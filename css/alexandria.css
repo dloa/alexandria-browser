@@ -100,22 +100,21 @@ header {
 	padding: 1em;
 /*	border-bottom-left-radius: 3px;
 	border-bottom-right-radius: 3px;*/
-	box-shadow: 0 1px 3px #444;
-	-moz-box-shadow: 0 1px 3px #444;
+	box-shadow: 0 1px 3px rgba(68, 68, 68, 0.69);
+	-moz-box-shadow: 0 1px 3px rgba(68, 68, 68, 0.69);
+  text-align: center;
 }
 
 header input {
   background: url(../img/search.svg) 9px 5px / .8em no-repeat;
-  width: 100px;
-  margin-right: auto;
-  margin-left: 97px;
   display: inline-block;
-  width: 50%;
   border-radius: 50em;
   border: 1px solid #cfcfcf;
-  position: relative;
+  position: static;
   padding-left: 35px;
   font-size: 1.5em;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 header input::after {
