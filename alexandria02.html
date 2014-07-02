@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html class="no-js">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Alexandria Sandbox</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="stylesheet" href="css/normalize.min.css">
+		<link rel="stylesheet" href="css/alexandria.css">
+		<!--<link rel="stylesheet" href="js/vendor/classic-min.css">-->
+		<link rel="stylesheet" href="css/timeline.css">
+			<link rel="stylesheet" href="css/font-awesome.css">
+		<!--<script src="js/vendor/wordcloud2.js"></script>-->
+		
+<!--		<script type="text/javascript">
+		
+      WordCloud(document.getElementById('wordCloud'), { [['foo', 12], ['bar', 6]] } );
+		  </script>-->
+	</head>
+	<body>
+		<header>
+			<h1 class="title">Alexandria</h1>
+			<!--<h2>Keeping History Honest</h2>-->
+		  	<input type="search" value="Different" recent="3" />
+		  	<h1 class="title" style="float: right;color: #ffffff;">Alexandria</h1>
+			<!--<h2>@daringfireball</h2>	-->
+			<!--<a href="" class="aboutAlexandria"></a>-->
+		</header>
+		
+		<main id="wordCloud">
+	                   <canvas id="canvas" class="canvas" width="1000" height="600"></canvas>
+	                   <div id="html-canvas" class="canvas hide" style="width: 1000px; height: 600px; background-color: rgb(255, 255, 255);"><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 39.56681144269438px; line-height: 39.56681144269438px; font-family: Avenir, serif; left: 441.5px; top: 272px; width: 109px; height: 40px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">Here’s</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 501px; top: 246.4px; width: 22px; height: 24px; white-space: nowrap; -webkit-transform: rotate(82.03340772539377deg); -webkit-transform-origin: 50% 40%;">to</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 447px; top: 238.4px; width: 34px; height: 24px; white-space: nowrap; -webkit-transform: rotate(81.77450221963227deg); -webkit-transform-origin: 50% 40%;">the</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 194.84983544617955px; line-height: 194.84983544617955px; font-family: Avenir, serif; left: 3px; top: 266px; width: 906px; height: 195px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">crazy ones</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 556px; top: 254.4px; width: 40px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">The</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 194.84983544617955px; line-height: 194.84983544617955px; font-family: Avenir, serif; left: 213.5px; top: 58px; width: 549px; height: 195px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">misfits</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 460px; top: 326.4px; width: 40px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-55.83393766544759deg); -webkit-transform-origin: 50% 40%;">The</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 396px; top: 238.4px; width: 40px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">The</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 380px; top: 286.4px; width: 40px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">The</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 574.5px; top: 286.4px; width: 19px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">in</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 527px; top: 230.4px; width: 34px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-35.473617226816714deg); -webkit-transform-origin: 50% 40%;">the</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 599px; top: 286.4px; width: 50px; height: 24px; white-space: nowrap; -webkit-transform: rotate(12.379915416240692deg); -webkit-transform-origin: 50% 40%;">ones</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 338px; top: 246.4px; width: 44px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-7.080704569816589deg); -webkit-transform-origin: 50% 40%;">who</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 598px; top: 246.4px; width: 36px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-67.23884412087499deg); -webkit-transform-origin: 50% 40%;">see</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 303.5px; top: 286.4px; width: 65px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">things</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 424.5px; top: 390.4px; width: 79px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-48.875601212494075deg); -webkit-transform-origin: 50% 40%;">They’re</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 638.5px; top: 230.4px; width: 35px; height: 24px; white-space: nowrap; -webkit-transform: rotate(55.934696230106056deg); -webkit-transform-origin: 50% 40%;">not</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 271.5px; top: 246.4px; width: 49px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-79.68850824516265deg); -webkit-transform-origin: 50% 40%;">fond</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 669.5px; top: 286.4px; width: 21px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">of</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 687px; top: 294.4px; width: 50px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-24.661255208775398deg); -webkit-transform-origin: 50% 40%;">rules</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 458px; top: 430.4px; width: 44px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-18.284056847915053deg); -webkit-transform-origin: 50% 40%;">And</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 681px; top: 238.4px; width: 46px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">they</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 295px; top: 182.4px; width: 50px; height: 24px; white-space: nowrap; -webkit-transform: rotate(83.71324660722166deg); -webkit-transform-origin: 50% 40%;">have</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 538.5px; top: 366.4px; width: 27px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">no</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 208.5px; top: 262.4px; width: 79px; height: 24px; white-space: nowrap; -webkit-transform: rotate(60.255513922311366deg); -webkit-transform-origin: 50% 40%;">respect</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 577.5px; top: 230.4px; width: 29px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-38.14628445077687deg); -webkit-transform-origin: 50% 40%;">for</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 639px; top: 374.4px; width: 34px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-31.255332170985636deg); -webkit-transform-origin: 50% 40%;">the</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 524.5px; top: 430.4px; width: 39px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">You</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 589.5px; top: 430.4px; width: 37px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">can</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 39.56681144269438px; line-height: 39.56681144269438px; font-family: Avenir, serif; left: 440.5px; top: 464px; width: 207px; height: 40px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">quote them</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 85.78780094094613px; line-height: 85.78780094094613px; font-family: Avenir, serif; left: 130px; top: 453.6px; width: 332px; height: 86px; white-space: nowrap; -webkit-transform: rotate(11.090072197839612deg); -webkit-transform-origin: 50% 40%;">disagree</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 746px; top: 222.4px; width: 44px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">with</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 173px; top: 286.4px; width: 54px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">them</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 85.78780094094613px; line-height: 85.78780094094613px; font-family: Avenir, serif; left: 295.5px; top: 5.600000000000001px; width: 241px; height: 86px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">glorify</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 12.22021731722967px; line-height: 12.22021731722967px; font-family: Avenir, serif; left: 379.5px; top: 323.11191307310816px; width: 25px; height: 12.22021731722967px; white-space: nowrap; -webkit-transform: rotate(-28.526365798898045deg); -webkit-transform-origin: 50% 40%;">vilify</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 85.78780094094613px; line-height: 85.78780094094613px; font-family: Avenir, serif; left: 86.5px; top: 197.6px; width: 131px; height: 86px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">But</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 239px; top: 230.4px; width: 34px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-39.284415598958724deg); -webkit-transform-origin: 50% 40%;">the</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 761.5px; top: 286.4px; width: 45px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">only</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 660.5px; top: 430.4px; width: 55px; height: 24px; white-space: nowrap; -webkit-transform: rotate(60.192885138094425deg); -webkit-transform-origin: 50% 40%;">thing</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 300.5px; top: 430.4px; width: 39px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">you</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 382.5px; top: 454.4px; width: 51px; height: 24px; white-space: nowrap; -webkit-transform: rotate(-25.920177628286186deg); -webkit-transform-origin: 50% 40%;">can’t</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 809.5px; top: 254.4px; width: 29px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">do</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 440px; top: 350.4px; width: 16px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">is</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 477.5px; top: 510.4px; width: 69px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">ignore</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 157px; top: 174.4px; width: 54px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">them</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 716px; top: 430.4px; width: 88px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">Because</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 23.683071351724966px; line-height: 23.683071351724966px; font-family: Avenir, serif; left: 761px; top: 142.4px; width: 46px; height: 24px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">they</span><span style="position: absolute; display: block; font-style: normal; font-variant: normal; font-weight: normal; font-size: 60.179409119872425px; line-height: 60.179409119872425px; font-family: Avenir, serif; left: 572.5px; top: 503.92823635205104px; width: 311px; height: 60.179409119872425px; white-space: nowrap; -webkit-transform: rotate(0deg); -webkit-transform-origin: 50% 40%;">human race</span></div>
+	               </div>	
+		</main>
+					              <div id="dateRulersExample" class="ui-rangeSlider timeline">
+					                <div class="ui-rangeSlider-container" style="position: absolute; width: 100%;">
+					                  <div class="ui-rangeSlider-innerBar" style=
+					                  "position: absolute; top: 0px; left: 0px; width: 777px;">
+					                    <div class="ui-rangeSlider-ruler ui-ruler">
+					                      <div class="ui-ruler-scale ui-ruler-scale0">
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 10%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">20th</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 10%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">21st</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 10%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">22nd</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 10%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">23rd</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 10%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">24th</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 10%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">25th</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 10%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">26th</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 10%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">27th</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 10%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">Yesterday</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 10%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">Today</span>
+					                          </div>
+					                        </div>
+					                      </div>
+					            
+					                      <div class="ui-ruler-scale ui-ruler-scale1">
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					            
+					                        <div class="ui-ruler-tick" style="display: inline-block; width: 1%;">
+					                          <div class="ui-ruler-tick-inner">
+					                            <span class="ui-ruler-tick-label">&nbsp;</span>
+					                          </div>
+					                        </div>
+					                      </div>
+					                    </div>
+					                  </div>
+					            
+					                  <div class="ui-rangeSlider-bar" style=
+					                  "position: absolute; top: 0px; width: 200px; right: 0px;">1000 Results</div>
+					            
+					                  <div class="ui-rangeSlider-handle ui-rangeSlider-leftHandle" style=
+					                  "position: absolute; top: 0px; left: 155.39999999999998px;">
+					                    <div class="ui-rangeSlider-handle-inner"></div>
+					                  </div>
+					            
+					                  <div class="ui-rangeSlider-handle ui-rangeSlider-rightHandle" style=
+					                  "position: absolute; top: 0px; left: 379px;">
+					                    <div class="ui-rangeSlider-handle-inner"></div>
+					                  </div>
+					                </div>
+					                
+					                <div class="ui-rangeSlider-label ui-rangeSlider-leftLabel" style=
+					                "position: absolute; display: none; right: 613.1px;">
+					                  <div class="ui-rangeSlider-label-value">
+					                    20
+					                  </div>
+					            
+					                <div class="ui-rangeSlider-label-inner"></div>
+					                </div>
+					                <div class="ui-rangeSlider-label ui-rangeSlider-rightLabel" style=
+					                "position: absolute; display: block; right: 10px;">
+					                  <div class="ui-rangeSlider-label-value">
+					                    Today
+					                  </div>
+					                  <div class="ui-rangeSlider-label-inner"></div>
+					                </div>
+					              </div>
+					            
+					          </div>
+
+		<script src="js/vendor/jquery.min.js"></script>
+		<script src="js/vendor/jqueryui.min.js"></script>
+		<script src="js/jQAllRangeSliders-min.js"></script>
+		<!--<script src="js/vendor/wordcloud2.js"></script>-->
+		<script src="js/main.js"></script>
+	</body>
+</html>
