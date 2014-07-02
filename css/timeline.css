@@ -23,9 +23,9 @@
 .ui-rangeSlider-withArrows .ui-rangeSlider-container,
 .ui-rangeSlider-noArrow .ui-rangeSlider-container,
 .ui-rangeSlider-arrow{
-/*  -webkit-box-shadow: inset 0px 4px 6px -2px RGBA(0,0,0,0.5);
+  -webkit-box-shadow: inset 0px 4px 6px -2px RGBA(0,0,0,0.5);
      -moz-box-shadow: inset 0px 4px 6px -2px RGBA(0,0,0,0.5);
-          box-shadow: inset 0px 4px 6px -2px RGBA(0,0,0,0.5);*/
+          box-shadow: inset 0px 4px 6px -2px RGBA(0,0,0,0.5);
 }
 
 .ui-rangeSlider-disabled.ui-rangeSlider-withArrows .ui-rangeSlider-container,
@@ -38,10 +38,8 @@
 }
 
 .ui-rangeSlider-noArrow .ui-rangeSlider-container{
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  border-left: solid 1px #515862;
-  border-right: solid 1px #515862;
+  border-left: solid 1px rgba(0, 0, 0, 0.5);
+  border-right: solid 1px rgba(0, 0, 0, 0.5);
 }
 
 .ui-rangeSlider-disabled.ui-rangeSlider-noArrow .ui-rangeSlider-container{
@@ -52,8 +50,8 @@
 .ui-rangeSlider-arrow{
  	height: 50px;
 
-  border-top: solid 1px #232a32;
-  border-bottom: solid 1px #6a7179;
+  border-top: 1px solid rgba(0, 0, 0, 0.5);
+  /*border-bottom: solid 1px #6a7179;*/
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-container,
@@ -65,8 +63,8 @@
 .ui-rangeSlider-container,
 .ui-rangeSlider-arrow,
 .ui-rangeSlider-label{
- 	background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.58)), to(rgba(182, 182, 182, 0.69)));
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.58) 0%, rgba(182, 182, 182, 0.69) 100%);
+/* 	background: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.58)), to(rgba(182, 182, 182, 0.69)));
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.58) 0%, rgba(182, 182, 182, 0.69) 100%);*/
 }
 
 .ui-rangeSlider-disabled .ui-rangeSlider-container,
