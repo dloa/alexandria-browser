@@ -336,7 +336,7 @@ h3{
 	background-color: transparent;
 	border: 0;
 	overflow: hidden;
-	*text-indent: -9999px;
+
 }
 
 .ir:before {
@@ -387,7 +387,7 @@ h3{
 }
 
 .clearfix {
-	*zoom: 1;
+	zoom: 1;
 }
 
 /* ==========================================================================
