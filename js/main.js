@@ -1,9 +1,9 @@
 var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
   $("#timeline").dateRangeSlider({
-    bounds: {min: new Date(2020, 0, 1), max: new Date(2020, 11, 31, 20, 59, 59)},
-    defaultValues: {min: new Date(2020, 7, 15), max: new Date(2020, 20, 31)},
-    valueLabels: "change",
-    arrows:false,
+
+    bounds: {min: new Date(2014, 0, 1), max: new Date(2014, 11, 31, 20, 59, 59)},
+    defaultValues: {min: new Date(2014, 7, 15), max: new Date(2014, 20, 31)},
+//    valueLabels: "change",
     scales: [{
       first: function(value){ return value; },
       end: function(value) {return value; },
@@ -40,7 +40,55 @@ var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "O
   };
   var target = document.getElementById('wait');
   var spinner = new Spinner(largeSpinConfig).spin(target);
-  
-  var cloudlist = [['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],] 
-  
-   WordCloud(document.getElementById('wordCloud'), { list:cloudlist } );
+/*  
+  var cloudlist = [['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],];
+  WordCloud(document.getElementById('wordCloud'), { list:cloudlist } );
+*/
+jQuery(document).ready(function($){
+
+    // function to get active jobs JSON object
+    function getActiveJobs() {
+
+        $.ajax({
+            type: "GET",
+            url: "http://blue.a.blocktech.com:3000/test/getArchivedTweets",
+            success: function (responseData) {
+
+                // respond with this alert (data passed back is responseData)
+               
+                var data = $.parseJSON(responseData);
+
+                console.log(data);
+
+                for (var i = 0; i < data.length; i++) {
+                    $("#tweetList").append('<li class = "responseRow"><div><strong>@' + data[i].p.twitter.data[6] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[1] + '</span></div> <div>' + data[i].p.twitter.data[7] + '</div></li>');
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("some error");
+                console.log(XMLHttpRequest);
+                console.log(textStatus);
+                console.log(errorThrown);
+                $("#tweetList").append("<li class = 'responseRow'>Cannot connect to Librarian</li>");
+           }
+        });
+
+    }
+	$('#archiveList a').click(function(){
+		// load active jobs
+		getActiveJobs();
+		$('#tweetListView').fadeIn(100);
+	});
+	$(document).on("keyup", function (e) {
+		var code = e.keyCode || e.which; if (code == 27) {
+			clearModal();
+		}
+	});
+	$('.close-modal').click(function(){
+		clearModal();
+	});
+	function clearModal() {
+		$('#tweetListView').fadeOut(100);
+		$("#tweetList li.responseRow").remove();
+	}
+});

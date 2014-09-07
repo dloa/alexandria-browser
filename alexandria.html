@@ -8,29 +8,37 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 
 		<link rel="stylesheet" href="css/normalize.min.css">
-		<link rel="stylesheet" href="css/alexandria.css">
 		<!--<link rel="stylesheet" href="js/vendor/classic-min.css">-->
 		<link rel="stylesheet" href="css/timeline.css">
 		<link rel="stylesheet" href="css/font-awesome.min.css">
-		<!--<script src="js/vendor/wordcloud2.js"></script>-->
+		<link rel="stylesheet" href="css/alexandria.css">
 	</head>
 	<body>
-	  <div id="logo">
-	  </div>
 	  <header>
-	  	<!--<h1 class="title">Alexandria</h1>-->
-	  	<!--<h2>Keeping History Honest</h2>-->
+		  <div id="logo">
+		  </div>
 	    	<input type="search" value="Different" />
-	    	<!--
-	  	    <span id="navSettings" class="fa fa-gear" aria-label="Settings"></span>
-	  	    <span id="navAbout" class="fa fa-info" aria-label="About"></span>-->
-	  	<!--<h2>@daringfireball</h2>	-->
-	  	<!--<a href="" class="aboutAlexandria"></a>-->
 	  </header>
-	  <!--<div id="mainlogo2"><img id="logo" class="inject-me" src="img/ribbon.svg" alt="" /><p>A</p></div>-->
 		
-		<main id="wordCloud">
+		<!-- <main id="wordCloud"></main> -->
+		<main id="tweetListView">
+			<article>
+				<ul id="tweetList"></ul>
+				<div class="close-modal">x</div>
+			</article>
+		</main>
 		
+		<main id="archiveListView">
+			<article>
+				<ul id="archiveList">
+					<li><a href="#"><span>Ferguson</span> <span>1648</span></a></li>
+					<li><a href="#"><span>ISIS</span> <span>1402</span></a></li>
+					<li><a href="#"><span>Ukraine</span> <span>2280</span></a></li>
+					<li><a href="#"><span>Bitcoin</span> <span>3712</span></a></li>
+					<li><a href="#"><span>2004 RC</span> <span>967</span></a></li>
+					<li><a href="#"><span>Jimmy Fallon</span> <span>2853</span></a></li>
+				</ul>
+			</article>
 		</main>
 		
 		<footer id="timeline" class="timeline">
@@ -44,8 +52,8 @@
 		<script src="js/vendor/jquery.min.js"></script>
 		<script src="js/vendor/svg-injector.min.js"></script>
 		<script src="js/vendor/jquery-ui.min.js"></script>
-		<script src="js/vendor/jQAllRangeSliders-withRuler-min.js"></script>
-		<script src="js/vendor/wordcloud2.js"></script>
+		<script src="js/vendor/jQAllRangeSliders-withRuler-min.js"></script>	
+		<!-- <script src="js/vendor/wordcloud2.js"></script> -->
 		<script src="js/vendor/spin.min.js"></script>
 		<script src="js/main.js"></script>
 	</body>
