@@ -241,22 +241,30 @@ ul#archiveList li a span:first-child {
 	position: absolute;
 	bottom: 0;
 	left: 0;
-	background-color: #bcbcbc;
 	z-index: 200;
 	width: 100%;
+	height: 50px;
+	padding: 0;
+	background-color: #bcbcbc;
 }
 
 .ui-rangeSlider-bar {
 	-moz-box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25), -2px 3px 4px rgba(0, 0, 0, 0.25);
 	box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25), -2px 3px 4px rgba(0, 0, 0, 0.25);
+	height: 45px;
+	margin: 2px 0
 }
 .ui-rangeSlider-container, .ui-rangeSlider-arrow, .ui-rangeSlider-label {
 	box-shadow: none;
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
+	height: 100%;
 }
 .ui-rangeSlider .ui-ruler-scale0 .ui-ruler-tick-label {
 	line-height: 40px;
+}
+.ui-rangeSlider .ui-ruler-scale0 .ui-ruler-tick-inner {
+	height: 50px;
 }
 .ui-rangeSlider .ui-ruler-scale0 :first-child .ui-ruler-tick-inner {
 	border: 0;
