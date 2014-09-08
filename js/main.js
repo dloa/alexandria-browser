@@ -51,7 +51,7 @@ jQuery(document).ready(function($){
 
         $.ajax({
             type: "GET",
-            url: "http://blue.a.blocktech.com:3000/test/getArchivedTweets",
+            url: "http://blue.a.blocktech.com:4000/test/getArchivedTweets",
             success: function (responseData) {
 
                 // respond with this alert (data passed back is responseData)
