@@ -4,6 +4,7 @@ var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "O
     bounds: {min: new Date(2014, 0, 1), max: new Date(2014, 11, 31, 20, 59, 59)},
     defaultValues: {min: new Date(2014, 7, 15), max: new Date(2014, 20, 31)},
 //    valueLabels: "change",
+	arrows: false,
     scales: [{
       first: function(value){ return value; },
       end: function(value) {return value; },
