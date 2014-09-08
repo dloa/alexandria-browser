@@ -1,46 +1,6 @@
 jQuery(document).ready(function($){
     // load active jobs on pageload
     getActiveJobs();
-    // function to get active jobs JSON object
-    function getActiveJobs() {
-
-        $.ajax({
-            type: "GET",
-            url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
-            success: function (responseData) {
-
-                // respond with this alert (data passed back is responseData)
-                //
-                
-                var data = $.parseJSON(responseData);
-				
-                for (var i = 0; i < data.length; i++) {
-					var v = getArchiveVolume(data[i]);
-                    $("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"></span></a></li>');
-                }
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("some error");
-                console.log(XMLHttpRequest);
-                console.log(textStatus);
-                console.log(errorThrown);
-                $("#archiveList").append("<li class='responseRow'>Cannot connect to Librarian</li>");
-           }
-        });
-        
-    }
-    // get archive volume
-	function getArchiveVolume(archiveTitle) {
-		$.ajax({
-			type: "POST",
-			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
-			data: archiveTitle,
-			success: function (e) {
-				var data = $.parseJSON(e);
-				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(data.length);
-			}
-		});
-	}
 
 	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 	$("#timeline").dateRangeSlider({
@@ -106,6 +66,29 @@ jQuery(document).ready(function($){
 		$("#tweetList li.responseRow").remove();
 	}
 });
+// function to get active jobs JSON object
+function getActiveJobs() {
+
+	$.ajax({
+		type: "GET",
+		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
+		success: function (responseData) {
+			var data = $.parseJSON(responseData);
+			for (var i = 0; i < data.length; i++) {
+				$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
+				getArchiveVolume(data[i]);
+			}
+		},
+		error: function (XMLHttpRequest, textStatus, errorThrown) {
+			alert("some error");
+			console.log(XMLHttpRequest);
+			console.log(textStatus);
+			console.log(errorThrown);
+			$("#archiveList").append("<li class='responseRow'>Cannot connect to Librarian</li>");
+	   }
+	});
+	
+}
 // pull tweets in archive
 function showTweetList(arch){
 	var archiveTitle = $(arch).find('span:first-child').text();
@@ -129,4 +112,16 @@ function getArchive(archiveTitle) {
             console.log($.parseJSON(e));
         }
     });
+}
+// get archive volume
+function getArchiveVolume(archiveTitle) {
+	$.ajax({
+		type: "POST",
+		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
+		data: archiveTitle,
+		success: function (e) {
+			var data = $.parseJSON(e);
+			$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(data.length);
+		}
+	});
 }
