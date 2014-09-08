@@ -96,33 +96,25 @@ jQuery(document).ready(function($){
 function showTweetList(arch){
 	var archiveTitle = $(arch).find('span:first-child').text();
 	$('header input[type="search"]').attr('value',archiveTitle);
-	getArchive();
+	getArchive(archiveTitle);
 	$('#tweetListView').fadeIn(100);
 }
 // function to get archives JSON object
-function getArchive() {
-
-	$.ajax({
-		type: "GET",
-		url: "http://blue.a.blocktech.com:4000/test/getArchivedTweets",
-		success: function (responseData) {
-
+function getArchive(archiveTitle) {
+    $.ajax({
+        type: "POST",
+        url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
+        data: archiveTitle,
+        success: function (e) {
 			// respond with this alert (data passed back is responseData)
 		   
-			var data = $.parseJSON(responseData);
-
-			console.log(data);
+			var data = $.parseJSON(e);
 
 			for (var i = 0; i < data.length; i++) {
-				$("#tweetList").append('<li class = "responseRow"><div><strong>@' + data[i].p.twitter.data[6] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[1] + '</span></div> <div>' + data[i].p.twitter.data[7] + '</div></li>');
+				$("#tweetList").append('<li class = "responseRow"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
 			}
-		},
-		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			alert("some error");
-			console.log(XMLHttpRequest);
-			console.log(textStatus);
-			console.log(errorThrown);
-			$("#tweetList").append("<li class = 'responseRow'>Error</li>");
-	   }
-	});
+            console.log(e);
+            console.log($.parseJSON(e));
+        }
+    });
 }
