@@ -76,6 +76,8 @@ jQuery(document).ready(function($){
     }
 	$('#archiveList a').click(function(){
 		// load active jobs
+		var archiveTitle = $(this).find('span:first-child').text();
+		$('header input[type="search"]').attr('value',archiveTitle);
 		getActiveJobs();
 		$('#tweetListView').fadeIn(100);
 	});
@@ -89,6 +91,7 @@ jQuery(document).ready(function($){
 	});
 	function clearModal() {
 		$('#tweetListView').fadeOut(100);
+		$('header input[type="search"]').attr('value','');
 		$("#tweetList li.responseRow").remove();
 	}
 });
