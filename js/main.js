@@ -1,7 +1,6 @@
 jQuery(document).ready(function($){
     // load active jobs on pageload
     getActiveJobs();
-
     // function to get active jobs JSON object
     function getActiveJobs() {
 
@@ -14,9 +13,10 @@ jQuery(document).ready(function($){
                 //
                 
                 var data = $.parseJSON(responseData);
-
+				
                 for (var i = 0; i < data.length; i++) {
-                    $("#archiveList").append('<li><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span>1234</span></a></li>');
+					var v = getArchiveVolume(data[i]);
+                    $("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"></span></a></li>');
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -27,7 +27,21 @@ jQuery(document).ready(function($){
                 $("#archiveList").append("<li class='responseRow'>Cannot connect to Librarian</li>");
            }
         });
+        
     }
+    // get archive volume
+	function getArchiveVolume(archiveTitle) {
+		$.ajax({
+			type: "POST",
+			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
+			data: archiveTitle,
+			success: function (e) {
+				var data = $.parseJSON(e);
+				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(data.length);
+			}
+		});
+	}
+
 	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(2014, 0, 1), max: new Date(2014, 11, 31, 20, 59, 59)},
@@ -76,7 +90,6 @@ jQuery(document).ready(function($){
   var cloudlist = [['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],];
   WordCloud(document.getElementById('wordCloud'), { list:cloudlist } );
 */
-
 	$(document).on("keyup", function (e) {
 		var code = e.keyCode || e.which; if (code == 27) {
 			clearModal();
@@ -93,6 +106,7 @@ jQuery(document).ready(function($){
 		$("#tweetList li.responseRow").remove();
 	}
 });
+// pull tweets in archive
 function showTweetList(arch){
 	var archiveTitle = $(arch).find('span:first-child').text();
 	$('header input[type="search"]').attr('value',archiveTitle);
@@ -106,10 +120,8 @@ function getArchive(archiveTitle) {
         url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
         data: archiveTitle,
         success: function (e) {
-			// respond with this alert (data passed back is responseData)
 		   
 			var data = $.parseJSON(e);
-
 			for (var i = 0; i < data.length; i++) {
 				$("#tweetList").append('<li class = "responseRow"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
 			}
