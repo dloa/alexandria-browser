@@ -46,11 +46,6 @@ jQuery(document).ready(function($){
 	var spinner = new Spinner(largeSpinConfig).spin(target);
 */
 
-/*  
-  var cloudlist = [['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],];
-  WordCloud(document.getElementById('wordCloud'), { list:cloudlist } );
-*/
-
 	// Modal controls
 	$(document).on("keyup", function (e) {
 		var code = e.keyCode || e.which; if (code == 27) {
@@ -65,11 +60,6 @@ jQuery(document).ready(function($){
 		$('header input.search').val('');
 		getActiveJobs();
 	});
-
-	function clearModal() {
-		$('#tweetListView').fadeOut(100);
-		$("#tweetList li.responseRow").remove();
-	}
 	
 	// Search box
 	$('header input.search').on("keyup", function (e) {
@@ -115,13 +105,12 @@ function getActiveJobs(searchTerm) {
 // show tweets in archive
 function showTweetList(arch){
 	var archiveTitle = $(arch).find('span:first-child').text();
-	console.log(archiveTitle);
 	$('header input.search').val(archiveTitle);
 	getArchive(archiveTitle);
-	$('#tweetListView').fadeIn(100);
+	$('#tweetListView').fadeIn(500);
 }
 // get archived tweets JSON object
-function getArchive(archiveTitle,min,max) {
+function getArchive(archiveTitle) {
     $.ajax({
         type: "POST",
         url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
@@ -160,5 +149,13 @@ function getArchiveVolume(archiveTitle) {
 }
 // scan archives after timeline slider values change
 $("#timeline").bind("valuesChanged", function(e, data){
-      getActiveJobs();
+	if($('#tweetListView').css('display') == 'block') {
+		clearModal();
+	}
+	var searchTerm = $('header input.search').val();
+	getActiveJobs(searchTerm);
 });
+function clearModal() {
+	$('#tweetListView').fadeOut(500);
+	$("#tweetList li.responseRow").remove();
+}
