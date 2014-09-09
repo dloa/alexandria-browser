@@ -96,7 +96,8 @@ ul {
 
 body {
 	overflow: hidden;
-	 background-color: #ecedec;
+  background-color: #ecedec;
+	font-family: "Helvetica Neue", Helvetica, Geneva, sans-serif;
 }
 
 header {
