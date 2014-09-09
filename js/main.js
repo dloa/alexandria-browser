@@ -15,23 +15,36 @@ jQuery(document).ready(function($){
 			$(this).text('Recent');
 		}
 	});
-    // load active jobs on pageload
-    getActiveJobs();
 
-	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+	// For todays date;
+	Date.prototype.today = function () { 
+		return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear();
+	}
+
+	// For the time now
+	Date.prototype.timeNow = function () {
+		 return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+	}
+	Date.prototype.timeNow = function(){
+		return ((this.getHours() < 10)?"0":"") + ((this.getHours()>12)?(this.getHours()-12):this.getHours()) +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds() + ((this.getHours()>12)?('PM'):'AM');
+	};
+	var datetime = new Date();
+	// Footer timeline contruct
+	var days = ["0", "Sept 1", "Sept 2", "Sept 3", "Sept 4", "Sept 5", "Sept 6", "Sept 7", "Sept 8", "Sept 9", "Sept 10", "Sept 11"];
+
 	$("#timeline").dateRangeSlider({
-		bounds: {min: new Date(2014, 8, 1), max: new Date(2014, 8, 15)},
-		defaultValues: {min: new Date(2014, 8, 7), max: new Date(2014, 8, 9)},
+		bounds: {min: new Date(2014, 8, 1), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 2)},
+		defaultValues: {min: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() - 5), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate())},
 		arrows: false,
 		scales: [{
 		  first: function(value){ return value; },
 		  end: function(value) {return value; },
 		  next: function(value){
 			var next = new Date(value);
-			return new Date(next.setMonth(value.getMonth() + 1));
+			return new Date(next.setDate(value.getDate() + 1));
 		  },
 		  label: function(value){
-			return months[value.getMonth()];
+			return days[value.getDate()];
 		  },
 		  format: function(tickContainer, tickStart, tickEnd){
 			tickContainer.addClass("myCustomClass");
@@ -60,6 +73,9 @@ jQuery(document).ready(function($){
 	var target = document.getElementById('wait');
 	var spinner = new Spinner(largeSpinConfig).spin(target);
 */
+
+    // load active jobs on pageload
+    getActiveJobs();
 
 	// Modal controls
 	$(document).on("keyup", function (e) {
