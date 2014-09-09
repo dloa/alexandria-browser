@@ -100,12 +100,12 @@ function getActiveJobs(searchTerm) {
 			for (var i = 0; i < data.length; i++) {
 				if(!searchTerm){					
 					$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
-//					getArchiveVolume(data[i]);
+					getArchiveVolume(data[i]);
 				} else {
 					var titleSlice = data[i].slice(0,searchTerm.length);
 					if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
 						$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
-//						getArchiveVolume(data[i]);
+						getArchiveVolume(data[i]);
 					}
 				}
 			}
