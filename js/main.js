@@ -100,12 +100,12 @@ function getActiveJobs(searchTerm) {
 			for (var i = 0; i < data.length; i++) {
 				if(!searchTerm){					
 					$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
-					getArchiveVolume(data[i]);
+//					getArchiveVolume(data[i]);
 				} else {
 					var titleSlice = data[i].slice(0,searchTerm.length);
 					if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
 						$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
-						getArchiveVolume(data[i]);
+//						getArchiveVolume(data[i]);
 					}
 				}
 			}
@@ -148,7 +148,9 @@ function getArchive(archiveTitle) {
 			for (var i = 0; i < data.length; i++) {
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
 				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ){
-					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div><div class="twitterbird"></div></li>');
+					var niceTweetDate = data[i].p.twitter.data[4].split(' ');
+					console.log(niceTweetDate);
+					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><div class="twitterbird"></div></li>');
 				}
 			}
 			if($('#tweetList').hasClass('pop-sort')){
