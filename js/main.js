@@ -40,17 +40,17 @@ jQuery(document).ready(function($){
 		}]
 	});
 
-/*	var largeSpinConfig = {
+var largeSpinConfig = {
 		lines: 13, // The number of lines to draw
-		length: 20, // The length of each line
-		width: 10, // The line thickness
-		radius: 30, // The radius of the inner circle
+		length: 4, // The length of each line
+		width: 2, // The line thickness
+		radius: 8, // The radius of the inner circle
 		corners: 1, // Corner roundness (0..1)
 		rotate: 0, // The rotation offset
 		direction: 1, // 1: clockwise, -1: counterclockwise
 		color: '#000', // #rgb or #rrggbb or array of colors
 		speed: 1, // Rounds per second
-		trail: 400, // Afterglow percentage
+		trail: 60, // Afterglow percentage
 		shadow: false, // Whether to render a shadow
 		hwaccel: false, // Whether to use hardware acceleration
 		className: 'spinner', // The CSS class to assign to the spinner
@@ -60,7 +60,6 @@ jQuery(document).ready(function($){
 	};
 	var target = document.getElementById('wait');
 	var spinner = new Spinner(largeSpinConfig).spin(target);
-*/
 
     // load active jobs on pageload
     getActiveJobs();
@@ -167,6 +166,7 @@ function getArchive(archiveTitle) {
 }
 // get archive volume
 function getArchiveVolume(archiveTitle) {
+	$('#archiveListView').hide();
 	$.ajax({
 		type: "POST",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
@@ -182,6 +182,8 @@ function getArchiveVolume(archiveTitle) {
 				}
 			}
 			$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(archiveCount);
+			$('#archiveListView').fadeIn(500);
+			$('#wait').fadeOut(500);
 		}
 	});
 }

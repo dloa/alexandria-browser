@@ -182,6 +182,7 @@ header span {
 	cursor:pointer
 }
 main {
+	display: none;
 	position: absolute;
 	top: 70px;
 	width: 100%;
@@ -260,7 +261,6 @@ ul#archiveList li a span:first-child {
   color: #000000;
 }
 #app-overlay {
-	display: none;
 	background-color: #111;
 	background-color: rgba(20,20,20,.7);
 	position: fixed;
@@ -271,7 +271,6 @@ ul#archiveList li a span:first-child {
 	width: 100%;
 }
 #tweetListView {
-	display: none;
 	z-index: 200;
 }
 #tweetList li span.tweet-date, #tweetList li div.left {
@@ -368,15 +367,12 @@ section#timeline {
 	height: 100%;
 }
 #wait {
-  zoom: .7;
-  display: none;
-/*  width: 75px;
-  height:75px;
+	width: 100%;
+  height:100%;
   position: fixed;
-  top: 50%;
-  left: 50%;
-  margin-left:-75px;
-  margin-top:-75px;*/
+  top: 0;
+  left: 0;
+	z-index: 1000;
 }
 
 
@@ -411,7 +407,9 @@ section#timeline {
 .sliderZone{
 	height:40px;
 }
-
+.overlay {
+	display: none;
+}
 div.close-modal {
 	color: #fff;
 	position: absolute;
