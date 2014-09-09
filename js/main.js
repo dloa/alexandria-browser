@@ -55,16 +55,19 @@ jQuery(document).ready(function($){
 	$(document).on("keyup", function (e) {
 		var code = e.keyCode || e.which; if (code == 27) {
 			clearModal();
+			$('header input.search').val('');
+			getActiveJobs();
 		}
 	});
 
 	$('.close-modal').click(function(){
 		clearModal();
+		$('header input.search').val('');
+		getActiveJobs();
 	});
 
 	function clearModal() {
 		$('#tweetListView').fadeOut(100);
-		$('header input.search').attr('value','');
 		$("#tweetList li.responseRow").remove();
 	}
 	
