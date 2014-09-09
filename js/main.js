@@ -50,6 +50,8 @@ jQuery(document).ready(function($){
   var cloudlist = [['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 20], ['bar', 40],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],['foo', 80], ['bar', 100],];
   WordCloud(document.getElementById('wordCloud'), { list:cloudlist } );
 */
+
+	// Modal controls
 	$(document).on("keyup", function (e) {
 		var code = e.keyCode || e.which; if (code == 27) {
 			clearModal();
@@ -84,13 +86,14 @@ function getActiveJobs(searchTerm) {
 			for (var i = 0; i < data.length; i++) {
 				if(!searchTerm){					
 					$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
+					getArchiveVolume(data[i]);
 				} else {
 					var titleSlice = data[i].slice(0,searchTerm.length);
 					if(titleSlice == searchTerm) {
 						$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
+						getArchiveVolume(data[i]);
 					}
 				}
-				getArchiveVolume(data[i]);
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -104,21 +107,20 @@ function getActiveJobs(searchTerm) {
 	});
 	
 }
-// pull tweets in archive
+// show tweets in archive
 function showTweetList(arch){
 	var archiveTitle = $(arch).find('span:first-child').text();
 	$('header input.search').attr('value',archiveTitle);
 	getArchive(archiveTitle);
 	$('#tweetListView').fadeIn(100);
 }
-// function to get archives JSON object
+// get archived tweets JSON object
 function getArchive(archiveTitle) {
     $.ajax({
         type: "POST",
         url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
         data: archiveTitle,
         success: function (e) {
-		   
 			var data = $.parseJSON(e);
 			for (var i = 0; i < data.length; i++) {
 				$("#tweetList").append('<li class = "responseRow"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
