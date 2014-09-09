@@ -96,6 +96,7 @@ ul {
 
 body {
 	overflow: hidden;
+	 background-color: #ecedec;
 }
 
 header {
@@ -183,6 +184,7 @@ main {
 	z-index: 2;
 	text-align: center;
 	overflow-y: scroll;
+	background-color: #ffffff;
 }
 ul#archiveList, ul#tweetList {
 	display: inline-block;
