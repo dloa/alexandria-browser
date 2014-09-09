@@ -165,10 +165,9 @@ header span {
   top: 0;
   left: 20px;
   z-index: 10;
-  background: url(../img/logo.svg) bottom left;
-  background-size: 55px auto;
-  text-align: center;
-  font: 3.5em "Avenir-Medium";
+  background: url(../img/logo.svg) left bottom / 55px auto no-repeat;
+	text-align: center;
+  font: 2em "Avenir-Medium";
   margin-left: -1px;
 	margin-top: 6px;
 }
