@@ -1,5 +1,20 @@
 jQuery(document).ready(function($){
-
+	
+	$('header').append('<div id="resort" style="display: inline-block;float: right;margin-top: .5em;">Recent</div>');
+	$('#resort').click(function(){
+		$('#tweetList').toggleClass('pop-sort');
+		if($('#tweetList').hasClass('pop-sort')){
+			$('#tweetList li').sortElements(function(a, b){
+				return parseInt($(a).attr('retweets')) < parseInt($(b).attr('retweets')) ? 1 : -1;
+			});
+			$(this).text('Popular');
+		} else {
+			$('#tweetList li').sortElements(function(a, b){
+				return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
+			});
+			$(this).text('Recent');
+		}
+	});
     // load active jobs on pageload
     getActiveJobs();
 
@@ -124,7 +139,7 @@ function getArchive(archiveTitle) {
 			for (var i = 0; i < data.length; i++) {
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
 				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ){
-					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
+					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
 				}
 			}
 			$('#tweetList li').sortElements(function(a, b){
