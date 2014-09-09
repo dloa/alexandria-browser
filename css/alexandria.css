@@ -125,6 +125,7 @@ header input {
   font-size: 1.5em;
   margin-left: auto;
   margin-right: auto;
+  width: 12.5em;
 }
 
 header input::after {
