@@ -62,20 +62,34 @@ jQuery(document).ready(function($){
 
 	function clearModal() {
 		$('#tweetListView').fadeOut(100);
-		$('header input[type="search"]').attr('value','');
+		$('header input.search').attr('value','');
 		$("#tweetList li.responseRow").remove();
 	}
+	
+	// Search box
+	$('header input.search').on("keyup", function (e) {
+		var searchTerm = $(this).val();
+		getActiveJobs(searchTerm);
+	});
 });
 // function to get active jobs JSON object
-function getActiveJobs() {
+function getActiveJobs(searchTerm) {
 
 	$.ajax({
 		type: "GET",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
 		success: function (responseData) {
+			$("#archiveList li").remove();
 			var data = $.parseJSON(responseData);
 			for (var i = 0; i < data.length; i++) {
-				$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
+				if(!searchTerm){					
+					$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
+				} else {
+					var titleSlice = data[i].slice(0,searchTerm.length);
+					if(titleSlice == searchTerm) {
+						$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
+					}
+				}
 				getArchiveVolume(data[i]);
 			}
 		},
@@ -84,6 +98,7 @@ function getActiveJobs() {
 			console.log(XMLHttpRequest);
 			console.log(textStatus);
 			console.log(errorThrown);
+			$("#archiveList li").remove();
 			$("#archiveList").append("<li class='responseRow'>Cannot connect to Librarian</li>");
 	   }
 	});
@@ -92,7 +107,7 @@ function getActiveJobs() {
 // pull tweets in archive
 function showTweetList(arch){
 	var archiveTitle = $(arch).find('span:first-child').text();
-	$('header input[type="search"]').attr('value',archiveTitle);
+	$('header input.search').attr('value',archiveTitle);
 	getArchive(archiveTitle);
 	$('#tweetListView').fadeIn(100);
 }
@@ -108,8 +123,6 @@ function getArchive(archiveTitle) {
 			for (var i = 0; i < data.length; i++) {
 				$("#tweetList").append('<li class = "responseRow"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
 			}
-            console.log(e);
-            console.log($.parseJSON(e));
         }
     });
 }
