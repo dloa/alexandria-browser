@@ -121,15 +121,19 @@ function showTweetList(arch){
 	$('#tweetListView').fadeIn(100);
 }
 // get archived tweets JSON object
-function getArchive(archiveTitle) {
+function getArchive(archiveTitle,min,max) {
     $.ajax({
         type: "POST",
         url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
         data: archiveTitle,
         success: function (e) {
 			var data = $.parseJSON(e);
+			var dateValues = $("#timeline").dateRangeSlider("values");
 			for (var i = 0; i < data.length; i++) {
-				$("#tweetList").append('<li class = "responseRow"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
+				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
+				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ){
+					$("#tweetList").append('<li class = "responseRow"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
+				}
 			}
         }
     });
