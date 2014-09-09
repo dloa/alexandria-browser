@@ -70,6 +70,9 @@ jQuery(document).ready(function($){
 	
 	// Search box
 	$('header input.search').on("keyup", function (e) {
+		if($('#tweetListView').css('display') == 'block') {
+			clearModal();
+		}
 		var searchTerm = $(this).val();
 		getActiveJobs(searchTerm);
 	});
@@ -89,7 +92,7 @@ function getActiveJobs(searchTerm) {
 					getArchiveVolume(data[i]);
 				} else {
 					var titleSlice = data[i].slice(0,searchTerm.length);
-					if(titleSlice == searchTerm) {
+					if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
 						$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
 						getArchiveVolume(data[i]);
 					}
@@ -110,7 +113,8 @@ function getActiveJobs(searchTerm) {
 // show tweets in archive
 function showTweetList(arch){
 	var archiveTitle = $(arch).find('span:first-child').text();
-	$('header input.search').attr('value',archiveTitle);
+	console.log(archiveTitle);
+	$('header input.search').val(archiveTitle);
 	getArchive(archiveTitle);
 	$('#tweetListView').fadeIn(100);
 }
