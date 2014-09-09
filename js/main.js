@@ -109,7 +109,8 @@ function getActiveJobs(searchTerm) {
 					}
 				}
 			}
-			$('#archiveListView').css('height',$('#archiveList').height());
+			var newHeight = parseInt($('#archiveList').height())+100+'px';
+			$('#archiveListView').css('height',newHeight);
 			$('#archiveList li').sortElements(function(a, b){
 				return $(a).text() > $(b).text() ? 1 : -1;
 			});
