@@ -1,12 +1,12 @@
 jQuery(document).ready(function($){
+
     // load active jobs on pageload
     getActiveJobs();
 
 	var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
 	$("#timeline").dateRangeSlider({
-		bounds: {min: new Date(2014, 0, 1), max: new Date(2014, 11, 31, 20, 59, 59)},
-		defaultValues: {min: new Date(2014, 7, 15), max: new Date(2014, 20, 31)},
-	//    valueLabels: "change",
+		bounds: {min: new Date(2014, 8, 1), max: new Date(2014, 8, 15)},
+		defaultValues: {min: new Date(2014, 8, 7), max: new Date(2014, 8, 9)},
 		arrows: false,
 		scales: [{
 		  first: function(value){ return value; },
@@ -23,7 +23,7 @@ jQuery(document).ready(function($){
 		  }
 		}]
 	});
-  
+
 /*	var largeSpinConfig = {
 		lines: 13, // The number of lines to draw
 		length: 20, // The length of each line
@@ -82,7 +82,6 @@ jQuery(document).ready(function($){
 });
 // function to get active jobs JSON object
 function getActiveJobs(searchTerm) {
-
 	$.ajax({
 		type: "GET",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
@@ -143,7 +142,19 @@ function getArchiveVolume(archiveTitle) {
 		data: archiveTitle,
 		success: function (e) {
 			var data = $.parseJSON(e);
-			$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(data.length);
+			var archiveCount = 0;
+			var dateValues = $("#timeline").dateRangeSlider("values");
+			for (var i = 0; i < data.length; i++) {
+				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
+				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ){
+					archiveCount++;
+				}
+			}
+			$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(archiveCount);
 		}
 	});
 }
+// scan archives after timeline slider values change
+$("#timeline").bind("valuesChanged", function(e, data){
+      getActiveJobs();
+});
