@@ -1,6 +1,5 @@
 jQuery(document).ready(function($){
 	
-	$('header').append('<div id="resort" style="position: absolute;right: 1em;top: 50%;margin-top: -.5em;line-height: 1;cursor:pointer">Recent</div>');
 	$('#resort').click(function(){
 		$('#tweetList').toggleClass('pop-sort');
 		if($('#tweetList').hasClass('pop-sort')){
@@ -17,24 +16,13 @@ jQuery(document).ready(function($){
 	});
 
 	// For todays date;
-	Date.prototype.today = function () { 
-		return ((this.getDate() < 10)?"0":"") + this.getDate() +"/"+(((this.getMonth()+1) < 10)?"0":"") + (this.getMonth()+1) +"/"+ this.getFullYear();
-	}
-
-	// For the time now
-	Date.prototype.timeNow = function () {
-		 return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
-	}
-	Date.prototype.timeNow = function(){
-		return ((this.getHours() < 10)?"0":"") + ((this.getHours()>12)?(this.getHours()-12):this.getHours()) +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds() + ((this.getHours()>12)?('PM'):'AM');
-	};
 	var datetime = new Date();
 	// Footer timeline contruct
 	var days = ["0", "Sept 1", "Sept 2", "Sept 3", "Sept 4", "Sept 5", "Sept 6", "Sept 7", "Sept 8", "Sept 9", "Sept 10", "Sept 11"];
 
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(2014, 8, 1), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 2)},
-		defaultValues: {min: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() - 5), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate())},
+		defaultValues: {min: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() - 2), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1)},
 		arrows: false,
 		scales: [{
 		  first: function(value){ return value; },
@@ -121,6 +109,7 @@ function getActiveJobs(searchTerm) {
 					}
 				}
 			}
+			$('#archiveListView').css('height',$('#archiveList').height());
 			$('#archiveList li').sortElements(function(a, b){
 				return $(a).text() > $(b).text() ? 1 : -1;
 			});
@@ -158,7 +147,7 @@ function getArchive(archiveTitle) {
 			for (var i = 0; i < data.length; i++) {
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
 				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ){
-					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
+					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div><div class="twitterbird"></div></li>');
 				}
 			}
 			if($('#tweetList').hasClass('pop-sort')){

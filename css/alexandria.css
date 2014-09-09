@@ -173,6 +173,14 @@ header span {
   margin-left: -1px;
 	margin-top: 6px;
 }
+#resort {
+	position: absolute;
+	right: 1em;
+	top: 50%;
+	margin-top: -.5em;
+	line-height: 1;
+	cursor:pointer
+}
 main {
 	position: absolute;
 	top: 70px;
@@ -198,6 +206,7 @@ ul#archiveList, ul#tweetList {
 	line-height: 2.25;
 	min-width: 250px;
 	max-width: 70%;
+	overflow: hidden;
 }
 ul#archiveList li, ul#tweetList li {
 	padding: 9px 14px;
@@ -211,6 +220,7 @@ ul#tweetList li {
 	margin: 0 0 20px;
 	line-height: 1.65;
 	max-width: 480px;
+	overflow: hidden;
 }
 ul#archiveList li a {
 	color: #222;
@@ -243,7 +253,6 @@ ul#archiveList li a span:first-child {
 	float: left;
 	margin-right: 2.2em;
 }
-
 .archive-volume {
 	background-color: #e0e0e0;
 	display: inline-block;
@@ -270,8 +279,14 @@ ul#archiveList li a span:first-child {
 #tweetList li span.tweet-date {
 	float: right;
 }
+.twitterbird {
+	width: 24px;
+	height: 24px;
+	background: url('../img/twitterbird.png') no-repeat center center transparent;
+	float: right;
+}
 body > footer {
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	left: 0;
 	z-index: 200;
