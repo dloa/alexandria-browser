@@ -125,6 +125,9 @@ function showTweetList(arch){
 	var archiveTitle = $(arch).find('span:first-child').text();
 	$('header input.search').val(archiveTitle);
 	getArchive(archiveTitle);
+	if($('#resort').text() == 'Popular') {
+		$('#tweetListView').addClass('pop-sort');
+	}
 	$('#tweetListView').fadeIn(500);
 }
 // get archived tweets JSON object
@@ -142,9 +145,15 @@ function getArchive(archiveTitle) {
 					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
 				}
 			}
-			$('#tweetList li').sortElements(function(a, b){
-				return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
-			});			
+			if($('#tweetList').hasClass('pop-sort')){
+				$('#tweetList li').sortElements(function(a, b){
+					return parseInt($(a).attr('retweets')) < parseInt($(b).attr('retweets')) ? 1 : -1;
+				});
+			} else {
+				$('#tweetList li').sortElements(function(a, b){
+					return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
+				});
+			}
         }
     });
 }
