@@ -186,6 +186,7 @@ main {
 	overflow-y: scroll;
 	background-color: #ffffff;
 	padding-bottom: 1000px;
+	-webkit-overflow-scrolling: touch;
 }
 ul#archiveList, ul#tweetList {
 	display: inline-block;
