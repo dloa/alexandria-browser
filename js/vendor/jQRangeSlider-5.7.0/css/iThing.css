@@ -1,3 +1,6 @@
+/* @override 
+	http://sandbox.dev/js/vendor/jQRangeSlider-5.7.0/css/iThing.css */
+
 /**
  * Theme for jQRangeSlider
  * Inspired by http://cssdeck.com/item/381/itunes-10-storage-bar
@@ -38,8 +41,8 @@
 }
 
 .ui-rangeSlider-noArrow .ui-rangeSlider-container{
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+/*  -moz-border-radius: 4px;
+  border-radius: 4px;*/
   border-left: solid 1px #515862;
   border-right: solid 1px #515862;
 }
