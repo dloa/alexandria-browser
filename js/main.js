@@ -90,6 +90,9 @@ function getActiveJobs(searchTerm) {
 					}
 				}
 			}
+			$('#archiveList li').sortElements(function(a, b){
+				return $(a).text() > $(b).text() ? 1 : -1;
+			});
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			// alert("some error");
@@ -121,9 +124,12 @@ function getArchive(archiveTitle) {
 			for (var i = 0; i < data.length; i++) {
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
 				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ){
-					$("#tweetList").append('<li class = "responseRow"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
+					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + data[i].p.twitter.data[4] + '</span></div> <div>' + data[i].p.twitter.data[10] + '</div></li>');
 				}
 			}
+			$('#tweetList li').sortElements(function(a, b){
+				return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
+			});			
         }
     });
 }
@@ -159,3 +165,50 @@ function clearModal() {
 	$('#tweetListView').fadeOut(500);
 	$("#tweetList li.responseRow").remove();
 }
+
+// sort order function
+jQuery.fn.sortElements = (function(){
+ 
+    var sort = [].sort;
+ 
+    return function(comparator, getSortable) {
+ 
+        getSortable = getSortable || function(){return this;};
+ 
+        var placements = this.map(function(){
+ 
+            var sortElement = getSortable.call(this),
+                parentNode = sortElement.parentNode,
+ 
+                // Since the element itself will change position, we have
+                // to have some way of storing its original position in
+                // the DOM. The easiest way is to have a 'flag' node:
+                nextSibling = parentNode.insertBefore(
+                    document.createTextNode(''),
+                    sortElement.nextSibling
+                );
+ 
+            return function() {
+ 
+                if (parentNode === this) {
+                    throw new Error(
+                        "You can't sort elements if any one is a descendant of another."
+                    );
+                }
+ 
+                // Insert before flag:
+                parentNode.insertBefore(this, nextSibling);
+                // Remove flag:
+                parentNode.removeChild(nextSibling);
+ 
+            };
+ 
+        });
+ 
+        return sort.call(this, comparator).each(function(i){
+            placements[i].call(getSortable.call(this));
+        });
+ 
+    };
+ 
+})();
