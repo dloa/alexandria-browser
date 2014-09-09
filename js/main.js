@@ -102,7 +102,7 @@ function getActiveJobs(searchTerm) {
 			console.log(textStatus);
 			console.log(errorThrown);
 			$("#archiveList li").remove();
-			$("#archiveList").append("<li class='responseRow'><h2>Cannot connect to Librarian</h2></li>");
+			$('header input.search').attr('disabled','disabled').css({background:'none #efefef',padding:'3px 15px'}).val('Cannot connect to Librarian');
 	   }
 	});
 	
