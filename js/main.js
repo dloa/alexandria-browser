@@ -1,6 +1,6 @@
 jQuery(document).ready(function($){
 	
-	$('header').append('<div id="resort" style="display: inline-block;float: right;margin-top: .5em;">Recent</div>');
+	$('header').append('<div id="resort" style="position: absolute;right: 1em;top: 50%;margin-top: -.5em;line-height: 1;cursor:pointer">Recent</div>');
 	$('#resort').click(function(){
 		$('#tweetList').toggleClass('pop-sort');
 		if($('#tweetList').hasClass('pop-sort')){
