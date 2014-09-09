@@ -134,7 +134,7 @@ function showTweetList(arch){
 	if($('#resort').text() == 'Popular') {
 		$('#tweetListView').addClass('pop-sort');
 	}
-	$('#tweetListView').fadeIn(500);
+	$('.overlay').fadeIn(500);
 }
 // get archived tweets JSON object
 function getArchive(archiveTitle) {
@@ -192,7 +192,7 @@ $("#timeline").bind("valuesChanged", function(e, data){
 	getActiveJobs(searchTerm);
 });
 function clearModal() {
-	$('#tweetListView').fadeOut(500);
+	$('.overlay').fadeOut(500);
 	$("#tweetList li.responseRow").remove();
 }
 

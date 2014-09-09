@@ -182,11 +182,12 @@ header span {
 	cursor:pointer
 }
 main {
-	position: relative;
+	position: absolute;
+	top: 70px;
+	width: 100%;
 	z-index: 10;
 	text-align: center;
 	-webkit-overflow-scrolling: touch;
-	margin-top: 70px;
 }
 #app-shading {
 	position: fixed;
@@ -236,14 +237,16 @@ ul#archiveList li a {
 	border-radius: 50em;
 	font-size: 1.5em;
 }
+/*
 ul#archiveList li a:hover {
 	background-color: #eee;
 	background-color: rgba(238, 238, 238, .8);
-	border: 1px solid #cfcfcf;
 	box-shadow: 1px 1px 1px rgba(238, 238, 238, .8);
 }
+*/
 ul#archiveList li a:active {
 	color: #fff;
+	border: 1px solid #cfcfcf;
 	background-color: #aaa;
 	background-color: rgba(170, 170, 170, .8);
 	box-shadow: none;
@@ -273,11 +276,20 @@ ul#archiveList li a span:first-child {
 #wordCloud {
   color: #000000;
 }
-#tweetListView {
+#app-overlay {
 	display: none;
 	background-color: #111;
 	background-color: rgba(20,20,20,.7);
-	z-index: 100;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 90;
+	height: 100%;
+	width: 100%;
+}
+#tweetListView {
+	display: none;
+	z-index: 200;
 }
 #tweetList li span.tweet-date {
 	float: right;
