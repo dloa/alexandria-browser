@@ -97,12 +97,12 @@ function getActiveJobs(searchTerm) {
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			alert("some error");
+			// alert("some error");
 			console.log(XMLHttpRequest);
 			console.log(textStatus);
 			console.log(errorThrown);
 			$("#archiveList li").remove();
-			$("#archiveList").append("<li class='responseRow'>Cannot connect to Librarian</li>");
+			$("#archiveList").append("<li class='responseRow'><h2>Cannot connect to Librarian</h2></li>");
 	   }
 	});
 	
