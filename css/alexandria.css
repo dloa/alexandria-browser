@@ -156,17 +156,18 @@ header span {
 }
 
 #logo {
-  width: 100px;
-  height: 119px;
+  width: 55px;
+  height:55px;
   position: absolute;
   top: 0;
   left: 20px;
   z-index: 10;
-  background: url(../img/logo.png) bottom left;
-  background-size: 100px auto;
+  background: url(../img/logo.svg) bottom left;
+  background-size: 55px auto;
   text-align: center;
   font: 3.5em "Avenir-Medium";
-  margin-left: 8px;
+  margin-left: -1px;
+	margin-top: 6px;
 }
 main {
 	position: absolute;
@@ -234,6 +235,7 @@ ul#archiveList li a span:first-child {
 	margin-right: 2.2em;
 }
 
+// TREV: FIX APPEARANCE FOR PILLS
 .archive-volume {
 	background-color: #c2c2c2;
 }
