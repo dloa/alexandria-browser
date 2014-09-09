@@ -233,6 +233,11 @@ ul#archiveList li a span:first-child {
 	float: left;
 	margin-right: 2.2em;
 }
+
+.archive-volume {
+	background-color: #c2c2c2;
+}
+
 #wordCloud {
   color: #000000;
 }
