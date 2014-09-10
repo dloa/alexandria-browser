@@ -87,8 +87,6 @@ function getActiveJobs(searchTerm) {
 					}
 				}
 			}
-			var newHeight = parseInt($('#archiveList').height())+100+'px';
-			$('#archiveListView').css('height',newHeight);
 			$('#archiveList li').sortElements(function(a, b){
 				return $(a).text() > $(b).text() ? 1 : -1;
 			});
@@ -127,7 +125,6 @@ function getArchive(archiveTitle) {
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
 				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ){
 					var niceTweetDate = data[i].p.twitter.data[4].split(' ');
-					console.log(niceTweetDate);
 					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong>@' + data[i].p.twitter.data[9] + '</strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><div class="twitterbird"></div></li>');
 				}
 			}
@@ -144,11 +141,16 @@ function getArchive(archiveTitle) {
     });
 }
 // get archive volume
+var spinnerCount = 0;
 function getArchiveVolume(archiveTitle) {
-	$('#archiveListView').hide();
+	if(spinnerCount == 0) {
+		$('#archiveListView').hide();
+		$('#wait').fadeIn(500);
+	}
 	$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').append('<div id="loading-'+ archiveTitle.replace(/ /g,"-") +'" class="loader"></div>');
 	var newTarget = document.getElementById('loading-'+ archiveTitle.replace(/ /g,"-"));
 	var newSpinner = new Spinner(smallSpinConfig).spin(newTarget);
+	spinnerCount++;
 	$.ajax({
 		type: "POST",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
@@ -163,10 +165,19 @@ function getArchiveVolume(archiveTitle) {
 					archiveCount++;
 				}
 			}
-			$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(archiveCount);
-			$('#archiveListView').fadeIn(500);
-			spinner.stop();
-			$('#wait').fadeOut(500);
+			newSpinner.stop();
+			spinnerCount--;
+			if (archiveCount==0) {
+				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).remove();
+			} else {
+				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(archiveCount);
+			}
+			if(spinnerCount == 0) {
+				$('#archiveListView').show();
+				var newHeight = parseInt($('#archiveList').height())+100+'px';
+				$('#archiveListView').css('height',newHeight);
+				$('#wait').fadeOut(500);
+			}
 		}
 	});
 }
