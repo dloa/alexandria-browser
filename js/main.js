@@ -22,7 +22,7 @@ jQuery(document).ready(function($){
 
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(2014, 8, 1), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 2)},
-		defaultValues: {min: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() - 2), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1)},
+		defaultValues: {min: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() - 1), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1)},
 		arrows: false,
 		scales: [{
 		  first: function(value){ return value; },
@@ -39,27 +39,6 @@ jQuery(document).ready(function($){
 		  }
 		}]
 	});
-
-var largeSpinConfig = {
-		lines: 13, // The number of lines to draw
-		length: 4, // The length of each line
-		width: 2, // The line thickness
-		radius: 8, // The radius of the inner circle
-		corners: 1, // Corner roundness (0..1)
-		rotate: 0, // The rotation offset
-		direction: 1, // 1: clockwise, -1: counterclockwise
-		color: '#000', // #rgb or #rrggbb or array of colors
-		speed: 1, // Rounds per second
-		trail: 60, // Afterglow percentage
-		shadow: false, // Whether to render a shadow
-		hwaccel: false, // Whether to use hardware acceleration
-		className: 'spinner', // The CSS class to assign to the spinner
-		zIndex: 2e9, // The z-index (defaults to 2000000000)
-		top: '50%', // Top position relative to parent
-		left: '50%' // Left position relative to parent
-	};
-	var target = document.getElementById('wait');
-	var spinner = new Spinner(largeSpinConfig).spin(target);
 
     // load active jobs on pageload
     getActiveJobs();
@@ -98,12 +77,12 @@ function getActiveJobs(searchTerm) {
 			var data = $.parseJSON(responseData);
 			for (var i = 0; i < data.length; i++) {
 				if(!searchTerm){					
-					$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
+					$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"></span></a></li>');
 					getArchiveVolume(data[i]);
 				} else {
 					var titleSlice = data[i].slice(0,searchTerm.length);
 					if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
-						$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"><img src="img/loaderb16.gif" /></span></a></li>');
+						$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"></span></a></li>');
 						getArchiveVolume(data[i]);
 					}
 				}
@@ -167,6 +146,9 @@ function getArchive(archiveTitle) {
 // get archive volume
 function getArchiveVolume(archiveTitle) {
 	$('#archiveListView').hide();
+	$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').append('<div id="loading-'+ archiveTitle.replace(/ /g,"-") +'" class="loader"></div>');
+	var newTarget = document.getElementById('loading-'+ archiveTitle.replace(/ /g,"-"));
+	var newSpinner = new Spinner(smallSpinConfig).spin(newTarget);
 	$.ajax({
 		type: "POST",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
@@ -183,6 +165,7 @@ function getArchiveVolume(archiveTitle) {
 			}
 			$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(archiveCount);
 			$('#archiveListView').fadeIn(500);
+			spinner.stop();
 			$('#wait').fadeOut(500);
 		}
 	});
@@ -244,5 +227,45 @@ jQuery.fn.sortElements = (function(){
         });
  
     };
- 
+    
 })();
+var largeSpinConfig = {
+	lines: 17, // The number of lines to draw
+	length: 40, // The length of each line
+	width: 4, // The line thickness
+	radius: 60, // The radius of the inner circle
+	corners: 1, // Corner roundness (0..1)
+	rotate: 0, // The rotation offset
+	direction: 1, // 1: clockwise, -1: counterclockwise
+	color: '#000', // #rgb or #rrggbb or array of colors
+	speed: .5, // Rounds per second
+	trail: 34, // Afterglow percentage
+	shadow: false, // Whether to render a shadow
+	hwaccel: false, // Whether to use hardware acceleration
+	className: 'spinner', // The CSS class to assign to the spinner
+	zIndex: 2e9, // The z-index (defaults to 2000000000)
+	top: '50%', // Top position relative to parent
+	left: '50%' // Left position relative to parent
+};
+var target = document.getElementById('wait');
+var spinner = new Spinner(largeSpinConfig).spin(target);
+
+// Small loading indicators
+var smallSpinConfig = {
+	lines: 13, // The number of lines to draw
+	length: 4, // The length of each line
+	width: 2, // The line thickness
+	radius: 8, // The radius of the inner circle
+	corners: 1, // Corner roundness (0..1)
+	rotate: 0, // The rotation offset
+	direction: 1, // 1: clockwise, -1: counterclockwise
+	color: '#000', // #rgb or #rrggbb or array of colors
+	speed: 1, // Rounds per second
+	trail: 60, // Afterglow percentage
+	shadow: false, // Whether to render a shadow
+	hwaccel: false, // Whether to use hardware acceleration
+	className: 'spinner', // The CSS class to assign to the spinner
+	zIndex: 2e9, // The z-index (defaults to 2000000000)
+	top: '50%', // Top position relative to parent
+	left: '50%' // Left position relative to parent
+};
