@@ -260,7 +260,8 @@ ul#archiveList li a span:first-child {
 }
 
 #wordCloud {
-  color: #000000;
+	color: #000000;
+	height: 100%;	
 }
 #app-overlay {
 	background-color: #111;

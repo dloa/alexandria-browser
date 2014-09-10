@@ -18,7 +18,7 @@ jQuery(document).ready(function($){
 	// For todays date;
 	var datetime = new Date();
 	// Footer timeline contruct
-	var days = ["0", "Sept 1", "Sept 2", "Sept 3", "Sept 4", "Sept 5", "Sept 6", "Sept 7", "Sept 8", "Sept 9", "Sept 10", "Sept 11"];
+	var days = ["0", "Sept 1", "Sept 2", "Sept 3", "Sept 4", "Sept 5", "Sept 6", "Sept 7", "Sept 8", "Sept 9", "Sept 10", "Sept 11", "Sept 12", "Sept 13", "Sept 14", "Sept 15", "Sept 16"];
 
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(2014, 8, 1), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 2)},
@@ -142,6 +142,7 @@ function getArchive(archiveTitle) {
 }
 // get archive volume
 var spinnerCount = 0;
+var cloudlist = [];
 function getArchiveVolume(archiveTitle) {
 	if(spinnerCount == 0) {
 		$('#archiveListView').hide();
@@ -171,12 +172,19 @@ function getArchiveVolume(archiveTitle) {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).remove();
 			} else {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(archiveCount);
+				console.log(archiveCount);
+				$('#archiveList li').each(function(){
+					cloudlist.push([$(this).find('span:first-child').text(),archiveCount]);
+				});
 			}
 			if(spinnerCount == 0) {
-				$('#archiveListView').show();
+//				WordCloud(document.getElementById('wordCloud'), { list:cloudlist, minSize:'24px', backgroundColor:'transparent' } );
+//				$('#wordCloud').fadeIn();
+				$('#archiveListView').fadeIn();
 				var newHeight = parseInt($('#archiveList').height())+100+'px';
 				$('#archiveListView').css('height',newHeight);
-				$('#wait').fadeOut(500);
+				$('#wait').fadeOut(100);
+				console.log(cloudlist);
 			}
 		}
 	});
