@@ -100,7 +100,7 @@ function getActiveJobs(searchTerm) {
     $('#intro').remove();
 	$('.search').attr('disabled','disabled');
 	$('#archiveListView').hide();
-	$('#wait').fadeIn(500);	
+	$('#wait').fadeIn(100);	
 	$.ajax({
 		type: "GET",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
@@ -147,7 +147,7 @@ function showTweetList(arch){
 			$('header input.search').val(archiveTitle);
 			resetArchiveList = true;
 		}
-		$('.overlay').fadeIn(500);
+		$('.overlay').fadeIn(100);
 	}
 	getArchive(archiveTitle);
 	if($('#resort').text() == 'Popular') {
@@ -156,6 +156,10 @@ function showTweetList(arch){
 }
 // get archived tweets JSON object
 function getArchive(archiveTitle) {
+	// Loading spinner
+	$('#wait').fadeIn(100);
+	$("#tweetList li.responseRow").remove();
+	// Run query
     $.ajax({
         type: "POST",
         url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
@@ -179,6 +183,7 @@ function getArchive(archiveTitle) {
 					return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
 				});
 			}
+		$('#wait').fadeOut(100);
         }
     });
 }
@@ -188,7 +193,7 @@ var cloudlist = [];
 function getArchiveVolume(archiveTitle) {
 	if(spinnerCount == 0) {
 		$('#archiveListView').hide();
-		$('#wait').fadeIn(500);
+		$('#wait').fadeIn(100);
 	}
 	$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').append('<div id="loading-'+ archiveTitle.replace(/ /g,"-") +'" class="loader"></div>');
 	spinnerCount++;
@@ -209,7 +214,7 @@ function getArchiveVolume(archiveTitle) {
 			spinnerCount--;
 			console.log(spinnerCount);
 			if (archiveCount==0) {
-				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).remove();
+				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).remove();				
 			} else {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(archiveCount);
 				$('#archiveList li').each(function(){
@@ -219,6 +224,9 @@ function getArchiveVolume(archiveTitle) {
 			if(spinnerCount == 0) {
 //				WordCloud(document.getElementById('wordCloud'), { list:cloudlist, minSize:'24px', backgroundColor:'transparent' } );
 //				$('#wordCloud').fadeIn();
+				if($('#archiveListView li').length == 0) {
+					$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
+				}
 				$('#archiveListView').fadeIn();
 				var newHeight = parseInt($('#archiveList').height())+100+'px';
 				$('#archiveListView').css('height',newHeight);
@@ -241,7 +249,7 @@ $("#timeline").bind("valuesChanged", function(e, data){
 	}
 });
 function clearModal() {
-	$('.overlay').fadeOut(500);
+	$('.overlay').fadeOut(100);
 	$("#tweetList li.responseRow").remove();
 	if (resetArchiveList == true) {
 		getActiveJobs($('header input.search').val());

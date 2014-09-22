@@ -259,6 +259,9 @@ ul#archiveList li a {
 	border-radius: 50em;
 	font-size: 1.5em;
 }
+ul#archiveList li#no-results a {
+	cursor: default;
+}
 ul#archiveList li a:active {
 	color: #fff;
 	border: 1px solid #cfcfcf;
