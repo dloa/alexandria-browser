@@ -18,7 +18,7 @@ jQuery(document).ready(function($){
 	// For todays date;
 	var datetime = new Date();
 	// Footer timeline contruct
-	var days = ["0", "Sept 1", "Sept 2", "Sept 3", "Sept 4", "Sept 5", "Sept 6", "Sept 7", "Sept 8", "Sept 9", "Sept 10", "Sept 11", "Sept 12", "Sept 13", "Sept 14", "Sept 15", "Sept 16"];
+	var days = ["0", "Sept 1", "Sept 2", "Sept 3", "Sept 4", "Sept 5", "Sept 6", "Sept 7", "Sept 8", "Sept 9", "Sept 10", "Sept 11", "Sept 12", "Sept 13", "Sept 14", "Sept 15", "Sept 16", "Sept 17", "Sept 18", "Sept 19", "Sept 20", "Sept 21", "Sept 22", "Sept 23", "Sept 24", "Sept 25", "Sept 26", "Sept 27", "Sept 28", "Sept 29", "Sept 30", "Oct 01", "Oct 02", "Oct 03", "Oct 04", "Oct 05", "Oct 06", "Oct 07", "Oct 08", "Oct 09", "Oct 10"];
 
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(2014, 8, 1), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 2)},
@@ -40,50 +40,66 @@ jQuery(document).ready(function($){
 		}]
 	});
 
-    // load active jobs on pageload
-    getActiveJobs();
+    // load active jobs on button click
+    $('#getArchives').click(function(){
+	    getActiveJobs();
+    });
 
 	// Modal controls
 	$(document).on("keyup", function (e) {
 		var code = e.keyCode || e.which; if (code == 27) {
 			clearModal();
-			$('header input.search').val('');
-			getActiveJobs();
 		}
 	});
 
 	$('.close-modal').click(function(){
 		clearModal();
-		$('header input.search').val('');
-		getActiveJobs();
 	});
 	
 	// Search box
 	$('header input.search').on("keyup", function (e) {
-		if($('#tweetListView').css('display') == 'block') {
-			clearModal();
+		if (searchRunning == 1) {
+			clearTimeout ( searchTimerId );
+			return;
 		}
-		var searchTerm = $(this).val();
-		getActiveJobs(searchTerm);
+		searchRunning = 1;
+		setTimeout ( 'runSearch()', 1500 );
 	});
 });
+var searchTimerId = 0;
+var searchRunning;
+function runSearch() {
+	if($('#tweetListView').css('display') == 'block') {
+		clearModal();
+	}
+	var searchTerm = $('.search').val();
+	getActiveJobs(searchTerm);
+	clearTimeout ( searchTimerId );
+	searchRunning = 0;
+}
 // function to get active jobs JSON object
 function getActiveJobs(searchTerm) {
+    $('#intro').remove();
+	$('.search').attr('disabled','disabled');
+	$('#archiveListView').hide();
+	$('#wait').fadeIn(500);	
 	$.ajax({
 		type: "GET",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
 		success: function (responseData) {
+			console.log('running search ... ' + searchTerm);
 			$("#archiveList li").remove();
 			var data = $.parseJSON(responseData);
-			for (var i = 0; i < data.length; i++) {
+//			console.log(data['Jobs']);
+			for (var i = 0; i < data['Jobs'].length; i++) {
 				if(!searchTerm){					
-					$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"></span></a></li>');
-					getArchiveVolume(data[i]);
+					$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
+					getArchiveVolume(data['Jobs'][i]);
 				} else {
-					var titleSlice = data[i].slice(0,searchTerm.length);
+					var titleSlice = data['Jobs'][i].slice(0,searchTerm.length);
 					if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
-						$("#archiveList").append('<li id="archive-'+data[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data[i] + '</span> <span class="archive-volume"></span></a></li>');
-						getArchiveVolume(data[i]);
+						$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
+						getArchiveVolume(data['Jobs'][i]);
 					}
 				}
 			}
@@ -104,13 +120,16 @@ function getActiveJobs(searchTerm) {
 }
 // show tweets in archive
 function showTweetList(arch){
-	var archiveTitle = $(arch).find('span:first-child').text();
-	$('header input.search').val(archiveTitle);
+	var archiveTitle = arch;
+	if($('#tweetListView').css('display') != 'block') {
+		archiveTitle = $(arch).find('span:first-child').text();
+		$('header input.search').val(archiveTitle);
+		$('.overlay').fadeIn(500);
+	}
 	getArchive(archiveTitle);
 	if($('#resort').text() == 'Popular') {
 		$('#tweetListView').addClass('pop-sort');
 	}
-	$('.overlay').fadeIn(500);
 }
 // get archived tweets JSON object
 function getArchive(archiveTitle) {
@@ -165,14 +184,14 @@ function getArchiveVolume(archiveTitle) {
 				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ){
 					archiveCount++;
 				}
-			}
+			}			
 			newSpinner.stop();
 			spinnerCount--;
+			console.log(spinnerCount);
 			if (archiveCount==0) {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).remove();
 			} else {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(archiveCount);
-				console.log(archiveCount);
 				$('#archiveList li').each(function(){
 					cloudlist.push([$(this).find('span:first-child').text(),archiveCount]);
 				});
@@ -184,6 +203,7 @@ function getArchiveVolume(archiveTitle) {
 				var newHeight = parseInt($('#archiveList').height())+100+'px';
 				$('#archiveListView').css('height',newHeight);
 				$('#wait').fadeOut(100);
+				$('.search').attr('disabled',false);
 				console.log(cloudlist);
 			}
 		}
@@ -191,11 +211,13 @@ function getArchiveVolume(archiveTitle) {
 }
 // scan archives after timeline slider values change
 $("#timeline").bind("valuesChanged", function(e, data){
-	if($('#tweetListView').css('display') == 'block') {
-		clearModal();
-	}
 	var searchTerm = $('header input.search').val();
-	getActiveJobs(searchTerm);
+	if($('#tweetListView').css('display') == 'block') {
+		$('ul#tweetList li').fadeOut(500);
+		showTweetList(searchTerm);
+	} else {
+		getActiveJobs(searchTerm);
+	}
 });
 function clearModal() {
 	$('.overlay').fadeOut(500);
