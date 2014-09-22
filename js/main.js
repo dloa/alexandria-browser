@@ -66,7 +66,10 @@ jQuery(document).ready(function($){
 		setTimeout ( 'runSearch()', 1500 );
 	});
 });
+<<<<<<< HEAD
 // Search
+=======
+>>>>>>> d96dd5e93dc354d9551040a7faaf031b00cab890
 var searchTimerId = 0;
 var searchRunning;
 function runSearch() {
