@@ -57,13 +57,26 @@ jQuery(document).ready(function($){
 	});
 	
 	// Search box
+	var searchValue;
+	var newSearchValue;
+	$('header input.search').on("keydown", function (e) {
+		searchValue = $('header input.search').val();
+	});
 	$('header input.search').on("keyup", function (e) {
-		if (searchRunning == 1) {
-			clearTimeout ( searchTimerId );
+		newSearchValue = $('header input.search').val();
+		var code = e.keyCode || e.which; if (code == 32) {
+			console.log('cannot search for empty space');
 			return;
+		} else if ( (newSearchValue != searchValue) && (newSearchValue != '') ) {
+			if (searchRunning == 1) {
+				clearTimeout ( searchTimerId );
+				return;
+			}
+			searchRunning = 1;
+			setTimeout ( 'runSearch()', 4000 );
+		} else {
+			console.log('Search value not changed or is null');
 		}
-		searchRunning = 1;
-		setTimeout ( 'runSearch()', 2000 );
 	});
 });
 // Searching ...
@@ -80,6 +93,10 @@ function runSearch() {
 }
 // function to get active jobs JSON object
 function getActiveJobs(searchTerm) {
+	resetArchiveList = false;
+	if (!searchTerm) {
+		var searchTerm = '';
+	}
     $('#intro').remove();
 	$('.search').attr('disabled','disabled');
 	$('#archiveListView').hide();
@@ -119,12 +136,17 @@ function getActiveJobs(searchTerm) {
 	});
 	
 }
+var resetArchiveList = false;
 // show tweets in archive
 function showTweetList(arch){
 	var archiveTitle = arch;
 	if($('#tweetListView').css('display') != 'block') {
+		var searchValue = $('header input.search').val();
 		archiveTitle = $(arch).find('span:first-child').text();
-		$('header input.search').val(archiveTitle);
+		if (searchValue != archiveTitle) {
+			$('header input.search').val(archiveTitle);
+			resetArchiveList = true;
+		}
 		$('.overlay').fadeIn(500);
 	}
 	getArchive(archiveTitle);
@@ -211,8 +233,9 @@ function getArchiveVolume(archiveTitle) {
 $("#timeline").bind("valuesChanged", function(e, data){
 	var searchTerm = $('header input.search').val();
 	if($('#tweetListView').css('display') == 'block') {
-		$('ul#tweetList li').fadeOut(500);
+		$('ul#tweetList li').remove();
 		showTweetList(searchTerm);
+		resetArchiveList = true;
 	} else {
 		getActiveJobs(searchTerm);
 	}
@@ -220,6 +243,9 @@ $("#timeline").bind("valuesChanged", function(e, data){
 function clearModal() {
 	$('.overlay').fadeOut(500);
 	$("#tweetList li.responseRow").remove();
+	if (resetArchiveList == true) {
+		getActiveJobs($('header input.search').val());
+	}
 }
 
 // sort order function
