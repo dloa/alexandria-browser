@@ -63,7 +63,7 @@ jQuery(document).ready(function($){
 			return;
 		}
 		searchRunning = 1;
-		setTimeout ( 'runSearch()', 1500 );
+		setTimeout ( 'runSearch()', 2000 );
 	});
 });
 // Searching ...
@@ -169,8 +169,6 @@ function getArchiveVolume(archiveTitle) {
 		$('#wait').fadeIn(500);
 	}
 	$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').append('<div id="loading-'+ archiveTitle.replace(/ /g,"-") +'" class="loader"></div>');
-	var newTarget = document.getElementById('loading-'+ archiveTitle.replace(/ /g,"-"));
-	var newSpinner = new Spinner(smallSpinConfig).spin(newTarget);
 	spinnerCount++;
 	$.ajax({
 		type: "POST",
@@ -186,7 +184,6 @@ function getArchiveVolume(archiveTitle) {
 					archiveCount++;
 				}
 			}			
-			newSpinner.stop();
 			spinnerCount--;
 			console.log(spinnerCount);
 			if (archiveCount==0) {
@@ -291,23 +288,3 @@ var largeSpinConfig = {
 };
 var target = document.getElementById('wait');
 var spinner = new Spinner(largeSpinConfig).spin(target);
-
-// Small loading indicators
-var smallSpinConfig = {
-	lines: 13, // The number of lines to draw
-	length: 4, // The length of each line
-	width: 2, // The line thickness
-	radius: 8, // The radius of the inner circle
-	corners: 1, // Corner roundness (0..1)
-	rotate: 0, // The rotation offset
-	direction: 1, // 1: clockwise, -1: counterclockwise
-	color: '#000', // #rgb or #rrggbb or array of colors
-	speed: 1, // Rounds per second
-	trail: 60, // Afterglow percentage
-	shadow: false, // Whether to render a shadow
-	hwaccel: false, // Whether to use hardware acceleration
-	className: 'spinner', // The CSS class to assign to the spinner
-	zIndex: 2e9, // The z-index (defaults to 2000000000)
-	top: '50%', // Top position relative to parent
-	left: '50%' // Left position relative to parent
-};
