@@ -66,6 +66,7 @@ jQuery(document).ready(function($){
 		setTimeout ( 'runSearch()', 1500 );
 	});
 });
+// Search
 var searchTimerId = 0;
 var searchRunning;
 function runSearch() {
