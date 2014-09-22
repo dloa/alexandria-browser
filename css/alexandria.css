@@ -94,10 +94,33 @@ ul {
 	Author's custom styles
 	========================================================================== */
 
-body {
+body, html { margin: 0; padding: 0;}
+body { 
 	overflow-x: hidden;
-  background-color: #ecedec;
-	font-family: "Helvetica Neue", Helvetica, Geneva, sans-serif;
+	color: #464646;
+	border-top: 8px solid #92b4c6;
+	background-color: #ecedec;
+}
+html, button, input, select, textarea, h1, h2, h3, h4, p {
+	font-family: Avenir-Book, avenir, 'Open Sans', open_sansregular, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: 400;
+	font-style: normal;
+}
+img {
+	max-width: 100%;
+	max-height: 100%;
+	height: auto;
+}
+h1, h2, h3, h4 {
+	text-align: center;
+}
+h1 {
+	font-size: 1.65em;
+	margin-top: 0;
+	color: #444;	
+	text-transform: uppercase;
+	letter-spacing: 7px;
+	line-height: 1.65;
 }
 
 header {
@@ -202,11 +225,19 @@ main {
 	z-index: 2;
 	background-color: #ffffff;
 }
+div#intro {
+	position: fixed;
+	width: 100%;
+	top: 42%;
+}
+#intro h1 {
+	margin: -.5em 0 .5em;
+}
 ul#archiveList, ul#tweetList {
 	display: inline-block;
 	zoom:1;*display:inline;
 	text-align: left;
-	margin: 20px 0 0 0;
+	margin: 20px 0 5em 0;
 	padding: 0;
 	line-height: 2.25;
 	min-width: 250px;
@@ -379,10 +410,12 @@ section#timeline {
 	-moz-opacity: 0.7;
 	-khtml-opacity: 0.7;
 	opacity: 0.7;
+	display: none;
 }
 #wait {
 	position: fixed;
 	z-index: 1000;
+	background: #fff;
 }
 .loader {
 	position:absolute;
@@ -448,6 +481,41 @@ div.close-modal:hover {
 	top: 85px;
 	right: 40px;
 }
+/* BUTTONS */
+.wsite-button {
+	display: inline-block;
+	zoom:1;*display:inline;
+	padding: 7px 12px;
+	background: #b0b0b0;
+	color: #fff;
+	font-weight: normal;
+	text-shadow: 0 1px rgba(0, 0, 0, 0.4);
+	text-decoration: none;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	cursor: pointer;
+	border-radius: 2px;
+	transition: background 0.1s ease-in-out;
+	-webkit-transition: background 0.1s ease-in-out;
+	-moz-transition: background 0.1s ease-in-out;
+	-ms-transition: background 0.1s ease-in-out;
+	-o-transition: background 0.1s ease-in-out;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+}
+.wsite-button.secondary {
+	background-color: #92b4c6;
+	box-shadow: 0px 3px 0px 0px #3293ba;
+	-moz-box-shadow: 0px 3px 0px 0px #3293ba;
+	-webkit-box-shadow: 0px 3px 0px 0px #3293ba;
+	margin-top: .5em;
+}
+.wsite-button:hover, .wsite-button.secondary:hover {
+	background: #242424;
+	color:#fff;
+}
+
 /* ==========================================================================
 	Media Queries
 	========================================================================== */
