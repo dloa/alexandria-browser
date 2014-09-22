@@ -277,6 +277,11 @@ ul#archiveList li a span:first-child {
 	float: left;
 	margin-right: 2.2em;
 }
+ul#tweetList li a.twitter-username {
+	font-weight: bold;
+	color: inherit;
+	text-decoration: none;
+}
 .archive-volume {
 	background-color: #e0e0e0;
 	display: inline-block;
