@@ -65,14 +65,10 @@ jQuery(document).ready(function($){
 			console.log('cannot search for empty space');
 			return;
 		} else if ( (newSearchValue != searchValue) && (searchValue != '') ) {
-			if (searchRunning == 1) {
+			if (searchTimerId) {
 				clearTimeout ( searchTimerId );
-				return;
 			}
-			searchRunning = 1;
-			setTimeout ( 'runSearch()', 4000 );
-		} else {
-			console.log('Search value not changed or is null');
+			searchTimerId = setTimeout ( 'runSearch()', 2000 );
 		}
 	});
 	// load active jobs on button click
