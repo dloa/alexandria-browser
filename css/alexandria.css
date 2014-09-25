@@ -144,7 +144,7 @@ header {
 }
 
 header input {
-  background: url(../img/search.svg) 10px 7px / .8em no-repeat;
+  background: url(../img/search.svg) 10px .45em / .8em no-repeat;
   display: inline-block;
   border-radius: 50em;
   border: 1px solid #cfcfcf;

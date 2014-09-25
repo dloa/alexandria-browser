@@ -17,6 +17,7 @@ jQuery(document).ready(function($){
 
 	// For todays date;
 	var datetime = new Date();
+	
 	// Footer timeline contruct
 	var days = ["0", "Sept 1", "Sept 2", "Sept 3", "Sept 4", "Sept 5", "Sept 6", "Sept 7", "Sept 8", "Sept 9", "Sept 10", "Sept 11", "Sept 12", "Sept 13", "Sept 14", "Sept 15", "Sept 16", "Sept 17", "Sept 18", "Sept 19", "Sept 20", "Sept 21", "Sept 22", "Sept 23", "Sept 24", "Sept 25", "Sept 26", "Sept 27", "Sept 28", "Sept 29", "Sept 30", "Oct 01", "Oct 02", "Oct 03", "Oct 04", "Oct 05", "Oct 06", "Oct 07", "Oct 08", "Oct 09", "Oct 10"];
 
@@ -40,11 +41,14 @@ jQuery(document).ready(function($){
 		}]
 	});
 
-    // load active jobs on button click
-    $('#getArchives').click(function(){
-	    getActiveJobs();
-    });
-
+	// load active jobs on button click
+	$('#getArchives').click(function(){
+		var startDate = new Date(2014, 8, 1);
+		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1);
+		$("#timeline").dateRangeSlider("values", startDate, endDate);
+//		getActiveJobs();
+	});
+	
 	// Modal controls
 	$(document).on("keyup", function (e) {
 		var code = e.keyCode || e.which; if (code == 27) {
@@ -67,7 +71,7 @@ jQuery(document).ready(function($){
 		var code = e.keyCode || e.which; if (code == 32) {
 			console.log('cannot search for empty space');
 			return;
-		} else if ( (newSearchValue != searchValue) && (newSearchValue != '') ) {
+		} else if ( (newSearchValue != searchValue) && (searchValue != '') ) {
 			if (searchRunning == 1) {
 				clearTimeout ( searchTimerId );
 				return;
@@ -138,14 +142,15 @@ function getActiveJobs(searchTerm) {
 }
 var resetArchiveList = false;
 // show tweets in archive
+var searchValue;
 function showTweetList(arch){
 	var archiveTitle = arch;
 	if($('#tweetListView').css('display') != 'block') {
-		var searchValue = $('header input.search').val();
+		searchValue = $('header input.search').val();
 		archiveTitle = $(arch).find('span:first-child').text();
 		if (searchValue != archiveTitle) {
 			$('header input.search').val(archiveTitle);
-			resetArchiveList = true;
+			// resetArchiveList = true;
 		}
 		$('.overlay').fadeIn(100);
 	}
@@ -171,7 +176,7 @@ function getArchive(archiveTitle) {
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
 				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ){
 					var niceTweetDate = data[i].p.twitter.data[4].split(' ');
-					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><a class="twitterbird" href="https://twitter.com/'+data[i].p.twitter.data[9]+'/status/'+data[i].p.twitter.data[3]+'" target="_blank"></a></li>');
+					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><span class="twitterbird"></span></li>');
 				}
 			}
 			if($('#tweetList').hasClass('pop-sort')){
@@ -246,6 +251,7 @@ $("#timeline").bind("valuesChanged", function(e, data){
 function clearModal() {
 	$('.overlay').fadeOut(100);
 	$("#tweetList li.responseRow").remove();
+	$('.search').val(searchValue);
 	if (resetArchiveList == true) {
 		getActiveJobs($('header input.search').val());
 	}
