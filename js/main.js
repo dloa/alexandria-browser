@@ -86,11 +86,12 @@ jQuery(document).ready(function($){
 // Searching ...
 var searchTimerId = 0;
 var searchRunning;
+var searchTerm
 function runSearch() {
+	searchTerm = $('.search').val();
 	if($('#tweetListView').css('display') == 'block') {
 		clearModal();
 	}
-	var searchTerm = $('.search').val();
 	getActiveJobs(searchTerm);
 	clearTimeout ( searchTimerId );
 	searchRunning = 0;
@@ -112,7 +113,6 @@ function getActiveJobs(searchTerm) {
 			console.log('running search ... ' + searchTerm);
 			$("#archiveList li").remove();
 			var data = $.parseJSON(responseData);
-//			console.log(data['Jobs']);
 			for (var i = 0; i < data['Jobs'].length; i++) {
 				if(!searchTerm){			
 					$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
@@ -251,7 +251,9 @@ $("#timeline").bind("valuesChanged", function(e, data){
 function clearModal() {
 	$('.overlay').fadeOut(100);
 	$("#tweetList li.responseRow").remove();
-	$('.search').val(searchValue);
+	if (searchTerm == searchValue) {
+		$('.search').val(searchValue);
+	}
 	if (resetArchiveList == true) {
 		getActiveJobs($('header input.search').val());
 	}
