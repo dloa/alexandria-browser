@@ -213,6 +213,7 @@ function getArchiveVolume(archiveTitle) {
 			console.log('StartDate = '+Date.parse(dateValues.min));
 			console.log('EndDate = '+Date.parse(dateValues.max));
 			console.log('Data = '+data);
+			console.log('***');
 			for (var i = 0; i < data.length; i++) {
 				console.log(data[i].p.twitter.data[0]);
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
