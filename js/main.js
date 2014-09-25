@@ -198,37 +198,20 @@ function getArchiveVolume(archiveTitle) {
 	$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').append('<div id="loading-'+ archiveTitle.replace(/ /g,"-") +'" class="loader"></div>');
 	spinnerCount++;
 	var dateValues = $("#timeline").dateRangeSlider("values");
+	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
 	$.ajax({
 		type: "POST",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/count",
-		data: {
-				"Archive": archiveTitle,
-				"StartDate": Date.parse(dateValues.min),
-				"EndDate": Date.parse(dateValues.max)
-		},
+		data: queryString.toString(),
 		success: function (e) {
 			var data = $.parseJSON(e);
 			var archiveCount = 0;
-			console.log('Archive = '+archiveTitle);
-			console.log('StartDate = '+Date.parse(dateValues.min));
-			console.log('EndDate = '+Date.parse(dateValues.max));
-			console.log('Data = '+data);
-			console.log('***');
-/*
-			for (var i = 0; i < data.length; i++) {
-				console.log(data);
-				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
-				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ) {
-					archiveCount++;
-				}
-			}
-*/
 			spinnerCount--;
 			console.log('Archives to count = '+spinnerCount);
 			if (data==0) {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).remove();				
 			} else {
-				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(archiveCount);
+				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(data);
 				$('#archiveList li').each(function(){
 					cloudlist.push([$(this).find('span:first-child').text(),archiveCount]);
 				});
@@ -246,38 +229,7 @@ function getArchiveVolume(archiveTitle) {
 				$('.search').attr('disabled',false);
 //				console.log(cloudlist);
 			}
-/*
-			var archiveCount = 0;
-			for (var i = 0; i < data.length; i++) {
-				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
-				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ) {
-					archiveCount++;
-				}
-			}
-			spinnerCount--;
-			console.log(spinnerCount);
-			if (archiveCount==0) {
-				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).remove();				
-			} else {
-				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(archiveCount);
-				$('#archiveList li').each(function(){
-					cloudlist.push([$(this).find('span:first-child').text(),archiveCount]);
-				});
-			}
-			if(spinnerCount == 0) {
-//				WordCloud(document.getElementById('wordCloud'), { list:cloudlist, minSize:'24px', backgroundColor:'transparent' } );
-//				$('#wordCloud').fadeIn();
-				if($('#archiveListView li').length == 0) {
-					$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
-				}
-				$('#archiveListView').fadeIn();
-				var newHeight = parseInt($('#archiveList').height())+100+'px';
-				$('#archiveListView').css('height',newHeight);
-				$('#wait').fadeOut(100);
-				$('.search').attr('disabled',false);
-				console.log(cloudlist);
-			}
-*/		}
+		}
 	});
 }
 // scan archives after timeline slider values change
