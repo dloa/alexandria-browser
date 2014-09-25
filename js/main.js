@@ -214,13 +214,15 @@ function getArchiveVolume(archiveTitle) {
 			console.log('EndDate = '+Date.parse(dateValues.max));
 			console.log('Data = '+data);
 			console.log('***');
+/*
 			for (var i = 0; i < data.length; i++) {
-				console.log(data[i].p.twitter.data[0]);
+				console.log(data);
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
 				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ) {
 					archiveCount++;
 				}
 			}
+*/
 			spinnerCount--;
 			console.log('Archives to count = '+spinnerCount);
 			if (data==0) {
