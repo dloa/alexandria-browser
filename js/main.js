@@ -200,7 +200,7 @@ function getArchiveVolume(archiveTitle) {
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	$.ajax({
 		type: "POST",
-		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates",
+		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/count",
 		data: {
 				"Archive": archiveTitle,
 				"StartDate": Date.parse(dateValues.min),
@@ -212,7 +212,7 @@ function getArchiveVolume(archiveTitle) {
 			console.log('Archive = '+archiveTitle);
 			console.log('StartDate = '+Date.parse(dateValues.min));
 			console.log('EndDate = '+Date.parse(dateValues.max));
-			console.log(data);
+			console.log('Data = '+data);
 			for (var i = 0; i < data.length; i++) {
 				console.log(data[i].p.twitter.data[0]);
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
@@ -221,7 +221,7 @@ function getArchiveVolume(archiveTitle) {
 				}
 			}
 			spinnerCount--;
-			console.log(spinnerCount);
+			console.log('Archives to count = '+spinnerCount);
 			if (data==0) {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).remove();				
 			} else {
