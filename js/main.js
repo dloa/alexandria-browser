@@ -41,14 +41,6 @@ jQuery(document).ready(function($){
 		}]
 	});
 
-	// load active jobs on button click
-	$('#getArchives').click(function(){
-		var startDate = new Date(2014, 8, 1);
-		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1);
-		$("#timeline").dateRangeSlider("values", startDate, endDate);
-//		getActiveJobs();
-	});
-	
 	// Modal controls
 	$(document).on("keyup", function (e) {
 		var code = e.keyCode || e.which; if (code == 27) {
@@ -61,10 +53,11 @@ jQuery(document).ready(function($){
 	});
 	
 	// Search box
-	var searchValue;
-	var newSearchValue;
 	$('header input.search').on("keydown", function (e) {
 		searchValue = $('header input.search').val();
+		if($('#tweetListView').css('display') == 'block') {
+			resetArchiveList == true;
+		}
 	});
 	$('header input.search').on("keyup", function (e) {
 		newSearchValue = $('header input.search').val();
@@ -82,11 +75,20 @@ jQuery(document).ready(function($){
 			console.log('Search value not changed or is null');
 		}
 	});
+	// load active jobs on button click
+	$('#getArchives').click(function(){
+		searchValue = '';
+		var startDate = new Date(2014, 8, 1);
+		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1);
+		$("#timeline").dateRangeSlider("values", startDate, endDate);
+//		getActiveJobs();
+	});
+	
 });
 // Searching ...
 var searchTimerId = 0;
 var searchRunning;
-var searchTerm
+var searchTerm;
 function runSearch() {
 	searchTerm = $('.search').val();
 	if($('#tweetListView').css('display') == 'block') {
@@ -100,7 +102,7 @@ function runSearch() {
 function getActiveJobs(searchTerm) {
 	resetArchiveList = false;
 	if (!searchTerm) {
-		var searchTerm = '';
+		searchTerm = '';
 	}
     $('#intro').remove();
 	$('.search').attr('disabled','disabled');
@@ -142,7 +144,8 @@ function getActiveJobs(searchTerm) {
 }
 var resetArchiveList = false;
 // show tweets in archive
-var searchValue;
+var searchValue = '';
+var newSearchValue = '';
 function showTweetList(arch){
 	var archiveTitle = arch;
 	if($('#tweetListView').css('display') != 'block') {
@@ -239,7 +242,7 @@ function getArchiveVolume(archiveTitle) {
 }
 // scan archives after timeline slider values change
 $("#timeline").bind("valuesChanged", function(e, data){
-	var searchTerm = $('header input.search').val();
+	searchTerm = $('header input.search').val();
 	if($('#tweetListView').css('display') == 'block') {
 		$('ul#tweetList li').remove();
 		showTweetList(searchTerm);
@@ -251,11 +254,12 @@ $("#timeline").bind("valuesChanged", function(e, data){
 function clearModal() {
 	$('.overlay').fadeOut(100);
 	$("#tweetList li.responseRow").remove();
-	if (searchTerm == searchValue) {
-		$('.search').val(searchValue);
-	}
 	if (resetArchiveList == true) {
 		getActiveJobs($('header input.search').val());
+	} else {
+		if ( (searchTerm == searchValue) && (searchValue == newSearchValue) )  {
+			$('.search').val(searchValue);
+		}
 	}
 }
 
