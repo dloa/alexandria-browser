@@ -63,8 +63,7 @@ jQuery(document).ready(function($){
 		newSearchValue = $('header input.search').val();
 		var code = e.keyCode || e.which; if (code == 32) {
 			console.log('cannot search for empty space');
-			return;
-		} else if ( (newSearchValue != searchValue) && (searchValue != '') ) {
+		} else if ( ( (newSearchValue != searchValue) && (searchValue != '') ) || (code == 16) ) {
 			if (searchTimerId) {
 				clearTimeout ( searchTimerId );
 			}
