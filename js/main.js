@@ -1,20 +1,5 @@
 jQuery(document).ready(function($){
 	
-	$('#resort').click(function(){
-		$('#tweetList').toggleClass('pop-sort');
-		if($('#tweetList').hasClass('pop-sort')){
-			$('#tweetList li').sortElements(function(a, b){
-				return parseInt($(a).attr('retweets')) < parseInt($(b).attr('retweets')) ? 1 : -1;
-			});
-			$(this).text('Popular');
-		} else {
-			$('#tweetList li').sortElements(function(a, b){
-				return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
-			});
-			$(this).text('Recent');
-		}
-	});
-
 	// For todays date;
 	var datetime = new Date();
 	
@@ -82,7 +67,39 @@ jQuery(document).ready(function($){
 //		getActiveJobs();
 	});
 	
-});
+	// Sort - Archive List
+	$('#resort-archView').click(function(){
+		$('#archiveList').toggleClass('pop-sort');
+		if($('#archiveList').hasClass('pop-sort')){
+			$('#archiveList li').sortElements(function(a, b){
+				return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
+			});
+			$(this).text('Popular');
+		} else {
+			sortUnorderedList("archiveList");
+			$(this).text('Alphabetical');
+		}
+	});
+	// Sort - Tweet List
+	$('#resort').click(function(){
+		$('#tweetList').toggleClass('pop-sort');
+		if($('#tweetList').hasClass('pop-sort')){
+			$('#tweetList li').sortElements(function(a, b){
+				return parseInt($(a).attr('retweets')) < parseInt($(b).attr('retweets')) ? 1 : -1;
+			});
+			$(this).text('Popular');
+		} else {
+			$('#tweetList li').sortElements(function(a, b){
+				return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
+			});
+			$(this).text('Recent');
+		}
+	});
+
+
+	
+}); // End Document.Ready
+
 // Searching ...
 var searchTimerId = 0;
 var searchRunning;
@@ -125,9 +142,14 @@ function getActiveJobs(searchTerm) {
 					}
 				}
 			}
-			$('#archiveList li').sortElements(function(a, b){
-				return $(a).text() > $(b).text() ? 1 : -1;
-			});
+			if($('#resort-archView').text() == 'Popular') {
+				$('#archiveList').addClass('pop-sort');
+				$('#archiveList li').sortElements(function(a, b){
+					return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
+				});
+			} else {
+				sortUnorderedList("archiveList");
+			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			// alert("some error");
@@ -147,6 +169,7 @@ var newSearchValue = '';
 function showTweetList(arch){
 	var archiveTitle = arch;
 	if($('#tweetListView').css('display') != 'block') {
+		$('#resort-archView').fadeOut(100);
 		searchValue = $('header input.search').val();
 		archiveTitle = $(arch).find('span:first-child').text();
 		if (searchValue != archiveTitle) {
@@ -201,7 +224,7 @@ function getArchiveVolume(archiveTitle) {
 		$('#archiveListView').hide();
 		$('#wait').fadeIn(100);
 	}
-	$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').append('<div id="loading-'+ archiveTitle.replace(/ /g,"-") +'" class="loader"></div>');
+//	$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').append('<div id="loading-'+ archiveTitle.replace(/ /g,"-") +'" class="loader"></div>');
 	spinnerCount++;
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
@@ -218,6 +241,7 @@ function getArchiveVolume(archiveTitle) {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).remove();				
 			} else {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(data);
+				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).attr('volume',data);
 				$('#archiveList li').each(function(){
 					cloudlist.push([$(this).find('span:first-child').text(),archiveCount]);
 				});
@@ -251,6 +275,7 @@ $("#timeline").bind("valuesChanged", function(e, data){
 });
 function clearModal() {
 	$('.overlay').fadeOut(100);
+	$('#resort-archView').fadeIn(100);
 	$("#tweetList li.responseRow").remove();
 	if (resetArchiveList == true) {
 		getActiveJobs($('header input.search').val());
@@ -261,7 +286,7 @@ function clearModal() {
 	}
 }
 
-// sort order function
+// Interger sort order function
 jQuery.fn.sortElements = (function(){
  
     var sort = [].sort;
@@ -307,6 +332,38 @@ jQuery.fn.sortElements = (function(){
     };
     
 })();
+// Alphabetical sort
+function sortUnorderedList(ul, sortDescending) {
+  if(typeof ul == "string")
+    ul = document.getElementById(ul);
+
+  // Idiot-proof, remove if you want
+  if(!ul) {
+    alert("The UL object is null!");
+    return;
+  }
+
+  // Get the list items and setup an array for sorting
+  var lis = ul.getElementsByTagName("LI");
+  var vals = [];
+
+  // Populate the array
+  for(var i = 0, l = lis.length; i < l; i++)
+    vals.push(lis[i].outerHTML);
+
+  // Sort it
+  vals.sort();
+
+  // Sometimes you gotta DESC
+  if(sortDescending)
+    vals.reverse();
+
+  // Change the list on the page
+  for(var i = 0, l = lis.length; i < l; i++)
+    lis[i].outerHTML = vals[i];
+}
+
+// Spinner configuration
 var largeSpinConfig = {
 	lines: 17, // The number of lines to draw
 	length: 40, // The length of each line
