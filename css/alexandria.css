@@ -304,7 +304,8 @@ ul#tweetList li a.twitter-username {
 
 #wordCloud {
 	color: #000000;
-	height: 100%;	
+	height: 90%;
+	top: 2.5em;
 }
 #wordCloud span {
 	cursor: pointer;
