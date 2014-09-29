@@ -244,7 +244,8 @@ function getArchiveVolume(archiveTitle) {
 				$('#wordCloud').fadeIn();
 				WordCloud(document.getElementById('wordCloud'), {
 					list:cloudlist,
-					minSize:'24px',
+					gridSize: Math.round(16 * $('#canvas').width() / 1024),
+  					minSize:24,
 					backgroundColor:'transparent',
 					minRotation:0,
 					maxRotation:0,
