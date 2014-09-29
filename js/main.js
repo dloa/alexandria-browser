@@ -279,7 +279,8 @@ function clearModal() {
 	$('#resort-archView').fadeIn(100);
 	$("#tweetList li.responseRow").remove();
 	if (resetArchiveList == true) {
-		getActiveJobs($('header input.search').val());
+		$('header input.search').val(searchValue)
+		getActiveJobs(searchValue);
 	} else {
 		if ( (searchTerm == searchValue) && (searchValue == newSearchValue) )  {
 			$('.search').val(searchValue);
