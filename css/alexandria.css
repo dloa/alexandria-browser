@@ -202,7 +202,8 @@ header span {
 	top: 50%;
 	margin-top: -.5em;
 	line-height: 1;
-	cursor:pointer
+	cursor:pointer;
+	display: none;
 }
 main {
 	display: none;

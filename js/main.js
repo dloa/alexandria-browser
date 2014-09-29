@@ -256,6 +256,7 @@ function getArchiveVolume(archiveTitle) {
 				var newHeight = parseInt($('#archiveList').height())+100+'px';
 				$('#archiveListView').css('height',newHeight);
 				$('#wait').fadeOut(100);
+				$('#resort-archView').fadeIn(100);
 				$('.search').attr('disabled',false);
 //				console.log(cloudlist);
 			}
