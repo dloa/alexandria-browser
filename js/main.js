@@ -180,20 +180,22 @@ function getArchive(archiveTitle) {
 	// Loading spinner
 	$('#wait').fadeIn(100);
 	$("#tweetList li.responseRow").remove();
+	var dateValues = $("#timeline").dateRangeSlider("values");
+	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
 	// Run query
     $.ajax({
         type: "POST",
-        url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive",
-        data: archiveTitle,
+        url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates",
+        // Get tweets between two dates
+		data: queryString.toString(),
         success: function (e) {
 			var data = $.parseJSON(e);
 			var dateValues = $("#timeline").dateRangeSlider("values");
+			// Load tweets
 			for (var i = 0; i < data.length; i++) {
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
-				if ( (tweetDate > Date.parse(dateValues.min) ) && ( tweetDate < Date.parse(dateValues.max) ) ){
-					var niceTweetDate = data[i].p.twitter.data[4].split(' ');
-					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><span class="twitterbird"></span></li>');
-				}
+				var niceTweetDate = data[i].p.twitter.data[4].split(' ');
+				$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><span class="twitterbird"></span></li>');
 			}
 			if($('#tweetList').hasClass('pop-sort')){
 				$('#tweetList li').sortElements(function(a, b){
