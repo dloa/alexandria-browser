@@ -159,18 +159,16 @@ var resetArchiveList = false;
 var searchValue = '';
 var newSearchValue = '';
 function showTweetList(arch){
-	var archiveTitle = arch;
 	if($('#tweetListView').css('display') != 'block') {
 		$('#resort-archView').fadeOut(100);
 		searchValue = $('header input.search').val();
-		archiveTitle = $(arch).find('span:first-child').text();
-		if (searchValue != archiveTitle) {
-			$('header input.search').val(archiveTitle);
+		if (searchValue != arch) {
+			$('header input.search').val(arch);
 			// resetArchiveList = true;
 		}
 		$('.overlay').fadeIn(100);
 	}
-	getArchive(archiveTitle);
+	getArchive(arch);
 	if($('#resort').text() == 'Popular') {
 		$('#tweetListView').addClass('pop-sort');
 	}
@@ -229,7 +227,6 @@ function getArchiveVolume(archiveTitle) {
 		data: queryString.toString(),
 		success: function (e) {
 			var data = $.parseJSON(e);
-			var archiveCount = 0;
 			spinnerCount--;
 			console.log('Archives to count = '+spinnerCount);
 			if (data==0) {
@@ -237,13 +234,30 @@ function getArchiveVolume(archiveTitle) {
 			} else {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(data);
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).attr('volume',data);
-				$('#archiveList li').each(function(){
-					cloudlist.push([$(this).find('span:first-child').text(),archiveCount]);
-				});
 			}
 			if(spinnerCount == 0) {
-//				WordCloud(document.getElementById('wordCloud'), { list:cloudlist, minSize:'24px', backgroundColor:'transparent' } );
-//				$('#wordCloud').fadeIn();
+				var cloudlist = [];
+				$('#archiveList li').each(function(){
+					var archWeight = $(this).find('span.archive-volume').text();
+					cloudlist.push([$(this).find('span:first-child').text(),archWeight/333]);
+				});
+				$('#wordCloud').fadeIn();
+				WordCloud(document.getElementById('wordCloud'), {
+					list:cloudlist,
+					minSize:'24px',
+					backgroundColor:'transparent',
+					minRotation:0,
+					maxRotation:0,
+					click: function(item) {
+						var arr = [];
+						$('#archiveList li span:first-child').each(function(){
+							arr.push($(this).text());
+						});
+						if(jQuery.inArray( item, arr ) > -1) {
+							showTweetList(item);
+						}
+					}
+				} );
 				if($('#archiveListView li').length == 0) {
 					$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
 				}
@@ -255,13 +269,14 @@ function getArchiveVolume(archiveTitle) {
 				} else {
 					sortUnorderedList("archiveList");
 				}
-				$('#archiveListView').fadeIn();
+//				$('#archiveListView').fadeIn();
 				var newHeight = parseInt($('#archiveList').height())+100+'px';
 				$('#archiveListView').css('height',newHeight);
 				$('#wait').fadeOut(100);
 				$('#resort-archView').fadeIn(100);
 				$('.search').attr('disabled',false);
-//				console.log(cloudlist);
+				// Archive List Word Cloud Interaction
+//				$('#wordCloud span').each(function(){$(this).attr('onclick','showTweetList($(this))')});;
 			}
 		}
 	});

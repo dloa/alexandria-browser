@@ -306,6 +306,9 @@ ul#tweetList li a.twitter-username {
 	color: #000000;
 	height: 100%;	
 }
+#wordCloud span {
+	cursor: pointer;
+}
 #app-overlay {
 	background-color: #111;
 	background-color: rgba(20,20,20,.7);
