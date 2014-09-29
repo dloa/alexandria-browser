@@ -272,7 +272,7 @@ function getArchiveVolume(archiveTitle) {
 				}
 //				$('#archiveListView').fadeIn();
 				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
-				$('#wordCloud').css('height',$('#wordCloud').height()+100+'px');				
+//				$('#wordCloud').css('height',$('#wordCloud').height()+100+'px');				
 				$('#wait').fadeOut(100);
 				$('#resort-archView').fadeIn(100);
 				$('.search').attr('disabled',false);
