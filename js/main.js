@@ -168,7 +168,7 @@ function showTweetList(arch){
 		}
 		$('.overlay').fadeIn(100);
 	}
-	getArchive(archiveTitle);
+	getArchive(arch);
 	if($('#resort').text() == 'Popular') {
 		$('#tweetListView').addClass('pop-sort');
 	}
@@ -244,7 +244,7 @@ function getArchiveVolume(archiveTitle) {
 				$('#wordCloud').fadeIn();
 				WordCloud(document.getElementById('wordCloud'), {
 					list:cloudlist,
-//					minSize:'24px',
+					minSize:'24px',
 					backgroundColor:'transparent',
 					minRotation:0,
 					maxRotation:0,
@@ -271,7 +271,7 @@ function getArchiveVolume(archiveTitle) {
 				}
 //				$('#archiveListView').fadeIn();
 				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
-				$('#wordCloud').css('height',$('#wordCloud').height()+100+'px');				
+//				$('#wordCloud').css('height',$('#wordCloud').height()+100+'px');				
 				$('#wait').fadeOut(100);
 				$('#resort-archView').fadeIn(100);
 				$('.search').attr('disabled',false);
