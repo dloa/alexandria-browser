@@ -196,7 +196,7 @@ header span {
   margin-left: -1px;
 	margin-top: 6px;
 }
-#resort {
+.sort-link {
 	position: absolute;
 	right: 1em;
 	top: 50%;
@@ -212,6 +212,9 @@ main {
 	z-index: 10;
 	text-align: center;
 	-webkit-overflow-scrolling: touch;
+}
+#archiveListView {
+	display: block;
 }
 #app-shading {
 	position: fixed;

@@ -19,7 +19,7 @@ jQuery(document).ready(function($){
 	var datetime = new Date();
 	
 	// Footer timeline contruct
-	var days = ["0", "Sept 1", "Sept 2", "Sept 3", "Sept 4", "Sept 5", "Sept 6", "Sept 7", "Sept 8", "Sept 9", "Sept 10", "Sept 11", "Sept 12", "Sept 13", "Sept 14", "Sept 15", "Sept 16", "Sept 17", "Sept 18", "Sept 19", "Sept 20", "Sept 21", "Sept 22", "Sept 23", "Sept 24", "Sept 25", "Sept 26", "Sept 27", "Sept 28", "Sept 29", "Sept 30", "Oct 01", "Oct 02", "Oct 03", "Oct 04", "Oct 05", "Oct 06", "Oct 07", "Oct 08", "Oct 09", "Oct 10"];
+	var days = ["0", "Sept 1", "Sept 2", "Sept 3", "Sept 4", "Sept 5", "Sept 6", "Sept 7", "Sept 8", "Sept 9", "Sept 10", "Sept 11", "Sept 12", "Sept 13", "Sept 14", "Sept 15", "Sept 16", "Sept 17", "Sept 18", "Sept 19", "Sept 20", "Sept 21", "Sept 22", "Sept 23", "Sept 24", "Sept 25", "Sept 26", "Sept 27", "Sept 28", "Sept 29", "Sept 30", "Oct 1", "Oct 2", "Oct 3", "Oct 4", "Oct 5", "Oct 6", "Oct 7", "Oct 8", "Oct 9", "Oct 10"];
 
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(2014, 8, 1), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 2)},
@@ -44,6 +44,9 @@ jQuery(document).ready(function($){
 	// Modal controls
 	$(document).on("keyup", function (e) {
 		var code = e.keyCode || e.which; if (code == 27) {
+			if($('#wait').css('display') == 'block') {
+				$('#wait').hide();
+			}
 			clearModal();
 		}
 	});
