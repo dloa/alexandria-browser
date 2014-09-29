@@ -142,14 +142,6 @@ function getActiveJobs(searchTerm) {
 					}
 				}
 			}
-			if($('#resort-archView').text() == 'Popular') {
-				$('#archiveList').addClass('pop-sort');
-				$('#archiveList li').sortElements(function(a, b){
-					return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
-				});
-			} else {
-				sortUnorderedList("archiveList");
-			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			// alert("some error");
@@ -213,6 +205,7 @@ function getArchive(archiveTitle) {
 				});
 			}
 		$('#wait').fadeOut(100);
+		$('#resort').fadeIn(100);
         }
     });
 }
@@ -252,6 +245,14 @@ function getArchiveVolume(archiveTitle) {
 				if($('#archiveListView li').length == 0) {
 					$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
 				}
+				if($('#resort-archView').text() == 'Popular') {
+					$('#archiveList').addClass('pop-sort');
+					$('#archiveList li').sortElements(function(a, b){
+						return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
+					});
+				} else {
+					sortUnorderedList("archiveList");
+				}
 				$('#archiveListView').fadeIn();
 				var newHeight = parseInt($('#archiveList').height())+100+'px';
 				$('#archiveListView').css('height',newHeight);
@@ -276,6 +277,7 @@ $("#timeline").bind("valuesChanged", function(e, data){
 });
 function clearModal() {
 	$('.overlay').fadeOut(100);
+	$('#resort').fadeOut(100);
 	$('#resort-archView').fadeIn(100);
 	$("#tweetList li.responseRow").remove();
 	if (resetArchiveList == true) {
