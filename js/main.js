@@ -239,7 +239,7 @@ function getArchiveVolume(archiveTitle) {
 				var cloudlist = [];
 				$('#archiveList li').each(function(){
 					var archWeight = $(this).find('span.archive-volume').text();
-					cloudlist.push([$(this).find('span:first-child').text(),archWeight]);
+					cloudlist.push([$(this).find('span:first-child').text(),archWeight/300]);
 				});
 				$('#wordCloud').fadeIn();
 				WordCloud(document.getElementById('wordCloud'), {
@@ -271,7 +271,7 @@ function getArchiveVolume(archiveTitle) {
 				}
 //				$('#archiveListView').fadeIn();
 				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
-//				$('#wordCloud').css('height',$('#wordCloud').height()+100+'px');				
+				$('#wordCloud').css('height',$('#wordCloud').height()+100+'px');				
 				$('#wait').fadeOut(100);
 				$('#resort-archView').fadeIn(100);
 				$('.search').attr('disabled',false);
