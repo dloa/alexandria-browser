@@ -184,17 +184,18 @@ header span {
 }
 
 #logo {
-  width: 55px;
-  height:55px;
-  position: absolute;
-  top: 0;
-  left: 20px;
-  z-index: 10;
-  background: url(../img/logo.svg) left bottom / 55px auto no-repeat;
+	width: 55px;
+	height:55px;
+	position: absolute;
+	top: 0;
+	left: 20px;
+	z-index: 10;
+	background: url(../img/logo.svg) left bottom / 55px auto no-repeat;
 	text-align: center;
-  font: 2em "Avenir-Medium";
-  margin-left: -1px;
+	font: 2em "Avenir-Medium";
+	margin-left: -1px;
 	margin-top: 6px;
+	cursor: pointer;
 }
 #view-controls {
 	position: absolute;

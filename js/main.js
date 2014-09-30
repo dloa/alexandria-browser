@@ -1,8 +1,5 @@
 jQuery(document).ready(function($){
 	
-	// For todays date;
-	var datetime = new Date();
-	
 	// Footer timeline contruct
 	var days = ["0", "Sept 1", "Sept 2", "Sept 3", "Sept 4", "Sept 5", "Sept 6", "Sept 7", "Sept 8", "Sept 9", "Sept 10", "Sept 11", "Sept 12", "Sept 13", "Sept 14", "Sept 15", "Sept 16", "Sept 17", "Sept 18", "Sept 19", "Sept 20", "Sept 21", "Sept 22", "Sept 23", "Sept 24", "Sept 25", "Sept 26", "Sept 27", "Sept 28", "Sept 29", "Sept 30", "Oct 1", "Oct 2", "Oct 3", "Oct 4", "Oct 5", "Oct 6", "Oct 7", "Oct 8", "Oct 9", "Oct 10"];
 
@@ -46,14 +43,9 @@ jQuery(document).ready(function($){
 	});
 
 	// load active jobs on button click
-	$('#getArchives').click(function(){
-		searchValue = '';
-		var startDate = new Date(2014, 8, 1);
-		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1);
-		$("#timeline").dateRangeSlider("values", startDate, endDate);
-//		getActiveJobs();
+	$('.getAllArchives').click(function(){
+		getAllArchives();
 	});
-	
 	// View - Archive List
 	$('#view-archView').click(function(){
 		if($('#wordCloud').css('display')=='block'){
@@ -117,6 +109,9 @@ jQuery(document).ready(function($){
 	
 }); // End Document.Ready
 
+// For todays date;
+var datetime = new Date();
+
 var fadeTimer = 100;
 
 // Searching ...
@@ -171,11 +166,24 @@ function getActiveJobs(searchTerm) {
 			console.log(errorThrown);
 			$("#archiveList li").remove();
 			$('header input.search').attr('disabled','disabled').css({background:'none #efefef',padding:'3px 15px'}).val('Cannot connect to Librarian');
+			$('#wait').fadeOut(fadeTimer);
+			$('#timeline').fadeOut(fadeTimer);
+			$('#app-shading').css('bottom',0);
+			alert('Cannot connect to Librarian');
 	   }
 	});
 	
 }
+
 var resetArchiveList = false;
+
+function getAllArchives(){
+		searchValue = '';
+		var startDate = new Date(2014, 8, 1);
+		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1);
+		$("#timeline").dateRangeSlider("values", startDate, endDate);
+}
+
 // show tweets in archive
 var searchValue = '';
 var newSearchValue = '';
@@ -218,7 +226,7 @@ function getArchive(archiveTitle) {
 	
 	// Run query
     // Get tweets between two dates
-	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40,"Page":'+currentPage+'}';
+	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 30,"Page":'+currentPage+'}';
     $.ajax({
         type: "POST",
         url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated",
@@ -243,7 +251,7 @@ function getArchive(archiveTitle) {
 			}
 			$("#tweetList li.more-link").remove();
 			if(currentPage < totalPages) {
-				$("#tweetList").append('<li class="more-link"><a href="javascript:currentPage++; getArchive(\x27'+archiveTitle+'\x27);">Load more</a></li>');
+				$("#tweetList").append('<li class="more-link"><a href="javascript:currentPage++; getArchive(\x27'+archiveTitle+'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 			}
 		$('#wait').fadeOut(fadeTimer);
 		$('#resort').fadeIn(fadeTimer);
@@ -286,7 +294,7 @@ function getArchiveVolume(archiveTitle) {
 				$('#archiveList li').each(function(){
 					var archWeight = $(this).index()+5;
 					cloudlist.push([$(this).find('span:first-child').text(),archWeight]);
-					console.log(cloudlist);
+//					console.log(cloudlist);
 				});
 //				$('#archiveListView').fadeIn();
 				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
