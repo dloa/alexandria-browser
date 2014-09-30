@@ -143,40 +143,29 @@ header {
 	-webkit-box-sizing: border-box;
 }
 
-header input {
-  background: url(../img/search.svg) 10px .45em / .8em no-repeat;
-  display: inline-block;
-  border-radius: 50em;
-  border: 1px solid #cfcfcf;
-  position: static;
-  padding: 3px 10px 3px 35px;
-  font-size: 1.5em;
-  margin-left: auto;
-  margin-right: auto;
-  width: 12.5em;
-  outline: none;	
+header input.search {
+	background: url(../img/search.svg) 10px .45em / .8em no-repeat;
+	display: inline-block;
+	zoom: 1;*display:inline;
+	border-radius: 50em;
+	border: 1px solid #cfcfcf;
+	padding: 3px 1.2em 3px 35px;
+	outline: none;
+	width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 }
 
-header input:focus{
+header input.search:focus{
 		box-shadow: 0 0 6px rgba(0, 0, 0, 0.9);	
 }
 
-header input::after {
+header input.search::after {
   background: url(../img/search.svg) 9px 5px / .8em no-repeat;
   position: absolute;
   z-index: 3;
 }
-
-/*header input::before {
-  height: 50px;
-  width: 50px;
-  background-color: #ab0606;
-  content: "food";
-  display: block;
-  position: absolute;
-  top: 1px;
-  right: 100px;
-}*/
 
 header span {
   float: right;
@@ -195,6 +184,19 @@ header span {
 	font: 2em "Avenir-Medium";
 	margin-left: -1px;
 	margin-top: 6px;
+	cursor: pointer;
+}
+#search {
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	width: 12.5em;
+	font-size: 1.5em;
+}
+#clearSearch {
+	position: absolute;
+	right: .5em;
+	top: .1em;
 	cursor: pointer;
 }
 #view-controls {

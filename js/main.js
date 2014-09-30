@@ -46,6 +46,10 @@ jQuery(document).ready(function($){
 	$('.getAllArchives').click(function(){
 		getAllArchives();
 	});
+	$('#clearSearch').click(function(){
+		$('header input.search').val('');
+		getAllArchives();
+	});
 	// View - Archive List
 	$('#view-archView').click(function(){
 		if($('#wordCloud').css('display')=='block'){
@@ -153,7 +157,7 @@ function getActiveJobs(searchTerm) {
 				} else {
 					var titleSlice = data['Jobs'][i].slice(0,searchTerm.length);
 					if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
-						$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
+						$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
 						getArchiveVolume(data['Jobs'][i]);
 					}
 				}
@@ -174,11 +178,11 @@ function getActiveJobs(searchTerm) {
 	});
 	
 }
-
 var resetArchiveList = false;
 
 function getAllArchives(){
-		searchValue = '';
+		searchValue = '';		
+		$('header input.search').val(searchValue);
 		var startDate = new Date(2014, 8, 1);
 		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1);
 		$("#timeline").dateRangeSlider("values", startDate, endDate);
