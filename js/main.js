@@ -208,7 +208,7 @@ function showTweetList(arch){
 	}
 }
 // get archived tweets JSON object
-var currentPage = 1;
+var currentPage = 0;
 var totalPages;
 function getArchive(archiveTitle) {
 	// Loading spinner
@@ -370,7 +370,7 @@ $("#timeline").bind("valuesChanged", function(e, data){
 	}
 });
 function clearModal() {
-	currentPage = 1;
+	currentPage = 0;
 	$('.overlay').fadeOut(fadeTimer);
 	$('#resort').fadeOut(fadeTimer);
 	if(currentView == 'cloud') {
