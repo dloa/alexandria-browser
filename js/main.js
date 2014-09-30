@@ -254,8 +254,9 @@ function getArchive(archiveTitle) {
 				});
 			}
 			$("#tweetList li.more-link").remove();
+			currentPage++;
 			if(currentPage < totalPages) {
-				$("#tweetList").append('<li class="more-link"><a href="javascript:currentPage++; getArchive(\x27'+archiveTitle+'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
+				$("#tweetList").append('<li class="more-link"><a href="javascript:getArchive(\x27'+archiveTitle+'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 			}
 		$('#wait').fadeOut(fadeTimer);
 		$('#resort').fadeIn(fadeTimer);
