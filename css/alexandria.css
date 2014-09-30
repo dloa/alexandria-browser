@@ -290,14 +290,14 @@ ul#tweetList li a {
 	text-decoration: none;
 	color: inherit;
 }
-ul#tweetList li.more-ling a {
-	display: block;
-}
 ul#tweetList li a.twitter-username {
 	font-weight: bold;
 }
 ul#tweetList li.more-link {
 	text-align: center;
+}
+ul#tweetList li.more-link a {
+	display: block;
 }
 .archive-volume {
 	background-color: #e0e0e0;
