@@ -25,20 +25,6 @@ jQuery(document).ready(function($){
 		  }
 		}]
 	});
-
-	// Modal controls
-	$(document).on("keyup", function (e) {
-		var code = e.keyCode || e.which; if (code == 27) {
-			if($('#wait').css('display') == 'block') {
-				$('#wait').hide();
-			}
-			clearModal();
-		}
-	});
-
-	$('.close-modal').click(function(){
-		clearModal();
-	});
 	
 	// Search box
 	$('header input.search').on("keydown", function (e) {
@@ -58,6 +44,7 @@ jQuery(document).ready(function($){
 			searchTimerId = setTimeout ( 'runSearch()', 2000 );
 		}
 	});
+
 	// load active jobs on button click
 	$('#getArchives').click(function(){
 		searchValue = '';
@@ -80,6 +67,7 @@ jQuery(document).ready(function($){
 			$(this).text('Alphabetical');
 		}
 	});
+
 	// Sort - Tweet List
 	$('#resort').click(function(){
 		$('#tweetList').toggleClass('pop-sort');
@@ -96,7 +84,19 @@ jQuery(document).ready(function($){
 		}
 	});
 
+	// Modal controls
+	$(document).on("keyup", function (e) {
+		var code = e.keyCode || e.which; if (code == 27) {
+			if($('#wait').css('display') == 'block') {
+				$('#wait').hide();
+			}
+			clearModal();
+		}
+	});
 
+	$('.close-modal').click(function(){
+		clearModal();
+	});
 	
 }); // End Document.Ready
 
@@ -193,7 +193,7 @@ function getArchive(archiveTitle) {
 			for (var i = 0; i < data.length; i++) {
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
 				var niceTweetDate = data[i].p.twitter.data[4].split(' ');
-				$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><span class="twitterbird"></span></li>');
+				$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'/status/'+data[i].p.twitter.data[3]+'" class="twitterbird" target="_blank"></a></li>');
 			}
 			if($('#tweetList').hasClass('pop-sort')){
 				$('#tweetList li').sortElements(function(a, b){
