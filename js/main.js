@@ -304,7 +304,9 @@ function getArchiveVolume(archiveTitle) {
 					list:cloudlist,
 					gridSize: Math.round(16 * $('#canvas').width() / window.innerWidth),
   					minSize:24,
-  					color:'#444444',
+  					color: function (word, weight) {
+					    return (weight === 1) ? '#444444' : '#222222';
+					},
 					backgroundColor:'transparent',
 					minRotation:0,
 					maxRotation:0,
@@ -347,8 +349,15 @@ function clearModal() {
 	currentPage = 1;
 	$('.overlay').fadeOut(fadeTimer);
 	$('#resort').fadeOut(fadeTimer);
-	$('#resort-archView').fadeIn(fadeTimer);
-	$('.view-link').fadeIn(fadeTimer);
+	if(currentView == 'cloud') {
+		$('#wordCloud').fadeIn(fadeTimer);
+		$('#resort-archView').fadeOut(fadeTimer);
+		$('#view-archView').fadeIn(fadeTimer);
+	} else {
+		$('#archiveListView').fadeIn(fadeTimer);
+		$('#resort-archView').fadeIn(fadeTimer);
+		$('#view-archView').fadeOut(fadeTimer);
+	}
 	$("#tweetList li").remove();
 	if (resetArchiveList == true) {
 		$('header input.search').val(searchValue)
