@@ -284,8 +284,9 @@ function getArchiveVolume(archiveTitle) {
 					return parseInt($(a).attr('volume')) > parseInt($(b).attr('volume')) ? 1 : -1;
 				});
 				$('#archiveList li').each(function(){
-					var archWeight = $(this).index()+1;
-					cloudlist.push([$(this).find('span:first-child').text(),archWeight*10]);
+					var archWeight = $(this).index()+5;
+					cloudlist.push([$(this).find('span:first-child').text(),archWeight]);
+					console.log(cloudlist);
 				});
 //				$('#archiveListView').fadeIn();
 				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
@@ -302,10 +303,21 @@ function getArchiveVolume(archiveTitle) {
 				}
 				WordCloud(document.getElementById('wordCloud'), {
 					list:cloudlist,
-					gridSize: Math.round(16 * $('#canvas').width() / window.innerWidth),
-  					minSize:24,
+					gridSize: 20,
+  					minSize: 5,
+  					weightFactor: 5,
   					color: function (word, weight) {
-					    return (weight === 1) ? '#444444' : '#222222';
+  						if (weight === 5) { return '#222222' }
+					    else if (weight === 6) { return '#333333' }
+					    else if (weight === 7) { return '#444444' }
+					    else if (weight === 8) { return '#555555' }
+					    else if (weight === 9) { return '#666666' }
+					    else if (weight === 10) { return '#777777' }
+					    else if (weight === 11) { return '#888888' }
+					    else if (weight === 12) { return '#999999' }
+					    else if (weight === 13) { return '#aaaaaa' }
+					    else if (weight === 14) { return '#bbbbbb' }
+					    else { return '#cccccc' };
 					},
 					backgroundColor:'transparent',
 					minRotation:0,
