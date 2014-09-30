@@ -59,11 +59,13 @@ jQuery(document).ready(function($){
 		if($('#wordCloud').css('display')=='block'){
 			$('#wordCloud').fadeOut(fadeTimer);
 			$('#archiveListView').fadeIn(fadeTimer);
+			$('#resort-archView').fadeIn(fadeTimer);
 			$(this).text('List');
 			currentView = 'list';
 		} else {
 			$('#wordCloud').fadeIn(fadeTimer);
 			$('#archiveListView').fadeOut(fadeTimer);
+			$('#resort-archView').fadeOut(fadeTimer);
 			$(this).text('Cloud');
 			currentView = 'cloud';
 		}
@@ -287,10 +289,13 @@ function getArchiveVolume(archiveTitle) {
 				});
 //				$('#archiveListView').fadeIn();
 				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
+				$('.view-link').fadeIn(fadeTimer);
 				if(currentView == 'cloud') {
 					$('#wordCloud').fadeIn(fadeTimer);
+					$('#resort-archView').fadeOut(fadeTimer);
 				} else {
 					$('#archiveListView').fadeIn(fadeTimer);
+					$('#resort-archView').fadeIn(fadeTimer);
 				}
 				if($('#archiveListView li').length == 0) {
 					$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
@@ -314,8 +319,6 @@ function getArchiveVolume(archiveTitle) {
 					}
 				});
 				$('#wait').fadeOut(fadeTimer);
-				$('#resort-archView').fadeIn(fadeTimer);
-				$('.view-link').fadeIn(fadeTimer);
 				if($('#resort-archView').text() == 'Popular') {
 					$('#archiveList').addClass('pop-sort');
 					$('#archiveList li').sortElements(function(a, b){

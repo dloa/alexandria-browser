@@ -209,10 +209,6 @@ header span {
 	float: left;
 	margin: 0 0 0 1em;
 }
-.sort-link {
-}
-.view-link {
-}
 main {
 	display: none;
 	position: absolute;
@@ -293,6 +289,9 @@ ul#archiveList li a span:first-child {
 ul#tweetList li a {
 	text-decoration: none;
 	color: inherit;
+}
+ul#tweetList li.more-ling a {
+	display: block;
 }
 ul#tweetList li a.twitter-username {
 	font-weight: bold;
