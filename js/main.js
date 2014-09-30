@@ -341,6 +341,7 @@ $("#timeline").bind("valuesChanged", function(e, data){
 	}
 });
 function clearModal() {
+	currentPage = 1;
 	$('.overlay').fadeOut(fadeTimer);
 	$('#resort').fadeOut(fadeTimer);
 	$('#resort-archView').fadeIn(fadeTimer);
