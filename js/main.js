@@ -54,6 +54,21 @@ jQuery(document).ready(function($){
 //		getActiveJobs();
 	});
 	
+	// View - Archive List
+	$('#view-archView').click(function(){
+		if($('#wordCloud').css('display')=='block'){
+			$('#wordCloud').fadeOut(fadeTimer);
+			$('#archiveListView').fadeIn(fadeTimer);
+			$(this).text('List');
+			currentView = 'list';
+		} else {
+			$('#wordCloud').fadeIn(fadeTimer);
+			$('#archiveListView').fadeOut(fadeTimer);
+			$(this).text('Cloud');
+			currentView = 'cloud';
+		}
+	});
+	
 	// Sort - Archive List
 	$('#resort-archView').click(function(){
 		$('#archiveList').toggleClass('pop-sort');
@@ -100,6 +115,8 @@ jQuery(document).ready(function($){
 	
 }); // End Document.Ready
 
+var fadeTimer = 100;
+
 // Searching ...
 var searchTimerId = 0;
 var searchRunning;
@@ -114,6 +131,7 @@ function runSearch() {
 	searchRunning = 0;
 }
 // function to get active jobs JSON object
+var archTitleSpan = 'span:first-child';
 function getActiveJobs(searchTerm) {
 	resetArchiveList = false;
 	if (!searchTerm) {
@@ -121,8 +139,9 @@ function getActiveJobs(searchTerm) {
 	}
     $('#intro').remove();
 	$('.search').attr('disabled','disabled');
-	$('#archiveListView').hide();
-	$('#wait').fadeIn(100);	
+	$('#archiveListView').fadeOut(fadeTimer);
+	$('#wordcloud').fadeOut(fadeTimer);
+	$('#wait').fadeIn(fadeTimer);	
 	$.ajax({
 		type: "GET",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
@@ -131,8 +150,8 @@ function getActiveJobs(searchTerm) {
 			$("#archiveList li").remove();
 			var data = $.parseJSON(responseData);
 			for (var i = 0; i < data['Jobs'].length; i++) {
-				if(!searchTerm){			
-					$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this))"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
+				if(!searchTerm){
+					$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
 					getArchiveVolume(data['Jobs'][i]);
 				} else {
 					var titleSlice = data['Jobs'][i].slice(0,searchTerm.length);
@@ -160,13 +179,14 @@ var searchValue = '';
 var newSearchValue = '';
 function showTweetList(arch){
 	if($('#tweetListView').css('display') != 'block') {
-		$('#resort-archView').fadeOut(100);
+		$('#resort-archView').fadeOut(fadeTimer);
 		searchValue = $('header input.search').val();
 		if (searchValue != arch) {
 			$('header input.search').val(arch);
 			// resetArchiveList = true;
 		}
-		$('.overlay').fadeIn(100);
+		$('.overlay').fadeIn(fadeTimer);
+		$('.view-link').fadeOut(fadeTimer);
 	}
 	getArchive(arch);
 	if($('#resort').text() == 'Popular') {
@@ -176,7 +196,7 @@ function showTweetList(arch){
 // get archived tweets JSON object
 function getArchive(archiveTitle) {
 	// Loading spinner
-	$('#wait').fadeIn(100);
+	$('#wait').fadeIn(fadeTimer);
 	$("#tweetList li.responseRow").remove();
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
@@ -204,18 +224,20 @@ function getArchive(archiveTitle) {
 					return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
 				});
 			}
-		$('#wait').fadeOut(100);
-		$('#resort').fadeIn(100);
+		$('#wait').fadeOut(fadeTimer);
+		$('#resort').fadeIn(fadeTimer);
         }
     });
 }
 // get archive volume
 var spinnerCount = 0;
 var cloudlist = [];
+var currentView = 'cloud';
 function getArchiveVolume(archiveTitle) {
 	if(spinnerCount == 0) {
-		$('#archiveListView').hide();
-		$('#wait').fadeIn(100);
+		$('#archiveListView').fadeOut(fadeTimer);
+		$('#wordCloud').fadeOut(fadeTimer);
+		$('#wait').fadeIn(fadeTimer);
 	}
 //	$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').append('<div id="loading-'+ archiveTitle.replace(/ /g,"-") +'" class="loader"></div>');
 	spinnerCount++;
@@ -246,7 +268,11 @@ function getArchiveVolume(archiveTitle) {
 				});
 //				$('#archiveListView').fadeIn();
 				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
-				$('#wordCloud').fadeIn();
+				if(currentView == 'cloud') {
+					$('#wordCloud').fadeIn(fadeTimer);
+				} else {
+					$('#archiveListView').fadeIn(fadeTimer);
+				}
 				if($('#archiveListView li').length == 0) {
 					$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
 				}
@@ -268,8 +294,9 @@ function getArchiveVolume(archiveTitle) {
 						}
 					}
 				});
-				$('#wait').fadeOut(100);
-				$('#resort-archView').fadeIn(100);
+				$('#wait').fadeOut(fadeTimer);
+				$('#resort-archView').fadeIn(fadeTimer);
+				$('.view-link').fadeIn(fadeTimer);
 				if($('#resort-archView').text() == 'Popular') {
 					$('#archiveList').addClass('pop-sort');
 					$('#archiveList li').sortElements(function(a, b){
@@ -297,9 +324,10 @@ $("#timeline").bind("valuesChanged", function(e, data){
 	}
 });
 function clearModal() {
-	$('.overlay').fadeOut(100);
-	$('#resort').fadeOut(100);
-	$('#resort-archView').fadeIn(100);
+	$('.overlay').fadeOut(fadeTimer);
+	$('#resort').fadeOut(fadeTimer);
+	$('#resort-archView').fadeIn(fadeTimer);
+	$('.view-link').fadeIn(fadeTimer);
 	$("#tweetList li.responseRow").remove();
 	if (resetArchiveList == true) {
 		$('header input.search').val(searchValue)

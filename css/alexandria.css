@@ -196,14 +196,22 @@ header span {
   margin-left: -1px;
 	margin-top: 6px;
 }
-.sort-link {
+#view-controls {
 	position: absolute;
-	right: 1em;
 	top: 50%;
+	right: 1em;
 	margin-top: -.5em;
 	line-height: 1;
+}
+.sort-link, .view-link {
 	cursor:pointer;
 	display: none;
+	float: left;
+	margin: 0 0 0 1em;
+}
+.sort-link {
+}
+.view-link {
 }
 main {
 	display: none;
@@ -280,6 +288,7 @@ ul#archiveList li a span {
 ul#archiveList li a span:first-child {
 	float: left;
 	margin-right: 2.2em;
+	text-transform: capitalize;
 }
 ul#tweetList li a.twitter-username {
 	font-weight: bold;
