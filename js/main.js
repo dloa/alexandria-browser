@@ -237,15 +237,24 @@ function getArchiveVolume(archiveTitle) {
 			}
 			if(spinnerCount == 0) {
 				var cloudlist = [];
-				$('#archiveList li').each(function(){
-					var archWeight = $(this).find('span.archive-volume').text();
-					cloudlist.push([$(this).find('span:first-child').text(),archWeight/300]);
+				$('#archiveList li').sortElements(function(a, b){
+					return parseInt($(a).attr('volume')) > parseInt($(b).attr('volume')) ? 1 : -1;
 				});
+				$('#archiveList li').each(function(){
+					var archWeight = $(this).index()+1;
+					cloudlist.push([$(this).find('span:first-child').text(),archWeight*10]);
+				});
+//				$('#archiveListView').fadeIn();
+				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
 				$('#wordCloud').fadeIn();
+				if($('#archiveListView li').length == 0) {
+					$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
+				}
 				WordCloud(document.getElementById('wordCloud'), {
 					list:cloudlist,
-					gridSize: Math.round(16 * $('#canvas').width() / 1024),
+					gridSize: Math.round(16 * $('#canvas').width() / window.innerWidth),
   					minSize:24,
+  					color:'#444444',
 					backgroundColor:'transparent',
 					minRotation:0,
 					maxRotation:0,
@@ -258,10 +267,9 @@ function getArchiveVolume(archiveTitle) {
 							showTweetList(item);
 						}
 					}
-				} );
-				if($('#archiveListView li').length == 0) {
-					$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
-				}
+				});
+				$('#wait').fadeOut(100);
+				$('#resort-archView').fadeIn(100);
 				if($('#resort-archView').text() == 'Popular') {
 					$('#archiveList').addClass('pop-sort');
 					$('#archiveList li').sortElements(function(a, b){
@@ -270,11 +278,6 @@ function getArchiveVolume(archiveTitle) {
 				} else {
 					sortUnorderedList("archiveList");
 				}
-//				$('#archiveListView').fadeIn();
-				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
-//				$('#wordCloud').css('height',$('#wordCloud').height()+100+'px');				
-				$('#wait').fadeOut(100);
-				$('#resort-archView').fadeIn(100);
 				$('.search').attr('disabled',false);
 				// Archive List Word Cloud Interaction
 //				$('#wordCloud span').each(function(){$(this).attr('onclick','showTweetList($(this))')});;
