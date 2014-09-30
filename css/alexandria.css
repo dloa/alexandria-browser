@@ -290,10 +290,15 @@ ul#archiveList li a span:first-child {
 	margin-right: 2.2em;
 	text-transform: capitalize;
 }
+ul#tweetList li a {
+	text-decoration: none;
+	color: inherit;
+}
 ul#tweetList li a.twitter-username {
 	font-weight: bold;
-	color: inherit;
-	text-decoration: none;
+}
+ul#tweetList li.more-link {
+	text-align: center;
 }
 .archive-volume {
 	background-color: #e0e0e0;

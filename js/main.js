@@ -98,7 +98,7 @@ jQuery(document).ready(function($){
 			$(this).text('Recent');
 		}
 	});
-
+	
 	// Modal controls
 	$(document).on("keyup", function (e) {
 		var code = e.keyCode || e.which; if (code == 27) {
@@ -194,21 +194,37 @@ function showTweetList(arch){
 	}
 }
 // get archived tweets JSON object
+var currentPage = 1;
+var totalPages;
 function getArchive(archiveTitle) {
 	// Loading spinner
 	$('#wait').fadeIn(fadeTimer);
 	$("#tweetList li.responseRow").remove();
 	var dateValues = $("#timeline").dateRangeSlider("values");
-	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
-	// Run query
+	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40}';
     $.ajax({
         type: "POST",
-        url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates",
+        url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated/count",
         // Get tweets between two dates
 		data: queryString.toString(),
         success: function (e) {
 			var data = $.parseJSON(e);
-			var dateValues = $("#timeline").dateRangeSlider("values");
+			totalPages = data;
+			// Load tweets
+        }
+    });
+	
+	// Run query
+    currentPage = 1;
+    // Get tweets between two dates
+	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40,"Page":'+currentPage+'}';
+    $.ajax({
+        type: "POST",
+        url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated",
+		data: queryString.toString(),
+        success: function (e) {
+			var data = $.parseJSON(e);
+//			var dateValues = $("#timeline").dateRangeSlider("values");
 			// Load tweets
 			for (var i = 0; i < data.length; i++) {
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
@@ -223,6 +239,9 @@ function getArchive(archiveTitle) {
 				$('#tweetList li').sortElements(function(a, b){
 					return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
 				});
+			}
+			if(currentPage < totalPages) {
+				$("#tweetList").append('<li class="more-link"><a href="javascript:currentPage++;console.log(currentPage);">Load more</a></li>');
 			}
 		$('#wait').fadeOut(fadeTimer);
 		$('#resort').fadeIn(fadeTimer);
@@ -306,8 +325,6 @@ function getArchiveVolume(archiveTitle) {
 					sortUnorderedList("archiveList");
 				}
 				$('.search').attr('disabled',false);
-				// Archive List Word Cloud Interaction
-//				$('#wordCloud span').each(function(){$(this).attr('onclick','showTweetList($(this))')});;
 			}
 		}
 	});
@@ -328,7 +345,7 @@ function clearModal() {
 	$('#resort').fadeOut(fadeTimer);
 	$('#resort-archView').fadeIn(fadeTimer);
 	$('.view-link').fadeIn(fadeTimer);
-	$("#tweetList li.responseRow").remove();
+	$("#tweetList li").remove();
 	if (resetArchiveList == true) {
 		$('header input.search').val(searchValue)
 		getActiveJobs(searchValue);
