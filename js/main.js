@@ -199,7 +199,7 @@ var totalPages;
 function getArchive(archiveTitle) {
 	// Loading spinner
 	$('#wait').fadeIn(fadeTimer);
-	$("#tweetList li.responseRow").remove();
+//	$("#tweetList li.responseRow").remove();
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40}';
     $.ajax({
@@ -215,7 +215,6 @@ function getArchive(archiveTitle) {
     });
 	
 	// Run query
-    currentPage = 1;
     // Get tweets between two dates
 	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40,"Page":'+currentPage+'}';
     $.ajax({
@@ -240,8 +239,9 @@ function getArchive(archiveTitle) {
 					return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
 				});
 			}
+			$("#tweetList li.more-link").remove();
 			if(currentPage < totalPages) {
-				$("#tweetList").append('<li class="more-link"><a href="javascript:currentPage++;console.log(currentPage);">Load more</a></li>');
+				$("#tweetList").append('<li class="more-link"><a href="javascript:currentPage++; getArchive(\x27'+archiveTitle+'\x27);">Load more</a></li>');
 			}
 		$('#wait').fadeOut(fadeTimer);
 		$('#resort').fadeIn(fadeTimer);
