@@ -318,19 +318,19 @@ ul#tweetList li.more-link a {
 	border-radius: 50px;
 }
 
-#wordCloud {
+main.wordCloud {
 	color: #000000;
-	height: 90%;
-	top: 2.5em;
+	bottom: 50px;
+	top: 73px;
 }
-#wordCloud span {
+main.wordCloud span {
 	cursor: pointer;
 	transition: color 0.5s ease;
 	-moz-transition: color 0.5s ease;
 	-webkit-transition: color 0.5s ease;
 	-o-transition: color 0.5s ease;
 }
-#wordCloud span:hover {
+main.wordCloud span:hover {
 	color: #92b4c6 !important;
 }
 #app-overlay {
