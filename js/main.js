@@ -403,15 +403,15 @@ function getArchiveWords(archiveTitle) {
 //				weightFactor: 5,
 				color: function (word, weight) {
 					if ((weight > 9) && (weight < 15)) { return '#222222' }
-					else if ((weight > 14) && (weight < 25)) { return '#333333' }
-					else if ((weight > 24) && (weight < 35)) { return '#444444' }
-					else if ((weight > 34) && (weight < 45)) { return '#555555' }
-					else if ((weight > 44) && (weight < 55)) { return '#666666' }
-					else if ((weight > 54) && (weight < 65)) { return '#777777' }
-					else if ((weight > 64) && (weight < 75)) { return '#888888' }
-					else if ((weight > 74) && (weight < 85)) { return '#999999' }
-					else if ((weight > 84) && (weight < 95)) { return '#aaaaaa' }
-					else if ((weight > 94) && (weight < 100)) { return '#bbbbbb' }
+					else if ((weight > 14) && (weight < 20)) { return '#333333' }
+					else if ((weight > 19) && (weight < 25)) { return '#444444' }
+					else if ((weight > 24) && (weight < 30)) { return '#555555' }
+					else if ((weight > 29) && (weight < 35)) { return '#666666' }
+					else if ((weight > 34) && (weight < 40)) { return '#777777' }
+					else if ((weight > 39) && (weight < 45)) { return '#888888' }
+					else if ((weight > 44) && (weight < 50)) { return '#999999' }
+					else if ((weight > 49) && (weight < 55)) { return '#aaaaaa' }
+					else if ((weight > 54) && (weight < 60)) { return '#bbbbbb' }
 					else { return '#cccccc' };
 				},
 				backgroundColor:'transparent',
