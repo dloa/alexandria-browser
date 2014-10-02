@@ -90,7 +90,7 @@ jQuery(document).ready(function($){
 	// Sort - Tweet List
 	$('#resort').click(function(){
 		$('main').fadeOut(fadeTimer);
-		$('#tweetListView').fadeOut(fadeTimer);
+		$('#tweetListView').fadeIn(fadeTimer);
 		$('#tweetList').toggleClass('pop-sort');
 		if($('#tweetList').hasClass('pop-sort')){
 			$('#tweetList li').sortElements(function(a, b){
@@ -198,6 +198,7 @@ var newSearchValue = '';
 function showTweetList(arch){
 	if($('#tweetListView').css('display') != 'block') {
 		$('main').fadeOut(fadeTimer);
+		$('#view-controls').fadeOut(fadeTimer);
 		searchValue = $('header input.search').val();
 		if (searchValue != arch) {
 			$('header input.search').val(arch);
@@ -453,15 +454,17 @@ $("#timeline").bind("valuesChanged", function(e, data){
 function clearModal() {
 	currentPage = 0;
 	$('main').fadeOut(fadeTimer);
+	$('.overlay').fadeOut(fadeTimer);
 	$('#resort').fadeOut(fadeTimer);
+	$('#view-controls').fadeIn(fadeTimer);
 	if(currentView == 'cloud') {
 		$('#wordCloud').fadeIn(fadeTimer);
 		$('#resort-archView').fadeOut(fadeTimer);
-		$('#view-archView').fadeIn(fadeTimer);
+		$('#view-archView').fadeOut(fadeTimer);
 	} else {
 		$('#archiveListView').fadeIn(fadeTimer);
 		$('#resort-archView').fadeIn(fadeTimer);
-		$('#view-archView').fadeOut(fadeTimer);
+		$('#view-archView').fadeIn(fadeTimer);
 	}
 	$("#tweetList li").remove();
 	if (resetArchiveList == true) {
