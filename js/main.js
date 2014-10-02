@@ -45,10 +45,14 @@ jQuery(document).ready(function($){
 	// load active jobs on button click
 	$('.getAllArchives').click(function(){
 		getAllArchives();
+		var startDate = new Date(2014, 8, 1);
+		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1);
+		$("#timeline").dateRangeSlider("values", startDate, endDate);
 	});
 	$('#clearSearch').click(function(){
 		$('header input.search').val('');
 		getAllArchives();
+		runSearch('')
 	});
 	// View - Archive List
 	$('#view-archView').click(function(){
@@ -69,6 +73,8 @@ jQuery(document).ready(function($){
 	
 	// Sort - Archive List
 	$('#resort-archView').click(function(){
+		$('main').fadeOut(fadeTimer);
+		$('#archiveListView').fadeIn(fadeTimer);
 		$('#archiveList').toggleClass('pop-sort');
 		if($('#archiveList').hasClass('pop-sort')){
 			$('#archiveList li').sortElements(function(a, b){
@@ -83,6 +89,8 @@ jQuery(document).ready(function($){
 
 	// Sort - Tweet List
 	$('#resort').click(function(){
+		$('main').fadeOut(fadeTimer);
+		$('#tweetListView').fadeOut(fadeTimer);
 		$('#tweetList').toggleClass('pop-sort');
 		if($('#tweetList').hasClass('pop-sort')){
 			$('#tweetList li').sortElements(function(a, b){
@@ -140,8 +148,7 @@ function getActiveJobs(searchTerm) {
 	}
     $('#intro').remove();
 	$('.search').attr('disabled','disabled');
-	$('#archiveListView').fadeOut(fadeTimer);
-	$('#wordcloud').fadeOut(fadeTimer);
+	$('main').fadeOut(fadeTimer);
 	$('#wait').fadeIn(fadeTimer);	
 	$.ajax({
 		type: "GET",
@@ -183,9 +190,6 @@ var resetArchiveList = false;
 function getAllArchives(){
 		searchValue = '';		
 		$('header input.search').val(searchValue);
-		var startDate = new Date(2014, 8, 1);
-		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1);
-		$("#timeline").dateRangeSlider("values", startDate, endDate);
 }
 
 // show tweets in archive
@@ -193,7 +197,7 @@ var searchValue = '';
 var newSearchValue = '';
 function showTweetList(arch){
 	if($('#tweetListView').css('display') != 'block') {
-		$('#resort-archView').fadeOut(fadeTimer);
+		$('main').fadeOut(fadeTimer);
 		searchValue = $('header input.search').val();
 		if (searchValue != arch) {
 			$('header input.search').val(arch);
@@ -267,8 +271,7 @@ var cloudlist = [];
 var currentView = 'cloud';
 function getArchiveVolume(archiveTitle) {
 	if(spinnerCount == 0) {
-		$('#archiveListView').fadeOut(fadeTimer);
-		$('#wordCloud').fadeOut(fadeTimer);
+		$('main').fadeOut(fadeTimer);
 		$('#wait').fadeIn(fadeTimer);
 	}
 	spinnerCount++;
@@ -281,7 +284,7 @@ function getArchiveVolume(archiveTitle) {
 		success: function (e) {
 			var data = $.parseJSON(e);
 			spinnerCount--;
-			console.log('Archives to count = '+spinnerCount);
+//			console.log('Archives to count = '+spinnerCount);
 			if (data==0) {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).remove();				
 			} else {
@@ -300,9 +303,9 @@ function getArchiveVolume(archiveTitle) {
 				});
 				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
 				$('.view-link').fadeIn(fadeTimer);
+				$('main').fadeOut(fadeTimer);
 				if(currentView == 'cloud') {
 					$('#wordCloud').fadeIn(fadeTimer);
-					$('#resort-archView').fadeOut(fadeTimer);
 				} else {
 					$('#archiveListView').fadeIn(fadeTimer);
 					$('#resort-archView').fadeIn(fadeTimer);
@@ -332,7 +335,7 @@ function getArchiveVolume(archiveTitle) {
 					minRotation:0,
 					maxRotation:0,
 					click: function(item) {
-						$('#wordCloud').fadeOut(fadeTimer);
+						$('main').fadeOut(fadeTimer);
 						var arr = [];
 						$('#archiveList li span:first-child').each(function(){
 							arr.push($(this).text());
@@ -344,6 +347,7 @@ function getArchiveVolume(archiveTitle) {
 					}
 				});
 				$('#wait').fadeOut(fadeTimer);
+				$('#view-archView').fadeIn(fadeTimer);
 				if($('#resort-archView').text() == 'Popular') {
 					$('#archiveList').addClass('pop-sort');
 					$('#archiveList li').sortElements(function(a, b){
@@ -360,8 +364,9 @@ function getArchiveVolume(archiveTitle) {
 
 // Get top words in archive and construct cloud
 function getArchiveWords(archiveTitle) {
-	// Loading spinner
+	// Loading spinner	
 	$('#wait').fadeIn(fadeTimer);
+	$('#view-controls').fadeOut(fadeTimer);
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
 	$.ajax({
@@ -391,7 +396,7 @@ function getArchiveWords(archiveTitle) {
 			$('#wordsCloudList li').each(function(){
 				var len = $('#wordsCloudList li').length;
 				var archWeight = $(this).index();
-				console.log('Word: '+$(this).text()+', Weight: '+parseInt(archWeight+10));
+//				console.log('Word: '+$(this).text()+', Weight: '+parseInt(archWeight+10));
 				cloudlist.push([$(this).text(),archWeight]);
 			});
 			$('#wordsCloudListView').css('height',$('#wordsCloudList').height()+100+'px');
@@ -447,7 +452,7 @@ $("#timeline").bind("valuesChanged", function(e, data){
 });
 function clearModal() {
 	currentPage = 0;
-	$('.overlay').fadeOut(fadeTimer);
+	$('main').fadeOut(fadeTimer);
 	$('#resort').fadeOut(fadeTimer);
 	if(currentView == 'cloud') {
 		$('#wordCloud').fadeIn(fadeTimer);
