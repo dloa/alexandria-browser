@@ -206,6 +206,9 @@ header span {
 	margin-top: -.5em;
 	line-height: 1;
 }
+#view-controls-2 {
+	display: none;
+}
 .sort-link, .view-link {
 	cursor:pointer;
 	display: none;
