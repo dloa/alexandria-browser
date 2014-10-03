@@ -199,7 +199,7 @@ header span {
 	top: .1em;
 	cursor: pointer;
 }
-#view-controls {
+.view-controls {
 	position: absolute;
 	top: 50%;
 	right: 1em;
