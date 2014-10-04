@@ -231,7 +231,7 @@ function showTweetList(arch){
 }
 // get archived tweets JSON object
 var currentPage = 0;
-var totalPages;
+var totalPages = 0;
 function getArchive(archiveTitle) {
 	// Loading spinner
 	$('#wait').fadeIn(fadeTimer);
@@ -245,7 +245,13 @@ function getArchive(archiveTitle) {
 		data: queryString.toString(),
         success: function (e) {
 			var totalPages = $.parseJSON(e);
-        }
+        },
+		error: function (XMLHttpRequest, textStatus, errorThrown) {
+			alert("some error");
+			console.log(XMLHttpRequest);
+			console.log(textStatus);
+			console.log(errorThrown);
+	   }
     });
 	
 	// Run query
@@ -402,25 +408,10 @@ function getArchiveWords(archiveTitle) {
 			$('#wordsList li').sortElements(function(a, b){
 				return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
 			});
-			/*
 			$('#wordsList li').each(function(){
-				var len = $('#wordsList li').length;
-				var archWeight = $(this).index();
-				archWeight = archWeight+len;
-				if (archWeight > len+75) {
-					$(this).remove();
-				}
-			});
-			$('#wordsList li').sortElements(function(a, b){
-				return parseInt($(a).attr('volume')) > parseInt($(b).attr('volume')) ? 1 : -1;
-			});
-			*/
-			$('#wordsList li').each(function(){
-//				var len = $('#wordsList li').length;
 				var archWeight = $(this).index();
 				cloudlist.push([$(this).text(),archWeight+10]);
 			});
-			console.log(cloudlist);
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 			$('#wordsCloud').fadeIn(fadeTimer);
 			WordCloud(document.getElementById('wordsCloud'), {
@@ -487,30 +478,7 @@ function getWordCount(arch, word) {
 	}
 }
 
-function getWordPageCount(arch, word, rpp) {
-	console.log(arch + ', ' + word);
-	if((!arch)||(!word)||(!rpp)){
-		console.log(arch + ', ' + word + ', ' + rpp + ', ' + pageFix);
-		if(!arch){console.log('arch!')}else if(!word){console.log('word!')}else if(!rpp){console.log('rpp = '+rpp)}else{console.log('something else!')}
-		alert('error in wordSearch');		
-		return false;
-	} else {
-		var dateValues = $("#timeline").dateRangeSlider("values");	
-		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(dateValues.min)/1000+',"EndDate":'+Date.parse(dateValues.max)/1000+'}';
-		$.ajax({
-			type: "POST",
-			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount",
-			data: queryString.toString(),
-			success: function (e) {
-				var data = $.parseJSON(e);
-				console.log(data);
-				$('#wait').fadeOut(fadeTimer);
-			}
-		});
-	}
-}
-
-function wordSearch(arch, word, rpp, page) {
+function wordSearch(arch, word, rpp, page) {	
 	var pageFix = page+1;
 	if((!arch)||(!word)||(!rpp)||(!pageFix)){
 		console.log(arch + ', ' + word + ', ' + rpp + ', ' + pageFix);
@@ -519,13 +487,23 @@ function wordSearch(arch, word, rpp, page) {
 		return false;
 	} else {
 		var dateValues = $("#timeline").dateRangeSlider("values");	
+		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(dateValues.min)/1000+',"EndDate":'+Date.parse(dateValues.max)/1000+',"ResultsPerPage": '+rpp+'}';
+		$.ajax({
+			type: "POST",
+			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount",
+			data: queryString.toString(),
+			success: function (e) {
+				totalPages = $.parseJSON(e);
+				$('#wait').fadeOut(fadeTimer);
+			}
+		});
 		var queryString = '{"Archive": "'+arch+'","Word": "'+word+'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": '+rpp+',"Page": '+page+'}';
-		console.log(queryString);
 		$.ajax({
 			type: "POST",
 			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch",
 			data: queryString.toString(),
 			success: function (e) {
+				console.log(totalPages);
 				var data = $.parseJSON(e);
 				console.log(data);
 				// Load tweets
@@ -557,6 +535,29 @@ function wordSearch(arch, word, rpp, page) {
 		});
 	}
 }
+/*
+function getWordPageCount(arch, word, rpp) {
+	console.log(arch + ', ' + word+ ', '+rpp);
+	if((!arch)||(!word)||(!rpp)){
+		if(!arch){console.log('arch!')}else if(!word){console.log('word!')}else if(!rpp){console.log('rpp = '+rpp)}else{console.log('something else!')}
+		alert('error in wordSearch');		
+		return false;
+	} else {
+		var dateValues = $("#timeline").dateRangeSlider("values");	
+		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(dateValues.min)/1000+',"EndDate":'+Date.parse(dateValues.max)/1000+',"ResultsPerPage": '+rpp+'}';
+		$.ajax({
+			type: "POST",
+			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount",
+			data: queryString.toString(),
+			success: function (e) {
+				var totalPages = $.parseJSON(e);
+				return totalPages;
+				$('#wait').fadeOut(fadeTimer);
+			}
+		});
+	}
+}
+*/
 
 // scan archives after timeline slider values change
 $("#timeline").bind("valuesChanged", function(e, data){
