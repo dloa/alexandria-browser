@@ -577,32 +577,10 @@ $("#timeline").bind("valuesChanged", function(e, data){
 function clearModal() {
 	currentPage = 0;
 	$('.overlay').fadeOut(fadeTimer);
+	$('.search').attr('disabled','disabled').val(searchTerm).attr('disabled',false);
 	$("#tweetList li").remove();
-	console.log(currentView);
 	$('main').not('#'+currentView).fadeOut(fadeTimer);
 	$('.view-controls').fadeIn(fadeTimer);
-/*
-	if(currentView == 'archiveCloud') {
-		$('main').not('#archiveCloud').fadeOut(fadeTimer);
-		$('#resort-archView').fadeOut(fadeTimer);
-		$('#view-archView').fadeOut(fadeTimer);
-		$('#resort').fadeOut(fadeTimer);
-		$('#view-controls').fadeIn(fadeTimer);
-	} else if (currentView == 'archiveListView') {
-		$('main').not('#archiveListView').fadeOut(fadeTimer);
-		// $('#archiveListView').fadeIn(fadeTimer);
-		$('#resort-archView').fadeIn(fadeTimer);
-		$('#view-archView').fadeIn(fadeTimer);
-		$('#resort').fadeOut(fadeTimer);
-		$('#view-controls').fadeIn(fadeTimer);
-	} else if(currentView == 'wordsCloud') {
-		$('main').not('#wordsCloud').fadeOut(fadeTimer);
-		$('#view-controls-2').fadeIn(fadeTimer);
-	} else if(currentView == 'wordsListView') {
-		$('main').not('#wordsListView').fadeOut(fadeTimer);
-		$('#view-controls-2').fadeIn(fadeTimer);
-	}
-*/
 	if (resetArchiveList == true) {
 		$('header input.search').val(searchValue)
 		getActiveJobs(searchValue);
