@@ -394,8 +394,8 @@ function getArchiveWords(archiveTitle) {
 	$('#wait').fadeIn(fadeTimer);
 	$('#view-controls').fadeOut(fadeTimer);
 	$('.sort-link').fadeOut(fadeTimer);
-	$('#wordsCloud').fadeIn(fadeTimer);
-	$('#view-controls-2').fadeIn(fadeTimer);
+	$('#wordsCloud').children().remove();
+	$('#wordsCloud').css('z-index','0').fadeIn(fadeTimer);
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
 	$.ajax({
@@ -466,7 +466,8 @@ function getArchiveWords(archiveTitle) {
 				}
 			});
 			currentView = 'wordsCloud';
-			$('#wordsCloud').fadeIn(fadeTimer);
+			$('.view-controls').fadeIn();
+			$('#wordsCloud').css('z-index','3').fadeIn(fadeTimer);
 			$('#wait').fadeOut(fadeTimer);
 		}
 	});
