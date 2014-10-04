@@ -54,8 +54,9 @@ jQuery(document).ready(function($){
 		getAllArchives();
 		runSearch('')
 	});
+	
 	// View Controls
-	$('.view-controls div').click(function(){		
+	$('.view-controls .view-link').click(function(){		
 		var newView;
 		$('main').fadeOut(fadeTimer);
 		switchView = $(this).text();
@@ -63,10 +64,12 @@ jQuery(document).ready(function($){
 			newView = currentView.slice(0,-5)+'ListView';			
 			currentView = newView;
 			switchView = 'List';
+			$('.sort-link').fadeIn(fadeTimer);
 		} else {
 			newView = currentView.slice(0,-8)+'Cloud';
 			currentView = newView;
 			switchView = 'Cloud';
+			$('.sort-link').fadeOut(fadeTimer);
 		}		
 		$('#'+newView).fadeIn(fadeTimer);
 		$(this).text(switchView);
@@ -150,16 +153,23 @@ function getActiveJobs(searchTerm) {
     $('#intro').remove();
 	$('.search').attr('disabled','disabled');
 	$('main').fadeOut(fadeTimer);
-	$('#wait').fadeIn(fadeTimer);	
+	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
+		$('#'+currentView.slice(0,-8)+'Cloud').children().remove();
+		$('#'+currentView+' li').remove();
+	} else {
+		$('#'+currentView.slice(0,-5)+'ListView li').remove();
+		$('#'+currentView).children().remove();
+	}
+	$('#wait').fadeIn(fadeTimer);
 	$.ajax({
 		type: "GET",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
 		success: function (responseData) {
 			console.log('running search ... ' + searchTerm);
 			console.log('Current View: '+currentView);
-			$('#'+currentView).children().remove();
 			var data = $.parseJSON(responseData);
 			for (var i = 0; i < data['Jobs'].length; i++) {
+
 				if(!searchTerm){
 					$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
 					getArchiveVolume(data['Jobs'][i]);
@@ -176,6 +186,7 @@ function getActiveJobs(searchTerm) {
 						}
 					}
 				}
+				
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -191,13 +202,12 @@ function getActiveJobs(searchTerm) {
 			alert('Cannot connect to Librarian');
 	   }
 	});
-	
 }
 var resetArchiveList = false;
 
 function getAllArchives(){
-		searchValue = '';		
-		$('header input.search').val(searchValue);
+	searchValue = '';		
+	$('header input.search').val(searchValue);
 }
 
 // show tweets in archive
@@ -300,6 +310,9 @@ function getArchiveVolume(archiveTitle) {
 				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).attr('volume',data);
 			}
 			if(spinnerCount == 0) {
+				$('main').fadeOut(fadeTimer);
+				$('#'+currentView).fadeIn(fadeTimer);
+				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
 				var cloudlist = [];
 				$('#archiveList li').sortElements(function(a, b){
 					return parseInt($(a).attr('volume')) > parseInt($(b).attr('volume')) ? 1 : -1;
@@ -307,22 +320,23 @@ function getArchiveVolume(archiveTitle) {
 				$('#archiveList li').each(function(){
 					var archWeight = $(this).index()+5;
 					cloudlist.push([$(this).find('span:first-child').text(),archWeight]);
-//					console.log(cloudlist);
 				});
-				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
-				$('.view-link').fadeIn(fadeTimer);
-				$('main').fadeOut(fadeTimer);
+/*
 				if(currentView == 'archiveCloud') {
 					$('#archiveCloud').fadeIn(fadeTimer);
 				} else {
 					$('#archiveListView').fadeIn(fadeTimer);
 					$('#resort-archView').fadeIn(fadeTimer);
 				}
+*/
 				if($('#archiveListView li').length == 0) {
 					$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
 				}
+				if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
+					// Build cloud behind the scenes
+					$('#'+currentView.slice(0,-8)+'Cloud').css('z-index','0').fadeIn(fadeTimer);
+				}
 				WordCloud(document.getElementById('archiveCloud'), {
-					clearCanvas: true,
 					list:cloudlist,
 					gridSize: 20,
   					minSize: 5,
@@ -356,8 +370,6 @@ function getArchiveVolume(archiveTitle) {
 						}
 					}
 				});
-				$('#wait').fadeOut(fadeTimer);
-				$('#view-archView').fadeIn(fadeTimer);
 				if($('#resort-archView').text() == 'Popular') {
 					$('#archiveList').addClass('pop-sort');
 					$('#archiveList li').sortElements(function(a, b){
@@ -366,6 +378,12 @@ function getArchiveVolume(archiveTitle) {
 				} else {
 					sortUnorderedList("archiveList");
 				}
+				if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
+					// Build cloud behind the scenes
+					$('#'+currentView.slice(0,-8)+'Cloud').hide().css('z-index','3');
+				}
+				$('.view-link').fadeIn(fadeTimer);
+				$('#wait').fadeOut(fadeTimer);
 				$('.search').attr('disabled',false);
 			}
 		}
@@ -414,7 +432,6 @@ function getArchiveWords(archiveTitle) {
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 			$('#wordsCloud').fadeIn(fadeTimer);
 			WordCloud(document.getElementById('wordsCloud'), {
-				clearCanvas: true,
 				list:cloudlist,
 				gridSize: 15,
 				minSize: 10,
