@@ -215,15 +215,14 @@ var searchValue = '';
 var newSearchValue = '';
 function showTweetList(arch){
 	if($('#tweetListView').css('display') != 'block') {
-		$('main').fadeOut(fadeTimer);
-		$('#view-controls').fadeOut(fadeTimer);
+		// $('main').not('#'+currentView).fadeOut(fadeTimer);
+		$('.view-controls').fadeOut(fadeTimer);
 		searchValue = $('header input.search').val();
 		if (searchValue != arch) {
 			$('header input.search').val(arch);
 			// resetArchiveList = true;
 		}
 		$('.overlay').fadeIn(fadeTimer);
-		$('.view-link').fadeOut(fadeTimer);
 	}
 	getArchive(arch);
 	if($('#resort').text() == 'Popular') {
@@ -578,7 +577,11 @@ $("#timeline").bind("valuesChanged", function(e, data){
 function clearModal() {
 	currentPage = 0;
 	$('.overlay').fadeOut(fadeTimer);
+	$("#tweetList li").remove();
 	console.log(currentView);
+	$('main').not('#'+currentView).fadeOut(fadeTimer);
+	$('.view-controls').fadeIn(fadeTimer);
+/*
 	if(currentView == 'archiveCloud') {
 		$('main').not('#archiveCloud').fadeOut(fadeTimer);
 		$('#resort-archView').fadeOut(fadeTimer);
@@ -599,7 +602,7 @@ function clearModal() {
 		$('main').not('#wordsListView').fadeOut(fadeTimer);
 		$('#view-controls-2').fadeIn(fadeTimer);
 	}
-	$("#tweetList li").remove();
+*/
 	if (resetArchiveList == true) {
 		$('header input.search').val(searchValue)
 		getActiveJobs(searchValue);
