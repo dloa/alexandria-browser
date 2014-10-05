@@ -392,6 +392,7 @@ function getArchiveVolume(arch) {
 						});
 						if(jQuery.inArray( item, arr ) > -1) {
 							$('header input.search').val(item);
+							searchTerm = item;
 							getArchiveWords(item);
 //							showTweetList(item);
 						}
@@ -478,7 +479,7 @@ function getArchiveWords(arch) {
 							var arch = $('header input.search').val();
 							if(arch!=''){
 								console.log(searchTerm);
-								wordSearch(searchValue, item, 40, 0)
+								wordSearch(searchTerm, item, 40, 0)
 								// showTweetList(item);
 							}
 						} else {
