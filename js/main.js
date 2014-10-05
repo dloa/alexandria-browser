@@ -245,7 +245,6 @@ function getArchive(arch) {
 		data: queryString.toString(),
         success: function (e) {
 			totalPages = $.parseJSON(e);
-			console.log('Total Pages = '+totalPages);
         },
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			alert("some error");
@@ -281,7 +280,6 @@ function getArchive(arch) {
 			}
 			$("#tweetList li.more-link").remove();
 			currentPage++;
-			console.log('Current: '+currentPage+', Total: '+totalPages);
 			if(currentPage < totalPages) {
 				$("#tweetList").append('<li class="more-link"><a href="javascript:getArchive(\x27'+ arch +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 			}
@@ -307,7 +305,6 @@ function getArchiveVolume(arch) {
 		data: queryString.toString(),
 		success: function (e) {
 			var data = $.parseJSON(e);
-			console.log(data);
 			spinnerCount--;
 			if (data==0) {
 				$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).remove();				
@@ -469,8 +466,8 @@ function getArchiveWords(arch) {
 	}
 }
 function getWordCount(arch, word) {
-	console.log(arch + ', ' + word);
 	if((!arch)||(!word)){
+		console.log(arch + ', ' + word);
 		alert('error in getWordCount');
 		return false;
 	} else {
@@ -482,7 +479,6 @@ function getWordCount(arch, word) {
 			data: queryString.toString(),
 			success: function (e) {
 				var data = $.parseJSON(e);
-				console.log(data);
 				$('#wait').fadeOut(fadeTimer);
 			}
 		});
@@ -515,7 +511,6 @@ function wordSearch(arch, word, rpp, currentPage) {
 			data: queryString.toString(),
 			success: function (e) {
 				var data = $.parseJSON(e);
-				console.log(data);
 				// Load tweets
 				for (var i = 0; i < data.length; i++) {
 					var tweetDate = Date.parse(data[i].p.twitter.data[4]);
@@ -533,7 +528,6 @@ function wordSearch(arch, word, rpp, currentPage) {
 				}
 				$("#tweetList li.more-link").remove();
 				currentPage++;
-				console.log('Current: '+currentPage+', Total: '+totalPages);
 				if(currentPage < totalPages) {
 					$("#tweetList").append('<li class="more-link"><a href="javascript:wordSearch(\x27'+arch+'\x27,\x27'+word+'\x27,\x27'+rpp+'\x27,\x27'+ currentPage +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 				}
@@ -548,8 +542,8 @@ function wordSearch(arch, word, rpp, currentPage) {
 }
 /*
 function getWordPageCount(arch, word, rpp) {
-	console.log(arch + ', ' + word+ ', '+rpp);
 	if((!arch)||(!word)||(!rpp)){
+		console.log(arch + ', ' + word+ ', '+rpp);
 		if(!arch){console.log('arch!')}else if(!word){console.log('word!')}else if(!rpp){console.log('rpp = '+rpp)}else{console.log('something else!')}
 		alert('error in wordSearch');		
 		return false;
@@ -583,17 +577,17 @@ $("#timeline").bind("valuesChanged", function(e, data){
 });
 function clearModal() {
 	currentPage = 0;
-	$('.overlay').fadeOut(fadeTimer);
-	$('.search').attr('disabled','disabled').val(searchTerm).attr('disabled',false);
 	$("#tweetList li").remove();
+	$('.overlay').fadeOut(fadeTimer);
+//	$('.search').attr('disabled','disabled').val(searchTerm).attr('disabled',false);
 	$('main').not('#'+currentView).fadeOut(fadeTimer);
 	$('.view-controls').fadeIn(fadeTimer);
 	if (resetArchiveList == true) {
-		$('header input.search').val(searchValue)
-		getActiveJobs(searchValue);
+//		$('header input.search').val(searchValue)
+//		getActiveJobs(searchValue);
 	} else {
 		if ( (searchValue) && (searchTerm == searchValue) && (searchValue == newSearchValue) )  {
-			$('.search').val(searchValue);
+			// $('.search').val(searchValue);
 		}
 	}
 }
