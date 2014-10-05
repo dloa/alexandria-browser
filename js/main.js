@@ -32,13 +32,16 @@ jQuery(document).ready(function($){
 	});
 	$('header input.search').on("keyup", function (e) {
 		newSearchValue = $('header input.search').val();
+		console.log('newSearchValue: '+ newSearchValue+', searchValue: '+ searchValue);
 		var code = e.keyCode || e.which; if (code == 32) {
 			console.log('cannot search for empty space');
 		} else if ( ( (newSearchValue != searchValue) && (searchValue != '') ) || (code == 16) ) {
 			if (searchTimerId) {
 				clearTimeout ( searchTimerId );
 			}
-			searchTimerId = setTimeout ( 'runSearch()', 2000 );
+			searchTimerId = setTimeout ( 'runSearch("'+ newSearchValue +'")', 2000 );
+		} else {
+			console.log('newSearchValue: '+ newSearchValue+', searchValue :'+ searchValue);
 		}
 	});
 
@@ -157,20 +160,22 @@ var searchTimerId = 0;
 var searchRunning;
 var searchTerm;
 var activeWord;
-function runSearch() {
-	if ( (currentView == 'wordsCloud') || (currentView == 'wordsCloudListView') ) {
-		clearTimeout ( searchTimerId );
-		searchRunning = 0;
-		return false;
-	}
-
-	searchTerm = $('.search').val();
+function runSearch(searchTerm) {
+//	searchTerm = $('.search').val();
+	clearTimeout ( searchTimerId );
+	searchRunning = 0;
+	console.log('running search ... ' + searchTerm);
+	console.log('Current View: '+currentView);
 	if($('#tweetListView').css('display') == 'block') {
 		clearModal();
 	}
-	getActiveJobs(searchTerm);
-	clearTimeout ( searchTimerId );
-	searchRunning = 0;
+	if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
+		activeWord = $('.search').val();
+		console.log('Search term: '+ searchValue +', Active word: '+activeWord);
+		getArchiveWords(searchValue, activeWord);
+	} else {
+		getActiveJobs(searchTerm);
+	}
 }
 // function to get active jobs JSON object
 var archTitleSpan = 'span:first-child';
@@ -194,8 +199,6 @@ function getActiveJobs(searchTerm) {
 		type: "GET",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
 		success: function (responseData) {
-			console.log('running search ... ' + searchTerm);
-			console.log('Current View: '+currentView);
 			var data = $.parseJSON(responseData);
 			for (var i = 0; i < data['Jobs'].length; i++) {
 
@@ -433,6 +436,7 @@ function getArchiveWords(arch) {
 			data: queryString.toString(),
 			success: function (e) {
 				var data = $.parseJSON(e);
+				var wordsArray = [];
 				// Load words
 				$.each(data,function(word, weight){
 					$("#wordsList").append('<li class="responseRow" volume="'+weight+'">'+word+'</li>');
@@ -443,6 +447,7 @@ function getArchiveWords(arch) {
 				$('#wordsList li').each(function(){
 					var archWeight = $(this).index();
 					cloudlist.push([$(this).text(),archWeight+8]);
+					wordsArray.push($(this).text());
 				});
 				$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 				$('#wordsCloud').fadeIn(fadeTimer);
@@ -468,17 +473,16 @@ function getArchiveWords(arch) {
 					maxRotation:0,
 					click: function(item) {
 						activeWord = item;
-						console.log('Active word: '+activeWord);
-						var arr = [];
-						$('#wordsList li').each(function(){
-							arr.push($(this).text());
-						});
-						if(jQuery.inArray( item, arr ) > -1) {
+						if(jQuery.inArray( item, wordsArray ) > -1) {
+							console.log('Active word: '+activeWord);
 							var arch = $('header input.search').val();
 							if(arch!=''){
+								console.log(arch);
 								wordSearch(arch, item, 40, 0)
 								// showTweetList(item);
 							}
+						} else {
+							console.log(wordsArray);
 						}
 					}
 				});
