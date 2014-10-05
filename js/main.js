@@ -134,7 +134,11 @@ jQuery(document).ready(function($){
 			}
 			resetArchiveList = true;
 		} else {
-			getActiveJobs(searchTerm);
+			if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
+				getArchiveWords(searchTerm);
+			} else {
+				getActiveJobs(searchTerm);
+			}
 		}
 	});
 	
@@ -229,7 +233,8 @@ function getAllArchives(){
 // show tweets in archive
 var searchValue = '';
 var newSearchValue = '';
-function showTweetList(arch){
+function showTweetList(arch){	
+	seachTerm = arch;
 	if($('#tweetListView').css('display') != 'block') {
 		// $('main').not('#'+currentView).fadeOut(fadeTimer);
 		$('.view-controls').fadeOut(fadeTimer);
@@ -414,6 +419,7 @@ function getArchiveWords(arch) {
 		$('#wait').fadeIn(fadeTimer);
 		$('#view-controls').fadeOut(fadeTimer);
 		$('.sort-link').fadeOut(fadeTimer);
+		$('#wordsList li').remove();
 		$('#wordsCloud').children().remove();
 		$('#wordsCloud').css('z-index','0').fadeIn(fadeTimer);
 		var dateValues = $("#timeline").dateRangeSlider("values");
@@ -459,6 +465,7 @@ function getArchiveWords(arch) {
 					maxRotation:0,
 					click: function(item) {
 						activeWord = item;
+						console.log('Active word: '+activeWord);
 						var arr = [];
 						$('#wordsList li').each(function(){
 							arr.push($(this).text());
@@ -503,7 +510,7 @@ function getWordCount(arch, word) {
 }
 
 function wordSearch(arch, word, rpp, currentPage) {
-	console.log('Active word: '+activeWord);
+	resetArchiveList = false;
 	var pageFix = currentPage+1;
 	if((!arch)||(!word)||(!rpp)||(!pageFix)){
 		console.log(arch + ', ' + word + ', ' + rpp + ', ' + pageFix);
@@ -590,8 +597,12 @@ function clearModal() {
 	$('main').not('#'+currentView).fadeOut(fadeTimer);
 	$('.view-controls').fadeIn(fadeTimer);
 	if (resetArchiveList == true) {
-		$('header input.search').val(searchValue)
-		getActiveJobs(searchValue);
+//		$('header input.search').val(searchValue);				
+		if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
+			getArchiveWords(searchTerm);
+		} else {
+			getActiveJobs(searchTerm);
+		}
 	} else {
 		if ( (searchValue) && (searchTerm == searchValue) && (searchValue == newSearchValue) )  {
 			$('.search').val(searchValue);
