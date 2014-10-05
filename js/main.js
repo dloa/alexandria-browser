@@ -49,6 +49,9 @@ jQuery(document).ready(function($){
 		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1);
 		$("#timeline").dateRangeSlider("values", startDate, endDate);
 	});
+	$('#logo').click(function(){
+		document.location.reload(true);
+	});
 	$('#clearSearch').click(function(){
 		$('header input.search').val('');
 		getAllArchives();
