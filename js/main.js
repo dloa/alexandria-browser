@@ -57,7 +57,7 @@ jQuery(document).ready(function($){
 	});
 	$('#clearSearch').click(function(){
 		$('header input.search').val('');
-		getAllArchives();
+//		getAllArchives();
 		runSearch('')
 	});
 	
@@ -232,7 +232,7 @@ function getActiveJobs(searchTerm) {
 var resetArchiveList = false;
 
 function getAllArchives(){
-	searchValue = '';		
+	searchValue = '';
 	$('header input.search').val(searchValue);
 }
 
