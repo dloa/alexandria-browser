@@ -477,8 +477,8 @@ function getArchiveWords(arch) {
 							console.log('Active word: '+activeWord);
 							var arch = $('header input.search').val();
 							if(arch!=''){
-								console.log(arch);
-								wordSearch(arch, item, 40, 0)
+								console.log(searchTerm);
+								wordSearch(searchValue, item, 40, 0)
 								// showTweetList(item);
 							}
 						} else {
