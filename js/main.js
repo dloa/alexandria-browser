@@ -583,11 +583,11 @@ function clearModal() {
 	$('main').not('#'+currentView).fadeOut(fadeTimer);
 	$('.view-controls').fadeIn(fadeTimer);
 	if (resetArchiveList == true) {
-//		$('header input.search').val(searchValue)
-//		getActiveJobs(searchValue);
+		$('header input.search').val(searchValue)
+		getActiveJobs(searchValue);
 	} else {
 		if ( (searchValue) && (searchTerm == searchValue) && (searchValue == newSearchValue) )  {
-			// $('.search').val(searchValue);
+			$('.search').val(searchValue);
 		}
 	}
 }
