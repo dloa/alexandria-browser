@@ -135,6 +135,12 @@ var searchTimerId = 0;
 var searchRunning;
 var searchTerm;
 function runSearch() {
+	if ( (currentView == 'wordsCloud') || (currentView == 'wordsCloudListView') ) {
+		clearTimeout ( searchTimerId );
+		searchRunning = 0;
+		return false;
+	}
+
 	searchTerm = $('.search').val();
 	if($('#tweetListView').css('display') == 'block') {
 		clearModal();
@@ -226,11 +232,11 @@ function showTweetList(arch){
 // get archived tweets JSON object
 var currentPage = 0;
 var totalPages = 0;
-function getArchive(archiveTitle) {
+function getArchive(arch) {
 	// Loading spinner
 	$('#wait').fadeIn(fadeTimer);
 	var dateValues = $("#timeline").dateRangeSlider("values");
-	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40}';
+	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40}';
 	// Count the pages
     $.ajax({
         type: "POST",
@@ -238,7 +244,8 @@ function getArchive(archiveTitle) {
         // Get tweets between two dates
 		data: queryString.toString(),
         success: function (e) {
-			var totalPages = $.parseJSON(e);
+			totalPages = $.parseJSON(e);
+			console.log('Total Pages = '+totalPages);
         },
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			alert("some error");
@@ -250,7 +257,7 @@ function getArchive(archiveTitle) {
 	
 	// Run query
     // Get tweets between two dates
-	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 30,"Page":'+currentPage+'}';
+	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40,"Page":'+currentPage+'}';
     $.ajax({
         type: "POST",
         url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated",
@@ -274,11 +281,11 @@ function getArchive(archiveTitle) {
 			}
 			$("#tweetList li.more-link").remove();
 			currentPage++;
+			console.log('Current: '+currentPage+', Total: '+totalPages);
 			if(currentPage < totalPages) {
-				$("#tweetList").append('<li class="more-link"><a href="javascript:getArchive(\x27'+archiveTitle+'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
+				$("#tweetList").append('<li class="more-link"><a href="javascript:getArchive(\x27'+ arch +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 			}
 		$('#wait').fadeOut(fadeTimer);
-		$('#resort').fadeIn(fadeTimer);
         }
     });
 }
@@ -286,14 +293,14 @@ function getArchive(archiveTitle) {
 var spinnerCount = 0;
 var cloudlist = [];
 var currentView = 'archiveCloud';
-function getArchiveVolume(archiveTitle) {
+function getArchiveVolume(arch) {
 	if(spinnerCount == 0) {
 		$('main').fadeOut(fadeTimer);
 		$('#wait').fadeIn(fadeTimer);
 	}
 	spinnerCount++;
 	var dateValues = $("#timeline").dateRangeSlider("values");
-	var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
+	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
 	$.ajax({
 		type: "POST",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/count",
@@ -303,10 +310,10 @@ function getArchiveVolume(archiveTitle) {
 			console.log(data);
 			spinnerCount--;
 			if (data==0) {
-				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).remove();				
+				$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).remove();				
 			} else {
-				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-") +' span.archive-volume').html(data);
-				$('#archiveList li#archive-'+ archiveTitle.replace(/ /g,"-")).attr('volume',data);
+				$('#archiveList li#archive-'+ arch.replace(/ /g,"-") +' span.archive-volume').html(data);
+				$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).attr('volume',data);
 			}
 			if(spinnerCount == 0) {
 				$('#archiveList li').each(function(){
@@ -386,8 +393,8 @@ function getArchiveVolume(archiveTitle) {
 	});
 }
 // Get top words in archive and construct cloud
-function getArchiveWords(archiveTitle) {
-	if(!archiveTitle){
+function getArchiveWords(arch) {
+	if(! arch){
 		console.log('No archive title!');
 	} else {
 		// Loading spinner	
@@ -397,7 +404,7 @@ function getArchiveWords(archiveTitle) {
 		$('#wordsCloud').children().remove();
 		$('#wordsCloud').css('z-index','0').fadeIn(fadeTimer);
 		var dateValues = $("#timeline").dateRangeSlider("values");
-		var queryString = '{"Archive": "'+ archiveTitle +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true}';
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true}';
 		$.ajax({
 			type: "POST",
 			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/wordcloud",
@@ -413,14 +420,14 @@ function getArchiveWords(archiveTitle) {
 				});
 				$('#wordsList li').each(function(){
 					var archWeight = $(this).index();
-					cloudlist.push([$(this).text(),archWeight+10]);
+					cloudlist.push([$(this).text(),archWeight+8]);
 				});
 				$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 				$('#wordsCloud').fadeIn(fadeTimer);
 				WordCloud(document.getElementById('wordsCloud'), {
 					list:cloudlist,
 					gridSize: 15,
-					minSize: 9,
+  					minSize: 7,
 					color: function (word, weight) {
 						if ((weight > 9) && (weight < 15)) { return '#222222' }
 						else if ((weight > 14) && (weight < 20)) { return '#333333' }
@@ -445,7 +452,7 @@ function getArchiveWords(archiveTitle) {
 						if(jQuery.inArray( item, arr ) > -1) {
 							var arch = $('header input.search').val();
 							if(arch!=''){
-								wordSearch(arch, item, 10, 0)
+								wordSearch(arch, item, 40, 0)
 								// showTweetList(item);
 							}
 						}
@@ -482,8 +489,8 @@ function getWordCount(arch, word) {
 	}
 }
 
-function wordSearch(arch, word, rpp, page) {	
-	var pageFix = page+1;
+function wordSearch(arch, word, rpp, currentPage) {
+	var pageFix = currentPage+1;
 	if((!arch)||(!word)||(!rpp)||(!pageFix)){
 		console.log(arch + ', ' + word + ', ' + rpp + ', ' + pageFix);
 		if(!arch){console.log('arch!')}else if(!word){console.log('word!')}else if(!rpp){console.log('rpp = '+rpp)}else if(!pageFix){console.log('pageFix = '+pageFix)}else{console.log('something else!')}
@@ -501,13 +508,12 @@ function wordSearch(arch, word, rpp, page) {
 				$('#wait').fadeOut(fadeTimer);
 			}
 		});
-		var queryString = '{"Archive": "'+arch+'","Word": "'+word+'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": '+rpp+',"Page": '+page+'}';
+		var queryString = '{"Archive": "'+arch+'","Word": "'+word+'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": '+rpp+',"Page": '+ currentPage +'}';
 		$.ajax({
 			type: "POST",
 			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch",
 			data: queryString.toString(),
 			success: function (e) {
-				console.log(totalPages);
 				var data = $.parseJSON(e);
 				console.log(data);
 				// Load tweets
@@ -527,10 +533,11 @@ function wordSearch(arch, word, rpp, page) {
 				}
 				$("#tweetList li.more-link").remove();
 				currentPage++;
+				console.log('Current: '+currentPage+', Total: '+totalPages);
 				if(currentPage < totalPages) {
-					$("#tweetList").append('<li class="more-link"><a href="wordSearch(\x27'+arch+'\x27,\x27'+word+'\x27,\x27'+rpp+'\x27,\x27'+page+'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
+					$("#tweetList").append('<li class="more-link"><a href="javascript:wordSearch(\x27'+arch+'\x27,\x27'+word+'\x27,\x27'+rpp+'\x27,\x27'+ currentPage +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 				}
-				$('main').not('#'+currentView).fadeOut(fadeTimer);
+				$('main').not('#'+currentView).not('#tweetListView').fadeOut(fadeTimer);
 				$('.view-controls').fadeOut(fadeTimer);
 				$('.overlay').fadeIn(fadeTimer);
 				$('#tweetListView').fadeIn(fadeTimer);
