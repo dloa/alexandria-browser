@@ -122,6 +122,21 @@ jQuery(document).ready(function($){
 	$('.close-modal').click(function(){
 		clearModal();
 	});
+	// scan archives after timeline slider values change
+	$("#timeline").bind("valuesChanged", function(e, data){
+		searchTerm = $('header input.search').val();
+		$('ul#tweetList li').remove();
+		if($('#tweetListView').css('display') == 'block') {
+			if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
+				wordSearch(searchTerm, activeWord, 40, 0);
+			} else {
+				showTweetList(searchTerm);
+			}
+			resetArchiveList = true;
+		} else {
+			getActiveJobs(searchTerm);
+		}
+	});
 	
 }); // End Document.Ready
 
@@ -134,6 +149,7 @@ var fadeTimer = 100;
 var searchTimerId = 0;
 var searchRunning;
 var searchTerm;
+var activeWord;
 function runSearch() {
 	if ( (currentView == 'wordsCloud') || (currentView == 'wordsCloudListView') ) {
 		clearTimeout ( searchTimerId );
@@ -442,6 +458,7 @@ function getArchiveWords(arch) {
 					minRotation:0,
 					maxRotation:0,
 					click: function(item) {
+						activeWord = item;
 						var arr = [];
 						$('#wordsList li').each(function(){
 							arr.push($(this).text());
@@ -486,6 +503,7 @@ function getWordCount(arch, word) {
 }
 
 function wordSearch(arch, word, rpp, currentPage) {
+	console.log('Active word: '+activeWord);
 	var pageFix = currentPage+1;
 	if((!arch)||(!word)||(!rpp)||(!pageFix)){
 		console.log(arch + ', ' + word + ', ' + rpp + ', ' + pageFix);
@@ -564,17 +582,6 @@ function getWordPageCount(arch, word, rpp) {
 }
 */
 
-// scan archives after timeline slider values change
-$("#timeline").bind("valuesChanged", function(e, data){
-	searchTerm = $('header input.search').val();
-	if($('#tweetListView').css('display') == 'block') {
-		$('ul#tweetList li').remove();
-		showTweetList(searchTerm);
-		resetArchiveList = true;
-	} else {
-		getActiveJobs(searchTerm);
-	}
-});
 function clearModal() {
 	currentPage = 0;
 	$("#tweetList li").remove();
