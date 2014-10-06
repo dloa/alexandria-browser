@@ -247,7 +247,7 @@ div#intro {
 #intro h1 {
 	margin: -.5em 0 .5em;
 }
-ul#archiveList, ul#tweetList {
+ul#archiveList, ul#tweetList, #wordsList {
 	display: inline-block;
 	zoom:1;*display:inline;
 	text-align: left;
@@ -258,11 +258,11 @@ ul#archiveList, ul#tweetList {
 	max-width: 70%;
 	overflow: hidden;
 }
-ul#archiveList li, ul#tweetList li {
+ul#archiveList li, ul#tweetList li, #wordsList li {
 	padding: 9px 14px;
 	display: block;
 }
-ul#archiveList li a {
+ul#archiveList li a, #wordsList li a {
 	color: #222;
 	display: block;
 	overflow: hidden;
@@ -273,10 +273,10 @@ ul#archiveList li a {
 	border-radius: 50em;
 	font-size: 1.5em;
 }
-ul#archiveList li#no-results a {
+ul#archiveList li#no-results a, ul#wordsList li#no-results a {
 	cursor: default;
 }
-ul#archiveList li a:active {
+ul#archiveList li a:active, ul#wordsList li a:active {
 	color: #fff;
 	border: 1px solid #cfcfcf;
 	background-color: #aaa;
@@ -284,10 +284,10 @@ ul#archiveList li a:active {
 	box-shadow: none;
 	text-shadow: 1px 1px 0 rgba(153, 153, 153, .8);
 }
-ul#archiveList li a span {
+ul#archiveList li a span, ul#wordsList li a span {
 	float: right;
 }
-ul#archiveList li a span:first-child {
+ul#archiveList li a span:first-child, ul#wordsList li a span:first-child {
 	float: left;
 	margin-right: 2.2em;
 	text-transform: capitalize;

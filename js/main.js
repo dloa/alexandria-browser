@@ -444,15 +444,15 @@ function getArchiveWords(arch) {
 				var wordsArray = [];
 				// Load words
 				$.each(data,function(word, weight){
-					$("#wordsList").append('<li class="responseRow" volume="'+weight+'">'+word+'</li>');
+					$("#wordsList").append('<li class="responseRow" volume="'+weight+'"><a href="#" onclick="wordSearch(&quot;'+searchTerm+'&quot;, &quot;'+word+'&quot;, 40, 0);"><span>' + word + '</span> <span class="archive-volume">'+ weight +'</span></a></li>');
 				});
 				$('#wordsList li').sortElements(function(a, b){
 					return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
 				});
 				$('#wordsList li').each(function(){
 					var archWeight = $(this).index();
-					cloudlist.push([$(this).text(),archWeight+8]);
-					wordsArray.push($(this).text());
+					cloudlist.push([$(this).find('span:first-child').text(),archWeight+8]);
+					wordsArray.push($(this).find('span:first-child').text());
 				});
 				$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 				$('#wordsCloud').fadeIn(fadeTimer);
