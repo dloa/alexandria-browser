@@ -1,7 +1,7 @@
 jQuery(document).ready(function($){
 	
 	// Footer timeline contruct
-	var days = ["0", "Sept 1", "Sept 2", "Sept 3", "Sept 4", "Sept 5", "Sept 6", "Sept 7", "Sept 8", "Sept 9", "Sept 10", "Sept 11", "Sept 12", "Sept 13", "Sept 14", "Sept 15", "Sept 16", "Sept 17", "Sept 18", "Sept 19", "Sept 20", "Sept 21", "Sept 22", "Sept 23", "Sept 24", "Sept 25", "Sept 26", "Sept 27", "Sept 28", "Sept 29", "Sept 30", "Oct 1", "Oct 2", "Oct 3", "Oct 4", "Oct 5", "Oct 6", "Oct 7", "Oct 8", "Oct 9", "Oct 10"];
+	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"];
 
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(2014, 8, 25), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1)},
@@ -25,7 +25,7 @@ jQuery(document).ready(function($){
 	
 	// Search box
 	$('header input.search').on("keydown", function (e) {
-		searchValue = $('header input.search').val();
+		searchValue = $('header input.search').val();		
 		if($('#tweetListView').css('display') == 'block') {
 			resetArchiveList == true;
 		}
@@ -139,7 +139,7 @@ jQuery(document).ready(function($){
 				showTweetList(searchTerm);
 			}
 			resetArchiveList = true;
-		} else {
+		} else {			
 			if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
 				getArchiveWords(searchTerm);
 			} else {
@@ -172,7 +172,7 @@ function runSearch(searchTerm) {
 	if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
 		activeWord = $('.search').val();
 		console.log('Search term: '+ searchValue +', Active word: '+activeWord);
-		getArchiveWords(searchValue, activeWord);
+		getArchiveWords(searchValue);
 	} else {
 		getActiveJobs(searchTerm);
 	}
@@ -422,13 +422,14 @@ function getArchiveWords(arch) {
 	if(! arch){
 		console.log('No archive title!');
 	} else {
+		$('#wordsCloud').css('z-index','0').show();
+		$('.wordCloud').children().remove();
+		$('main article ul li').remove();
+		console.log(currentView);
 		// Loading spinner	
 		$('#wait').fadeIn(fadeTimer);
 		$('#view-controls').fadeOut(fadeTimer);
 		$('.sort-link').fadeOut(fadeTimer);
-		$('#wordsList li').remove();
-		$('#wordsCloud').children().remove();
-		$('#wordsCloud').css('z-index','0').fadeIn(fadeTimer);
 		var dateValues = $("#timeline").dateRangeSlider("values");
 		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true}';
 		$.ajax({
@@ -436,7 +437,10 @@ function getArchiveWords(arch) {
 			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/wordcloud",
 			data: queryString.toString(),
 			success: function (e) {
+				$('#wordsCloud').css('z-index','0').show();
+				$('.wordCloud').children().remove();
 				var data = $.parseJSON(e);
+				var cloudlist = [];
 				var wordsArray = [];
 				// Load words
 				$.each(data,function(word, weight){
@@ -490,8 +494,8 @@ function getArchiveWords(arch) {
 				$('#wordsListView').css('height',$('#archiveList').height()+100+'px');
 				currentView = 'wordsCloud';
 				$('#wordsCloud').hide().css('z-index','3');
-				$('.view-controls').fadeIn(fadeTimer);
-				$('#wordsCloud').fadeIn(fadeTimer);
+				$('.view-controls').fadeIn(fadeTimer);				
+				$('main#'+currentView).fadeIn(fadeTimer);
 				$('#wait').fadeOut(fadeTimer);
 			}
 		});
