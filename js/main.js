@@ -83,9 +83,10 @@ jQuery(document).ready(function($){
 	
 	// Sort - Archive List
 	$('#resort-archView').click(function(){
-		$('main').fadeOut(fadeTimer);
-		$('#archiveListView').fadeIn(fadeTimer);
+		$('main').not('#'+currentView).fadeOut(fadeTimer);
+//		$('#archiveListView').fadeIn(fadeTimer);
 		$('#archiveList').toggleClass('pop-sort');
+		$('#wordsList').toggleClass('pop-sort');
 		if($('#archiveList').hasClass('pop-sort')){
 			$('#archiveList li').sortElements(function(a, b){
 				return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
@@ -95,6 +96,16 @@ jQuery(document).ready(function($){
 			sortUnorderedList("archiveList");
 			$(this).text('Alphabetical');
 		}
+		if($('#wordsList').hasClass('pop-sort')){
+			$('#wordsList li').sortElements(function(a, b){
+				return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
+			});
+			$(this).text('Popular');
+		} else {
+			sortUnorderedList("wordsList");
+			$(this).text('Alphabetical');
+		}
+		$('main #'+currentView).fadeIn(fadeTimer);
 	});
 
 	// Sort - Tweet List
@@ -385,12 +396,12 @@ function getArchiveVolume(arch) {
 					minRotation:0,
 					maxRotation:0,
 					click: function(item) {
-						$('main').fadeOut(fadeTimer);
-						var arr = [];
+						var archiveArray = [];
 						$('#archiveCloud span').each(function(){
-							arr.push($(this).text());
+							archiveArray.push($(this).text());
 						});
-						if(jQuery.inArray( item, arr ) > -1) {
+						if(jQuery.inArray( item, archiveArray ) > -1) {
+							$('main').fadeOut(fadeTimer);
 							$('header input.search').val(item);
 							searchTerm = item;
 							getArchiveWords(item);
