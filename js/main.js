@@ -460,6 +460,8 @@ function getArchiveWords(arch) {
 				$('#wordsList li').sortElements(function(a, b){
 					return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
 				});
+				$('#wordsList').addClass('pop-sort');
+				$('.sort-link').text('Popular');
 				$('#wordsList li').each(function(){
 					var archWeight = $(this).index();
 					cloudlist.push([$(this).find('span:first-child').text(),archWeight+8]);
