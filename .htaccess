@@ -1,0 +1,4 @@
+AuthUserFile /var/www/blue.a.blocktech.com/htdocs/.htpasswd
+AuthType Basic
+AuthName "Blocktech"
+Require valid-user
