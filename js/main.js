@@ -718,7 +718,7 @@ function getWordCount(arch, word) {
 }
 
 function wordSearch(arch, word, rpp, currentPage) {
-	$('#volume').fadeOut(fadeTimer);
+	$('#volume').fadeOut(fadeTimer); 
 	resetArchiveList = false;
 	var pageFix = currentPage+1;
 	if((!arch)||(!word)||(!rpp)||(!pageFix)){
