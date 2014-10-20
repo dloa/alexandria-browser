@@ -251,6 +251,7 @@ function getAllArchives(){
 var searchValue = '';
 var newSearchValue = '';
 function showTweetList(arch){	
+	$('#volume').fadeOut(fadeTimer);
 	seachTerm = arch;
 	if($('#tweetListView').css('display') != 'block') {
 		// $('main').not('#'+currentView).fadeOut(fadeTimer);
@@ -321,6 +322,60 @@ function getArchive(arch) {
 			if(currentPage < totalPages) {
 				$("#tweetList").append('<li class="more-link"><a href="javascript:getArchive(\x27'+ arch +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 			}
+		// VOLUME BARS
+			$('#volume').remove();
+			//Width and height
+			var w = window.innerWidth-1;
+			var h = 60;
+			var barPadding = 1;
+			var dataset = [];
+			$('.ui-ruler-tick-label').each(function(){
+				dataset.push($(this).text());
+			});
+			
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("id","volume")
+						.attr("height", h);
+
+			svg.selectAll("rect")
+			   .data(dataset)
+			   .enter()
+			   .append("rect")
+			   .attr("x", function(d, i) {
+					return i * (w / dataset.length);
+			   })
+			   .attr("y", function(d) {
+					return h - (d * 2);
+			   })
+			   .attr("width", w / dataset.length - barPadding)
+			   .attr("height", function(d) {
+					return d * 2;
+			   })
+			   .attr("fill", function(d) {
+					return "rgb(0, 0, " + (d * 10) + ")";
+			   });
+
+			svg.selectAll("text")
+			   .data(dataset)
+			   .enter()
+			   .append("text")
+			   .text(function(d) {
+					return d;
+			   })
+			   .attr("text-anchor", "middle")
+			   .attr("x", function(d, i) {
+					return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+			   })
+			   .attr("y", function(d) {
+					return h - (d * 2) + 14;
+			   })
+			   .attr("font-family", "sans-serif")
+			   .attr("font-size", "11px")
+			   .attr("fill", "white");		
+		
 		$('#wait').fadeOut(fadeTimer);
         }
     });
@@ -338,6 +393,7 @@ function getArchiveVolume(arch) {
 	spinnerCount++;
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
+//	console.log(queryString);
 	$.ajax({
 		type: "POST",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/count",
@@ -404,6 +460,7 @@ function getArchiveVolume(arch) {
 						});
 						if(jQuery.inArray( item, archiveArray ) > -1) {
 							$('main').fadeOut(fadeTimer);
+							$('#volume').fadeOut(fadeTimer);
 							$('header input.search').val(item);
 							currentArchive = item;
 							searchTerm = item;
@@ -427,62 +484,63 @@ function getArchiveVolume(arch) {
 				$('.view-link').fadeIn(fadeTimer);
 				// Volume Bars
 
+				$('#volume').remove();
+				//Width and height
+				var w = window.innerWidth-1;
+				var h = 60;
+				var barPadding = 1;
+				var dataset = [];
+				$('.ui-ruler-tick-label').each(function(){
+					dataset.push($(this).text());
+				});
+				
+				//Create SVG element
+				var svg = d3.select("body")
+							.append("svg")
+							.attr("width", w)
+							.attr("id","volume")
+							.attr("height", h);
 
-			//Width and height
-			var w = window.innerWidth-1;
-			var h = 100;
-			var barPadding = 1;
-			
-			var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
-							11, 12, 15, 20, 18, 17, 16, 18, 23, 25, 30, 7, 14, 12, 27 ];
-			
-			//Create SVG element
-			var svg = d3.select("body")
-						.append("svg")
-						.attr("width", w)
-						.attr("id","volume")
-						.attr("height", h);
+				svg.selectAll("rect")
+				   .data(dataset)
+				   .enter()
+				   .append("rect")
+				   .attr("x", function(d, i) {
+						return i * (w / dataset.length);
+				   })
+				   .attr("y", function(d) {
+						return h - (d * 2);
+				   })
+				   .attr("width", w / dataset.length - barPadding)
+				   .attr("height", function(d) {
+						return d * 2;
+				   })
+				   .attr("fill", function(d) {
+						return "rgb(0, 0, " + (d * 10) + ")";
+				   });
 
-			svg.selectAll("rect")
-			   .data(dataset)
-			   .enter()
-			   .append("rect")
-			   .attr("x", function(d, i) {
-			   		return i * (w / dataset.length);
-			   })
-			   .attr("y", function(d) {
-			   		return h - (d * 3);
-			   })
-			   .attr("width", w / dataset.length - barPadding)
-			   .attr("height", function(d) {
-			   		return d * 3;
-			   })
-			   .attr("fill", function(d) {
-					return "rgb(0, 0, " + (d * 10) + ")";
-			   });
-
-			svg.selectAll("text")
-			   .data(dataset)
-			   .enter()
-			   .append("text")
-			   .text(function(d) {
-			   		return d;
-			   })
-			   .attr("text-anchor", "middle")
-			   .attr("x", function(d, i) {
-			   		return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
-			   })
-			   .attr("y", function(d) {
-			   		return h - (d * 3) + 14;
-			   })
-			   .attr("font-family", "sans-serif")
-			   .attr("font-size", "11px")
-			   .attr("fill", "white");
+				svg.selectAll("text")
+				   .data(dataset)
+				   .enter()
+				   .append("text")
+				   .text(function(d) {
+						return d;
+				   })
+				   .attr("text-anchor", "middle")
+				   .attr("x", function(d, i) {
+						return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+				   })
+				   .attr("y", function(d) {
+						return h - (d * 2) + 14;
+				   })
+				   .attr("font-family", "sans-serif")
+				   .attr("font-size", "11px")
+				   .attr("fill", "white");
 
 
-			
-				$('#wait').fadeOut(fadeTimer);
-				$('.search').attr('disabled',false);
+				
+					$('#wait').fadeOut(fadeTimer);
+					$('.search').attr('disabled',false);
 			}
 		}
 	});
@@ -505,7 +563,7 @@ function getArchiveWords(arch, filterword) {
 			var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true}';
 		} else {
 			var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
-			console.log(queryString);
+//			console.log(queryString);
 		}
 		$.ajax({
 			type: "POST",
@@ -575,6 +633,63 @@ function getArchiveWords(arch, filterword) {
 				$('#wordsCloud').hide().css('z-index','3');
 				$('.view-controls').fadeIn(fadeTimer);				
 				$('main#'+currentView).fadeIn(fadeTimer);
+				// Volume Bars
+				$('#volume').remove();
+				//Width and height
+				var w = window.innerWidth-1;
+				var h = 60;
+				var barPadding = 1;
+				var dataset = [];
+				$('.ui-ruler-tick-label').each(function(){
+					dataset.push($(this).text());
+				});
+				
+				//Create SVG element
+				var svg = d3.select("body")
+							.append("svg")
+							.attr("width", w)
+							.attr("id","volume")
+							.attr("height", h);
+
+				svg.selectAll("rect")
+				   .data(dataset)
+				   .enter()
+				   .append("rect")
+				   .attr("x", function(d, i) {
+						return i * (w / dataset.length);
+				   })
+				   .attr("y", function(d) {
+						return h - (d * 2);
+				   })
+				   .attr("width", w / dataset.length - barPadding)
+				   .attr("height", function(d) {
+						return d * 2;
+				   })
+				   .attr("fill", function(d) {
+						return "rgb(0, 0, " + (d * 10) + ")";
+				   });
+
+				svg.selectAll("text")
+				   .data(dataset)
+				   .enter()
+				   .append("text")
+				   .text(function(d) {
+						return d;
+				   })
+				   .attr("text-anchor", "middle")
+				   .attr("x", function(d, i) {
+						return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+				   })
+				   .attr("y", function(d) {
+						return h - (d * 2) + 14;
+				   })
+				   .attr("font-family", "sans-serif")
+				   .attr("font-size", "11px")
+				   .attr("fill", "white");
+
+			
+					$('#wait').fadeOut(fadeTimer);
+					$('.search').attr('disabled',false);
 				$('#wait').fadeOut(fadeTimer);
 			}
 		});
@@ -588,12 +703,14 @@ function getWordCount(arch, word) {
 	} else {
 		var dateValues = $("#timeline").dateRangeSlider("values");	
 		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(dateValues.min)/1000+',"EndDate":'+Date.parse(dateValues.max)/1000+'}';
+//		console.log(queryString);
 		$.ajax({
 			type: "POST",
 			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/count",
 			data: queryString.toString(),
 			success: function (e) {
 				var data = $.parseJSON(e);
+				console.log(data);
 				$('#wait').fadeOut(fadeTimer);
 			}
 		});

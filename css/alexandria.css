@@ -347,7 +347,7 @@ main.wordCloud span:hover {
 	width: 100%;
 }
 #tweetListView {
-	z-index: 200;
+	z-index: 100;
 }
 #tweetList li span.tweet-date, #tweetList li div.left {
 	color: #66757f;
@@ -528,7 +528,7 @@ svg#volume {
 	position: fixed;
 	bottom: 50px;
 	left: 1px;
-	z-index: 100;
+	z-index: 150;
 }
 /* BUTTONS */
 .wsite-button {
