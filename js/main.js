@@ -1,7 +1,7 @@
 jQuery(document).ready(function($){
 	
 	// Footer timeline contruct
-	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"];
+	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
 
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(2014, 8, 25), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1)},
@@ -182,8 +182,8 @@ function runSearch(searchTerm) {
 	}
 	if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
 		activeWord = $('.search').val();
-		console.log('Search term: '+ searchValue +', Active word: '+activeWord);
-		getArchiveWords(searchValue);
+		console.log('Search term: '+ searchTerm +', Active word: '+activeWord+', currentArchive: '+currentArchive);
+		getArchiveWords(currentArchive,activeWord);
 	} else {
 		getActiveJobs(searchTerm);
 	}
@@ -329,6 +329,7 @@ function getArchive(arch) {
 var spinnerCount = 0;
 var cloudlist = [];
 var currentView = 'archiveCloud';
+var currentArchive;
 function getArchiveVolume(arch) {
 	if(spinnerCount == 0) {
 		$('main').fadeOut(fadeTimer);
@@ -403,6 +404,7 @@ function getArchiveVolume(arch) {
 						if(jQuery.inArray( item, archiveArray ) > -1) {
 							$('main').fadeOut(fadeTimer);
 							$('header input.search').val(item);
+							currentArchive = item;
 							searchTerm = item;
 							getArchiveWords(item);
 //							showTweetList(item);
@@ -429,9 +431,9 @@ function getArchiveVolume(arch) {
 	});
 }
 // Get top words in archive and construct cloud
-function getArchiveWords(arch) {
-	if(! arch){
-		console.log('No archive title!');
+function getArchiveWords(arch, filterword) {
+	if(!arch){
+			console.log('No archive title!');
 	} else {
 		$('#wordsCloud').css('z-index','0').show();
 		$('.wordCloud').children().remove();
@@ -442,7 +444,12 @@ function getArchiveWords(arch) {
 		$('#view-controls').fadeOut(fadeTimer);
 		$('.sort-link').fadeOut(fadeTimer);
 		var dateValues = $("#timeline").dateRangeSlider("values");
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true}';
+		if (!filterword) {
+			var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true}';
+		} else {
+			var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
+			console.log(queryString);
+		}
 		$.ajax({
 			type: "POST",
 			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/wordcloud",
@@ -491,6 +498,7 @@ function getArchiveWords(arch) {
 					maxRotation:0,
 					click: function(item) {
 						activeWord = item;
+						// currentArchive = item;
 						if(jQuery.inArray( item, wordsArray ) > -1) {
 							console.log('Active word: '+activeWord);
 							var arch = $('header input.search').val();
