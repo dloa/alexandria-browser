@@ -323,59 +323,7 @@ function getArchive(arch) {
 				$("#tweetList").append('<li class="more-link"><a href="javascript:getArchive(\x27'+ arch +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 			}
 		// VOLUME BARS
-			$('#volume').remove();
-			//Width and height
-			var w = window.innerWidth-1;
-			var h = 60;
-			var barPadding = 1;
-			var dataset = [];
-			$('.ui-ruler-tick-label').each(function(){
-				dataset.push($(this).text());
-			});
-			
-			//Create SVG element
-			var svg = d3.select("body")
-						.append("svg")
-						.attr("width", w)
-						.attr("id","volume")
-						.attr("height", h);
-
-			svg.selectAll("rect")
-			   .data(dataset)
-			   .enter()
-			   .append("rect")
-			   .attr("x", function(d, i) {
-					return i * (w / dataset.length);
-			   })
-			   .attr("y", function(d) {
-					return h - (d * 2);
-			   })
-			   .attr("width", w / dataset.length - barPadding)
-			   .attr("height", function(d) {
-					return d * 2;
-			   })
-			   .attr("fill", function(d) {
-					return "rgb(0, 0, " + (d * 10) + ")";
-			   });
-
-			svg.selectAll("text")
-			   .data(dataset)
-			   .enter()
-			   .append("text")
-			   .text(function(d) {
-					return d;
-			   })
-			   .attr("text-anchor", "middle")
-			   .attr("x", function(d, i) {
-					return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
-			   })
-			   .attr("y", function(d) {
-					return h - (d * 2) + 14;
-			   })
-			   .attr("font-family", "sans-serif")
-			   .attr("font-size", "11px")
-			   .attr("fill", "white");		
-		
+		volumeBars();		
 		$('#wait').fadeOut(fadeTimer);
         }
     });
@@ -482,65 +430,11 @@ function getArchiveVolume(arch) {
 					$('#'+currentView.slice(0,-8)+'Cloud').hide().css('z-index','3');
 				}
 				$('.view-link').fadeIn(fadeTimer);
-				// Volume Bars
-
-				$('#volume').remove();
-				//Width and height
-				var w = window.innerWidth-1;
-				var h = 60;
-				var barPadding = 1;
-				var dataset = [];
-				$('.ui-ruler-tick-label').each(function(){
-					dataset.push($(this).text());
-				});
-				
-				//Create SVG element
-				var svg = d3.select("body")
-							.append("svg")
-							.attr("width", w)
-							.attr("id","volume")
-							.attr("height", h);
-
-				svg.selectAll("rect")
-				   .data(dataset)
-				   .enter()
-				   .append("rect")
-				   .attr("x", function(d, i) {
-						return i * (w / dataset.length);
-				   })
-				   .attr("y", function(d) {
-						return h - (d * 2);
-				   })
-				   .attr("width", w / dataset.length - barPadding)
-				   .attr("height", function(d) {
-						return d * 2;
-				   })
-				   .attr("fill", function(d) {
-						return "rgb(0, 0, " + (d * 10) + ")";
-				   });
-
-				svg.selectAll("text")
-				   .data(dataset)
-				   .enter()
-				   .append("text")
-				   .text(function(d) {
-						return d;
-				   })
-				   .attr("text-anchor", "middle")
-				   .attr("x", function(d, i) {
-						return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
-				   })
-				   .attr("y", function(d) {
-						return h - (d * 2) + 14;
-				   })
-				   .attr("font-family", "sans-serif")
-				   .attr("font-size", "11px")
-				   .attr("fill", "white");
-
-
-				
-					$('#wait').fadeOut(fadeTimer);
-					$('.search').attr('disabled',false);
+				// VOLUME BARS
+				volumeBars();		
+			
+				$('#wait').fadeOut(fadeTimer);
+				$('.search').attr('disabled',false);
 			}
 		}
 	});
@@ -634,58 +528,7 @@ function getArchiveWords(arch, filterword) {
 				$('.view-controls').fadeIn(fadeTimer);				
 				$('main#'+currentView).fadeIn(fadeTimer);
 				// Volume Bars
-				$('#volume').remove();
-				//Width and height
-				var w = window.innerWidth-1;
-				var h = 60;
-				var barPadding = 1;
-				var dataset = [];
-				$('.ui-ruler-tick-label').each(function(){
-					dataset.push($(this).text());
-				});
-				
-				//Create SVG element
-				var svg = d3.select("body")
-							.append("svg")
-							.attr("width", w)
-							.attr("id","volume")
-							.attr("height", h);
-
-				svg.selectAll("rect")
-				   .data(dataset)
-				   .enter()
-				   .append("rect")
-				   .attr("x", function(d, i) {
-						return i * (w / dataset.length);
-				   })
-				   .attr("y", function(d) {
-						return h - (d * 2);
-				   })
-				   .attr("width", w / dataset.length - barPadding)
-				   .attr("height", function(d) {
-						return d * 2;
-				   })
-				   .attr("fill", function(d) {
-						return "rgb(0, 0, " + (d * 10) + ")";
-				   });
-
-				svg.selectAll("text")
-				   .data(dataset)
-				   .enter()
-				   .append("text")
-				   .text(function(d) {
-						return d;
-				   })
-				   .attr("text-anchor", "middle")
-				   .attr("x", function(d, i) {
-						return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
-				   })
-				   .attr("y", function(d) {
-						return h - (d * 2) + 14;
-				   })
-				   .attr("font-family", "sans-serif")
-				   .attr("font-size", "11px")
-				   .attr("fill", "white");
+				volumeBars();		
 
 			
 					$('#wait').fadeOut(fadeTimer);
@@ -772,60 +615,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 
 				// Volume Bars
 				$('#volume').remove();
-				//Width and height
-				var w = window.innerWidth-1;
-				var h = 60;
-				var barPadding = 1;
-				var dataset = [];
-				$('.ui-ruler-tick-label').each(function(){
-					dataset.push($(this).text());
-				});
-				
-				//Create SVG element
-				var svg = d3.select("body")
-							.append("svg")
-							.attr("width", w)
-							.attr("id","volume")
-							.attr("height", h);
-
-				svg.selectAll("rect")
-				   .data(dataset)
-				   .enter()
-				   .append("rect")
-				   .attr("x", function(d, i) {
-						return i * (w / dataset.length);
-				   })
-				   .attr("y", function(d) {
-						return h - (d * 2);
-				   })
-				   .attr("width", w / dataset.length - barPadding)
-				   .attr("height", function(d) {
-						return d * 2;
-				   })
-				   .attr("fill", function(d) {
-						return "rgb(0, 0, " + (d * 10) + ")";
-				   });
-
-				svg.selectAll("text")
-				   .data(dataset)
-				   .enter()
-				   .append("text")
-				   .text(function(d) {
-						return d;
-				   })
-				   .attr("text-anchor", "middle")
-				   .attr("x", function(d, i) {
-						return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
-				   })
-				   .attr("y", function(d) {
-						return h - (d * 2) + 14;
-				   })
-				   .attr("font-family", "sans-serif")
-				   .attr("font-size", "11px")
-				   .attr("fill", "white");
-
-
-				
+				volumeBars();
 					$('#wait').fadeOut(fadeTimer);
 					$('.search').attr('disabled',false);
 
@@ -878,8 +668,64 @@ function clearModal() {
 			$('.search').val(searchValue);
 		}
 	// BUILD NEW VOLUME BARS
-	$('#volume').remove();
+	volumeBars();
 	}
+}
+
+// VOLUME BARS
+function volumeBars(){
+	$('#volume').remove();
+	//Width and height
+	var w = window.innerWidth-1;
+	var h = 60;
+	var barPadding = 1;
+	var dataset = [];
+	$('.ui-ruler-tick-label').each(function(){
+		dataset.push($(this).text());
+	});
+	
+	//Create SVG element
+	var svg = d3.select("body")
+				.append("svg")
+				.attr("width", w)
+				.attr("id","volume")
+				.attr("height", h);
+
+	svg.selectAll("rect")
+	   .data(dataset)
+	   .enter()
+	   .append("rect")
+	   .attr("x", function(d, i) {
+			return i * (w / dataset.length);
+	   })
+	   .attr("y", function(d) {
+			return h - (d * 2);
+	   })
+	   .attr("width", w / dataset.length - barPadding)
+	   .attr("height", function(d) {
+			return d * 2;
+	   })
+	   .attr("fill", function(d) {
+			return "rgb(0, 0, " + (d * 10) + ")";
+	   });
+
+	svg.selectAll("text")
+	   .data(dataset)
+	   .enter()
+	   .append("text")
+	   .text(function(d) {
+			return d;
+	   })
+	   .attr("text-anchor", "middle")
+	   .attr("x", function(d, i) {
+			return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+	   })
+	   .attr("y", function(d) {
+			return h - (d * 2) + 14;
+	   })
+	   .attr("font-family", "sans-serif")
+	   .attr("font-size", "11px")
+	   .attr("fill", "white");
 }
 
 // Interger sort order function
