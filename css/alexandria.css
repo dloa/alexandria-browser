@@ -299,6 +299,12 @@ ul#tweetList li a {
 ul#tweetList li a.twitter-username {
 	font-weight: bold;
 }
+ul#tweetList li .tweetBody a {
+	text-decoration: underline;
+}
+#tweetList li div.left {
+	display: none;
+}
 ul#tweetList li.more-link {
 	text-align: center;
 }

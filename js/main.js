@@ -324,6 +324,7 @@ function getArchive(arch) {
 			}
 		// VOLUME BARS
 		volumeBars();		
+		$('.tweetBody').linkify()
 		$('#wait').fadeOut(fadeTimer);
         }
     });
@@ -612,7 +613,8 @@ function wordSearch(arch, word, rpp, currentPage) {
 				$('.view-controls').fadeOut(fadeTimer);
 				$('.overlay').fadeIn(fadeTimer);
 				$('#tweetListView').fadeIn(fadeTimer);
-
+				$('.tweetBody').linkify();
+				
 				// Volume Bars
 				$('#volume').remove();
 				volumeBars();
