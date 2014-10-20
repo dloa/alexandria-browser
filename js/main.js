@@ -718,6 +718,7 @@ function getWordCount(arch, word) {
 }
 
 function wordSearch(arch, word, rpp, currentPage) {
+	$('#volume').fadeOut(fadeTimer);
 	resetArchiveList = false;
 	var pageFix = currentPage+1;
 	if((!arch)||(!word)||(!rpp)||(!pageFix)){
@@ -768,6 +769,66 @@ function wordSearch(arch, word, rpp, currentPage) {
 				$('.view-controls').fadeOut(fadeTimer);
 				$('.overlay').fadeIn(fadeTimer);
 				$('#tweetListView').fadeIn(fadeTimer);
+
+				// Volume Bars
+				$('#volume').remove();
+				//Width and height
+				var w = window.innerWidth-1;
+				var h = 60;
+				var barPadding = 1;
+				var dataset = [];
+				$('.ui-ruler-tick-label').each(function(){
+					dataset.push($(this).text());
+				});
+				
+				//Create SVG element
+				var svg = d3.select("body")
+							.append("svg")
+							.attr("width", w)
+							.attr("id","volume")
+							.attr("height", h);
+
+				svg.selectAll("rect")
+				   .data(dataset)
+				   .enter()
+				   .append("rect")
+				   .attr("x", function(d, i) {
+						return i * (w / dataset.length);
+				   })
+				   .attr("y", function(d) {
+						return h - (d * 2);
+				   })
+				   .attr("width", w / dataset.length - barPadding)
+				   .attr("height", function(d) {
+						return d * 2;
+				   })
+				   .attr("fill", function(d) {
+						return "rgb(0, 0, " + (d * 10) + ")";
+				   });
+
+				svg.selectAll("text")
+				   .data(dataset)
+				   .enter()
+				   .append("text")
+				   .text(function(d) {
+						return d;
+				   })
+				   .attr("text-anchor", "middle")
+				   .attr("x", function(d, i) {
+						return i * (w / dataset.length) + (w / dataset.length - barPadding) / 2;
+				   })
+				   .attr("y", function(d) {
+						return h - (d * 2) + 14;
+				   })
+				   .attr("font-family", "sans-serif")
+				   .attr("font-size", "11px")
+				   .attr("fill", "white");
+
+
+				
+					$('#wait').fadeOut(fadeTimer);
+					$('.search').attr('disabled',false);
+
 				$('#wait').fadeOut(fadeTimer);
 			}
 		});
@@ -801,6 +862,7 @@ function clearModal() {
 	currentPage = 0;
 	$("#tweetList li").remove();
 	$('.overlay').fadeOut(fadeTimer);
+	$('#volume').fadeOut(fadeTimer);
 //	$('.search').attr('disabled','disabled').val(searchTerm).attr('disabled',false);
 	$('main').not('#'+currentView).fadeOut(fadeTimer);
 	$('.view-controls').fadeIn(fadeTimer);
@@ -815,6 +877,8 @@ function clearModal() {
 		if ( (searchValue) && (searchTerm == searchValue) && (searchValue == newSearchValue) )  {
 			$('.search').val(searchValue);
 		}
+	// BUILD NEW VOLUME BARS
+	$('#volume').remove();
 	}
 }
 
