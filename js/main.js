@@ -375,6 +375,7 @@ function getArchiveVolume(arch) {
 					// Build cloud behind the scenes
 					$('#'+currentView.slice(0,-8)+'Cloud').css('z-index','0').fadeIn(fadeTimer);
 				}
+				cloudlist.reverse();
 				WordCloud(document.getElementById('archiveCloud'), {
 					list:cloudlist,
 					gridSize: 20,
@@ -476,6 +477,7 @@ function getArchiveWords(arch, filterword) {
 				});
 				$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 				$('#wordsCloud').fadeIn(fadeTimer);
+				cloudlist.reverse();
 				WordCloud(document.getElementById('wordsCloud'), {
 					list:cloudlist,
 					gridSize: 15,
