@@ -523,6 +523,13 @@ div.close-modal:hover {
 	top: 85px;
 	right: 40px;
 }
+/* VOLUME BARS */
+svg#volume {
+	position: fixed;
+	bottom: 50px;
+	left: 1px;
+	z-index: 100;
+}
 /* BUTTONS */
 .wsite-button {
 	display: inline-block;
