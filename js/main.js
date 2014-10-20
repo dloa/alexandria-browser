@@ -53,7 +53,10 @@ jQuery(document).ready(function($){
 		$("#timeline").dateRangeSlider("values", startDate, endDate);
 	});
 	$('#logo').click(function(){
-		document.location.reload(true);
+		$('header input.search').val('');
+		currentView = 'archiveCloud';
+		$('main').fadeOut(fadeTimer);
+		runSearch('');
 	});
 	$('#clearSearch').click(function(){
 		$('header input.search').val('');
