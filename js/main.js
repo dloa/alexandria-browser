@@ -713,6 +713,8 @@ function volumeBars(arch, word, interval){
 					dataset.push(v);
 				});
 				console.log(dataset);
+				var largest = Math.max.apply(Math, dataset);
+				console.log('largest = '+largest);
 				//Create SVG element
 				var svg = d3.select("body")
 							.append("svg")
@@ -728,11 +730,11 @@ function volumeBars(arch, word, interval){
 						return i * (w / dataset.length);
 				   })
 				   .attr("y", function(d) {
-						return h - (d);
+						return h - (h*(d/largest));
 				   })
 				   .attr("width", w / dataset.length - barPadding)
 				   .attr("height", function(d) {
-						return d;
+						return h*(d/largest);
 				   })
 				   .attr("fill", function(d) {
 						return "rgb(0, 0, " + (d * 10) + ")";
