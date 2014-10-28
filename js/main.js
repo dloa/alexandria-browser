@@ -437,6 +437,9 @@ function getArchiveVolume(arch) {
 				}
 				$('.view-link').fadeIn(fadeTimer);
 			
+				// VOLUME BARS
+				volumeBars('*','',45000);
+			
 				$('#wait').fadeOut(fadeTimer);
 				$('.search').attr('disabled',false);
 			}
