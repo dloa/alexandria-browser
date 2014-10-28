@@ -288,7 +288,7 @@ function getArchive(arch) {
 		data: queryString.toString(),
         success: function (e) {
 			totalPages = $.parseJSON(e);
-			volumeBars(arch,'',45000);
+			volumeBars(arch,'',7200);
         },
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			alert("some error");
@@ -438,7 +438,7 @@ function getArchiveVolume(arch) {
 				$('.view-link').fadeIn(fadeTimer);
 			
 				// VOLUME BARS
-				volumeBars('*','',45000);
+				volumeBars('*','',7200);
 			
 				$('#wait').fadeOut(fadeTimer);
 				$('.search').attr('disabled',false);
@@ -535,7 +535,7 @@ function getArchiveWords(arch, filterword) {
 				$('.view-controls').fadeIn(fadeTimer);				
 				$('main#'+currentView).fadeIn(fadeTimer);
 				// Volume Bars
-				volumeBars(arch,'',45000);
+				volumeBars(arch,'',7200);
 			
 					$('#wait').fadeOut(fadeTimer);
 					$('.search').attr('disabled',false);
@@ -622,7 +622,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 				
 				// Volume Bars
 				$('#volume').remove();
-				volumeBars(arch, word, 45000);
+				volumeBars(arch, word, 7200);
 					$('#wait').fadeOut(fadeTimer);
 					$('.search').attr('disabled',false);
 
@@ -683,7 +683,7 @@ function clearModal() {
 function volumeBars(arch, word, interval){
 	$('#volume').remove();
 	if(!interval){
-		var inverval = 45000;
+		var inverval = 7200;
 	}
 	//Width and height
 	var w = window.innerWidth-1;
@@ -701,6 +701,7 @@ function volumeBars(arch, word, interval){
 
 		var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
 		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(basicSliderBounds.min)/1000+',"EndDate":'+Date.parse(basicSliderBounds.max)/1000+',"Interval": '+interval+'}';
+		console.log(queryString);
 		$.ajax({
 			type: "POST",
 			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/interval/count",
@@ -737,6 +738,7 @@ function volumeBars(arch, word, interval){
 						return "rgb(0, 0, " + (d * 10) + ")";
 				   });
 			
+/*
 				svg.selectAll("text")
 				   .data(dataset)
 				   .enter()
@@ -754,6 +756,7 @@ function volumeBars(arch, word, interval){
 				   .attr("font-family", "sans-serif")
 				   .attr("font-size", "11px")
 				   .attr("fill", "white");
+*/
 				$('#wait').fadeOut(fadeTimer);
 			}
 		});
