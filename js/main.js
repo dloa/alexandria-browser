@@ -436,8 +436,6 @@ function getArchiveVolume(arch) {
 					$('#'+currentView.slice(0,-8)+'Cloud').hide().css('z-index','3');
 				}
 				$('.view-link').fadeIn(fadeTimer);
-				// VOLUME BARS
-//				volumeBars(arch,'',6000);		
 			
 				$('#wait').fadeOut(fadeTimer);
 				$('.search').attr('disabled',false);
@@ -534,7 +532,7 @@ function getArchiveWords(arch, filterword) {
 				$('.view-controls').fadeIn(fadeTimer);				
 				$('main#'+currentView).fadeIn(fadeTimer);
 				// Volume Bars
-//				volumeBars(arch,'',45000);
+				volumeBars(arch,'',45000);
 			
 					$('#wait').fadeOut(fadeTimer);
 					$('.search').attr('disabled',false);
