@@ -535,6 +535,7 @@ svg#volume {
 	bottom: 50px;
 	left: 1px;
 	z-index: 150;
+	overflow: visible;
 }
 /* BUTTONS */
 .wsite-button {
