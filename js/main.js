@@ -714,7 +714,7 @@ function volumeBars(arch, word, interval){
 				var largest = Math.max.apply(Math, dataset);
 				console.log('largest = '+largest);
 				//Create SVG element
-				var svg = d3.select("body")
+				var svg = d3.select("#footer")
 							.append("svg")
 							.attr("width", "100%")
 							.attr("id","volume")
