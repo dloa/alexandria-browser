@@ -538,6 +538,7 @@ div.close-modal:hover {
 }
 .ui-rangeSlider-handle {
 	height: 100%;
+	width: 1em;
 }
 .ui-rangeSlider-container div.ui-rangeSlider-bar {
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=65)";
