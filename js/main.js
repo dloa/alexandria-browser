@@ -682,6 +682,12 @@ function clearModal() {
 // VOLUME BARS
 function volumeBars(arch, word, interval){
 	$('#volume').remove();
+	if (!arch) {
+		arch = '*';
+	}
+	if (!word) {
+		word = '';
+	}
 	if(!interval){
 		var inverval = 7200;
 	}
@@ -691,14 +697,6 @@ function volumeBars(arch, word, interval){
 	var barPadding = 1;
 	var dataset = [];
 	
-	if (!word) {
-		word = '';
-	}
-	if (!arch) {
-		arch = '*';
-	}
-	console.log(arch + ', ' + word + ', ' + interval);
-
 		var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
 		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(basicSliderBounds.min)/1000+',"EndDate":'+Date.parse(basicSliderBounds.max)/1000+',"Interval": '+interval+'}';
 		console.log(queryString);
@@ -718,7 +716,7 @@ function volumeBars(arch, word, interval){
 				//Create SVG element
 				var svg = d3.select("body")
 							.append("svg")
-							.attr("width", w)
+							.attr("width", "100%")
 							.attr("id","volume")
 							.attr("height", h);
 			
@@ -727,12 +725,12 @@ function volumeBars(arch, word, interval){
 				   .enter()
 				   .append("rect")
 				   .attr("x", function(d, i) {
-						return i * (w / dataset.length);
+						return ((i * (w / dataset.length))/w)*100+'%';
 				   })
 				   .attr("y", function(d) {
 						return h - (h*(d/largest));
 				   })
-				   .attr("width", w / dataset.length - barPadding)
+				   .attr("width", ((w / dataset.length - barPadding)/w)*100+'%')
 				   .attr("height", function(d) {
 						return h*(d/largest);
 				   })
