@@ -485,7 +485,7 @@ function getArchiveVolume(arch) {
 					})
 					.text(function(d) { return d.text; });
 				}
-
+ 
 				if($('#resort-archView').text() == 'Popular') {
 					$('#archiveList').addClass('pop-sort');
 					$('#archiveList li').sortElements(function(a, b){
