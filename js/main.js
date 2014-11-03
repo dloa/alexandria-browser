@@ -195,6 +195,7 @@ function runSearch(searchTerm) {
 // function to get active jobs JSON object
 var archTitleSpan = 'span:first-child';
 function getActiveJobs(searchTerm) {
+	console.log('Searching ... '+searchTerm);
 	resetArchiveList = false;
 	if (!searchTerm) {
 		var searchTerm = '';
@@ -347,13 +348,14 @@ function getArchiveVolume(arch) {
 	spinnerCount++;
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
-//	console.log(queryString);
+	console.log('Query: '+queryString);
 	$.ajax({
 		type: "POST",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/count",
 		data: queryString.toString(),
 		success: function (e) {
 			var data = $.parseJSON(e);
+			console.log(data);
 			spinnerCount--;
 			if (data==0) {
 				$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).remove();				
@@ -376,7 +378,8 @@ function getArchiveVolume(arch) {
 				});
 				$('#archiveList li').each(function(){
 					var archWeight = $(this).index()+5;
-					cloudlist.push([$(this).find('span:first-child').text(),archWeight]);
+//					cloudlist.push([$(this).find('span:first-child').text(),archWeight]);
+					cloudlist.push($(this).find('span:first-child').text());
 				});
 				if($('#archiveListView li').length == 0) {
 					$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
@@ -385,7 +388,8 @@ function getArchiveVolume(arch) {
 					// Build cloud behind the scenes
 					$('#'+currentView.slice(0,-8)+'Cloud').css('z-index','0').fadeIn(fadeTimer);
 				}
-				cloudlist.reverse();
+				// cloudlist.reverse();
+				/*
 				WordCloud(document.getElementById('archiveCloud'), {
 					list:cloudlist,
 					gridSize: 20,
@@ -423,6 +427,46 @@ function getArchiveVolume(arch) {
 						}
 					}
 				});
+*/
+
+				var fill = d3.scale.category20();
+				var w = window.innerWidth;
+				var h = window.innerHeight-117;
+				console.log('cloudlist = '+cloudlist);
+				d3.layout.cloud()
+				  .size([w, h])
+				  .words(cloudlist.map(function(d, i) {
+					return {text: d, size: (i+16)*1.5};
+				  }))
+				  .padding(5)
+				  .rotate(0)
+				  .font("Avenir-Book")
+				  .fontSize(function(d) { return d.size; })
+				  .on("end", draw)
+				  .start();
+
+				function draw(words) {
+				d3.select("#archiveCloud").append("svg")
+					.attr("width", w)
+					.attr("height", h)
+				  .append("g")
+					.attr("transform", "translate("+w/2+","+h/2+")")
+				  .selectAll("text")
+					.data(words)
+				  .enter().append("text")
+					.style("font-size", function(d) { return d.size + "px"; })
+					.style("font-family", "Avenir-Book")
+					.style("fill", function(d, i) { return '#777777'; })
+					.attr("text-anchor", "middle")
+					.attr("transform", function(d) {
+					  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+					})
+					.on("click", function(d) {
+						console.log(d.text);
+					})
+					.text(function(d) { return d.text; });
+				}
+
 				if($('#resort-archView').text() == 'Popular') {
 					$('#archiveList').addClass('pop-sort');
 					$('#archiveList li').sortElements(function(a, b){
@@ -449,100 +493,104 @@ function getArchiveVolume(arch) {
 // Get top words in archive and construct cloud
 function getArchiveWords(arch, filterword) {
 	if(!arch){
+		if(currentArchive){
+			var arch = currentArchive;
+		}else{
 			console.log('No archive title!');
-	} else {
-		$('#wordsCloud').css('z-index','0').show();
-		$('.wordCloud').children().remove();
-		$('main article ul li').remove();
-		console.log(currentView);
-		// Loading spinner	
-		$('#wait').fadeIn(fadeTimer);
-		$('#view-controls').fadeOut(fadeTimer);
-		$('.sort-link').fadeOut(fadeTimer);
-		var dateValues = $("#timeline").dateRangeSlider("values");
-		if (!filterword) {
-			var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true}';
-		} else {
-			var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
-//			console.log(queryString);
+			return false;
 		}
-		$.ajax({
-			type: "POST",
-			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/wordcloud",
-			data: queryString.toString(),
-			success: function (e) {
-				$('#wordsCloud').css('z-index','0').show();
-				$('.wordCloud').children().remove();
-				var data = $.parseJSON(e);
-				var cloudlist = [];
-				var wordsArray = [];
-				// Load words
-				$.each(data,function(word, weight){
-					$("#wordsList").append('<li class="responseRow" volume="'+weight+'"><a href="#" onclick="wordSearch(&quot;'+searchTerm+'&quot;, &quot;'+word+'&quot;, 40, 0);"><span>' + word + '</span> <span class="archive-volume">'+ weight +'</span></a></li>');
-				});
-				$('#wordsList li').sortElements(function(a, b){
-					return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
-				});
-				$('#wordsList').addClass('pop-sort');
-				$('.sort-link').text('Popular');
-				$('#wordsList li').each(function(){
-					var archWeight = $(this).index();
-					cloudlist.push([$(this).find('span:first-child').text(),archWeight+8]);
-					wordsArray.push($(this).find('span:first-child').text());
-				});
-				$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
-				$('#wordsCloud').fadeIn(fadeTimer);
-				cloudlist.reverse();
-				WordCloud(document.getElementById('wordsCloud'), {
-					list:cloudlist,
-					gridSize: 15,
-  					minSize: 7,
-					color: function (word, weight) {
-						if ((weight > 9) && (weight < 15)) { return '#222222' }
-						else if ((weight > 14) && (weight < 20)) { return '#333333' }
-						else if ((weight > 19) && (weight < 25)) { return '#444444' }
-						else if ((weight > 24) && (weight < 30)) { return '#555555' }
-						else if ((weight > 29) && (weight < 35)) { return '#666666' }
-						else if ((weight > 34) && (weight < 40)) { return '#777777' }
-						else if ((weight > 39) && (weight < 45)) { return '#888888' }
-						else if ((weight > 44) && (weight < 50)) { return '#999999' }
-						else if ((weight > 49) && (weight < 55)) { return '#aaaaaa' }
-						else if ((weight > 54) && (weight < 60)) { return '#bbbbbb' }
-						else { return '#cccccc' };
-					},
-					backgroundColor:'transparent',
-					minRotation:0,
-					maxRotation:0,
-					click: function(item) {
-						activeWord = item;
-						// currentArchive = item;
-						if(jQuery.inArray( item, wordsArray ) > -1) {
-							console.log('Active word: '+activeWord);
-							var arch = $('header input.search').val();
-							if(arch!=''){
-								console.log(searchTerm);
-								wordSearch(searchTerm, item, 40, 0)
-								// showTweetList(item);
-							}
-						} else {
-							console.log(wordsArray);
-						}
-					}
-				});
-				$('#wordsListView').css('height',$('#archiveList').height()+100+'px');
-				currentView = 'wordsCloud';
-				$('#wordsCloud').hide().css('z-index','3');
-				$('.view-controls').fadeIn(fadeTimer);				
-				$('main#'+currentView).fadeIn(fadeTimer);
-				// Volume Bars
-				volumeBars(arch,'',7200);
-			
-					$('#wait').fadeOut(fadeTimer);
-					$('.search').attr('disabled',false);
-				$('#wait').fadeOut(fadeTimer);
-			}
-		});
 	}
+	$('#wordsCloud').css('z-index','0').show();
+	$('.wordCloud').children().remove();
+	$('main article ul li').remove();
+	console.log(currentView);
+	// Loading spinner	
+	$('#wait').fadeIn(fadeTimer);
+	$('#view-controls').fadeOut(fadeTimer);
+	$('.sort-link').fadeOut(fadeTimer);
+	var dateValues = $("#timeline").dateRangeSlider("values");
+	if (!filterword) {
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true}';
+	} else {
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
+//			console.log(queryString);
+	}
+	$.ajax({
+		type: "POST",
+		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/wordcloud",
+		data: queryString.toString(),
+		success: function (e) {
+			$('#wordsCloud').css('z-index','0').show();
+			$('.wordCloud').children().remove();
+			var data = $.parseJSON(e);
+			var cloudlist = [];
+			var wordsArray = [];
+			// Load words
+			$.each(data,function(word, weight){
+				$("#wordsList").append('<li class="responseRow" volume="'+weight+'"><a href="#" onclick="wordSearch(&quot;'+searchTerm+'&quot;, &quot;'+word+'&quot;, 40, 0);"><span>' + word + '</span> <span class="archive-volume">'+ weight +'</span></a></li>');
+			});
+			$('#wordsList li').sortElements(function(a, b){
+				return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
+			});
+			$('#wordsList').addClass('pop-sort');
+			$('.sort-link').text('Popular');
+			$('#wordsList li').each(function(){
+				var archWeight = $(this).index();
+				cloudlist.push([$(this).find('span:first-child').text(),archWeight+8]);
+				wordsArray.push($(this).find('span:first-child').text());
+			});
+			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
+			$('#wordsCloud').fadeIn(fadeTimer);
+			cloudlist.reverse();
+			WordCloud(document.getElementById('wordsCloud'), {
+				list:cloudlist,
+				gridSize: 15,
+				minSize: 7,
+				color: function (word, weight) {
+					if ((weight > 9) && (weight < 15)) { return '#222222' }
+					else if ((weight > 14) && (weight < 20)) { return '#333333' }
+					else if ((weight > 19) && (weight < 25)) { return '#444444' }
+					else if ((weight > 24) && (weight < 30)) { return '#555555' }
+					else if ((weight > 29) && (weight < 35)) { return '#666666' }
+					else if ((weight > 34) && (weight < 40)) { return '#777777' }
+					else if ((weight > 39) && (weight < 45)) { return '#888888' }
+					else if ((weight > 44) && (weight < 50)) { return '#999999' }
+					else if ((weight > 49) && (weight < 55)) { return '#aaaaaa' }
+					else if ((weight > 54) && (weight < 60)) { return '#bbbbbb' }
+					else { return '#cccccc' };
+				},
+				backgroundColor:'transparent',
+				minRotation:0,
+				maxRotation:0,
+				click: function(item) {
+					activeWord = item;
+					// currentArchive = item;
+					if(jQuery.inArray( item, wordsArray ) > -1) {
+						console.log('Active word: '+activeWord);
+						var arch = $('header input.search').val();
+						if(arch!=''){
+							console.log(searchTerm);
+							wordSearch(searchTerm, item, 40, 0)
+							// showTweetList(item);
+						}
+					} else {
+						console.log(wordsArray);
+					}
+				}
+			});
+			$('#wordsListView').css('height',$('#archiveList').height()+100+'px');
+			currentView = 'wordsCloud';
+			$('#wordsCloud').hide().css('z-index','3');
+			$('.view-controls').fadeIn(fadeTimer);				
+			$('main#'+currentView).fadeIn(fadeTimer);
+			// Volume Bars
+			volumeBars(arch,'',7200);
+		
+				$('#wait').fadeOut(fadeTimer);
+				$('.search').attr('disabled',false);
+			$('#wait').fadeOut(fadeTimer);
+		}
+	});
 }
 function getWordCount(arch, word) {
 	if((!arch)||(!word)){

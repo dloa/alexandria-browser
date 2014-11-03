@@ -101,7 +101,7 @@ body {
 	border-top: 8px solid #92b4c6;
 	background-color: #ecedec;
 }
-html, button, input, select, textarea, h1, h2, h3, h4, p {
+html, button, input, select, textarea, h1, h2, h3, h4, p, text {
 	font-family: Avenir-Book, avenir, 'Open Sans', open_sansregular, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-weight: 400;
 	font-style: normal;
@@ -332,15 +332,16 @@ main.wordCloud {
 	bottom: 50px;
 	top: 73px;
 }
-main.wordCloud span {
+main.wordCloud span, main.wordCloud text {
 	cursor: pointer;
-	transition: color 0.5s ease;
-	-moz-transition: color 0.5s ease;
-	-webkit-transition: color 0.5s ease;
-	-o-transition: color 0.5s ease;
+	transition: all 0.5s ease;
+	-moz-transition: all 0.5s ease;
+	-webkit-transition: all 0.5s ease;
+	-o-transition: all 0.5s ease;
 }
-main.wordCloud span:hover {
+main.wordCloud span:hover, main.wordCloud text:hover {
 	color: #92b4c6 !important;
+	fill: #92b4c6 !important;
 }
 #app-overlay {
 	background-color: #111;
@@ -538,7 +539,7 @@ div.close-modal:hover {
 }
 .ui-rangeSlider-handle {
 	height: 100%;
-	width: 1em;
+	width: .75em;
 }
 .ui-rangeSlider-container div.ui-rangeSlider-bar {
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=65)";
