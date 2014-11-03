@@ -436,7 +436,7 @@ function getArchiveVolume(arch) {
 				d3.layout.cloud()
 				  .size([w, h])
 				  .words(cloudlist.map(function(d, i) {
-					return {text: d, size: (i+16)*1.5};
+					return {text: d, size: (i+8)*2};
 				  }))
 				  .padding(5)
 				  .rotate(0)
@@ -454,15 +454,34 @@ function getArchiveVolume(arch) {
 				  .selectAll("text")
 					.data(words)
 				  .enter().append("text")
-					.style("font-size", function(d) { return d.size + "px"; })
+					.style("font-size", function(d) { return parseInt(d.size)/16 + "em"; })
 					.style("font-family", "Avenir-Book")
-					.style("fill", function(d, i) { return '#777777'; })
+					.style("fill", function (d) {
+  						if (d.size < 19) { return '#222222' }
+					    else if (d.size < 22) { return '#333333' }
+					    else if (d.size < 25) { return '#444444' }
+					    else if (d.size < 28) { return '#555555' }
+					    else if (d.size < 31) { return '#666666' }
+					    else if (d.size < 34) { return '#777777' }
+					    else if (d.size < 37) { return '#888888' }
+					    else if (d.size < 40) { return '#999999' }
+					    else if (d.size < 44) { return '#aaaaaa' }
+					    else if (d.size < 47) { return '#bbbbbb' }
+					    else { return '#cccccc' };
+					})
 					.attr("text-anchor", "middle")
 					.attr("transform", function(d) {
 					  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
 					})
 					.on("click", function(d) {
-						console.log(d.text);
+						var item = d.text;
+						console.log('Item = '+item);
+						$('main').fadeOut(fadeTimer);
+						$('#volume').fadeOut(fadeTimer);
+						$('header input.search').val(item);
+						currentArchive = item;
+						searchTerm = item;
+						getArchiveWords(item);
 					})
 					.text(function(d) { return d.text; });
 				}
