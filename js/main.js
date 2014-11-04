@@ -429,16 +429,14 @@ function getArchiveVolume(arch) {
 				});
 */
 
-				var fill = d3.scale.category20();
 				var w = window.innerWidth;
 				var h = window.innerHeight-117;
-				console.log('cloudlist = '+cloudlist);
 				d3.layout.cloud()
 				  .size([w, h])
 				  .words(cloudlist.map(function(d, i) {
 					return {text: d, size: (i+8)*2};
 				  }))
-				  .padding(5)
+				  .padding(1)
 				  .rotate(0)
 				  .font("Avenir-Book")
 				  .fontSize(function(d) { return d.size; })
@@ -555,12 +553,15 @@ function getArchiveWords(arch, filterword) {
 			$('.sort-link').text('Popular');
 			$('#wordsList li').each(function(){
 				var archWeight = $(this).index();
-				cloudlist.push([$(this).find('span:first-child').text(),archWeight+8]);
-				wordsArray.push($(this).find('span:first-child').text());
+//				cloudlist.push([$(this).find('span:first-child').text(),archWeight+8]);
+//				wordsArray.push($(this).find('span:first-child').text());
+				cloudlist.push($(this).find('span:first-child').text());
 			});
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 			$('#wordsCloud').fadeIn(fadeTimer);
 			cloudlist.reverse();
+/*
+ * 			
 			WordCloud(document.getElementById('wordsCloud'), {
 				list:cloudlist,
 				gridSize: 15,
@@ -597,6 +598,63 @@ function getArchiveWords(arch, filterword) {
 					}
 				}
 			});
+*/
+
+				var w = window.innerWidth;
+				var h = window.innerHeight-117;
+				d3.layout.cloud()
+				  .size([w, h])
+				  .words(cloudlist.map(function(d, i) {
+					return {text: d, size: (i+12)*1.25};
+				  }))
+				  .padding(1)
+				  .rotate(0)
+				  .font("Avenir-Book")
+				  .fontSize(function(d) { return d.size; })
+				  .on("end", draw)
+				  .start();
+
+				function draw(words) {
+				d3.select("#wordsCloud").append("svg")
+					.attr("width", w)
+					.attr("height", h)
+				  .append("g")
+					.attr("transform", "translate("+w/2+","+h/2+")")
+				  .selectAll("text")
+					.data(words)
+				  .enter().append("text")
+					.style("font-size", function(d) { return parseInt(d.size)/16 + "em"; })
+					.style("font-family", "Avenir-Book")
+					.style("fill", function (d) {
+  						if (d.size < 19) { return '#222222' }
+					    else if (d.size < 22) { return '#333333' }
+					    else if (d.size < 25) { return '#444444' }
+					    else if (d.size < 28) { return '#555555' }
+					    else if (d.size < 31) { return '#666666' }
+					    else if (d.size < 34) { return '#777777' }
+					    else if (d.size < 37) { return '#888888' }
+					    else if (d.size < 40) { return '#999999' }
+					    else if (d.size < 44) { return '#aaaaaa' }
+					    else if (d.size < 47) { return '#bbbbbb' }
+					    else { return '#cccccc' };
+					})
+					.attr("text-anchor", "middle")
+					.attr("transform", function(d) {
+					  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+					})
+					.on("click", function(d) {
+						var item = d.text;
+						activeWord = item;
+						console.log('Active word: '+activeWord);
+						var arch = $('header input.search').val();
+						if(arch!=''){
+							console.log(searchTerm);
+							wordSearch(searchTerm, item, 40, 0)
+						}
+					})
+					.text(function(d) { return d.text; });
+				}
+
 			$('#wordsListView').css('height',$('#archiveList').height()+100+'px');
 			currentView = 'wordsCloud';
 			$('#wordsCloud').hide().css('z-index','3');
