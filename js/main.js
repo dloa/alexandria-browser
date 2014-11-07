@@ -432,11 +432,12 @@ function getArchiveVolume(arch) {
 				var w = window.innerWidth;
 				var h = window.innerHeight-117;
 				d3.layout.cloud()
+				  .timeInterval(10)
 				  .size([w, h])
 				  .words(cloudlist.map(function(d, i) {
 					return {text: d, size: (i+8)*2};
 				  }))
-				  .padding(1)
+				  .padding(4)
 				  .rotate(0)
 				  .font("Avenir-Book")
 				  .fontSize(function(d) { return d.size; })
@@ -448,7 +449,7 @@ function getArchiveVolume(arch) {
 					.attr("width", w)
 					.attr("height", h)
 				  .append("g")
-					.attr("transform", "translate("+w/2+","+h/2+")")
+					.attr("transform", "translate(" + [w >> 1, h >> 1] + ")")
 				  .selectAll("text")
 					.data(words)
 				  .enter().append("text")
@@ -603,11 +604,12 @@ function getArchiveWords(arch, filterword) {
 				var w = window.innerWidth;
 				var h = window.innerHeight-117;
 				d3.layout.cloud()
+				  .timeInterval(10)
 				  .size([w, h])
 				  .words(cloudlist.map(function(d, i) {
-					return {text: d, size: (i+12)*1.25};
+					return {text: d, size: i+16};
 				  }))
-				  .padding(1)
+				  .padding(4)
 				  .rotate(0)
 				  .font("Avenir-Book")
 				  .fontSize(function(d) { return d.size; })
@@ -619,7 +621,7 @@ function getArchiveWords(arch, filterword) {
 					.attr("width", w)
 					.attr("height", h)
 				  .append("g")
-					.attr("transform", "translate("+w/2+","+h/2+")")
+					.attr("transform", "translate(" + [w >> 1, h >> 1] + ")")
 				  .selectAll("text")
 					.data(words)
 				  .enter().append("text")
