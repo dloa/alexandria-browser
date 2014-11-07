@@ -379,10 +379,10 @@ function getArchiveVolume(arch) {
 				  .words(cloudlist.map(function(d, i) {
 					return {text: d, size: i+16};
 				  }))
-				  .padding(5)
+				  .padding(6)
 				  .rotate(0)
 				  .font("Avenir-Book")
-				  .fontSize(function(d) { return d.size*1.5; })
+				  .fontSize(function(d) { return d.size*1.75; })
 				  .on("end", draw)
 				  .start();
 
@@ -398,16 +398,16 @@ function getArchiveVolume(arch) {
 					.style("font-size", function(d) { return parseInt(d.size)/16 + "em"; })
 					.style("font-family", "Avenir-Book")
 					.style("fill", function (d) {
-  						if (d.size < 19) { return '#222222' }
-					    else if (d.size < 22) { return '#333333' }
-					    else if (d.size < 25) { return '#444444' }
-					    else if (d.size < 28) { return '#555555' }
-					    else if (d.size < 31) { return '#666666' }
-					    else if (d.size < 34) { return '#777777' }
-					    else if (d.size < 37) { return '#888888' }
-					    else if (d.size < 40) { return '#999999' }
-					    else if (d.size < 44) { return '#aaaaaa' }
-					    else if (d.size < 47) { return '#bbbbbb' }
+  						if (d.size < 33) { return '#222222' }
+					    else if (d.size < 38) { return '#333333' }
+					    else if (d.size < 44) { return '#444444' }
+					    else if (d.size < 49) { return '#555555' }
+					    else if (d.size < 54) { return '#666666' }
+					    else if (d.size < 60) { return '#777777' }
+					    else if (d.size < 65) { return '#888888' }
+					    else if (d.size < 70) { return '#999999' }
+					    else if (d.size < 77) { return '#aaaaaa' }
+					    else if (d.size < 82) { return '#bbbbbb' }
 					    else { return '#cccccc' };
 					})
 					.attr("text-anchor", "middle")
@@ -526,16 +526,16 @@ function getArchiveWords(arch, filterword) {
 					.style("font-size", function(d) { return parseInt(d.size)/16 + "em"; })
 					.style("font-family", "Avenir-Book")
 					.style("fill", function (d) {
-  						if (d.size < 19) { return '#222222' }
+  						if (d.size < 24) { return '#222222' }
 					    else if (d.size < 22) { return '#333333' }
-					    else if (d.size < 25) { return '#444444' }
-					    else if (d.size < 28) { return '#555555' }
-					    else if (d.size < 31) { return '#666666' }
-					    else if (d.size < 34) { return '#777777' }
-					    else if (d.size < 37) { return '#888888' }
-					    else if (d.size < 40) { return '#999999' }
-					    else if (d.size < 44) { return '#aaaaaa' }
-					    else if (d.size < 47) { return '#bbbbbb' }
+					    else if (d.size < 28) { return '#444444' }
+					    else if (d.size < 35) { return '#555555' }
+					    else if (d.size < 39) { return '#666666' }
+					    else if (d.size < 43) { return '#777777' }
+					    else if (d.size < 46) { return '#888888' }
+					    else if (d.size < 50) { return '#999999' }
+					    else if (d.size < 55) { return '#aaaaaa' }
+					    else if (d.size < 59) { return '#bbbbbb' }
 					    else { return '#cccccc' };
 					})
 					.attr("text-anchor", "middle")
