@@ -468,9 +468,9 @@ function getArchiveWords(arch, filterword) {
 	$('.sort-link').fadeOut(fadeTimer);
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	if (!filterword) {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 140,"FilterStopWords": true}';
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 180,"FilterStopWords": true}';
 	} else {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 140,"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 180,"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
 	}
 	$.ajax({
 		type: "POST",
@@ -505,12 +505,12 @@ function getArchiveWords(arch, filterword) {
 				  .timeInterval(10)
 				  .size([w, h])
 				  .words(cloudlist.map(function(d, i) {
-					return {text: d, size: ((i+10)/10)+15}; // make min size 16 and max within 2em, when maxresults <= 140
+					return {text: d, size: i };
 				  }))
 				  .padding(6)
 				  .rotate(0)
 				  .font("Avenir-Book")
-				  .fontSize(function(d) { return d.size*1.25; }) // amplify font scale
+				  .fontSize(function(d) { return (d.size/10)+16; }) // make min and max within reasonable range
 				  .on("end", draw)
 				  .start();
 
@@ -526,21 +526,27 @@ function getArchiveWords(arch, filterword) {
 					.style("font-size", function(d) { return parseInt(d.size)/16 + "em"; }) // set font size in ems
 					.style("font-family", "Avenir-Book")
 					.style("fill", function (d) {
-  						if (d.size < 24) { return '#222222' }
-					    else if (d.size < 22) { return '#333333' }
-					    else if (d.size < 28) { return '#444444' }
-					    else if (d.size < 35) { return '#555555' }
-					    else if (d.size < 39) { return '#666666' }
-					    else if (d.size < 43) { return '#777777' }
-					    else if (d.size < 46) { return '#888888' }
-					    else if (d.size < 50) { return '#999999' }
-					    else if (d.size < 55) { return '#aaaaaa' }
-					    else if (d.size < 59) { return '#bbbbbb' }
-					    else { return '#cccccc' };
+  						if (d.size/16-1 < .075) { return '#eeeeee' }
+					    else if (d.size/16-1 < .15) { return '#dddddd' }
+					    else if (d.size/16-1 < .225) { return '#cccccc' }
+					    else if (d.size/16-1 < .3) { return '#bbbbbb' }
+					    else if (d.size/16-1 < .375) { return '#aaaaaa' }
+					    else if (d.size/16-1 < .45) { return '#999999' }
+					    else if (d.size/16-1 < .525) { return '#888888' }
+					    else if (d.size/16-1 < .6) { return '#777777' }
+					    else if (d.size/16-1 < .675) { return '#666666' }
+					    else if (d.size/16-1 < .75) { return '#555555' }
+					    else if (d.size/16-1 < .825) { return '#444444' }
+					    else if (d.size/16-1 < .9) { return '#333333' }
+					    else if (d.size/16-1 < .975) { return '#222222' }
+					    else { return '#111111' };
 					})
 					.attr("text-anchor", "middle")
 					.attr("transform", function(d) {
 					  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+					})
+					.on("mouseover", function(d) {
+						console.log(d.size/16-1);
 					})
 					.on("click", function(d) {
 						var item = d.text;
