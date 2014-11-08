@@ -526,20 +526,19 @@ function getArchiveWords(arch, filterword) {
 					.style("font-size", function(d) { return parseInt(d.size)/16 + "em"; }) // set font size in ems
 					.style("font-family", "Avenir-Book")
 					.style("fill", function (d) {
-  						if (d.size/16-1 < .075) { return '#eeeeee' }
-					    else if (d.size/16-1 < .15) { return '#dddddd' }
-					    else if (d.size/16-1 < .225) { return '#cccccc' }
-					    else if (d.size/16-1 < .3) { return '#bbbbbb' }
-					    else if (d.size/16-1 < .375) { return '#aaaaaa' }
-					    else if (d.size/16-1 < .45) { return '#999999' }
-					    else if (d.size/16-1 < .525) { return '#888888' }
-					    else if (d.size/16-1 < .6) { return '#777777' }
-					    else if (d.size/16-1 < .675) { return '#666666' }
-					    else if (d.size/16-1 < .75) { return '#555555' }
-					    else if (d.size/16-1 < .825) { return '#444444' }
-					    else if (d.size/16-1 < .9) { return '#333333' }
-					    else if (d.size/16-1 < .975) { return '#222222' }
-					    else { return '#111111' };
+  						if (d.size/16-1 < .08) { return '#eeeeee' }
+					    else if (d.size/16-1 < .16) { return '#dddddd' }
+					    else if (d.size/16-1 < .24) { return '#cccccc' }
+					    else if (d.size/16-1 < .32) { return '#bbbbbb' }
+					    else if (d.size/16-1 < .4) { return '#aaaaaa' }
+					    else if (d.size/16-1 < .48) { return '#999999' }
+					    else if (d.size/16-1 < .56) { return '#888888' }
+					    else if (d.size/16-1 < .64) { return '#777777' }
+					    else if (d.size/16-1 < .72) { return '#666666' }
+					    else if (d.size/16-1 < .8) { return '#555555' }
+					    else if (d.size/16-1 < .88) { return '#444444' }
+					    else if (d.size/16-1 < .96) { return '#333333' }
+					    else { return '#222222' };
 					})
 					.attr("text-anchor", "middle")
 					.attr("transform", function(d) {
