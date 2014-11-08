@@ -379,7 +379,7 @@ function getArchiveVolume(arch) {
 				  .words(cloudlist.map(function(d, i) {
 					return {text: d, size: i+16};
 				  }))
-				  .padding(6)
+				  .padding(7)
 				  .rotate(0)
 				  .font("Avenir-Book")
 				  .fontSize(function(d) { return d.size*1.75; })
@@ -468,9 +468,9 @@ function getArchiveWords(arch, filterword) {
 	$('.sort-link').fadeOut(fadeTimer);
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	if (!filterword) {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true}';
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 150,"FilterStopWords": true}';
 	} else {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 50,"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 150,"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
 	}
 	$.ajax({
 		type: "POST",
@@ -505,9 +505,9 @@ function getArchiveWords(arch, filterword) {
 				  .timeInterval(10)
 				  .size([w, h])
 				  .words(cloudlist.map(function(d, i) {
-					return {text: d, size: i+16};
+					return {text: d, size: ((i+10)/10)+15};
 				  }))
-				  .padding(5)
+				  .padding(6)
 				  .rotate(0)
 				  .font("Avenir-Book")
 				  .fontSize(function(d) { return d.size*1.25; })
