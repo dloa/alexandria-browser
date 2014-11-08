@@ -467,10 +467,11 @@ function getArchiveWords(arch, filterword) {
 	$('#view-controls').fadeOut(fadeTimer);
 	$('.sort-link').fadeOut(fadeTimer);
 	var dateValues = $("#timeline").dateRangeSlider("values");
+	var MaxResults = 160;
 	if (!filterword) {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 180,"FilterStopWords": true}';
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": '+MaxResults+',"FilterStopWords": true}';
 	} else {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 180,"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": '+MaxResults+',"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
 	}
 	$.ajax({
 		type: "POST",
@@ -498,19 +499,22 @@ function getArchiveWords(arch, filterword) {
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 			$('#wordsCloud').fadeIn(fadeTimer);
 			cloudlist.reverse();
-
-				var w = window.innerWidth;
+				// Determine volume ratio for word size and fill
+				if(cloudlist.length < MaxResults) {
+					MaxResults = cloudlist.length;
+				}				
+				var w = window.innerWidth;				
 				var h = window.innerHeight-117;
 				d3.layout.cloud()
 				  .timeInterval(10)
 				  .size([w, h])
 				  .words(cloudlist.map(function(d, i) {
-					return {text: d, size: i };
+					return {text: d, size: ((i/MaxResults)+1)*16, fill: i/MaxResults }; // base size on ratio of number of actual results
 				  }))
 				  .padding(6)
 				  .rotate(0)
 				  .font("Avenir-Book")
-				  .fontSize(function(d) { return (d.size/10)+16; }) // make min and max within reasonable range
+				  .fontSize(function(d) { return d.size; })
 				  .on("end", draw)
 				  .start();
 
@@ -523,29 +527,30 @@ function getArchiveWords(arch, filterword) {
 				  .selectAll("text")
 					.data(words)
 				  .enter().append("text")
-					.style("font-size", function(d) { return parseInt(d.size)/16 + "em"; }) // set font size in ems
+					.style("font-size", function(d) { return parseInt(d.size) + "px"; }) // set font size in ems
 					.style("font-family", "Avenir-Book")
-					.style("fill", function (d) {
-  						if (d.size/16-1 < .08) { return '#eeeeee' }
-					    else if (d.size/16-1 < .16) { return '#dddddd' }
-					    else if (d.size/16-1 < .24) { return '#cccccc' }
-					    else if (d.size/16-1 < .32) { return '#bbbbbb' }
-					    else if (d.size/16-1 < .4) { return '#aaaaaa' }
-					    else if (d.size/16-1 < .48) { return '#999999' }
-					    else if (d.size/16-1 < .56) { return '#888888' }
-					    else if (d.size/16-1 < .64) { return '#777777' }
-					    else if (d.size/16-1 < .72) { return '#666666' }
-					    else if (d.size/16-1 < .8) { return '#555555' }
-					    else if (d.size/16-1 < .88) { return '#444444' }
-					    else if (d.size/16-1 < .96) { return '#333333' }
+					.style("fill", function (d) { // base fill on ratio of number of actual results
+  						if (d.fill < .075) { return '#eeeeee' }
+					    else if (d.fill < .15) { return '#dddddd' }
+					    else if (d.fill < .225) { return '#cccccc' }
+					    else if (d.fill < .3) { return '#bbbbbb' }
+					    else if (d.fill < .375) { return '#aaaaaa' }
+					    else if (d.fill < .45) { return '#999999' }
+					    else if (d.fill < .525) { return '#888888' }
+					    else if (d.fill < .6) { return '#777777' }
+					    else if (d.fill < .675) { return '#666666' }
+					    else if (d.fill < .75) { return '#555555' }
+					    else if (d.fill < .825) { return '#444444' }
+					    else if (d.fill < .9) { return '#333333' }
 					    else { return '#222222' };
 					})
 					.attr("text-anchor", "middle")
 					.attr("transform", function(d) {
 					  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
 					})
-					.on("mouseover", function(d) {
-						console.log(d.size/16-1);
+					.on("mouseover", function(d, i) {
+						console.log(d.size);
+						console.log(i);
 					})
 					.on("click", function(d) {
 						var item = d.text;
