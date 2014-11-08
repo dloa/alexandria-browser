@@ -458,6 +458,7 @@ function getArchiveVolume(arch) {
 			
 				$('#wait').fadeOut(fadeTimer);
 				$('.search').attr('disabled',false);
+				console.log(currentView);
 			}
 		}
 	});
@@ -535,8 +536,7 @@ function getArchiveWords(arch, filterword) {
 			  .start();
 
 			function draw(words) {
-			// Make generalized using current view
-			d3.select("#wordsCloud").append("svg")
+			d3.select("#"+currentView).append("svg")
 				.attr("width", w)
 				.attr("height", h)
 			  .append("g")
@@ -565,14 +565,21 @@ function getArchiveWords(arch, filterword) {
 				.attr("transform", function(d) {
 				  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
 				})
+				.on("moveover", function(d) {
+					console.log(d);
+				})
 				.on("click", function(d) {
 					var item = d.text;
-					activeWord = item;
-//					console.log('Active word: '+activeWord);
-					var arch = $('header input.search').val();
-					if(arch!=''){
-						// Make conditional using current view
-						wordSearch(searchTerm, item, 40, 0)
+					if(currentView == 'wordsCloud' ){
+						activeWord = item;
+						wordSearch(currentArchive, item, 40, 0);
+					} else {
+						$('main').fadeOut(fadeTimer);
+						$('#volume').fadeOut(fadeTimer);
+						$('header input.search').val(item);
+						currentArchive = item;
+						searchTerm = item;
+						getArchiveWords(item);
 					}
 				})
 				.text(function(d) { return d.text; });
