@@ -511,70 +511,72 @@ function getArchiveWords(arch, filterword) {
 			});
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 			$('#wordsCloud').fadeIn(fadeTimer);
+		// Construct Word Cloud
 			cloudlist.reverse();
-				// Determine volume ratio for word size and fill
-				if(cloudlist.length < MaxResults) {
-					MaxResults = cloudlist.length;
-				}				
-				var w = window.innerWidth;				
-				var h = window.innerHeight-117;
-				var fontSizeMultiplier = 1.5; // Change this to be based on size of viewport
-				
-				d3.layout.cloud()
-				  .timeInterval(10)
-				  .size([w, h])
-				  .words(cloudlist.map(function(d, i) {
-					return {text: d, size: (((i/MaxResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/MaxResults }; // base size on ratio of number of actual results
-				  }))
-				  .padding(5*fontSizeMultiplier)
-				  .rotate(0)
-				  .font("Avenir-Book")
-				  .fontSize(function(d) { return d.size; })
-				  .on("end", draw)
-				  .start();
+			// Determine word cloud density for word size and fill
+			if(cloudlist.length < MaxResults) {
+				MaxResults = cloudlist.length;
+			}				
+			var w = window.innerWidth;				
+			var h = window.innerHeight-117;
+			var fontSizeMultiplier = 1.5; // Change this to be based on size of viewport AND maxResults
+			
+			d3.layout.cloud()
+			  .timeInterval(10)
+			  .size([w, h])
+			  .words(cloudlist.map(function(d, i) {
+				return {text: d, size: (((i/MaxResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/MaxResults }; // base size on ratio of number of actual results
+			  }))
+			  .padding(5*fontSizeMultiplier)
+			  .rotate(0)
+			  .font("Avenir-Book")
+			  .fontSize(function(d) { return d.size; })
+			  .on("end", draw)
+			  .start();
 
-				function draw(words) {
-				d3.select("#wordsCloud").append("svg")
-					.attr("width", w)
-					.attr("height", h)
-				  .append("g")
-					.attr("transform", "translate(" + [w >> 1, h >> 1] + ")")
-				  .selectAll("text")
-					.data(words)
-				  .enter().append("text")
-					.style("font-size", function(d) { return parseInt(d.size)/document.emSize()[1] + "em"; }) // set font size in ems
-					.style("font-family", "Avenir-Book")
-					.style("fill", function (d) { // base fill on ratio of number of actual results
-  						if (d.fill < .075) { return '#eeeeee' }
-					    else if (d.fill < .15) { return '#dddddd' }
-					    else if (d.fill < .225) { return '#cccccc' }
-					    else if (d.fill < .3) { return '#bbbbbb' }
-					    else if (d.fill < .375) { return '#aaaaaa' }
-					    else if (d.fill < .45) { return '#999999' }
-					    else if (d.fill < .525) { return '#888888' }
-					    else if (d.fill < .6) { return '#777777' }
-					    else if (d.fill < .675) { return '#666666' }
-					    else if (d.fill < .75) { return '#555555' }
-					    else if (d.fill < .825) { return '#444444' }
-					    else if (d.fill < .9) { return '#333333' }
-					    else { return '#222222' };
-					})
-					.attr("text-anchor", "middle")
-					.attr("transform", function(d) {
-					  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-					})
-					.on("click", function(d) {
-						var item = d.text;
-						activeWord = item;
-//						console.log('Active word: '+activeWord);
-						var arch = $('header input.search').val();
-						if(arch!=''){
-//							console.log(searchTerm);
-							wordSearch(searchTerm, item, 40, 0)
-						}
-					})
-					.text(function(d) { return d.text; });
-				}
+			function draw(words) {
+			// Make generalized using current view
+			d3.select("#wordsCloud").append("svg")
+				.attr("width", w)
+				.attr("height", h)
+			  .append("g")
+				.attr("transform", "translate(" + [w >> 1, h >> 1] + ")")
+			  .selectAll("text")
+				.data(words)
+			  .enter().append("text")
+				.style("font-size", function(d) { return parseInt(d.size)/document.emSize()[1] + "em"; }) // set font size in ems
+				.style("font-family", "Avenir-Book")
+				.style("fill", function (d) { // base fill on ratio of number of actual results
+					if (d.fill < .075) { return '#eeeeee' }
+					else if (d.fill < .15) { return '#dddddd' }
+					else if (d.fill < .225) { return '#cccccc' }
+					else if (d.fill < .3) { return '#bbbbbb' }
+					else if (d.fill < .375) { return '#aaaaaa' }
+					else if (d.fill < .45) { return '#999999' }
+					else if (d.fill < .525) { return '#888888' }
+					else if (d.fill < .6) { return '#777777' }
+					else if (d.fill < .675) { return '#666666' }
+					else if (d.fill < .75) { return '#555555' }
+					else if (d.fill < .825) { return '#444444' }
+					else if (d.fill < .9) { return '#333333' }
+					else { return '#222222' };
+				})
+				.attr("text-anchor", "middle")
+				.attr("transform", function(d) {
+				  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+				})
+				.on("click", function(d) {
+					var item = d.text;
+					activeWord = item;
+//					console.log('Active word: '+activeWord);
+					var arch = $('header input.search').val();
+					if(arch!=''){
+						// Make conditional using current view
+						wordSearch(searchTerm, item, 40, 0)
+					}
+				})
+				.text(function(d) { return d.text; });
+			}
 
 			$('#wordsListView').css('height',$('#archiveList').height()+100+'px');
 			currentView = 'wordsCloud';
