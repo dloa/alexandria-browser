@@ -505,13 +505,14 @@ function getArchiveWords(arch, filterword) {
 				}				
 				var w = window.innerWidth;				
 				var h = window.innerHeight-117;
+				var fontSizeMultiplier = 1.5; // Change this to be based on size of viewport
 				d3.layout.cloud()
 				  .timeInterval(10)
 				  .size([w, h])
 				  .words(cloudlist.map(function(d, i) {
-					return {text: d, size: ((i/MaxResults)+1)*16, fill: i/MaxResults }; // base size on ratio of number of actual results
+					return {text: d, size: (((i/MaxResults)*fontSizeMultiplier)+1)*16, fill: i/MaxResults }; // base size on ratio of number of actual results
 				  }))
-				  .padding(6)
+				  .padding(5*fontSizeMultiplier)
 				  .rotate(0)
 				  .font("Avenir-Book")
 				  .fontSize(function(d) { return d.size; })
@@ -527,7 +528,7 @@ function getArchiveWords(arch, filterword) {
 				  .selectAll("text")
 					.data(words)
 				  .enter().append("text")
-					.style("font-size", function(d) { return parseInt(d.size) + "px"; }) // set font size in ems
+					.style("font-size", function(d) { return parseInt(d.size)/16 + "em"; }) // set font size in ems
 					.style("font-family", "Avenir-Book")
 					.style("fill", function (d) { // base fill on ratio of number of actual results
   						if (d.fill < .075) { return '#eeeeee' }
@@ -547,10 +548,6 @@ function getArchiveWords(arch, filterword) {
 					.attr("text-anchor", "middle")
 					.attr("transform", function(d) {
 					  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-					})
-					.on("mouseover", function(d, i) {
-						console.log(d.size);
-						console.log(i);
 					})
 					.on("click", function(d) {
 						var item = d.text;
