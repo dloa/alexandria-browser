@@ -468,9 +468,9 @@ function getArchiveWords(arch, filterword) {
 	$('.sort-link').fadeOut(fadeTimer);
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	if (!filterword) {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 150,"FilterStopWords": true}';
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 140,"FilterStopWords": true}';
 	} else {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 150,"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": 140,"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
 	}
 	$.ajax({
 		type: "POST",
@@ -505,12 +505,12 @@ function getArchiveWords(arch, filterword) {
 				  .timeInterval(10)
 				  .size([w, h])
 				  .words(cloudlist.map(function(d, i) {
-					return {text: d, size: ((i+10)/10)+15};
+					return {text: d, size: ((i+10)/10)+15}; // make min size 16 and max within 2em, when maxresults <= 140
 				  }))
 				  .padding(6)
 				  .rotate(0)
 				  .font("Avenir-Book")
-				  .fontSize(function(d) { return d.size*1.25; })
+				  .fontSize(function(d) { return d.size*1.25; }) // amplify font scale
 				  .on("end", draw)
 				  .start();
 
@@ -523,7 +523,7 @@ function getArchiveWords(arch, filterword) {
 				  .selectAll("text")
 					.data(words)
 				  .enter().append("text")
-					.style("font-size", function(d) { return parseInt(d.size)/16 + "em"; })
+					.style("font-size", function(d) { return parseInt(d.size)/16 + "em"; }) // set font size in ems
 					.style("font-family", "Avenir-Book")
 					.style("fill", function (d) {
   						if (d.size < 24) { return '#222222' }
