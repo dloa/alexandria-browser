@@ -160,8 +160,21 @@ jQuery(document).ready(function($){
 
 // For todays date;
 var datetime = new Date();
-
 var fadeTimer = 100;
+// Default browser font size for word cloud
+document.emSize=function(pa){
+	pa= pa || document.body;
+	var who= document.createElement('div');
+	var atts= {fontSize:'1em',padding:'0',position:'absolute',lineHeight:'1',visibility:'hidden'};
+	for(var p in atts){
+		who.style[p]= atts[p];
+	}
+	who.appendChild(document.createTextNode('M'));
+	pa.appendChild(who);
+	var fs= [who.offsetWidth,who.offsetHeight];
+	pa.removeChild(who);
+	return fs;
+}
 
 // Searching ...
 var searchTimerId = 0;
@@ -506,11 +519,12 @@ function getArchiveWords(arch, filterword) {
 				var w = window.innerWidth;				
 				var h = window.innerHeight-117;
 				var fontSizeMultiplier = 1.5; // Change this to be based on size of viewport
+				
 				d3.layout.cloud()
 				  .timeInterval(10)
 				  .size([w, h])
 				  .words(cloudlist.map(function(d, i) {
-					return {text: d, size: (((i/MaxResults)*fontSizeMultiplier)+1)*16, fill: i/MaxResults }; // base size on ratio of number of actual results
+					return {text: d, size: (((i/MaxResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/MaxResults }; // base size on ratio of number of actual results
 				  }))
 				  .padding(5*fontSizeMultiplier)
 				  .rotate(0)
@@ -528,7 +542,7 @@ function getArchiveWords(arch, filterword) {
 				  .selectAll("text")
 					.data(words)
 				  .enter().append("text")
-					.style("font-size", function(d) { return parseInt(d.size)/16 + "em"; }) // set font size in ems
+					.style("font-size", function(d) { return parseInt(d.size)/document.emSize()[1] + "em"; }) // set font size in ems
 					.style("font-family", "Avenir-Book")
 					.style("fill", function (d) { // base fill on ratio of number of actual results
   						if (d.fill < .075) { return '#eeeeee' }
