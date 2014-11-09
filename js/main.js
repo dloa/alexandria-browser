@@ -164,6 +164,7 @@ jQuery(document).ready(function($){
 // For todays date;
 var datetime = new Date();
 var fadeTimer = 100;
+var defaultMaxResults = 160;
 
 // Default browser font size for word cloud
 document.emSize=function(pa){
@@ -411,7 +412,7 @@ function getArchiveVolume(arch) {
 				$('.view-link').fadeIn(fadeTimer);
 
 				// Build Word Cloud
-				buildWordCloud(cloudlist);
+				buildWordCloud(cloudlist, defaultMaxResults);
 			}
 		}
 	});
@@ -434,11 +435,10 @@ function getArchiveWords(arch, filterword) {
 	$('#view-controls').fadeOut(fadeTimer);
 	$('.sort-link').fadeOut(fadeTimer);
 	var dateValues = $("#timeline").dateRangeSlider("values");
-	var MaxResults = 160;
 	if (!filterword) {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": '+MaxResults+',"FilterStopWords": true}';
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true}';
 	} else {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": '+MaxResults+',"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
 	}
 	console.log('API call: get/archive/betweenDates/wordcloud ...');
 	$.ajax({
@@ -473,7 +473,7 @@ function getArchiveWords(arch, filterword) {
 			$('main#'+currentView).fadeIn(fadeTimer);
 			// Build Word Cloud
 			cloudlist.reverse();
-			buildWordCloud(cloudlist, MaxResults);
+			buildWordCloud(cloudlist, defaultMaxResults);
 		}
 	});
 }
@@ -481,18 +481,24 @@ function getArchiveWords(arch, filterword) {
 // Construct Word Cloud
 function buildWordCloud(cloudlist, MaxResults) {
 	// Determine word cloud density for word size and fill
-	if( (!MaxResults) || (cloudlist.length < MaxResults) ) {
-		MaxResults = cloudlist.length;
-	}				
+	if (!MaxResults) {
+		var MaxResults = defaultMaxResults;
+	}
+	if (cloudlist.length < MaxResults)  {
+		totalResults = cloudlist.length;
+	} else {
+		totalResults = MaxResults;
+	}	
+	console.log('totalResults = '+totalResults);
 	var w = window.innerWidth;				
 	var h = window.innerHeight-117;
-	var fontSizeMultiplier = 1.5; // Change this to be based on size of viewport AND maxResults
-	
+	var fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Change difference between largest and smallest word based on browser font size AND number of results
+	console.log('fontSizeMultiplier = '+fontSizeMultiplier);
 	d3.layout.cloud()
 	  .timeInterval(10)
 	  .size([w, h])
 	  .words(cloudlist.map(function(d, i) {
-		return {text: d, size: (((i/MaxResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/MaxResults }; // base size on ratio of number of actual results
+		return {text: d, size: (((i/totalResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/totalResults }; // base size on ratio of number of actual results
 	  }))
 	  .padding(5*fontSizeMultiplier)
 	  .rotate(0)
