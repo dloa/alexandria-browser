@@ -4,7 +4,7 @@ jQuery(document).ready(function($){
 	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
 
 	$("#timeline").dateRangeSlider({
-		bounds: {min: new Date(2014, 8, 25), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate())},
+		bounds: {min: new Date(2014, 8, 25), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
 		defaultValues: {min: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() - 1), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate())},
 		arrows: false,
 		scales: [{
@@ -171,6 +171,13 @@ var datetime = new Date();
 var fadeTimer = 100;
 var defaultMaxResults = 160;
 var activeJobsCache = [];
+var archiveVolumeCache = [];
+var archiveVolumeQueryStringCache = [];
+// var dateValuesCache;
+var spinnerCount = 0;
+var cloudlist = [];
+var currentView = 'archiveCloud';
+var currentArchive;
 
 // GET ACTIVE JOBS
 function getActiveJobs(searchTerm) {
@@ -210,7 +217,7 @@ function getActiveJobs(searchTerm) {
 			type: "GET",
 			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
 			success: function (responseData) {
-				console.log('getActiveJobs() Ajax: get/activejobs ... '+searchTerm);
+				console.log('CACHED: getActiveJobs() Ajax: get/activejobs ... '+searchTerm);
 				var data = $.parseJSON(responseData);
 				for (var i = 0; i < data['Jobs'].length; i++) {
 					if ( data['Count'][i] != 0 ) {
@@ -237,6 +244,98 @@ function getActiveJobs(searchTerm) {
 			}
 		});
 	}
+}
+
+// Get Archive volumes and construct word cloud
+function getArchiveVolume(arch) {
+	spinnerCount++;
+	var dateValues = $("#timeline").dateRangeSlider("values");
+	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
+	// Check the cache for recent query
+	var cacheCheck = false;
+	archiveVolumeQueryStringCache.forEach(function(a, i){
+		if (queryString == a[1]) {
+			cacheCheck = true;
+			$('#archiveList li#archive-'+ archiveVolumeCache[i][0].replace(/ /g,"-")).attr('volume',archiveVolumeCache[i][1]).find('span.archive-volume').text(archiveVolumeCache[i][1]);
+		}
+	});
+	if(cacheCheck == false){
+		// API call if not cached
+		console.log('API call: get/archive/betweenDates/count ...');
+		$.ajax({
+			type: "POST",
+			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/count",
+			data: queryString.toString(),
+			success: function (e) {
+				console.log('CACHED: getArchiveVolume() Ajax: betweenDates/count ... '+queryString);
+				var data = $.parseJSON(e);
+				// Cache the query string
+				archiveVolumeQueryStringCache.push([arch,queryString]);
+				// Cache results
+				archiveVolumeCache.push([arch, data]);
+				spinnerCount--;
+/*
+				if (data==0) {
+					$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).remove();				
+				} else {
+					$('#archiveList li#archive-'+ arch.replace(/ /g,"-") +' span.archive-volume').html(data);
+					$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).attr('volume',data);
+				}
+*/
+				$('#archiveList li#archive-'+ arch.replace(/ /g,"-") +' span.archive-volume').text(data);
+				$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).attr('volume',data);
+				if(spinnerCount == 0) {
+					buildArchiveList();
+				}
+			}
+		});
+	} else {
+		spinnerCount = archiveVolumeQueryStringCache.length;
+		if(spinnerCount == $('#archiveList li').length){
+			buildArchiveList();
+		}
+	}
+}
+function buildArchiveList() {	
+	$('#archiveList li').each(function(){
+		if($(this).find('span.archive-volume').html()==''){
+			$(this).remove();
+		}
+	});
+	$('main').fadeOut(fadeTimer);
+	$('#'+currentView).fadeIn(fadeTimer);
+	$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
+	$('#archiveList li').sortElements(function(a, b){
+		return parseInt($(a).attr('volume')) > parseInt($(b).attr('volume')) ? 1 : -1;
+	});
+	
+	// Populate cloudlist array with raw data			
+	var cloudlist = [];				
+	
+	$('#archiveList li').each(function(){
+		var archWeight = $(this).index()+5;
+		cloudlist.push($(this).find('span:first-child').text());
+	});
+	if($('#archiveListView li').length == 0) {
+		$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
+	}
+	// Build cloud behind the scenes
+	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
+		$('#'+currentView.slice(0,-8)+'Cloud').css('z-index','0').fadeIn(fadeTimer);
+	}
+
+	if($('#resort-archView').text() == 'Popular') {
+		$('#archiveList').addClass('pop-sort');
+		$('#archiveList li').sortElements(function(a, b){
+			return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
+		});
+	} else {
+		sortUnorderedList("archiveList");
+	}
+	$('.view-link').fadeIn(fadeTimer);
+
+	// Build Word Cloud
+	buildWordCloud(cloudlist, defaultMaxResults);
 }
 
 // RUN SEARCH
@@ -353,78 +452,6 @@ function getArchive(arch) {
     });
 }
 
-// Get Archive volumes and construct word cloud
-var spinnerCount = 0;
-var cloudlist = [];
-var currentView = 'archiveCloud';
-var currentArchive;
-function getArchiveVolume(arch) {
-	if(spinnerCount == 0) {
-		$('main').fadeOut(fadeTimer);
-		$('#wait').fadeIn(fadeTimer);
-	}
-	spinnerCount++;
-	var dateValues = $("#timeline").dateRangeSlider("values");
-	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
-	console.log('API call: get/archive/betweenDates/count ...');
-	$.ajax({
-		type: "POST",
-		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/count",
-		data: queryString.toString(),
-		success: function (e) {
-			console.log('getArchiveVolume() Ajax: betweenDates/count ... '+queryString);
-			var data = $.parseJSON(e);
-			spinnerCount--;
-			if (data==0) {
-				$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).remove();				
-			} else {
-				$('#archiveList li#archive-'+ arch.replace(/ /g,"-") +' span.archive-volume').html(data);
-				$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).attr('volume',data);
-			}
-			if(spinnerCount == 0) {
-				$('#archiveList li').each(function(){
-					if($(this).find('span.archive-volume').html()==''){
-						$(this).remove();
-					}
-				});
-				$('main').fadeOut(fadeTimer);
-				$('#'+currentView).fadeIn(fadeTimer);
-				$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
-				$('#archiveList li').sortElements(function(a, b){
-					return parseInt($(a).attr('volume')) > parseInt($(b).attr('volume')) ? 1 : -1;
-				});
-				
-				// Populate cloudlist array with raw data			
-				var cloudlist = [];				
-				
-				$('#archiveList li').each(function(){
-					var archWeight = $(this).index()+5;
-					cloudlist.push($(this).find('span:first-child').text());
-				});
-				if($('#archiveListView li').length == 0) {
-					$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
-				}
-				// Build cloud behind the scenes
-				if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
-					$('#'+currentView.slice(0,-8)+'Cloud').css('z-index','0').fadeIn(fadeTimer);
-				}
-
-				if($('#resort-archView').text() == 'Popular') {
-					$('#archiveList').addClass('pop-sort');
-					$('#archiveList li').sortElements(function(a, b){
-						return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
-					});
-				} else {
-					sortUnorderedList("archiveList");
-				}
-				$('.view-link').fadeIn(fadeTimer);
-
-				// Build Word Cloud
-				buildWordCloud(cloudlist, defaultMaxResults);
-			}
-		}
-	});
-}
 // Get top words in archive and construct cloud
 function getArchiveWords(arch, filterword) {
 	if(!arch){
