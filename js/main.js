@@ -390,7 +390,10 @@ function getArchiveVolume(arch) {
 				$('#archiveList li').sortElements(function(a, b){
 					return parseInt($(a).attr('volume')) > parseInt($(b).attr('volume')) ? 1 : -1;
 				});
-				var cloudlist = [];
+				
+				// Populate cloudlist array with raw data			
+				var cloudlist = [];				
+				
 				$('#archiveList li').each(function(){
 					var archWeight = $(this).index()+5;
 					cloudlist.push($(this).find('span:first-child').text());
@@ -453,19 +456,22 @@ function getArchiveWords(arch, filterword) {
 			$('.wordCloud').children().remove();
 			var data = $.parseJSON(e);
 			// Load words
+			var cloudlistraw = [],i;
+			var cloudlist = [];
 			$.each(data,function(word, weight){
 				$("#wordsList").append('<li class="responseRow" volume="'+weight+'"><a href="#" onclick="wordSearch(&quot;'+searchTerm+'&quot;, &quot;'+word+'&quot;, 40, 0);"><span>' + word + '</span> <span class="archive-volume">'+ weight +'</span></a></li>');
+				// Populate cloudlist array with raw data
+				cloudlistraw.push([word,weight]);
 			});
 			$('#wordsList li').sortElements(function(a, b){
 				return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
 			});
+			cloudlistraw.sort(function(a,b){ return a[1]>b[1]?1:-1; });
+			cloudlistraw.forEach(function(a){
+				cloudlist.push(a[0]);
+			});
 			$('#wordsList').addClass('pop-sort');
 			$('.sort-link').text('Popular');
-			var cloudlist = [];
-			$('#wordsList li').each(function(){
-				var archWeight = $(this).index();
-				cloudlist.push($(this).find('span:first-child').text());
-			});
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 			$('#wordsCloud').fadeIn(fadeTimer);		
 			$('#wordsListView').css('height',$('#archiveList').height()+100+'px');
@@ -473,8 +479,6 @@ function getArchiveWords(arch, filterword) {
 			$('#wordsCloud').hide().css('z-index','3');
 			$('.view-controls').fadeIn(fadeTimer);				
 			$('main#'+currentView).fadeIn(fadeTimer);
-			// Build Word Cloud
-			cloudlist.reverse();
 			buildWordCloud(cloudlist, defaultMaxResults);
 		}
 	});
