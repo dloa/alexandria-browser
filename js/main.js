@@ -156,6 +156,7 @@ jQuery(document).ready(function($){
 			}
 		}
 	});
+	$('#wait').fadeIn(fadeTimer);
 	volumeBars('*', '', 7200);
 }); // End Document.Ready
 
@@ -533,6 +534,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 			console.log(d);
 		})
 		.on("click", function(d) {
+			$('#wait').fadeIn(fadeTimer);
 			var item = d.text;
 			if(currentView == 'wordsCloud' ){
 				activeWord = item;
