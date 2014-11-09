@@ -166,27 +166,12 @@ jQuery(document).ready(function($){
 	});
 }); // End Document.Ready
 
-// For todays date;
+// Default variables
 var datetime = new Date();
 var fadeTimer = 100;
 var defaultMaxResults = 160;
 
-// Default browser font size for word cloud
-document.emSize=function(pa){
-	pa= pa || document.body;
-	var who= document.createElement('div');
-	var atts= {fontSize:'1em',padding:'0',position:'absolute',lineHeight:'1',visibility:'hidden'};
-	for(var p in atts){
-		who.style[p]= atts[p];
-	}
-	who.appendChild(document.createTextNode('M'));
-	pa.appendChild(who);
-	var fs= [who.offsetWidth,who.offsetHeight];
-	pa.removeChild(who);
-	return fs;
-}
-
-// Searching ...
+// RUN SEARCH
 var searchTimerId = 0;
 var searchRunning;
 var searchTerm;
@@ -205,7 +190,8 @@ function runSearch(searchTerm) {
 		getActiveJobs(searchTerm);
 	}
 }
-// function to get active jobs JSON object
+
+// GET ACTIVE JOBS
 var archTitleSpan = 'span:first-child';
 function getActiveJobs(searchTerm) {
 	resetArchiveList = false;
@@ -268,7 +254,8 @@ function getAllArchives(){
 	searchValue = '';
 	$('header input.search').val(searchValue);
 }
-// show tweets in archive
+
+// Show tweets in archive
 var searchValue = '';
 var newSearchValue = '';
 function showTweetList(arch){	
@@ -289,7 +276,8 @@ function showTweetList(arch){
 		$('#tweetListView').addClass('pop-sort');
 	}
 }
-// get archived tweets JSON object
+
+// Get archived tweets JSON object
 var currentPage = 0;
 var totalPages = 0;
 function getArchive(arch) {
@@ -353,7 +341,8 @@ function getArchive(arch) {
         }
     });
 }
-// get archive volume and construct word cloud
+
+// Get Archive volumes and construct word cloud
 var spinnerCount = 0;
 var cloudlist = [];
 var currentView = 'archiveCloud';
@@ -487,7 +476,7 @@ function getArchiveWords(arch, filterword) {
 	});
 }
 
-// Construct Word Cloud
+// Build WORD CLOUD
 function buildWordCloud(cloudlist, MaxResults) {
 	// Determine word cloud density for word size and fill
 	if (!MaxResults) {
@@ -558,7 +547,6 @@ function buildWordCloud(cloudlist, MaxResults) {
 			} else {
 				$('main').fadeOut(fadeTimer);
 				$('#volume').fadeOut(fadeTimer);
-//				$('header input.search').val(item);
 				currentArchive = item;
 				$('#viewlabel .currentArchive').text(currentArchive);
 				searchTerm = item;
@@ -575,6 +563,8 @@ function buildWordCloud(cloudlist, MaxResults) {
 	}
 }
 
+// WORD COUNT
+/*
 function getWordCount(arch, word) {
 	if((!arch)||(!word)){
 		console.log(arch + ', ' + word);
@@ -596,7 +586,8 @@ function getWordCount(arch, word) {
 		});
 	}
 }
-
+*/
+// WORD SEARCH
 function wordSearch(arch, word, rpp, currentPage) {
 	$('#volume').fadeOut(fadeTimer);
 	resetArchiveList = false;
@@ -730,6 +721,7 @@ function volumeBars(arch, word, interval){
 	});
 }
 
+// CLEAR MODAL
 function clearModal() {
 	currentPage = 0;
 	$("#tweetList li").remove();
@@ -810,3 +802,18 @@ var largeSpinConfig = {
 };
 var target = document.getElementById('wait');
 var spinner = new Spinner(largeSpinConfig).spin(target);
+
+// Default browser font size for word cloud
+document.emSize=function(pa){
+	pa= pa || document.body;
+	var who= document.createElement('div');
+	var atts= {fontSize:'1em',padding:'0',position:'absolute',lineHeight:'1',visibility:'hidden'};
+	for(var p in atts){
+		who.style[p]= atts[p];
+	}
+	who.appendChild(document.createTextNode('M'));
+	pa.appendChild(who);
+	var fs= [who.offsetWidth,who.offsetHeight];
+	pa.removeChild(who);
+	return fs;
+}
