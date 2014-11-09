@@ -162,6 +162,7 @@ jQuery(document).ready(function($){
 // For todays date;
 var datetime = new Date();
 var fadeTimer = 100;
+
 // Default browser font size for word cloud
 document.emSize=function(pa){
 	pa= pa || document.body;
@@ -214,7 +215,10 @@ function getActiveJobs(searchTerm) {
 		$('#'+currentView).children().remove();
 	}
 	$('#wait').fadeIn(fadeTimer);
-	console.log('API call: get/activejobs ...');
+	console.log('API call: get/activejobs ... '+searchTerm);
+	if(!searchTerm){
+		console.log('No searchTerm - Use cached results!');
+	}
 	$.ajax({
 		type: "GET",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
@@ -538,6 +542,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 				$('#volume').fadeOut(fadeTimer);
 //				$('header input.search').val(item);
 				currentArchive = item;
+				$('#viewlabel .'+currentArchive).text(currentArchive);
 				searchTerm = item;
 				getArchiveWords(item);
 			}
@@ -653,12 +658,6 @@ function clearModal() {
 		} else {
 			getActiveJobs(searchTerm);
 		}
-	} else {
-/*
-		if ( (searchValue) && (searchTerm == searchValue) && (searchValue == newSearchValue) )  {
-			$('.search').val(searchValue);
-		}
-*/
 	}
 }
 
@@ -726,53 +725,39 @@ function volumeBars(arch, word, interval){
 	});
 }
 	
-	
 // Interger sort order function
 jQuery.fn.sortElements = (function(){
- 
     var sort = [].sort;
- 
     return function(comparator, getSortable) {
- 
         getSortable = getSortable || function(){return this;};
- 
         var placements = this.map(function(){
- 
             var sortElement = getSortable.call(this),
                 parentNode = sortElement.parentNode,
- 
                 // Since the element itself will change position, we have
                 // to have some way of storing its original position in
                 // the DOM. The easiest way is to have a 'flag' node:
                 nextSibling = parentNode.insertBefore(
                     document.createTextNode(''),
                     sortElement.nextSibling
-                );
- 
+                ); 
             return function() {
- 
                 if (parentNode === this) {
                     throw new Error(
                         "You can't sort elements if any one is a descendant of another."
                     );
                 }
- 
                 // Insert before flag:
                 parentNode.insertBefore(this, nextSibling);
                 // Remove flag:
                 parentNode.removeChild(nextSibling);
- 
             };
- 
         });
- 
         return sort.call(this, comparator).each(function(i){
             placements[i].call(getSortable.call(this));
         });
- 
     };
-    
 })();
+
 // Alphabetical sort
 function sortUnorderedList(ul, sortDescending) {
 	var mylist = $('#'+ul);
