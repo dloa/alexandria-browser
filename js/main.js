@@ -585,6 +585,9 @@ function wordSearch(arch, word, rpp, currentPage) {
 	$('#volume').fadeOut(fadeTimer);
 	resetArchiveList = false;
 	var pageFix = currentPage+1;
+	if(!arch){
+		arch = currentArchive;
+	}
 	if((!arch)||(!word)||(!rpp)||(!pageFix)){
 		console.log(arch + ', ' + word + ', ' + rpp + ', ' + pageFix);
 		if(!arch){console.log('arch!')}else if(!word){console.log('word!')}else if(!rpp){console.log('rpp = '+rpp)}else if(!pageFix){console.log('pageFix = '+pageFix)}else{console.log('something else!')}
