@@ -170,6 +170,73 @@ jQuery(document).ready(function($){
 var datetime = new Date();
 var fadeTimer = 100;
 var defaultMaxResults = 160;
+var activeJobsCache = [];
+
+// GET ACTIVE JOBS
+var archTitleSpan = 'span:first-child';
+function getActiveJobs(searchTerm) {
+	resetArchiveList = false;
+	if (!searchTerm) {
+		var searchTerm = '';
+	}
+    $('#intro').remove();
+	$('.search').attr('disabled','disabled');
+	$('main').fadeOut(fadeTimer);
+	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
+		$('#'+currentView.slice(0,-8)+'Cloud').children().remove();
+		$('#'+currentView+' li').remove();
+	} else {
+		$('#'+currentView.slice(0,-5)+'ListView li').remove();
+		$('#'+currentView).children().remove();
+	}
+	$('#wait').fadeIn(fadeTimer);
+	if ( activeJobsCache != '' ) {
+		console.log('Use activeJobsCache = '+activeJobsCache);
+		for (var i = 0; i < activeJobsCache.length; i++) {
+			if(!searchTerm){
+				$("#archiveList").append('<li id="archive-'+activeJobsCache[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + activeJobsCache[i] + '</span> <span class="archive-volume"></span></a></li>');
+				getArchiveVolume(activeJobsCache[i]);
+			} else {
+				var titleSlice = activeJobsCache[i].slice(0,searchTerm.length);
+				if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
+					$("#archiveList").append('<li id="archive-'+activeJobsCache[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + activeJobsCache[i] + '</span> <span class="archive-volume"></span></a></li>');
+					getArchiveVolume(activeJobsCache[i]);
+				}
+			}
+		}
+	} else {
+		console.log('API call: get/activejobs ... '+searchTerm);
+		$.ajax({
+			type: "GET",
+			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
+			success: function (responseData) {
+				console.log('getActiveJobs() Ajax: get/activejobs ... '+searchTerm);
+				var data = $.parseJSON(responseData);
+				for (var i = 0; i < data['Jobs'].length; i++) {
+					activeJobsCache.push(data['Jobs'][i]);
+					if(!searchTerm){
+						$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
+						getArchiveVolume(data['Jobs'][i]);
+					} else {
+						var titleSlice = data['Jobs'][i].slice(0,searchTerm.length);
+						if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
+							$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
+							getArchiveVolume(data['Jobs'][i]);
+						}
+					}
+				}
+				console.log('Created activeJobsCache = '+activeJobsCache);
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				// alert("some error");
+				console.log(XMLHttpRequest);
+				console.log(textStatus);
+				console.log(errorThrown);
+				librarianErr();
+			}
+		});
+	}
+}
 
 // RUN SEARCH
 var searchTimerId = 0;
@@ -191,63 +258,6 @@ function runSearch(searchTerm) {
 	}
 }
 
-// GET ACTIVE JOBS
-var archTitleSpan = 'span:first-child';
-function getActiveJobs(searchTerm) {
-	resetArchiveList = false;
-	if (!searchTerm) {
-		var searchTerm = '';
-	}
-    $('#intro').remove();
-	$('.search').attr('disabled','disabled');
-	$('main').fadeOut(fadeTimer);
-	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
-		$('#'+currentView.slice(0,-8)+'Cloud').children().remove();
-		$('#'+currentView+' li').remove();
-	} else {
-		$('#'+currentView.slice(0,-5)+'ListView li').remove();
-		$('#'+currentView).children().remove();
-	}
-	$('#wait').fadeIn(fadeTimer);
-	console.log('API call: get/activejobs ... '+searchTerm);
-	if(!searchTerm){
-		console.log('No searchTerm - Use cached results!');
-	}
-	$.ajax({
-		type: "GET",
-		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs",
-		success: function (responseData) {
-			console.log('getActiveJobs() Ajax: get/activejobs ... '+searchTerm);
-			var data = $.parseJSON(responseData);
-			for (var i = 0; i < data['Jobs'].length; i++) {
-
-				if(!searchTerm){
-					$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
-					getArchiveVolume(data['Jobs'][i]);
-				} else {
-					var titleSlice = data['Jobs'][i].slice(0,searchTerm.length);
-					if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
-						$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
-						getArchiveVolume(data['Jobs'][i]);
-					}
-				}
-				
-			}
-		},
-		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			// alert("some error");
-			console.log(XMLHttpRequest);
-			console.log(textStatus);
-			console.log(errorThrown);
-			$("#archiveList li").remove();
-			$('header input.search').attr('disabled','disabled').css({background:'none #efefef',padding:'3px 15px',width:'14em'}).val('Cannot connect to Librarian').next().hide();			
-			$('#wait').fadeOut(fadeTimer);
-			$('#timeline').fadeOut(fadeTimer);
-			$('#app-shading').css('bottom',0);
-			alert('Cannot connect to Librarian');
-	   }
-	});
-}
 var resetArchiveList = false;
 
 function getAllArchives(){
@@ -736,6 +746,17 @@ function clearModal() {
 			getActiveJobs(searchTerm);
 		}
 	}
+}
+
+// ERROR CONNECTING TO LIBRARIAN
+function librarianErr(){
+	$("#archiveList li").remove();
+	$('header input.search').attr('disabled','disabled').css({background:'none #efefef',padding:'3px 15px',width:'14em'}).val('Cannot connect to Librarian').next().hide();			
+	$('#wait').fadeOut(fadeTimer);
+	$('#volume').fadeOut(fadeTimer);
+	$('#timeline').fadeOut(fadeTimer);
+	$('#app-shading').css('bottom',0);
+	alert('Cannot connect to Librarian');
 }
 
 // Interger sort order function
