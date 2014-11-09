@@ -167,11 +167,6 @@ header input.search::after {
   z-index: 3;
 }
 
-header span {
-  float: right;
-  margin: 5em;
-}
-
 #logo {
 	width: 55px;
 	height:55px;
@@ -188,9 +183,10 @@ header span {
 }
 div#viewlabel {
 	position: absolute;
-	height: 2em;
-	top: 1em;
+	top: 50%;
 	left: 92px;
+	margin-top: -.5em;
+	line-height: 1;
 }
 #search {
 	position: relative;

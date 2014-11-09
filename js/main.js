@@ -542,7 +542,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 				$('#volume').fadeOut(fadeTimer);
 //				$('header input.search').val(item);
 				currentArchive = item;
-				$('#viewlabel .'+currentArchive).text(currentArchive);
+				$('#viewlabel .currentArchive').text(currentArchive);
 				searchTerm = item;
 				getArchiveWords(item);
 			}
