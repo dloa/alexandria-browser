@@ -252,12 +252,10 @@ function getActiveJobs(searchTerm) {
 }
 var resetArchiveList = false;
 
-/* Depricated?
 function getAllArchives(){
 	searchValue = '';
 	$('header input.search').val(searchValue);
 }
-*/
 // show tweets in archive
 var searchValue = '';
 var newSearchValue = '';
