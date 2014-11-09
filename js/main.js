@@ -134,6 +134,7 @@ jQuery(document).ready(function($){
 	// scan archives after timeline slider values change
 	$("#timeline").bind("valuesChanged", function(e, data){
 		searchTerm = $('header input.search').val();
+		resetCache = true;
 		$('ul#tweetList li').remove();
 		if($('#tweetListView').css('display') == 'block') {
 			if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
@@ -173,12 +174,12 @@ var defaultMaxResults = 160;
 var activeJobsCache = [];
 var archiveVolumeCache = [];
 var archiveVolumeQueryStringCache = [];
+var resetCache = true;
 // var dateValuesCache;
-var spinnerCount = 0;
 var cloudlist = [];
 var currentView = 'archiveCloud';
 var currentArchive;
-
+var spinnerCount = 0;
 // GET ACTIVE JOBS
 function getActiveJobs(searchTerm) {
 	resetArchiveList = false;
@@ -234,7 +235,6 @@ function getActiveJobs(searchTerm) {
 						}
 					}
 				}
-				console.log('Created activeJobsCache = '+activeJobsCache);
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
 				console.log(XMLHttpRequest);
@@ -248,6 +248,13 @@ function getActiveJobs(searchTerm) {
 
 // Get Archive volumes and construct word cloud
 function getArchiveVolume(arch) {
+	if (resetCache == true){
+		spinnerCount = 0;
+		archiveVolumeQueryStringCache.length = 0;
+		archiveVolumeCache.length = 0;
+		resetCache = false;
+		console.log('CACHE RESET: getArchiveVolume()');
+	}
 	spinnerCount++;
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
@@ -274,6 +281,7 @@ function getArchiveVolume(arch) {
 				// Cache results
 				archiveVolumeCache.push([arch, data]);
 				spinnerCount--;
+				console.log(spinnerCount);
 /*
 				if (data==0) {
 					$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).remove();				
@@ -291,6 +299,7 @@ function getArchiveVolume(arch) {
 		});
 	} else {
 		spinnerCount = archiveVolumeQueryStringCache.length;
+		console.log('spinnerCount = '+spinnerCount);
 		if(spinnerCount == $('#archiveList li').length){
 			buildArchiveList();
 		}
