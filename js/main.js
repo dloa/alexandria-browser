@@ -50,8 +50,10 @@ jQuery(document).ready(function($){
 	});
 	$('#logo').click(function(){
 		$('header input.search').val('');
-		currentView = 'archiveCloud';
 		currentArchive = '*';
+		currentView = 'archiveCloud';
+		$('.sort-link').fadeOut(fadeTimer);
+		$('.view-controls .view-link').text('Cloud');
 		$('main').fadeOut(fadeTimer);
 		$('#viewlabel .currentArchive').text('');
 		runSearch('');		
@@ -657,22 +659,6 @@ function wordSearch(arch, word, rpp, currentPage) {
 	}
 }
 
-function clearModal() {
-	currentPage = 0;
-	$("#tweetList li").remove();
-	$('.overlay').fadeOut(fadeTimer);
-	$('#volume').fadeOut(fadeTimer);
-	$('main').not('#'+currentView).fadeOut(fadeTimer);
-	$('.view-controls').fadeIn(fadeTimer);
-	if (resetArchiveList == true) {
-		if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
-			getArchiveWords(searchTerm);
-		} else {
-			getActiveJobs(searchTerm);
-		}
-	}
-}
-
 // VOLUME BARS
 function volumeBars(arch, word, interval){
 	$('#volume').remove();
@@ -736,7 +722,23 @@ function volumeBars(arch, word, interval){
 		}
 	});
 }
-	
+
+function clearModal() {
+	currentPage = 0;
+	$("#tweetList li").remove();
+	$('.overlay').fadeOut(fadeTimer);
+	$('#volume').fadeOut(fadeTimer);
+	$('main').not('#'+currentView).fadeOut(fadeTimer);
+	$('.view-controls').fadeIn(fadeTimer);
+	if (resetArchiveList == true) {
+		if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
+			getArchiveWords(searchTerm);
+		} else {
+			getActiveJobs(searchTerm);
+		}
+	}
+}
+
 // Interger sort order function
 jQuery.fn.sortElements = (function(){
     var sort = [].sort;
