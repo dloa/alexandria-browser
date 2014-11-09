@@ -1,10 +1,10 @@
-jQuery(document).ready(function($){
-	
+jQuery(document).ready(function($){	
+	$('#wait').fadeIn(fadeTimer);
 	// Footer timeline contruct
 	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
 
 	$("#timeline").dateRangeSlider({
-		bounds: {min: new Date(2014, 8, 25), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1)},
+		bounds: {min: new Date(2014, 8, 25), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate())},
 		defaultValues: {min: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() - 1), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate())},
 		arrows: false,
 		scales: [{
@@ -22,9 +22,23 @@ jQuery(document).ready(function($){
 		  }
 		}]
 	});
-	
-	// Search box
-	$('header input.search').on("keydown", function (e) {
+	// Generate initial volume bars
+	volumeBars('*', '', 7200);
+
+	// UI/UX Navigation
+	// Click logo to go back to archive list with current timeline selection
+	$('#logo').click(function(){
+		currentArchive = '*';
+		currentView = 'archiveCloud';
+		$('#viewlabel .currentArchive').text('');
+		$('header input.search').val('');
+		$('.sort-link').fadeOut(fadeTimer);
+		$('.view-controls .view-link').text('Cloud');
+		$('main').fadeOut(fadeTimer);
+		runSearch('');		
+	});
+	// Omnibox (search input)
+	$('header input.search').on("keydown", function (e) {		
 		searchValue = $('header input.search').val();		
 		if($('#tweetListView').css('display') == 'block') {
 			resetArchiveList == true;
@@ -32,37 +46,23 @@ jQuery(document).ready(function($){
 	});
 	$('header input.search').on("keyup", function (e) {
 		newSearchValue = $('header input.search').val();
-		var code = e.keyCode || e.which; if (code == 32) {
+		var code = e.keyCode || e.which;
+		if (code == 32) {
+			// pressin the space bar
 		} else if ( ( (newSearchValue != searchValue) && (searchValue != '') ) || (code == 16) ) {
+			// nothing changed in search content
 			if (searchTimerId) {
 				clearTimeout ( searchTimerId );
 			}
+			// set a timer and run search if done typing
 			searchTimerId = setTimeout ( 'runSearch("'+ newSearchValue +'")', 2000 );
 		}
 	});
-
-	// load active jobs on button click
-	$('.getAllArchives').click(function(){
-		getAllArchives();
-		var startDate = new Date(2014, 8, 25);
-		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() + 1);
-		$("#timeline").dateRangeSlider("values", startDate, endDate);
-	});
-	$('#logo').click(function(){
-		$('header input.search').val('');
-		currentArchive = '*';
-		currentView = 'archiveCloud';
-		$('.sort-link').fadeOut(fadeTimer);
-		$('.view-controls .view-link').text('Cloud');
-		$('main').fadeOut(fadeTimer);
-		$('#viewlabel .currentArchive').text('');
-		runSearch('');		
-	});
+	// Click icon in omnibox to clear and run search
 	$('#clearSearch').click(function(){
 		$('header input.search').val('');
-		runSearch('')
-	});
-	
+		runSearch('');
+	});	
 	// View Controls
 	$('.view-controls .view-link').click(function(){		
 		var newView;
@@ -81,8 +81,7 @@ jQuery(document).ready(function($){
 		}		
 		$('#'+newView).fadeIn(fadeTimer);
 		$(this).text(switchView);
-	});
-	
+	});	
 	// Sort - Archive List
 	$('#resort-archView').click(function(){
 		$('main').not('#'+currentView).fadeOut(fadeTimer);
@@ -108,7 +107,6 @@ jQuery(document).ready(function($){
 		}
 		$('main #'+currentView).fadeIn(fadeTimer);
 	});
-
 	// Sort - Tweet List
 	$('#resort').click(function(){
 		$('main').fadeOut(fadeTimer);
@@ -126,20 +124,13 @@ jQuery(document).ready(function($){
 			$(this).text('Recent');
 		}
 	});
-	
-	// Modal controls
-	$(document).on("keyup", function (e) {
-		var code = e.keyCode || e.which; if (code == 27) {
-			if($('#wait').css('display') == 'block') {
-				$('#wait').hide();
-			}
-			clearModal();
-		}
-	});
-
-	$('.close-modal').click(function(){
-		clearModal();
-	});
+	// Button on start page
+	$('.getAllArchives').click(function(){
+		getAllArchives();
+		var startDate = new Date(2014, 8, 25);
+		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate());
+		$("#timeline").dateRangeSlider("values", startDate, endDate);
+	});	
 	// scan archives after timeline slider values change
 	$("#timeline").bind("valuesChanged", function(e, data){
 		searchTerm = $('header input.search').val();
@@ -159,8 +150,20 @@ jQuery(document).ready(function($){
 			}
 		}
 	});
-	$('#wait').fadeIn(fadeTimer);
-	volumeBars('*', '', 7200);
+	// Modal controls
+	$(document).on("keyup", function (e) {
+		var code = e.keyCode || e.which;
+		if (code == 27) {
+			// esc pressed
+			if($('#wait').css('display') == 'block') {
+				$('#wait').hide();
+			}
+			clearModal();
+		}
+	});
+	$('.close-modal').click(function(){
+		clearModal();
+	});
 }); // End Document.Ready
 
 // For todays date;
