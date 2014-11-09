@@ -173,14 +173,14 @@ var defaultMaxResults = 160;
 var activeJobsCache = [];
 
 // GET ACTIVE JOBS
-var archTitleSpan = 'span:first-child';
 function getActiveJobs(searchTerm) {
 	resetArchiveList = false;
 	if (!searchTerm) {
 		var searchTerm = '';
 	}
-    $('#intro').remove();
+	$('#wait').fadeIn(fadeTimer);
 	$('.search').attr('disabled','disabled');
+    $('#intro').remove();
 	$('main').fadeOut(fadeTimer);
 	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
 		$('#'+currentView.slice(0,-8)+'Cloud').children().remove();
@@ -189,7 +189,7 @@ function getActiveJobs(searchTerm) {
 		$('#'+currentView.slice(0,-5)+'ListView li').remove();
 		$('#'+currentView).children().remove();
 	}
-	$('#wait').fadeIn(fadeTimer);
+	var archTitleSpan = 'span:first-child';
 	if ( activeJobsCache != '' ) {
 		console.log('Use activeJobsCache = '+activeJobsCache);
 		for (var i = 0; i < activeJobsCache.length; i++) {
@@ -213,22 +213,23 @@ function getActiveJobs(searchTerm) {
 				console.log('getActiveJobs() Ajax: get/activejobs ... '+searchTerm);
 				var data = $.parseJSON(responseData);
 				for (var i = 0; i < data['Jobs'].length; i++) {
-					activeJobsCache.push(data['Jobs'][i]);
-					if(!searchTerm){
-						$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
-						getArchiveVolume(data['Jobs'][i]);
-					} else {
-						var titleSlice = data['Jobs'][i].slice(0,searchTerm.length);
-						if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
+					if ( data['Count'][i] != 0 ) {
+						activeJobsCache.push(data['Jobs'][i]);
+						if(!searchTerm){
 							$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
 							getArchiveVolume(data['Jobs'][i]);
+						} else {
+							var titleSlice = data['Jobs'][i].slice(0,searchTerm.length);
+							if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
+								$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
+								getArchiveVolume(data['Jobs'][i]);
+							}
 						}
 					}
 				}
 				console.log('Created activeJobsCache = '+activeJobsCache);
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
-				// alert("some error");
 				console.log(XMLHttpRequest);
 				console.log(textStatus);
 				console.log(errorThrown);
@@ -497,11 +498,9 @@ function buildWordCloud(cloudlist, MaxResults) {
 	} else {
 		totalResults = MaxResults;
 	}	
-	console.log('totalResults = '+totalResults);
 	var w = window.innerWidth;				
 	var h = window.innerHeight-117;
 	var fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Change difference between largest and smallest word based on browser font size AND number of results
-	console.log('fontSizeMultiplier = '+fontSizeMultiplier);
 	d3.layout.cloud()
 	  .timeInterval(10)
 	  .size([w, h])
