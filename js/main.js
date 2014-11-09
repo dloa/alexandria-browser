@@ -170,16 +170,15 @@ jQuery(document).ready(function($){
 // Default variables
 var datetime = new Date();
 var fadeTimer = 100;
-var defaultMaxResults = 160;
 var activeJobsCache = [];
+var spinnerCount = 0;
 var archiveVolumeCache = [];
 var archiveVolumeQueryStringCache = [];
 var resetCache = true;
-// var dateValuesCache;
+var defaultMaxResults = 160;
 var cloudlist = [];
 var currentView = 'archiveCloud';
 var currentArchive;
-var spinnerCount = 0;
 // GET ACTIVE JOBS
 function getActiveJobs(searchTerm) {
 	resetArchiveList = false;
@@ -263,7 +262,11 @@ function getArchiveVolume(arch) {
 	archiveVolumeQueryStringCache.forEach(function(a, i){
 		if (queryString == a[1]) {
 			cacheCheck = true;
-			$('#archiveList li#archive-'+ archiveVolumeCache[i][0].replace(/ /g,"-")).attr('volume',archiveVolumeCache[i][1]).find('span.archive-volume').text(archiveVolumeCache[i][1]);
+			if (archiveVolumeCache[i][1] == 0) {
+				$('#archiveList li#archive-'+ archiveVolumeCache[i][0].replace(/ /g,"-")).remove();
+			} else {
+				$('#archiveList li#archive-'+ archiveVolumeCache[i][0].replace(/ /g,"-")).attr('volume',archiveVolumeCache[i][1]).find('span.archive-volume').text(archiveVolumeCache[i][1]);
+			}
 		}
 	});
 	if(cacheCheck == false){
@@ -281,15 +284,12 @@ function getArchiveVolume(arch) {
 				// Cache results
 				archiveVolumeCache.push([arch, data]);
 				spinnerCount--;
-				console.log(spinnerCount);
-/*
 				if (data==0) {
 					$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).remove();				
 				} else {
 					$('#archiveList li#archive-'+ arch.replace(/ /g,"-") +' span.archive-volume').html(data);
 					$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).attr('volume',data);
 				}
-*/
 				$('#archiveList li#archive-'+ arch.replace(/ /g,"-") +' span.archive-volume').text(data);
 				$('#archiveList li#archive-'+ arch.replace(/ /g,"-")).attr('volume',data);
 				if(spinnerCount == 0) {
@@ -299,7 +299,6 @@ function getArchiveVolume(arch) {
 		});
 	} else {
 		spinnerCount = archiveVolumeQueryStringCache.length;
-		console.log('spinnerCount = '+spinnerCount);
 		if(spinnerCount == $('#archiveList li').length){
 			buildArchiveList();
 		}
@@ -579,9 +578,6 @@ function buildWordCloud(cloudlist, MaxResults) {
 		.attr("text-anchor", "middle")
 		.attr("transform", function(d) {
 		  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-		})
-		.on("moveover", function(d) {
-			console.log(d);
 		})
 		.on("click", function(d) {
 			$('#wait').fadeIn(fadeTimer);
