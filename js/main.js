@@ -304,20 +304,39 @@ function buildArchiveList() {
 //	$('main').fadeOut(fadeTimer);
 	$('#'+currentView).fadeIn(fadeTimer);
 	$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
+
+	// Populate cloudlist array with raw data			
+	var cloudlistraw = [];
+	var cloudlist = [];
+	$.each(archiveVolumeCache,function(word, weight){
+		// $("#archiveList").append('<li class="responseRow" volume="'+weight+'"><a href="#" onclick="wordSearch(&quot;'+searchTerm+'&quot;, &quot;'+word+'&quot;, 40, 0);"><span>' + word + '</span> <span class="archive-volume">'+ weight +'</span></a></li>');
+		// Populate cloudlist array with raw data
+		cloudlistraw.push([word,weight]);
+	});
+	cloudlistraw.sort(function(a,b){ return a[1][1]>b[1][1]?1:-1; });
+	cloudlistraw.forEach(function(a){
+		if(a[1][1]>0){
+			cloudlist.push(a[1][0]);
+		}
+	});
+
+/* Depricated
+	// Sort the archive list by volume
 	$('#archiveList li').sortElements(function(a, b){
 		return parseInt($(a).attr('volume')) > parseInt($(b).attr('volume')) ? 1 : -1;
-	});
-	
-	// Populate cloudlist array with raw data			
-	var cloudlist = [];				
-	
+	});	
 	$('#archiveList li').each(function(){
-		var archWeight = $(this).index()+5;
+//		var archWeight = $(this).index()+5;
 		cloudlist.push($(this).find('span:first-child').text());
 	});
+*/
+
+	// Communicate with user that there are no results
+// DO A BETTER JOB THAN THIS
 	if($('#archiveListView li').length == 0) {
 		$("#archiveList").append('<li id="no-results"><a href="javascript:void(0);"><span>No Archives</span></li>');					
 	}
+	
 	// Build cloud behind the scenes
 	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
 		$('#'+currentView.slice(0,-8)+'Cloud').css('z-index','0').fadeIn(fadeTimer);
