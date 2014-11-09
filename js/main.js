@@ -53,7 +53,8 @@ jQuery(document).ready(function($){
 		currentView = 'archiveCloud';
 		currentArchive = '*';
 		$('main').fadeOut(fadeTimer);
-		runSearch('');
+		$('#viewlabel .currentArchive').text('');
+		runSearch('');		
 	});
 	$('#clearSearch').click(function(){
 		$('header input.search').val('');
