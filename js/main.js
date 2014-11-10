@@ -412,8 +412,6 @@ function showTweetList(arch){
 	getArchive(arch);
 }
 
-/* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
-
 // Get archived tweets
 function getArchive(arch) {
 	var dateValues = $("#timeline").dateRangeSlider("values");
@@ -469,6 +467,8 @@ function getArchive(arch) {
         }
     });
 }
+
+/* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
 
 // Get top words in archive and construct cloud
 function getArchiveWords(arch, filterword) {
@@ -619,30 +619,6 @@ function buildWordCloud(cloudlist, MaxResults) {
 	}
 }
 
-// WORD COUNT
-/*
-function getWordCount(arch, word) {
-	if((!arch)||(!word)){
-		console.log(arch + ', ' + word);
-		alert('error in getWordCount');
-		return false;
-	} else {
-		var dateValues = $("#timeline").dateRangeSlider("values");	
-		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(dateValues.min)/1000+',"EndDate":'+Date.parse(dateValues.max)/1000+'}';
-		console.log('API call: get/tweets/betweenDates/wordsearch/count ...');
-		$.ajax({
-			type: "POST",
-			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/count",
-			data: queryString.toString(),
-			success: function (e) {
-				console.log('getWordCount() Ajax: betweenDates/wordsearch/count ... '+queryString);
-				var data = $.parseJSON(e);
-				$('#wait').fadeOut(fadeTimer);
-			}
-		});
-	}
-}
-*/
 // WORD SEARCH
 function wordSearch(arch, word, rpp, currentPage) {
 	resetArchiveList = false;
@@ -738,36 +714,62 @@ function volumeBars(arch, word, interval){
 		data: queryString.toString(),
 		success: function (e) {
 			console.log('volumeBars() Ajax: get/interval/count ... '+queryString);
-			data = $.parseJSON(e);
+			var data = $.parseJSON(e);
 			$.each(data,function(t, v){
 				dataset.push(v);
 			});
 			var largest = Math.max.apply(Math, dataset);
-			//Create SVG element
-			var svg = d3.select("#footer")
-						.append("svg")
-						.attr("width", "100%")
-						.attr("id","volume")
-						.attr("height", h);
-		
-			svg.selectAll("rect")
-			   .data(dataset)
-			   .enter()
-			   .append("rect")
-			   .attr("x", function(d, i) {
-					return ((i * (w / dataset.length))/w)*100+'%';
-			   })
-			   .attr("y", function(d) {
-					return h - (h*(d/largest));
-			   })
-			   .attr("width", ((w / dataset.length - barPadding)/w)*100+'%')
-			   .attr("height", function(d) {
-					return h*(d/largest);
-			   })
-			   .attr("fill", function(d) {
-					return "rgb(0, 0, " + (d * 10) + ")";
-			   });
-		
+			var mostRecent = Math.max.apply(Math, Object.keys(data));
+			var firstTimestamp = Math.min.apply(Math, Object.keys(data));
+			console.log('Interval: '+interval);
+			console.log('First timestamp: '+firstTimestamp);
+			console.log('Slider min: '+Date.parse(basicSliderBounds.min)/1000);
+			console.log('Diff between most recent volume and timeline start: '+((Date.parse(basicSliderBounds.min)/1000)-firstTimestamp));
+			console.log('Missing Intervals at start: '+(((Date.parse(basicSliderBounds.min)/1000)-firstTimestamp)/interval));
+			console.log('Most recent timestamp: '+mostRecent);
+			console.log('Slider max: '+Date.parse(basicSliderBounds.max)/1000);
+			console.log('Diff between most recent volume and timeline end: '+((Date.parse(basicSliderBounds.max)/1000)-mostRecent));
+			var missingIntervals = ((Date.parse(basicSliderBounds.max)/1000)-mostRecent)/interval;
+			console.log('Missing Intervals on end: '+missingIntervals);
+			// Fill in missing volume bars at end of timeline
+			while (missingIntervals > 0) {
+				data[Math.max.apply(Math, Object.keys(data))+interval] = 0;
+				missingIntervals--;
+				console.log('Missing Intervals on end: '+missingIntervals);
+			}
+			// Draw bars
+			if(missingIntervals == 0){
+				console.log('DONE!');
+				var drawdata = [];
+				$.each(data,function(t, v){
+					drawdata.push(v);
+				});
+				console.log('Missing time = '+(Math.max.apply(Math, Object.keys(data)) - Date.parse(basicSliderBounds.max)/1000));
+				//Create SVG element
+				var svg = d3.select("#footer")
+							.append("svg")
+							.attr("width", "100%")
+							.attr("id","volume")
+							.attr("height", h);
+			
+				svg.selectAll("rect")
+				   .data(drawdata)
+				   .enter()
+				   .append("rect")
+				   .attr("x", function(d, i) {
+						return ((i * (w / drawdata.length))/w)*100+'%';
+				   })
+				   .attr("y", function(d) {
+						return h - (h*(d/largest));
+				   })
+				   .attr("width", ((w / drawdata.length - barPadding)/w)*100+'%')
+				   .attr("height", function(d) {
+						return h*(d/largest);
+				   })
+				   .attr("fill", function(d) {
+						return "rgb(0, 0, " + (d * 10) + ")";
+				   });
+			}
 			// Reset Interface
 			searchResultsCache = [];
 			spinnerCount = 0;
@@ -793,6 +795,31 @@ function clearModal() {
 		}
 	}
 }
+
+// WORD COUNT
+/*
+function getWordCount(arch, word) {
+	if((!arch)||(!word)){
+		console.log(arch + ', ' + word);
+		alert('error in getWordCount');
+		return false;
+	} else {
+		var dateValues = $("#timeline").dateRangeSlider("values");	
+		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(dateValues.min)/1000+',"EndDate":'+Date.parse(dateValues.max)/1000+'}';
+		console.log('API call: get/tweets/betweenDates/wordsearch/count ...');
+		$.ajax({
+			type: "POST",
+			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/count",
+			data: queryString.toString(),
+			success: function (e) {
+				console.log('getWordCount() Ajax: betweenDates/wordsearch/count ... '+queryString);
+				var data = $.parseJSON(e);
+				$('#wait').fadeOut(fadeTimer);
+			}
+		});
+	}
+}
+*/
 
 // ERROR CONNECTING TO LIBRARIAN
 function librarianErr(){
