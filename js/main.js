@@ -182,6 +182,8 @@ var currentArchive;
 var searchResults = [];
 var searchResultsCache= [];
 var resetArchiveList = false;
+var currentPage = 0;
+var totalPages = 0;
 
 // RUN SEARCH
 var searchValue = '';
@@ -400,10 +402,8 @@ function buildArchiveList() {
 	buildWordCloud(cloudlist, defaultMaxResults);
 }
 
-/* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
-
 // Show tweets in archive
-function showTweetList(arch){	
+function showTweetList(arch){
 	seachTerm = arch;
 	if($('#tweetListView').css('display') != 'block') {
 		$('.view-controls').fadeOut(fadeTimer);
@@ -411,21 +411,18 @@ function showTweetList(arch){
 		$('.overlay').fadeIn(fadeTimer);
 	}
 	getArchive(arch);
-	if($('#resort').text() == 'Popular') {
-		$('#tweetListView').addClass('pop-sort');
-	}
 }
 
-// Get archived tweets JSON object
-var currentPage = 0;
-var totalPages = 0;
+/* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
+
+// Get archived tweets
 function getArchive(arch) {
-	// Loading spinner
 	$('#wait').fadeIn(fadeTimer);
+	// Count the pages
+// ONLY DO THIS ONCE PER TWEET LIST!!!
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40}';
 	console.log('API call: get/archive/betweenDates/paginated/count ...');
-	// Count the pages
     $.ajax({
         type: "POST",
         url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated/count",
@@ -441,13 +438,15 @@ function getArchive(arch) {
 			console.log(XMLHttpRequest);
 			console.log(textStatus);
 			console.log(errorThrown);
+			librarianErr();
 	   }
     });
 	
-	// Run query
     // Get tweets between two dates
+	$('#wait').fadeIn(fadeTimer);
 	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40,"Page":'+currentPage+'}';
 	console.log('API call: get/archive/betweenDates/paginated ...');
+	$('#wait').fadeIn(fadeTimer);
     $.ajax({
         type: "POST",
         url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated",
@@ -455,12 +454,13 @@ function getArchive(arch) {
         success: function (e) {
 			console.log('getArchive() Ajax: paginated ... '+queryString);
 			var data = $.parseJSON(e);
-			// Load tweets
+			// Load a page of tweets
 			for (var i = 0; i < data.length; i++) {
 				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
 				var niceTweetDate = data[i].p.twitter.data[4].split(' ');
 				$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'/status/'+data[i].p.twitter.data[3]+'" class="twitterbird" target="_blank"></a></li>');
 			}
+/* DEPRICATED
 			if($('#tweetList').hasClass('pop-sort')){
 				$('#tweetList li').sortElements(function(a, b){
 					return parseInt($(a).attr('retweets')) < parseInt($(b).attr('retweets')) ? 1 : -1;
@@ -470,13 +470,14 @@ function getArchive(arch) {
 					return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
 				});
 			}
+*/
 			$("#tweetList li.more-link").remove();
 			currentPage++;
 			if(currentPage < totalPages) {
 				$("#tweetList").append('<li class="more-link"><a href="javascript:getArchive(\x27'+ arch +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 			}
-		$('.tweetBody').linkify()
-		$('#wait').fadeOut(fadeTimer);
+			$('.tweetBody').linkify()
+			$('#wait').fadeOut(fadeTimer);
         }
     });
 }
