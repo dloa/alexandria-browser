@@ -738,9 +738,9 @@ function volumeBars(arch, word, interval){
 			var largest = Math.max.apply(Math, dataset);
 			var mostRecent = Math.max.apply(Math, Object.keys(data));
 			// Difference between most recent and current time
-			if ( ( ( ( Date.parse(datetime)/1000 ) - mostRecent ) > ( interval*1.1 ) ) && (arch == '*') ) {
+			if ( ( ( ( Date.parse(datetime)/1000 ) - mostRecent ) > interval ) && (arch == '*') ) {
 				alert('Librarian stopped archiving!');
-			}else{
+			} else {
 				console.log('Diff = '+((Date.parse(datetime)/1000)-mostRecent));
 				console.log('interval = '+interval);
 				console.log('Librarian apears to be archiving');

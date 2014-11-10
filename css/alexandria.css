@@ -333,6 +333,7 @@ main.wordCloud {
 	color: #000000;
 	bottom: 50px;
 	top: 73px;
+	position: fixed;
 }
 main.wordCloud span, main.wordCloud text {
 	cursor: pointer;
