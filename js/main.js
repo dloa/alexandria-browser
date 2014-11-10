@@ -416,32 +416,32 @@ function showTweetList(arch){
 
 // Get archived tweets
 function getArchive(arch) {
-	$('#wait').fadeIn(fadeTimer);
-	// Count the pages
-// ONLY DO THIS ONCE PER TWEET LIST!!!
 	var dateValues = $("#timeline").dateRangeSlider("values");
-	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40}';
-	console.log('API call: get/archive/betweenDates/paginated/count ...');
-    $.ajax({
-        type: "POST",
-        url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated/count",
-        // Get tweets between two dates
-		data: queryString.toString(),
-        success: function (e) {
-			console.log('getArchive() Ajax: get/archive/betweenDates/paginated/count ... '+queryString);
-			totalPages = $.parseJSON(e);
-			volumeBars(arch,'',7200);
-        },
-		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			alert("some error");
-			console.log(XMLHttpRequest);
-			console.log(textStatus);
-			console.log(errorThrown);
-			librarianErr();
-	   }
-    });
-	
-    // Get tweets between two dates
+	if ( totalPages == 0 ) {
+		// Count the pages and draw volume bars
+		$('#wait').fadeIn(fadeTimer);
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40}';
+		console.log('API call: get/archive/betweenDates/paginated/count ...');
+		$.ajax({
+			type: "POST",
+			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated/count",
+			// Get tweets between two dates
+			data: queryString.toString(),
+			success: function (e) {
+				console.log('getArchive() Ajax: get/archive/betweenDates/paginated/count ... '+queryString);
+				totalPages = $.parseJSON(e);
+				volumeBars(arch,'',7200);
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				alert("some error");
+				console.log(XMLHttpRequest);
+				console.log(textStatus);
+				console.log(errorThrown);
+				librarianErr();
+		   }
+		});
+	}
+    // Get a page of tweets between two dates
 	$('#wait').fadeIn(fadeTimer);
 	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40,"Page":'+currentPage+'}';
 	console.log('API call: get/archive/betweenDates/paginated ...');
@@ -791,6 +791,7 @@ function volumeBars(arch, word, interval){
 // CLEAR MODAL
 function clearModal() {
 	currentPage = 0;
+	totalPages = 0
 	$("#tweetList li").remove();
 	$('.overlay').fadeOut(fadeTimer);
 	$('main').not('#'+currentView).fadeOut(fadeTimer);
