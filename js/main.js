@@ -719,6 +719,11 @@ function volumeBars(arch, word, interval){
 			});
 			var largest = Math.max.apply(Math, dataset);
 			var mostRecent = Math.max.apply(Math, Object.keys(data));
+			// Difference between most recent and current time
+			console.log('Diff = '+((Date.parse(datetime)/1000)-mostRecent));
+			if ( ( ((Date.parse(datetime)/1000)-mostRecent) > interval ) && (arch = '*') ) {
+				alert('Librarian stopped archiving!');
+			}
 			var firstTimestamp = Math.min.apply(Math, Object.keys(data));
 			var missingIntervals = ((Date.parse(basicSliderBounds.max)/1000)-mostRecent)/interval;
 			// Fill in missing volume bars at end of timeline
