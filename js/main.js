@@ -459,17 +459,6 @@ function getArchive(arch) {
 				var niceTweetDate = data[i].p.twitter.data[4].split(' ');
 				$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'/status/'+data[i].p.twitter.data[3]+'" class="twitterbird" target="_blank"></a></li>');
 			}
-/* DEPRICATED
-			if($('#tweetList').hasClass('pop-sort')){
-				$('#tweetList li').sortElements(function(a, b){
-					return parseInt($(a).attr('retweets')) < parseInt($(b).attr('retweets')) ? 1 : -1;
-				});
-			} else {
-				$('#tweetList li').sortElements(function(a, b){
-					return $(a).attr('tweetDate') < $(b).attr('tweetDate') ? 1 : -1;
-				});
-			}
-*/
 			$("#tweetList li.more-link").remove();
 			currentPage++;
 			if(currentPage < totalPages) {
