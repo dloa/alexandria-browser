@@ -233,17 +233,16 @@ function getActiveJobs(searchTerm) {
 		$('#'+currentView.slice(0,-5)+'ListView li').remove();
 		$('#'+currentView).children().remove();
 	}
-	var archTitleSpan = 'span:first-child';
 	if ( activeJobsCache != '' ) {
 		console.log('Using activeJobsCache');
 		for (var i = 0; i < activeJobsCache.length; i++) {
 			if(!searchTerm){
-				$("#archiveList").append('<li id="archive-'+activeJobsCache[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + activeJobsCache[i] + '</span> <span class="archive-volume"></span></a></li>');
+				$("#archiveList").append('<li id="archive-'+activeJobsCache[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList(\x27'+activeJobsCache[i]+'\x27))"><span>' + activeJobsCache[i] + '</span> <span class="archive-volume"></span></a></li>');
 				getArchiveVolume(activeJobsCache[i]);
 			} else {
 				var titleSlice = activeJobsCache[i].slice(0,searchTerm.length);
 				if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
-					$("#archiveList").append('<li id="archive-'+activeJobsCache[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + activeJobsCache[i] + '</span> <span class="archive-volume"></span></a></li>');
+					$("#archiveList").append('<li id="archive-'+activeJobsCache[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList(\x27'+activeJobsCache[i]+'\x27)"><span>' + activeJobsCache[i] + '</span> <span class="archive-volume"></span></a></li>');
 					searchResults.push(activeJobsCache[i]);
 				}
 			}
@@ -265,12 +264,12 @@ function getActiveJobs(searchTerm) {
 					if ( data['Count'][i] != 0 ) {
 						activeJobsCache.push(data['Jobs'][i]);
 						if(!searchTerm){
-							$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
+							$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList(\x27'+data['Jobs'][i]+'\x27)"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
 							getArchiveVolume(data['Jobs'][i]);
 						} else {
 							var titleSlice = data['Jobs'][i].slice(0,searchTerm.length);
 							if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
-								$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
+								$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList(\x27'+data['Jobs'][i]+'\x27)"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume"></span></a></li>');
 								getArchiveVolume(data['Jobs'][i]);
 							}
 						}
