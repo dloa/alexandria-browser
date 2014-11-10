@@ -183,6 +183,38 @@ var currentView = 'archiveCloud';
 var currentArchive;
 var searchResults = [];
 var searchResultsCache= [];
+var resetArchiveList = false;
+
+// RUN SEARCH
+var searchValue = '';
+var newSearchValue = '';
+var searchTimerId = 0;
+var searchRunning;
+var searchTerm;
+var activeWord;
+
+function runSearch(searchTerm) {
+	if(searchTerm == ''){
+		searchResults.length=0;
+	}
+	clearTimeout ( searchTimerId );
+	searchRunning = 0;
+	if($('#tweetListView').css('display') == 'block') {
+		clearModal();
+	}
+	if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
+		activeWord = $('.search').val();
+		getArchiveWords(currentArchive,activeWord);
+	} else {
+		getActiveJobs(searchTerm);
+	}
+}
+
+function getAllArchives(){
+	searchValue = '';
+	$('header input.search').val(searchValue);
+}
+
 // GET ACTIVE JOBS
 function getActiveJobs(searchTerm) {
 	resetArchiveList = false;
@@ -374,48 +406,12 @@ function buildArchiveList() {
 	buildWordCloud(cloudlist, defaultMaxResults);
 }
 
-// RUN SEARCH
-var searchValue = '';
-var newSearchValue = '';
-var searchTimerId = 0;
-var searchRunning;
-var searchTerm;
-var activeWord;
-function runSearch(searchTerm) {
-	if(searchTerm == ''){
-		searchResults.length=0;
-	}
-	clearTimeout ( searchTimerId );
-	searchRunning = 0;
-	if($('#tweetListView').css('display') == 'block') {
-		clearModal();
-	}
-	if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
-		activeWord = $('.search').val();
-		getArchiveWords(currentArchive,activeWord);
-	} else {
-		getActiveJobs(searchTerm);
-	}
-}
-
-var resetArchiveList = false;
-
-function getAllArchives(){
-	searchValue = '';
-	$('header input.search').val(searchValue);
-}
-
 // Show tweets in archive
 function showTweetList(arch){	
 	seachTerm = arch;
 	if($('#tweetListView').css('display') != 'block') {
 		$('.view-controls').fadeOut(fadeTimer);
 		searchValue = $('header input.search').val();
-/*
-		if (searchValue != arch) {
-			$('header input.search').val(arch);
-		}
-*/
 		$('.overlay').fadeIn(fadeTimer);
 	}
 	getArchive(arch);
