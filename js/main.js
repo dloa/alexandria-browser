@@ -678,8 +678,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 				$('.view-controls').fadeOut(fadeTimer);
 				$('.overlay').fadeIn(fadeTimer);
 				$('#tweetListView').fadeIn(fadeTimer);
-				$('.tweetBody').linkify();
-				
+				$('.tweetBody').linkify();			
 				// Volume Bars
 				volumeBars(arch, word, 7200);
 			}
@@ -721,21 +720,11 @@ function volumeBars(arch, word, interval){
 			var largest = Math.max.apply(Math, dataset);
 			var mostRecent = Math.max.apply(Math, Object.keys(data));
 			var firstTimestamp = Math.min.apply(Math, Object.keys(data));
-			console.log('Interval: '+interval);
-			console.log('First timestamp: '+firstTimestamp);
-			console.log('Slider min: '+Date.parse(basicSliderBounds.min)/1000);
-			console.log('Diff between most recent volume and timeline start: '+((Date.parse(basicSliderBounds.min)/1000)-firstTimestamp));
-			console.log('Missing Intervals at start: '+(((Date.parse(basicSliderBounds.min)/1000)-firstTimestamp)/interval));
-			console.log('Most recent timestamp: '+mostRecent);
-			console.log('Slider max: '+Date.parse(basicSliderBounds.max)/1000);
-			console.log('Diff between most recent volume and timeline end: '+((Date.parse(basicSliderBounds.max)/1000)-mostRecent));
 			var missingIntervals = ((Date.parse(basicSliderBounds.max)/1000)-mostRecent)/interval;
-			console.log('Missing Intervals on end: '+missingIntervals);
 			// Fill in missing volume bars at end of timeline
 			while (missingIntervals > 0) {
 				data[Math.max.apply(Math, Object.keys(data))+interval] = 0;
 				missingIntervals--;
-				console.log('Missing Intervals on end: '+missingIntervals);
 			}
 			// Draw bars
 			if(missingIntervals == 0){
