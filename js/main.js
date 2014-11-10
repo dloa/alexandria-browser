@@ -400,6 +400,8 @@ function buildArchiveList() {
 	buildWordCloud(cloudlist, defaultMaxResults);
 }
 
+/* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
+
 // Show tweets in archive
 function showTweetList(arch){	
 	seachTerm = arch;
@@ -532,7 +534,6 @@ function getArchiveWords(arch, filterword) {
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 			$('#wordsCloud').fadeIn(fadeTimer);		
 			$('#wordsListView').css('height',$('#archiveList').height()+100+'px');
-			currentView = 'wordsCloud';
 			$('#wordsCloud').hide().css('z-index','3');
 			$('.view-controls').fadeIn(fadeTimer);				
 			$('main#'+currentView).fadeIn(fadeTimer);
@@ -569,7 +570,13 @@ function buildWordCloud(cloudlist, MaxResults) {
 	  .start();
 
 	function draw(words) {
-	d3.select("#"+currentView).append("svg")
+		var thisCloudView = currentView;
+		if ((currentView == 'archiveListView') || (currentView == 'wordsListView') ) {
+			thisCloudView = currentView.slice(0,-8)+'Cloud';
+			console.log(thisCloudView);
+		}
+
+	d3.select("#"+thisCloudView).append("svg")
 		.attr("width", w)
 		.attr("height", h)
 	  .append("g")
@@ -609,6 +616,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 				currentArchive = item;
 				$('#viewlabel .currentArchive').text(currentArchive);
 				searchTerm = item;
+				currentView = 'wordsCloud';
 				getArchiveWords(item);
 			}
 		})
