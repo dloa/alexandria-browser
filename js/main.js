@@ -5,7 +5,7 @@ jQuery(document).ready(function($){
 
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(2014, 8, 25), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
-		defaultValues: {min: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate() - 1), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate())},
+		defaultValues: {min: Date.parse(datetime)-86400000, max: Date.parse(datetime)},
 		arrows: false,
 		scales: [{
 		  first: function(value){ return value; },
@@ -412,62 +412,6 @@ function showTweetList(arch){
 	getArchive(arch);
 }
 
-// Get archived tweets
-function getArchive(arch) {
-	var dateValues = $("#timeline").dateRangeSlider("values");
-	if ( totalPages == 0 ) {
-		// Count the pages and draw volume bars
-		$('#wait').fadeIn(fadeTimer);
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40}';
-		console.log('API call: get/archive/betweenDates/paginated/count ...');
-		$.ajax({
-			type: "POST",
-			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated/count",
-			// Get tweets between two dates
-			data: queryString.toString(),
-			success: function (e) {
-				console.log('getArchive() Ajax: get/archive/betweenDates/paginated/count ... '+queryString);
-				totalPages = $.parseJSON(e);
-				volumeBars(arch,'',7200);
-			},
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
-				alert("some error");
-				console.log(XMLHttpRequest);
-				console.log(textStatus);
-				console.log(errorThrown);
-				librarianErr();
-		   }
-		});
-	}
-    // Get a page of tweets between two dates
-	$('#wait').fadeIn(fadeTimer);
-	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40,"Page":'+currentPage+'}';
-	console.log('API call: get/archive/betweenDates/paginated ...');
-	$('#wait').fadeIn(fadeTimer);
-    $.ajax({
-        type: "POST",
-        url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated",
-		data: queryString.toString(),
-        success: function (e) {
-			console.log('getArchive() Ajax: paginated ... '+queryString);
-			var data = $.parseJSON(e);
-			// Load a page of tweets
-			for (var i = 0; i < data.length; i++) {
-				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
-				var niceTweetDate = data[i].p.twitter.data[4].split(' ');
-				$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'/status/'+data[i].p.twitter.data[3]+'" class="twitterbird" target="_blank"></a></li>');
-			}
-			$("#tweetList li.more-link").remove();
-			currentPage++;
-			if(currentPage < totalPages) {
-				$("#tweetList").append('<li class="more-link"><a href="javascript:getArchive(\x27'+ arch +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
-			}
-			$('.tweetBody').linkify()
-			$('#wait').fadeOut(fadeTimer);
-        }
-    });
-}
-
 /* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
 
 // Get top words in archive and construct cloud
@@ -619,6 +563,63 @@ function buildWordCloud(cloudlist, MaxResults) {
 	}
 }
 
+/* STREAMLINE TWO FUNCTIONS BELOW TO USE ONE */
+
+// Get archived tweets
+function getArchive(arch) {
+	var dateValues = $("#timeline").dateRangeSlider("values");
+	if ( totalPages == 0 ) {
+		// Count the pages and draw volume bars
+		$('#wait').fadeIn(fadeTimer);
+		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40}';
+		console.log('API call: get/archive/betweenDates/paginated/count ...');
+		$.ajax({
+			type: "POST",
+			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated/count",
+			// Get tweets between two dates
+			data: queryString.toString(),
+			success: function (e) {
+				console.log('getArchive() Ajax: get/archive/betweenDates/paginated/count ... '+queryString);
+				totalPages = $.parseJSON(e);
+				volumeBars(arch,'',7200);
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				alert("some error");
+				console.log(XMLHttpRequest);
+				console.log(textStatus);
+				console.log(errorThrown);
+				librarianErr();
+		   }
+		});
+	}
+    // Get a page of tweets between two dates
+	$('#wait').fadeIn(fadeTimer);
+	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40,"Page":'+currentPage+'}';
+	console.log('API call: get/archive/betweenDates/paginated ...');
+	$('#wait').fadeIn(fadeTimer);
+    $.ajax({
+        type: "POST",
+        url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated",
+		data: queryString.toString(),
+        success: function (e) {
+			console.log('getArchive() Ajax: paginated ... '+queryString);
+			var data = $.parseJSON(e);
+			// Load a page of tweets
+			for (var i = 0; i < data.length; i++) {
+				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
+				var niceTweetDate = data[i].p.twitter.data[4].split(' ');
+				$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'/status/'+data[i].p.twitter.data[3]+'" class="twitterbird" target="_blank"></a></li>');
+			}
+			$("#tweetList li.more-link").remove();
+			currentPage++;
+			if(currentPage < totalPages) {
+				$("#tweetList").append('<li class="more-link"><a href="javascript:getArchive(\x27'+ arch +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
+			}
+			$('.tweetBody').linkify()
+			$('#wait').fadeOut(fadeTimer);
+        }
+    });
+}
 // WORD SEARCH
 function wordSearch(arch, word, rpp, currentPage) {
 	resetArchiveList = false;
@@ -686,6 +687,23 @@ function wordSearch(arch, word, rpp, currentPage) {
 	}
 }
 
+// CLEAR MODAL
+function clearModal() {
+	currentPage = 0;
+	totalPages = 0
+	$("#tweetList li").remove();
+	$('.overlay').fadeOut(fadeTimer);
+	$('main').not('#'+currentView).fadeOut(fadeTimer);
+	$('.view-controls').fadeIn(fadeTimer);
+	if (resetArchiveList == true) {
+		if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
+			getArchiveWords(searchTerm);
+		} else {
+			getActiveJobs(searchTerm);
+		}
+	}
+}
+
 // VOLUME BARS
 function volumeBars(arch, word, interval){
 	$('footer svg').remove();
@@ -721,8 +739,10 @@ function volumeBars(arch, word, interval){
 			var mostRecent = Math.max.apply(Math, Object.keys(data));
 			// Difference between most recent and current time
 			console.log('Diff = '+((Date.parse(datetime)/1000)-mostRecent));
-			if ( ( ((Date.parse(datetime)/1000)-mostRecent) > interval ) && (arch = '*') ) {
+			if ( ( ((Date.parse(datetime)/1000)-mostRecent) > (interval+90) ) && (arch = '*') ) {
 				alert('Librarian stopped archiving!');
+			}else{
+				console.log('Librarian apears to be archiving');
 			}
 			var firstTimestamp = Math.min.apply(Math, Object.keys(data));
 			var missingIntervals = ((Date.parse(basicSliderBounds.max)/1000)-mostRecent)/interval;
@@ -733,12 +753,10 @@ function volumeBars(arch, word, interval){
 			}
 			// Draw bars
 			if(missingIntervals == 0){
-				console.log('DONE!');
 				var drawdata = [];
 				$.each(data,function(t, v){
 					drawdata.push(v);
 				});
-				console.log('Missing time = '+(Math.max.apply(Math, Object.keys(data)) - Date.parse(basicSliderBounds.max)/1000));
 				//Create SVG element
 				var svg = d3.select("#footer")
 							.append("svg")
@@ -771,23 +789,6 @@ function volumeBars(arch, word, interval){
 			$('.search').attr('disabled',false);
 		}
 	});
-}
-
-// CLEAR MODAL
-function clearModal() {
-	currentPage = 0;
-	totalPages = 0
-	$("#tweetList li").remove();
-	$('.overlay').fadeOut(fadeTimer);
-	$('main').not('#'+currentView).fadeOut(fadeTimer);
-	$('.view-controls').fadeIn(fadeTimer);
-	if (resetArchiveList == true) {
-		if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
-			getArchiveWords(searchTerm);
-		} else {
-			getActiveJobs(searchTerm);
-		}
-	}
 }
 
 // WORD COUNT
