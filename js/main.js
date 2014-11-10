@@ -39,17 +39,19 @@ jQuery(document).ready(function($){
 	});
 	// Omnibox (search input)
 	$('header input.search').on("keydown", function (e) {		
-		searchValue = $('header input.search').val();		
+		searchValue = $('header input.search').val();
+		console.log('searchValue = '+searchValue);
 		if($('#tweetListView').css('display') == 'block') {
 			resetArchiveList == true;
 		}
 	});
 	$('header input.search').on("keyup", function (e) {
 		newSearchValue = $('header input.search').val();
+		console.log('newSearchValue = '+newSearchValue);
 		var code = e.keyCode || e.which;
 		if (code == 32) {
 			// pressin the space bar
-		} else if ( ( (newSearchValue != searchValue) && (searchValue != '') ) || (code == 16) ) {
+		} else if ( (newSearchValue != searchValue) || (code == 16) ) {
 			// nothing changed in search content
 			if (searchTimerId) {
 				clearTimeout ( searchTimerId );
@@ -78,7 +80,7 @@ jQuery(document).ready(function($){
 			currentView = newView;
 			switchView = 'Cloud';
 			$('.sort-link').fadeOut(fadeTimer);
-		}		
+		}
 		$('#'+newView).fadeIn(fadeTimer);
 		$(this).text(switchView);
 	});	
@@ -179,9 +181,12 @@ var defaultMaxResults = 160;
 var cloudlist = [];
 var currentView = 'archiveCloud';
 var currentArchive;
+var searchResults = [];
+var searchResultsCache= [];
 // GET ACTIVE JOBS
 function getActiveJobs(searchTerm) {
 	resetArchiveList = false;
+	searchResults.length = 0;
 	if (!searchTerm) {
 		var searchTerm = '';
 	}
@@ -208,8 +213,14 @@ function getActiveJobs(searchTerm) {
 				var titleSlice = activeJobsCache[i].slice(0,searchTerm.length);
 				if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
 					$("#archiveList").append('<li id="archive-'+activeJobsCache[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + activeJobsCache[i] + '</span> <span class="archive-volume"></span></a></li>');
-					getArchiveVolume(activeJobsCache[i]);
+					searchResults.push(activeJobsCache[i]);
 				}
+			}
+		}
+		if(searchResults.length>0){
+			for (var i = 0; i < searchResults.length; i++) {
+				console.log('getArchiveVolume(searchResults[i]) = '+searchResults[i]);
+				getArchiveVolume(searchResults[i]);
 			}
 		}
 	} else {
@@ -248,6 +259,7 @@ function getActiveJobs(searchTerm) {
 
 // Get Archive volumes and construct word cloud
 function getArchiveVolume(arch) {
+	
 	if (resetCache == true){
 		spinnerCount = 0;
 		archiveVolumeQueryStringCache.length = 0;
@@ -255,7 +267,11 @@ function getArchiveVolume(arch) {
 		resetCache = false;
 		console.log('CACHE RESET: getArchiveVolume()');
 	}
-	spinnerCount++;
+	if (searchResults.length!=0) {
+		spinnerCount = searchResults.length;
+	} else {
+		spinnerCount++;
+	}
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
 	// Check the cache for recent query
@@ -289,9 +305,22 @@ function getArchiveVolume(arch) {
 			}
 		});
 	} else {
-		spinnerCount = archiveVolumeQueryStringCache.length;
+		if(!searchResults){
+			console.log('archiveVolumeQueryStringCache.length = '+archiveVolumeQueryStringCache.length);
+			spinnerCount = archiveVolumeQueryStringCache.length;
+		}
 		if(spinnerCount == $('#archiveList li').length){
-			buildArchiveList();
+			if(searchResults != ''){
+				archiveVolumeCache.forEach(function(a, i){
+					if(jQuery.inArray(a[0], searchResults) > -1){
+						searchResultsCache.push(a);
+					}
+				});
+				console.log('CACHED SEARCH RESULTS: searchResultsCache = '+searchResultsCache);
+				buildArchiveList();
+			} else if(spinnerCount == archiveVolumeQueryStringCache.length){
+				buildArchiveList();
+			}
 		}
 	}
 }
@@ -302,16 +331,22 @@ function buildArchiveList() {
 			$(this).remove();
 		}
 	});
-//	$('main').fadeOut(fadeTimer);
+	console.log('currentView = '+currentView);
 	$('#'+currentView).fadeIn(fadeTimer);
 	$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
 
 	// Populate cloudlist array with raw data			
 	var cloudlistraw = [];
 	var cloudlist = [];
-	$.each(archiveVolumeCache,function(word, weight){
-		cloudlistraw.push([word,weight]);
-	});
+	if(searchResults.length==0){
+		$.each(archiveVolumeCache,function(word, weight){
+			cloudlistraw.push([word,weight]);
+		});
+	} else {
+		$.each(searchResultsCache,function(word, weight){
+			cloudlistraw.push([word,weight]);
+		});
+	}
 	cloudlistraw.sort(function(a,b){ return a[1][1]>b[1][1]?1:-1; });
 	cloudlistraw.forEach(function(a){
 		if(a[1][1]>0){
@@ -340,12 +375,16 @@ function buildArchiveList() {
 }
 
 // RUN SEARCH
+var searchValue = '';
+var newSearchValue = '';
 var searchTimerId = 0;
 var searchRunning;
 var searchTerm;
 var activeWord;
 function runSearch(searchTerm) {
-	$('#volume').fadeOut(fadeTimer);
+	if(searchTerm == ''){
+		searchResults.length=0;
+	}
 	clearTimeout ( searchTimerId );
 	searchRunning = 0;
 	if($('#tweetListView').css('display') == 'block') {
@@ -367,10 +406,7 @@ function getAllArchives(){
 }
 
 // Show tweets in archive
-var searchValue = '';
-var newSearchValue = '';
 function showTweetList(arch){	
-	$('#volume').fadeOut(fadeTimer);
 	seachTerm = arch;
 	if($('#tweetListView').css('display') != 'block') {
 		$('.view-controls').fadeOut(fadeTimer);
@@ -580,7 +616,6 @@ function buildWordCloud(cloudlist, MaxResults) {
 				wordSearch(currentArchive, item, 40, 0);
 			} else {
 				$('main').fadeOut(fadeTimer);
-				$('#volume').fadeOut(fadeTimer);
 				currentArchive = item;
 				$('#viewlabel .currentArchive').text(currentArchive);
 				searchTerm = item;
@@ -623,7 +658,6 @@ function getWordCount(arch, word) {
 */
 // WORD SEARCH
 function wordSearch(arch, word, rpp, currentPage) {
-	$('#volume').fadeOut(fadeTimer);
 	resetArchiveList = false;
 	var pageFix = currentPage+1;
 	if(!arch){
@@ -684,7 +718,6 @@ function wordSearch(arch, word, rpp, currentPage) {
 				$('.tweetBody').linkify();
 				
 				// Volume Bars
-				$('#volume').remove();
 				volumeBars(arch, word, 7200);
 			}
 		});
@@ -693,7 +726,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 
 // VOLUME BARS
 function volumeBars(arch, word, interval){
-	$('#volume').remove();
+	$('footer svg').remove();
 	if (!arch) {
 		arch = '*';
 	}
@@ -748,7 +781,9 @@ function volumeBars(arch, word, interval){
 					return "rgb(0, 0, " + (d * 10) + ")";
 			   });
 		
-			// Enable Interface
+			// Reset Interface
+			searchResultsCache = [];
+			spinnerCount = 0;
 			$('#wait').fadeOut(fadeTimer);
 			$('.search').attr('disabled',false);
 		}
@@ -760,7 +795,6 @@ function clearModal() {
 	currentPage = 0;
 	$("#tweetList li").remove();
 	$('.overlay').fadeOut(fadeTimer);
-	$('#volume').fadeOut(fadeTimer);
 	$('main').not('#'+currentView).fadeOut(fadeTimer);
 	$('.view-controls').fadeIn(fadeTimer);
 	if (resetArchiveList == true) {
