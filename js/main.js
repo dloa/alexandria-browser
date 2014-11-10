@@ -40,14 +40,12 @@ jQuery(document).ready(function($){
 	// Omnibox (search input)
 	$('header input.search').on("keydown", function (e) {		
 		searchValue = $('header input.search').val();
-		console.log('searchValue = '+searchValue);
 		if($('#tweetListView').css('display') == 'block') {
 			resetArchiveList == true;
 		}
 	});
 	$('header input.search').on("keyup", function (e) {
 		newSearchValue = $('header input.search').val();
-		console.log('newSearchValue = '+newSearchValue);
 		var code = e.keyCode || e.which;
 		if (code == 32) {
 			// pressin the space bar
@@ -222,7 +220,6 @@ function getActiveJobs(searchTerm) {
 	if (!searchTerm) {
 		var searchTerm = '';
 	}
-	console.log('searchTerm = '+searchTerm);
 	$('#wait').fadeIn(fadeTimer);
 	$('.search').attr('disabled','disabled');
     $('#intro').remove();
@@ -236,7 +233,7 @@ function getActiveJobs(searchTerm) {
 	}
 	var archTitleSpan = 'span:first-child';
 	if ( activeJobsCache != '' ) {
-		console.log('Use activeJobsCache = '+activeJobsCache);
+		console.log('Using activeJobsCache');
 		for (var i = 0; i < activeJobsCache.length; i++) {
 			if(!searchTerm){
 				$("#archiveList").append('<li id="archive-'+activeJobsCache[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList($(this).find(archTitleSpan).text())"><span>' + activeJobsCache[i] + '</span> <span class="archive-volume"></span></a></li>');
@@ -251,7 +248,6 @@ function getActiveJobs(searchTerm) {
 		}
 		if(searchResults.length>0){
 			for (var i = 0; i < searchResults.length; i++) {
-				console.log('getArchiveVolume(searchResults[i]) = '+searchResults[i]);
 				getArchiveVolume(searchResults[i]);
 			}
 		}
@@ -338,7 +334,6 @@ function getArchiveVolume(arch) {
 		});
 	} else {
 		if(!searchResults){
-			console.log('archiveVolumeQueryStringCache.length = '+archiveVolumeQueryStringCache.length);
 			spinnerCount = archiveVolumeQueryStringCache.length;
 		}
 		if(spinnerCount == $('#archiveList li').length){
@@ -363,7 +358,6 @@ function buildArchiveList() {
 			$(this).remove();
 		}
 	});
-	console.log('currentView = '+currentView);
 	$('#'+currentView).fadeIn(fadeTimer);
 	$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
 
