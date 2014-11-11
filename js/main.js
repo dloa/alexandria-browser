@@ -556,37 +556,17 @@ function buildWordCloud(cloudlist, MaxResults) {
 
 // Get archived tweets
 function getArchive(arch) {
+	$('#wait').fadeIn(fadeTimer);
 	var dateValues = $("#timeline").dateRangeSlider("values");
-	if ( totalPages == 0 ) {
-		// Count the pages and draw volume bars
-		$('#wait').fadeIn(fadeTimer);
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40}';
+	if ( totalPages == 0 ) {		
+		// GET TOTAL PAGES
+		var url = "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated/count";
 		console.log('API call: get/archive/betweenDates/paginated/count ...');
-		$.ajax({
-			type: "POST",
-			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated/count",
-			// Get tweets between two dates
-			data: queryString.toString(),
-			success: function (e) {
-				console.log('getArchive() Ajax: get/archive/betweenDates/paginated/count ... '+queryString);
-				totalPages = $.parseJSON(e);
-				// VOLUME BARS FOR TWEET LIST
-				volumeBars(arch,'',7200);
-			},
-			error: function (XMLHttpRequest, textStatus, errorThrown) {
-				alert("some error");
-				console.log(XMLHttpRequest);
-				console.log(textStatus);
-				console.log(errorThrown);
-				librarianErr();
-		   }
-		});
+		totalPagesAPI(url, arch, '', Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, 40);
 	}
     // Get a page of tweets between two dates
-	$('#wait').fadeIn(fadeTimer);
 	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40,"Page":'+currentPage+'}';
 	console.log('API call: get/archive/betweenDates/paginated ...');
-	$('#wait').fadeIn(fadeTimer);
     $.ajax({
         type: "POST",
         url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated",
@@ -612,6 +592,7 @@ function getArchive(arch) {
 }
 // WORD SEARCH
 function wordSearch(arch, word, rpp, currentPage) {
+	$('#wait').fadeIn(fadeTimer);
 	resetArchiveList = false;
 	var pageFix = currentPage+1;
 	if(!arch){
@@ -623,19 +604,14 @@ function wordSearch(arch, word, rpp, currentPage) {
 		alert('error in wordSearch');		
 		return false;
 	} else {
-		var dateValues = $("#timeline").dateRangeSlider("values");	
-		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(dateValues.min)/1000+',"EndDate":'+Date.parse(dateValues.max)/1000+',"ResultsPerPage": '+rpp+'}';
-		console.log('API call: get/tweets/betweenDates/wordsearch/pagecount ...');
-		$.ajax({
-			type: "POST",
-			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount",
-			data: queryString.toString(),
-			success: function (e) {
-				console.log('wordSearch() Ajax: betweenDates/wordsearch/pagecount ... '+queryString);
-				totalPages = $.parseJSON(e);
-				$('#wait').fadeOut(fadeTimer);
-			}
-		});
+		var dateValues = $("#timeline").dateRangeSlider("values");
+		if ( totalPages == 0 ) {
+			// GET TOTAL PAGES
+			var url = "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount";
+			console.log('API call: get/tweets/betweenDates/wordsearch/pagecount ...');
+			totalPagesAPI(url, arch, word, Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, rpp);
+		}
+		// Get a page of tweets between two dates
 		var queryString = '{"Archive": "'+arch+'","Word": "'+word+'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": '+rpp+',"Page": '+ currentPage +'}';
 		console.log('API call: get/tweets/betweenDates/wordsearch ...');
 		$.ajax({
@@ -645,7 +621,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 			success: function (e) {
 				console.log('wordSearch() Ajax: betweenDates/wordsearch ... '+queryString);
 				var data = $.parseJSON(e);
-				// Load tweets
+				// Load a page of tweets
 				for (var i = 0; i < data.length; i++) {
 					var tweetDate = Date.parse(data[i].p.twitter.data[4]);
 					var niceTweetDate = data[i].p.twitter.data[4].split(' ');
@@ -670,9 +646,38 @@ function wordSearch(arch, word, rpp, currentPage) {
 				$('.overlay').fadeIn(fadeTimer);
 				$('#tweetListView').fadeIn(fadeTimer);
 				$('.tweetBody').linkify();			
+				$('#wait').fadeOut(fadeTimer);
+			}
+		});
+	}
+}
+
+function totalPagesAPI(url, arch, word, StartDate, EndDate, rpp){
+	if((!ul)||(!arch)||(!word)||(!StartDate)||(!EndDate)||(!rpp)){
+		console.log(arch + ', ' + word + ', ' + StartDate + EndDate + ', ' + rpp);
+		alert('error in totalPagesAPI');		
+		return false;
+	} else {
+		// GET TOTAL PAGES
+		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+StartDate+',"EndDate":'+EndDate+',"ResultsPerPage": '+rpp+'}';
+		console.log('API call: get/tweets/betweenDates/wordsearch/pagecount ...');
+		$.ajax({
+			type: "POST",
+			url: url,
+			data: queryString.toString(),
+			success: function (e) {
+				console.log('wordSearch() Ajax: betweenDates/wordsearch/pagecount ... '+queryString);
+				totalPages = $.parseJSON(e);
 				// VOLUME BARS FOR TWEET LIST
 				volumeBars(arch, word, 7200);
-			}
+				},
+				error: function (XMLHttpRequest, textStatus, errorThrown) {
+					alert("some error");
+					console.log(XMLHttpRequest);
+					console.log(textStatus);
+					console.log(errorThrown);
+					librarianErr();
+			   }
 		});
 	}
 }
