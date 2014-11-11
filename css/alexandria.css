@@ -187,6 +187,7 @@ div#viewlabel {
 	left: 92px;
 	margin-top: -.5em;
 	line-height: 1;
+	text-transform: capitalize;
 }
 #search {
 	position: relative;

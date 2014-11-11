@@ -496,9 +496,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 		var thisCloudView = currentView;
 		if ((currentView == 'archiveListView') || (currentView == 'wordsListView') ) {
 			thisCloudView = currentView.slice(0,-8)+'Cloud';
-			console.log(thisCloudView);
 		}
-		console.log('currentArchive = '+currentArchive.toLowerCase());
 		var currentArchiveLowercase = currentArchive.toLowerCase();
 	d3.select("#"+thisCloudView).append("svg")
 		.attr("width", w)
@@ -512,7 +510,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 		.style("font-family", "Avenir-Book")
 		.style("fill", function (d) { // base fill on ratio of number of actual results
 			if ( (d.text == currentArchiveLowercase) && ( currentArchiveLowercase != '*' ) ) {
-				return '#7076AF';
+				return '#9DA2CF';
 			} else if (d.fill < .075) { return '#eeeeee' }
 			else if (d.fill < .15) { return '#dddddd' }
 			else if (d.fill < .225) { return '#cccccc' }
