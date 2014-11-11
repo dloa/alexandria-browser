@@ -144,7 +144,7 @@ jQuery(document).ready(function($){
 			}
 			resetArchiveList = true;
 		} else {			
-			if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
+			if (currentView.slice(0,5) == 'words') {
 				getArchiveWords(searchTerm);
 			} else {
 				getActiveJobs(searchTerm);
@@ -201,8 +201,8 @@ function runSearch(searchTerm) {
 	searchRunning = 0;
 	if($('#tweetListView').css('display') == 'block') {
 		clearModal();
-	}
-	if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
+	}	
+	if (currentView.slice(0,5) == 'words') {
 		activeWord = $('.search').val();
 		getArchiveWords(currentArchive,activeWord);
 	} else {
@@ -237,7 +237,7 @@ function getActiveJobs(searchTerm) {
 		console.log('Using activeJobsCache');
 		for (var i = 0; i < activeJobsCache.length; i++) {
 			if(!searchTerm){
-				$("#archiveList").append('<li id="archive-'+activeJobsCache[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList(\x27'+activeJobsCache[i]+'\x27))"><span>' + activeJobsCache[i] + '</span> <span class="archive-volume"></span></a></li>');
+				$("#archiveList").append('<li id="archive-'+activeJobsCache[i].replace(/ /g,"-")+'"><a href="#" onclick="showTweetList(\x27'+activeJobsCache[i]+'\x27)"><span>' + activeJobsCache[i] + '</span> <span class="archive-volume"></span></a></li>');
 				getArchiveVolume(activeJobsCache[i]);
 			} else {
 				var titleSlice = activeJobsCache[i].slice(0,searchTerm.length);
@@ -381,11 +381,6 @@ function buildArchiveList() {
 		}
 	});
 
-	// Build cloud behind the scenes
-	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
-		$('#'+currentView.slice(0,-8)+'Cloud').css('z-index','0').fadeIn(fadeTimer);
-	}
-
 	// Sort list according to client session preference
 	if($('#resort-archView').text() == 'Popular') {
 		$('#archiveList').addClass('pop-sort');
@@ -412,31 +407,28 @@ function showTweetList(arch){
 	getArchive(arch);
 }
 
-/* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
-
 // Get top words in archive and construct cloud
 function getArchiveWords(arch, filterword) {
 	if(!arch){
-		if(currentArchive){
+		if (currentArchive) {
 			var arch = currentArchive;
-		}else{
+		} else {
 			console.log('No archive title!');
 			return false;
 		}
 	}
-	$('#wordsCloud').css('z-index','0').show();
-	$('.wordCloud').children().remove();
-	$('main article ul li').remove();
-	// Loading spinner	
+	// Loading spinner
 	$('#wait').fadeIn(fadeTimer);
-	$('#view-controls').fadeOut(fadeTimer);
+	// Remove previous results from Words cloud and list
+	$('main article ul li').remove();
+	$('.wordCloud').children().remove();
+	// Adjust interface display for Words cloud display
 	$('.sort-link').fadeOut(fadeTimer);
+	// Construct query string
 	var dateValues = $("#timeline").dateRangeSlider("values");
-	if (!filterword) {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true}';
-	} else {
-		var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true,"FilterWord":"'+filterword+'"}';
-	}
+	var queryStringMod = '';
+	if (filterword) { queryStringMod = ',"FilterWord":"'+filterword+'"'; }
+	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true'+queryStringMod+'}';
 	console.log('API call: get/archive/betweenDates/wordcloud ...');
 	$.ajax({
 		type: "POST",
@@ -444,36 +436,34 @@ function getArchiveWords(arch, filterword) {
 		data: queryString.toString(),
 		success: function (e) {
 			console.log('getArchiveWords() Ajax: betweenDates/wordcloud ... '+queryString);
-			$('#wordsCloud').css('z-index','0').show();
-			$('.wordCloud').children().remove();
 			var data = $.parseJSON(e);
 			// Load words
 			var cloudlistraw = [],i;
 			var cloudlist = [];
+			// Add words and volumes to array and hidden list
 			$.each(data,function(word, weight){
-				$("#wordsList").append('<li class="responseRow" volume="'+weight+'"><a href="#" onclick="wordSearch(&quot;'+searchTerm+'&quot;, &quot;'+word+'&quot;, 40, 0);"><span>' + word + '</span> <span class="archive-volume">'+ weight +'</span></a></li>');
-				// Populate cloudlist array with raw data
 				cloudlistraw.push([word,weight]);
+				$("#wordsList").append('<li class="responseRow" volume="'+weight+'"><a href="#" onclick="wordSearch(&quot;'+searchTerm+'&quot;, &quot;'+word+'&quot;, 40, 0);"><span>' + word + '</span> <span class="archive-volume">'+ weight +'</span></a></li>');
 			});
-			$('#wordsList li').sortElements(function(a, b){
-				return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
-			});
+			// Sort the words array and list by volume
 			cloudlistraw.sort(function(a,b){ return a[1]>b[1]?1:-1; });
 			cloudlistraw.forEach(function(a){
 				cloudlist.push(a[0]);
 			});
+			$('#wordsList li').sortElements(function(a, b){
+				return parseInt($(a).attr('volume')) < parseInt($(b).attr('volume')) ? 1 : -1;
+			});
 			$('#wordsList').addClass('pop-sort');
+			// Build the interface
 			$('.sort-link').text('Popular');
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
-			$('#wordsCloud').fadeIn(fadeTimer);		
-			$('#wordsListView').css('height',$('#archiveList').height()+100+'px');
-			$('#wordsCloud').hide().css('z-index','3');
-			$('.view-controls').fadeIn(fadeTimer);				
 			$('main#'+currentView).fadeIn(fadeTimer);
 			buildWordCloud(cloudlist, defaultMaxResults);
 		}
 	});
 }
+
+/* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
 
 // Build WORD CLOUD
 function buildWordCloud(cloudlist, MaxResults) {
@@ -556,10 +546,6 @@ function buildWordCloud(cloudlist, MaxResults) {
 		.text(function(d) { return d.text; });
 		// VOLUME BARS
 		volumeBars(currentArchive,'',7200);		
-	}
-	// Move cloud back to front
-	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
-		$('#'+currentView.slice(0,-8)+'Cloud').hide().css('z-index','3');
 	}
 }
 
@@ -738,11 +724,11 @@ function volumeBars(arch, word, interval){
 			var largest = Math.max.apply(Math, dataset);
 			var mostRecent = Math.max.apply(Math, Object.keys(data));
 			// Difference between most recent and current time
+			console.log('Diff = '+((Date.parse(datetime)/1000)-mostRecent));
+			console.log('interval = '+interval);
 			if ( ( ( ( Date.parse(datetime)/1000 ) - mostRecent ) > interval ) && (arch == '*') ) {
 				alert('Librarian stopped archiving!');
 			} else {
-				console.log('Diff = '+((Date.parse(datetime)/1000)-mostRecent));
-				console.log('interval = '+interval);
 				console.log('Librarian apears to be archiving');
 			}
 			var firstTimestamp = Math.min.apply(Math, Object.keys(data));
