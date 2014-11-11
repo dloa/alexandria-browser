@@ -498,7 +498,8 @@ function buildWordCloud(cloudlist, MaxResults) {
 			thisCloudView = currentView.slice(0,-8)+'Cloud';
 			console.log(thisCloudView);
 		}
-
+		console.log('currentArchive = '+currentArchive.toLowerCase());
+		var currentArchiveLowercase = currentArchive.toLowerCase();
 	d3.select("#"+thisCloudView).append("svg")
 		.attr("width", w)
 		.attr("height", h)
@@ -510,7 +511,9 @@ function buildWordCloud(cloudlist, MaxResults) {
 		.style("font-size", function(d) { return parseInt(d.size)/document.emSize()[1] + "em"; }) // set font size in ems
 		.style("font-family", "Avenir-Book")
 		.style("fill", function (d) { // base fill on ratio of number of actual results
-			if (d.fill < .075) { return '#eeeeee' }
+			if ( (d.text == currentArchiveLowercase) && ( currentArchiveLowercase != '*' ) ) {
+				return '#7076AF';
+			} else if (d.fill < .075) { return '#eeeeee' }
 			else if (d.fill < .15) { return '#dddddd' }
 			else if (d.fill < .225) { return '#cccccc' }
 			else if (d.fill < .3) { return '#bbbbbb' }
@@ -544,9 +547,9 @@ function buildWordCloud(cloudlist, MaxResults) {
 			}
 		})
 		.text(function(d) { return d.text; });
-		// VOLUME BARS
-		volumeBars(currentArchive,'',7200);		
 	}
+	// VOLUME BARS AFTER WORD CLOUD
+	volumeBars(currentArchive,'',7200);
 }
 
 /* STREAMLINE TWO FUNCTIONS BELOW TO USE ONE */
@@ -567,6 +570,7 @@ function getArchive(arch) {
 			success: function (e) {
 				console.log('getArchive() Ajax: get/archive/betweenDates/paginated/count ... '+queryString);
 				totalPages = $.parseJSON(e);
+				// VOLUME BARS FOR TWEET LIST
 				volumeBars(arch,'',7200);
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -666,7 +670,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 				$('.overlay').fadeIn(fadeTimer);
 				$('#tweetListView').fadeIn(fadeTimer);
 				$('.tweetBody').linkify();			
-				// Volume Bars
+				// VOLUME BARS FOR TWEET LIST
 				volumeBars(arch, word, 7200);
 			}
 		});
