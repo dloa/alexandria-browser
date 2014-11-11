@@ -127,9 +127,6 @@ jQuery(document).ready(function($){
 	// Button on start page
 	$('.getAllArchives').click(function(){
 		getAllArchives();
-		var startDate = new Date(2014, 8, 25);
-		var endDate = new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate());
-		$("#timeline").dateRangeSlider("values", startDate, endDate);
 	});	
 	// scan archives after timeline slider values change
 	$("#timeline").bind("valuesChanged", function(e, data){
@@ -178,7 +175,7 @@ var resetCache = true;
 var defaultMaxResults = 160;
 var cloudlist = [];
 var currentView = 'archiveCloud';
-var currentArchive;
+var currentArchive = '*';
 var searchResults = [];
 var searchResultsCache= [];
 var resetArchiveList = false;
@@ -213,6 +210,10 @@ function runSearch(searchTerm) {
 function getAllArchives(){
 	searchValue = '';
 	$('header input.search').val(searchValue);
+	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
+	var startDate = Date.parse(basicSliderBounds.min)/1000;
+	var endDate = Date.parse(datetime);
+	$("#timeline").dateRangeSlider("values", startDate, endDate);
 }
 
 // GET ACTIVE JOBS
@@ -463,8 +464,6 @@ function getArchiveWords(arch, filterword) {
 	});
 }
 
-/* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
-
 // Build WORD CLOUD
 function buildWordCloud(cloudlist, MaxResults) {
 	// Determine word cloud density for word size and fill
@@ -497,6 +496,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 		if ((currentView == 'archiveListView') || (currentView == 'wordsListView') ) {
 			thisCloudView = currentView.slice(0,-8)+'Cloud';
 		}
+		
 		var currentArchiveLowercase = currentArchive.toLowerCase();
 	d3.select("#"+thisCloudView).append("svg")
 		.attr("width", w)
@@ -549,6 +549,8 @@ function buildWordCloud(cloudlist, MaxResults) {
 	// VOLUME BARS AFTER WORD CLOUD
 	volumeBars(currentArchive,'',7200);
 }
+
+/* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
 
 /* STREAMLINE TWO FUNCTIONS BELOW TO USE ONE */
 
