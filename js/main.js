@@ -546,6 +546,8 @@ function buildWordCloud(cloudlist, MaxResults) {
 
 // Get archived tweets
 function showTweetList(arch){
+	var word = arch;
+	var rpp = 40;
 	currentArchive = arch;
 	seachTerm = arch;
 	if($('#tweetListView').css('display') != 'block') {
@@ -561,33 +563,10 @@ function showTweetList(arch){
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	if ( totalPages == 0 ) {		
 		// GET TOTAL PAGES
-		totalPagesAPI(arch, '', Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, 40);
+		totalPagesAPI(arch, '', Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, rpp);
 	}
     // Get a page of tweets between two dates
-	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40,"Page":'+currentPage+'}';
-	console.log('API call: get/archive/betweenDates/paginated ...');
-    $.ajax({
-        type: "POST",
-        url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated",
-		data: queryString.toString(),
-        success: function (e) {
-			console.log('showTweetList() Ajax: paginated ... '+queryString);
-			var data = $.parseJSON(e);
-			// Load a page of tweets
-			for (var i = 0; i < data.length; i++) {
-				var tweetDate = Date.parse(data[i].p.twitter.data[4]);
-				var niceTweetDate = data[i].p.twitter.data[4].split(' ');
-				$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'/status/'+data[i].p.twitter.data[3]+'" class="twitterbird" target="_blank"></a></li>');
-			}
-			$("#tweetList li.more-link").remove();
-			currentPage++;
-			if(currentPage < totalPages) {
-				$("#tweetList").append('<li class="more-link"><a href="javascript:showTweetList(\x27'+ arch +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
-			}
-			$('.tweetBody').linkify()
-			$('#wait').fadeOut(fadeTimer);
-        }
-    });
+	tweetListPageAPI(arch, word, Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, rpp);
 }
 
 // WORD SEARCH
@@ -615,30 +594,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 			totalPagesAPI(arch, word, Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, rpp);
 		}
 		// Get a page of tweets between two dates
-		var queryString = '{"Archive": "'+arch+'","Word": "'+word+'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": '+rpp+',"Page": '+ currentPage +'}';
-		console.log('API call: get/tweets/betweenDates/wordsearch ...');
-		$.ajax({
-			type: "POST",
-			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch",
-			data: queryString.toString(),
-			success: function (e) {
-				console.log('wordSearch() Ajax: betweenDates/wordsearch ... '+queryString);
-				var data = $.parseJSON(e);
-				// Load a page of tweets
-				for (var i = 0; i < data.length; i++) {
-					var tweetDate = Date.parse(data[i].p.twitter.data[4]);
-					var niceTweetDate = data[i].p.twitter.data[4].split(' ');
-					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'/status/'+data[i].p.twitter.data[3]+'" class="twitterbird" target="_blank"></a></li>');
-				}
-				$("#tweetList li.more-link").remove();
-				currentPage++;
-				if(currentPage < totalPages) {
-					$("#tweetList").append('<li class="more-link"><a href="javascript:wordSearch(\x27'+arch+'\x27,\x27'+word+'\x27,\x27'+rpp+'\x27,\x27'+ currentPage +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
-				}
-				$('.tweetBody').linkify();			
-				$('#wait').fadeOut(fadeTimer);
-			}
-		});
+		tweetListPageAPI(arch, word, Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, rpp);
 	}
 }
 
@@ -671,6 +627,43 @@ function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 					console.log(errorThrown);
 					librarianErr();
 			   }
+		});
+	}
+}
+function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
+	if(!word){
+		var word = arch;
+	}
+	if((!arch)||(!word)||(!StartDate)||(!EndDate)||(!rpp)){
+		console.log(arch + ', ' + word + ', ' + StartDate + EndDate + ', ' + rpp);
+		alert('error in tweetListPageAPI');		
+		return false;
+	} else {
+		// Get a page of tweets between two dates
+		var queryString = '{"Archive": "'+arch+'","Word": "'+word+'","StartDate": '+StartDate+',"EndDate": '+EndDate+',"ResultsPerPage": '+rpp+',"Page": '+ currentPage +'}';
+		console.log('API call: get/tweets/betweenDates/wordsearch ...');
+		$.ajax({
+			type: "POST",
+			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch",
+			data: queryString.toString(),
+			success: function (e) {
+				console.log('wordSearch() Ajax: betweenDates/wordsearch ... '+queryString);
+				var data = $.parseJSON(e);
+				console.info(data);
+				// Load a page of tweets
+				for (var i = 0; i < data.length; i++) {
+					var tweetDate = Date.parse(data[i].p.twitter.data[4]);
+					var niceTweetDate = data[i].p.twitter.data[4].split(' ');
+					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'/status/'+data[i].p.twitter.data[3]+'" class="twitterbird" target="_blank"></a></li>');
+				}
+				$("#tweetList li.more-link").remove();
+				currentPage++;
+				if(currentPage < totalPages) {
+					$("#tweetList").append('<li class="more-link"><a href="javascript:wordSearch(\x27'+arch+'\x27,\x27'+word+'\x27,\x27'+rpp+'\x27,\x27'+ currentPage +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
+				}
+				$('.tweetBody').linkify();			
+				$('#wait').fadeOut(fadeTimer);
+			}
 		});
 	}
 }
