@@ -398,19 +398,6 @@ function buildArchiveList() {
 	buildWordCloud(cloudlist, defaultMaxResults);
 }
 
-// Show tweets in archive
-function showTweetList(arch){
-	currentArchive = arch;
-	console.log('currentArchive = '+currentArchive);
-	seachTerm = arch;
-	if($('#tweetListView').css('display') != 'block') {
-		$('.view-controls').fadeOut(fadeTimer);
-		searchValue = $('header input.search').val();
-		$('.overlay').fadeIn(fadeTimer);
-	}
-	getArchive(arch);
-}
-
 // Get top words in archive and construct cloud
 function getArchiveWords(arch, filterword) {
 	if(!arch){
@@ -558,7 +545,14 @@ function buildWordCloud(cloudlist, MaxResults) {
 /* STREAMLINE TWO FUNCTIONS BELOW TO USE ONE */
 
 // Get archived tweets
-function getArchive(arch) {
+function showTweetList(arch){
+	currentArchive = arch;
+	seachTerm = arch;
+	if($('#tweetListView').css('display') != 'block') {
+		$('.view-controls').fadeOut(fadeTimer);
+		searchValue = $('header input.search').val();
+		$('.overlay').fadeIn(fadeTimer);
+	}
 	if ( (arch == '*') || (!arch) ) {
 		alert('No archive name!');
 		return false;
@@ -567,9 +561,7 @@ function getArchive(arch) {
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	if ( totalPages == 0 ) {		
 		// GET TOTAL PAGES
-		var url = "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated/count";
-		console.log('API call: get/archive/betweenDates/paginated/count ...');
-		totalPagesAPI(url, arch, '', Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, 40);
+		totalPagesAPI(arch, '', Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, 40);
 	}
     // Get a page of tweets between two dates
 	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": 40,"Page":'+currentPage+'}';
@@ -579,7 +571,7 @@ function getArchive(arch) {
         url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated",
 		data: queryString.toString(),
         success: function (e) {
-			console.log('getArchive() Ajax: paginated ... '+queryString);
+			console.log('showTweetList() Ajax: paginated ... '+queryString);
 			var data = $.parseJSON(e);
 			// Load a page of tweets
 			for (var i = 0; i < data.length; i++) {
@@ -590,13 +582,14 @@ function getArchive(arch) {
 			$("#tweetList li.more-link").remove();
 			currentPage++;
 			if(currentPage < totalPages) {
-				$("#tweetList").append('<li class="more-link"><a href="javascript:getArchive(\x27'+ arch +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
+				$("#tweetList").append('<li class="more-link"><a href="javascript:showTweetList(\x27'+ arch +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 			}
 			$('.tweetBody').linkify()
 			$('#wait').fadeOut(fadeTimer);
         }
     });
 }
+
 // WORD SEARCH
 function wordSearch(arch, word, rpp, currentPage) {
 	$('#wait').fadeIn(fadeTimer);
@@ -614,9 +607,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 		var dateValues = $("#timeline").dateRangeSlider("values");
 		if ( totalPages == 0 ) {
 			// GET TOTAL PAGES
-			var url = "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount";
-			console.log('API call: get/tweets/betweenDates/wordsearch/pagecount ...');
-			totalPagesAPI(url, arch, word, Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, rpp);
+			totalPagesAPI(arch, word, Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, rpp);
 		}
 		// Get a page of tweets between two dates
 		var queryString = '{"Archive": "'+arch+'","Word": "'+word+'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"ResultsPerPage": '+rpp+',"Page": '+ currentPage +'}';
@@ -659,12 +650,12 @@ function wordSearch(arch, word, rpp, currentPage) {
 	}
 }
 
-function totalPagesAPI(url, arch, word, StartDate, EndDate, rpp){
+function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 	if(!word){
 		var word = arch;
 	}
-	if((!url)||(!arch)||(!word)||(!StartDate)||(!EndDate)||(!rpp)){
-		console.log(url + ', ' + arch + ', ' + word + ', ' + StartDate + EndDate + ', ' + rpp);
+	if((!arch)||(!word)||(!StartDate)||(!EndDate)||(!rpp)){
+		console.log(arch + ', ' + word + ', ' + StartDate + EndDate + ', ' + rpp);
 		alert('error in totalPagesAPI');		
 		return false;
 	} else {
@@ -690,6 +681,10 @@ function totalPagesAPI(url, arch, word, StartDate, EndDate, rpp){
 			   }
 		});
 	}
+}
+function getArchive(arch) {
+	alert('YOU BROKE IT!');
+	return false;
 }
 
 // CLEAR MODAL
