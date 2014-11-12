@@ -172,7 +172,6 @@ jQuery(document).ready(function($){
 var datetime = new Date();
 var fadeTimer = 100;
 var activeJobsCache = [];
-var spinnerCount = 0;
 var newArchiveVolumeQueryStringCache = [];
 var newArchiveVolumeCache = [];
 var defaultMaxResults = 160;
@@ -243,7 +242,6 @@ function getJobs(searchTerm) {
 	// Check the cache for recent query
 	var cacheCheck = false;
 	if(jQuery.inArray(queryString, newArchiveVolumeQueryStringCache) > -1){
-		console.log('Using newArchiveVolumeCache = '+newArchiveVolumeCache);
 		cacheCheck = true;
 		newArchiveVolumeCache.forEach(function(a, i){
 			if(!searchTerm){
@@ -286,8 +284,6 @@ function getJobs(searchTerm) {
 						}
 					}
 				}
-				console.info('newArchiveVolumeQueryStringCache = '+newArchiveVolumeQueryStringCache);
-				console.info('newArchiveVolumeCache = '+newArchiveVolumeCache);
 				buildArchiveList();
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -298,19 +294,14 @@ function getJobs(searchTerm) {
 			}
 		});
 	} else {
-		console.log('Using newArchiveVolumeQueryStringCache');
-		console.log('searchResults = '+searchResults);
 		spinnerCount = newArchiveVolumeCache.length;
-		if(spinnerCount == $('#archiveList li').length){
+		if(newArchiveVolumeCache.length == $('#archiveList li').length){
 			if(searchResults != ''){
 				newArchiveVolumeCache.forEach(function(a, i){
 					if(jQuery.inArray(a[0], searchResults) > -1){
 						searchResultsCache.push(a);
 					}
 				});
-				console.log('CACHED SEARCH RESULTS: searchResultsCache = '+searchResultsCache);
-				buildArchiveList();
-			} else if(spinnerCount == newArchiveVolumeQueryStringCache.length){
 				buildArchiveList();
 			} else {
 				console.info(newArchiveVolumeQueryStringCache);
@@ -732,7 +723,6 @@ function volumeBars(arch, word, interval){
 			// Reset Interface
 			searchResults.length=0;
 			searchResultsCache.length = 0;
-			spinnerCount = 0;
 			$('#wait').fadeOut(fadeTimer);
 			$('.search').attr('disabled',false);
 		}
