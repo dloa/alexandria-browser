@@ -42,7 +42,7 @@ jQuery(document).ready(function($){
 	$('header input.search').on("keydown", function (e) {		
 		searchValue = $('header input.search').val();
 		if($('#tweetListView').css('display') == 'block') {
-			resetArchiveList == true;
+			resetArchiveList = true;
 		}
 	});
 	$('header input.search').on("keyup", function (e) {
@@ -178,11 +178,21 @@ var defaultMaxResults = 160;
 var cloudlist = [];
 var currentView = 'archiveCloud';
 var currentArchive = '*';
+var activeWord;
 var searchResults = [];
 var searchResultsCache = [];
 var resetArchiveList = false;
 var currentPage = 0;
 var totalPages = 0;
+
+function getAllArchives(){
+	searchValue = '';
+	$('header input.search').val(searchValue);
+	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
+	var startDate = Date.parse(basicSliderBounds.min)/1000;
+	var endDate = Date.parse(datetime);
+	$("#timeline").dateRangeSlider("values", startDate, endDate);
+}
 
 // RUN SEARCH
 var searchValue = '';
@@ -190,13 +200,16 @@ var newSearchValue = '';
 var searchTimerId = 0;
 var searchRunning;
 var searchTerm;
-var activeWord;
 
 function runSearch(searchTerm) {
 	if(searchTerm == ''){
 		searchResults.length=0;
 		searchResultsCache.length = 0;
+		newArchiveVolumeCache.length = 0;
 	}
+	console.log('searchTerm '+searchTerm);
+	console.log('searchResults '+searchResults);
+	console.log('searchResultsCache '+searchResultsCache);
 	clearTimeout ( searchTimerId );
 	searchRunning = 0;
 	if($('#tweetListView').css('display') == 'block') {
@@ -210,14 +223,6 @@ function runSearch(searchTerm) {
 	}
 }
 
-function getAllArchives(){
-	searchValue = '';
-	$('header input.search').val(searchValue);
-	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
-	var startDate = Date.parse(basicSliderBounds.min)/1000;
-	var endDate = Date.parse(datetime);
-	$("#timeline").dateRangeSlider("values", startDate, endDate);
-}
 // NEW GET ACTIVE JOBS AND VOLUMES
 function getJobs(searchTerm) {
 	resetArchiveList = false;
@@ -248,7 +253,7 @@ function getJobs(searchTerm) {
 				$("#archiveList").append('<li id="archive-'+a[0].replace(/ /g,"-")+'" volume="'+a[1]+'"><a href="#" onclick="wordSearch(\x27'+a[0]+'\x27, \x27'+a[0]+'\x27, 40, 0)"><span>' + a[0] + '</span> <span class="archive-volume">'+a[1]+'</span></a></li>');
 				searchResults.push(a[0]);
 			} else {
-				var titleSlice = activeJobsCache[i].slice(0,searchTerm.length);
+				var titleSlice = a[0].slice(0,searchTerm.length);
 				if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
 					$("#archiveList").append('<li id="archive-'+a[0].replace(/ /g,"-")+'" volume="'+a[1]+'"><a href="#" onclick="wordSearch(\x27'+a[0]+'\x27, \x27'+a[0]+'\x27, 40, 0)"><span>' + a[0] + '</span> <span class="archive-volume">'+a[1]+'</span></a></li>');
 					searchResults.push(a[0]);
@@ -294,6 +299,7 @@ function getJobs(searchTerm) {
 			}
 		});
 	} else {
+		cacheCheck = false;
 		spinnerCount = newArchiveVolumeCache.length;
 		if(newArchiveVolumeCache.length == $('#archiveList li').length){
 			if(searchResults != ''){
@@ -324,10 +330,12 @@ function buildArchiveList() {
 	var cloudlistraw = [];
 	var cloudlist = [];
 	if(newArchiveVolumeCache.length!=0){
+		console.log('newArchiveVolumeCache = '+newArchiveVolumeCache);
 		$.each(newArchiveVolumeCache,function(i, d){
 			cloudlistraw.push([i,d]);
 		});
 	} else if (searchResultsCache.length!=0) {
+		console.log('searchResultsCache = '+searchResultsCache);
 		$.each(searchResultsCache,function(i, d){
 			cloudlistraw.push([i,d]);
 		});				
@@ -340,7 +348,8 @@ function buildArchiveList() {
 			cloudlist.push(a[1][0]);
 		}
 	});
-
+	console.log('cloudlistraw = '+cloudlistraw);
+	console.log('cloudlist = '+cloudlist);
 	// Sort list according to client session preference
 	if($('#resort-archView').text() == 'Popular') {
 		$('#archiveList').addClass('pop-sort');
@@ -677,7 +686,7 @@ function volumeBars(arch, word, interval){
 			// Difference between most recent and current time
 			console.log('Diff = '+((Date.parse(datetime)/1000)-mostRecent));
 			console.log('interval = '+interval);
-			if ( ( ( ( Date.parse(datetime)/1000 ) - mostRecent ) > interval ) && (arch == '*') ) {
+			if ( ( ( ( Date.parse(datetime)/1000 ) - mostRecent ) > interval*1.15 ) && (arch == '*') ) {
 				alert('Librarian stopped archiving!');
 			} else {
 				console.log('Librarian appears to be archiving');
@@ -725,12 +734,19 @@ function volumeBars(arch, word, interval){
 			searchResultsCache.length = 0;
 			$('#wait').fadeOut(fadeTimer);
 			$('.search').attr('disabled',false);
+		},
+		error: function (XMLHttpRequest, textStatus, errorThrown) {
+			console.log(XMLHttpRequest);
+			console.log(textStatus);
+			console.log(errorThrown);
+			librarianErr();
 		}
 	});
 }
 
 // ERROR CONNECTING TO LIBRARIAN
 function librarianErr(){
+    $('#intro').remove();
 	$("#archiveList li").remove();
 	$('header input.search').attr('disabled','disabled').css({background:'none #efefef',padding:'3px 15px',width:'14em'}).val('Cannot connect to Librarian').next().hide();			
 	$('#wait').fadeOut(fadeTimer);
