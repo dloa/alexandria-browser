@@ -28,6 +28,9 @@ jQuery(document).ready(function($){
 	// UI/UX Navigation
 	// Click logo to go back to archive list with current timeline selection
 	$('#logo').click(function(){
+		if($(this).hasClass('disabled')){
+			return false;
+		}
 		currentArchive = '*';
 		searchTerm = '';
 		currentView = 'archiveCloud';
@@ -417,6 +420,12 @@ function getArchiveWords(arch, filterword) {
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 			$('main#'+currentView).fadeIn(fadeTimer);
 			buildWordCloud(cloudlist, defaultMaxResults);
+		},
+		error: function (XMLHttpRequest, textStatus, errorThrown) {
+			console.log(XMLHttpRequest);
+			console.log(textStatus);
+			console.log(errorThrown);
+			librarianErr();
 		}
 	});
 }
@@ -623,6 +632,12 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 				}
 				$('.tweetBody').linkify();			
 				$('#wait').fadeOut(fadeTimer);
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest);
+				console.log(textStatus);
+				console.log(errorThrown);
+				librarianErr();
 			}
 		});
 	}
@@ -746,6 +761,7 @@ function volumeBars(arch, word, interval){
 
 // ERROR CONNECTING TO LIBRARIAN
 function librarianErr(){
+	$('#logo').addClass('disabled');
     $('#intro').remove();
 	$("#archiveList li").remove();
 	$('header input.search').attr('disabled','disabled').css({background:'none #efefef',padding:'3px 15px',width:'14em'}).val('Cannot connect to Librarian').next().hide();			
