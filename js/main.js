@@ -131,7 +131,8 @@ jQuery(document).ready(function($){
 	});	
 	// Scan archives after timeline slider values change
 	$("#timeline").bind("valuesChanged", function(e, data){
-		resetCache = true;
+		searchResults.length = 0;
+		searchResultsCache.length = 0;
 		currentPage = 0;
 		totalPages = 0;
 		$('ul#tweetList li').remove();
@@ -174,7 +175,6 @@ var activeJobsCache = [];
 var spinnerCount = 0;
 var newArchiveVolumeQueryStringCache = [];
 var newArchiveVolumeCache = [];
-var resetCache = true;
 var defaultMaxResults = 160;
 var cloudlist = [];
 var currentView = 'archiveCloud';
@@ -196,6 +196,7 @@ var activeWord;
 function runSearch(searchTerm) {
 	if(searchTerm == ''){
 		searchResults.length=0;
+		searchResultsCache.length = 0;
 	}
 	clearTimeout ( searchTimerId );
 	searchRunning = 0;
@@ -222,6 +223,7 @@ function getAllArchives(){
 function getJobs(searchTerm) {
 	resetArchiveList = false;
 	searchResults.length = 0;
+	searchResultsCache.length = 0;
 	if (!searchTerm) {
 		var searchTerm = '';
 	}
@@ -243,7 +245,6 @@ function getJobs(searchTerm) {
 	if(jQuery.inArray(queryString, newArchiveVolumeQueryStringCache) > -1){
 		console.log('Using newArchiveVolumeCache = '+newArchiveVolumeCache);
 		cacheCheck = true;
-		searchResults = [];
 		newArchiveVolumeCache.forEach(function(a, i){
 			if(!searchTerm){
 				$("#archiveList").append('<li id="archive-'+a[0].replace(/ /g,"-")+'" volume="'+a[1]+'"><a href="#" onclick="wordSearch(\x27'+a[0]+'\x27, \x27'+a[0]+'\x27, 40, 0)"><span>' + a[0] + '</span> <span class="archive-volume">'+a[1]+'</span></a></li>');
@@ -259,6 +260,8 @@ function getJobs(searchTerm) {
 	}
 	if(cacheCheck == false){		
 		console.log('API call: get/activejobs/betweenDates ... '+searchTerm);
+		newArchiveVolumeQueryStringCache.length = 0;
+		newArchiveVolumeCache.length = 0;
 		$.ajax({
 			type: "POST",
 			data: queryString.toString(),
@@ -727,7 +730,8 @@ function volumeBars(arch, word, interval){
 				   });
 			}
 			// Reset Interface
-			searchResultsCache = [];
+			searchResults.length=0;
+			searchResultsCache.length = 0;
 			spinnerCount = 0;
 			$('#wait').fadeOut(fadeTimer);
 			$('.search').attr('disabled',false);
