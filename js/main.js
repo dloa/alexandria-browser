@@ -656,7 +656,7 @@ function clearModal() {
 	$('main').not('#'+currentView).fadeOut(fadeTimer);
 	$('.view-controls').fadeIn(fadeTimer);
 	if (resetArchiveList == true) {
-		if((currentView == 'wordsListView')||(currentView == 'wordsCloud')){
+		if (currentView.slice(0,5) == 'words') {
 			getArchiveWords(searchTerm);
 		} else {
 			getJobs(searchTerm);
