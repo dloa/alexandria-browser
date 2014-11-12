@@ -64,9 +64,6 @@ jQuery(document).ready(function($){
 	});
 	// Click icon in omnibox to clear and run search
 	$('#clearSearch').click(function(){
-		if($('header input.search').val().length > 0){
-			resetArchiveList = true;
-		}
 		$('header input.search').val('');
 		runSearch('');
 	});	
@@ -222,6 +219,7 @@ function runSearch(searchTerm) {
 
 // NEW GET ACTIVE JOBS AND VOLUMES
 function getJobs(searchTerm) {
+	console.log('Searching for '+searchTerm);
 	if(resetArchiveList == true){
 		resetArchiveList = false;
 		newArchiveVolumeCache.length = 0;
@@ -248,6 +246,9 @@ function getJobs(searchTerm) {
 	// Check the cache for recent query
 	var cacheCheck = false;
 	if(jQuery.inArray(queryString, newArchiveVolumeQueryStringCache) > -1){
+		console.log('queryString = '+queryString);
+		console.log('newArchiveVolumeQueryStringCache = '+newArchiveVolumeQueryStringCache);
+		console.log('newArchiveVolumeCache = '+newArchiveVolumeCache);
 		cacheCheck = true;
 		newArchiveVolumeCache.forEach(function(a, i){
 			if(!searchTerm){
@@ -301,18 +302,18 @@ function getJobs(searchTerm) {
 		});
 	} else {
 		cacheCheck = false;
-		spinnerCount = newArchiveVolumeCache.length;
-		if(newArchiveVolumeCache.length == $('#archiveList li').length){
-			if(searchResults != ''){
+		console.log('searchResults.length = '+searchResults.length);
+		if(searchResults.length > 0){
+			if(searchResults.length == $('#archiveList li').length){
 				newArchiveVolumeCache.forEach(function(a, i){
 					if(jQuery.inArray(a[0], searchResults) > -1){
 						searchResultsCache.push(a);
 					}
 				});
 				buildArchiveList();
-			} else {
-				console.info(newArchiveVolumeQueryStringCache);
-			}			
+			}
+		} else {
+			console.error('Problem in getJobs cacheCheck function');
 		}
 	}
 }
@@ -330,18 +331,18 @@ function buildArchiveList() {
 	// Populate cloudlist array with raw data			
 	var cloudlistraw = [];
 	var cloudlist = [];
-	if(newArchiveVolumeCache.length!=0){
-		console.log('newArchiveVolumeCache = '+newArchiveVolumeCache);
+	console.error('searchResultsCache = '+searchResultsCache);
+	console.error('newArchiveVolumeCache = '+newArchiveVolumeCache);
+	if ((searchResultsCache.length==0)&&(newArchiveVolumeCache.length!=0)) {
 		$.each(newArchiveVolumeCache,function(i, d){
 			cloudlistraw.push([i,d]);
-		});
+		});				
 	} else if (searchResultsCache.length!=0) {
-		console.log('searchResultsCache = '+searchResultsCache);
 		$.each(searchResultsCache,function(i, d){
 			cloudlistraw.push([i,d]);
-		});				
+		});
 	} else {
-		alert('You broke it!');
+		alert('Under construction');
 	}
 	cloudlistraw.sort(function(a,b){ return a[1][1]>b[1][1]?1:-1; });
 	cloudlistraw.forEach(function(a){
