@@ -172,8 +172,6 @@ var datetime = new Date();
 var fadeTimer = 100;
 var activeJobsCache = [];
 var spinnerCount = 0;
-var archiveVolumeCache = [];
-var archiveVolumeQueryStringCache = [];
 var newArchiveVolumeQueryStringCache = [];
 var newArchiveVolumeCache = [];
 var resetCache = true;
@@ -245,6 +243,7 @@ function getJobs(searchTerm) {
 	if(jQuery.inArray(queryString, newArchiveVolumeQueryStringCache) > -1){
 		console.log('Using newArchiveVolumeCache = '+newArchiveVolumeCache);
 		cacheCheck = true;
+		searchResults = [];
 		newArchiveVolumeCache.forEach(function(a, i){
 			if(!searchTerm){
 				$("#archiveList").append('<li id="archive-'+a[0].replace(/ /g,"-")+'" volume="'+a[1]+'"><a href="#" onclick="wordSearch(\x27'+a[0]+'\x27, \x27'+a[0]+'\x27, 40, 0)"><span>' + a[0] + '</span> <span class="archive-volume">'+a[1]+'</span></a></li>');
