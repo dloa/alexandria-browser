@@ -29,6 +29,7 @@ jQuery(document).ready(function($){
 	// Click logo to go back to archive list with current timeline selection
 	$('#logo').click(function(){
 		currentArchive = '*';
+		searchTerm = '';
 		currentView = 'archiveCloud';
 		$('#viewlabel .currentArchive').text('');
 		$('header input.search').val('');
@@ -146,7 +147,6 @@ jQuery(document).ready(function($){
 			if (currentView.slice(0,5) == 'words') {
 				getArchiveWords(searchTerm);
 			} else {
-				console.log("It broke, didn't it?");
 				getJobs(searchTerm);
 			}
 		}
@@ -174,6 +174,8 @@ var activeJobsCache = [];
 var spinnerCount = 0;
 var archiveVolumeCache = [];
 var archiveVolumeQueryStringCache = [];
+var newArchiveVolumeQueryStringCache = [];
+var newArchiveVolumeCache = [];
 var resetCache = true;
 var defaultMaxResults = 160;
 var cloudlist = [];
@@ -181,7 +183,6 @@ var currentView = 'archiveCloud';
 var currentArchive = '*';
 var searchResults = [];
 var searchResultsCache = [];
-var newSearchResults = [];
 var resetArchiveList = false;
 var currentPage = 0;
 var totalPages = 0;
@@ -223,7 +224,6 @@ function getAllArchives(){
 function getJobs(searchTerm) {
 	resetArchiveList = false;
 	searchResults.length = 0;
-	newSearchResults.length = 0;
 	if (!searchTerm) {
 		var searchTerm = '';
 	}
@@ -240,40 +240,85 @@ function getJobs(searchTerm) {
 	}
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
-	console.log('API call: get/activejobs/betweenDates ... '+searchTerm);
-	$.ajax({
-		type: "POST",
-		data: queryString.toString(),
-		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs/betweenDates",
-		success: function (e) {
-			console.log('getJobs() Ajax: get/activejobs/betweenDates ... '+searchTerm);
-			var data = $.parseJSON(e);
-			for (var i = 0; i < data['Jobs'].length; i++) {
-				if ( data['Count'][i] != 0 ) {
-					if(!searchTerm){
-						$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'" volume="'+data['Count'][i]+'"><a href="#" onclick="wordSearch(\x27'+data['Jobs'][i]+'\x27, \x27'+data['Jobs'][i]+'\x27, 40, 0)"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume">'+data['Count'][i]+'</span></a></li>');
-						newSearchResults.push([data['Jobs'][i],data['Count'][i]]);
-					} else {
-						var titleSlice = data['Jobs'][i].slice(0,searchTerm.length);
-						if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
+	// Check the cache for recent query
+	var cacheCheck = false;
+	if(jQuery.inArray(queryString, newArchiveVolumeQueryStringCache) > -1){
+		console.log('Using newArchiveVolumeCache = '+newArchiveVolumeCache);
+		cacheCheck = true;
+		newArchiveVolumeCache.forEach(function(a, i){
+			if(!searchTerm){
+				$("#archiveList").append('<li id="archive-'+a[0].replace(/ /g,"-")+'" volume="'+a[1]+'"><a href="#" onclick="wordSearch(\x27'+a[0]+'\x27, \x27'+a[0]+'\x27, 40, 0)"><span>' + a[0] + '</span> <span class="archive-volume">'+a[1]+'</span></a></li>');
+				searchResults.push(a[0]);
+			} else {
+				var titleSlice = activeJobsCache[i].slice(0,searchTerm.length);
+				if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
+					$("#archiveList").append('<li id="archive-'+a[0].replace(/ /g,"-")+'" volume="'+a[1]+'"><a href="#" onclick="wordSearch(\x27'+a[0]+'\x27, \x27'+a[0]+'\x27, 40, 0)"><span>' + a[0] + '</span> <span class="archive-volume">'+a[1]+'</span></a></li>');
+					searchResults.push(a[0]);
+				}
+			}
+		});
+	}
+	if(cacheCheck == false){		
+		console.log('API call: get/activejobs/betweenDates ... '+searchTerm);
+		$.ajax({
+			type: "POST",
+			data: queryString.toString(),
+			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs/betweenDates",
+			success: function (e) {
+				console.log('getJobs() Ajax: get/activejobs/betweenDates ... '+searchTerm);
+				var data = $.parseJSON(e);
+				// Cache the query string
+				newArchiveVolumeQueryStringCache.push(queryString);
+				for (var i = 0; i < data['Jobs'].length; i++) {
+					if ( data['Count'][i] != 0 ) {
+						if(!searchTerm){
+							newArchiveVolumeCache.push([data['Jobs'][i],data['Count'][i]]);
 							$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'" volume="'+data['Count'][i]+'"><a href="#" onclick="wordSearch(\x27'+data['Jobs'][i]+'\x27, \x27'+data['Jobs'][i]+'\x27, 40, 0)"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume">'+data['Count'][i]+'</span></a></li>');
-							newSearchResults.push([data['Jobs'][i],data['Count'][i]]);
+						} else {
+							var titleSlice = data['Jobs'][i].slice(0,searchTerm.length);
+							if(titleSlice.toLowerCase() == searchTerm.toLowerCase()) {
+								// Cache the results
+								newArchiveVolumeCache.push([data['Jobs'][i],data['Count'][i]]);
+								$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'" volume="'+data['Count'][i]+'"><a href="#" onclick="wordSearch(\x27'+data['Jobs'][i]+'\x27, \x27'+data['Jobs'][i]+'\x27, 40, 0)"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume">'+data['Count'][i]+'</span></a></li>');
+							}
 						}
 					}
 				}
+				console.info('newArchiveVolumeQueryStringCache = '+newArchiveVolumeQueryStringCache);
+				console.info('newArchiveVolumeCache = '+newArchiveVolumeCache);
+				buildArchiveList();
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest);
+				console.log(textStatus);
+				console.log(errorThrown);
+				librarianErr();
 			}
-			buildArchiveList();
-		},
-		error: function (XMLHttpRequest, textStatus, errorThrown) {
-			console.log(XMLHttpRequest);
-			console.log(textStatus);
-			console.log(errorThrown);
-			librarianErr();
+		});
+	} else {
+		console.log('Using newArchiveVolumeQueryStringCache');
+		console.log('searchResults = '+searchResults);
+		spinnerCount = newArchiveVolumeCache.length;
+		if(spinnerCount == $('#archiveList li').length){
+			if(searchResults != ''){
+				newArchiveVolumeCache.forEach(function(a, i){
+					if(jQuery.inArray(a[0], searchResults) > -1){
+						searchResultsCache.push(a);
+					}
+				});
+				console.log('CACHED SEARCH RESULTS: searchResultsCache = '+searchResultsCache);
+				buildArchiveList();
+			} else if(spinnerCount == newArchiveVolumeQueryStringCache.length){
+				buildArchiveList();
+			} else {
+				console.info(newArchiveVolumeQueryStringCache);
+			}			
 		}
-	});
+	}
 }
 
 /**********************************************/
+/* DEPRICATED
 // OLD get active jobs & volumes
 function getActiveJobs(searchTerm) {
 	resetArchiveList = false;
@@ -344,8 +389,7 @@ function getActiveJobs(searchTerm) {
 		});
 	}
 }
-
-// Get Archive volumes and construct word cloud
+// OLD Get Archive volumes and construct word cloud
 function getArchiveVolume(arch) {
 	
 	if (resetCache == true){
@@ -411,8 +455,9 @@ function getArchiveVolume(arch) {
 		}
 	}
 }
-
+*/
 /******************/
+
 // Build archiveList and cloudlist array and call word cloud function
 function buildArchiveList() {	
 	$('#archiveList li').each(function(){
@@ -426,20 +471,16 @@ function buildArchiveList() {
 	// Populate cloudlist array with raw data			
 	var cloudlistraw = [];
 	var cloudlist = [];
-	if(archiveVolumeCache.length!=0){
-		$.each(archiveVolumeCache,function(i, d){
+	if(newArchiveVolumeCache.length!=0){
+		$.each(newArchiveVolumeCache,function(i, d){
 			cloudlistraw.push([i,d]);
 		});
 	} else if (searchResultsCache.length!=0) {
 		$.each(searchResultsCache,function(i, d){
 			cloudlistraw.push([i,d]);
 		});				
-	} else if (newSearchResults.length!=0) {
-		$.each(newSearchResults,function(i, d){
-			cloudlistraw.push([i,d]);
-		});				
 	} else {
-		console.log('You broke it!');
+		alert('You broke it!');
 	}
 	cloudlistraw.sort(function(a,b){ return a[1][1]>b[1][1]?1:-1; });
 	cloudlistraw.forEach(function(a){
@@ -605,7 +646,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 	volumeBars(currentArchive,'',7200);
 }
 
-// BUILD TWEET LIST
+// Build TWEET LIST
 function wordSearch(arch, word, rpp, currentPage) {
 	$('#wait').fadeIn(fadeTimer);
 	resetArchiveList = false;
