@@ -572,7 +572,7 @@ div.close-modal:hover {
 /* VOLUME BARS */
 svg#volume {
 	position: fixed;
-	bottom: 0;
+	bottom: 50px;
 	left: 1px;
 	z-index: 15;
 }
