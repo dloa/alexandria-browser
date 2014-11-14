@@ -4,7 +4,7 @@ jQuery(document).ready(function($){
 	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
 
 	$("#timeline").dateRangeSlider({
-		bounds: {min: new Date(2014, 8, 25), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
+		bounds: {min: new Date(2014, 9, 17), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
 		defaultValues: {min: Date.parse(datetime)-86400000, max: Date.parse(datetime)},
 		arrows: false,
 		scales: [{
