@@ -574,7 +574,7 @@ svg#volume {
 	position: fixed;
 	bottom: 50px;
 	left: 1px;
-	z-index: 15;
+	z-index: 150;
 }
 /* BUTTONS */
 .wsite-button {

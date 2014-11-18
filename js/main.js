@@ -441,7 +441,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 		totalResults = MaxResults;
 	}	
 	var w = window.innerWidth;				
-	var h = window.innerHeight-117;
+	var h = window.innerHeight-177;
 	var fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Change difference between largest and smallest word based on browser font size AND number of results
 	d3.layout.cloud()
 	  .timeInterval(10)
@@ -620,9 +620,23 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 				var data = $.parseJSON(e);
 				// Load a page of tweets
 				for (var i = 0; i < data.length; i++) {
-					var tweetDate = Date.parse(data[i].p.twitter.data[4]);
-					var niceTweetDate = data[i].p.twitter.data[4].split(' ');
-					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data[10] + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data[9]+'/status/'+data[i].p.twitter.data[3]+'" class="twitterbird" target="_blank"></a></li>');
+					var expanded_url = (data[i].p.twitter.data.url_data[0]);
+					if(expanded_url){
+						expanded_url = expanded_url['Expanded_url'];
+					} else {
+						expanded_url = '';
+					}
+					console.log(expanded_url.split('/')[2]);
+					if(expanded_url.split('/')[2] == 'youtu.be'){
+						var render_url = '<iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3] +'" frameborder="0" allowfullscreen></iframe>';
+					} else if (expanded_url.split('/')[2] == 'vine.co') {
+						var render_url = '<iframe src="http://vine.co/v/'+expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe>';
+					} else {
+						var render_url = '';
+					}
+					var tweetDate = Date.parse(data[i].p.twitter.data.tweet_data[4]);
+					var niceTweetDate = data[i].p.twitter.data.tweet_data[4].split(' ');
+					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<br />' + expanded_url + '<br />' + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
 				}
 				$("#tweetList li.more-link").remove();
 				currentPage++;
@@ -642,6 +656,98 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 	}
 }
 
+/* TEMPORARY */
+function archiveTweetListPageAPI(arch, StartDate, EndDate, rpp) {
+	if(arch == '*'){
+		alert('FAIL: arch = *, currentArchive = '+currentArchive+', word = '+word);
+		return false;
+	}
+	if(currentArchive == '*'){
+		currentArchive = arch;
+		seachTerm = arch;
+	}
+	if(!rpp){
+		var rpp = 40;
+	}
+	if((!arch)||(!StartDate)||(!EndDate)||(!rpp)){
+		console.log(arch + ', ' + word + ', ' + StartDate + EndDate + ', ' + rpp);
+		alert('error in tweetListPageAPI');		
+		return false;
+	} else {
+		// Get a page of tweets between two dates
+		var queryString = '{"Archive": "'+arch+'","StartDate": '+StartDate+',"EndDate": '+EndDate+',"ResultsPerPage": '+rpp+',"Page": '+ currentPage +'}';
+		console.log('API call: /get/archive/betweenDates/paginated ...');
+		$.ajax({
+			type: "POST",
+			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/paginated",
+			data: queryString.toString(),
+			success: function (e) {
+				console.log('archiveTweetListPageAPI() /get/archive/betweenDates/paginated ... '+queryString);
+				var data = $.parseJSON(e);
+				// Load a page of tweets
+				for (var i = 0; i < data.length; i++) {
+					var expanded_url = (data[i].p.twitter.data.url_data[0]);
+					if(expanded_url){
+						expanded_url = expanded_url['Expanded_url'];
+					} else {
+						expanded_url = '';
+					}
+					console.log(expanded_url.split('/')[2]);
+					if(expanded_url.split('/')[2] == 'youtu.be'){
+						var render_url = '<iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3] +'" frameborder="0" allowfullscreen></iframe>';
+					} else if (expanded_url.split('/')[2] == 'vine.co') {
+						var render_url = '<iframe src="http://vine.co/v/'+expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe>';
+					} else {
+						var render_url = '';
+					}
+					var tweetDate = Date.parse(data[i].p.twitter.data.tweet_data[4]);
+					var niceTweetDate = data[i].p.twitter.data.tweet_data[4].split(' ');
+					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<br />' + expanded_url + '<br />' + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
+				}
+				$("#tweetList li.more-link").remove();
+				currentPage++;
+				if(currentPage < totalPages) {
+					$("#tweetList").append('<li class="more-link"><a href="javascript:archiveSearch(\x27'+arch+'\x27,\x27'+word+'\x27,\x27'+rpp+'\x27,\x27'+ currentPage +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
+				}
+				$('.tweetBody').linkify();			
+				$('#wait').fadeOut(fadeTimer);
+			},
+			error: function (XMLHttpRequest, textStatus, errorThrown) {
+				console.log(XMLHttpRequest);
+				console.log(textStatus);
+				console.log(errorThrown);
+				librarianErr();
+			}
+		});
+	}
+}
+function archiveSearch(arch, rpp, currentPage) {
+	$('#wait').fadeIn(fadeTimer);
+	resetArchiveList = false;
+	var pageFix = currentPage+1;
+	if(!arch){
+		arch = currentArchive;
+	}
+	if((!arch)||(!rpp)||(!pageFix)){
+		console.log(arch + ', ' + word + ', ' + rpp + ', ' + pageFix);
+		if(!arch){console.log('arch!')}else if(!word){console.log('word!')}else if(!rpp){console.log('rpp = '+rpp)}else if(!pageFix){console.log('pageFix = '+pageFix)}else{console.log('something else!')}
+		alert('error in wordSearch');		
+		return false;
+	} else {
+		if($('#tweetListView').css('display') != 'block') {
+			$('.view-controls').fadeOut(fadeTimer);
+			searchValue = $('header input.search').val();
+			$('.overlay').fadeIn(fadeTimer);
+		}
+		var dateValues = $("#timeline").dateRangeSlider("values");
+		if ( totalPages == 0 ) {
+			// GET TOTAL PAGES
+			archiveTweetListPageAPI(arch, Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, rpp);
+		}
+		// Get a page of tweets between two dates
+		archiveTweetListPageAPI(arch, Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, rpp);
+	}
+}
 /* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
 
 // CLEAR MODAL
@@ -666,7 +772,7 @@ function clearModal() {
 
 // VOLUME BARS
 function volumeBars(arch, word, interval){
-	$('footer svg').remove();
+	$('svg#volume').remove();
 	if (!arch) {
 		arch = '*';
 	}
@@ -701,7 +807,7 @@ function volumeBars(arch, word, interval){
 			console.log('Diff = '+((Date.parse(datetime)/1000)-mostRecent));
 			console.log('interval = '+interval);
 			if ( ( ( ( Date.parse(datetime)/1000 ) - mostRecent ) > interval*1.15 ) && (arch == '*') ) {
-				alert('Librarian stopped archiving!');
+				console.log('Librarian stopped archiving!');
 			} else {
 				console.log('Librarian appears to be archiving');
 			}
@@ -719,7 +825,7 @@ function volumeBars(arch, word, interval){
 					drawdata.push(v);
 				});
 				//Create SVG element
-				var svg = d3.select("#footer")
+				var svg = d3.select("body")
 							.append("svg")
 							.attr("width", "100%")
 							.attr("id","volume")
