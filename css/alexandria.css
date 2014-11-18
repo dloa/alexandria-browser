@@ -305,6 +305,10 @@ ul#tweetList li a.twitter-username {
 ul#tweetList li .tweetBody a {
 	text-decoration: underline;
 }
+.tweetEmbedWrap {
+	text-align: center;
+	margin: 1em 0 0;
+}
 #tweetList li div.left {
 	display: none;
 }

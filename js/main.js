@@ -628,9 +628,9 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 					}
 					console.log(expanded_url.split('/')[2]);
 					if(expanded_url.split('/')[2] == 'youtu.be'){
-						var render_url = '<iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3] +'" frameborder="0" allowfullscreen></iframe>';
+						var render_url = '<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3] +'" frameborder="0" allowfullscreen></iframe></div>';
 					} else if (expanded_url.split('/')[2] == 'vine.co') {
-						var render_url = '<iframe src="http://vine.co/v/'+expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe>';
+						var render_url = '<div class="tweetEmbedWrap"><iframe src="http://vine.co/v/'+expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe></div>';
 					} else {
 						var render_url = '';
 					}
