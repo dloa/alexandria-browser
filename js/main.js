@@ -4,7 +4,7 @@ jQuery(document).ready(function($){
 	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
 
 	$("#timeline").dateRangeSlider({
-		bounds: {min: new Date(2014, 9, 17), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
+		bounds: {min: new Date(2014, 8, 8), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
 		defaultValues: {min: Date.parse(datetime)-86400000, max: Date.parse(datetime)},
 		arrows: false,
 		scales: [{
@@ -144,13 +144,18 @@ jQuery(document).ready(function($){
 			} else {
 				var searchWord = activeWord;			
 			}
-			var escapeWord = escape(word);
-			wordSearch(currentArchive, escapeWord, 40, 0);
+//			var escapeWord = escape(word);
+//			wordSearch(currentArchive, escapeWord, 40, 0);
+			wordSearch(currentArchive, searchWord, 40, 0);
 			resetArchiveList = true;
 		} else {			
 			if (currentView.slice(0,5) == 'words') {
 				getArchiveWords(searchTerm);
 			} else {
+				if(!searchTerm) {
+					var searchTerm = '';
+				}
+				console.log(searchTerm);
 				getJobs(searchTerm);
 			}
 		}
@@ -177,7 +182,7 @@ var fadeTimer = 100;
 var activeJobsCache = [];
 var newArchiveVolumeQueryStringCache = [];
 var newArchiveVolumeCache = [];
-var defaultMaxResults = 160;
+var defaultMaxResults = 50;
 var cloudlist = [];
 var currentView = 'archiveCloud';
 var currentArchive = '*';
@@ -343,7 +348,7 @@ function buildArchiveList() {
 			cloudlistraw.push([i,d]);
 		});
 	} else {
-		alert('Under construction');
+		alert('No Archives Found');
 	}
 	cloudlistraw.sort(function(a,b){ return a[1][1]>b[1][1]?1:-1; });
 	cloudlistraw.forEach(function(a){
@@ -620,21 +625,24 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 			data: queryString.toString(),
 			success: function (e) {
 				console.log('wordSearch() Ajax: betweenDates/wordsearch ... '+queryString);
+				console.info(e);
 				var data = $.parseJSON(e);
+				console.info(data);
 				// Load a page of tweets
 				for (var i = 0; i < data.length; i++) {
-					var expanded_url = (data[i].p.twitter.data.url_data[0]);
-					if(expanded_url){
-						expanded_url = expanded_url['Expanded_url'];
-					} else {
-						expanded_url = '';
-					}
-					console.log(expanded_url.split('/')[2]);
-					if(expanded_url.split('/')[2] == 'youtu.be'){
-						var render_url = '<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3] +'" frameborder="0" allowfullscreen></iframe></div>';
-					} else if (expanded_url.split('/')[2] == 'vine.co') {
-						var render_url = '<div class="tweetEmbedWrap"><iframe src="http://vine.co/v/'+expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe></div>';
-					} else {
+					var expanded_url = [];
+					if(data[i].p.twitter.data.url_data[0]) {
+						expanded_url = (data[i].p.twitter.data.url_data[0]);
+						if(expanded_url != ''){
+							expanded_url = expanded_url['Expanded_url'];
+						}
+						if(expanded_url.split('/')[2] == 'youtu.be'){
+							var render_url = '<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3] +'" frameborder="0" allowfullscreen></iframe></div>';
+						} else if (expanded_url.split('/')[2] == 'vine.co') {
+							var render_url = '<div class="tweetEmbedWrap"><iframe src="http://vine.co/v/'+expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe></div>';
+						} else {
+							var render_url = '';
+						}
 						var render_url = '';
 					}
 					var tweetDate = Date.parse(data[i].p.twitter.data.tweet_data[4]);
