@@ -6,6 +6,9 @@ jQuery(document).ready(function($){
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(2014, 8, 8), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
 		defaultValues: {min: Date.parse(datetime)-86400000, max: Date.parse(datetime)},
+//	Troubleshooting empty tweet list problem
+//		bounds: {min: new Date(2014, 10, 11), max: new Date(2014, 10, 12)},
+//		defaultValues: {min: new Date(2014, 10, 11), max: new Date(2014, 10, 12)},
 		arrows: false,
 		scales: [{
 		  first: function(value){ return value; },
@@ -216,8 +219,7 @@ function runSearch(searchTerm) {
 		clearModal();
 	}	
 	if (currentView.slice(0,5) == 'words') {
-		activeWord = $('.search').val();
-		getArchiveWords(currentArchive,activeWord);
+		getArchiveWords(currentArchive, $('.search').val());
 	} else {
 		getJobs(searchTerm);
 	}
@@ -409,8 +411,8 @@ function getArchiveWords(arch, filterword) {
 			// Add words and volumes to array and hidden list
 			$.each(data,function(word, weight){
 				cloudlistraw.push([word,weight]);
-				var escapeWord = escape(word);
-				$("#wordsList").append('<li class="responseRow" volume="'+weight+'"><a href="#" onclick="wordSearch(&quot;'+searchTerm+'&quot;, &quot;'+ escapeWord +'&quot;, 40, 0);"><span>' + word + '</span> <span class="archive-volume">'+ weight +'</span></a></li>');
+//				var escapeWord = escape(word);
+				$("#wordsList").append('<li class="responseRow" volume="'+weight+'"><a href="#" onclick="wordSearch(&quot;'+searchTerm+'&quot;, &quot;'+ word +'&quot;, 40, 0);"><span>' + word + '</span> <span class="archive-volume">'+ weight +'</span></a></li>');
 			});
 			// Sort the words array and list by volume
 			cloudlistraw.sort(function(a,b){ return a[1]>b[1]?1:-1; });
@@ -506,8 +508,8 @@ function buildWordCloud(cloudlist, MaxResults) {
 			var item = d.text;
 			if(currentView == 'wordsCloud' ){
 				activeWord = item;
-				var escapeItem = escape(item);
-				wordSearch(currentArchive, escapeItem, 40, 0);
+//				var escapeItem = escape(item);
+				wordSearch(currentArchive, item, 40, 0);
 			} else {
 				$('main').fadeOut(fadeTimer);
 				currentArchive = item;
@@ -537,6 +539,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 		alert('error in wordSearch');		
 		return false;
 	} else {
+		activeWord = word;
 		if($('#tweetListView').css('display') != 'block') {
 			$('.view-controls').fadeOut(fadeTimer);
 			searchValue = $('header input.search').val();
@@ -643,8 +646,8 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 						} else {
 							var render_url = '';
 						}
-						var render_url = '';
 					}
+					var render_url = '';
 					var tweetDate = Date.parse(data[i].p.twitter.data.tweet_data[4]);
 					var niceTweetDate = data[i].p.twitter.data.tweet_data[4].split(' ');
 					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<br />' + expanded_url + '<br />' + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
@@ -652,8 +655,8 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 				$("#tweetList li.more-link").remove();
 				currentPage++;
 				if(currentPage < totalPages) {
-					var escapeWord = escape(word);
-					$("#tweetList").append('<li class="more-link"><a href="javascript:wordSearch(\x27'+arch+'\x27,\x27'+ escapeWord +'\x27,\x27'+rpp+'\x27,\x27'+ currentPage +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
+//					var escapeWord = escape(word);
+					$("#tweetList").append('<li class="more-link"><a href="javascript:wordSearch(\x27'+arch+'\x27,\x27'+ word +'\x27,\x27'+rpp+'\x27,\x27'+ currentPage +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 				}
 				$('.tweetBody').linkify();			
 				$('#wait').fadeOut(fadeTimer);
