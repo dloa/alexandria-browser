@@ -636,8 +636,10 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 					var expanded_url = [];
 					if(data[i].p.twitter.data.url_data[0]) {
 						expanded_url = (data[i].p.twitter.data.url_data[0]);
+						console.log(expanded_url);
 						if(expanded_url != ''){
 							expanded_url = expanded_url['Expanded_url'];
+							console.log(expanded_url);
 						}
 						if(expanded_url.split('/')[2] == 'youtu.be'){
 							var render_url = '<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3] +'" frameborder="0" allowfullscreen></iframe></div>';
@@ -646,8 +648,10 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 						} else {
 							var render_url = '';
 						}
+						console.log(render_url);
+					} else {
+						var render_url = '';
 					}
-					var render_url = '';
 					var tweetDate = Date.parse(data[i].p.twitter.data.tweet_data[4]);
 					var niceTweetDate = data[i].p.twitter.data.tweet_data[4].split(' ');
 					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<br />' + expanded_url + '<br />' + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
