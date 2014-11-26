@@ -147,8 +147,6 @@ jQuery(document).ready(function($){
 			} else {
 				var searchWord = activeWord;			
 			}
-//			var escapeWord = escape(word);
-//			wordSearch(currentArchive, escapeWord, 40, 0);
 			wordSearch(currentArchive, searchWord, 40, 0);
 			resetArchiveList = true;
 		} else {			
@@ -180,21 +178,135 @@ jQuery(document).ready(function($){
 }); // End Document.Ready
 
 // Default variables
+var w = window.innerWidth;				
+var h = window.innerHeight-177;
 var datetime = new Date();
 var fadeTimer = 100;
 var activeJobsCache = [];
+var MaxResults;
 var newArchiveVolumeQueryStringCache = [];
 var newArchiveVolumeCache = [];
 var defaultMaxResults = 50;
-var cloudlist = [];
+var cloudlist = [],
+    max,
+    scale = 1,
+    complete = 0,
+    keyword = "",
+    tags,
+    fontSize,
+    maxLength = 30,
+    fetcher;
+var fontSizeMultiplier;
+var layout = d3.layout.cloud()
+	.timeInterval(10)
+	.size([w, h])
+	.rotate(0)
+	.font("Avenir-Book")
+	.fontSize(function(d) { return d.size; })
+	.text(function(d) { return d.text; })
+	.on("end", draw);
+	
+var svg = d3.select("#vis").append("svg")
+    .attr("width", w)
+    .attr("height", h);
+
+var background = svg.append("g"),
+    vis = svg.append("g")
+    .attr("transform", "translate(" + [w >> 1, h >> 1] + ")");
+
 var currentView = 'archiveCloud';
 var currentArchive = '*';
+var currentArchiveLowercase = '*';
 var activeWord;
 var searchResults = [];
 var searchResultsCache = [];
 var resetArchiveList = false;
 var currentPage = 0;
 var totalPages = 0;
+var cloudCache = [];
+
+// From Jonathan Feinberg's cue.language, see lib/cue.language/license.txt.
+var stopWords = /^(i|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourself|yourselves|he|him|his|himself|she|her|hers|herself|it|its|itself|they|them|their|theirs|themselves|what|which|who|whom|whose|this|that|these|those|am|is|are|was|were|be|been|being|have|has|had|having|do|does|did|doing|will|would|should|can|could|ought|i'm|you're|he's|she's|it's|we're|they're|i've|you've|we've|they've|i'd|you'd|he'd|she'd|we'd|they'd|i'll|you'll|he'll|she'll|we'll|they'll|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|won't|wouldn't|shan't|shouldn't|can't|cannot|couldn't|mustn't|let's|that's|who's|what's|here's|there's|when's|where's|why's|how's|a|an|the|and|but|if|or|because|as|until|while|of|at|by|for|with|about|against|between|into|through|during|before|after|above|below|to|from|up|upon|down|in|out|on|off|over|under|again|further|then|once|here|there|when|where|why|how|all|any|both|each|few|more|most|other|some|such|no|nor|not|only|own|same|so|than|too|very|say|says|said|shall)$/,
+    punctuation = new RegExp("[" + unicodePunctuationRe + "]", "g"),
+    wordSeparators = /[\s\u3031-\u3035\u309b\u309c\u30a0\u30fc\uff70]+/g,
+    discard = /^(@|https?:|\/\/)/,
+    htmlTags = /(<[^>]*?>|<script.*?<\/script>|<style.*?<\/style>|<head.*?><\/head>)/g;
+
+function draw(words, bounds) {
+  scale = bounds ? Math.min(
+      w / Math.abs(bounds[1].x - w / 2),
+      w / Math.abs(bounds[0].x - w / 2),
+      h / Math.abs(bounds[1].y - h / 2),
+      h / Math.abs(bounds[0].y - h / 2)) / 2 : 1;
+	var thisCloudView = currentView;
+	if ((currentView == 'archiveListView') || (currentView == 'wordsListView') ) {
+		thisCloudView = currentView.slice(0,-8)+'Cloud';
+	}
+  var text = vis.selectAll("text")
+      .data(words, function(d) { return d.text.toLowerCase(); });
+  text.transition()
+      .duration(1000)
+      .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
+      .style("font-size", function(d) { return d.size + "px"; });
+  text.enter().append("text")
+      .attr("text-anchor", "middle")
+      .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
+      .style("font-size", function(d) { return d.size + "px"; })
+      .style("opacity", 1e-6)
+      .on("click", function(d) {
+        /*
+		$('#wait').fadeIn(fadeTimer);
+		var item = d.text;
+		if(currentView == 'wordsCloud' ){
+			activeWord = item;
+			wordSearch(currentArchive, item, 40, 0);
+		} else {
+			$('main').fadeOut(fadeTimer);
+			currentArchive = item;
+			$('#viewlabel .currentArchive').text(currentArchive);
+			searchTerm = item;
+			currentView = 'wordsCloud';
+			getArchiveWords(item);
+		}
+		*/
+      })
+    .transition()
+      .duration(1000)
+      .style("opacity", 1);
+  text.style("font-family", function(d) { return d.font; })
+		.style("fill", function (d) { // base fill on ratio of number of actual results
+			if ( (d.text == currentArchiveLowercase) && ( currentArchiveLowercase != '*' ) ) {
+				return '#9DA2CF';
+			} else if (d.fill < .075) { return '#eeeeee' }
+			else if (d.fill < .15) { return '#dddddd' }
+			else if (d.fill < .225) { return '#cccccc' }
+			else if (d.fill < .3) { return '#bbbbbb' }
+			else if (d.fill < .375) { return '#aaaaaa' }
+			else if (d.fill < .45) { return '#999999' }
+			else if (d.fill < .525) { return '#888888' }
+			else if (d.fill < .6) { return '#777777' }
+			else if (d.fill < .675) { return '#666666' }
+			else if (d.fill < .75) { return '#555555' }
+			else if (d.fill < .825) { return '#444444' }
+			else if (d.fill < .9) { return '#333333' }
+			else { return '#222222' };
+		})
+      .text(function(d) { return d.text; });
+  var exitGroup = background.append("g")
+      .attr("transform", vis.attr("transform"));
+  var exitGroupNode = exitGroup.node();
+  text.exit().each(function() {
+    exitGroupNode.appendChild(this);
+  });
+  exitGroup.transition()
+      .duration(1000)
+      .style("opacity", 1e-6)
+      .remove();
+  vis.transition()
+      .delay(1000)
+      .duration(750)
+      .attr("transform", "translate(" + [w >> 1, h >> 1] + ")scale(" + scale + ")");
+}
 
 function getAllArchives(){
 	searchValue = '';
@@ -387,7 +499,8 @@ function getArchiveWords(arch, filterword) {
 	}
 	// Loading spinner
 	$('#wait').fadeIn(fadeTimer);
-	// Remove previous results from Words cloud and list
+	// Record and remove previous results from Words cloud and list
+	
 	$('main article ul li').remove();
 	$('.wordCloud').children().remove();
 	// Adjust interface display for Words cloud display
@@ -407,11 +520,10 @@ function getArchiveWords(arch, filterword) {
 			var data = $.parseJSON(e);
 			// Load words
 			var cloudlistraw = [],i;
-			var cloudlist = [];
+			cloudlist = [];
 			// Add words and volumes to array and hidden list
 			$.each(data,function(word, weight){
 				cloudlistraw.push([word,weight]);
-//				var escapeWord = escape(word);
 				$("#wordsList").append('<li class="responseRow" volume="'+weight+'"><a href="#" onclick="wordSearch(&quot;'+searchTerm+'&quot;, &quot;'+ word +'&quot;, 40, 0);"><span>' + word + '</span> <span class="archive-volume">'+ weight +'</span></a></li>');
 			});
 			// Sort the words array and list by volume
@@ -440,18 +552,35 @@ function getArchiveWords(arch, filterword) {
 
 // Build WORD CLOUD
 function buildWordCloud(cloudlist, MaxResults) {
+	if (currentView == 'wordsCloud') {
+		if (cloudCache.length > 0) {
+			console.log('Word cloud cache exists!');
+			console.info(cloudCache);
+		}
+	}
 	// Determine word cloud density for word size and fill
 	if (!MaxResults) {
-		var MaxResults = defaultMaxResults;
+		MaxResults = defaultMaxResults;
 	}
 	if (cloudlist.length < MaxResults)  {
 		totalResults = cloudlist.length;
 	} else {
 		totalResults = MaxResults;
-	}	
-	var w = window.innerWidth;				
-	var h = window.innerHeight-177;
-	var fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Change difference between largest and smallest word based on browser font size AND number of results
+	}
+	w = window.innerWidth;				
+	h = window.innerHeight-177;
+	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Change difference between largest and smallest word based on browser font size AND number of results
+	console.log('fontSizeMultiplier = '+fontSizeMultiplier);
+	console.log('cloudlist = '+cloudlist);
+	console.info(cloudlist.map(function(d, i) {
+		return {text: d, size: (((i/totalResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/totalResults }; // base size on ratio of number of actual results
+	  }));
+	currentArchiveLowercase = currentArchive.toLowerCase();
+	  layout.stop().words(cloudlist.map(function(d, i) {
+			return {text: d, size: (((i/totalResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/totalResults }; // base size on ratio of number of actual results
+	  })).padding(5*fontSizeMultiplier).start();
+
+/*
 	d3.layout.cloud()
 	  .timeInterval(10)
 	  .size([w, h])
@@ -466,6 +595,33 @@ function buildWordCloud(cloudlist, MaxResults) {
 	  .start();
 
 	function draw(words) {
+		if (currentView == 'wordsCloud') {
+			console.log('WORDS: ');
+			console.info(words);
+			var cachedWords = [];
+			cloudCache.forEach(function(d, i){
+				
+				// create array to check new cloud words
+				cachedWords.push(d.text);				
+			});
+			
+			console.log('cachedWords = '+cachedWords);
+			words.forEach(function(d, i, arr) {
+				console.log(d.text, i);
+				if(jQuery.inArray(d.text, cachedWords) > -1){				
+					console.log('WORD EXISTS!');
+					if(i != jQuery.inArray(d.text, cachedWords)){
+						// CHANGE THE FONT SIZE IF TEXT ALREADY IN CLOUD
+						console.log(jQuery.inArray(d.text, cachedWords));
+						console.info('cloudCache = ');
+						console.info(cloudCache[jQuery.inArray(d.text, cachedWords)]);
+						console.info(d);
+					}else{
+						console.log('NO CHANGE');
+					}
+				}
+			});
+		}
 		var thisCloudView = currentView;
 		if ((currentView == 'archiveListView') || (currentView == 'wordsListView') ) {
 			thisCloudView = currentView.slice(0,-8)+'Cloud';
@@ -508,7 +664,6 @@ function buildWordCloud(cloudlist, MaxResults) {
 			var item = d.text;
 			if(currentView == 'wordsCloud' ){
 				activeWord = item;
-//				var escapeItem = escape(item);
 				wordSearch(currentArchive, item, 40, 0);
 			} else {
 				$('main').fadeOut(fadeTimer);
@@ -520,7 +675,20 @@ function buildWordCloud(cloudlist, MaxResults) {
 			}
 		})
 		.text(function(d) { return d.text; });
+		if (currentView == 'wordsCloud') {
+			if (cloudCache.length > 0) {
+				console.log('Word cloud cache exists!');
+				console.info(cloudCache);
+				cloudCache = [];
+				cloudCache = d3.selectAll("text").data();
+			} else {
+				cloudCache = d3.selectAll("text").data();
+				// console.log('cloudCache = ');
+				// console.info(cloudCache);
+			}
+		}
 	}
+*/
 	// VOLUME BARS AFTER WORD CLOUD
 	volumeBars(currentArchive,'',7200);
 }
@@ -642,9 +810,12 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 							console.log(expanded_url);
 						}
 						if(expanded_url.split('/')[2] == 'youtu.be'){
-							var render_url = '<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3] +'" frameborder="0" allowfullscreen></iframe></div>';
+							var render_url = '<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3].split('?')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
 						} else if (expanded_url.split('/')[2] == 'vine.co') {
 							var render_url = '<div class="tweetEmbedWrap"><iframe src="http://vine.co/v/'+expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe></div>';
+						} else if (expanded_url.split('/')[2] == 'www.youtube.com') {
+							var render_url = '<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3].split('=')[1] +'" frameborder="0" allowfullscreen></iframe></div>';
+							 'https://www.youtube.com/watch?v=L0bzwOdOI8UI'
 						} else {
 							var render_url = '';
 						}
@@ -659,7 +830,6 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 				$("#tweetList li.more-link").remove();
 				currentPage++;
 				if(currentPage < totalPages) {
-//					var escapeWord = escape(word);
 					$("#tweetList").append('<li class="more-link"><a href="javascript:wordSearch(\x27'+arch+'\x27,\x27'+ word +'\x27,\x27'+rpp+'\x27,\x27'+ currentPage +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 				}
 				$('.tweetBody').linkify();			

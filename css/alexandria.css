@@ -340,6 +340,10 @@ main.wordCloud {
 	top: 73px;
 	position: fixed;
 }
+main.wordCloud#vis {
+	display: block !important;
+	z-index: 15;
+}
 main.wordCloud span, main.wordCloud text {
 	cursor: pointer;
 	transition: all 0.5s ease;
