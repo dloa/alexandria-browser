@@ -247,6 +247,7 @@ div#intro {
 	width: 100%;
 	top: 42%;
 	z-index:500;
+	text-align: center;
 }
 #intro h1 {
 	margin: -.5em 0 .5em;
