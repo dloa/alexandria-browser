@@ -254,21 +254,19 @@ function draw(words, bounds) {
       .style("font-size", function(d) { return d.size + "px"; })
       .style("opacity", 1e-6)
       .on("click", function(d) {
-        /*
-		$('#wait').fadeIn(fadeTimer);
-		var item = d.text;
-		if(currentView == 'wordsCloud' ){
-			activeWord = item;
-			wordSearch(currentArchive, item, 40, 0);
-		} else {
-			$('main').fadeOut(fadeTimer);
-			currentArchive = item;
-			$('#viewlabel .currentArchive').text(currentArchive);
-			searchTerm = item;
-			currentView = 'wordsCloud';
-			getArchiveWords(item);
-		}
-		*/
+			$('#wait').fadeIn(fadeTimer);
+			var item = d.text;
+			if(currentView == 'wordsCloud' ){
+				activeWord = item;
+				wordSearch(currentArchive, item, 40, 0);
+			} else {
+			//	$('main').fadeOut(fadeTimer);
+				currentArchive = item;
+				$('#viewlabel .currentArchive').text(currentArchive);
+				searchTerm = item;
+				currentView = 'wordsCloud';
+				getArchiveWords(item);
+			}
       })
     .transition()
       .duration(1000)
@@ -353,7 +351,7 @@ function getJobs(searchTerm) {
 	$('#wait').fadeIn(fadeTimer);
 	$('.search').attr('disabled','disabled');
     $('#intro').remove();
-	$('main').fadeOut(fadeTimer);
+//	$('main').fadeOut(fadeTimer);
 	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
 		$('#'+currentView.slice(0,-8)+'Cloud').children().remove();
 		$('#'+currentView+' li').remove();
@@ -502,7 +500,7 @@ function getArchiveWords(arch, filterword) {
 	// Record and remove previous results from Words cloud and list
 	
 	$('main article ul li').remove();
-	$('.wordCloud').children().remove();
+	// $('.wordCloud').children().remove();
 	// Adjust interface display for Words cloud display
 	$('.sort-link').fadeOut(fadeTimer);
 	// Construct query string
