@@ -42,7 +42,7 @@ jQuery(document).ready(function($){
 		$('header input.search').val('');
 		$('.sort-link').fadeOut(fadeTimer);
 		$('.view-controls .view-link').text('Cloud');
-		$('main').fadeOut(fadeTimer);
+//		$('main').fadeOut(fadeTimer);
 		runSearch('');		
 	});
 	// Omnibox (search input)
@@ -74,7 +74,7 @@ jQuery(document).ready(function($){
 	// View Controls
 	$('.view-controls .view-link').click(function(){		
 		var newView;
-		$('main').fadeOut(fadeTimer);
+//		$('main').fadeOut(fadeTimer);
 		switchView = $(this).text();
 		if(switchView == 'Cloud') {
 			newView = currentView.slice(0,-5)+'ListView';			
@@ -92,7 +92,7 @@ jQuery(document).ready(function($){
 	});	
 	// Sort - Archive List
 	$('#resort-archView').click(function(){
-		$('main').not('#'+currentView).fadeOut(fadeTimer);
+//		$('main').not('#'+currentView).fadeOut(fadeTimer);
 		$('#archiveList').toggleClass('pop-sort');
 		$('#wordsList').toggleClass('pop-sort');
 		if($('#archiveList').hasClass('pop-sort')){
@@ -117,7 +117,7 @@ jQuery(document).ready(function($){
 	});
 	// Sort - Tweet List
 	$('#resort').click(function(){
-		$('main').fadeOut(fadeTimer);
+//		$('main').fadeOut(fadeTimer);
 		$('#tweetListView').fadeIn(fadeTimer);
 		$('#tweetList').toggleClass('pop-sort');
 		if($('#tweetList').hasClass('pop-sort')){
@@ -861,7 +861,7 @@ function clearModal() {
 	totalPages = 0
 	$("#tweetList li").remove();
 	$('.overlay').fadeOut(fadeTimer);
-	$('main').not('#'+currentView).fadeOut(fadeTimer);
+//	$('main').not('#'+currentView).fadeOut(fadeTimer);
 	$('.view-controls').fadeIn(fadeTimer);
 	if (resetArchiveList == true) {
 		if (currentView.slice(0,5) == 'words') {
