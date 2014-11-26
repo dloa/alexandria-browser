@@ -1,5 +1,6 @@
 jQuery(document).ready(function($){	
 	$('#wait').fadeIn(fadeTimer);
+	$('#disabler').fadeIn(fadeTimer);
 	// Footer timeline contruct
 	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
 
@@ -168,6 +169,7 @@ jQuery(document).ready(function($){
 			// esc pressed
 			if($('#wait').css('display') == 'block') {
 				$('#wait').hide();
+				$('#disabler').hide();
 			}
 			clearModal();
 		}
@@ -255,6 +257,7 @@ function draw(words, bounds) {
       .style("opacity", 1e-6)
       .on("click", function(d) {
 			$('#wait').fadeIn(fadeTimer);
+			$('#disabler').fadeIn(fadeTimer);
 			var item = d.text;
 			if(currentView == 'wordsCloud' ){
 				activeWord = item;
@@ -349,6 +352,7 @@ function getJobs(searchTerm) {
 		var searchTerm = '';
 	}
 	$('#wait').fadeIn(fadeTimer);
+	$('#disabler').fadeIn(fadeTimer);
 	$('.search').attr('disabled','disabled');
     $('#intro').remove();
 //	$('main').fadeOut(fadeTimer);
@@ -497,6 +501,7 @@ function getArchiveWords(arch, filterword) {
 	}
 	// Loading spinner
 	$('#wait').fadeIn(fadeTimer);
+	$('#disabler').fadeIn(fadeTimer);
 	// Record and remove previous results from Words cloud and list
 	
 	$('main article ul li').remove();
@@ -694,6 +699,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 // Build TWEET LIST
 function wordSearch(arch, word, rpp, currentPage) {
 	$('#wait').fadeIn(fadeTimer);
+	$('#disabler').fadeIn(fadeTimer);
 	resetArchiveList = false;
 	var pageFix = currentPage+1;
 	if(!arch){
@@ -832,6 +838,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 				}
 				$('.tweetBody').linkify();			
 				$('#wait').fadeOut(fadeTimer);
+				$('#disabler').fadeOut(fadeTimer);
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
 				console.log(XMLHttpRequest);
@@ -948,6 +955,7 @@ function volumeBars(arch, word, interval){
 			searchResults.length=0;
 			searchResultsCache.length = 0;
 			$('#wait').fadeOut(fadeTimer);
+			$('#disabler').fadeOut(fadeTimer);
 			$('.search').attr('disabled',false);
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -966,7 +974,9 @@ function librarianErr(){
 	$("#archiveList li").remove();
 	$('header input.search').attr('disabled','disabled').css({background:'none #efefef',padding:'3px 15px',width:'14em'}).val('Cannot connect to Librarian').next().hide();			
 	$('#wait').fadeOut(fadeTimer);
+	$('#disabler').fadeOut(fadeTimer);
 	$('#volume').fadeOut(fadeTimer);
+	$('#disabler').fadeOut(fadeTimer);
 	$('#timeline').fadeOut(fadeTimer);
 	$('#app-shading').css('bottom',0);
 	alert('Cannot connect to Librarian');
@@ -1018,9 +1028,9 @@ function sortUnorderedList(ul, sortDescending) {
 // Spinner configuration
 var largeSpinConfig = {
 	lines: 17, // The number of lines to draw
-	length: 40, // The length of each line
-	width: 4, // The line thickness
-	radius: 60, // The radius of the inner circle
+	length: 7, // The length of each line
+	width: 1, // The line thickness
+	radius: 10, // The radius of the inner circle
 	corners: 1, // Corner roundness (0..1)
 	rotate: 0, // The rotation offset
 	direction: 1, // 1: clockwise, -1: counterclockwise
