@@ -113,7 +113,7 @@ jQuery(document).ready(function($){
 			sortUnorderedList("wordsList");
 			$(this).text('Alphabetical');
 		}
-		$('main #'+currentView).fadeIn(fadeTimer);
+//		$('main #'+currentView).fadeIn(fadeTimer);
 	});
 	// Sort - Tweet List
 	$('#resort').click(function(){
@@ -357,11 +357,11 @@ function getJobs(searchTerm) {
     $('#intro').remove();
 //	$('main').fadeOut(fadeTimer);
 	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
-		$('#'+currentView.slice(0,-8)+'Cloud').children().remove();
+//		$('#'+currentView.slice(0,-8)+'Cloud').children().remove();
 		$('#'+currentView+' li').remove();
 	} else {
 		$('#'+currentView.slice(0,-5)+'ListView li').remove();
-		$('#'+currentView).children().remove();
+//		$('#'+currentView).children().remove();
 	}
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryString = '{"StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
@@ -448,7 +448,7 @@ function buildArchiveList() {
 			$(this).remove();
 		}
 	});
-	$('#'+currentView).fadeIn(fadeTimer);
+//	$('#'+currentView).fadeIn(fadeTimer);
 	$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
 	// Populate cloudlist array with raw data			
 	var cloudlistraw = [];
@@ -541,7 +541,7 @@ function getArchiveWords(arch, filterword) {
 			// Build the interface
 			$('.sort-link').text('Popular');
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
-			$('main#'+currentView).fadeIn(fadeTimer);
+//			$('main#'+currentView).fadeIn(fadeTimer);
 			buildWordCloud(cloudlist, defaultMaxResults);
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -692,6 +692,8 @@ function buildWordCloud(cloudlist, MaxResults) {
 		}
 	}
 */
+	$('main').not('#'+currentView).fadeOut(fadeTimer);
+	$('main #'+currentView).fadeIn(fadeTimer);
 	// VOLUME BARS AFTER WORD CLOUD
 	volumeBars(currentArchive,'',7200);
 }

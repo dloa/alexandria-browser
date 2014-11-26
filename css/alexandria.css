@@ -203,6 +203,7 @@ div#viewlabel {
 	cursor: pointer;
 }
 .view-controls {
+	display: none;
 	position: absolute;
 	top: 50%;
 	right: 1em;
