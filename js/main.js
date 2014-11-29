@@ -135,27 +135,30 @@ jQuery(document).ready(function($){
 	});	
 	// Timeline selected values change
 	$("#timeline").bind("valuesChanged", function(e, data){
-		resetArchiveList = true;
-		currentPage = 0;
-		totalPages = 0;
-		$('ul#tweetList li').remove();
-		if($('#tweetListView').css('display') == 'block') {
-			if(!activeWord){
-				var searchWord = currentArchive;			
-			} else {
-				var searchWord = activeWord;			
-			}
-			wordSearch(currentArchive, searchWord, 40, 0);
+		console.log($('#timeline').hasClass('ui-rangeSlider-disabled'));
+		if(disableTimeline == false){
 			resetArchiveList = true;
-		} else {			
-			if (currentView.slice(0,5) == 'words') {
-				getArchiveWords(searchTerm);
-			} else {
-				if(!searchTerm) {
-					var searchTerm = '';
+			if($('#tweetListView').css('display') == 'block') {
+				currentPage = 0;
+				totalPages = 0;
+				$('ul#tweetList li').remove();
+				if(!activeWord){
+					var searchWord = currentArchive;			
+				} else {
+					var searchWord = activeWord;			
 				}
-				console.log(searchTerm);
-				getJobs(searchTerm);
+				wordSearch(currentArchive, searchWord, 40, 0);
+				resetArchiveList = true;
+			} else {			
+				if (currentView.slice(0,5) == 'words') {
+					getArchiveWords(searchTerm);
+				} else {
+					if(!searchTerm) {
+						var searchTerm = '';
+					}
+					console.log(searchTerm);
+					getJobs(searchTerm);
+				}
 			}
 		}
 	});
@@ -174,6 +177,18 @@ jQuery(document).ready(function($){
 	$('.close-modal').click(function(){
 		clearModal();
 	});	
+	$('#timeline-controls .full').click(function(){
+		$("#timeline").dateRangeSlider("bounds", new Date(2014, 8, 8), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
+		volumeBars(currentArchive,'',7200);
+	});
+	$('#timeline-controls .month').click(function(){
+		$("#timeline").dateRangeSlider("bounds", new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
+		volumeBars(currentArchive,'',7200);
+	});
+	$('#timeline-controls .playbtn').click(function(){
+		playTimeline();
+	});
+	
 }); // End Document.Ready
 
 // Default variables
@@ -223,6 +238,9 @@ var resetArchiveList = false;
 var currentPage = 0;
 var totalPages = 0;
 var cloudCache = [];
+
+var playingTimeline = 1;
+var disableTimeline = false;
 
 // From Jonathan Feinberg's cue.language, see lib/cue.language/license.txt.
 var stopWords = /^(i|me|my|myself|we|us|our|ours|ourselves|you|your|yours|yourself|yourselves|he|him|his|himself|she|her|hers|herself|it|its|itself|they|them|their|theirs|themselves|what|which|who|whom|whose|this|that|these|those|am|is|are|was|were|be|been|being|have|has|had|having|do|does|did|doing|will|would|should|can|could|ought|i'm|you're|he's|she's|it's|we're|they're|i've|you've|we've|they've|i'd|you'd|he'd|she'd|we'd|they'd|i'll|you'll|he'll|she'll|we'll|they'll|isn't|aren't|wasn't|weren't|hasn't|haven't|hadn't|doesn't|don't|didn't|won't|wouldn't|shan't|shouldn't|can't|cannot|couldn't|mustn't|let's|that's|who's|what's|here's|there's|when's|where's|why's|how's|a|an|the|and|but|if|or|because|as|until|while|of|at|by|for|with|about|against|between|into|through|during|before|after|above|below|to|from|up|upon|down|in|out|on|off|over|under|again|further|then|once|here|there|when|where|why|how|all|any|both|each|few|more|most|other|some|such|no|nor|not|only|own|same|so|than|too|very|say|says|said|shall)$/,
@@ -682,7 +700,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 		}
 	}
 */
-	$('main').not('#'+currentView).fadeOut(fadeTimer);
+	$('main').not('#'+currentView).not('#vis').fadeOut(fadeTimer);
 	$('main #'+currentView).fadeIn(fadeTimer);
 	// VOLUME BARS AFTER WORD CLOUD
 	volumeBars(currentArchive,'',7200);
@@ -840,6 +858,17 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 			}
 		});
 	}
+}
+
+function playTimeline() {
+		var minVal = Date.parse($("#timeline").dateRangeSlider("values").min);
+		var maxVal = Date.parse($("#timeline").dateRangeSlider("values").max);
+		if ( playingTimeline == 0) {
+			$("#timeline").dateRangeSlider("values", new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)), new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)+86400000));
+			playingTimeline = 1;
+		} else {
+			$("#timeline").dateRangeSlider("values", new Date(maxVal), new Date(maxVal+86400000));
+		}
 }
 
 /* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */

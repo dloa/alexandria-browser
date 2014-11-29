@@ -202,13 +202,21 @@ div#viewlabel {
 	top: .1em;
 	cursor: pointer;
 }
-.view-controls {
-	display: none !important;
+.view-controls, #timeline-controls {
 	position: absolute;
 	top: 50%;
 	right: 1em;
 	margin-top: -.5em;
 	line-height: 1;
+}
+#timeline-controls div {
+	display: inline;
+}
+#timeline-controls span {
+	cursor: pointer;
+}
+.view-controls {
+	display: none !important;
 }
 #view-controls-2 {
 	display: none;
