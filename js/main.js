@@ -7,9 +7,6 @@ jQuery(document).ready(function($){
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(2014, 8, 8), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
 		defaultValues: {min: Date.parse(datetime)-86400000, max: Date.parse(datetime)},
-//	Troubleshooting empty tweet list problem
-//		bounds: {min: new Date(2014, 10, 11), max: new Date(2014, 10, 12)},
-//		defaultValues: {min: new Date(2014, 10, 11), max: new Date(2014, 10, 12)},
 		arrows: false,
 		scales: [{
 		  first: function(value){ return value; },
@@ -209,8 +206,8 @@ var layout = d3.layout.cloud()
 	.on("end", draw);
 	
 var svg = d3.select("#vis").append("svg")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", window.innerWidth)
+    .attr("height", window.innerHeight-177);
 
 var background = svg.append("g"),
     vis = svg.append("g")
@@ -453,8 +450,6 @@ function buildArchiveList() {
 	// Populate cloudlist array with raw data			
 	var cloudlistraw = [];
 	var cloudlist = [];
-	console.error('searchResultsCache = '+searchResultsCache);
-	console.error('newArchiveVolumeCache = '+newArchiveVolumeCache);
 	if ((searchResultsCache.length==0)&&(newArchiveVolumeCache.length!=0)) {
 		$.each(newArchiveVolumeCache,function(i, d){
 			cloudlistraw.push([i,d]);
@@ -573,11 +568,6 @@ function buildWordCloud(cloudlist, MaxResults) {
 	w = window.innerWidth;				
 	h = window.innerHeight-177;
 	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Change difference between largest and smallest word based on browser font size AND number of results
-	console.log('fontSizeMultiplier = '+fontSizeMultiplier);
-	console.log('cloudlist = '+cloudlist);
-	console.info(cloudlist.map(function(d, i) {
-		return {text: d, size: (((i/totalResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/totalResults }; // base size on ratio of number of actual results
-	  }));
 	currentArchiveLowercase = currentArchive.toLowerCase();
 	  layout.stop().words(cloudlist.map(function(d, i) {
 			return {text: d, size: (((i/totalResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/totalResults }; // base size on ratio of number of actual results
