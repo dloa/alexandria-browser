@@ -184,7 +184,7 @@ jQuery(document).ready(function($){
 		volumeBars(currentArchive,'',7200);
 	});
 	$('#timeline-controls .playbtn').click(function(){
-		playTimeline();
+		autoPlayTimeline();
 	});
 	
 }); // End Document.Ready
@@ -254,7 +254,7 @@ function draw(words, bounds) {
       .data(words, function(d) { return d.text.toLowerCase(); });
   text.transition()
       .duration(1000)
-//      .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
+      .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
       .style("font-size", function(d) { return d.size + "px"; });
   text.enter().append("text")
       .attr("text-anchor", "middle")
@@ -857,13 +857,16 @@ var playTimerId = 0;
 function autoPlayTimeline() {
 	if (playingTimeline == false) {
 		playingTimeline = true;
+		$('#timeline-controls .playbtn').text('Stop');
 		playTimeline();
 	} else {
+		$('#timeline-controls .playbtn').text('Play');
 		playingTimeline = false;
 	}
 }
 
 function playTimeline() {
+		clearTimeout ( playTimerId );
 		var minVal = Date.parse($("#timeline").dateRangeSlider("values").min);
 		var maxVal = Date.parse($("#timeline").dateRangeSlider("values").max);
 //		$("#timeline").dateRangeSlider("values", new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)), new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)+86400000));
@@ -978,8 +981,8 @@ function volumeBars(arch, word, interval){
 			$('#disabler').fadeOut(fadeTimer);
 			$('.search').attr('disabled',false);
 			if (playingTimeline == true){
-				// set a timer and run search if done typing
-				playTimerId = setTimeout ( 'playTimeline()', 3000 );
+				// set a timer and step timline forward
+				playTimerId = setTimeout ( 'playTimeline()', 2500 );
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
