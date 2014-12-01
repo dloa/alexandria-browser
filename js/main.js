@@ -136,29 +136,27 @@ jQuery(document).ready(function($){
 	// Timeline selected values change
 	$("#timeline").bind("valuesChanged", function(e, data){
 		console.log($('#timeline').hasClass('ui-rangeSlider-disabled'));
-		if(disableTimeline == false){
+		resetArchiveList = true;
+		if($('#tweetListView').css('display') == 'block') {
+			currentPage = 0;
+			totalPages = 0;
+			$('ul#tweetList li').remove();
+			if(!activeWord){
+				var searchWord = currentArchive;			
+			} else {
+				var searchWord = activeWord;			
+			}
+			wordSearch(currentArchive, searchWord, 40, 0);
 			resetArchiveList = true;
-			if($('#tweetListView').css('display') == 'block') {
-				currentPage = 0;
-				totalPages = 0;
-				$('ul#tweetList li').remove();
-				if(!activeWord){
-					var searchWord = currentArchive;			
-				} else {
-					var searchWord = activeWord;			
+		} else {			
+			if (currentView.slice(0,5) == 'words') {
+				getArchiveWords(searchTerm);
+			} else {
+				if(!searchTerm) {
+					var searchTerm = '';
 				}
-				wordSearch(currentArchive, searchWord, 40, 0);
-				resetArchiveList = true;
-			} else {			
-				if (currentView.slice(0,5) == 'words') {
-					getArchiveWords(searchTerm);
-				} else {
-					if(!searchTerm) {
-						var searchTerm = '';
-					}
-					console.log(searchTerm);
-					getJobs(searchTerm);
-				}
+				console.log(searchTerm);
+				getJobs(searchTerm);
 			}
 		}
 	});
