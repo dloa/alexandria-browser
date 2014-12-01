@@ -274,6 +274,7 @@ function draw(words, bounds) {
 			if(currentView == 'wordsCloud' ){
 				activeWord = item;
 				wordSearch(currentArchive, item, 40, 0);
+				$('#timeline-controls').fadeOut(fadeTimer);
 			} else {
 			//	$('main').fadeOut(fadeTimer);
 				currentArchive = item;
@@ -795,6 +796,7 @@ function clearModal() {
 		}
 	}
 	volumeBars(currentArchive,'',7200);
+	$('#timeline-controls').fadeIn(fadeTimer);
 }
 
 // VOLUME BARS
