@@ -25,13 +25,14 @@ jQuery(document).ready(function($){
 	});
 	// Generate initial volume bars
 	volumeBars('*', '', 7200);
-
 	// UI/UX Navigation
 	// Click logo to go back to archive list with current timeline selection
 	$('#logo').click(function(){
 		if($(this).hasClass('disabled')){
 			return false;
 		}
+		playingTimeline = true;
+		autoPlayTimeline();
 		currentArchive = '*';
 		searchTerm = '';
 		currentView = 'archiveCloud';
@@ -40,10 +41,12 @@ jQuery(document).ready(function($){
 		$('.sort-link').fadeOut(fadeTimer);
 		$('.view-controls .view-link').text('Cloud');
 //		$('main').fadeOut(fadeTimer);
-		runSearch('');		
+		runSearch('');
 	});
 	// Omnibox (search input)
 	$('header input.search').on("keydown", function (e) {		
+		playingTimeline = true;
+		autoPlayTimeline();
 		searchValue = $('header input.search').val();
 		if($('#tweetListView').css('display') == 'block') {
 			resetArchiveList = true;
@@ -185,7 +188,8 @@ jQuery(document).ready(function($){
 	$('#timeline-controls .playbtn').click(function(){
 		autoPlayTimeline();
 	});
-	
+
+	resetInterface();	
 }); // End Document.Ready
 
 // Default variables
@@ -237,6 +241,7 @@ var totalPages = 0;
 var cloudCache = [];
 
 var playingTimeline = false;
+var animDuration = 3500;
 
 // Draw Word Clouds
 function draw(words, bounds) {
@@ -252,7 +257,7 @@ function draw(words, bounds) {
   var text = vis.selectAll("text")
       .data(words, function(d) { return d.text.toLowerCase(); });
   text.transition()
-      .duration(3500)
+      .duration(animDuration)
       .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
       .style("font-size", function(d) { return d.size + "px"; });
   text.enter().append("text")
@@ -276,10 +281,11 @@ function draw(words, bounds) {
 				searchTerm = item;
 				currentView = 'wordsCloud';
 				getArchiveWords(item);
+				volumeBars(currentArchive,'',7200);
 			}
       })
     .transition()
-      .duration(3500)
+      .duration(animDuration)
       .style("opacity", 1);
   text.style("font-family", function(d) { return d.font; })
 		.style("fill", function (d) { // base fill on ratio of number of actual results
@@ -314,6 +320,7 @@ function draw(words, bounds) {
       .delay(1000)
       .duration(750)
       .attr("transform", "translate(" + [w >> 1, h >> 1] + ")scale(" + scale + ")");
+	setTimeout ( 'resetInterface()', animDuration );
 }
 
 function getAllArchives(){
@@ -343,6 +350,8 @@ function runSearch(searchTerm) {
 	} else {
 		getJobs(searchTerm);
 	}
+	console.log('currentView = '+currentView);
+	volumeBars(currentArchive,'',7200);
 }
 
 // NEW GET ACTIVE JOBS AND VOLUMES
@@ -579,123 +588,11 @@ function buildWordCloud(cloudlist, MaxResults) {
 	h = window.innerHeight-177;
 	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Change difference between largest and smallest word based on browser font size AND number of results
 	currentArchiveLowercase = currentArchive.toLowerCase();
-	  layout.stop().words(cloudlist.map(function(d, i) {
-			return {text: d, size: (((i/totalResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/totalResults }; // base size on ratio of number of actual results
-	  })).padding(5*fontSizeMultiplier).start();
-
-/*
-	d3.layout.cloud()
-	  .timeInterval(10)
-	  .size([w, h])
-	  .words(cloudlist.map(function(d, i) {
+	layout.stop().words(cloudlist.map(function(d, i) {
 		return {text: d, size: (((i/totalResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/totalResults }; // base size on ratio of number of actual results
-	  }))
-	  .padding(5*fontSizeMultiplier)
-	  .rotate(0)
-	  .font("Avenir-Book")
-	  .fontSize(function(d) { return d.size; })
-	  .on("end", draw)
-	  .start();
-
-	function draw(words) {
-		if (currentView == 'wordsCloud') {
-			console.log('WORDS: ');
-			console.info(words);
-			var cachedWords = [];
-			cloudCache.forEach(function(d, i){
-				
-				// create array to check new cloud words
-				cachedWords.push(d.text);				
-			});
-			
-			console.log('cachedWords = '+cachedWords);
-			words.forEach(function(d, i, arr) {
-				console.log(d.text, i);
-				if(jQuery.inArray(d.text, cachedWords) > -1){				
-					console.log('WORD EXISTS!');
-					if(i != jQuery.inArray(d.text, cachedWords)){
-						// CHANGE THE FONT SIZE IF TEXT ALREADY IN CLOUD
-						console.log(jQuery.inArray(d.text, cachedWords));
-						console.info('cloudCache = ');
-						console.info(cloudCache[jQuery.inArray(d.text, cachedWords)]);
-						console.info(d);
-					}else{
-						console.log('NO CHANGE');
-					}
-				}
-			});
-		}
-		var thisCloudView = currentView;
-		if ((currentView == 'archiveListView') || (currentView == 'wordsListView') ) {
-			thisCloudView = currentView.slice(0,-8)+'Cloud';
-		}
-		
-		var currentArchiveLowercase = currentArchive.toLowerCase();
-	d3.select("#"+thisCloudView).append("svg")
-		.attr("width", w)
-		.attr("height", h)
-	  .append("g")
-		.attr("transform", "translate(" + [w >> 1, h >> 1] + ")")
-	  .selectAll("text")
-		.data(words)
-	  .enter().append("text")
-		.style("font-size", function(d) { return parseInt(d.size)/document.emSize()[1] + "em"; }) // set font size in ems
-		.style("font-family", "Avenir-Book")
-		.style("fill", function (d) { // base fill on ratio of number of actual results
-			if ( (d.text == currentArchiveLowercase) && ( currentArchiveLowercase != '*' ) ) {
-				return '#9DA2CF';
-			} else if (d.fill < .075) { return '#eeeeee' }
-			else if (d.fill < .15) { return '#dddddd' }
-			else if (d.fill < .225) { return '#cccccc' }
-			else if (d.fill < .3) { return '#bbbbbb' }
-			else if (d.fill < .375) { return '#aaaaaa' }
-			else if (d.fill < .45) { return '#999999' }
-			else if (d.fill < .525) { return '#888888' }
-			else if (d.fill < .6) { return '#777777' }
-			else if (d.fill < .675) { return '#666666' }
-			else if (d.fill < .75) { return '#555555' }
-			else if (d.fill < .825) { return '#444444' }
-			else if (d.fill < .9) { return '#333333' }
-			else { return '#222222' };
-		})
-		.attr("text-anchor", "middle")
-		.attr("transform", function(d) {
-		  return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-		})
-		.on("click", function(d) {
-			$('#wait').fadeIn(fadeTimer);
-			var item = d.text;
-			if(currentView == 'wordsCloud' ){
-				activeWord = item;
-				wordSearch(currentArchive, item, 40, 0);
-			} else {
-				$('main').fadeOut(fadeTimer);
-				currentArchive = item;
-				$('#viewlabel .currentArchive').text(currentArchive);
-				searchTerm = item;
-				currentView = 'wordsCloud';
-				getArchiveWords(item);
-			}
-		})
-		.text(function(d) { return d.text; });
-		if (currentView == 'wordsCloud') {
-			if (cloudCache.length > 0) {
-				console.log('Word cloud cache exists!');
-				console.info(cloudCache);
-				cloudCache = [];
-				cloudCache = d3.selectAll("text").data();
-			} else {
-				cloudCache = d3.selectAll("text").data();
-				// console.log('cloudCache = ');
-				// console.info(cloudCache);
-			}
-		}
-	}
-*/
+	})).padding(5*fontSizeMultiplier).start();
 	$('main').not('#'+currentView).not('#vis').fadeOut(fadeTimer);
 	$('main #'+currentView).fadeIn(fadeTimer);
-	// VOLUME BARS AFTER WORD CLOUD
-	volumeBars(currentArchive,'',7200);
 }
 
 // Build TWEET LIST
@@ -752,6 +649,8 @@ function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 		// GET TOTAL PAGES
 		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+StartDate+',"EndDate":'+EndDate+',"ResultsPerPage": '+rpp+'}';
 		console.log('API call: betweenDates/wordsearch/pagecount');
+		// VOLUME BARS FOR TWEETLIST
+		volumeBars(arch, word, 7200);
 		$.ajax({
 			type: "POST",
 			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount",
@@ -759,8 +658,6 @@ function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 			success: function (e) {
 				console.log('wordSearch() Ajax: betweenDates/wordsearch/pagecount ... '+queryString);
 				totalPages = $.parseJSON(e);
-				// VOLUME BARS FOR TWEET LIST
-				volumeBars(arch, word, 7200);
 				},
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
 					alert("some error");
@@ -854,6 +751,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 
 // Timeline Playback
 var playTimerId = 0;
+
 function autoPlayTimeline() {
 	if (playingTimeline == false) {
 		playingTimeline = true;
@@ -896,11 +794,11 @@ function clearModal() {
 			getJobs(searchTerm);
 		}
 	}
+	volumeBars(currentArchive,'',7200);
 }
 
 // VOLUME BARS
 function volumeBars(arch, word, interval){
-	$('svg#volume').remove();
 	if (!arch) {
 		arch = '*';
 	}
@@ -910,12 +808,10 @@ function volumeBars(arch, word, interval){
 	if(!interval){
 		var inverval = 7200;
 	}
-	//Width and height
 	var w = window.innerWidth-1;
 	var h = 60;
 	var barPadding = 1;
-	var dataset = [];
-	
+	var dataset = [];	
 	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
 	var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(basicSliderBounds.min)/1000+',"EndDate":'+Date.parse(basicSliderBounds.max)/1000+',"Interval": '+interval+'}';
 	console.log('API call: get/interval/count ...');
@@ -924,6 +820,7 @@ function volumeBars(arch, word, interval){
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/interval/count",
 		data: queryString.toString(),
 		success: function (e) {
+			$('svg#volume').remove();
 			console.log('volumeBars() Ajax: get/interval/count ... '+queryString);
 			var data = $.parseJSON(e);
 			$.each(data,function(t, v){
@@ -977,16 +874,6 @@ function volumeBars(arch, word, interval){
 						return "rgb(0, 0, " + (d * 10) + ")";
 				   });
 			}
-			// Reset Interface
-			searchResults.length=0;
-			searchResultsCache.length = 0;
-			$('#wait').fadeOut(fadeTimer);
-			$('#disabler').fadeOut(fadeTimer);
-			$('.search').attr('disabled',false);
-			if (playingTimeline == true){
-				// set a timer and step timline forward
-				playTimerId = setTimeout ( 'playTimeline()', 7000 );
-			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			console.log(XMLHttpRequest);
@@ -996,7 +883,18 @@ function volumeBars(arch, word, interval){
 		}
 	});
 }
-
+function resetInterface() {
+	// Reset Interface
+	searchResults.length=0;
+	searchResultsCache.length = 0;
+	$('#wait').fadeOut(fadeTimer);
+	$('#disabler').fadeOut(fadeTimer);
+	$('.search').attr('disabled',false);
+	if (playingTimeline == true) {
+		// set a timer and step timline forward
+		playTimerId = setTimeout ( 'playTimeline()', animDuration );
+	}
+}
 // ERROR CONNECTING TO LIBRARIAN
 function librarianErr(){
 	$('#logo').addClass('disabled');
