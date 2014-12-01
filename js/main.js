@@ -253,7 +253,7 @@ function draw(words, bounds) {
   var text = vis.selectAll("text")
       .data(words, function(d) { return d.text.toLowerCase(); });
   text.transition()
-      .duration(1000)
+      .duration(3500)
       .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
       .style("font-size", function(d) { return d.size + "px"; });
   text.enter().append("text")
@@ -262,6 +262,8 @@ function draw(words, bounds) {
       .style("font-size", function(d) { return d.size + "px"; })
       .style("opacity", 1e-6)
       .on("click", function(d) {
+		  playingTimeline = true;
+			autoPlayTimeline();
 			$('#wait').fadeIn(fadeTimer);
 			$('#disabler').fadeIn(fadeTimer);
 			var item = d.text;
@@ -278,7 +280,7 @@ function draw(words, bounds) {
 			}
       })
     .transition()
-      .duration(1000)
+      .duration(2500)
       .style("opacity", 1);
   text.style("font-family", function(d) { return d.font; })
 		.style("fill", function (d) { // base fill on ratio of number of actual results
@@ -860,12 +862,13 @@ function autoPlayTimeline() {
 		$('#timeline-controls .playbtn').text('Stop');
 		playTimeline();
 	} else {
-		$('#timeline-controls .playbtn').text('Play');
+		clearTimeout ( playTimerId );
 		playingTimeline = false;
+		$('#timeline-controls .playbtn').text('Play');
 	}
 }
 
-function playTimeline() {
+function playTimeline() {		
 		clearTimeout ( playTimerId );
 		var minVal = Date.parse($("#timeline").dateRangeSlider("values").min);
 		var maxVal = Date.parse($("#timeline").dateRangeSlider("values").max);
@@ -982,7 +985,7 @@ function volumeBars(arch, word, interval){
 			$('.search').attr('disabled',false);
 			if (playingTimeline == true){
 				// set a timer and step timline forward
-				playTimerId = setTimeout ( 'playTimeline()', 2500 );
+				playTimerId = setTimeout ( 'playTimeline()', 8000 );
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
