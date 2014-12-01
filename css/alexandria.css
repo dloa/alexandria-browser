@@ -595,6 +595,12 @@ div.close-modal:hover {
 	-khtml-opacity: 0.5;
 	opacity: 0.5;
 }
+.ui-rangeSlider-container div.ui-rangeSlider-bar.animate {
+	transition: all .5s ease;
+	-moz-transition: all .5s ease;
+	-webkit-transition: all .5s ease;
+	-o-transition: all .5s ease;	
+}
 /* VOLUME BARS */
 svg#volume {
 	position: fixed;

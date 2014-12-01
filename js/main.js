@@ -135,7 +135,6 @@ jQuery(document).ready(function($){
 	});	
 	// Timeline selected values change
 	$("#timeline").bind("valuesChanged", function(e, data){
-		console.log($('#timeline').hasClass('ui-rangeSlider-disabled'));
 		resetArchiveList = true;
 		if($('#tweetListView').css('display') == 'block') {
 			currentPage = 0;
@@ -280,7 +279,7 @@ function draw(words, bounds) {
 			}
       })
     .transition()
-      .duration(2500)
+      .duration(3500)
       .style("opacity", 1);
   text.style("font-family", function(d) { return d.font; })
 		.style("fill", function (d) { // base fill on ratio of number of actual results
@@ -363,7 +362,7 @@ function getJobs(searchTerm) {
 	$('#disabler').fadeIn(fadeTimer);
 	$('.search').attr('disabled','disabled');
     $('#intro').remove();
-//	$('main').fadeOut(fadeTimer);
+	$('main').not('#'+currentView).not('#vis').fadeOut(fadeTimer);
 	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
 //		$('#'+currentView.slice(0,-8)+'Cloud').children().remove();
 		$('#'+currentView+' li').remove();
@@ -853,17 +852,18 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 	}
 }
 
-// RUN PLAY TIMELINE
+// Timeline Playback
 var playTimerId = 0;
-
 function autoPlayTimeline() {
 	if (playingTimeline == false) {
 		playingTimeline = true;
+		$('#timeline .ui-rangeSlider-bar').addClass('animate');
 		$('#timeline-controls .playbtn').text('Stop');
 		playTimeline();
 	} else {
 		clearTimeout ( playTimerId );
 		playingTimeline = false;
+		$('#timeline .ui-rangeSlider-bar').removeClass('animate');
 		$('#timeline-controls .playbtn').text('Play');
 	}
 }
@@ -873,7 +873,7 @@ function playTimeline() {
 		var minVal = Date.parse($("#timeline").dateRangeSlider("values").min);
 		var maxVal = Date.parse($("#timeline").dateRangeSlider("values").max);
 //		$("#timeline").dateRangeSlider("values", new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)), new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)+86400000));
-		$("#timeline").dateRangeSlider("values", new Date(maxVal), new Date(maxVal+86400000));
+		$("#timeline").dateRangeSlider("values", new Date(maxVal-43200000), new Date(maxVal+43200000));
 }
 
 /* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
@@ -985,7 +985,7 @@ function volumeBars(arch, word, interval){
 			$('.search').attr('disabled',false);
 			if (playingTimeline == true){
 				// set a timer and step timline forward
-				playTimerId = setTimeout ( 'playTimeline()', 8000 );
+				playTimerId = setTimeout ( 'playTimeline()', 7000 );
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
