@@ -239,8 +239,7 @@ var currentPage = 0;
 var totalPages = 0;
 var cloudCache = [];
 
-var playingTimeline = 1;
-var disableTimeline = false;
+var playingTimeline = false;
 
 // Draw Word Clouds
 function draw(words, bounds) {
@@ -257,7 +256,7 @@ function draw(words, bounds) {
       .data(words, function(d) { return d.text.toLowerCase(); });
   text.transition()
       .duration(1000)
-      .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
+//      .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
       .style("font-size", function(d) { return d.size + "px"; });
   text.enter().append("text")
       .attr("text-anchor", "middle")
@@ -854,15 +853,23 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 	}
 }
 
+// RUN PLAY TIMELINE
+var playTimerId = 0;
+
+function autoPlayTimeline() {
+	if (playingTimeline == false) {
+		playingTimeline = true;
+		playTimeline();
+	} else {
+		playingTimeline = false;
+	}
+}
+
 function playTimeline() {
 		var minVal = Date.parse($("#timeline").dateRangeSlider("values").min);
 		var maxVal = Date.parse($("#timeline").dateRangeSlider("values").max);
-		if ( playingTimeline == 0) {
-			$("#timeline").dateRangeSlider("values", new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)), new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)+86400000));
-			playingTimeline = 1;
-		} else {
-			$("#timeline").dateRangeSlider("values", new Date(maxVal), new Date(maxVal+86400000));
-		}
+//		$("#timeline").dateRangeSlider("values", new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)), new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)+86400000));
+		$("#timeline").dateRangeSlider("values", new Date(maxVal), new Date(maxVal+86400000));
 }
 
 /* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
@@ -972,6 +979,10 @@ function volumeBars(arch, word, interval){
 			$('#wait').fadeOut(fadeTimer);
 			$('#disabler').fadeOut(fadeTimer);
 			$('.search').attr('disabled',false);
+			if (playingTimeline == true){
+				// set a timer and run search if done typing
+				playTimerId = setTimeout ( 'playTimeline()', 3000 );
+			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			console.log(XMLHttpRequest);
