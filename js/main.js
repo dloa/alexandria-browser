@@ -706,6 +706,14 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 				// Load a page of tweets
 				for (var i = 0; i < data.length; i++) {
 					var expanded_url = [];
+					var media_url = [];
+					if(data[i].p.twitter.data.media_url[0]) {
+						media_url = data[i].p.twitter.data.media_url[0];
+						console.log('MEDIA: '+ media_url);
+						if(media_url != '') {
+							media_url = media_url['Media_url'];
+						}
+					}
 					if(data[i].p.twitter.data.url_data[0]) {
 						expanded_url = (data[i].p.twitter.data.url_data[0]);
 						console.log(expanded_url);
@@ -724,6 +732,9 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 							var render_url = '';
 						}
 						console.log(render_url);
+						if(media_url != '' ){
+							render_url = '<img src="'+media_url+'" /><br />'+render_url;
+						}
 					} else {
 						var render_url = '';
 					}
