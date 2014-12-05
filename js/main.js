@@ -722,9 +722,9 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 							media_url = media_url['Media_url'];
 						}
 					}
+					var render_url = '';
 					if(data[i].p.twitter.data.url_data[0]) {
 						console.info(data[i].p.twitter.data.url_data);
-						var render_url = '';
 						for(var iurl = 0; iurl < data[i].p.twitter.data.url_data.length; iurl++){
 							var new_expanded_url = data[i].p.twitter.data.url_data[iurl];
 							new_expanded_url = new_expanded_url['Expanded_url'];
@@ -732,6 +732,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 							if((expanded_url=='')&&(new_expanded_url!='')){
 								expanded_url = new_expanded_url;
 							} else if (expanded_url!='') {
+								console.log('expanded_url '+expanded_url);
 								expanded_url = expanded_url+'<br />'+new_expanded_url;
 							}
 							if(new_expanded_url.split('/')[2] == 'youtu.be'){
@@ -742,38 +743,14 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 								render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('=')[1] +'" frameborder="0" allowfullscreen></iframe></div>';
 								 'https://www.youtube.com/watch?v=L0bzwOdOI8UI'
 							}
-						}						
-/*
-						expanded_url = (data[i].p.twitter.data.url_data[0]);
-						console.log(expanded_url);
-						if(expanded_url != ''){
-							expanded_url = expanded_url['Expanded_url'];
-							console.log(expanded_url);
 						}
-						if(expanded_url.split('/')[2] == 'youtu.be'){
-							var render_url = '<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3].split('?')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
-						} else if (expanded_url.split('/')[2] == 'vine.co') {
-							var render_url = '<div class="tweetEmbedWrap"><iframe src="http://vine.co/v/'+expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe></div>';
-						} else if (expanded_url.split('/')[2] == 'www.youtube.com') {
-							var render_url = '<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ expanded_url.split('/')[3].split('=')[1] +'" frameborder="0" allowfullscreen></iframe></div>';
-							 'https://www.youtube.com/watch?v=L0bzwOdOI8UI'
-						} else {
-							var render_url = '';
-						}
-						console.log(render_url);
-						if(media_url != '' ){
-							render_url = '<div class="imgwrap"><img src="'+media_url+'" /></div>'+render_url;
-						}
-					} else {
-						var render_url = '';
-*/
 						if(media_url != '' ){
 							render_url = '<div class="imgwrap"><img src="'+media_url+'" /></div>'+render_url;
 						}
 					}
 					var tweetDate = Date.parse(data[i].p.twitter.data.tweet_data[4]);
 					var niceTweetDate = data[i].p.twitter.data.tweet_data[4].split(' ');
-					$("#tweetList").append('<li style="display:none" class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<br />' + expanded_url + '<br />' + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
+					$("#tweetList").append('<li style="display:none" class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + expanded_url + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
 				}
 				$("#tweetList li.more-link").fadeOut(fadeTimer);
 				$('#tweetList li:hidden').fadeIn(fadeTimer);
