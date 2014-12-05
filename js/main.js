@@ -194,7 +194,7 @@ jQuery(document).ready(function($){
 
 // Default variables
 var w = window.innerWidth;				
-var h = window.innerHeight-177;
+var h = window.innerHeight-200;
 var datetime = new Date();
 var fadeTimer = 100;
 var activeJobsCache = [];
@@ -214,7 +214,7 @@ var cloudlist = [],
 var fontSizeMultiplier;
 var layout = d3.layout.cloud()
 	.timeInterval(10)
-	.size([window.innerWidth, window.innerHeight-177])
+	.size([window.innerWidth, window.innerHeight-200])
 	.rotate(0)
 	.font("Avenir-Book")
 	.fontSize(function(d) { return d.size; })
@@ -223,11 +223,11 @@ var layout = d3.layout.cloud()
 	
 var svg = d3.select("#vis").append("svg")
     .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight-177);
+    .attr("height", window.innerHeight-200);
 
 var background = svg.append("g"),
     vis = svg.append("g")
-    .attr("transform", "translate(" + [window.innerWidth >> 1, window.innerHeight-177 >> 1] + ")");
+    .attr("transform", "translate(" + [window.innerWidth >> 1, window.innerHeight-200 >> 1] + ")");
 
 var currentView = 'archiveCloud';
 var currentArchive = '*';
@@ -328,7 +328,7 @@ function draw(words, bounds) {
   vis.transition()
       .delay(1000)
       .duration(750)
-      .attr("transform", "translate(" + [w >> 1, h >> 1] + ")scale(" + scale + ")");
+      .attr("transform", "translate(" + [window.innerWidth >> 1, window.innerHeight-200 >> 1] + ")");
 	setTimeout ( 'resetInterface()', animDuration );
 }
 
@@ -593,8 +593,6 @@ function buildWordCloud(cloudlist, MaxResults) {
 	} else {
 		totalResults = MaxResults;
 	}
-//	w = window.innerWidth;				
-//	h = window.innerHeight-177;
 	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Change difference between largest and smallest word based on browser font size AND number of results
 	currentArchiveLowercase = currentArchive.toLowerCase();
 	layout.stop().words(cloudlist.map(function(d, i) {
@@ -750,7 +748,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 					}
 					var tweetDate = Date.parse(data[i].p.twitter.data.tweet_data[4]);
 					var niceTweetDate = data[i].p.twitter.data.tweet_data[4].split(' ');
-					$("#tweetList").append('<li style="display:none" class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + expanded_url + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
+					$("#tweetList").append('<li style="display:none" class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<div class="expanded_urls">' + expanded_url + '</div>' + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
 				}
 				$("#tweetList li.more-link").fadeOut(fadeTimer);
 				$('#tweetList li:hidden').fadeIn(fadeTimer);

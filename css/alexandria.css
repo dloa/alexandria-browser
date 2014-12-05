@@ -348,7 +348,7 @@ ul#tweetList li.more-link a {
 main.wordCloud {
 	color: #000000;
 	bottom: 50px;
-	top: 73px;
+	top: 93px;
 	position: fixed;
 }
 main.wordCloud#vis {
@@ -412,6 +412,9 @@ ul#tweetList li {
 #tweetList li div.left span:first-child {
 	border: 0 none transparent;
 	padding: 0;
+}
+ul#tweetList li .tweetBody div.expanded_urls a {
+	word-break: break-all;
 }
 .twitterbird {
 	width: 24px;
