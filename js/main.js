@@ -214,7 +214,7 @@ var cloudlist = [],
 var fontSizeMultiplier;
 var layout = d3.layout.cloud()
 	.timeInterval(10)
-	.size([w, h])
+	.size([window.innerWidth, window.innerHeight-177])
 	.rotate(0)
 	.font("Avenir-Book")
 	.fontSize(function(d) { return d.size; })
@@ -227,7 +227,7 @@ var svg = d3.select("#vis").append("svg")
 
 var background = svg.append("g"),
     vis = svg.append("g")
-    .attr("transform", "translate(" + [w >> 1, h >> 1] + ")");
+    .attr("transform", "translate(" + [window.innerWidth >> 1, window.innerHeight-177 >> 1] + ")");
 
 var currentView = 'archiveCloud';
 var currentArchive = '*';
@@ -274,7 +274,15 @@ function draw(words, bounds) {
 			if(currentView == 'wordsCloud' ){
 				activeWord = item;
 				wordSearch(currentArchive, item, 40, 0);
-				$('#timeline-controls').fadeOut(fadeTimer);
+				$('#timeline-controls').fadeOut(fadeTimer);				
+				$('main.wordCloud text').css({
+					'text-shadow':'0 0 .2em rgba(100,100,100,.75)',
+					'opacity':'.75',
+					'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=75)',
+					'filter':'alpha(opacity=75)',
+					'-moz-opacity': '0.75',
+					'-khtml-opacity': '0.75'					
+				});
 			} else {
 			//	$('main').fadeOut(fadeTimer);
 				currentArchive = item;
@@ -585,8 +593,8 @@ function buildWordCloud(cloudlist, MaxResults) {
 	} else {
 		totalResults = MaxResults;
 	}
-	w = window.innerWidth;				
-	h = window.innerHeight-177;
+//	w = window.innerWidth;				
+//	h = window.innerHeight-177;
 	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Change difference between largest and smallest word based on browser font size AND number of results
 	currentArchiveLowercase = currentArchive.toLowerCase();
 	layout.stop().words(cloudlist.map(function(d, i) {
@@ -715,6 +723,27 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 						}
 					}
 					if(data[i].p.twitter.data.url_data[0]) {
+						console.info(data[i].p.twitter.data.url_data);
+						var render_url = '';
+						for(var iurl = 0; iurl < data[i].p.twitter.data.url_data.length; iurl++){
+							var new_expanded_url = data[i].p.twitter.data.url_data[iurl];
+							new_expanded_url = new_expanded_url['Expanded_url'];
+							console.log("new_expanded_url = " + new_expanded_url);
+							if((expanded_url=='')&&(new_expanded_url!='')){
+								expanded_url = new_expanded_url;
+							} else if (expanded_url!='') {
+								expanded_url = expanded_url+'<br />'+new_expanded_url;
+							}
+							if(new_expanded_url.split('/')[2] == 'youtu.be'){
+								render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('?')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
+							} else if (new_expanded_url.split('/')[2] == 'vine.co') {
+								render_url = render_url+'<div class="tweetEmbedWrap"><iframe src="http://vine.co/v/'+ new_expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe></div>';
+							} else if (new_expanded_url.split('/')[2] == 'www.youtube.com') {
+								render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('=')[1] +'" frameborder="0" allowfullscreen></iframe></div>';
+								 'https://www.youtube.com/watch?v=L0bzwOdOI8UI'
+							}
+						}						
+/*
 						expanded_url = (data[i].p.twitter.data.url_data[0]);
 						console.log(expanded_url);
 						if(expanded_url != ''){
@@ -733,16 +762,21 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 						}
 						console.log(render_url);
 						if(media_url != '' ){
-							render_url = '<img src="'+media_url+'" /><br />'+render_url;
+							render_url = '<div class="imgwrap"><img src="'+media_url+'" /></div>'+render_url;
 						}
 					} else {
 						var render_url = '';
+*/
+						if(media_url != '' ){
+							render_url = '<div class="imgwrap"><img src="'+media_url+'" /></div>'+render_url;
+						}
 					}
 					var tweetDate = Date.parse(data[i].p.twitter.data.tweet_data[4]);
 					var niceTweetDate = data[i].p.twitter.data.tweet_data[4].split(' ');
-					$("#tweetList").append('<li class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<br />' + expanded_url + '<br />' + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
+					$("#tweetList").append('<li style="display:none" class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<br />' + expanded_url + '<br />' + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
 				}
-				$("#tweetList li.more-link").remove();
+				$("#tweetList li.more-link").fadeOut(fadeTimer);
+				$('#tweetList li:hidden').fadeIn(fadeTimer);
 				currentPage++;
 				if(currentPage < totalPages) {
 					$("#tweetList").append('<li class="more-link"><a href="javascript:wordSearch(\x27'+arch+'\x27,\x27'+ word +'\x27,\x27'+rpp+'\x27,\x27'+ currentPage +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
@@ -790,12 +824,20 @@ function playTimeline() {
 
 // CLEAR MODAL
 function clearModal() {
+	$('main.wordCloud text').css({
+		'text-shadow':'0 0 0 rgba(200,200,200,.5)',
+		'opacity':'1',
+		'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=100)',
+		'filter':'alpha(opacity=100)',
+		'-moz-opacity': '1',
+		'-khtml-opacity': '1'					
+	});
 	if (currentView.slice(0,7) == 'archive') {
 		currentArchive = '*';
 	}
 	currentPage = 0;
 	totalPages = 0
-	$("#tweetList li").remove();
+	$("#tweetList li").fadeOut(fadeTimer);
 	$('.overlay').fadeOut(fadeTimer);
 //	$('main').not('#'+currentView).fadeOut(fadeTimer);
 	$('.view-controls').fadeIn(fadeTimer);
@@ -807,6 +849,7 @@ function clearModal() {
 		}
 	}
 	volumeBars(currentArchive,'',7200);
+	$("#tweetList li").remove();
 	$('#timeline-controls').fadeIn(fadeTimer);
 }
 
@@ -884,7 +927,8 @@ function volumeBars(arch, word, interval){
 						return h*(d/largest);
 				   })
 				   .attr("fill", function(d) {
-						return "rgb(0, 0, " + (d * 10) + ")";
+				   		var barFill = ((255-(Math.round((d/largest)*255 * 10)/10))*.75).toFixed(0);
+						return "rgb("+barFill+", "+ barFill +", " + barFill + ")";
 				   });
 			}
 		},
@@ -908,6 +952,16 @@ function resetInterface() {
 		playTimerId = setTimeout ( 'playTimeline()', animDuration );
 	}
 }
+// Infinite Scroll
+var $el = $('#tweetList');
+var listView = new infinity.ListView($el);
+
+// ... When adding new content:
+/* 
+var $newContent = $('<p>Hello World</p>');
+listView.append($newContent);
+*/
+
 // ERROR CONNECTING TO LIBRARIAN
 function librarianErr(){
 	$('#logo').addClass('disabled');

@@ -316,7 +316,7 @@ ul#tweetList li a.twitter-username {
 ul#tweetList li .tweetBody a {
 	text-decoration: underline;
 }
-.tweetEmbedWrap {
+.tweetEmbedWrap, #tweetList li div.tweetBody div.imgwrap {
 	text-align: center;
 	margin: 1em 0 0;
 }
@@ -373,8 +373,8 @@ main.wordCloud span:hover, main.wordCloud text:hover {
 	fill: #92b4c6 !important;
 }
 #app-overlay {
-	background-color: #111;
-	background-color: rgba(20,20,20,.7);
+	background-color: #ebebeb;
+	background-color: rgba(235,235,235,.7);
 	position: fixed;
 	top: 0;
 	left: 0;
