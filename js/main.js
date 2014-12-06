@@ -196,7 +196,7 @@ jQuery(document).ready(function($){
 var w = window.innerWidth;				
 var h = window.innerHeight-200;
 var datetime = new Date();
-var fadeTimer = 100;
+var fadeTimer = 200;
 var activeJobsCache = [];
 var MaxResults;
 var newArchiveVolumeQueryStringCache = [];
@@ -272,17 +272,16 @@ function draw(words, bounds) {
 			$('#disabler').fadeIn(fadeTimer);
 			var item = d.text;
 			if(currentView == 'wordsCloud' ){
-				activeWord = item;
-				wordSearch(currentArchive, item, 40, 0);
-				$('#timeline-controls').fadeOut(fadeTimer);				
 				$('main.wordCloud text').css({
-					'text-shadow':'0 0 .2em rgba(100,100,100,.75)',
-					'opacity':'.75',
-					'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=75)',
-					'filter':'alpha(opacity=75)',
-					'-moz-opacity': '0.75',
-					'-khtml-opacity': '0.75'					
+					'transition': 'all 3s ease',
+					'-moz-transition': 'all 3s ease',
+					'-webkit-transition': 'all 3s ease',
+					'-o-transition': 'all 3s ease'
 				});
+				activeWord = item;
+				// VOLUME BARS FOR TWEETLIST
+				wordSearch(currentArchive, item, 40, 0);
+				volumeBars(currentArchive, activeWord, 7200);
 			} else {
 			//	$('main').fadeOut(fadeTimer);
 				currentArchive = item;
@@ -619,9 +618,8 @@ function wordSearch(arch, word, rpp, currentPage) {
 	} else {
 		activeWord = word;
 		if($('#tweetListView').css('display') != 'block') {
-			$('.view-controls').fadeOut(fadeTimer);
 			searchValue = $('header input.search').val();
-			$('.overlay').fadeIn(fadeTimer);
+			$('.view-controls').fadeOut(fadeTimer);
 		}
 		var dateValues = $("#timeline").dateRangeSlider("values");
 		if ( totalPages == 0 ) {
@@ -656,8 +654,6 @@ function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 		// GET TOTAL PAGES
 		var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+StartDate+',"EndDate":'+EndDate+',"ResultsPerPage": '+rpp+'}';
 		console.log('API call: betweenDates/wordsearch/pagecount');
-		// VOLUME BARS FOR TWEETLIST
-		volumeBars(arch, word, 7200);
 		$.ajax({
 			type: "POST",
 			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount",
@@ -700,6 +696,20 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 		// Get a page of tweets between two dates
 		var queryString = '{"Archive": "'+arch+'","Word": "'+word+'","StartDate": '+StartDate+',"EndDate": '+EndDate+',"ResultsPerPage": '+rpp+',"Page": '+ currentPage +'}';
 		console.log('API call: get/tweets/betweenDates/wordsearch ...');
+		if($('#tweetListView').css('display') != 'block') {
+			searchValue = $('header input.search').val();
+			$('.view-controls').fadeOut(fadeTimer);
+			$('.overlay').fadeIn(fadeTimer);
+				$('#timeline-controls').fadeOut(fadeTimer);				
+				$('main.wordCloud text').css({
+					'text-shadow':'0 0 .2em rgba(100,100,100,.75)',
+					'opacity':'.75',
+					'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=75)',
+					'filter':'alpha(opacity=75)',
+					'-moz-opacity': '0.75',
+					'-khtml-opacity': '0.75'					
+				});
+		}
 		$.ajax({
 			type: "POST",
 			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch",
@@ -805,7 +815,11 @@ function clearModal() {
 		'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=100)',
 		'filter':'alpha(opacity=100)',
 		'-moz-opacity': '1',
-		'-khtml-opacity': '1'					
+		'-khtml-opacity': '1',
+		'transition': 'all 1s ease',
+		'-moz-transition': 'all 1s ease',
+		'-webkit-transition': 'all 1s ease',
+		'-o-transition': 'all 1s ease'
 	});
 	if (currentView.slice(0,7) == 'archive') {
 		currentArchive = '*';
