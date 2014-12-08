@@ -5,7 +5,7 @@ jQuery(document).ready(function($){
 	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
 
 	$("#timeline").dateRangeSlider({
-		bounds: {min: new Date(2014, 8, 8), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
+		bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
 		defaultValues: {min: Date.parse(datetime)-86400000, max: Date.parse(datetime)},
 		arrows: false,
 		scales: [{
@@ -24,7 +24,7 @@ jQuery(document).ready(function($){
 		}]
 	});
 	// Generate initial volume bars
-	volumeBars('*', '', 7200);
+	volumeBars('*', '', 7200000);
 	// UI/UX Navigation
 	// Click logo to go back to archive list with current timeline selection
 	$('#logo').click(function(){
@@ -179,11 +179,11 @@ jQuery(document).ready(function($){
 	});	
 	$('#timeline-controls .full').click(function(){
 		$("#timeline").dateRangeSlider("bounds", new Date(2014, 8, 8), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
-		volumeBars(currentArchive,'',7200);
+		volumeBars(currentArchive,'',7200000);
 	});
 	$('#timeline-controls .month').click(function(){
 		$("#timeline").dateRangeSlider("bounds", new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
-		volumeBars(currentArchive,'',7200);
+		volumeBars(currentArchive,'',7200000);
 	});
 	$('#timeline-controls .playbtn').click(function(){
 		autoPlayTimeline();
@@ -281,7 +281,7 @@ function draw(words, bounds) {
 				activeWord = item;
 				// VOLUME BARS FOR TWEETLIST
 				wordSearch(currentArchive, item, 40, 0);
-				volumeBars(currentArchive, activeWord, 7200);
+				volumeBars(currentArchive, activeWord, 7200000);
 			} else {
 			//	$('main').fadeOut(fadeTimer);
 				currentArchive = item;
@@ -289,7 +289,7 @@ function draw(words, bounds) {
 				searchTerm = item;
 				currentView = 'wordsCloud';
 				getArchiveWords(item);
-				volumeBars(currentArchive,'',7200);
+				volumeBars(currentArchive,'',7200000);
 			}
       })
     .transition()
@@ -335,7 +335,7 @@ function getAllArchives(){
 	searchValue = '';
 	$('header input.search').val(searchValue);
 	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
-	var startDate = Date.parse(basicSliderBounds.min)/1000;
+	var startDate = Date.parse(basicSliderBounds.min)/1/*000*/;
 	var endDate = Date.parse(datetime);
 	$("#timeline").dateRangeSlider("values", startDate, endDate);
 }
@@ -359,7 +359,7 @@ function runSearch(searchTerm) {
 		getJobs(searchTerm);
 	}
 	console.log('currentView = '+currentView);
-	volumeBars(currentArchive,'',7200);
+	volumeBars(currentArchive,'',7200000);
 }
 
 // NEW GET ACTIVE JOBS AND VOLUMES
@@ -388,7 +388,7 @@ function getJobs(searchTerm) {
 //		$('#'+currentView).children().remove();
 	}
 	var dateValues = $("#timeline").dateRangeSlider("values");
-	var queryString = '{"StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+'}';
+	var queryString = '{"StartDate": '+Date.parse(dateValues.min)/1/*000*/+',"EndDate": '+Date.parse(dateValues.max)/1/*000*/+'}';
 	// Check the cache for recent query
 	var cacheCheck = false;
 	if(jQuery.inArray(queryString, newArchiveVolumeQueryStringCache) > -1){
@@ -534,7 +534,7 @@ function getArchiveWords(arch, filterword) {
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryStringMod = '';
 	if (filterword) { queryStringMod = ',"FilterWord":"'+filterword+'"'; }
-	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1000+',"EndDate": '+Date.parse(dateValues.max)/1000+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true'+queryStringMod+'}';
+	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1/*000*/+',"EndDate": '+Date.parse(dateValues.max)/1/*000*/+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true'+queryStringMod+'}';
 	console.log('API call: get/archive/betweenDates/wordcloud ...');
 	$.ajax({
 		type: "POST",
@@ -624,10 +624,10 @@ function wordSearch(arch, word, rpp, currentPage) {
 		var dateValues = $("#timeline").dateRangeSlider("values");
 		if ( totalPages == 0 ) {
 			// GET TOTAL PAGES
-			totalPagesAPI(arch, word, Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, rpp);
+			totalPagesAPI(arch, word, Date.parse(dateValues.min)/1/*000*/, Date.parse(dateValues.max)/1/*000*/, rpp);
 		}
 		// Get a page of tweets between two dates
-		tweetListPageAPI(arch, word, Date.parse(dateValues.min)/1000, Date.parse(dateValues.max)/1000, rpp);
+		tweetListPageAPI(arch, word, Date.parse(dateValues.min)/1/*000*/, Date.parse(dateValues.max)/1/*000*/, rpp);
 	}
 }
 
@@ -722,6 +722,14 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 				// Load a page of tweets
 				for (var i = 0; i < data.length; i++) {
 					var expanded_url = [];
+					var render_url = '';
+					var TweetEntities = [];
+					if(data[i].p.twitter.data.entity){
+						for(var iurl = 0; iurl < data[i].p.twitter.data.entity.length; iurl++){
+							console.info(data[i].p.twitter.data.entity.media[iurl]);
+						}
+					}
+/*
 					var media_url = [];
 					if(data[i].p.twitter.data.media_url[0]) {
 						media_url = data[i].p.twitter.data.media_url[0];
@@ -730,7 +738,6 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 							media_url = media_url['Media_url'];
 						}
 					}
-					var render_url = '';
 					if(data[i].p.twitter.data.url_data[0]) {
 						console.info(data[i].p.twitter.data.url_data);
 						for(var iurl = 0; iurl < data[i].p.twitter.data.url_data.length; iurl++){
@@ -756,6 +763,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 							render_url = '<div class="imgwrap"><img src="'+media_url+'" /></div>'+render_url;
 						}
 					}
+*/
 					var tweetDate = Date.parse(data[i].p.twitter.data.tweet_data[4]);
 					var niceTweetDate = data[i].p.twitter.data.tweet_data[4].split(' ');
 					$("#tweetList").append('<li style="display:none" class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<div class="expanded_urls">' + expanded_url + '</div>' + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
@@ -837,7 +845,7 @@ function clearModal() {
 			getJobs(searchTerm);
 		}
 	}
-	volumeBars(currentArchive,'',7200);
+	volumeBars(currentArchive,'',7200000);
 	$("#tweetList li").remove();
 	$('#timeline-controls').fadeIn(fadeTimer);
 }
@@ -851,14 +859,14 @@ function volumeBars(arch, word, interval){
 		word = '';
 	}
 	if(!interval){
-		var inverval = 7200;
+		var inverval = 7200000;
 	}
 	var w = window.innerWidth-1;
 	var h = 60;
 	var barPadding = 1;
 	var dataset = [];	
 	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
-	var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(basicSliderBounds.min)/1000+',"EndDate":'+Date.parse(basicSliderBounds.max)/1000+',"Interval": '+interval+'}';
+	var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(basicSliderBounds.min)/1/*000*/+',"EndDate":'+Date.parse(basicSliderBounds.max)/1/*000*/+',"Interval": '+interval+'}';
 	console.log('API call: get/interval/count ...');
 	$.ajax({
 		type: "POST",
@@ -874,15 +882,15 @@ function volumeBars(arch, word, interval){
 			var largest = Math.max.apply(Math, dataset);
 			var mostRecent = Math.max.apply(Math, Object.keys(data));
 			// Difference between most recent and current time
-			console.log('Diff = '+((Date.parse(datetime)/1000)-mostRecent));
+			console.log('Diff = '+((Date.parse(datetime)/1/*000*/)-mostRecent));
 			console.log('interval = '+interval);
-			if ( ( ( ( Date.parse(datetime)/1000 ) - mostRecent ) > interval*1.15 ) && (arch == '*') ) {
+			if ( ( ( ( Date.parse(datetime)/1/*000*/ ) - mostRecent ) > interval*1.15 ) && (arch == '*') ) {
 				console.log('Librarian stopped archiving!');
 			} else {
 				console.log('Librarian appears to be archiving');
 			}
 			var firstTimestamp = Math.min.apply(Math, Object.keys(data));
-			var missingIntervals = ((Date.parse(basicSliderBounds.max)/1000)-mostRecent)/interval;
+			var missingIntervals = ((Date.parse(basicSliderBounds.max)/1/*000*/)-mostRecent)/interval;
 			// Fill in missing volume bars at end of timeline
 			while (missingIntervals > 0) {
 				data[Math.max.apply(Math, Object.keys(data))+interval] = 0;
@@ -942,14 +950,7 @@ function resetInterface() {
 	}
 }
 // Infinite Scroll
-var $el = $('#tweetList');
-var listView = new infinity.ListView($el);
 
-// ... When adding new content:
-/* 
-var $newContent = $('<p>Hello World</p>');
-listView.append($newContent);
-*/
 
 // ERROR CONNECTING TO LIBRARIAN
 function librarianErr(){
