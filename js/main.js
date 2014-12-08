@@ -69,6 +69,7 @@ jQuery(document).ready(function($){
 	// Click icon in omnibox to clear and run search
 	$('#clearSearch').click(function(){
 		$('header input.search').val('');
+		resetArchiveList = true
 		runSearch('');
 	});	
 	// View Controls
@@ -411,6 +412,7 @@ function getJobs(searchTerm) {
 	}
 	if(cacheCheck == false){		
 		console.log('API call: get/activejobs/betweenDates ... '+searchTerm);
+		console.info('queryString =='+queryString);
 		newArchiveVolumeQueryStringCache.length = 0;
 		newArchiveVolumeCache.length = 0;
 		$.ajax({
@@ -425,6 +427,7 @@ function getJobs(searchTerm) {
 				for (var i = 0; i < data['Jobs'].length; i++) {
 					if ( data['Count'][i] != 0 ) {
 						if(!searchTerm){
+							console.log(data['Jobs'][i]+','+data['Count'][i]);
 							newArchiveVolumeCache.push([data['Jobs'][i],data['Count'][i]]);
 							$("#archiveList").append('<li id="archive-'+data['Jobs'][i].replace(/ /g,"-")+'" volume="'+data['Count'][i]+'"><a href="#" onclick="wordSearch(\x27'+data['Jobs'][i]+'\x27, \x27'+data['Jobs'][i]+'\x27, 40, 0)"><span>' + data['Jobs'][i] + '</span> <span class="archive-volume">'+data['Count'][i]+'</span></a></li>');
 						} else {
@@ -465,7 +468,8 @@ function getJobs(searchTerm) {
 }
 
 // Build archiveList and cloudlist array and call word cloud function
-function buildArchiveList() {	
+function buildArchiveList() {
+	console.log(newArchiveVolumeCache);
 	$('#archiveList li').each(function(){
 		var volumeSpan = $(this).find('span.archive-volume').html();
 		if((volumeSpan=='')||(volumeSpan==0)){
@@ -724,9 +728,36 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 					var expanded_url = [];
 					var render_url = '';
 					var TweetEntities = [];
+					var media_url = [];
 					if(data[i].p.twitter.data.entity){
-						for(var iurl = 0; iurl < data[i].p.twitter.data.entity.length; iurl++){
-							console.info(data[i].p.twitter.data.entity.media[iurl]);
+						var TweetEntities = data[i].p.twitter.data.entity;
+						console.info(TweetEntities);
+						var TweetEntitiesMedia = TweetEntities.media;
+						if (TweetEntitiesMedia) {
+							console.log(TweetEntitiesMedia.length);
+							console.info(TweetEntitiesMedia);
+							for(var iurl = 0; iurl < TweetEntitiesMedia.length; iurl++){
+								var iurl_expanded = data[i].p.twitter.data.entity.media[iurl];
+								if(iurl_expanded['type'] != 'photo') {
+									new_expanded_url = iurl_expanded['expanded_url'];
+									if((expanded_url=='')&&(new_expanded_url!='')){
+										expanded_url = new_expanded_url;
+									} else if (expanded_url!='') {
+										expanded_url = expanded_url+'<br />'+new_expanded_url;
+									}
+								} else {
+									if(iurl_expanded['media_url']) {
+										media_url = iurl_expanded['media_url'];
+										console.log('MEDIA: '+ media_url);
+		//								if(media_url != '') {
+		//									media_url = media_url['Media_url'];
+		//								}
+									}
+								}
+							}
+						}
+						if(media_url != '' ){
+							render_url = '<div class="imgwrap"><img src="'+media_url+'" /></div>'+render_url;
 						}
 					}
 /*
@@ -758,9 +789,6 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 								render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('=')[1] +'" frameborder="0" allowfullscreen></iframe></div>';
 								 'https://www.youtube.com/watch?v=L0bzwOdOI8UI'
 							}
-						}
-						if(media_url != '' ){
-							render_url = '<div class="imgwrap"><img src="'+media_url+'" /></div>'+render_url;
 						}
 					}
 */
