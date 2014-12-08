@@ -761,14 +761,6 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 						}
 					}
 /*
-					var media_url = [];
-					if(data[i].p.twitter.data.media_url[0]) {
-						media_url = data[i].p.twitter.data.media_url[0];
-						console.log('MEDIA: '+ media_url);
-						if(media_url != '') {
-							media_url = media_url['Media_url'];
-						}
-					}
 					if(data[i].p.twitter.data.url_data[0]) {
 						console.info(data[i].p.twitter.data.url_data);
 						for(var iurl = 0; iurl < data[i].p.twitter.data.url_data.length; iurl++){
@@ -977,20 +969,9 @@ function resetInterface() {
 		playTimerId = setTimeout ( 'playTimeline()', animDuration );
 	}
 }
-// Infinite Scroll
-
 
 // ERROR CONNECTING TO LIBRARIAN
 function librarianErr(){
-//	$('#logo').addClass('disabled');
-//	$('#intro').remove();
-//	$("#archiveList li").remove();
-//	$('header input.search').attr('disabled','disabled').css({background:'none #efefef',padding:'3px 15px',width:'14em'}).val('Cannot connect to Librarian').next().hide();			
-//	$('#wait').fadeOut(fadeTimer);
-//	$('#disabler').fadeOut(fadeTimer);
-//	$('#volume').fadeOut(fadeTimer);
-//	$('#timeline').fadeOut(fadeTimer);
-//	$('#app-shading').css('bottom',0);
 	alert('Librarian Error');
 }
 
