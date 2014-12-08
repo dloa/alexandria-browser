@@ -336,7 +336,7 @@ function getAllArchives(){
 	searchValue = '';
 	$('header input.search').val(searchValue);
 	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
-	var startDate = Date.parse(basicSliderBounds.min)/1/*000*/;
+	var startDate = Date.parse(basicSliderBounds.min);
 	var endDate = Date.parse(datetime);
 	$("#timeline").dateRangeSlider("values", startDate, endDate);
 }
@@ -389,7 +389,7 @@ function getJobs(searchTerm) {
 //		$('#'+currentView).children().remove();
 	}
 	var dateValues = $("#timeline").dateRangeSlider("values");
-	var queryString = '{"StartDate": '+Date.parse(dateValues.min)/1/*000*/+',"EndDate": '+Date.parse(dateValues.max)/1/*000*/+'}';
+	var queryString = '{"StartDate": '+Date.parse(dateValues.min)+',"EndDate": '+Date.parse(dateValues.max)+'}';
 	// Check the cache for recent query
 	var cacheCheck = false;
 	if(jQuery.inArray(queryString, newArchiveVolumeQueryStringCache) > -1){
@@ -538,7 +538,7 @@ function getArchiveWords(arch, filterword) {
 	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryStringMod = '';
 	if (filterword) { queryStringMod = ',"FilterWord":"'+filterword+'"'; }
-	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)/1/*000*/+',"EndDate": '+Date.parse(dateValues.max)/1/*000*/+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true'+queryStringMod+'}';
+	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)+',"EndDate": '+Date.parse(dateValues.max)+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true'+queryStringMod+'}';
 	console.log('API call: get/archive/betweenDates/wordcloud ...');
 	$.ajax({
 		type: "POST",
@@ -628,10 +628,10 @@ function wordSearch(arch, word, rpp, currentPage) {
 		var dateValues = $("#timeline").dateRangeSlider("values");
 		if ( totalPages == 0 ) {
 			// GET TOTAL PAGES
-			totalPagesAPI(arch, word, Date.parse(dateValues.min)/1/*000*/, Date.parse(dateValues.max)/1/*000*/, rpp);
+			totalPagesAPI(arch, word, Date.parse(dateValues.min), Date.parse(dateValues.max), rpp);
 		}
 		// Get a page of tweets between two dates
-		tweetListPageAPI(arch, word, Date.parse(dateValues.min)/1/*000*/, Date.parse(dateValues.max)/1/*000*/, rpp);
+		tweetListPageAPI(arch, word, Date.parse(dateValues.min), Date.parse(dateValues.max), rpp);
 	}
 }
 
@@ -894,7 +894,7 @@ function volumeBars(arch, word, interval){
 	var barPadding = 1;
 	var dataset = [];	
 	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
-	var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(basicSliderBounds.min)/1/*000*/+',"EndDate":'+Date.parse(basicSliderBounds.max)/1/*000*/+',"Interval": '+interval+'}';
+	var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(basicSliderBounds.min)+',"EndDate":'+Date.parse(basicSliderBounds.max)+',"Interval": '+interval+'}';
 	console.log('API call: get/interval/count ...');
 	$.ajax({
 		type: "POST",
@@ -910,15 +910,15 @@ function volumeBars(arch, word, interval){
 			var largest = Math.max.apply(Math, dataset);
 			var mostRecent = Math.max.apply(Math, Object.keys(data));
 			// Difference between most recent and current time
-			console.log('Diff = '+((Date.parse(datetime)/1/*000*/)-mostRecent));
+			console.log('Diff = '+((Date.parse(datetime))-mostRecent));
 			console.log('interval = '+interval);
-			if ( ( ( ( Date.parse(datetime)/1/*000*/ ) - mostRecent ) > interval*1.15 ) && (arch == '*') ) {
+			if ( ( ( ( Date.parse(datetime) ) - mostRecent ) > interval*1.15 ) && (arch == '*') ) {
 				console.log('Librarian stopped archiving!');
 			} else {
 				console.log('Librarian appears to be archiving');
 			}
 			var firstTimestamp = Math.min.apply(Math, Object.keys(data));
-			var missingIntervals = ((Date.parse(basicSliderBounds.max)/1/*000*/)-mostRecent)/interval;
+			var missingIntervals = ((Date.parse(basicSliderBounds.max))-mostRecent)/interval;
 			// Fill in missing volume bars at end of timeline
 			while (missingIntervals > 0) {
 				data[Math.max.apply(Math, Object.keys(data))+interval] = 0;
