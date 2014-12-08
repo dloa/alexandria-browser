@@ -982,17 +982,16 @@ function resetInterface() {
 
 // ERROR CONNECTING TO LIBRARIAN
 function librarianErr(){
-	$('#logo').addClass('disabled');
-    $('#intro').remove();
-	$("#archiveList li").remove();
-	$('header input.search').attr('disabled','disabled').css({background:'none #efefef',padding:'3px 15px',width:'14em'}).val('Cannot connect to Librarian').next().hide();			
-	$('#wait').fadeOut(fadeTimer);
-	$('#disabler').fadeOut(fadeTimer);
-	$('#volume').fadeOut(fadeTimer);
-	$('#disabler').fadeOut(fadeTimer);
-	$('#timeline').fadeOut(fadeTimer);
-	$('#app-shading').css('bottom',0);
-	alert('Cannot connect to Librarian');
+//	$('#logo').addClass('disabled');
+//	$('#intro').remove();
+//	$("#archiveList li").remove();
+//	$('header input.search').attr('disabled','disabled').css({background:'none #efefef',padding:'3px 15px',width:'14em'}).val('Cannot connect to Librarian').next().hide();			
+//	$('#wait').fadeOut(fadeTimer);
+//	$('#disabler').fadeOut(fadeTimer);
+//	$('#volume').fadeOut(fadeTimer);
+//	$('#timeline').fadeOut(fadeTimer);
+//	$('#app-shading').css('bottom',0);
+	alert('Librarian Error');
 }
 
 // Interger sort order function
