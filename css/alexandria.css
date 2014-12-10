@@ -351,7 +351,7 @@ div#lightbox img {
 	box-shadow: .2em .2em .5em rgba(20,20,20,.5);
 	-moz-box-shadow: .2em .2em .5em rgba(20,20,20,.5);
 	-webkit-box-shadow: .2em .2em .5em rgba(20,20,20,.5);
-	border: 1px solid #cfcfcf;
+	border: 1px solid #303030;
 }
 .archive-volume {
 	background-color: #e0e0e0;
