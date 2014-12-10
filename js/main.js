@@ -260,6 +260,8 @@ var cloudCache = [];
 var playingTimeline = false;
 var animDuration = 3500;
 
+var expandList = true;
+
 // Draw Word Clouds
 function draw(words, bounds) {
   scale = bounds ? Math.min(
@@ -283,7 +285,7 @@ function draw(words, bounds) {
       .style("font-size", function(d) { return d.size + "px"; })
       .style("opacity", 1e-6)
       .on("click", function(d) {
-		  playingTimeline = true;
+			 playingTimeline = true;
 			autoPlayTimeline();
 			$('#wait').fadeIn(fadeTimer);
 			$('#disabler').fadeIn(fadeTimer);
@@ -623,6 +625,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 
 // Build TWEET LIST
 function wordSearch(arch, word, rpp, currentPage) {
+	$("#tweetList li.more-link").remove();
 	$('#wait').fadeIn(fadeTimer);
 	$('#disabler').fadeIn(fadeTimer);
 	resetArchiveList = false;
@@ -804,15 +807,18 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 					var niceTweetDate = data[i].p.twitter.data.tweet_data[4].split(' ');
 					$("#tweetList").append('<li style="display:none" class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<div class="expanded_urls">' + expanded_url + '</div>' + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
 				}
-				$("#tweetList li.more-link").fadeOut(fadeTimer);
 				$('#tweetList li:hidden').fadeIn(fadeTimer);
 				currentPage++;
 				if(currentPage < totalPages) {
 					$("#tweetList").append('<li class="more-link"><a href="javascript:wordSearch(\x27'+arch+'\x27,\x27'+ word +'\x27,\x27'+rpp+'\x27,\x27'+ currentPage +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
-				}
+					expandList = true;
+				}				
 				$('.tweetBody').linkify();			
 				$('#wait').fadeOut(fadeTimer);
 				$('#disabler').fadeOut(fadeTimer);
+				if(window.scrollY == 0){
+					$(window).scrollTop(10,0);
+				}
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
 				console.log(XMLHttpRequest);
@@ -988,7 +994,13 @@ function lightbox(obj){
 
 // LIGHTBOX FUNCTION
 function infiniteScroll() {	
-	console.log(window.scrollY);
+	console.log;
+	var loadScrollPosition = $('#tweetList').height()-(window.innerHeight*6.5);
+	console.log(loadScrollPosition);
+	if( (expandList == true) && (window.scrollY > loadScrollPosition) ) {
+		expandList = false;
+		wordSearch(currentArchive, activeWord, 40, currentPage);
+	}
 }
 
 function resetInterface() {
