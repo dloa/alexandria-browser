@@ -137,6 +137,13 @@ jQuery(document).ready(function($){
 	$('.getAllArchives').click(function(){
 		getAllArchives();
 	});	
+	
+	// Ukrain Archive Shortcut
+	$('#ukraineShortcut').click(function(){
+	    $('#intro').remove();
+		wordSearch('Ukraine', 'ukraine', 40, 0);
+	});
+	
 	// Timeline selected values change
 	$("#timeline").bind("valuesChanged", function(e, data){
 		resetArchiveList = true;
@@ -192,6 +199,11 @@ jQuery(document).ready(function($){
 	});
 	$('#timeline-controls .playbtn').click(function(){
 		autoPlayTimeline();
+	});
+	$(window).scroll(function(){
+		if($('#tweetListView').css('display') == 'block') {
+			infiniteScroll();
+		}
 	});
 
 	resetInterface();	
@@ -738,8 +750,6 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 						console.info(TweetEntities);
 						var TweetEntitiesMedia = TweetEntities.media;
 						if (TweetEntitiesMedia) {
-							console.log(TweetEntitiesMedia.length);
-							console.info(TweetEntitiesMedia);
 							for(var iurl = 0; iurl < TweetEntitiesMedia.length; iurl++){
 								var iurl_expanded = data[i].p.twitter.data.entity.media[iurl];
 								if(iurl_expanded['type'] != 'photo') {
@@ -963,6 +973,8 @@ function volumeBars(arch, word, interval){
 		}
 	});
 }
+
+// LIGHTBOX FUNCTION
 function lightbox(obj){
 	var imgContent = $(obj).find('img').clone();
 	var imgMarginTop = (window.innerHeight-$(obj).find('img').height())*.4;
@@ -973,6 +985,12 @@ function lightbox(obj){
 	});
 	$('#lightbox').fadeIn(fadeTimer);
 }
+
+// LIGHTBOX FUNCTION
+function infiniteScroll() {	
+	console.log(window.scrollY);
+}
+
 function resetInterface() {
 	// Reset Interface
 	searchResults.length=0;

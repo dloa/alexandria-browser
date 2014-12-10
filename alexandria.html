@@ -22,30 +22,32 @@
 		</script>
 	</head>
 	<body>
-	  <header>
-		<div id="logo"><!--Alexandria--></div>
-		<div id="viewlabel"><span class="currentArchive"></span></div>
-		<div id="search">
-			<input type="text" class="search" value="" placeholder="Search Archives" />
-			<div id="clearSearch">x</div>
+		<header>
+			<div id="logo"><!--Alexandria--></div>
+			<div id="viewlabel"><span class="currentArchive"></span></div>
+			<div id="search">
+				<input type="text" class="search" value="" placeholder="Search Archives" />
+				<div id="clearSearch">x</div>
+			</div>
+			<div id="timeline-controls">
+				<div class="label-wrap">Timeline:</div> <span class="full">Full</span> | <span class="month">Month</span> | <span class="playbtn">Play</span>
+			</div>
+			<div id="view-controls" class="view-controls">
+				<div id="view-archView" class="view-link">Cloud</div>
+				<div id="resort-archView" class="sort-link">Alphabetical</div>
+			</div>
+			<!--
+			<div id="view-controls-2" class="view-controls">
+				<div id="view-archView-2" class="view-link">Cloud</div>
+			</div>
+			-->
+		</header>
+		<div id="intro">
+			<h1>Welcome to Alexandria</h1>
+			<div class="wsite-button secondary getAllArchives" id="getArchives">Get All Archives</div>
+			<br style="clear:both" />
+			<div id="ukraineShortcut" onclick=""></div>
 		</div>
-		<div id="timeline-controls">
-			<div class="label-wrap">Timeline:</div> <span class="full">Full</span> | <span class="month">Month</span> | <span class="playbtn">Play</span>
-		</div>
-		<div id="view-controls" class="view-controls">
-			<div id="view-archView" class="view-link">Cloud</div>
-			<div id="resort-archView" class="sort-link">Alphabetical</div>
-		</div>
-<!--
-		<div id="view-controls-2" class="view-controls">
-			<div id="view-archView-2" class="view-link">Cloud</div>
-		</div>
--->
-	  </header>
-	<div id="intro">
-		<h1>Welcome to Alexandria</h1>
-		<div class="wsite-button secondary getAllArchives" id="getArchives">Get All Archives</div>
-	</div>
 		<div data-role="spritzer"></div>
 		<main id="vis" class="wordCloud"></main>
 		<main id="wordsListView">

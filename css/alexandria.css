@@ -261,6 +261,15 @@ div#intro {
 #intro h1 {
 	margin: -.5em 0 .5em;
 }
+#ukraineShortcut {
+	display: inline-block;
+	zoom:1;*dispaly:inline;
+	background: url('../img/icon_map_of_Ukraine.png') no-repeat center center transparent;
+	width:80px;
+	height:60px;
+	cursor: pointer;
+	margin-top: 1em;
+}
 ul#archiveList, ul#tweetList, #wordsList {
 	display: inline-block;
 	zoom:1;*display:inline;
@@ -351,7 +360,8 @@ div#lightbox img {
 	box-shadow: .2em .2em .5em rgba(20,20,20,.5);
 	-moz-box-shadow: .2em .2em .5em rgba(20,20,20,.5);
 	-webkit-box-shadow: .2em .2em .5em rgba(20,20,20,.5);
-	border: 1px solid #303030;
+	border: 1px solid #646464;
+	max-height: 91%;
 }
 .archive-volume {
 	background-color: #e0e0e0;
