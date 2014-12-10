@@ -995,7 +995,7 @@ function lightbox(obj){
 // LIGHTBOX FUNCTION
 function infiniteScroll() {	
 	console.log;
-	var loadScrollPosition = $('#tweetList').height()-(window.innerHeight*6.5);
+	var loadScrollPosition = $('#tweetList').height()-(window.innerHeight*8);
 	console.log(loadScrollPosition);
 	if( (expandList == true) && (window.scrollY > loadScrollPosition) ) {
 		expandList = false;
