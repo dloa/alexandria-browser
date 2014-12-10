@@ -172,7 +172,11 @@ jQuery(document).ready(function($){
 				$('#wait').hide();
 				$('#disabler').hide();
 			}
-			clearModal();
+			if ( ($('#tweetListView').css('display') == 'block') && ($('#lightbox').css('display') != 'block') ) {
+				clearModal();
+			} else if ($('#lightbox').css('display') == 'block') {
+				$('#lightbox').fadeOut(fadeTimer);
+			}
 		}
 	});
 	$('.close-modal').click(function(){
@@ -961,8 +965,13 @@ function volumeBars(arch, word, interval){
 }
 function lightbox(obj){
 	var imgContent = $(obj).find('img').clone();
+	var imgMarginTop = (window.innerHeight-$(obj).find('img').height())*.4;
 	$('#lightbox').children().remove();
-	$('#lightbox').append(imgContent).css('z-index','500').fadeIn(fadeTimer);
+	$('#lightbox').append(imgContent);
+	$('#lightbox img').css({
+		'margin-top': imgMarginTop+'px'
+	});
+	$('#lightbox').fadeIn(fadeTimer);
 }
 function resetInterface() {
 	// Reset Interface
