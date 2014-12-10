@@ -12,6 +12,14 @@
 		<link rel="stylesheet" href="css/normalize.min.css">
 		<link rel="stylesheet" href="js/vendor/jQRangeSlider-5.7.0/css/iThing.css" type="text/css" />
 		<link rel="stylesheet" href="css/alexandria.css">
+		<script type="text/javascript">
+		/*
+		    var SpritzSettings = {
+		           clientId: "bca1146a623ec3d99",
+		           redirectUri: "http://blue.a.blocktech.com/archview/thirdparty/login_success.html"
+		    };
+	    */
+		</script>
 	</head>
 	<body>
 	  <header>
@@ -38,9 +46,8 @@
 		<h1>Welcome to Alexandria</h1>
 		<div class="wsite-button secondary getAllArchives" id="getArchives">Get All Archives</div>
 	</div>
+		<div data-role="spritzer"></div>
 		<main id="vis" class="wordCloud"></main>
-		<main id="archiveCloud" class="wordCloud"></main>
-		<main id="wordsCloud" class="wordCloud"></main>
 		<main id="wordsListView">
 			<article>
 				<ul id="wordsList"></ul>
@@ -67,10 +74,9 @@
 			<section id="timeline" class="timeline"></section>	
 		</footer>
 		
-		<div id="wait">
-		</div>
-		<div id="disabler">
-		</div>
+		<div id="wait"></div>
+		<div id="disabler"></div>
+		<div id="lightbox" onclick="$(this).fadeOut(fadeTimer);"></div>
 		<script src="js/vendor/d3.v3.min.js"></script>
 		<script src="js/vendor/jquery-2.1.1.min.js"></script>
 		<script src="js/vendor/jquery-ui.min.js"></script>
@@ -82,6 +88,7 @@
 		<script src="js/vendor/jquery.linkify.min.js"></script>
 		<!-- <script src="js/vendor/infinity.min.js"></script> -->
 		<script type="text/javascript" src="js/vendor/spritz-1.2.min.js"></script>
+		<!-- <script type="text/javascript" src="//sdk.spritzinc.com/js/1.2/js/spritz.min.js"></script> -->
 		<script src="js/main.js"></script>
 		<!-- <script src="js/main-d3.js"></script> -->
 	</body>

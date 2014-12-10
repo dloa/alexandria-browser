@@ -747,17 +747,19 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 									}
 								} else {
 									if(iurl_expanded['media_url']) {
-										media_url = iurl_expanded['media_url'];
 										console.log('MEDIA: '+ media_url);
-		//								if(media_url != '') {
-		//									media_url = media_url['Media_url'];
-		//								}
+										var embedded_media = '<div class="imgwrap" onclick="lightbox($(this));"><img src="'+iurl_expanded['media_url']+'" /></div>';
+										if(media_url==''){
+											media_url = embedded_media;
+										} else {
+											media_url = media_url + embedded_media;
+										}
 									}
 								}
 							}
 						}
 						if(media_url != '' ){
-							render_url = '<div class="imgwrap"><img src="'+media_url+'" /></div>'+render_url;
+							render_url = media_url+render_url;
 						}
 					}
 /*
@@ -956,6 +958,11 @@ function volumeBars(arch, word, interval){
 			librarianErr();
 		}
 	});
+}
+function lightbox(obj){
+	var imgContent = $(obj).find('img').clone();
+	$('#lightbox').children().remove();
+	$('#lightbox').append(imgContent).css('z-index','500').fadeIn(fadeTimer);
 }
 function resetInterface() {
 	// Reset Interface

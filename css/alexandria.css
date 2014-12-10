@@ -319,6 +319,7 @@ ul#tweetList li .tweetBody a {
 .tweetEmbedWrap, #tweetList li div.tweetBody div.imgwrap {
 	text-align: center;
 	margin: 1em 0 0;
+	cursor: pointer;
 }
 #tweetList li div.left {
 	display: none;
@@ -328,6 +329,27 @@ ul#tweetList li.more-link {
 }
 ul#tweetList li.more-link a {
 	display: block;
+}
+.spritzer {
+	z-index: 1000;
+	position: absolute;
+	top: 87px;
+	left: 10px;
+}
+div#lightbox {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	background-color: rgba(150,150,150,.45);
+	box-shadow: .2em .2em .5em rgba(20,20,20,.5);
+	-moz-box-shadow: .2em .2em .5em rgba(20,20,20,.5);
+	-webkit-box-shadow: .2em .2em .5em rgba(20,20,20,.5);
+}
+div#lightbox img {
+	margin-top: 87px;
 }
 .archive-volume {
 	background-color: #e0e0e0;
