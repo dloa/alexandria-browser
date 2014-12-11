@@ -36,6 +36,12 @@ jQuery(document).ready(function($){
 		currentArchive = '*';
 		searchTerm = '';
 		currentView = 'archiveCloud';
+		var stateObj = {
+			archive: '',
+			word: ''
+		};
+		var newURL = document.location.origin + document.location.pathname;
+		history.pushState(stateObj, 'Alexandria', newURL);
 		$('#viewlabel .currentArchive').text('');
 		$('header input.search').val('');
 		$('.sort-link').fadeOut(fadeTimer);
@@ -314,7 +320,7 @@ function draw(words, bounds) {
 					archive: currentArchive,
 					word: ''
 				};
-				var newURL = document.location.href+'?archive='+currentArchive
+				var newURL = document.location.href+'?archive='+currentArchive;
 				history.pushState(stateObj, currentArchive, newURL);
 				$('#viewlabel .currentArchive').text(currentArchive);
 				searchTerm = item;
