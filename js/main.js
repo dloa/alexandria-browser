@@ -298,12 +298,24 @@ function draw(words, bounds) {
 					'-o-transition': 'all 3s ease'
 				});
 				activeWord = item;
+				var stateObj = {
+					archive: currentArchive,
+					word: activeWord
+				};
+				var newURL = document.location.href+'&word='+activeWord;
+				history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
 				// VOLUME BARS FOR TWEETLIST
 				wordSearch(currentArchive, item, 40, 0);
 				volumeBars(currentArchive, activeWord, 7200000);
 			} else {
 			//	$('main').fadeOut(fadeTimer);
 				currentArchive = item;
+				var stateObj = {
+					archive: currentArchive,
+					word: ''
+				};
+				var newURL = document.location.href+'?archive='+currentArchive
+				history.pushState(stateObj, currentArchive, newURL);
 				$('#viewlabel .currentArchive').text(currentArchive);
 				searchTerm = item;
 				currentView = 'wordsCloud';
@@ -874,6 +886,12 @@ function clearModal() {
 	if (currentView.slice(0,7) == 'archive') {
 		currentArchive = '*';
 	}
+	var stateObj = {
+		archive: currentArchive,
+		word: ''
+	};
+	var newURL = document.location.origin + document.location.pathname + window.location.search.split('&')[0];
+	history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
 	currentPage = 0;
 	totalPages = 0
 	$("#tweetList li").fadeOut(fadeTimer);
@@ -994,15 +1012,25 @@ function lightbox(obj){
 
 // LIGHTBOX FUNCTION
 function infiniteScroll() {	
-	console.log;
 	var loadScrollPosition = $('#tweetList').height()-(window.innerHeight*8);
-	console.log(loadScrollPosition);
 	if( (expandList == true) && (window.scrollY > loadScrollPosition) ) {
 		expandList = false;
 		wordSearch(currentArchive, activeWord, 40, currentPage);
 	}
 }
 
+// SPRITZ
+/*
+var onStartSpritzClick = function(event) {
+    var text = $('#inputText').val();
+    var locale = "en_us;";
+ 
+    // Send to SpritzEngine to translate
+    SpritzClient.spritzify(text, locale, onSpritzifySuccess, onSpritzifyError);
+};
+*/
+
+// RESET INTERFACE
 function resetInterface() {
 	// Reset Interface
 	searchResults.length=0;
