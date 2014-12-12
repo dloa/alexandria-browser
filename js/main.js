@@ -313,13 +313,14 @@ function draw(words, bounds) {
 			$('#wait').fadeIn(fadeTimer);
 			$('#disabler').fadeIn(fadeTimer);
 			var item = d.text;
-			if(currentView == 'wordsCloud' ){
+			if(currentView == 'wordsCloud' ){				
 				$('main.wordCloud text').css({
 					'transition': 'all 3s ease',
 					'-moz-transition': 'all 3s ease',
 					'-webkit-transition': 'all 3s ease',
 					'-o-transition': 'all 3s ease'
 				});
+				$('#tweetList li').remove();
 				activeWord = item;
 				var stateObj = {
 					archive: currentArchive,
@@ -920,7 +921,6 @@ function clearModal() {
 		archive: currentArchive,
 		word: ''
 	};
-	
 	var newURL = document.location.origin + document.location.pathname + window.location.search.split('&')[0];
 	history.pushState(stateObj, currentArchive, newURL);
 	document.title = 'Alexandria - '+currentArchive;
@@ -940,6 +940,7 @@ function clearModal() {
 	volumeBars(currentArchive,'',7200000);
 	$("#tweetList li").remove();
 	$('#timeline-controls').fadeIn(fadeTimer);
+	return false;
 }
 
 // VOLUME BARS
@@ -1103,11 +1104,10 @@ function displayItem(key){
 			searchTerm = currentArchive;
 			currentView = 'wordsCloud';
 			activeWord = '';
-			console.log('Search = '+window.location.search);
 			if (window.location.search.indexOf("word") == -1) {
+				document.title = 'Alexandria - '+currentArchive;
 				getArchiveWords(currentArchive);
 				volumeBars(currentArchive,'',7200000);
-				document.title = 'Alexandria - '+currentArchive;
 			} else {
 				displayItem('word');
 			}
@@ -1141,6 +1141,8 @@ window.onpopstate = function(event) {
 	$("#tweetList li").fadeOut(fadeTimer);
 	$('.overlay').fadeOut(fadeTimer);
 	$("#tweetList li").remove();
+	currentPage = 0;
+	totalPages = 0;
 	if(window.location.search != ''){
 	    $('#intro').remove();
 		displayItem('archive');
@@ -1149,8 +1151,6 @@ window.onpopstate = function(event) {
 		currentArchive = '*';
 		searchTerm = '';
 		currentView = 'archiveCloud';
-		currentPage = 0;
-		totalPages = 0;
 		runSearch(searchTerm);
 	}
 };
