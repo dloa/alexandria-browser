@@ -40,13 +40,6 @@ jQuery(document).ready(function($){
 		currentArchive = '*';
 		searchTerm = '';
 		currentView = 'archiveCloud';
-		var stateObj = {
-			archive: '',
-			word: ''
-		};
-		var newURL = document.location.origin + document.location.pathname;
-		history.pushState(stateObj, 'Alexandria', newURL);
-		document.title = 'Alexandria';
 		$('#viewlabel .currentArchive').text('');
 		$('header input.search').val('');
 		$('.sort-link').fadeOut(fadeTimer);
@@ -429,6 +422,7 @@ function runSearch(searchTerm) {
 
 // NEW GET ACTIVE JOBS AND VOLUMES
 function getJobs(searchTerm) {
+	document.title = 'Alexandria';
 	console.log('Searching for '+searchTerm);
 	startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
 	endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
@@ -708,13 +702,13 @@ function wordSearch(arch, word, rpp, currentPage) {
 			searchValue = $('header input.search').val();
 			$('.view-controls').fadeOut(fadeTimer);
 		}
-		var dateValues = $("#timeline").dateRangeSlider("values");
+//		var dateValues = $("#timeline").dateRangeSlider("values");
 		if ( totalPages == 0 ) {
 			// GET TOTAL PAGES
-			totalPagesAPI(arch, word, Date.parse(dateValues.min), Date.parse(dateValues.max), rpp);
+			totalPagesAPI(arch, word, startDateValue, endDateValue, rpp);
 		}
 		// Get a page of tweets between two dates
-		tweetListPageAPI(arch, word, Date.parse(dateValues.min), Date.parse(dateValues.max), rpp);
+		tweetListPageAPI(arch, word, startDateValue, endDateValue, rpp);
 	}
 }
 
@@ -734,7 +728,7 @@ function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 		var rpp = 40;
 	}
 	if((!arch)||(!word)||(!StartDate)||(!EndDate)||(!rpp)){
-		console.log(arch + ', ' + word + ', ' + StartDate + EndDate + ', ' + rpp);
+		console.log(arch + ', ' + word + ', ' + StartDate + ', ' + EndDate + ', ' + rpp);
 		alert('error in totalPagesAPI');		
 		return false;
 	} else {
@@ -776,7 +770,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 		var rpp = 40;
 	}
 	if((!arch)||(!word)||(!StartDate)||(!EndDate)||(!rpp)){
-		console.log(arch + ', ' + word + ', ' + StartDate + EndDate + ', ' + rpp);
+		console.log(arch + ', ' + word + ', ' + StartDate + ', ' + EndDate + ', ' + rpp);
 		alert('error in tweetListPageAPI');		
 		return false;
 	} else {
@@ -942,6 +936,7 @@ function clearModal() {
 		archive: currentArchive,
 		word: ''
 	};
+	console.log('Query object length = '+window.location.search.split('&'));
 	var newURL = document.location.origin + document.location.pathname + window.location.search.split('&')[0];
 	history.pushState(stateObj, currentArchive, newURL);
 	document.title = 'Alexandria - '+currentArchive;
