@@ -326,7 +326,7 @@ function draw(words, bounds) {
 				history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
 				document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
 				// VOLUME BARS FOR TWEETLIST
-				wordSearch(currentArchive, item, 40, 0);
+				wordSearch(currentArchive, activeWord, 40, 0);
 				volumeBars(currentArchive, activeWord, 7200000);
 			} else {
 				currentArchive = item;
@@ -675,7 +675,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 	if((!arch)||(!word)||(!rpp)||(!pageFix)){
 		console.log(arch + ', ' + word + ', ' + rpp + ', ' + pageFix);
 		if(!arch){console.log('arch!')}else if(!word){console.log('word!')}else if(!rpp){console.log('rpp = '+rpp)}else if(!pageFix){console.log('pageFix = '+pageFix)}else{console.log('something else!')}
-		alert('error in wordSearch');		
+		console.error('error in wordSearch');		
 		return false;
 	} else {
 		activeWord = word;
@@ -922,7 +922,7 @@ function clearModal() {
 	history.pushState(stateObj, currentArchive, newURL);
 	document.title = 'Alexandria - '+currentArchive;
 	currentPage = 0;
-	totalPages = 0
+	totalPages = 0;
 	$("#tweetList li").fadeOut(fadeTimer);
 	$('.overlay').fadeOut(fadeTimer);
 //	$('main').not('#'+currentView).fadeOut(fadeTimer);
@@ -1099,6 +1099,7 @@ function displayItem(key){
 			$('#viewlabel .currentArchive').text(currentArchive);
 			searchTerm = currentArchive;
 			currentView = 'wordsCloud';
+			activeWord = '';
 			console.log('Search = '+window.location.search);
 			if (window.location.search.indexOf("word") == -1) {
 				getArchiveWords(currentArchive);
@@ -1134,7 +1135,9 @@ window.onpopstate = function(event) {
 		'-webkit-transition': 'all 1s ease',
 		'-o-transition': 'all 1s ease'
 	});
+	$("#tweetList li").fadeOut(fadeTimer);
 	$('.overlay').fadeOut(fadeTimer);
+	$("#tweetList li").remove();
 	if(window.location.search != ''){
 		displayItem('archive');
 	} else {
@@ -1143,10 +1146,8 @@ window.onpopstate = function(event) {
 		searchTerm = '';
 		currentView = 'archiveCloud';
 		currentPage = 0;
-		totalPages = 0
-		$("#tweetList li").fadeOut(fadeTimer);
+		totalPages = 0;
 		getJobs(searchTerm);
-		$("#tweetList li").remove();
 	}
 };
 
