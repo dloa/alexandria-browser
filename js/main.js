@@ -311,20 +311,20 @@ function draw(words, bounds) {
 					archive: currentArchive,
 					word: activeWord
 				};
-				var newURL = document.location.href+'&word='+encodeURIComponent(activeWord);
+				var newURL = document.location.origin + document.location.pathname + document.location.search + '&word='+encodeURIComponent(activeWord);
 				history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
 				// VOLUME BARS FOR TWEETLIST
 				wordSearch(currentArchive, item, 40, 0);
 				volumeBars(currentArchive, activeWord, 7200000);
 			} else {
 			//	$('main').fadeOut(fadeTimer);
-				currentArchive = item;
 				var stateObj = {
 					archive: currentArchive,
 					word: ''
 				};
-				var newURL = document.location.href+'?archive='+encodeURIComponent(currentArchive);
+				var newURL = document.location.origin + document.location.pathname +'?archive='+encodeURIComponent(currentArchive);
 				history.pushState(stateObj, currentArchive, newURL);
+				currentArchive = item;
 				$('#viewlabel .currentArchive').text(currentArchive);
 				searchTerm = item;
 				currentView = 'wordsCloud';
@@ -1074,8 +1074,14 @@ function displayItem(key){
 	if(queryString(key)=='false') {
 		console.log("you didn't enter a ?name=value querystring item.");
 	} else {
-		console.log(queryString(key));
-		getArchiveWords(queryString(key));
+		if(key == 'archive'){
+			currentArchive = queryString(key);
+			$('#viewlabel .currentArchive').text(currentArchive);
+			searchTerm = currentArchive;
+			currentView = 'wordsCloud';
+			getArchiveWords(currentArchive);
+			volumeBars(currentArchive,'',7200000);
+		}
 	}
 }
 
