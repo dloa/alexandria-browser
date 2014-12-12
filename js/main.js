@@ -157,6 +157,8 @@ jQuery(document).ready(function($){
 	// Timeline selected values change
 	$("#timeline").bind("valuesChanged", function(e, data){
 		resetArchiveList = true;
+		startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
+		endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
 		if($('#tweetListView').css('display') == 'block') {
 			currentPage = 0;
 			totalPages = 0;
@@ -166,10 +168,32 @@ jQuery(document).ready(function($){
 			} else {
 				var searchWord = activeWord;			
 			}
+			var stateObj = {
+				startDateValue: startDateValue,
+				endDateValue: endDateValue,
+				archive: currentArchive,
+				word: searchWord
+			};
+			var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive) + '&word='+encodeURIComponent(activeWord);
+			history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
+			document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
 			wordSearch(currentArchive, searchWord, 40, 0);
 			resetArchiveList = true;
 		} else {			
 			if (currentView.slice(0,5) == 'words') {
+				var stateObj = {
+					startDateValue: startDateValue,
+					endDateValue: endDateValue,
+					archive: currentArchive,
+					word: ''
+				};
+				if(window.location.search==''){
+					var newURL = document.location.origin + document.location.pathname +'?archive='+encodeURIComponent(currentArchive);
+				} else {
+					var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue + '&archive='+encodeURIComponent(currentArchive);
+				}
+				history.pushState(stateObj, currentArchive, newURL);
+				document.title = 'Alexandria - '+currentArchive;
 				getArchiveWords(searchTerm);
 			} else {
 				if(!searchTerm) {
@@ -320,11 +344,15 @@ function draw(words, bounds) {
 				});
 				$('#tweetList li').remove();
 				activeWord = item;
+				startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
+				endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
 				var stateObj = {
+					startDateValue: startDateValue,
+					endDateValue: endDateValue,
 					archive: currentArchive,
 					word: activeWord
 				};
-				var newURL = document.location.origin + document.location.pathname + document.location.search + '&word='+encodeURIComponent(activeWord);
+				var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive) + '&word='+encodeURIComponent(activeWord);
 				history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
 				document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
 				// VOLUME BARS FOR TWEETLIST
@@ -335,14 +363,18 @@ function draw(words, bounds) {
 				$('#viewlabel .currentArchive').text(currentArchive);
 				searchTerm = currentArchive;
 				currentView = 'wordsCloud';
+				startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
+				endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
 				var stateObj = {
+					startDateValue: startDateValue,
+					endDateValue: endDateValue,
 					archive: currentArchive,
 					word: ''
 				};
 				if(window.location.search==''){
 					var newURL = document.location.origin + document.location.pathname +'?archive='+encodeURIComponent(currentArchive);
 				} else {
-					var newURL = document.location.origin + document.location.pathname + document.location.search + '&archive='+encodeURIComponent(currentArchive);
+					var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue + '&archive='+encodeURIComponent(currentArchive);
 				}
 				history.pushState(stateObj, currentArchive, newURL);
 				document.title = 'Alexandria - '+currentArchive;
@@ -426,7 +458,6 @@ function getJobs(searchTerm) {
 	console.log('Searching for '+searchTerm);
 	startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
 	endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
-	console.log('startDate = '+startDateValue+', endDate = '+endDateValue)
 	var stateObj = {
 		startDateValue: startDateValue,
 		endDateValue: endDateValue,
@@ -436,7 +467,7 @@ function getJobs(searchTerm) {
 	if(currentArchive == '*'){
 		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue;
 	} else {
-		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+currentArchive;
+		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive);
 	}
 	history.pushState(stateObj, 'Alexandria', newURL);
 
@@ -936,7 +967,7 @@ function clearModal() {
 		archive: currentArchive,
 		word: ''
 	};
-	var newURL = document.location.origin + document.location.pathname + window.location.search.split('&')[0] + '&' + window.location.search.split('&')[1] + '&' + window.location.search.split('&')[2];
+	var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive);
 	history.pushState(stateObj, currentArchive, newURL);
 	document.title = 'Alexandria - '+currentArchive;
 	currentPage = 0;
@@ -1191,7 +1222,7 @@ function resetInterface() {
 
 // ERROR CONNECTING TO LIBRARIAN
 function librarianErr(){
-	alert('Librarian Error');
+	console.error('Librarian Error');
 }
 
 // Interger sort order function
