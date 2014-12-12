@@ -31,6 +31,9 @@ jQuery(document).ready(function($){
 		if($(this).hasClass('disabled')){
 			return false;
 		}
+		if($('#tweetListView').css('display') == 'block') {
+			clearModal();
+		}
 		playingTimeline = true;
 		autoPlayTimeline();
 		currentArchive = '*';
@@ -1139,6 +1142,7 @@ window.onpopstate = function(event) {
 	$('.overlay').fadeOut(fadeTimer);
 	$("#tweetList li").remove();
 	if(window.location.search != ''){
+	    $('#intro').remove();
 		displayItem('archive');
 	} else {
 		$('#viewlabel .currentArchive').text('');
@@ -1147,7 +1151,7 @@ window.onpopstate = function(event) {
 		currentView = 'archiveCloud';
 		currentPage = 0;
 		totalPages = 0;
-		getJobs(searchTerm);
+		runSearch(searchTerm);
 	}
 };
 
