@@ -3,10 +3,11 @@ jQuery(document).ready(function($){
 	$('#disabler').fadeIn(fadeTimer);
 	// Footer timeline contruct
 	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
-
+	displayItem('startDate');
+	console.log('startDate = '+startDateValue+', endDate = '+endDateValue)
 	$("#timeline").dateRangeSlider({
 		bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
-		defaultValues: {min: Date.parse(datetime)-86400000, max: Date.parse(datetime)},
+		defaultValues: {min: startDateValue, max: endDateValue},
 		arrows: false,
 		scales: [{
 		  first: function(value){ return value; },
@@ -285,6 +286,10 @@ var animDuration = 3500;
 
 var expandList = true;
 
+var startDateValue = Date.parse(datetime)-86400000;
+var endDateValue = Date.parse(datetime);
+
+
 // Draw Word Clouds
 function draw(words, bounds) {
   scale = bounds ? Math.min(
@@ -425,6 +430,22 @@ function runSearch(searchTerm) {
 // NEW GET ACTIVE JOBS AND VOLUMES
 function getJobs(searchTerm) {
 	console.log('Searching for '+searchTerm);
+	startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
+	endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
+	console.log('startDate = '+startDateValue+', endDate = '+endDateValue)
+	var stateObj = {
+		startDateValue: startDateValue,
+		endDateValue: endDateValue,
+		archive: currentArchive,
+		word: ''
+	};
+	if(currentArchive == '*'){
+		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue;
+	} else {
+		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+currentArchive;
+	}
+	history.pushState(stateObj, 'Alexandria', newURL);
+
 	if(resetArchiveList == true){
 		resetArchiveList = false;
 		newArchiveVolumeCache.length = 0;
@@ -1095,10 +1116,15 @@ function queryString(key){
 	return unescape(page.getValue(key)); 
 }
 function displayItem(key){
-	if(queryString(key)=='false') {
-		console.log("you didn't enter a ?name=value querystring item.");
+	if(queryString(key)=='false') {	
+		console.log("you didn't enter a ?"+key+"=value querystring item.");
 	} else {
-		if(key == 'archive'){
+		if (key == 'startDate') {
+			startDateValue = queryString(key);
+			displayItem('endDate');
+		} else if(key == 'endDate'){
+			endDateValue = queryString(key);
+		} else if(key == 'archive'){
 			currentArchive = queryString(key);
 			$('#viewlabel .currentArchive').text(currentArchive);
 			searchTerm = currentArchive;
