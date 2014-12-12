@@ -1,7 +1,4 @@
 jQuery(document).ready(function($){	
-	if(window.location.search == ''){
-	    $('#intro').fadeIn(fadeTimer);
-	}
 	$('#wait').fadeIn(fadeTimer);
 	$('#disabler').fadeIn(fadeTimer);
 	// Footer timeline contruct
@@ -150,7 +147,13 @@ jQuery(document).ready(function($){
 	// Ukrain Archive Shortcut
 	$('#ukraineShortcut').click(function(){
 	    $('#intro').remove();
-		wordSearch('Ukraine', 'ukraine', 40, 0);
+		currentArchive = 'Ukraine';
+		activeWord = 'ukraine';
+		$('#viewlabel .currentArchive').text(currentArchive);
+		searchTerm = currentArchive;
+		currentView = 'wordsCloud';
+		wordSearch(currentArchive, activeWord, 40, 0);
+		volumeBars(currentArchive, activeWord,7200000);
 	});
 	
 	// Timeline selected values change
@@ -216,6 +219,13 @@ jQuery(document).ready(function($){
 	});
 
 	resetInterface();	
+
+	if(window.location.search == ''){
+	    $('#intro').fadeIn(fadeTimer);
+	} else {
+		displayItem('archive');
+	}
+
 }); // End Document.Ready
 
 // Default variables
@@ -317,17 +327,16 @@ function draw(words, bounds) {
 				wordSearch(currentArchive, item, 40, 0);
 				volumeBars(currentArchive, activeWord, 7200000);
 			} else {
-			//	$('main').fadeOut(fadeTimer);
+				currentArchive = item;
+				$('#viewlabel .currentArchive').text(currentArchive);
+				searchTerm = currentArchive;
+				currentView = 'wordsCloud';
 				var stateObj = {
 					archive: currentArchive,
 					word: ''
 				};
 				var newURL = document.location.origin + document.location.pathname +'?archive='+encodeURIComponent(currentArchive);
 				history.pushState(stateObj, currentArchive, newURL);
-				currentArchive = item;
-				$('#viewlabel .currentArchive').text(currentArchive);
-				searchTerm = item;
-				currentView = 'wordsCloud';
 				getArchiveWords(item);
 				volumeBars(currentArchive,'',7200000);
 			}
@@ -838,7 +847,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 				$('#wait').fadeOut(fadeTimer);
 				$('#disabler').fadeOut(fadeTimer);
 				if(window.scrollY == 0){
-					$(window).scrollTop(10,0);
+					$(window).scrollTop(5,0);
 				}
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -1067,7 +1076,7 @@ function PageQuery(q) {
 	this.getLength = function() { return this.keyValuePairs.length; } 
 }
 function queryString(key){
-	var page = new PageQuery(window.location.search); 
+	var page = new PageQuery(window.location.search);
 	return unescape(page.getValue(key)); 
 }
 function displayItem(key){
@@ -1078,10 +1087,20 @@ function displayItem(key){
 			currentArchive = queryString(key);
 			$('#viewlabel .currentArchive').text(currentArchive);
 			searchTerm = currentArchive;
-			currentView = 'wordsCloud';
-			getArchiveWords(currentArchive);
-			volumeBars(currentArchive,'',7200000);
+			if (window.location.search.indexOf("word") == -1) {
+				currentView = 'wordsCloud';
+				getArchiveWords(currentArchive);
+				volumeBars(currentArchive,'',7200000);
+			} else {
+				displayItem('word');
+			}
+		} else if (key == 'word') {
+			activeWord = queryString(key);
+			// VOLUME BARS FOR TWEETLIST
+			wordSearch(currentArchive, activeWord, 40, 0);
+			volumeBars(currentArchive, activeWord, 7200000);
 		}
+		
 	}
 }
 
