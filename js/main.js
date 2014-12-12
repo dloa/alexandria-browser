@@ -42,6 +42,7 @@ jQuery(document).ready(function($){
 		};
 		var newURL = document.location.origin + document.location.pathname;
 		history.pushState(stateObj, 'Alexandria', newURL);
+		document.title = 'Alexandria';
 		$('#viewlabel .currentArchive').text('');
 		$('header input.search').val('');
 		$('.sort-link').fadeOut(fadeTimer);
@@ -323,6 +324,7 @@ function draw(words, bounds) {
 				};
 				var newURL = document.location.origin + document.location.pathname + document.location.search + '&word='+encodeURIComponent(activeWord);
 				history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
+				document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
 				// VOLUME BARS FOR TWEETLIST
 				wordSearch(currentArchive, item, 40, 0);
 				volumeBars(currentArchive, activeWord, 7200000);
@@ -335,8 +337,13 @@ function draw(words, bounds) {
 					archive: currentArchive,
 					word: ''
 				};
-				var newURL = document.location.origin + document.location.pathname +'?archive='+encodeURIComponent(currentArchive);
+				if(window.location.search==''){
+					var newURL = document.location.origin + document.location.pathname +'?archive='+encodeURIComponent(currentArchive);
+				} else {
+					var newURL = document.location.origin + document.location.pathname + document.location.search + '&archive='+encodeURIComponent(currentArchive);
+				}
 				history.pushState(stateObj, currentArchive, newURL);
+				document.title = 'Alexandria - '+currentArchive;
 				getArchiveWords(item);
 				volumeBars(currentArchive,'',7200000);
 			}
@@ -688,7 +695,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 
 function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 	if(arch == '*'){
-		alert('FAIL: arch = *, currentArchive = '+currentArchive+', word = '+word);
+		console.error('FAIL: arch = *, currentArchive = '+currentArchive+', word = '+word);
 		return false;
 	}
 	if(currentArchive == '*'){
@@ -730,7 +737,7 @@ function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 
 function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 	if(arch == '*'){
-		alert('FAIL: arch = *, currentArchive = '+currentArchive+', word = '+word);
+		console.error('FAIL: arch = *, currentArchive = '+currentArchive+', word = '+word);
 		return false;
 	}
 	if(currentArchive == '*'){
@@ -910,8 +917,10 @@ function clearModal() {
 		archive: currentArchive,
 		word: ''
 	};
+	
 	var newURL = document.location.origin + document.location.pathname + window.location.search.split('&')[0];
 	history.pushState(stateObj, currentArchive, newURL);
+	document.title = 'Alexandria - '+currentArchive;
 	currentPage = 0;
 	totalPages = 0
 	$("#tweetList li").fadeOut(fadeTimer);
@@ -1089,15 +1098,17 @@ function displayItem(key){
 			currentArchive = queryString(key);
 			$('#viewlabel .currentArchive').text(currentArchive);
 			searchTerm = currentArchive;
+			currentView = 'wordsCloud';
 			if (window.location.search.indexOf("word") == -1) {
-				currentView = 'wordsCloud';
 				getArchiveWords(currentArchive);
 				volumeBars(currentArchive,'',7200000);
+				document.title = 'Alexandria - '+currentArchive;
 			} else {
 				displayItem('word');
 			}
 		} else if (key == 'word') {
 			activeWord = queryString(key);
+			document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
 			// VOLUME BARS FOR TWEETLIST
 			wordSearch(currentArchive, activeWord, 40, 0);
 			volumeBars(currentArchive, activeWord, 7200000);
