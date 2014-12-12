@@ -649,7 +649,9 @@ function buildWordCloud(cloudlist, MaxResults) {
 	layout.stop().words(cloudlist.map(function(d, i) {
 		return {text: d, size: (((i/totalResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/totalResults }; // base size on ratio of number of actual results
 	})).padding(5*fontSizeMultiplier).start();
-	$('main').not('#'+currentView).not('#vis').fadeOut(fadeTimer);
+	if($('#tweetListView').css('display') != 'block') {
+		$('main').not('#'+currentView).not('#vis').fadeOut(fadeTimer);		
+	}
 	$('main #'+currentView).fadeIn(fadeTimer);
 }
 
@@ -1099,6 +1101,7 @@ function displayItem(key){
 			// VOLUME BARS FOR TWEETLIST
 			wordSearch(currentArchive, activeWord, 40, 0);
 			volumeBars(currentArchive, activeWord, 7200000);
+			getArchiveWords(currentArchive);
 		}
 		
 	}
