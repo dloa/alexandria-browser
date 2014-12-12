@@ -1,4 +1,7 @@
 jQuery(document).ready(function($){	
+	if(window.location.search == ''){
+	    $('#intro').fadeIn(fadeTimer);
+	}
 	$('#wait').fadeIn(fadeTimer);
 	$('#disabler').fadeIn(fadeTimer);
 	// Footer timeline contruct
@@ -308,7 +311,7 @@ function draw(words, bounds) {
 					archive: currentArchive,
 					word: activeWord
 				};
-				var newURL = document.location.href+'&word='+activeWord;
+				var newURL = document.location.href+'&word='+encodeURIComponent(activeWord);
 				history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
 				// VOLUME BARS FOR TWEETLIST
 				wordSearch(currentArchive, item, 40, 0);
@@ -320,7 +323,7 @@ function draw(words, bounds) {
 					archive: currentArchive,
 					word: ''
 				};
-				var newURL = document.location.href+'?archive='+currentArchive;
+				var newURL = document.location.href+'?archive='+encodeURIComponent(currentArchive);
 				history.pushState(stateObj, currentArchive, newURL);
 				$('#viewlabel .currentArchive').text(currentArchive);
 				searchTerm = item;
@@ -897,7 +900,7 @@ function clearModal() {
 		word: ''
 	};
 	var newURL = document.location.origin + document.location.pathname + window.location.search.split('&')[0];
-	history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
+	history.pushState(stateObj, currentArchive, newURL);
 	currentPage = 0;
 	totalPages = 0
 	$("#tweetList li").fadeOut(fadeTimer);
@@ -1035,6 +1038,46 @@ var onStartSpritzClick = function(event) {
     SpritzClient.spritzify(text, locale, onSpritzifySuccess, onSpritzifyError);
 };
 */
+
+// URL PARSING
+function PageQuery(q) {
+	if(q.length > 1) this.q = q.substring(1, q.length);
+	else this.q = null;
+	this.keyValuePairs = new Array();
+	if(q) {
+		for(var i=0; i < this.q.split("&").length; i++) {
+			this.keyValuePairs[i] = this.q.split("&")[i];
+		}
+	}
+	this.getKeyValuePairs = function() { return this.keyValuePairs; }
+	this.getValue = function(s) {
+		for(var j=0; j < this.keyValuePairs.length; j++) {
+			if(this.keyValuePairs[j].split("=")[0] == s)
+				return this.keyValuePairs[j].split("=")[1];
+		}
+		return false;
+	}
+	this.getParameters = function() {
+		var a = new Array(this.getLength());
+		for(var j=0; j < this.keyValuePairs.length; j++) {
+			a[j] = this.keyValuePairs[j].split("=")[0];
+		}
+		return a;
+	}
+	this.getLength = function() { return this.keyValuePairs.length; } 
+}
+function queryString(key){
+	var page = new PageQuery(window.location.search); 
+	return unescape(page.getValue(key)); 
+}
+function displayItem(key){
+	if(queryString(key)=='false') {
+		console.log("you didn't enter a ?name=value querystring item.");
+	} else {
+		console.log(queryString(key));
+		getArchiveWords(queryString(key));
+	}
+}
 
 // RESET INTERFACE
 function resetInterface() {
