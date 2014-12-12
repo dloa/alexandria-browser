@@ -936,8 +936,7 @@ function clearModal() {
 		archive: currentArchive,
 		word: ''
 	};
-	console.log('Query object length = '+window.location.search.split('&'));
-	var newURL = document.location.origin + document.location.pathname + window.location.search.split('&')[0];
+	var newURL = document.location.origin + document.location.pathname + window.location.search.split('&')[0] + '&' + window.location.search.split('&')[1] + '&' + window.location.search.split('&')[2];
 	history.pushState(stateObj, currentArchive, newURL);
 	document.title = 'Alexandria - '+currentArchive;
 	currentPage = 0;
