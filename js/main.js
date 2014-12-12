@@ -1099,6 +1099,7 @@ function displayItem(key){
 			$('#viewlabel .currentArchive').text(currentArchive);
 			searchTerm = currentArchive;
 			currentView = 'wordsCloud';
+			console.log('Search = '+window.location.search);
 			if (window.location.search.indexOf("word") == -1) {
 				getArchiveWords(currentArchive);
 				volumeBars(currentArchive,'',7200000);
@@ -1121,9 +1122,14 @@ function displayItem(key){
 // BROWSER NAVIGATION CONTROLS
 window.onpopstate = function(event) {
 	console.info("location: " + document.location + ", state: " + JSON.stringify(event.state));
+	console.log('Search = '+window.location.search);
 	if(window.location.search != ''){
 		displayItem('archive');
 	} else {
+		$('#viewlabel .currentArchive').text('');
+		currentArchive = '*';
+		searchTerm = '';
+		currentView = 'archiveCloud';
 		runSearch('');
 	}
 };
