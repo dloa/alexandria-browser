@@ -48,7 +48,7 @@ jQuery(document).ready(function($){
 		$('.sort-link').fadeOut(fadeTimer);
 		$('.view-controls .view-link').text('Cloud');
 //		$('main').fadeOut(fadeTimer);
-		runSearch('');
+		getJobs(searchTerm);
 	});
 	// Omnibox (search input)
 	$('header input.search').on("keydown", function (e) {		
@@ -762,15 +762,15 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 			searchValue = $('header input.search').val();
 			$('.view-controls').fadeOut(fadeTimer);
 			$('.overlay').fadeIn(fadeTimer);
-				$('#timeline-controls').fadeOut(fadeTimer);				
-				$('main.wordCloud text').css({
-					'text-shadow':'0 0 .2em rgba(100,100,100,.75)',
-					'opacity':'.75',
-					'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=75)',
-					'filter':'alpha(opacity=75)',
-					'-moz-opacity': '0.75',
-					'-khtml-opacity': '0.75'					
-				});
+			$('#timeline-controls').fadeOut(fadeTimer);				
+			$('main.wordCloud text').css({
+				'text-shadow':'0 0 .2em rgba(100,100,100,.75)',
+				'opacity':'.75',
+				'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=75)',
+				'filter':'alpha(opacity=75)',
+				'-moz-opacity': '0.75',
+				'-khtml-opacity': '0.75'					
+			});
 		}
 		$.ajax({
 			type: "POST",
@@ -1122,7 +1122,19 @@ function displayItem(key){
 // BROWSER NAVIGATION CONTROLS
 window.onpopstate = function(event) {
 	console.info("location: " + document.location + ", state: " + JSON.stringify(event.state));
-	console.log('Search = '+window.location.search);
+	$('main.wordCloud text').css({
+		'text-shadow':'0 0 0 rgba(200,200,200,.5)',
+		'opacity':'1',
+		'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=100)',
+		'filter':'alpha(opacity=100)',
+		'-moz-opacity': '1',
+		'-khtml-opacity': '1',
+		'transition': 'all 1s ease',
+		'-moz-transition': 'all 1s ease',
+		'-webkit-transition': 'all 1s ease',
+		'-o-transition': 'all 1s ease'
+	});
+	$('.overlay').fadeOut(fadeTimer);
 	if(window.location.search != ''){
 		displayItem('archive');
 	} else {
@@ -1130,7 +1142,11 @@ window.onpopstate = function(event) {
 		currentArchive = '*';
 		searchTerm = '';
 		currentView = 'archiveCloud';
-		runSearch('');
+		currentPage = 0;
+		totalPages = 0
+		$("#tweetList li").fadeOut(fadeTimer);
+		getJobs(searchTerm);
+		$("#tweetList li").remove();
 	}
 };
 
