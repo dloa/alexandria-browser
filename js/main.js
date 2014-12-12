@@ -1118,6 +1118,16 @@ function displayItem(key){
 	}
 }
 
+// BROWSER NAVIGATION CONTROLS
+window.onpopstate = function(event) {
+	console.info("location: " + document.location + ", state: " + JSON.stringify(event.state));
+	if(window.location.search != ''){
+		displayItem('archive');
+	} else {
+		runSearch('');
+	}
+};
+
 // RESET INTERFACE
 function resetInterface() {
 	// Reset Interface
