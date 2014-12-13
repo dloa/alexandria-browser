@@ -456,15 +456,21 @@ function runSearch(searchTerm) {
 function getJobs(searchTerm) {
 	document.title = 'Alexandria';
 	console.log('Searching for '+searchTerm);
-	startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
-	endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
+	if(window.location.search != '') {
+		if (window.location.search.indexOf("startDate") > -1) {
+			$("#timeline").dateRangeSlider("values", startDateValue, endDateValue);
+		}
+	} else {
+		startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
+		endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
+	}
 	var stateObj = {
 		startDateValue: startDateValue,
 		endDateValue: endDateValue,
 		archive: currentArchive,
 		word: ''
 	};
-	console.log('currentArchive = '+ currentArchive);
+	console.log('currentArchive = '+ currentArchive);	
 	if(currentArchive == '*'){
 		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue;
 	} else {
