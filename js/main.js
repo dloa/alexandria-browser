@@ -5,27 +5,6 @@ jQuery(document).ready(function($){
 	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
 	displayItem('startDate');
 	console.log('startDate = '+startDateValue+', endDate = '+endDateValue)
-	$("#timeline").dateRangeSlider({
-		bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
-		defaultValues: {min: startDateValue, max: endDateValue},
-		arrows: false,
-		scales: [{
-		  first: function(value){ return value; },
-		  end: function(value) {return value; },
-		  next: function(value){
-			var next = new Date(value);
-			return new Date(next.setDate(value.getDate() + 1));
-		  },
-		  label: function(value){
-			return days[value.getDate()];
-		  },
-		  format: function(tickContainer, tickStart, tickEnd){
-			tickContainer.addClass("myCustomClass");
-		  }
-		}]
-	});
-	// Generate initial volume bars
-	volumeBars('*', '', 7200000);
 	// UI/UX Navigation
 	// Click logo to go back to archive list with current timeline selection
 	$('#logo').click(function(){
@@ -142,18 +121,63 @@ jQuery(document).ready(function($){
 		getAllArchives();
 	});	
 	
-	// Ukrain Archive Shortcut
-	$('#ukraineShortcut').click(function(){
-	    $('#intro').remove();
-		currentArchive = 'Ukraine';
-		activeWord = 'ukraine';
-		$('#viewlabel .currentArchive').text(currentArchive);
-		searchTerm = currentArchive;
-		currentView = 'wordsCloud';
-		wordSearch(currentArchive, activeWord, 40, 0);
-		volumeBars(currentArchive, activeWord,7200000);
+	// Modal controls
+	$(document).on("keyup", function (e) {
+		var code = e.keyCode || e.which;
+		if (code == 27) {
+			// esc pressed
+			if($('#wait').css('display') == 'block') {
+				$('#wait').hide();
+				$('#disabler').hide();
+			}
+			if ( ($('#tweetListView').css('display') == 'block') && ($('#lightbox').css('display') != 'block') ) {
+				clearModal();
+			} else if ($('#lightbox').css('display') == 'block') {
+				$('#lightbox').fadeOut(fadeTimer);
+			}
+		}
 	});
-	
+	$('.close-modal').click(function(){
+		clearModal();
+	});	
+	$('#timeline-controls .full').click(function(){
+		$("#timeline").dateRangeSlider("bounds", new Date(2014, 8, 8), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
+		volumeBars(currentArchive,'',7200000);
+	});
+	$('#timeline-controls .month').click(function(){
+		$("#timeline").dateRangeSlider("bounds", new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
+		volumeBars(currentArchive,'',7200000);
+	});
+	$('#timeline-controls .playbtn').click(function(){
+		autoPlayTimeline();
+	});
+	$(window).scroll(function(){
+		if($('#tweetListView').css('display') == 'block') {
+			infiniteScroll();
+		}
+	});
+
+// BUILD TIMELINE
+	$("#timeline").dateRangeSlider({
+		bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
+		defaultValues: {min: startDateValue, max: endDateValue},
+		arrows: false,
+		scales: [{
+		  first: function(value){ return value; },
+		  end: function(value) {return value; },
+		  next: function(value){
+			var next = new Date(value);
+			return new Date(next.setDate(value.getDate() + 1));
+		  },
+		  label: function(value){
+			return days[value.getDate()];
+		  },
+		  format: function(tickContainer, tickStart, tickEnd){
+			tickContainer.addClass("myCustomClass");
+		  }
+		}]
+	});
+
 	// Timeline selected values change
 	$("#timeline").bind("valuesChanged", function(e, data){
 		resetArchiveList = true;
@@ -204,48 +228,16 @@ jQuery(document).ready(function($){
 			}
 		}
 	});
-	// Modal controls
-	$(document).on("keyup", function (e) {
-		var code = e.keyCode || e.which;
-		if (code == 27) {
-			// esc pressed
-			if($('#wait').css('display') == 'block') {
-				$('#wait').hide();
-				$('#disabler').hide();
-			}
-			if ( ($('#tweetListView').css('display') == 'block') && ($('#lightbox').css('display') != 'block') ) {
-				clearModal();
-			} else if ($('#lightbox').css('display') == 'block') {
-				$('#lightbox').fadeOut(fadeTimer);
-			}
-		}
-	});
-	$('.close-modal').click(function(){
-		clearModal();
-	});	
-	$('#timeline-controls .full').click(function(){
-		$("#timeline").dateRangeSlider("bounds", new Date(2014, 8, 8), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
-		volumeBars(currentArchive,'',7200000);
-	});
-	$('#timeline-controls .month').click(function(){
-		$("#timeline").dateRangeSlider("bounds", new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
-		volumeBars(currentArchive,'',7200000);
-	});
-	$('#timeline-controls .playbtn').click(function(){
-		autoPlayTimeline();
-	});
-	$(window).scroll(function(){
-		if($('#tweetListView').css('display') == 'block') {
-			infiniteScroll();
-		}
-	});
-
-	resetInterface();	
 
 	if(window.location.search == ''){
+		resetInterface();	
 	    $('#intro').fadeIn(fadeTimer);
-	} else {
-		displayItem('archive');
+		// Generate initial volume bars
+		volumeBars('*', '', 7200000);
+	} else if (window.location.search.indexOf("archive") > -1) {
+		if (1 != 1) {
+			displayItem('archive');
+		}
 	}
 
 }); // End Document.Ready
@@ -309,6 +301,7 @@ var endDateValue = Date.parse(datetime);
 var prevStartDate = '';
 var prevEndDate = '';
 
+var freshLoad = true;
 
 // Draw Word Clouds
 function draw(words, bounds) {
@@ -621,6 +614,7 @@ function buildArchiveList() {
 
 	// Build Word Cloud
 	buildWordCloud(cloudlist, defaultMaxResults);
+	volumeBars('*', '', 7200000);
 }
 
 // Get top words in archive and construct cloud
@@ -636,17 +630,14 @@ function getArchiveWords(arch, filterword) {
 	// Loading spinner
 	$('#wait').fadeIn(fadeTimer);
 	$('#disabler').fadeIn(fadeTimer);
-	// Record and remove previous results from Words cloud and list
-	
 	$('main article ul li').remove();
 	// $('.wordCloud').children().remove();
 	// Adjust interface display for Words cloud display
 	$('.sort-link').fadeOut(fadeTimer);
 	// Construct query string
-	var dateValues = $("#timeline").dateRangeSlider("values");
 	var queryStringMod = '';
 	if (filterword) { queryStringMod = ',"FilterWord":"'+filterword+'"'; }
-	var queryString = '{"Archive": "'+ arch +'","StartDate": '+Date.parse(dateValues.min)+',"EndDate": '+Date.parse(dateValues.max)+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true'+queryStringMod+'}';
+	var queryString = '{"Archive": "'+ arch +'","StartDate": '+startDateValue+',"EndDate": '+endDateValue+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true'+queryStringMod+'}';
 	console.log('API call: get/archive/betweenDates/wordcloud ...');
 	$.ajax({
 		type: "POST",
@@ -1153,7 +1144,7 @@ function displayItem(key){
 		} else if(key == 'endDate'){
 			endDateValue = queryString(key);
 		} else if(key == 'archive'){
-			if ( ((prevStartDate != '')&&(prevEndDate != '')) && ( (startDateValue != prevStartDate) || (endDateValue != prevEndDate) ) ) {
+			if ( ( (prevStartDate != '') && (prevEndDate != '') ) && ( (startDateValue != prevStartDate) || (endDateValue != prevEndDate) ) ) {
 				var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];	
 				$("#timeline").dateRangeSlider("destroy");				
 				$("#timeline").dateRangeSlider({
@@ -1202,6 +1193,7 @@ function displayItem(key){
 
 // BROWSER NAVIGATION CONTROLS
 window.onpopstate = function(event) {
+	freshLoad = false;
 	console.info("location: " + document.location + ", state: " + JSON.stringify(event.state));
 	prevStartDate = startDateValue;
 	prevEndDate = endDateValue;
