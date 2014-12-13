@@ -4,6 +4,31 @@ jQuery(document).ready(function($){
 	// Footer timeline contruct
 	displayItem('startDate');
 	console.log('startDate = '+startDateValue+', endDate = '+endDateValue)
+// BUILD TIMELINE
+	$("#timeline").dateRangeSlider({
+		bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
+		defaultValues: {min: startDateValue, max: endDateValue},
+		arrows: false,
+		scales: [{
+		  first: function(value){ return value; },
+		  end: function(value) {return value; },
+		  next: function(value){
+			var next = new Date(value);
+			return new Date(next.setDate(value.getDate() + 1));
+		  },
+		  label: function(value){
+			return days[value.getDate()];
+		  },
+		  format: function(tickContainer, tickStart, tickEnd){
+			tickContainer.addClass("myCustomClass");
+		  }
+		}]
+	});
+
+	// Timeline selected values change
+	$("#timeline").bind("userValuesChanged", function(e, data){
+		timeChange();
+	});
 	// UI/UX Navigation
 	// Click logo to go back to archive list with current timeline selection
 	$('#logo').click(function(){
@@ -156,78 +181,6 @@ jQuery(document).ready(function($){
 		}
 	});
 
-// BUILD TIMELINE
-	$("#timeline").dateRangeSlider({
-		bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
-		defaultValues: {min: startDateValue, max: endDateValue},
-		arrows: false,
-		scales: [{
-		  first: function(value){ return value; },
-		  end: function(value) {return value; },
-		  next: function(value){
-			var next = new Date(value);
-			return new Date(next.setDate(value.getDate() + 1));
-		  },
-		  label: function(value){
-			return days[value.getDate()];
-		  },
-		  format: function(tickContainer, tickStart, tickEnd){
-			tickContainer.addClass("myCustomClass");
-		  }
-		}]
-	});
-
-	// Timeline selected values change
-	$("#timeline").bind("valuesChanged", function(e, data){
-		resetArchiveList = true;
-		startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
-		endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
-		if($('#tweetListView').css('display') == 'block') {
-			currentPage = 0;
-			totalPages = 0;
-			$('ul#tweetList li').remove();
-			if(!activeWord){
-				var searchWord = currentArchive;			
-			} else {
-				var searchWord = activeWord;			
-			}
-			var stateObj = {
-				startDateValue: startDateValue,
-				endDateValue: endDateValue,
-				archive: currentArchive,
-				word: searchWord
-			};
-			var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive) + '&word='+encodeURIComponent(activeWord);
-			history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
-			document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
-			wordSearch(currentArchive, searchWord, 40, 0);
-			resetArchiveList = true;
-		} else {			
-			if (currentView.slice(0,5) == 'words') {
-				var stateObj = {
-					startDateValue: startDateValue,
-					endDateValue: endDateValue,
-					archive: currentArchive,
-					word: ''
-				};
-				if(window.location.search==''){
-					var newURL = document.location.origin + document.location.pathname +'?archive='+encodeURIComponent(currentArchive);
-				} else {
-					var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue + '&archive='+encodeURIComponent(currentArchive);
-				}
-				history.pushState(stateObj, currentArchive, newURL);
-				document.title = 'Alexandria - '+currentArchive;
-				getArchiveWords(searchTerm);
-			} else {
-				if(!searchTerm) {
-					var searchTerm = '';
-				}
-				console.log(searchTerm);
-				getJobs(searchTerm);
-			}
-		}
-	});
-
 	if(window.location.search == ''){
 		resetInterface();	
 	    $('#intro').fadeIn(fadeTimer);
@@ -235,6 +188,8 @@ jQuery(document).ready(function($){
 		volumeBars('*', '', 7200000);
 	} else if (window.location.search.indexOf("archive") > -1) {
 		displayItem('archive');
+	} else if (window.location.search.indexOf("word") == -1) {
+		getJobs('');
 	}
 
 }); // End Document.Ready
@@ -301,7 +256,57 @@ var prevEndDate = '';
 
 var freshLoad = true;
 
+// TIMELINE CHANGE
 
+function timeChange() {
+	resetArchiveList = true;
+	startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
+	endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
+	if($('#tweetListView').css('display') == 'block') {
+		currentPage = 0;
+		totalPages = 0;
+		$('ul#tweetList li').remove();
+		if(!activeWord){
+			var searchWord = currentArchive;			
+		} else {
+			var searchWord = activeWord;			
+		}
+		var stateObj = {
+			startDateValue: startDateValue,
+			endDateValue: endDateValue,
+			archive: currentArchive,
+			word: searchWord
+		};
+		var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive) + '&word='+encodeURIComponent(activeWord);
+		history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
+		document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
+		wordSearch(currentArchive, searchWord, 40, 0);
+		resetArchiveList = true;
+	} else {			
+		if (currentView.slice(0,5) == 'words') {
+			var stateObj = {
+				startDateValue: startDateValue,
+				endDateValue: endDateValue,
+				archive: currentArchive,
+				word: ''
+			};
+			if(window.location.search==''){
+				var newURL = document.location.origin + document.location.pathname +'?archive='+encodeURIComponent(currentArchive);
+			} else {
+				var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue + '&archive='+encodeURIComponent(currentArchive);
+			}
+			history.pushState(stateObj, currentArchive, newURL);
+			document.title = 'Alexandria - '+currentArchive;
+			getArchiveWords(searchTerm);
+		} else {
+			if(!searchTerm) {
+				var searchTerm = '';
+			}
+			console.log(searchTerm);
+			getJobs(searchTerm);
+		}
+	}
+}
 
 // Draw Word Clouds
 function draw(words, bounds) {
@@ -934,6 +939,7 @@ function playTimeline() {
 		var maxVal = Date.parse($("#timeline").dateRangeSlider("values").max);
 //		$("#timeline").dateRangeSlider("values", new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)), new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)+86400000));
 		$("#timeline").dateRangeSlider("values", new Date(maxVal-43200000), new Date(maxVal+43200000));
+		timeChange();
 }
 
 /* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
@@ -1191,26 +1197,8 @@ window.onpopstate = function(event) {
 	console.log('prevEndDate = '+ prevEndDate);
 	console.log('endDateValue = '+ endDateValue);
 	if ( ( (prevStartDate != '') && (prevEndDate != '') ) && ( (startDateValue != prevStartDate) || (endDateValue != prevEndDate) ) ) {
-		$("#timeline").dateRangeSlider("destroy");				
-		$("#timeline").dateRangeSlider({
-			bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
-			defaultValues: {min: startDateValue, max: endDateValue},
-			arrows: false,
-			scales: [{
-			  first: function(value){ return value; },
-			  end: function(value) {return value; },
-			  next: function(value){
-				var next = new Date(value);
-				return new Date(next.setDate(value.getDate() + 1));
-			  },
-			  label: function(value){
-				return days[value.getDate()];
-			  },
-			  format: function(tickContainer, tickStart, tickEnd){
-				tickContainer.addClass("myCustomClass");
-			  }
-			}]
-		});
+		$("#timeline").dateRangeSlider("values", startDateValue, endDateValue);
+		timeChange();
 	}
 	$("#tweetList li").fadeOut(fadeTimer);
 	$('.overlay').fadeOut(fadeTimer);
