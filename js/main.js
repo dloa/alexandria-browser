@@ -306,6 +306,9 @@ var expandList = true;
 var startDateValue = Date.parse(datetime)-86400000;
 var endDateValue = Date.parse(datetime);
 
+var prevStartDate = '';
+var prevEndDate = '';
+
 
 // Draw Word Clouds
 function draw(words, bounds) {
@@ -1150,6 +1153,29 @@ function displayItem(key){
 		} else if(key == 'endDate'){
 			endDateValue = queryString(key);
 		} else if(key == 'archive'){
+			if ( ((prevStartDate != '')&&(prevEndDate != '')) && ( (startDateValue != prevStartDate) || (endDateValue != prevEndDate) ) ) {
+				var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];	
+				$("#timeline").dateRangeSlider("destroy");				
+				$("#timeline").dateRangeSlider({
+					bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
+					defaultValues: {min: startDateValue, max: endDateValue},
+					arrows: false,
+					scales: [{
+					  first: function(value){ return value; },
+					  end: function(value) {return value; },
+					  next: function(value){
+						var next = new Date(value);
+						return new Date(next.setDate(value.getDate() + 1));
+					  },
+					  label: function(value){
+						return days[value.getDate()];
+					  },
+					  format: function(tickContainer, tickStart, tickEnd){
+						tickContainer.addClass("myCustomClass");
+					  }
+					}]
+				});
+			}
 			currentArchive = queryString(key);
 			$('#viewlabel .currentArchive').text(currentArchive);
 			searchTerm = currentArchive;
@@ -1177,6 +1203,9 @@ function displayItem(key){
 // BROWSER NAVIGATION CONTROLS
 window.onpopstate = function(event) {
 	console.info("location: " + document.location + ", state: " + JSON.stringify(event.state));
+	prevStartDate = startDateValue;
+	prevEndDate = endDateValue;
+	displayItem('startDate');
 	$('main.wordCloud text').css({
 		'text-shadow':'0 0 0 rgba(200,200,200,.5)',
 		'opacity':'1',
