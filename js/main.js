@@ -234,9 +234,7 @@ jQuery(document).ready(function($){
 		// Generate initial volume bars
 		volumeBars('*', '', 7200000);
 	} else if (window.location.search.indexOf("archive") > -1) {
-		if (1 != 1) {
-			displayItem('archive');
-		}
+		displayItem('archive');
 	}
 
 }); // End Document.Ready
@@ -302,6 +300,8 @@ var prevStartDate = '';
 var prevEndDate = '';
 
 var freshLoad = true;
+
+
 
 // Draw Word Clouds
 function draw(words, bounds) {
@@ -440,11 +440,10 @@ function runSearch(searchTerm) {
 		clearModal();
 	}	
 	if (currentView.slice(0,5) == 'words') {
-		getArchiveWords(currentArchive, $('.search').val());
+	//	getArchiveWords(currentArchive, $('.search').val());
 	} else {
 		getJobs(searchTerm);
 	}
-	console.log('currentView = '+currentView);
 	volumeBars(currentArchive,'',7200000);
 }
 
@@ -460,6 +459,7 @@ function getJobs(searchTerm) {
 		archive: currentArchive,
 		word: ''
 	};
+	console.log('currentArchive = '+ currentArchive);
 	if(currentArchive == '*'){
 		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue;
 	} else {
@@ -483,11 +483,9 @@ function getJobs(searchTerm) {
     $('#intro').remove();
 	$('main').not('#'+currentView).not('#vis').fadeOut(fadeTimer);
 	if ((currentView == 'archiveListView') || (currentView == 'wordListView') ) {
-//		$('#'+currentView.slice(0,-8)+'Cloud').children().remove();
 		$('#'+currentView+' li').remove();
 	} else {
 		$('#'+currentView.slice(0,-5)+'ListView li').remove();
-//		$('#'+currentView).children().remove();
 	}
 	var queryString = '{"StartDate": '+startDateValue+',"EndDate": '+endDateValue+'}';
 	// Check the cache for recent query
@@ -638,6 +636,7 @@ function getArchiveWords(arch, filterword) {
 	if (filterword) { queryStringMod = ',"FilterWord":"'+filterword+'"'; }
 	var queryString = '{"Archive": "'+ arch +'","StartDate": '+startDateValue+',"EndDate": '+endDateValue+',"MaxResults": '+defaultMaxResults+',"FilterStopWords": true'+queryStringMod+'}';
 	console.log('API call: get/archive/betweenDates/wordcloud ...');
+	console.log('currentView = '+currentView);
 	$.ajax({
 		type: "POST",
 		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/wordcloud",
@@ -1186,6 +1185,7 @@ window.onpopstate = function(event) {
 		'-webkit-transition': 'all 1s ease',
 		'-o-transition': 'all 1s ease'
 	});
+	$('#timeline-controls').fadeIn(fadeTimer);
 	console.log('prevStartDate = '+ prevStartDate);
 	console.log('startDateValue = '+ startDateValue);
 	console.log('prevEndDate = '+ prevEndDate);
