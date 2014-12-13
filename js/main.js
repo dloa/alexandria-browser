@@ -1143,32 +1143,6 @@ function displayItem(key){
 		} else if(key == 'endDate'){
 			endDateValue = queryString(key);
 		} else if(key == 'archive'){
-			console.log('prevStartDate = '+ prevStartDate);
-			console.log('startDateValue = '+ startDateValue);
-			console.log('prevEndDate = '+ prevEndDate);
-			console.log('endDateValue = '+ endDateValue);
-			if ( ( (prevStartDate != '') && (prevEndDate != '') ) && ( (startDateValue != prevStartDate) || (endDateValue != prevEndDate) ) ) {
-				$("#timeline").dateRangeSlider("destroy");				
-				$("#timeline").dateRangeSlider({
-					bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
-					defaultValues: {min: startDateValue, max: endDateValue},
-					arrows: false,
-					scales: [{
-					  first: function(value){ return value; },
-					  end: function(value) {return value; },
-					  next: function(value){
-						var next = new Date(value);
-						return new Date(next.setDate(value.getDate() + 1));
-					  },
-					  label: function(value){
-						return days[value.getDate()];
-					  },
-					  format: function(tickContainer, tickStart, tickEnd){
-						tickContainer.addClass("myCustomClass");
-					  }
-					}]
-				});
-			}
 			currentArchive = queryString(key);
 			$('#viewlabel .currentArchive').text(currentArchive);
 			searchTerm = currentArchive;
