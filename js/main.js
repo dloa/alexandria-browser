@@ -2,7 +2,6 @@ jQuery(document).ready(function($){
 	$('#wait').fadeIn(fadeTimer);
 	$('#disabler').fadeIn(fadeTimer);
 	// Footer timeline contruct
-	var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];
 	displayItem('startDate');
 	console.log('startDate = '+startDateValue+', endDate = '+endDateValue)
 	// UI/UX Navigation
@@ -246,6 +245,7 @@ jQuery(document).ready(function($){
 var w = window.innerWidth;				
 var h = window.innerHeight-200;
 var datetime = new Date();
+var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];	
 var fadeTimer = 200;
 var activeJobsCache = [];
 var MaxResults;
@@ -489,8 +489,7 @@ function getJobs(searchTerm) {
 		$('#'+currentView.slice(0,-5)+'ListView li').remove();
 //		$('#'+currentView).children().remove();
 	}
-	var dateValues = $("#timeline").dateRangeSlider("values");
-	var queryString = '{"StartDate": '+Date.parse(dateValues.min)+',"EndDate": '+Date.parse(dateValues.max)+'}';
+	var queryString = '{"StartDate": '+startDateValue+',"EndDate": '+endDateValue+'}';
 	// Check the cache for recent query
 	var cacheCheck = false;
 	if(jQuery.inArray(queryString, newArchiveVolumeQueryStringCache) > -1){
@@ -1144,8 +1143,11 @@ function displayItem(key){
 		} else if(key == 'endDate'){
 			endDateValue = queryString(key);
 		} else if(key == 'archive'){
+			console.log('prevStartDate = '+ prevStartDate);
+			console.log('startDateValue = '+ startDateValue);
+			console.log('prevEndDate = '+ prevEndDate);
+			console.log('endDateValue = '+ endDateValue);
 			if ( ( (prevStartDate != '') && (prevEndDate != '') ) && ( (startDateValue != prevStartDate) || (endDateValue != prevEndDate) ) ) {
-				var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];	
 				$("#timeline").dateRangeSlider("destroy");				
 				$("#timeline").dateRangeSlider({
 					bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
@@ -1210,6 +1212,32 @@ window.onpopstate = function(event) {
 		'-webkit-transition': 'all 1s ease',
 		'-o-transition': 'all 1s ease'
 	});
+	console.log('prevStartDate = '+ prevStartDate);
+	console.log('startDateValue = '+ startDateValue);
+	console.log('prevEndDate = '+ prevEndDate);
+	console.log('endDateValue = '+ endDateValue);
+	if ( ( (prevStartDate != '') && (prevEndDate != '') ) && ( (startDateValue != prevStartDate) || (endDateValue != prevEndDate) ) ) {
+		$("#timeline").dateRangeSlider("destroy");				
+		$("#timeline").dateRangeSlider({
+			bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
+			defaultValues: {min: startDateValue, max: endDateValue},
+			arrows: false,
+			scales: [{
+			  first: function(value){ return value; },
+			  end: function(value) {return value; },
+			  next: function(value){
+				var next = new Date(value);
+				return new Date(next.setDate(value.getDate() + 1));
+			  },
+			  label: function(value){
+				return days[value.getDate()];
+			  },
+			  format: function(tickContainer, tickStart, tickEnd){
+				tickContainer.addClass("myCustomClass");
+			  }
+			}]
+		});
+	}
 	$("#tweetList li").fadeOut(fadeTimer);
 	$('.overlay').fadeOut(fadeTimer);
 	$("#tweetList li").remove();
