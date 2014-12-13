@@ -599,7 +599,7 @@ function buildArchiveList() {
 			cloudlistraw.push([i,d]);
 		});
 	} else {
-		alert('No Archives Found');
+		console.error('No Archives Found');
 	}
 	cloudlistraw.sort(function(a,b){ return a[1][1]>b[1][1]?1:-1; });
 	cloudlistraw.forEach(function(a){
@@ -763,7 +763,7 @@ function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 	}
 	if((!arch)||(!word)||(!StartDate)||(!EndDate)||(!rpp)){
 		console.log(arch + ', ' + word + ', ' + StartDate + ', ' + EndDate + ', ' + rpp);
-		alert('error in totalPagesAPI');		
+		console.error('error in totalPagesAPI');		
 		return false;
 	} else {
 		// GET TOTAL PAGES
@@ -778,7 +778,7 @@ function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 				totalPages = $.parseJSON(e);
 				},
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
-					alert("some error");
+					console.error("some error");
 					console.log(XMLHttpRequest);
 					console.log(textStatus);
 					console.log(errorThrown);
@@ -805,7 +805,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 	}
 	if((!arch)||(!word)||(!StartDate)||(!EndDate)||(!rpp)){
 		console.log(arch + ', ' + word + ', ' + StartDate + ', ' + EndDate + ', ' + rpp);
-		alert('error in tweetListPageAPI');		
+		console.error('error in tweetListPageAPI');		
 		return false;
 	} else {
 		// Get a page of tweets between two dates
