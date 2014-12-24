@@ -328,7 +328,7 @@ ul#tweetList li .tweetBody a {
 }
 .tweetEmbedWrap, #tweetList li div.tweetBody div.imgwrap {
 	text-align: center;
-	margin: 1em 0 0;
+	margin: 1em 0 .5em;
 	cursor: pointer;
 }
 #tweetList li div.left {
@@ -342,7 +342,7 @@ ul#tweetList li.more-link a {
 }
 .spritzer {
 	z-index: 1000;
-	position: absolute;
+	position: fixed;
 	top: 87px;
 	left: 10px;
 }
@@ -448,8 +448,27 @@ ul#tweetList li {
 	border: 0 none transparent;
 	padding: 0;
 }
-ul#tweetList li .tweetBody div.expanded_urls a {
+ul#tweetList li .tweetBody div.expanded_urls > a {
 	word-break: break-all;
+	font-style: italic;
+}
+ul#tweetList li .tweetBody div.expanded_urls .extLinkTitle a {
+	font-weight: bold;
+	text-decoration: none;
+}
+.extLinkTitle, .extLinkDesc {
+	background-color: #fff;
+	border-radius: .2em;
+	-moz-border-radius: .2em;
+	-webkit-border-radius: .2em;
+}
+.extLinkTitle {
+	margin-top: .5em;
+	padding: .25em .5em 0;
+}
+.extLinkDesc {
+	font-size: .95em;
+	padding: 0 .5em .25em;
 }
 .twitterbird {
 	width: 24px;
@@ -531,6 +550,7 @@ section#timeline {
 #wait, #disabler {
 	position: fixed;
 	z-index: 1000;
+	cursor: wait;
 }
 #disabler {
 	width: 100%;

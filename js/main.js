@@ -254,6 +254,8 @@ var endDateValue = Date.parse(datetime);
 var prevStartDate = '';
 var prevEndDate = '';
 
+var spritzURL = '';
+
 var freshLoad = true;
 
 // TIMELINE CHANGE
@@ -320,18 +322,18 @@ function draw(words, bounds) {
 		thisCloudView = currentView.slice(0,-8)+'Cloud';
 	}
   var text = vis.selectAll("text")
-      .data(words, function(d) { return d.text.toLowerCase(); });
+		.data(words, function(d) { return d.text.toLowerCase(); });
   text.transition()
-      .duration(animDuration)
-      .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
-      .style("font-size", function(d) { return d.size + "px"; });
-  text.enter().append("text")
-      .attr("text-anchor", "middle")
-      .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
-      .style("font-size", function(d) { return d.size + "px"; })
-      .style("opacity", 1e-6)
-      .on("click", function(d) {
-			 playingTimeline = true;
+		.duration(animDuration)
+		.attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
+		.style("font-size", function(d) { return d.size + "px"; });
+	text.enter().append("text")
+		.attr("text-anchor", "middle")
+		.attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
+		.style("font-size", function(d) { return d.size + "px"; })
+		.style("opacity", 1e-6)
+		.on("click", function(d) {
+			playingTimeline = true;
 			autoPlayTimeline();
 			$('#wait').fadeIn(fadeTimer);
 			$('#disabler').fadeIn(fadeTimer);
@@ -621,8 +623,9 @@ function buildArchiveList() {
 	$('.view-link').fadeIn(fadeTimer);
 
 	// Build Word Cloud
+	volumeBars(currentArchive, '', 7200000);
+	console.info(cloudlistraw);
 	buildWordCloud(cloudlist, defaultMaxResults);
-	volumeBars('*', '', 7200000);
 }
 
 // Get top words in archive and construct cloud
@@ -831,9 +834,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 			data: queryString.toString(),
 			success: function (e) {
 				console.log('wordSearch() Ajax: betweenDates/wordsearch ... '+queryString);
-				console.info(e);
 				var data = $.parseJSON(e);
-				console.info(data);
 				// Load a page of tweets
 				for (var i = 0; i < data.length; i++) {
 					var expanded_url = [];
@@ -871,6 +872,32 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 							render_url = media_url+render_url;
 						}
 					}
+					console.info(data[i].p.twitter.data);
+					if(data[i].p.twitter.data.extended_entity.urls){
+						if(data[i].p.twitter.data.extended_entity.urls.length > 0){
+							console.log('URL == ');
+							console.info(data[i].p.twitter.data.extended_entity.urls[0].expanded_url);
+							for(var iurl = 0; iurl < data[i].p.twitter.data.extended_entity.urls.length; iurl++){
+								var new_expanded_url = data[i].p.twitter.data.extended_entity.urls[iurl];
+								new_expanded_url = new_expanded_url['expanded_url'];
+								console.log("new_expanded_url = " + new_expanded_url);
+								if((expanded_url=='')&&(new_expanded_url!='')){
+									expanded_url = new_expanded_url;
+								} else if (expanded_url!='') {
+									console.log('expanded_url '+expanded_url);
+									expanded_url = expanded_url+'<br />'+new_expanded_url;
+								}
+								if(new_expanded_url.split('/')[2] == 'youtu.be'){
+									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('?')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
+								} else if (new_expanded_url.split('/')[2] == 'vine.co') {
+									render_url = render_url+'<div class="tweetEmbedWrap"><iframe src="http://vine.co/v/'+ new_expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe></div>';
+								} else if (new_expanded_url.split('/')[2] == 'www.youtube.com') {
+									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('=')[1] +'" frameborder="0" allowfullscreen></iframe></div>';
+									 'https://www.youtube.com/watch?v=L0bzwOdOI8UI'
+								}
+							}
+						}
+					}
 /*
 					if(data[i].p.twitter.data.url_data[0]) {
 						console.info(data[i].p.twitter.data.url_data);
@@ -905,7 +932,11 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 					$("#tweetList").append('<li class="more-link"><a href="javascript:wordSearch(\x27'+arch+'\x27,\x27'+ word +'\x27,\x27'+rpp+'\x27,\x27'+ currentPage +'\x27);">Load More (Page '+ currentPage +'/'+totalPages+')</a></li>');
 					expandList = true;
 				}				
-				$('.tweetBody').linkify();			
+				$('.tweetBody').linkify();
+				$('.expanded_urls a').each(function(){
+					var extURL = $(this).attr('href');
+					getLinkMeta(extURL);
+				});		
 				$('#wait').fadeOut(fadeTimer);
 				$('#disabler').fadeOut(fadeTimer);
 				if(window.scrollY == 0){
@@ -1096,13 +1127,23 @@ function lightbox(obj){
 // LIGHTBOX FUNCTION
 function infiniteScroll() {	
 	var loadScrollPosition = $('#tweetList').height()-(window.innerHeight*8);
-	if( (expandList == true) && (window.scrollY > loadScrollPosition) ) {
+	if ( (expandList == true) && (window.scrollY > loadScrollPosition) && (currentPage < totalPages) ) {
+		console.info('currentPage = '+currentPage);
+		console.info('totalPages = '+totalPages);
 		expandList = false;
 		wordSearch(currentArchive, activeWord, 40, currentPage);
 	}
 }
 
 // SPRITZ
+
+/*
+
+spritzURL = '';
+$('#spritzer').data('controller').setUrl(url);
+
+*/
+
 /*
 var onStartSpritzClick = function(event) {
     var text = $('#inputText').val();
@@ -1222,6 +1263,44 @@ window.onpopstate = function(event) {
 		runSearch(searchTerm);
 	}
 };
+
+function getLinkMeta(extURL) {
+	$.ajax({
+	    url: extURL,
+	    type: 'GET',
+	    success: function(res) {
+	        var thisLink = $('.expanded_urls a[href="'+extURL+'"]');
+	    	var extContent = $(res.responseText).find().prevObject;
+	    	if ( $(extContent).filter('title').length > 0 ) {
+		        var linkTitle = $(extContent).filter('title')[0].text;
+		        if ( ( $(thisLink).next().attr('class') != 'extLinkTitle' ) && ( linkTitle != '' ) ) {
+			        $(thisLink).after('<div class="extLinkTitle"><a href="'+ extURL +'" target="_blank">'+linkTitle+'</a></div>');
+		        };
+	    	}
+	    	var linkText = $(extContent).filter('text');
+	    	console.info(extContent);
+	    	var linkMeta = $(extContent).filter('meta');
+	    	console.info(linkMeta);
+	    	var twitterMeta = [];
+	    	$(linkMeta).each(function(i){
+	    		if ( ($(this).attr('name') == 'description') && ( $(thisLink).next().attr('class') == 'extLinkTitle' ) && ( $(thisLink).next().next().attr('class') != 'extLinkDesc' ) ) {
+	    			var linkDesc = $(this).attr('content');
+			        $(thisLink).next().after('<div class="extLinkDesc">'+ linkDesc +' ... </div>');
+	    		}
+	    		if ($(this).attr('name')){
+		    		if ( ($(this).attr('name').slice(0,7)) == 'twitter') {
+		    			twitterMeta.push(this);
+		    		}
+	    		}
+	    	});
+   			console.info(twitterMeta);
+   			$.each(twitterMeta,function(i, d){
+   				console.log('twitterMeta! = '+i);
+				console.info(d);
+			});	
+	    }
+	});
+}
 
 // RESET INTERFACE
 function resetInterface() {
