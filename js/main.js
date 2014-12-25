@@ -606,7 +606,7 @@ function buildArchiveList() {
 	cloudlistraw.sort(function(a,b){ return a[1][1]>b[1][1]?1:-1; });
 	cloudlistraw.forEach(function(a){
 		if(a[1][1]>0){
-			cloudlist.push(a[1][0]);
+			cloudlist.push(a[1]);
 		}
 	});
 	console.log('cloudlistraw = '+cloudlistraw);
@@ -624,7 +624,7 @@ function buildArchiveList() {
 
 	// Build Word Cloud
 	volumeBars(currentArchive, '', 7200000);
-	console.info(cloudlistraw);
+	console.info(cloudlist);
 	buildWordCloud(cloudlist, defaultMaxResults);
 }
 
@@ -669,6 +669,7 @@ function getArchiveWords(arch, filterword) {
 			// Sort the words array and list by volume
 			cloudlistraw.sort(function(a,b){ return a[1]>b[1]?1:-1; });
 			cloudlistraw.forEach(function(a){
+				console.info(a);
 				cloudlist.push(a[0]);
 			});
 			$('#wordsList li').sortElements(function(a, b){
@@ -679,7 +680,7 @@ function getArchiveWords(arch, filterword) {
 			$('.sort-link').text('Popular');
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
 //			$('main#'+currentView).fadeIn(fadeTimer);
-			buildWordCloud(cloudlist, defaultMaxResults);
+			buildWordCloud(cloudlistraw, defaultMaxResults);
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			console.log(XMLHttpRequest);
@@ -707,10 +708,16 @@ function buildWordCloud(cloudlist, MaxResults) {
 	} else {
 		totalResults = MaxResults;
 	}
-	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Change difference between largest and smallest word based on browser font size AND number of results
+	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Difference between largest and smallest word based on browser font size AND number of results
 	currentArchiveLowercase = currentArchive.toLowerCase();
+	console.info(cloudlist);
+	var maxWeight = cloudlist[cloudlist.length-1][1];
+	var minWeight = cloudlist[0][1];
 	layout.stop().words(cloudlist.map(function(d, i) {
-		return {text: d, size: (((i/totalResults)*fontSizeMultiplier)+1)*document.emSize()[1], fill: i/totalResults }; // base size on ratio of number of actual results
+		console.info(d);
+		console.log('d[1]/maxWeight = '+d[1]/maxWeight);
+		var wordWeight = d[1]/maxWeight;
+		return {text: d[0], size: ((wordWeight*fontSizeMultiplier)+1)*document.emSize()[1], fill: wordWeight }; // base size on ratio of number of actual results
 	})).padding(5*fontSizeMultiplier).start();
 	if($('#tweetListView').css('display') != 'block') {
 		$('main').not('#'+currentView).not('#vis').fadeOut(fadeTimer);		
@@ -880,12 +887,11 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 							for(var iurl = 0; iurl < data[i].p.twitter.data.extended_entity.urls.length; iurl++){
 								var new_expanded_url = data[i].p.twitter.data.extended_entity.urls[iurl];
 								new_expanded_url = new_expanded_url['expanded_url'];
-								console.log("new_expanded_url = " + new_expanded_url);
 								if((expanded_url=='')&&(new_expanded_url!='')){
-									expanded_url = new_expanded_url;
+									expanded_url = '<a href="'+new_expanded_url+'">'+new_expanded_url+'</a>';
 								} else if (expanded_url!='') {
 									console.log('expanded_url '+expanded_url);
-									expanded_url = expanded_url+'<br />'+new_expanded_url;
+									expanded_url = expanded_url+'<br /><a href="'+new_expanded_url+'">'+new_expanded_url+'</a>';
 								}
 								if(new_expanded_url.split('/')[2] == 'youtu.be'){
 									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('?')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
@@ -893,38 +899,14 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 									render_url = render_url+'<div class="tweetEmbedWrap"><iframe src="http://vine.co/v/'+ new_expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe></div>';
 								} else if (new_expanded_url.split('/')[2] == 'www.youtube.com') {
 									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('=')[1] +'" frameborder="0" allowfullscreen></iframe></div>';
-									 'https://www.youtube.com/watch?v=L0bzwOdOI8UI'
 								}
 							}
 						}
 					}
-/*
-					if(data[i].p.twitter.data.url_data[0]) {
-						console.info(data[i].p.twitter.data.url_data);
-						for(var iurl = 0; iurl < data[i].p.twitter.data.url_data.length; iurl++){
-							var new_expanded_url = data[i].p.twitter.data.url_data[iurl];
-							new_expanded_url = new_expanded_url['Expanded_url'];
-							console.log("new_expanded_url = " + new_expanded_url);
-							if((expanded_url=='')&&(new_expanded_url!='')){
-								expanded_url = new_expanded_url;
-							} else if (expanded_url!='') {
-								console.log('expanded_url '+expanded_url);
-								expanded_url = expanded_url+'<br />'+new_expanded_url;
-							}
-							if(new_expanded_url.split('/')[2] == 'youtu.be'){
-								render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('?')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
-							} else if (new_expanded_url.split('/')[2] == 'vine.co') {
-								render_url = render_url+'<div class="tweetEmbedWrap"><iframe src="http://vine.co/v/'+ new_expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe></div>';
-							} else if (new_expanded_url.split('/')[2] == 'www.youtube.com') {
-								render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('=')[1] +'" frameborder="0" allowfullscreen></iframe></div>';
-								 'https://www.youtube.com/watch?v=L0bzwOdOI8UI'
-							}
-						}
-					}
-*/
+
 					var tweetDate = Date.parse(data[i].p.twitter.data.tweet_data[4]);
 					var niceTweetDate = data[i].p.twitter.data.tweet_data[4].split(' ');
-					$("#tweetList").append('<li style="display:none" class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<div class="expanded_urls">' + expanded_url + '</div>' + render_url + '</div><div style="clear:both"></div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
+					$("#tweetList").append('<li style="display:none" class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<div style="clear:both"></div></div><div class="expanded_urls">' + expanded_url + '</div><div class="render_url">' + render_url + '</div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
 				}
 				$('#tweetList li:hidden').fadeIn(fadeTimer);
 				currentPage++;
@@ -933,7 +915,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 					expandList = true;
 				}				
 				$('.tweetBody').linkify();
-				$('.expanded_urls a').each(function(){
+				$('.expanded_urls a').not('.scraped').each(function(){
 					var extURL = $(this).attr('href');
 					getLinkMeta(extURL);
 				});		
@@ -1277,27 +1259,41 @@ function getLinkMeta(extURL) {
 			        $(thisLink).after('<div class="extLinkTitle"><a href="'+ extURL +'" target="_blank">'+linkTitle+'</a></div>');
 		        };
 	    	}
-	    	var linkText = $(extContent).filter('text');
-	    	console.info(extContent);
-	    	var linkMeta = $(extContent).filter('meta');
-	    	console.info(linkMeta);
-	    	var twitterMeta = [];
-	    	$(linkMeta).each(function(i){
-	    		if ( ($(this).attr('name') == 'description') && ( $(thisLink).next().attr('class') == 'extLinkTitle' ) && ( $(thisLink).next().next().attr('class') != 'extLinkDesc' ) ) {
-	    			var linkDesc = $(this).attr('content');
-			        $(thisLink).next().after('<div class="extLinkDesc">'+ linkDesc +' ... </div>');
-	    		}
-	    		if ($(this).attr('name')){
-		    		if ( ($(this).attr('name').slice(0,7)) == 'twitter') {
-		    			twitterMeta.push(this);
-		    		}
-	    		}
-	    	});
-   			console.info(twitterMeta);
-   			$.each(twitterMeta,function(i, d){
-   				console.log('twitterMeta! = '+i);
-				console.info(d);
-			});	
+			if(extContent.length > 0){
+		    	console.info(extContent);
+		    	var linkMeta = $(extContent).filter('meta');
+		    	console.info(linkMeta);
+		    	var ogMeta = [];
+		    	var twitterMeta = [];
+		    	$(linkMeta).each(function(i){
+		    		if ($(this).attr('name')){
+			    		if ( ($(this).attr('name') == 'description') && ( $(thisLink).next().attr('class') == 'extLinkTitle' ) && ( $(thisLink).next().next().attr('class') != 'extLinkDesc' ) ) {
+			    			var linkDesc = $(this).attr('content');
+					        $(thisLink).next().after('<div class="extLinkDesc">'+ linkDesc +' ... </div>');
+			    		} else if ( $(this).attr('name').slice(0,7) == 'twitter' ) {
+			    			twitterMeta.push(this);
+			    		} else if ( $(this).attr('name').slice(0,2) == 'og' ) {
+		    				ogMeta.push(this);
+		    				if ( $(this).attr('name') == 'og:title' ) {
+		    					$(thisLink).next('.extLinkTitle').find('a').append(' - '+$(this).attr('content'));
+		    				}
+			    		}
+					}
+		    	});
+		    	console.info(ogMeta);
+	   			$.each(ogMeta,function(i, d){
+	   				console.log('ogMeta == '+i);
+					console.info(d);
+				});
+	   			console.info(twitterMeta);
+	   			$.each(twitterMeta,function(i, d){
+	   				console.log('twitterMeta == '+i);
+					console.info(d);
+				});
+
+			}
+
+			$(thisLink).addClass('scraped');
 	    }
 	});
 }

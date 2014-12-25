@@ -326,7 +326,7 @@ ul#tweetList li a.twitter-username {
 ul#tweetList li .tweetBody a {
 	text-decoration: underline;
 }
-.tweetEmbedWrap, #tweetList li div.tweetBody div.imgwrap {
+.tweetEmbedWrap, #tweetList li div.imgwrap {
 	text-align: center;
 	margin: 1em 0 .5em;
 	cursor: pointer;
@@ -448,19 +448,26 @@ ul#tweetList li {
 	border: 0 none transparent;
 	padding: 0;
 }
-ul#tweetList li .tweetBody div.expanded_urls > a {
+ul#tweetList li div.expanded_urls > a {
 	word-break: break-all;
 	font-style: italic;
+	text-decoration: underline;
 }
-ul#tweetList li .tweetBody div.expanded_urls .extLinkTitle a {
+ul#tweetList li div.expanded_urls .extLinkTitle a {
 	font-weight: bold;
 	text-decoration: none;
 }
-.extLinkTitle, .extLinkDesc {
+.extLinkTitle, .extLinkDesc, .tweetEmbedWrap, #tweetList li div.imgwrap img {
 	background-color: #fff;
 	border-radius: .2em;
 	-moz-border-radius: .2em;
 	-webkit-border-radius: .2em;
+}
+.tweetEmbedWrap, #tweetList li div.imgwrap img {
+	padding: .5em;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 }
 .extLinkTitle {
 	margin-top: .5em;
