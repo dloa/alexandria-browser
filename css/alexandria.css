@@ -144,12 +144,12 @@ header {
 }
 
 header input.search {
-	background: url(../img/search.svg) 10px .45em / .8em no-repeat;
+	background: url(../img/search.svg) 10px 50% / .8em no-repeat;
 	display: inline-block;
 	zoom: 1;*display:inline;
-	border-radius: 50em;
-	border: 1px solid #cfcfcf;
-	padding: 3px 1.2em 3px 35px;
+	border-radius: 5px;
+	border: 1px solid #979797;
+	padding: 6px 1.2em 2px 40px;
 	outline: none;
 	width: 100%;
 	box-sizing: border-box;
@@ -158,13 +158,7 @@ header input.search {
 }
 
 header input.search:focus{
-		box-shadow: 0 0 6px rgba(0, 0, 0, 0.9);	
-}
-
-header input.search::after {
-  background: url(../img/search.svg) 9px 5px / .8em no-repeat;
-  position: absolute;
-  z-index: 3;
+		box-shadow: 0 0 5px rgba(20, 20, 20, 0.2);	
 }
 
 #logo {
@@ -183,8 +177,8 @@ header input.search::after {
 }
 div#viewlabel {
 	position: absolute;
-	top: 50%;
-	left: 92px;
+	bottom: -32px;
+	left: 20px;
 	margin-top: -.5em;
 	line-height: 1;
 	text-transform: capitalize;
@@ -193,14 +187,53 @@ div#viewlabel {
 	position: relative;
 	margin-left: auto;
 	margin-right: auto;
-	width: 12.5em;
+	width: 14em;
 	font-size: 1.5em;
 }
 #clearSearch {
 	position: absolute;
-	right: .5em;
-	top: .1em;
+	right: 10px;
+	top: 50%;
+	width: 20px;
+	height: 28px;
+	margin-top: -14px;
 	cursor: pointer;
+	background: url(../img/clear-search-modal.png) 50% / .8em no-repeat;
+	color: transparent;
+}
+#adv-search {
+//	display: none;
+	position: absolute;
+	background: none #fff;
+	padding: .2em 10px;
+	border: 1px solid #cdcdcd;
+	border-radius: 5px;
+	top: 180%;
+}
+#adv-search:before {
+	top: -16px;
+	left: 34px;
+	border-width: 0 16px 16px;
+	content: "";
+	position:absolute;
+	border-style: solid;
+	border-color: #cdcdcd transparent;
+	display: block;
+	width: 0;
+}
+#adv-search:after {
+	top: -15px;
+	left: 35px;
+	border-width: 0 15px 15px;
+	content: "";
+	position:absolute;
+	border-style: solid;
+	border-color: #fff transparent;
+	display: block;
+	width: 0;
+}
+#adv-search h3 {
+	font-size: .8em;
 }
 .view-controls, #timeline-controls {
 	position: absolute;

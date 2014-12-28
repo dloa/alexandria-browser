@@ -392,19 +392,20 @@ function draw(words, bounds) {
 		.style("fill", function (d) { // base fill on ratio of number of actual results
 			if ( (d.text == currentArchiveLowercase) && ( currentArchiveLowercase != '*' ) ) {
 				return '#9DA2CF';
-			} else if (d.fill < .075) { return '#eeeeee' }
-			else if (d.fill < .15) { return '#dddddd' }
-			else if (d.fill < .225) { return '#cccccc' }
-			else if (d.fill < .3) { return '#bbbbbb' }
-			else if (d.fill < .375) { return '#aaaaaa' }
-			else if (d.fill < .45) { return '#999999' }
-			else if (d.fill < .525) { return '#888888' }
-			else if (d.fill < .6) { return '#777777' }
-			else if (d.fill < .675) { return '#666666' }
-			else if (d.fill < .75) { return '#555555' }
-			else if (d.fill < .825) { return '#444444' }
-			else if (d.fill < .9) { return '#333333' }
-			else { return '#222222' };
+			}
+			else if (d.fill < .075) { return '#cccccc' }
+			else if (d.fill < .15) { return '#bbbbbb' }
+			else if (d.fill < .225) { return '#aaaaaa' }
+			else if (d.fill < .3) { return '#999999' }
+			else if (d.fill < .375) { return '#888888' }
+			else if (d.fill < .45) { return '#777777' }
+			else if (d.fill < .525) { return '#666666' }
+			else if (d.fill < .6) { return '#555555' }
+			else if (d.fill < .675) { return '#444444' }
+			else if (d.fill < .75) { return '#333333' }
+			else if (d.fill < .825) { return '#222222' }
+			else if (d.fill < .9) { return '#111111' }
+			else { return '#111111' };
 		})
       .text(function(d) { return d.text; });
   var exitGroup = background.append("g")
@@ -708,7 +709,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 	} else {
 		totalResults = MaxResults;
 	}
-	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.1); // Difference between largest and smallest word based on browser font size AND number of results
+	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.115); // Difference between largest and smallest word based on browser font size AND number of results
 	currentArchiveLowercase = currentArchive.toLowerCase();
 	console.info(cloudlist);
 	var maxWeight = cloudlist[cloudlist.length-1][1];
@@ -991,7 +992,6 @@ function clearModal() {
 	totalPages = 0;
 	$("#tweetList li").fadeOut(fadeTimer);
 	$('.overlay').fadeOut(fadeTimer);
-//	$('main').not('#'+currentView).fadeOut(fadeTimer);
 	$('.view-controls').fadeIn(fadeTimer);
 	if (resetArchiveList == true) {
 		if (currentView.slice(0,5) == 'words') {
