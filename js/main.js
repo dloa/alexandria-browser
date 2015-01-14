@@ -1,6 +1,10 @@
-jQuery(document).ready(function($){	
+jQuery(document).ready(function($){
+	$('#spritz-container').hide();
 	$('#wait').fadeIn(fadeTimer);
 	$('#disabler').fadeIn(fadeTimer);
+	$('#adv-search').addClass('abs');
+	$('.alex-ui-slider').slider();
+	$('.alex-ui-datepicker').datepicker();
 	// Footer timeline contruct
 	displayItem('startDate');
 	console.log('startDate = '+startDateValue+', endDate = '+endDateValue)
@@ -44,23 +48,23 @@ jQuery(document).ready(function($){
 		searchTerm = '';
 		currentView = 'archiveCloud';
 		$('#viewlabel .currentArchive').text('');
-		$('header input.search').val('');
+		$('#search-main').val('');
 		$('.sort-link').fadeOut(fadeTimer);
 		$('.view-controls .view-link').text('Cloud');
 //		$('main').fadeOut(fadeTimer);
 		getJobs(searchTerm);
 	});
 	// Omnibox (search input)
-	$('header input.search').on("keydown", function (e) {		
+	$('#search-main').on("keydown", function (e) {		
 		playingTimeline = true;
 		autoPlayTimeline();
-		searchValue = $('header input.search').val();
+		searchValue = $('#search-main').val();
 		if($('#tweetListView').css('display') == 'block') {
 			resetArchiveList = true;
 		}
 	});
-	$('header input.search').on("keyup", function (e) {
-		newSearchValue = $('header input.search').val();
+	$('#search-main').on("keyup", function (e) {
+		newSearchValue = $('#search-main').val();
 		var code = e.keyCode || e.which;
 		if (code == 32) {
 			// pressin the space bar
@@ -74,11 +78,32 @@ jQuery(document).ready(function($){
 		}
 	});
 	// Click icon in omnibox to clear and run search
-	$('#clearSearch').click(function(){
-		$('header input.search').val('');
+	$('.clearSearch').click(function(){
+		$(this).prev('input').val('');
 		resetArchiveList = true
 		runSearch('');
 	});	
+	// Advanced Search toggle
+	$('#adv-search-toggle').click(function(){
+		$('#adv-search').fadeToggle(fadeTimer);
+	});
+	// Toggle modal on off-modal click
+	$('body').on('click', function(e){
+		if ( ($(e.target).attr('id') != 'adv-search') && (!$(e.target).parents('#adv-search')[0]) && ($(e.target).attr('id') != 'adv-search-toggle') ) {			
+			if($('#adv-search').css('display') == 'block') {
+				$('#adv-search').fadeToggle(fadeTimer);
+			}
+		}
+		if ( (!$(e.target).hasClass('spritz-control')) && (!$(e.target).parents('#spritzer')[0]) ) {
+			if ($('#spritz-container').css('display') == 'block') {
+				$('#spritz-container').fadeOut(fadeTimer);
+			}
+		}
+	});
+	// Advanced Search clear button
+	$('#adv-search .cancel-btn').click(function(){
+		$('#adv-search').fadeToggle(fadeTimer).find('input[type="text"]').val('');
+	});
 	// View Controls
 	$('.view-controls .view-link').click(function(){		
 		var newView;
@@ -254,8 +279,6 @@ var endDateValue = Date.parse(datetime);
 var prevStartDate = '';
 var prevEndDate = '';
 
-var spritzURL = '';
-
 var freshLoad = true;
 
 // TIMELINE CHANGE
@@ -427,7 +450,7 @@ function draw(words, bounds) {
 
 function getAllArchives(){
 	searchValue = '';
-	$('header input.search').val(searchValue);
+	$('#search-main').val(searchValue);
 	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
 	var startDate = Date.parse(basicSliderBounds.min);
 	var endDate = Date.parse(datetime);
@@ -530,7 +553,7 @@ function getJobs(searchTerm) {
 		$.ajax({
 			type: "POST",
 			data: queryString.toString(),
-			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/activejobs/betweenDates",
+			url: "http://54.172.28.195:3000/alexandria/v1/twitter/get/activejobs/betweenDates",
 			success: function (e) {
 				console.log('getJobs() Ajax: get/activejobs/betweenDates ... '+searchTerm);
 				var data = $.parseJSON(e);
@@ -654,7 +677,7 @@ function getArchiveWords(arch, filterword) {
 	console.log('currentView = '+currentView);
 	$.ajax({
 		type: "POST",
-		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/archive/betweenDates/wordcloud",
+		url: "http://54.172.28.195:3000/alexandria/v1/twitter/get/archive/betweenDates/wordcloud",
 		data: queryString.toString(),
 		success: function (e) {
 			console.log('getArchiveWords() Ajax: betweenDates/wordcloud ... '+queryString);
@@ -744,7 +767,7 @@ function wordSearch(arch, word, rpp, currentPage) {
 	} else {
 		activeWord = word;
 		if($('#tweetListView').css('display') != 'block') {
-			searchValue = $('header input.search').val();
+			searchValue = $('#search-main').val();
 			$('.view-controls').fadeOut(fadeTimer);
 		}
 //		var dateValues = $("#timeline").dateRangeSlider("values");
@@ -782,7 +805,7 @@ function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 		console.log('API call: betweenDates/wordsearch/pagecount');
 		$.ajax({
 			type: "POST",
-			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount",
+			url: "http://54.172.28.195:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount",
 			data: queryString.toString(),
 			success: function (e) {
 				console.log('wordSearch() Ajax: betweenDates/wordsearch/pagecount ... '+queryString);
@@ -823,7 +846,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 		var queryString = '{"Archive": "'+arch+'","Word": "'+word+'","StartDate": '+StartDate+',"EndDate": '+EndDate+',"ResultsPerPage": '+rpp+',"Page": '+ currentPage +'}';
 		console.log('API call: get/tweets/betweenDates/wordsearch ...');
 		if($('#tweetListView').css('display') != 'block') {
-			searchValue = $('header input.search').val();
+			searchValue = $('#search-main').val();
 			$('.view-controls').fadeOut(fadeTimer);
 			$('.overlay').fadeIn(fadeTimer);
 			$('#timeline-controls').fadeOut(fadeTimer);				
@@ -838,7 +861,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 		}
 		$.ajax({
 			type: "POST",
-			url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch",
+			url: "http://54.172.28.195:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch",
 			data: queryString.toString(),
 			success: function (e) {
 				console.log('wordSearch() Ajax: betweenDates/wordsearch ... '+queryString);
@@ -888,18 +911,21 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 							for(var iurl = 0; iurl < data[i].p.twitter.data.extended_entity.urls.length; iurl++){
 								var new_expanded_url = data[i].p.twitter.data.extended_entity.urls[iurl];
 								new_expanded_url = new_expanded_url['expanded_url'];
+								/*
 								if((expanded_url=='')&&(new_expanded_url!='')){
-									expanded_url = '<a href="'+new_expanded_url+'">'+new_expanded_url+'</a>';
+									expanded_url = '<a href="'+new_expanded_url+'" target="_blank">'+new_expanded_url+'</a>';
 								} else if (expanded_url!='') {
-									console.log('expanded_url '+expanded_url);
-									expanded_url = expanded_url+'<br /><a href="'+new_expanded_url+'">'+new_expanded_url+'</a>';
+									expanded_url = expanded_url+'<br /><a href="'+new_expanded_url+'" target="_blank">'+new_expanded_url+'</a>';
 								}
+								*/
 								if(new_expanded_url.split('/')[2] == 'youtu.be'){
-									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('?')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
+									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('?')[0].split('&')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
 								} else if (new_expanded_url.split('/')[2] == 'vine.co') {
 									render_url = render_url+'<div class="tweetEmbedWrap"><iframe src="http://vine.co/v/'+ new_expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe></div>';
 								} else if (new_expanded_url.split('/')[2] == 'www.youtube.com') {
-									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('=')[1] +'" frameborder="0" allowfullscreen></iframe></div>';
+									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('=')[1].split('&')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
+								} else {
+									render_url = render_url+'<div class="row-spritz"><a class="spritz-control" onclick="spritzThis(\x27'+new_expanded_url+'\x27)"></a><div class="clearfix"></div><p class="spritz-caption click-to-spritz hidden-xs"><br /><a href="'+new_expanded_url+'" target="_blank">'+new_expanded_url+'</a></p></div>';
 								}
 							}
 						}
@@ -961,8 +987,6 @@ function playTimeline() {
 		$("#timeline").dateRangeSlider("values", new Date(maxVal-43200000), new Date(maxVal+43200000));
 		timeChange();
 }
-
-/* KEEP CLEANING THIS CODE FROM THIS POINT DOWN = BOOKMARK */
 
 // CLEAR MODAL
 function clearModal() {
@@ -1026,7 +1050,7 @@ function volumeBars(arch, word, interval){
 	console.log('API call: get/interval/count ...');
 	$.ajax({
 		type: "POST",
-		url: "http://blue.a.blocktech.com:3000/alexandria/v1/twitter/get/interval/count",
+		url: "http://54.172.28.195:3000/alexandria/v1/twitter/get/interval/count",
 		data: queryString.toString(),
 		success: function (e) {
 			$('svg#volume').remove();
@@ -1118,14 +1142,12 @@ function infiniteScroll() {
 }
 
 // SPRITZ
-
-/*
-
-spritzURL = '';
-$('#spritzer').data('controller').setUrl(url);
-
-*/
-
+function spritzThis(extURL) {
+	if ($('#spritz-container').css('display') != 'block') {
+		$('#spritz-container').fadeIn(fadeTimer);
+		$('#spritzer').data('controller').setUrl(extURL);
+	}
+}
 /*
 var onStartSpritzClick = function(event) {
     var text = $('#inputText').val();
@@ -1245,7 +1267,7 @@ window.onpopstate = function(event) {
 		runSearch(searchTerm);
 	}
 };
-
+// External link meta data
 function getLinkMeta(extURL) {
 	$.ajax({
 	    url: extURL,
@@ -1272,6 +1294,15 @@ function getLinkMeta(extURL) {
 					        $(thisLink).next().after('<div class="extLinkDesc">'+ linkDesc +' ... </div>');
 			    		} else if ( $(this).attr('name').slice(0,7) == 'twitter' ) {
 			    			twitterMeta.push(this);
+		    				if ( $(this).attr('name') == 'twitter:title' ) {
+		    					// $(thisLink).after('<div class="extLinkTitle"><a href="'+ extURL +'" target="_blank"><span style="background-color:#000;color:#fff;">Twitter Title: '+$(this).attr('content')+'</span></a>');
+		    				} else if ( $(this).attr('name') == 'twitter:description' ) {
+		    					// $(thisLink).next().after('<div class="extLinkDesc"><span style="background-color:#000;color:#fff;">Twitter Description: '+$(this).attr('content')+'</span></div>');
+		    				} else if ($(this).attr('name') == 'twitter:image') {
+								$(thisLink).next().after('<div class="extLinkTwitImg tweetEmbedWrap"><img src="'+$(this).attr('content')+'" /></div>');
+								
+							}
+
 			    		} else if ( $(this).attr('name').slice(0,2) == 'og' ) {
 		    				ogMeta.push(this);
 		    				if ( $(this).attr('name') == 'og:title' ) {
@@ -1295,6 +1326,20 @@ function getLinkMeta(extURL) {
 
 			$(thisLink).addClass('scraped');
 	    }
+	});
+}
+// External Link Content
+function getLinkContent(extURL) {
+	$.ajax({
+	    url: extURL,
+	    type: 'GET',
+	    success: function(res) {
+	        var thisLink = $('.expanded_urls a[href="'+extURL+'"]');
+	    	var extContent = $(res.responseText).find().prevObject;
+	    	extContent = extContent.find().prevObject;
+	    	var extText = $(extContent).filter('text');
+	    	console.info(extContent);
+		}
 	});
 }
 

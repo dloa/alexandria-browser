@@ -11,24 +11,76 @@
 		<link rel="stylesheet" href="css/fonts.css">
 		<link rel="stylesheet" href="css/normalize.min.css">
 		<link rel="stylesheet" href="js/vendor/jQRangeSlider-5.7.0/css/iThing.css" type="text/css" />
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="css/alexandria.css">
 		<script type="text/javascript">
-/*
-		    var SpritzSettings = {
-		           clientId: "bca1146a623ec3d99",
-		           redirectUri: "http://54.172.28.195/blue.a.blocktech.com/htdocs/alexandriaUX/thirdparty/login_success.html"
-		    };
-*/
+			var SpritzSettings = {
+				clientId: "bca1146a623ec3d99",
+				redirectUri: "http://54.172.28.195/blue.a.blocktech.com/htdocs/alexandriaUX/thirdparty/login_success.html"
+			};
 		</script>
 	</head>
 	<body>		<header>
 			<div id="logo"><!--Alexandria--></div>
 			<div id="viewlabel"><span class="currentArchive"></span></div>
 			<div id="search">
-				<input type="text" class="search" value="" placeholder="Search Archives" />
-				<div id="clearSearch">x</div>
+				<div class="input-container">
+					<input type="text" class="search" value="" placeholder="Search Archives" id="search-main" />
+					<div class="clearSearch">x</div>
+				</div>
+				<span id="adv-search-toggle">advanced</span>
 				<div id="adv-search">
-					<h3>Advanced Search Options</h3>				
+					<h3>Advanced Search Options</h3>
+					<div class="row">
+						<label>Archive Search</label>
+						<div class="input-container">
+							<input type="text" class="search" />			
+							<div class="clearSearch">x</div>
+						</div>						
+					</div>
+					<div class="row">
+						<label>Refine Results</label>
+						<div class="input-container first">
+							<select>
+								<option value="inc">includes</option>
+								<option value="exc">excludes</option>
+								<option value="starts">starts with</option>
+							</select>
+						</div>
+						<div class="input-container second">
+							<input type="text" class="search" />
+							<div class="clearSearch">x</div>
+						</div>						
+					</div>
+					<div class="row">
+						<label>Module</label>
+						<div class="input-container">
+							<select>
+								<option value="twitter">Twitter Archive</option>
+								<option value="rss">RSS Archive</option>
+								<option value="market">Market Archive</option>
+								<option value="movies">Movies</option>
+								<option value="music">Music</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<label>Results</label>
+						<div class="input-container slider-container">
+							<div class="alex-ui-slider"></div>
+						</div>
+					</div>
+					<div class="row">
+						<label>Date range</label>
+						<div class="input-container">
+							<input type="text" class="alex-ui-datepicker search"> - <input type="text" class="alex-ui-datepicker search">
+						</div>
+					</div>
+					<div class="row">
+						<div class="input-container buttons">
+							<span class="cancel-btn icongfx">Cancel</span> <span class="go-btn icongfx">Go</span>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div id="timeline-controls">
@@ -50,7 +102,9 @@
 <!--			<br style="clear:both" /> -->
 <!--		<div id="ukraineShortcut"></div> -->
 		</div>
-		<div data-role="spritzer" data-url="http://www.jasondavies.com/wordtree/cat-in-the-hat.txt"></div>
+		<div id="spritz-container">
+			<div id="spritzer" data-role="spritzer" data-url="http://www.jasondavies.com/wordtree/cat-in-the-hat.txt"></div>
+		</div>
 		<main id="vis" class="wordCloud"></main>
 		<main id="wordsListView">
 			<article>
@@ -73,7 +127,7 @@
 		</main>
 
 		<div id="app-shading"></div>
-		
+		<div id="inputText"></div>
 		<footer id="footer">
 			<section id="timeline" class="timeline"></section>	
 		</footer>

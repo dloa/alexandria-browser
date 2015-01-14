@@ -142,25 +142,25 @@ header {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 }
-
-header input.search {
-	background: url(../img/search.svg) 10px 50% / .8em no-repeat;
+header input.search, #adv-search select {
 	display: inline-block;
 	zoom: 1;*display:inline;
 	border-radius: 5px;
 	border: 1px solid #979797;
-	padding: 6px 1.2em 2px 40px;
+	padding: 6px 1.2em 2px;
 	outline: none;
 	width: 100%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 }
-
+header input.search#search-main {
+	background: url(../img/search.svg) 10px 50% / .8em no-repeat;
+	padding-left: 40px;
+}
 header input.search:focus{
 		box-shadow: 0 0 5px rgba(20, 20, 20, 0.2);	
 }
-
 #logo {
 	width: 55px;
 	height:55px;
@@ -187,10 +187,22 @@ div#viewlabel {
 	position: relative;
 	margin-left: auto;
 	margin-right: auto;
-	width: 14em;
-	font-size: 1.5em;
+	min-width: 18em;
+	width: 35%;
+	font-size: 1.45em;
 }
-#clearSearch {
+#search > .input-container {
+	float: left;
+	width: 78%;
+}
+#adv-search-toggle {
+	font-size: .9rem;
+	cursor: pointer;
+}
+.input-container {
+	position: relative;
+}
+.clearSearch {
 	position: absolute;
 	right: 10px;
 	top: 50%;
@@ -202,13 +214,21 @@ div#viewlabel {
 	color: transparent;
 }
 #adv-search {
-//	display: none;
-	position: absolute;
+	position: fixed;
+	top: 100%;
+	left: 100%;
+	width: 96%;
 	background: none #fff;
-	padding: .2em 10px;
+	padding: 1em 60px 1em 35px;
 	border: 1px solid #cdcdcd;
 	border-radius: 5px;
-	top: 180%;
+	text-align: left;
+}
+#adv-search.abs {
+	position: absolute;
+	top: 200%;
+	left: -8%;
+	display: none;
 }
 #adv-search:before {
 	top: -16px;
@@ -233,7 +253,96 @@ div#viewlabel {
 	width: 0;
 }
 #adv-search h3 {
+	font-size: 20px;
+	font-size: 1.25rem;
+	text-align: left;
+}
+#adv-search label {
+	font-size: 16px;
+	font-size: 1rem;
+	margin-left: 1em;
+	color: #979797;
+	display: block;
+	margin-top: .5em;
+}
+#adv-search .input-container.first, #adv-search .input-container.second {
+	display: inline-block;
+	zoom: 1;*display:inline;
+	vertical-align: middle;
+}
+#adv-search .input-container.first {
+	width: 32%;
+	margin-right: -.5rem;
+}
+#adv-search .input-container.second {
+	width: 66%;
+	margin-left: 2%;
+}
+#adv-search .input-container.slider-container {
+	border-left: 1px solid #aaaaaa;
+	border-right: 1px solid #aaaaaa;
+	padding-top: 10px;
+}
+header #adv-search input.search, #adv-search select {
+	padding-left: 1rem;
+	line-height: 1em;
+}
+#adv-search select {
+	background: transparent;
+	width: 100%;
+	height: 100%;
+	padding-right: 5px;
 	font-size: .8em;
+	-webkit-appearance: none;
+	line-height: 1.75em;
+	cursor: pointer;
+}
+#adv-search .alex-ui-slider.ui-slider.ui-slider-horizontal.ui-widget.ui-widget-content.ui-corner-all {
+	border-radius: 0;
+	border-right: 0 none transparent;
+	border-bottom: 0 none transparent;
+	border-left: 0 none transparent;
+	padding: 0;
+	height: 10px;
+}
+#adv-search span.ui-slider-handle.ui-state-default.ui-corner-all {
+	border-radius: 50%;
+	background: none #fff;
+	top: -12px;
+	margin-top: 0;
+	height: 20px;
+	width: 20px;
+	border-width: 2px;
+	cursor: pointer;
+}
+input.search.alex-ui-datepicker {
+	width: 42.5%;
+}
+#adv-search .row .buttons {
+	text-align: center;
+	margin-top: 1em;
+}
+.alex-ui-datepicker {
+	width: 40%;
+}
+.icongfx {
+	color: transparent;
+	margin: 0 .5em;
+	cursor: pointer;
+}
+#adv-search .icongfx {
+	display: inline-block;
+	zoom: 1;*display: inline;
+	width: 32px;
+	height: 32px;
+}
+#adv-search .icongfx.cancel-btn {
+	background: url('../img/advanced-search-modal-cancel.png') center center no-repeat;
+	background-size: contain;
+}
+#adv-search .icongfx.go-btn {
+	background: url('../img/advanced-search-modal-go.png') center center no-repeat;
+	background-size: contain;
 }
 .view-controls, #timeline-controls {
 	position: absolute;
@@ -361,7 +470,7 @@ ul#tweetList li .tweetBody a {
 }
 .tweetEmbedWrap, #tweetList li div.imgwrap {
 	text-align: center;
-	margin: 1em 0 .5em;
+	margin: 1em 0;
 	cursor: pointer;
 }
 #tweetList li div.left {
@@ -373,11 +482,12 @@ ul#tweetList li.more-link {
 ul#tweetList li.more-link a {
 	display: block;
 }
-.spritzer {
-	z-index: 1000;
+#spritz-container {
 	position: fixed;
-	top: 87px;
-	left: 10px;
+	z-index: 1000;
+	text-align: center;
+	margin-top: 36%;
+	width: 100%;
 }
 div#lightbox {
 	display: none;
@@ -469,6 +579,7 @@ ul#tweetList li {
 	max-width: 480px;
 	overflow: hidden;
 	color: #292f33;
+	position: relative;
 }
 #tweetList li div.tweetBody {
 	margin: 3px 0;
@@ -485,10 +596,36 @@ ul#tweetList li div.expanded_urls > a {
 	word-break: break-all;
 	font-style: italic;
 	text-decoration: underline;
+	display: block;
 }
 ul#tweetList li div.expanded_urls .extLinkTitle a {
 	font-weight: bold;
 	text-decoration: none;
+}
+.row-spritz {
+	clear: both;
+	margin: 1em 0 0;
+}
+.spritz-control {
+	cursor: pointer;
+	width: 67px;
+	height: 66px;
+	overflow: hidden;
+	position: relative;
+	background: url('../img/spritz-control.png') no-repeat;
+	display: block;
+	margin-right: 7px;
+}
+.spritz-control:hover {
+	background-position: 0 -66px;
+}
+.spritz-caption {
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0;
+}
+.click-to-spritz:before {
+	content: "click to spritz";
 }
 .extLinkTitle, .extLinkDesc, .tweetEmbedWrap, #tweetList li div.imgwrap img {
 	background-color: #fff;
@@ -501,6 +638,7 @@ ul#tweetList li div.expanded_urls .extLinkTitle a {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
+	clear: both;
 }
 .extLinkTitle {
 	margin-top: .5em;
@@ -509,12 +647,15 @@ ul#tweetList li div.expanded_urls .extLinkTitle a {
 .extLinkDesc {
 	font-size: .95em;
 	padding: 0 .5em .25em;
+	margin-bottom: .5em;
 }
 .twitterbird {
 	width: 24px;
 	height: 24px;
 	background: url('../img/twitterbird.png') no-repeat center center transparent;
-	float: right;
+	position: absolute;
+	bottom: .825em;
+	right: 10px;
 }
 body > footer {
 	position: fixed;
@@ -843,6 +984,9 @@ svg#volume {
 	========================================================================== */
 .left {
 	float: left;
+}
+.pull-right {
+	float: right !important;
 }
 .ir {
 	background-color: transparent;
