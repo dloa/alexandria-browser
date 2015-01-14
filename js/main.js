@@ -911,13 +911,11 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 							for(var iurl = 0; iurl < data[i].p.twitter.data.extended_entity.urls.length; iurl++){
 								var new_expanded_url = data[i].p.twitter.data.extended_entity.urls[iurl];
 								new_expanded_url = new_expanded_url['expanded_url'];
-								/*
 								if((expanded_url=='')&&(new_expanded_url!='')){
 									expanded_url = '<a href="'+new_expanded_url+'" target="_blank">'+new_expanded_url+'</a>';
 								} else if (expanded_url!='') {
 									expanded_url = expanded_url+'<br /><a href="'+new_expanded_url+'" target="_blank">'+new_expanded_url+'</a>';
 								}
-								*/
 								if(new_expanded_url.split('/')[2] == 'youtu.be'){
 									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('?')[0].split('&')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
 								} else if (new_expanded_url.split('/')[2] == 'vine.co') {
@@ -1299,7 +1297,7 @@ function getLinkMeta(extURL) {
 		    				} else if ( $(this).attr('name') == 'twitter:description' ) {
 		    					// $(thisLink).next().after('<div class="extLinkDesc"><span style="background-color:#000;color:#fff;">Twitter Description: '+$(this).attr('content')+'</span></div>');
 		    				} else if ($(this).attr('name') == 'twitter:image') {
-								$(thisLink).next().after('<div class="extLinkTwitImg tweetEmbedWrap"><img src="'+$(this).attr('content')+'" /></div>');
+								$(thisLink).next().after('<div class="extLinkTwitImg imgwrap" onclick="lightbox($(this));"><img src="'+$(this).attr('content')+'" /></div>');
 								
 							}
 
