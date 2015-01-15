@@ -242,7 +242,7 @@ var cloudlist = [],
 var fontSizeMultiplier;
 var layout = d3.layout.cloud()
 	.timeInterval(10)
-	.size([window.innerWidth, window.innerHeight-200])
+	.size([window.innerWidth, window.innerHeight-193])
 	.rotate(0)
 	.font("Avenir-Book")
 	.fontSize(function(d) { return d.size; })
@@ -251,7 +251,7 @@ var layout = d3.layout.cloud()
 	
 var svg = d3.select("#vis").append("svg")
     .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight-200);
+    .attr("height", window.innerHeight-193);
 
 var background = svg.append("g"),
     vis = svg.append("g")

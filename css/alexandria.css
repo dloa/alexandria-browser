@@ -196,8 +196,8 @@ div#viewlabel {
 	width: 78%;
 }
 #adv-search-toggle {
-	font-size: .9rem;
 	cursor: pointer;
+	font-size: .95rem;
 }
 .input-container {
 	position: relative;
@@ -384,7 +384,7 @@ main {
 #app-shading {
 	position: fixed;
 	top: 70px;
-	bottom: 50px;
+	bottom: 60px;
 	right: 0;
 	left: 0;
 	overflow: hidden;
@@ -525,7 +525,7 @@ div#lightbox img {
 
 main.wordCloud {
 	color: #000000;
-	bottom: 50px;
+	bottom: 60px;
 	top: 93px;
 	position: fixed;
 }
@@ -663,12 +663,12 @@ body > footer {
 	left: 0;
 	z-index: 200;
 	width: 100%;
-	height: 50px;
+	height: 60px;
 	padding: 0;
 	overflow: hidden;	
 }
 body > footer:hover {
-	padding: 50px 0 0;
+	padding: 60px 0 0;
 }
 section#timeline {
 	padding: 0;
@@ -678,7 +678,7 @@ section#timeline {
 .ui-rangeSlider-bar {
 	-moz-box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25), -2px 3px 4px rgba(0, 0, 0, 0.25);
 	box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25), -2px 3px 4px rgba(0, 0, 0, 0.25);
-	height: 45px;
+	height: 56px;
 	margin: 2px 0;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=85)";
 	filter: alpha(opacity=85);
@@ -701,7 +701,10 @@ section#timeline {
 	line-height: 40px;
 }
 .ui-rangeSlider .ui-ruler-scale0 .ui-ruler-tick-inner {
-	height: 50px;
+	height: 58px;
+	color: #d3d5d9;
+	border-left: 1px solid #d3d5d9;
+	font-size: .95rem;
 }
 .ui-rangeSlider .ui-ruler-scale0 :first-child .ui-ruler-tick-inner {
 	border: 0;
@@ -710,7 +713,7 @@ section#timeline {
 	border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
 .timeline .ui-rangeSlider-label {
-	bottom: 60px;
+	bottom: 70px;
 	background-color: #888DA0;
 }
 .ui-rangeSlider-label-inner {
@@ -781,7 +784,7 @@ section#timeline {
 }
 
 .sliderZone dl{
-	margin-bottom:50px;
+	margin-bottom:60px;
 }
 
 .sliderZone{
@@ -843,7 +846,7 @@ div.close-modal:hover {
 /* VOLUME BARS */
 svg#volume {
 	position: fixed;
-	bottom: 50px;
+	bottom: 60px;
 	left: 1px;
 	z-index: 150;
 	opacity: .7;
