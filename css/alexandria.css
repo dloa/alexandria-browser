@@ -671,11 +671,7 @@ body > footer:hover {
 	padding: 60px 0 0;
 }
 #timeline-container {
-	
-}
-section#timeline {
 	height: 100%;
-	width: 100%;
 	padding: 0 0 0 125px;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -688,6 +684,12 @@ section#timeline {
 	background: -ms-linear-gradient(top, #3a3e47 0%,#7c8091 100%); /* IE10+ */
 	background: linear-gradient(to bottom, #3a3e47 0%,#7c8091 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3a3e47', endColorstr='#7c8091',GradientType=0 ); /* IE6-9 */
+
+}
+section#timeline {
+	height: 100%;
+	width: 100%;
+	padding: 0;
 }
 .ui-rangeSlider-bar {
 	-moz-box-shadow: 2px 3px 4px rgba(0, 0, 0, 0.25), -2px 3px 4px rgba(0, 0, 0, 0.25);
