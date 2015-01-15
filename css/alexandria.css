@@ -814,7 +814,7 @@ div.close-modal:hover {
 #tweetListView div.close-modal {
 	position: fixed;
 	top: 85px;
-	right: 40px;
+	right: 20px;
 }
 /* TIMELINE */
 .ui-rangeSlider-container div {

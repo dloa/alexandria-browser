@@ -1271,58 +1271,66 @@ function getLinkMeta(extURL) {
 	    url: extURL,
 	    type: 'GET',
 	    success: function(res) {
-	        var thisLink = $('.expanded_urls a[href="'+extURL+'"]');
-	    	var extContent = $(res.responseText).find().prevObject;
-	    	if ( $(extContent).filter('title').length > 0 ) {
-		        var linkTitle = $(extContent).filter('title')[0].text;
-		        if ( ( $(thisLink).next().attr('class') != 'extLinkTitle' ) && ( linkTitle != '' ) ) {
-			        $(thisLink).after('<div class="extLinkTitle"><a href="'+ extURL +'" target="_blank">'+linkTitle+'</a></div>');
-		        };
-	    	}
-			if(extContent.length > 0){
-		    	console.info(extContent);
-		    	var linkMeta = $(extContent).filter('meta');
-		    	console.info(linkMeta);
-		    	var ogMeta = [];
-		    	var twitterMeta = [];
-		    	$(linkMeta).each(function(i){
-		    		if ($(this).attr('name')){
-			    		if ( ($(this).attr('name') == 'description') && ( $(thisLink).next().attr('class') == 'extLinkTitle' ) && ( $(thisLink).next().next().attr('class') != 'extLinkDesc' ) ) {
-			    			var linkDesc = $(this).attr('content');
-					        $(thisLink).next().after('<div class="extLinkDesc">'+ linkDesc +' ... </div>');
-			    		} else if ( $(this).attr('name').slice(0,7) == 'twitter' ) {
-			    			twitterMeta.push(this);
-		    				if ( $(this).attr('name') == 'twitter:title' ) {
-		    					// $(thisLink).after('<div class="extLinkTitle"><a href="'+ extURL +'" target="_blank"><span style="background-color:#000;color:#fff;">Twitter Title: '+$(this).attr('content')+'</span></a>');
-		    				} else if ( $(this).attr('name') == 'twitter:description' ) {
-		    					// $(thisLink).next().after('<div class="extLinkDesc"><span style="background-color:#000;color:#fff;">Twitter Description: '+$(this).attr('content')+'</span></div>');
-		    				} else if ($(this).attr('name') == 'twitter:image') {
-								$(thisLink).next().after('<div class="extLinkTwitImg imgwrap" onclick="lightbox($(this));"><img src="'+$(this).attr('content')+'" /></div>');
-								
-							}
-
-			    		} else if ( $(this).attr('name').slice(0,2) == 'og' ) {
-		    				ogMeta.push(this);
-		    				if ( $(this).attr('name') == 'og:title' ) {
-		    					$(thisLink).next('.extLinkTitle').find('a').append(' - '+$(this).attr('content'));
-		    				}
-			    		}
+	        var thisLink = $('.expanded_urls a[href="'+extURL+'"]').first();
+	        console.error(thisLink);
+	        if (!$(thisLink).hasClass('.scraped')){
+				var extContent = $(res.responseText).find().prevObject;
+				if ( $(extContent).filter('title').length > 0 ) {
+					var linkTitle = $(extContent).filter('title')[0].text;
+					if(!$(thisLink).parents('.expanded_urls').find('.extLinkTitle').length > 0) {
+						if ( ( $(thisLink).next().attr('class') != 'extLinkTitle' ) && ( linkTitle != '' ) ) {
+							$(thisLink).after('<div class="extLinkTitle"><a href="'+ extURL +'" target="_blank">'+linkTitle+'</a></div>');
+						};
 					}
-		    	});
-		    	console.info(ogMeta);
-	   			$.each(ogMeta,function(i, d){
-	   				console.log('ogMeta == '+i);
-					console.info(d);
-				});
-	   			console.info(twitterMeta);
-	   			$.each(twitterMeta,function(i, d){
-	   				console.log('twitterMeta == '+i);
-					console.info(d);
-				});
+				}
+				if(extContent.length > 0){
+					console.info(extContent);
+					var linkMeta = $(extContent).filter('meta');
+					console.info(linkMeta);
+					var ogMeta = [];
+					var twitterMeta = [];
+					$(linkMeta).each(function(i){
+						if ($(this).attr('name')){
+							if ( ($(this).attr('name') == 'description') && ( $(thisLink).next().attr('class') == 'extLinkTitle' ) && ( $(thisLink).next().next().attr('class') != 'extLinkDesc' ) ) {
+								if(!$(thisLink).parents('.expanded_urls').find('.extLinkDesc').length > 0) {
+									var linkDesc = $(this).attr('content');
+									$(thisLink).next().after('<div class="extLinkDesc">'+ linkDesc +' ... </div>');
+								}
+							} else if ( $(this).attr('name').slice(0,7) == 'twitter' ) {
+								twitterMeta.push(this);
+								if ( $(this).attr('name') == 'twitter:title' ) {
+									// $(thisLink).after('<div class="extLinkTitle"><a href="'+ extURL +'" target="_blank"><span style="background-color:#000;color:#fff;">Twitter Title: '+$(this).attr('content')+'</span></a>');
+								} else if ( $(this).attr('name') == 'twitter:description' ) {
+									// $(thisLink).next().after('<div class="extLinkDesc"><span style="background-color:#000;color:#fff;">Twitter Description: '+$(this).attr('content')+'</span></div>');
+								} else if ( ($(this).attr('name') == 'twitter:image:src') || ($(this).attr('name') == 'twitter:image') ) {
+									if(!$(thisLink).parents('.expanded_urls').find('.extLinkTwitImg').length > 0) {
+										$(thisLink).after('<div class="extLinkTwitImg imgwrap" onclick="lightbox($(this));"><img src="'+$(this).attr('content')+'" /></div>');
+									}
+								}
 
+							} else if ( $(this).attr('name').slice(0,2) == 'og' ) {
+								ogMeta.push(this);
+								if ( $(this).attr('name') == 'og:title' ) {
+									$(thisLink).next('.extLinkTitle').find('a').append(' - '+$(this).attr('content'));
+								}
+							}
+						}
+					});
+					console.info(ogMeta);
+					$.each(ogMeta,function(i, d){
+						console.log('ogMeta == '+i);
+						console.info(d);
+					});
+					console.info(twitterMeta);
+					$.each(twitterMeta,function(i, d){
+						console.log('twitterMeta == '+i);
+						console.info(d);
+					});
+
+				}
+
+				$(thisLink).addClass('scraped');
 			}
-
-			$(thisLink).addClass('scraped');
 	    }
 	});
 }
