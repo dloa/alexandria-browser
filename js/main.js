@@ -969,16 +969,17 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 var playTimerId = 0;
 
 function autoPlayTimeline() {
+	$('.playbtn').toggleClass('playing');
 	if (playingTimeline == false) {
 		playingTimeline = true;
 		$('#timeline .ui-rangeSlider-bar').addClass('animate');
-		$('#timeline-controls .playbtn').text('Stop');
+		$('.playbtn').text('pause');
 		playTimeline();
 	} else {
 		clearTimeout ( playTimerId );
 		playingTimeline = false;
 		$('#timeline .ui-rangeSlider-bar').removeClass('animate');
-		$('#timeline-controls .playbtn').text('Play');
+		$('.playbtn').text('play');
 	}
 }
 

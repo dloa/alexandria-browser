@@ -688,6 +688,9 @@ section#timeline {
 	left: 22px;
 	bottom: 10px;
 }
+#footer .playbtn.playing {
+	background: url('../img/pause-icon.svg') center center no-repeat transparent;
+}
 .settings-icon {
 	background: url('../img/settings-icon.svg') no-repeat center center transparent;
 	width:20px;
@@ -695,7 +698,7 @@ section#timeline {
 	bottom: 20px;
 	left: 70px;
 }
-#footer .playbtn, .settings-icon {
+#footer .playbtn, #footer .playbtn.playing, .settings-icon {
 	background-size: contain;
 	-moz-background-size: contain;
 	-webkit-background-size: contain;
