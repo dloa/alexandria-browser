@@ -818,8 +818,8 @@ section#timeline {
 #wait, .loader, #wait span.text {
 	width: 30px;
 	height: 30px;
-	top: 21px;
-	left: 98px;
+	top: 20px;
+	left: 20px;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
 	filter: alpha(opacity=70);
 	-moz-opacity: 0.7;
