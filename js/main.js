@@ -3,6 +3,7 @@ jQuery(document).ready(function($){
 	$('#wait').fadeIn(fadeTimer);
 	$('#disabler').fadeIn(fadeTimer);
 	$('#adv-search').addClass('abs');
+	$('#timeline-settings').addClass('abs');
 	$('.alex-ui-slider').slider();
 	$('.alex-ui-datepicker').datepicker();
 	// Footer timeline contruct
@@ -189,6 +190,7 @@ jQuery(document).ready(function($){
 	$('.close-modal').click(function(){
 		clearModal();
 	});	
+	// Timeline controls
 	$('#timeline-controls .full').click(function(){
 		$("#timeline").dateRangeSlider("bounds", new Date(2014, 8, 8), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
 		volumeBars(currentArchive,'',7200000);
@@ -197,8 +199,11 @@ jQuery(document).ready(function($){
 		$("#timeline").dateRangeSlider("bounds", new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
 		volumeBars(currentArchive,'',7200000);
 	});
-	$('#timeline-controls .playbtn').click(function(){
+	$('.playbtn').click(function(){
 		autoPlayTimeline();
+	});
+	$('#footer .settings-icon').click(function(){
+		$('#timeline-settings').fadeToggle(fadeTimer);
 	});
 	$(window).scroll(function(){
 		if($('#tweetListView').css('display') == 'block') {
