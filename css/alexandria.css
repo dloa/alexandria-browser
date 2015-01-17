@@ -283,7 +283,7 @@ div#viewlabel {
 	border-right: 1px solid #aaaaaa;
 	padding-top: 10px;
 }
-header #adv-search input.search, #adv-search select {
+header #adv-search input.search, #adv-search select, .timeline-control-input.alex-ui-datepicker {
 	padding-left: 1rem;
 	line-height: 1em;
 }
@@ -315,7 +315,7 @@ span.ui-slider-handle.ui-state-default.ui-corner-all {
 	border-width: 2px;
 	cursor: pointer;
 }
-input.search.alex-ui-datepicker {
+.search.alex-ui-datepicker {
 	width: 42.5%;
 }
 #adv-search .row .buttons {
@@ -727,7 +727,7 @@ section#timeline {
 	top: 100%;
 	left: 100%;
 	background: none #fff;
-	padding: 1em 60px 1em 35px;
+	padding: 2.65em 40px 1.65em 35px;
 	border: 1px solid #cdcdcd;
 	text-align: left;
 }
@@ -760,6 +760,9 @@ section#timeline {
 	border-color: #fff transparent;
 	display: block;
 	width: 0;
+}
+.timeline-control-input.alex-ui-datepicker {
+	width: 6em;
 }
 #timeline-container, .ui-rangeSlider-container, .ui-rangeSlider-arrow, .ui-rangeSlider-label {
 	background: #3a3e47; /* Old browsers */
@@ -985,7 +988,7 @@ svg#volume {
 	line-height: 1.85em;
 	cursor: pointer;
 	border-radius: 5px;
-	margin-top: 1.125em;
+	margin-top: .25em;
 }
 .wsite-button {
 	display: inline-block;
