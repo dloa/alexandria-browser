@@ -1020,6 +1020,11 @@ function playTimeline() {
 		minVal = minVal+playbackDuration;
 		maxVal = maxVal+playbackDuration;
 	}
+	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
+	var endDate = Date.parse(basicSliderBounds.max);
+	if (maxVal > endDate) {		
+		return false;
+	}
 	$("#timeline").dateRangeSlider("values", new Date(minVal), new Date(maxVal));
 	playCounter++;
 	timeChange();
