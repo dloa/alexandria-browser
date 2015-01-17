@@ -278,7 +278,7 @@ div#viewlabel {
 	width: 66%;
 	margin-left: 2%;
 }
-#adv-search .input-container.slider-container {
+.slider-container {
 	border-left: 1px solid #aaaaaa;
 	border-right: 1px solid #aaaaaa;
 	padding-top: 10px;
@@ -297,7 +297,7 @@ header #adv-search input.search, #adv-search select {
 	line-height: 1.75em;
 	cursor: pointer;
 }
-#adv-search .alex-ui-slider.ui-slider.ui-slider-horizontal.ui-widget.ui-widget-content.ui-corner-all {
+.alex-ui-slider.ui-slider.ui-slider-horizontal.ui-widget.ui-widget-content.ui-corner-all {
 	border-radius: 0;
 	border-right: 0 none transparent;
 	border-bottom: 0 none transparent;
@@ -305,7 +305,7 @@ header #adv-search input.search, #adv-search select {
 	padding: 0;
 	height: 10px;
 }
-#adv-search span.ui-slider-handle.ui-state-default.ui-corner-all {
+span.ui-slider-handle.ui-state-default.ui-corner-all {
 	border-radius: 50%;
 	background: none #fff;
 	top: -12px;
@@ -363,6 +363,18 @@ input.search.alex-ui-datepicker {
 }
 #timeline-controls span {
 	cursor: pointer;
+}
+input.timeline-control-input {
+	width: 1.25em;
+	padding: 0 .25em;
+	margin: 0 .25em;
+}
+#timeline-settings .slider-container {
+	display: inline-block;
+	zoom:1;*display:inline;
+	vertical-align: middle;
+	width: 22em;	
+	margin: 0 .5em;
 }
 .view-controls {
 	display: none !important;
@@ -959,6 +971,22 @@ svg#volume {
 	-webkit-box-sizing: border-box;
 }
 /* BUTTONS */
+.apply-container {
+	text-align: center;
+}
+.applybtn {
+	display: inline-block;
+	background: none #97b3c5;
+	text-align: center;
+	color: #fff;
+	text-transform: uppercase;
+	padding: 0 2.28125em;
+	font-size: 1.125em;
+	line-height: 1.85em;
+	cursor: pointer;
+	border-radius: 5px;
+	margin-top: 1.125em;
+}
 .wsite-button {
 	display: inline-block;
 	zoom:1;*display:inline;

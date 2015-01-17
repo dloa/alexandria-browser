@@ -95,7 +95,7 @@ jQuery(document).ready(function($){
 				$('#adv-search').fadeToggle(fadeTimer);
 			}
 		}
-		if ( (!$(e.target).hasClass('settings-icon')) && (!$(e.target).parents('#timeline-settings')[0]) ) {
+		if ( ( (!$(e.target).hasClass('settings-icon')) && (!$(e.target).parents('#timeline-settings')[0]) ) || ($(e.target).hasClass('applybtn')) ) {
 			if($('#timeline-settings').css('display') == 'block') {
 				$('#timeline-settings').fadeToggle(fadeTimer);
 			}
