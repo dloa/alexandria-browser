@@ -166,7 +166,7 @@ header input.search:focus{
 	height:55px;
 	position: absolute;
 	top: 3px;
-	left: 20px;
+	left: 32px;
 	z-index: 10;
 	background: url(../img/logo.svg) left bottom / 55px auto no-repeat;
 	text-align: center;
@@ -177,11 +177,16 @@ header input.search:focus{
 }
 div#viewlabel {
 	position: absolute;
-	bottom: -32px;
-	left: 20px;
-	margin-top: -.5em;
-	line-height: 1;
+	top: 95px;
+	left: 32px;
+	z-index: 100;
+	color: #a8a8a8;
+	font-size: 1.375rem;
 	text-transform: capitalize;
+	line-height: 1;
+}
+div#viewlabel .currentArchive {
+	color: #92b4c6;
 }
 #search {
 	position: relative;
@@ -197,7 +202,12 @@ div#viewlabel {
 }
 #adv-search-toggle {
 	cursor: pointer;
-	font-size: .95rem;
+	font-size: .75em;
+	text-transform: capitalize;
+	color: #979797;
+	display: inline-block;
+	margin-top: .75em;
+	margin-left: .25em;
 }
 .input-container {
 	position: relative;
@@ -834,7 +844,7 @@ section#timeline {
 	width: 30px;
 	height: 30px;
 	top: 20px;
-	left: 90px;
+	left: 102px;
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)";
 	filter: alpha(opacity=70);
 	-moz-opacity: 0.7;

@@ -1022,7 +1022,9 @@ function playTimeline() {
 	}
 	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
 	var endDate = Date.parse(basicSliderBounds.max);
-	if (maxVal > endDate) {		
+	if (maxVal > endDate) {
+		autoPlayTimeline();
+		alert('End of Timeline');
 		return false;
 	}
 	$("#timeline").dateRangeSlider("values", new Date(minVal), new Date(maxVal));
@@ -1242,6 +1244,7 @@ function displayItem(key){
 			endDateValue = queryString(key);
 		} else if(key == 'archive'){
 			currentArchive = queryString(key);
+			$('.archiveLabel').fadeIn(fadeTimer);
 			$('#viewlabel .currentArchive').text(currentArchive);
 			searchTerm = currentArchive;
 			currentView = 'wordsCloud';
@@ -1302,6 +1305,7 @@ window.onpopstate = function(event) {
 	    $('#intro').remove();
 		displayItem('archive');
 	} else {
+		$('.archiveLabel').fadeOut(fadeTimer);
 		$('#viewlabel .currentArchive').text('');
 		currentArchive = '*';
 		searchTerm = '';

@@ -22,7 +22,6 @@
 	</head>
 	<body>		<header>
 			<div id="logo"><!--Alexandria--></div>
-			<div id="viewlabel"><span class="currentArchive"></span></div>
 			<div id="search">
 				<div class="input-container">
 					<input type="text" class="search" value="" placeholder="Search Archives" id="search-main" />
@@ -96,15 +95,21 @@
 		<div id="intro">
 			<h1>Welcome to Alexandria</h1>
 		</div>
+
+		<div id="viewlabel"><span class="archiveLabel">Twitter Archive:</span> <span class="currentArchive"></span></div>
+
 		<div id="spritz-container">
-			<div id="spritzer" data-role="spritzer" data-url="http://www.jasondavies.com/wordtree/cat-in-the-hat.txt"></div>
+			<div id="spritzer" data-role="spritzer"></div>
 		</div>
+
 		<main id="vis" class="wordCloud"></main>
+
 		<main id="wordsListView">
 			<article>
 				<ul id="wordsList"></ul>
 			</article>
 		</main>
+
 		<main id="tweetListView" class="overlay">
 			<article>
 				<ul id="tweetList"></ul>
