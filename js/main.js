@@ -301,6 +301,9 @@ function timeChange() {
 	resetArchiveList = true;
 	startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
 	endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
+	$('.currentStartTime').text(startDateValue);
+	$('.currentEndTime').text(endDateValue);
+	$('.timespanLabel').fadeIn(fadeTimer);
 	if($('#tweetListView').css('display') == 'block') {
 		currentPage = 0;
 		totalPages = 0;
@@ -1239,9 +1242,12 @@ function displayItem(key){
 	} else {
 		if (key == 'startDate') {
 			startDateValue = queryString(key);
+   			$('.currentStartTime').text(startDateValue);
 			displayItem('endDate');
 		} else if(key == 'endDate'){
 			endDateValue = queryString(key);
+			$('.currentEndTime').text(endDateValue);
+			$('.timespanLabel').fadeIn(fadeTimer);
 		} else if(key == 'archive'){
 			currentArchive = queryString(key);
 			$('.archiveLabel').fadeIn(fadeTimer);

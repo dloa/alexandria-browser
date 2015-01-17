@@ -130,11 +130,7 @@ header {
 	width: 100%;
 	background-color: #FEFEFE;
 	z-index: 300;
-/*	margin-right: 1em;
-	margin-left: 1em;*/
 	padding: 1em;
-/*	border-bottom-left-radius: 3px;
-	border-bottom-right-radius: 3px;*/
 	box-shadow: 0 1px 3px rgba(68, 68, 68, 0.69);
 	-moz-box-shadow: 0 1px 3px rgba(68, 68, 68, 0.69);
 	text-align: center;
@@ -153,6 +149,8 @@ header input.search, #adv-search select {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
+	font-size: 22px;
+	font-size: 1.375rem;
 }
 header input.search#search-main {
 	background: url(../img/search.svg) 10px 50% / .8em no-repeat;
@@ -181,12 +179,22 @@ div#viewlabel {
 	left: 32px;
 	z-index: 100;
 	color: #a8a8a8;
+	font-size: 22px;
 	font-size: 1.375rem;
-	text-transform: capitalize;
 	line-height: 1;
+}
+div#viewlabel div {
+	margin: 0 0 .25em;
 }
 div#viewlabel .currentArchive {
 	color: #92b4c6;
+	text-transform: capitalize;
+}
+div#viewlabel .timespanLabel {
+	display: none;
+}
+div#viewlabel .timespanLabel span {
+	color: #a3ccb1;
 }
 #search {
 	position: relative;
