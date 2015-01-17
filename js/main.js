@@ -976,7 +976,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 
 // Timeline Playback
 var playTimerId = 0;
-
+var playCounter = 0;
 function autoPlayTimeline() {
 	$('.playbtn').toggleClass('playing');
 	$('#timeline-settings').fadeOut(fadeTimer);
@@ -990,6 +990,7 @@ function autoPlayTimeline() {
 		playingTimeline = false;
 		$('#timeline .ui-rangeSlider-bar').removeClass('animate');
 		$('.playbtn').text('play');
+		playCounter = 0;
 	}
 }
 
@@ -997,9 +998,21 @@ function playTimeline() {
 		clearTimeout ( playTimerId );
 		var playbackInterval = parseInt($('.timeline-control-input[name="timeline-interval"]').val())*60*60*1000;
 		var playbackDuration = parseInt($('.timeline-control-input[name="timeline-duration"]').val())*60*60*1000;
-		var minVal = Date.parse($("#timeline").dateRangeSlider("values").min);
-		var maxVal = Date.parse($("#timeline").dateRangeSlider("values").min)+playbackInterval;
-		$("#timeline").dateRangeSlider("values", new Date(minVal+playbackDuration), new Date(maxVal+playbackDuration));
+		var userStartDate = $('#timeline-settings .timeline-control-input[name="timeline-startDate"]').val();
+		if (playCounter == 0) {
+			if ( userStartDate != '' ) {			
+				var minVal = Date.parse(userStartDate);
+				var maxVal = minVal+playbackInterval;
+			} else {
+				var minVal = Date.parse($("#timeline").dateRangeSlider("values").min);
+				var maxVal = Date.parse($("#timeline").dateRangeSlider("values").min)+playbackInterval;
+			}
+		} else {
+			minVal = minVal+playbackDuration;
+			maxVal = maxVal+playbackDuration;
+		}
+		$("#timeline").dateRangeSlider("values", new Date(minVal), new Date(maxVal));
+		playCounter++;
 		timeChange();
 }
 
@@ -1114,7 +1127,7 @@ function volumeBars(arch, word, interval){
 				   .attr("y", function(d) {
 						return h - (h*(d/largest));
 				   })
-				   .attr("width", ((w / drawdata.length - barPadding)/w)*100+'%')
+				   .attr("width", Math.abs(((w / drawdata.length - barPadding)/w)*100)+'%')
 				   .attr("height", function(d) {
 						return h*(d/largest);
 				   })
