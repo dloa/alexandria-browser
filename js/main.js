@@ -78,12 +78,16 @@ jQuery(document).ready(function($){
 			searchTimerId = setTimeout ( 'runSearch("'+ newSearchValue +'")', 2000 );
 		}
 	});
+
 	// Click icon in omnibox to clear and run search
+/*
 	$('.clearSearch').click(function(){
 		$(this).prev('input').val('');
 		resetArchiveList = true
 		runSearch('');
 	});	
+*/
+
 	// Advanced Search toggle
 	$('#adv-search-toggle').click(function(){
 		$('#adv-search').fadeToggle(fadeTimer);
