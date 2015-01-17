@@ -977,6 +977,9 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 // Timeline Playback
 var playTimerId = 0;
 var playCounter = 0;
+var minVal;
+var maxVal;
+
 function autoPlayTimeline() {
 	$('.playbtn').toggleClass('playing');
 	$('#timeline-settings').fadeOut(fadeTimer);
@@ -995,25 +998,31 @@ function autoPlayTimeline() {
 }
 
 function playTimeline() {
-		clearTimeout ( playTimerId );
-		var playbackInterval = parseInt($('.timeline-control-input[name="timeline-interval"]').val())*60*60*1000;
-		var playbackDuration = parseInt($('.timeline-control-input[name="timeline-duration"]').val())*60*60*1000;
-		var userStartDate = $('#timeline-settings .timeline-control-input[name="timeline-startDate"]').val();
-		if (playCounter == 0) {
-			if ( userStartDate != '' ) {			
-				var minVal = Date.parse(userStartDate);
-				var maxVal = minVal+playbackInterval;
-			} else {
-				var minVal = Date.parse($("#timeline").dateRangeSlider("values").min);
-				var maxVal = Date.parse($("#timeline").dateRangeSlider("values").min)+playbackInterval;
-			}
+	clearTimeout ( playTimerId );
+	var playbackInterval = parseInt($('.timeline-control-input[name="timeline-interval"]').val())*60*60*1000;
+	var playbackDuration = parseInt($('.timeline-control-input[name="timeline-duration"]').val())*60*60*1000;
+	var userStartDate = $('#timeline-settings .timeline-control-input[name="timeline-startDate"]').val();
+	if (playCounter == 0) {
+		if ( userStartDate != '' ) {			
+			minVal = Date.parse(userStartDate);
+			maxVal = minVal+playbackInterval;
 		} else {
-			minVal = minVal+playbackDuration;
-			maxVal = maxVal+playbackDuration;
+			if (Date.parse($("#timeline").dateRangeSlider("values").min)+playbackInterval == Date.parse($("#timeline").dateRangeSlider("values").max)) {
+				minVal = Date.parse($("#timeline").dateRangeSlider("values").min)+playbackDuration;
+				maxVal = minVal+playbackInterval;
+			} else {
+				minVal = Date.parse($("#timeline").dateRangeSlider("values").min);
+				maxVal = Date.parse($("#timeline").dateRangeSlider("values").min)+playbackInterval;
+			}
 		}
-		$("#timeline").dateRangeSlider("values", new Date(minVal), new Date(maxVal));
-		playCounter++;
-		timeChange();
+	} else {
+		console.error('minVal == '+minVal+', maxVal == '+maxVal);
+		minVal = minVal+playbackDuration;
+		maxVal = maxVal+playbackDuration;
+	}
+	$("#timeline").dateRangeSlider("values", new Date(minVal), new Date(maxVal));
+	playCounter++;
+	timeChange();
 }
 
 // CLEAR MODAL
