@@ -989,12 +989,13 @@ function autoPlayTimeline() {
 	}
 }
 
-function playTimeline() {		
+function playTimeline() {
 		clearTimeout ( playTimerId );
+		var playbackInterval = parseInt($('.timeline-control-input[name="timeline-interval"]').val())*60*60*1000;
+		var playbackDuration = parseInt($('.timeline-control-input[name="timeline-duration"]').val())*60*60*1000;
 		var minVal = Date.parse($("#timeline").dateRangeSlider("values").min);
-		var maxVal = Date.parse($("#timeline").dateRangeSlider("values").max);
-//		$("#timeline").dateRangeSlider("values", new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)), new Date(Date.parse($("#timeline").dateRangeSlider("bounds").min)+86400000));
-		$("#timeline").dateRangeSlider("values", new Date(maxVal-43200000), new Date(maxVal+43200000));
+		var maxVal = Date.parse($("#timeline").dateRangeSlider("values").min)+playbackInterval;
+		$("#timeline").dateRangeSlider("values", new Date(minVal+playbackDuration), new Date(maxVal+playbackDuration));
 		timeChange();
 }
 
