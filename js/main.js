@@ -40,6 +40,7 @@ jQuery(document).ready(function($){
 		$('.currentStartTime').text($("#timeline").dateRangeSlider("values").min);
 		$('.currentEndTime').text($("#timeline").dateRangeSlider("values").max);
 	}
+	$('#viewlabel').fadeIn(fadeTimer);
 	// UI/UX Navigation
 	// Click logo to go back to archive list with current timeline selection
 	$('#logo').click(function(){
