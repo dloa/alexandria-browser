@@ -174,7 +174,7 @@ header input.search:focus{
 	cursor: pointer;
 }
 div#viewlabel {
-	position: absolute;
+	position: fixed;
 	top: 95px;
 	left: 32px;
 	z-index: 100;
@@ -189,9 +189,6 @@ div#viewlabel div {
 div#viewlabel .currentArchive {
 	color: #92b4c6;
 	text-transform: capitalize;
-}
-div#viewlabel .timespanLabel {
-	display: none;
 }
 div#viewlabel .timespanLabel span {
 	color: #a3ccb1;

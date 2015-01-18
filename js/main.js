@@ -301,9 +301,8 @@ function timeChange() {
 	resetArchiveList = true;
 	startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
 	endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
-	$('.currentStartTime').text(startDateValue);
-	$('.currentEndTime').text(endDateValue);
-	$('.timespanLabel').fadeIn(fadeTimer);
+	$('.currentStartTime').text(new Date(parseInt(startDateValue)));
+	$('.currentEndTime').text(new Date(parseInt(endDateValue)));
 	if($('#tweetListView').css('display') == 'block') {
 		currentPage = 0;
 		totalPages = 0;
@@ -389,6 +388,8 @@ function draw(words, bounds) {
 				activeWord = item;
 				startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
 				endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
+				$('.currentStartTime').text(new Date(parseInt(startDateValue)));
+				$('.currentEndTime').text(new Date(parseInt(endDateValue)));
 				var stateObj = {
 					startDateValue: startDateValue,
 					endDateValue: endDateValue,
@@ -1242,12 +1243,11 @@ function displayItem(key){
 	} else {
 		if (key == 'startDate') {
 			startDateValue = queryString(key);
-   			$('.currentStartTime').text(startDateValue);
+			$('.currentStartTime').text(new Date(parseInt(startDateValue)));
 			displayItem('endDate');
 		} else if(key == 'endDate'){
 			endDateValue = queryString(key);
-			$('.currentEndTime').text(endDateValue);
-			$('.timespanLabel').fadeIn(fadeTimer);
+			$('.currentEndTime').text(new Date(parseInt(endDateValue)));
 		} else if(key == 'archive'){
 			currentArchive = queryString(key);
 			$('.archiveLabel').fadeIn(fadeTimer);
