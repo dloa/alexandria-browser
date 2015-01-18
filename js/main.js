@@ -1108,6 +1108,10 @@ function volumeBars(arch, word, interval){
 		url: "http://54.172.28.195:3000/alexandria/v1/twitter/get/interval/count",
 		data: queryString.toString(),
 		success: function (e) {
+			if ( $('#footer').css('display') == 'none' ) {
+				console.log('Timeline not present. Aborting volume bar generation.');
+				return false;
+			}
 			$('svg#volume').remove();
 			console.log('volumeBars() Ajax: get/interval/count ... '+queryString);
 			var data = $.parseJSON(e);
@@ -1422,6 +1426,18 @@ function resetInterface() {
 		// set a timer and step timline forward
 		playTimerId = setTimeout ( 'playTimeline()', animDuration );
 	}
+}
+
+// Share New Content Module
+function loadShareMod() {
+	$('#intro').fadeOut(fadeTimer);
+	$('header #search').fadeOut(fadeTimer);
+	$('#viewlabel').fadeOut(fadeTimer);
+	$('#timeline-controls').fadeOut(fadeTimer);
+	$('#volume').fadeOut(fadeTimer);
+	$('#footer').fadeOut(fadeTimer);
+	$('#app-shading').css('bottom',0);
+	$('#media-type-menu').fadeIn(fadeTimer);
 }
 
 // ERROR CONNECTING TO LIBRARIAN

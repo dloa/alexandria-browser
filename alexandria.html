@@ -96,7 +96,14 @@
 		
 		<div id="intro">
 			<h1>Welcome to Alexandria</h1>
+			<div class="links">
+				<ul>
+					<li><a onclick="loadShareMod()">+ Share new content</a></li>
+				</ul>
+			</div>
 		</div>
+
+		<!-- Twitter Archives -->
 
 		<div id="viewlabel">
 			<div class="archiveLabel">
@@ -134,8 +141,6 @@
 			</article>
 		</main>
 
-		<div id="app-shading"></div>
-		<div id="inputText"></div>
 		<div id="timeline-settings">
 			<h3>Playback Settings</h3>
 			<div class="row">
@@ -162,26 +167,50 @@
 			<div class="playbtn">play</div>
 			<div class="settings-icon">settings</div>
 		</footer>
+
+		<!-- Share New Content -->
+		
+		<main id="media-type-menu">
+			<h2>Select media type:</h2>
+			<ul id="media-type-list">
+				<li>Movie</li>
+				<li>Video</li>
+				<li>Music</li>
+				<li></li>
+			</ul>
+		</main>
+		
+		<main id="share-movie">
+		</main>
+
+		<main id="share-video">
+		</main>
+
+		<main id="share-music">
+		</main>
+
+		<main id="share-podcast">
+		</main>
+		
+		<!-- Application components -->
+		
+		<div id="app-shading"></div>
 		
 		<div id="wait"></div>
-		<div id="disabler"></div>
-		<div id="lightbox" onclick="$(this).fadeOut(fadeTimer);"></div>
 		
+		<div id="disabler"></div>
+		
+		<div id="lightbox" onclick="$(this).fadeOut(fadeTimer);"></div>
+				
 		<script src="js/vendor/d3.v3.min.js"></script>
 		<script src="js/vendor/jquery-2.1.1.min.js"></script>
 		<script src="js/vendor/jquery-ui-1.11.2/jquery-ui.min.js"></script>
 		<script src="js/vendor/jQRangeSlider-5.7.0/jQAllRangeSliders-withRuler-min.js"></script>	
-		<!-- <script src="js/vendor/svg-injector.min.js"></script> -->
 		<script src="js/vendor/d3.layout.cloud.js"></script>
-		<!-- <script src="js/vendor/wordcloud2.js"></script> -->
 		<script src="js/vendor/spin.min.js"></script>
 		<script src="js/vendor/jquery.linkify.min.js"></script>
-		<!-- <script src="js/vendor/infinity.min.js"></script> -->
 		<script type="text/javascript" src="js/vendor/spritz-1.2.min.js"></script>
-		<!-- <script type="text/javascript" src="//sdk.spritzinc.com/js/1.2/js/spritz.min.js"></script> -->
 		<script src="js/vendor/jquery.xdomainajax.js"></script>
 		<script src="js/main.js"></script>
-		<!-- <script src="js/main-d3.js"></script> -->
-		
 	</body>
 </html>

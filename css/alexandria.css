@@ -122,12 +122,26 @@ h1 {
 	letter-spacing: 7px;
 	line-height: 1.65;
 }
-
+a {
+	color: #9da2cf;
+	text-decoration: none;
+	transition: all 1s ease;
+	-moz-transition: all 1s ease;
+	-webkit-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	border-bottom: 1px solid transparent;
+	cursor: pointer;
+}
+a:hover {
+	color: #a3ccb1;
+	border-bottom: 1px solid #a3ccb1;
+}
 header {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
+	height: 72px;
 	background-color: #FEFEFE;
 	z-index: 300;
 	padding: 1em;
@@ -439,14 +453,14 @@ div#intro {
 #intro h1 {
 	margin: 0 0 .5em;
 }
-#ukraineShortcut {
-	display: inline-block;
-	zoom:1;*dispaly:inline;
-	background: url('../img/icon_map_of_Ukraine.png') no-repeat center center transparent;
-	width:80px;
-	height:60px;
-	cursor: pointer;
-	margin-top: 1em;
+#intro ul, #intro ul li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#intro .links {
+	font-size: 22px;
+	font-size: 1.375rem;
 }
 ul#archiveList, ul#tweetList, #wordsList {
 	display: inline-block;
@@ -846,6 +860,18 @@ section#timeline {
 	height: 100%;
 	border-top: 10px solid #7c8091;
 }
+
+#media-type-menu ul, #media-type-menu ul li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	zoom:1;*display: inline;
+	vertical-align: middle;
+	text-align: center;
+}
+/* Application components */
+
 #wait, .loader, #wait span.text {
 	width: 30px;
 	height: 30px;
