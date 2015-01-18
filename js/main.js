@@ -778,7 +778,9 @@ function buildWordCloud(cloudlist, MaxResults) {
 function wordSearch(arch, word, rpp, currentPage) {
 	$("#tweetList li.more-link").remove();
 	$('#wait').fadeIn(fadeTimer);
-	$('#disabler').fadeIn(fadeTimer);
+	if($('#tweetListView').css('display') != 'block') {
+		$('#disabler').fadeIn(fadeTimer);
+	}
 	resetArchiveList = false;
 	var pageFix = currentPage+1;
 	if(!arch){
@@ -1180,16 +1182,30 @@ function volumeBars(arch, word, interval){
 // LIGHTBOX FUNCTION
 function lightbox(obj){
 	var imgContent = $(obj).find('img').clone();
-	var imgMarginTop = (window.innerHeight-$(obj).find('img').height())*.4;
 	$('#lightbox').children().remove();
 	$('#lightbox').append(imgContent);
+	$('#lightbox').show();
+//	imgContent = $('#lightbox img');
+	var imgContentWidth = $(imgContent).width();
+	var maxWH = .95; // Max width and height for lightboxed image
+	if (imgContentWidth > window.innerWidth*maxWH) {
+		$('#lightbox img').css('width',window.innerWidth*maxWH+'px');
+		imgContentWidth = $('#lightbox img').width();
+	}
+	var imgContentHeight = $('#lightbox img').height();
+	if (imgContentHeight > window.innerHeight*maxWH) {
+		$('#lightbox img').css('width','auto');
+		$('#lightbox img').css('height',window.innerHeight*maxWH+'px');
+		imgContentHeight = $('#lightbox img').height();
+		imgContentWidth = $('#lightbox img').width();
+	}
 	$('#lightbox img').css({
-		'margin-top': imgMarginTop+'px'
+		'top': (window.innerHeight-imgContentHeight)/2+'px',
+		'left': (window.innerWidth-imgContentWidth)/2+'px'
 	});
-	$('#lightbox').fadeIn(fadeTimer);
 }
 
-// LIGHTBOX FUNCTION
+// infinite Scroll FUNCTION
 function infiniteScroll() {	
 	var loadScrollPosition = $('#tweetList').height()-(window.innerHeight*8);
 	if ( (expandList == true) && (window.scrollY > loadScrollPosition) && (currentPage < totalPages) ) {

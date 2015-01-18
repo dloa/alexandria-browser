@@ -122,20 +122,6 @@ h1 {
 	letter-spacing: 7px;
 	line-height: 1.65;
 }
-a {
-	color: #9da2cf;
-	text-decoration: none;
-	transition: all 1s ease;
-	-moz-transition: all 1s ease;
-	-webkit-transition: all 1s ease;
-	-o-transition: all 1s ease;
-	border-bottom: 1px solid transparent;
-	cursor: pointer;
-}
-a:hover {
-	color: #a3ccb1;
-	border-bottom: 1px solid #a3ccb1;
-}
 header {
 	position: fixed;
 	top: 0;
@@ -462,6 +448,21 @@ div#intro {
 	font-size: 22px;
 	font-size: 1.375rem;
 }
+.links a {
+	color: #9da2cf;
+	text-decoration: none;
+	transition: all 1s ease;
+	-moz-transition: all 1s ease;
+	-webkit-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	border-bottom: 1px solid transparent;
+	cursor: pointer;
+}
+.links a:hover {
+	color: #a3ccb1;
+	border-bottom: 1px solid #a3ccb1;
+}
+
 ul#archiveList, ul#tweetList, #wordsList {
 	display: inline-block;
 	zoom:1;*display:inline;
@@ -550,11 +551,13 @@ div#lightbox {
 	background-color: rgba(150,150,150,.45);
 }
 div#lightbox img {
+	position: absolute;
+	top: 50%;
+	left: 50%;
 	box-shadow: .2em .2em .5em rgba(20,20,20,.5);
 	-moz-box-shadow: .2em .2em .5em rgba(20,20,20,.5);
 	-webkit-box-shadow: .2em .2em .5em rgba(20,20,20,.5);
 	border: 1px solid #646464;
-	max-height: 91%;
 }
 .archive-volume {
 	background-color: #e0e0e0;
@@ -619,6 +622,7 @@ main.wordCloud span:hover, main.wordCloud text:hover {
 	float: right;
 }
 ul#tweetList li {
+	padding-bottom: 1.675em;
 	background-color: rgb(246, 247, 246);
 	border-radius: 1em;
 	border: 1px solid #cfcfcf;
@@ -653,7 +657,7 @@ ul#tweetList li div.expanded_urls .extLinkTitle a {
 }
 .row-spritz {
 	clear: both;
-	margin: 1em 0 0;
+	margin: 1em 0;
 }
 .spritz-control {
 	cursor: pointer;
