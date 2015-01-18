@@ -34,6 +34,12 @@ jQuery(document).ready(function($){
 	$("#timeline").bind("userValuesChanged", function(e, data){
 		timeChange();
 	});
+
+	// Timeline breadcrumbs
+	if ($('.currentStartTime').text()=='') {
+		$('.currentStartTime').text($("#timeline").dateRangeSlider("values").min);
+		$('.currentEndTime').text($("#timeline").dateRangeSlider("values").max);
+	}
 	// UI/UX Navigation
 	// Click logo to go back to archive list with current timeline selection
 	$('#logo').click(function(){
