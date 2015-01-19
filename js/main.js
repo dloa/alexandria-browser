@@ -51,7 +51,10 @@ jQuery(document).ready(function($){
 			clearModal();
 		}
 		if($(this).hasClass('toArchive')){
-			volumeBars('*', '', 7200000);
+			var hasVolumeBars = $('svg#volume');
+			if(hasVolumeBars.length==0){
+				volumeBars('*', '', 7200000);
+			}
 			$('.sharing-ui').fadeOut(fadeTimer);
 			$('#intro').fadeIn(fadeTimer);
 			$('.twitter-archive').fadeIn(fadeTimer);
