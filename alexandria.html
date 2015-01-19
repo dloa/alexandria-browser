@@ -178,7 +178,7 @@
 			<div id="add-media-container">
 				<nav>
 					<ul id="add-media-menu">
-						<li name="newMedia-media">Media</li>
+						<li name="newMedia-media" class="active">Media</li>
 						<li name="newMedia-info">Information</li>
 						<li name="newMedia-notary">Digital Notary</li>
 						<li name="newMedia-net">Distribution Network</li>
@@ -187,19 +187,29 @@
 				</nav>
 				<div id="newMedia-tabs">
 					<div id="newMedia-media" class="modal-tab">
-						Media
+						<h2>select media to share:</h2>
+						<ul class="newMedia-links">
+							<li>Browse...</li>
+							<li>From URL...</li>
+							<li>From Hash...</li>
+						</ul>
 					</div>
 					<div id="newMedia-info" class="modal-tab">
-						Information
+						<div class="left">
+							<h2>Information</h2>
+						</div>
+						<div class="pull-right">
+							<h2>choose title artwork:</h2>
+						</div>
 					</div>
 					<div id="newMedia-notary" class="modal-tab">
-						Digital Notary
+						<h2>set proof of ownership/rights:</h2>
 					</div>
 					<div id="newMedia-net" class="modal-tab">
-						Distributed Network
+						<h2>set distributed network:</h2>
 					</div>
 					<div id="newMedia-pay" class="modal-tab">
-						Payments
+						<h2>set payment options:</h2>
 					</div>
 				</div>
 			</div>

@@ -478,10 +478,10 @@ div#intro {
 	text-align: center;
 }
 #add-media > * {
-	width: 71.5%;
+	width: 98%;
 	display: inline-block;
 	zoom: 1;*display:inline;
-	min-width: 909px;
+	max-width: 880px;
 }
 #add-media-container {
 	border: 4px solid #979797;
@@ -490,26 +490,30 @@ div#intro {
 }
 #add-media nav {
 	border-bottom: 4px solid #979797;
+	display: table;
+	width: 100%;
 }
 #add-media nav ul {
 	margin: 0;
 	padding: 0;
+	display: table-row;
 }
 #add-media nav, #add-media .pagination {
-	font-size: 1.4em;
+	font-size: 1em;
 }
 #add-media nav ul li, .pagination li {
 	line-height: 1;
 	cursor: pointer;
 }
 #add-media nav ul li {
-	box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	display: inline-block;
-	zoom: 1;*display:inline;
+	display: table-cell;
 	color:#979797;
-	padding: .5em 1.25em;
+	padding: .5em;
+	border-left: 2px solid #979797;
+}
+#add-media nav ul li:first-child {
+	border-left: 0 none transparent;
+	margin-left: 0;
 }
 #add-media nav ul li.active {
 	color: #fff;
@@ -518,6 +522,7 @@ div#intro {
 #add-media #newMedia-tabs {
 	position: relative;
 	min-height: 5em;
+	margin: 30px 0;
 }
 #add-media #newMedia-tabs .modal-tab {
 	position:absolute;
@@ -526,6 +531,9 @@ div#intro {
 	width: 100%;
 	height: 100%;
 	display: none;
+}
+#add-media #newMedia-tabs .modal-tab h2 {
+	color: #979797;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;
@@ -537,6 +545,7 @@ div#intro {
 }
 .pagination ul li:first-child {
 	float: left;
+	display: none;
 }
 #add-media .pagination ul li {
 	margin-top: .5em;
@@ -1203,6 +1212,9 @@ svg#volume {
 //		float: right;
 //		width: 38%;
 	}
+	#add-media nav, #add-media .pagination {
+		font-size: 1.2em;
+	}
 
 /* ============
 	WIDE: Main
@@ -1224,7 +1236,9 @@ svg#volume {
 /* ===============
 	Maximal Width
 	=============== */
-
+	#add-media nav, #add-media .pagination {
+		font-size: 1.4em;
+	}
 	.wrapper {
 		width: 9999999px; /* 1140px - 10% for margins */
 		margin: 0 auto;

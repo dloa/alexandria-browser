@@ -240,17 +240,30 @@ jQuery(document).ready(function($){
 
 	// Add New Content Interface
 	$('#add-media-menu li').click(function(){
-		$('#add-media-menu li').not($(this)).removeClass('active');
-		$(this).addClass('active');
-		$('#newMedia-tabs .modal-tab').hide();
-		$('#newMedia-tabs').find('.modal-tab#'+$(this).attr("name")).show();
+		$(this).addClass('active').siblings().removeClass('active');
+		$('#newMedia-tabs').find('.modal-tab#'+$(this).attr("name")).show().siblings().hide();
+		var activeTabName = $('#add-media-menu li.active').attr('name');
+		$('#add-media .pagination ul li').show();
+		var firstTab = $('#add-media-menu li:first-child').attr('name');
+		var lastTab = $('#add-media-menu li:last-child').attr('name');
+		if (activeTabName == lastTab) {
+			$('#add-media .pagination ul li:last-child').removeClass('next').addClass('submit').text('Submit');
+		} else {
+			$('#add-media .pagination ul li:last-child').removeClass('submit').addClass('next').text('Next');
+		}
+		if (activeTabName == firstTab) {
+			$('#add-media .pagination ul li.prev').hide();
+		}
 	});
 
 	$('#add-media .pagination li').click(function(){
+		var activeTab = $('#add-media-menu li.active');
 		if ($(this).hasClass('next')) {
-			$('#add-media-menu li.active').next('#add-media-menu li').click();
-		} else {
-			$('#add-media-menu li.active').prev('#add-media-menu li').click();
+			$(activeTab).next('#add-media-menu li').click();
+		} else if ($(this).hasClass('prev')) {
+			$(activeTab).prev('#add-media-menu li').click();
+		} else if ($(this).hasClass('submit')) {
+			alert("Just like that! You're a rockstar! See how easy that was?");
 		}
 	});
 
