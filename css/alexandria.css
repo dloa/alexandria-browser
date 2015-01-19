@@ -70,7 +70,7 @@ h1, h2, h3, h4, h5, h6 {
 	
 }
 h2 {
-	margin-bottom:50px;
+//	margin-bottom:50px;
 }
 
 h3{
@@ -137,6 +137,17 @@ header {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
+}
+.sharing-ui {
+	display: none;
+}
+header h2.sharing-ui {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	margin: 0;
+	line-height: 72px;
 }
 header input.search, #adv-search select {
 	display: inline-block;
@@ -462,7 +473,14 @@ div#intro {
 	color: #a3ccb1;
 	border-bottom: 1px solid #a3ccb1;
 }
-
+#media-type-menu {
+	margin-top: 5em;
+}
+#media-type-menu h2 {
+	font-size: 35px;
+	color: #979797;
+	font-weight: 600;
+}
 ul#archiveList, ul#tweetList, #wordsList {
 	display: inline-block;
 	zoom:1;*display:inline;
@@ -582,7 +600,7 @@ main.wordCloud {
 	position: fixed;
 }
 main.wordCloud#vis {
-	display: block !important;
+	display: block;
 	z-index: 15;
 }
 main.wordCloud#vis > svg {
@@ -874,6 +892,17 @@ section#timeline {
 	vertical-align: middle;
 	text-align: center;
 }
+#media-type-menu ul#media-type-list {
+	width: 100%;
+}
+#media-type-menu ul#media-type-list li {
+	width: 13.25125%;
+	margin: 0 .5%;
+	border: 6px solid currentColor;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
 /* Application components */
 
 #wait, .loader, #wait span.text {

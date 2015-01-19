@@ -26,7 +26,7 @@
 			
 			<div id="logo"><!--Alexandria--></div>
 			
-			<div id="search">
+			<div id="search" class="twitter-archive">
 				<div class="input-container">
 					<input type="text" class="search" value="" placeholder="Search Archives" id="search-main" />
 					<div class="clearSearch">x</div>
@@ -87,10 +87,14 @@
 				</div>
 			</div>
 			
+<!--
 			<div id="view-controls" class="view-controls">
 				<div id="view-archView" class="view-link">Cloud</div>
 				<div id="resort-archView" class="sort-link">Alphabetical</div>
 			</div>
+-->
+
+			<h2 class="sharing-ui">Share New Content</h2>
 
 		</header>
 		
@@ -105,7 +109,7 @@
 
 		<!-- Twitter Archives -->
 
-		<div id="viewlabel">
+		<div id="viewlabel" class="twitter-archive">
 			<div class="archiveLabel">
 				Twitter Archive: <span class="currentArchive"></span>
 			</div>
@@ -118,9 +122,9 @@
 			<div id="spritzer" data-role="spritzer"></div>
 		</div>
 
-		<main id="vis" class="wordCloud"></main>
+		<main id="vis" class="wordCloud twitter-archive"></main>
 
-		<main id="wordsListView">
+		<main id="wordsListView" class="twitter-archive">
 			<article>
 				<ul id="wordsList"></ul>
 			</article>
@@ -135,13 +139,13 @@
 
 		<div id="app-overlay" class="overlay"></div>
 
-		<main id="archiveListView">
+		<main id="archiveListView" class="twitter-archive">
 			<article>
 				<ul id="archiveList"></ul>
 			</article>
 		</main>
 
-		<div id="timeline-settings">
+		<div id="timeline-settings" class="twitter-archive">
 			<h3>Playback Settings</h3>
 			<div class="row">
 				<p>Show a <input type="text" name="timeline-interval" class="timeline-control-input" value="24" /> hour time period that advances by <input type="text" name="timeline-duration" class="timeline-control-input" value="12" /> hours.</p>
@@ -157,10 +161,10 @@
 			</div>
 			<!-- <div class="clearSearch">x</div> -->
 		</div>
-		<div id="timeline-controls">
+		<div id="timeline-controls" class="twitter-archive">
 			<div class="label-wrap">Timeline:</div> <span class="full">Full</span> | <span class="month">Month</span>
 		</div>
-		<footer id="footer">
+		<footer id="footer" class="twitter-archive">
 			<div id="timeline-container">
 				<section id="timeline" class="timeline"></section>	
 			</div>
@@ -170,7 +174,7 @@
 
 		<!-- Share New Content -->
 		
-		<main id="media-type-menu">
+		<main id="media-type-menu" class="sharing-ui">
 			<h2>Select media type:</h2>
 			<ul id="media-type-list">
 				<li>Movie</li>

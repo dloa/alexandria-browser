@@ -1148,6 +1148,7 @@ function volumeBars(arch, word, interval){
 							.append("svg")
 							.attr("width", "100%")
 							.attr("id","volume")
+							.attr("class","twitter-archive")
 							.attr("height", h);
 			
 				svg.selectAll("rect")
@@ -1185,7 +1186,6 @@ function lightbox(obj){
 	$('#lightbox').children().remove();
 	$('#lightbox').append(imgContent);
 	$('#lightbox').show();
-//	imgContent = $('#lightbox img');
 	var imgContentWidth = $(imgContent).width();
 	var maxWH = .95; // Max width and height for lightboxed image
 	if (imgContentWidth > window.innerWidth*maxWH) {
@@ -1447,13 +1447,9 @@ function resetInterface() {
 // Share New Content Module
 function loadShareMod() {
 	$('#intro').fadeOut(fadeTimer);
-	$('header #search').fadeOut(fadeTimer);
-	$('#viewlabel').fadeOut(fadeTimer);
-	$('#timeline-controls').fadeOut(fadeTimer);
-	$('#volume').fadeOut(fadeTimer);
-	$('#footer').fadeOut(fadeTimer);
+	$('.twitter-archive').fadeOut(fadeTimer);
 	$('#app-shading').css('bottom',0);
-	$('#media-type-menu').fadeIn(fadeTimer);
+	$('.sharing-ui').fadeIn(fadeTimer);
 }
 
 // ERROR CONNECTING TO LIBRARIAN
