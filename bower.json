@@ -1,0 +1,32 @@
+{
+  "name": "AlexandriaUX",
+  "version": "0.0.1",
+  "homepage": "https://github.com/blocktech/alexandriaux",
+  "authors": [
+    "Niv Sardi <xaiki@evilgiggle.com>"
+  ],
+  "directory": "js/vendor",
+  "description": "UX for the Alexandria Blocktech Library",
+  "main": "alexandria.html",
+  "license": "GPL",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "js/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery-ui": "~1.11.2",
+    "d3.layout.cloud": "~1.0.5",
+    "d3": "~3.5.3",
+    "infinity": "*",
+    "svg-injector": "~1.1.2",
+    "jQuery-linkify": "~1.1.7",
+    "spin.js": "~2.0.2",
+    "jquery-mousewheel": "~3.1.12",
+    "wordcloud2.js": "*",
+    "jqrangeslider": "~5.7.0"
+  }
+}
