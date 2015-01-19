@@ -511,8 +511,21 @@ div#intro {
 	color:#979797;
 	padding: .5em 1.25em;
 }
-#add-media .modal-tab {
+#add-media nav ul li.active {
+	color: #fff;
+	background-color: #979797;
+}
+#add-media #newMedia-tabs {
+	position: relative;
 	min-height: 5em;
+}
+#add-media #newMedia-tabs .modal-tab {
+	position:absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;
@@ -525,7 +538,7 @@ div#intro {
 .pagination ul li:first-child {
 	float: left;
 }
-#add-media. pagination ul li {
+#add-media .pagination ul li {
 	margin-top: .5em;
 }
 ul#archiveList, ul#tweetList, #wordsList {

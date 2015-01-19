@@ -238,6 +238,22 @@ jQuery(document).ready(function($){
 		getJobs('');
 	}
 
+	// Add New Content Interface
+	$('#add-media-menu li').click(function(){
+		$('#add-media-menu li').not($(this)).removeClass('active');
+		$(this).addClass('active');
+		$('#newMedia-tabs .modal-tab').hide();
+		$('#newMedia-tabs').find('.modal-tab#'+$(this).attr("name")).show();
+	});
+
+	$('#add-media .pagination li').click(function(){
+		if ($(this).hasClass('next')) {
+			$('#add-media-menu li.active').next('#add-media-menu li').click();
+		} else {
+			$('#add-media-menu li.active').prev('#add-media-menu li').click();
+		}
+	});
+
 }); // End Document.Ready
 
 // Default variables
