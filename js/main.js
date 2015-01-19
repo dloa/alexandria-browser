@@ -46,7 +46,7 @@ jQuery(document).ready(function($){
 	$('#logo').click(function(){
 		if($(this).hasClass('disabled')){
 			return false;
-		}
+		}		
 		if($('#tweetListView').css('display') == 'block') {
 			clearModal();
 		}

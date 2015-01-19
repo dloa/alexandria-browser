@@ -521,19 +521,89 @@ div#intro {
 }
 #add-media #newMedia-tabs {
 	position: relative;
-	min-height: 5em;
-	margin: 30px 0;
+	min-height: 24.46em;
+	margin: 30px 0 40px;
 }
 #add-media #newMedia-tabs .modal-tab {
 	position:absolute;
 	top: 0;
 	left: 0;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 	width: 100%;
 	height: 100%;
+	padding: 0 2.5%;
 	display: none;
-}
-#add-media #newMedia-tabs .modal-tab h2 {
 	color: #979797;
+}
+#add-media #newMedia-tabs .modal-tab:first-child {
+	display: block;
+}
+#add-media #newMedia-tabs .modal-tab > .left {
+	width: 58.62%;
+}
+#add-media #newMedia-tabs .modal-tab > .pull-right {
+	width: 38.46%;
+}
+#add-media .container {
+	border: 1px solid #979797;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	padding: 1em;
+}
+#add-media .input-container {
+	text-align: left;
+}
+#add-media .input-container label {
+	display: block;
+}
+#add-media .input-container input[type="text"] {
+	width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+#add-media #newMedia-tabs ul.newMedia-links, #add-media #newMedia-tabs ul.newMedia-links li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#add-media #newMedia-tabs ul.newMedia-links {
+	margin-top: 1em;
+}
+#add-media #newMedia-tabs .container ul.newMedia-links {
+	margin-top: 0;
+}
+#add-media #newMedia-tabs ul.newMedia-links li {
+	display: inline-block;
+	zoom: 1;*display:inline;
+	padding: .25em 1.25em;
+	background: none #d8d8d8;
+	border-radius: 8px;
+	color: #464646;
+	cursor: pointer;
+}
+#newMedia-tabs .tbl {
+	display: inline-block;
+	zoom:1;*display:inline;
+	text-align: left;
+	width: 50%;
+	margin-top: 1em;
+}
+#newMedia-tabs .tbl .row:first-child {
+	font-weight: 600;
+}
+#newMedia-tabs .tbl .col {
+	padding-left: 5em;
+}
+#newMedia-tabs .tbl .row .col:first-child {
+	padding-left: 0;
+}
+#add-media #newMedia-tabs .tbl .row .col .input-container label {
+	display: inline;
+	cursor: pointer;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;
@@ -1096,6 +1166,17 @@ svg#volume {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
+}
+/* TABLE LAYOUT */
+.tbl {
+	display: table;
+}
+.tbl .row {
+	display: table-row;
+	width: 100%;
+}
+.tbl .col {
+	display: table-cell;
 }
 /* BUTTONS */
 .apply-container {
