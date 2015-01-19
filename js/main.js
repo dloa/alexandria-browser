@@ -46,9 +46,18 @@ jQuery(document).ready(function($){
 	$('#logo').click(function(){
 		if($(this).hasClass('disabled')){
 			return false;
-		}		
+		}
 		if($('#tweetListView').css('display') == 'block') {
 			clearModal();
+		}
+		if($(this).hasClass('toArchive')){
+			volumeBars('*', '', 7200000);
+			$('.sharing-ui').fadeOut(fadeTimer);
+			$('#intro').fadeIn(fadeTimer);
+			$('.twitter-archive').fadeIn(fadeTimer);
+			$('#app-shading').css('bottom','60px');
+			$(this).removeClass('toArchive');
+			return false;	
 		}
 		playingTimeline = true;
 		autoPlayTimeline();
@@ -1479,6 +1488,7 @@ function loadShareMod() {
 	$('.twitter-archive').fadeOut(fadeTimer);
 	$('#app-shading').css('bottom',0);
 	$('.sharing-ui').fadeIn(fadeTimer);
+	$('#logo').addClass('toArchive');
 }
 
 // ERROR CONNECTING TO LIBRARIAN
