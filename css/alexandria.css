@@ -148,6 +148,7 @@ header h2.sharing-ui {
 	width: 100%;
 	margin: 0;
 	line-height: 72px;
+	font-size: 1.6875em;
 }
 header input.search, #adv-search select {
 	display: inline-block;
@@ -473,13 +474,59 @@ div#intro {
 	color: #a3ccb1;
 	border-bottom: 1px solid #a3ccb1;
 }
-#media-type-menu {
-	margin-top: 5em;
+#add-media {
+	text-align: center;
 }
-#media-type-menu h2 {
-	font-size: 35px;
-	color: #979797;
-	font-weight: 600;
+#add-media > * {
+	width: 71.5%;
+	display: inline-block;
+	zoom: 1;*display:inline;
+	min-width: 909px;
+}
+#add-media-container {
+	border: 4px solid #979797;
+	border-radius: 9px;
+	margin-top: 5%;
+}
+#add-media nav {
+	border-bottom: 4px solid #979797;
+}
+#add-media nav ul {
+	margin: 0;
+	padding: 0;
+}
+#add-media nav, #add-media .pagination {
+	font-size: 1.4em;
+}
+#add-media nav ul li, .pagination li {
+	line-height: 1;
+	cursor: pointer;
+}
+#add-media nav ul li {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	display: inline-block;
+	zoom: 1;*display:inline;
+	color:#979797;
+	padding: .5em 1.25em;
+}
+#add-media .modal-tab {
+	min-height: 5em;
+}
+.pagination ul, .pagination ul li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+.pagination ul li {
+	float: right;
+}
+.pagination ul li:first-child {
+	float: left;
+}
+#add-media. pagination ul li {
+	margin-top: .5em;
 }
 ul#archiveList, ul#tweetList, #wordsList {
 	display: inline-block;
@@ -883,26 +930,6 @@ section#timeline {
 	border-top: 10px solid #7c8091;
 }
 
-#media-type-menu ul, #media-type-menu ul li {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	display: inline-block;
-	zoom:1;*display: inline;
-	vertical-align: middle;
-	text-align: center;
-}
-#media-type-menu ul#media-type-list {
-	width: 100%;
-}
-#media-type-menu ul#media-type-list li {
-	width: 13.25125%;
-	margin: 0 .5%;
-	border: 6px solid currentColor;
-	border-radius: 5px;
-	cursor: pointer;
-}
-
 /* Application components */
 
 #wait, .loader, #wait span.text {
@@ -1160,8 +1187,8 @@ svg#volume {
 	}
 
 	nav {
-		float: right;
-		width: 38%;
+//		float: right;
+//		width: 38%;
 	}
 
 /* ============

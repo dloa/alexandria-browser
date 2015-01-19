@@ -757,7 +757,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 	} else {
 		totalResults = MaxResults;
 	}
-	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.115); // Difference between largest and smallest word based on browser font size AND number of results
+	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.25); // Difference between largest and smallest word based on browser font size AND number of results
 	currentArchiveLowercase = currentArchive.toLowerCase();
 	console.info(cloudlist);
 	var maxWeight = cloudlist[cloudlist.length-1][1];
@@ -1099,7 +1099,7 @@ function volumeBars(arch, word, interval){
 		var inverval = 7200000;
 	}
 	var w = window.innerWidth-1;
-	var h = 60;
+	var h = 80;
 	var barPadding = 1;
 	var dataset = [];	
 	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
