@@ -251,6 +251,8 @@ jQuery(document).ready(function($){
 	}
 
 	// Add New Content Interface
+	
+	// Tabs
 	$('#add-media-menu li').click(function(){
 		$(this).addClass('active').siblings().removeClass('active');
 		$('#newMedia-tabs').find('.modal-tab#'+$(this).attr("name")).show().siblings().hide();
@@ -265,6 +267,14 @@ jQuery(document).ready(function($){
 		}
 		if (activeTabName == firstTab) {
 			$('#add-media .pagination ul li.prev').hide();
+		}
+	});
+	
+	// Select Media Type
+	$('select#mediaType').change(function(){
+		var mediaType = $(this).val();
+		if(mediaType != ''){
+			console.log(mediaType);
 		}
 	});
 

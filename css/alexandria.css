@@ -150,7 +150,7 @@ header h2.sharing-ui {
 	line-height: 72px;
 	font-size: 1.6875em;
 }
-header input.search, #adv-search select {
+header input.search, .input-container select {
 	display: inline-block;
 	zoom: 1;*display:inline;
 	border-radius: 5px;
@@ -311,11 +311,11 @@ div#viewlabel .timespanLabel span {
 	border-right: 1px solid #aaaaaa;
 	padding-top: 10px;
 }
-header #adv-search input.search, #adv-search select, .timeline-control-input.alex-ui-datepicker {
+header #adv-search input.search, .input-container select, .timeline-control-input.alex-ui-datepicker {
 	padding-left: 1rem;
 	line-height: 1em;
 }
-#adv-search select {
+.input-container select {
 	background: transparent;
 	width: 100%;
 	height: 100%;
@@ -553,6 +553,12 @@ div#intro {
 	-webkit-box-sizing: border-box;
 	padding: 1em;
 }
+#add-media .container .row {
+	margin-top: 10px;
+}
+#add-media .container .row:first-child {
+	margin-top: 0;
+}
 #add-media .input-container {
 	text-align: left;
 }
@@ -603,7 +609,6 @@ div#intro {
 }
 #add-media #newMedia-tabs .tbl .row .col .input-container label {
 	display: inline;
-	cursor: pointer;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;
