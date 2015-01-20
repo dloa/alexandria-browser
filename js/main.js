@@ -1,9 +1,4 @@
 jQuery(document).ready(function($){
-	if(serverAddress == '54.172.28.195'){
-		$('#serverID').text('Dev');
-	} else {
-		$('#serverID').text('Demo');
-	}
 	$('#spritz-container').hide();
 	$('#wait').fadeIn(fadeTimer);
 	$('#disabler').fadeIn(fadeTimer);
@@ -104,13 +99,11 @@ jQuery(document).ready(function($){
 	});
 
 	// Click icon in omnibox to clear and run search
-/*
-	$('.clearSearch').click(function(){
+	$('#search .clearSearch').click(function(){
 		$(this).prev('input').val('');
 		resetArchiveList = true
 		runSearch('');
 	});	
-*/
 
 	// Advanced Search toggle
 	$('#adv-search-toggle').click(function(){
@@ -292,6 +285,22 @@ jQuery(document).ready(function($){
 		} else if ($(this).hasClass('submit')) {
 			alert("Just like that! You're a rockstar! See how easy that was?");
 		}
+	});
+
+	// API Server ID and Control
+	if(serverAddress == '54.172.28.195'){
+		$('#serverID').text('Dev');
+	} else {
+		$('#serverID').text('Demo');
+	}
+	$('#serverID').click(function(){
+		if(serverAddress == '54.172.28.195'){
+			serverAddress = 'blue.a.blocktech.com'
+			$('#serverID').text('Demo');
+		} else {
+			serverAddress = '54.172.28.195'
+			$('#serverID').text('Dev');
+		}		
 	});
 
 }); // End Document.Ready
@@ -559,7 +568,7 @@ function runSearch(searchTerm) {
 		clearModal();
 	}	
 	if (currentView.slice(0,5) == 'words') {
-	//	getArchiveWords(currentArchive, $('.search').val());
+		getArchiveWords(currentArchive, searchTerm);
 	} else {
 		getJobs(searchTerm);
 	}

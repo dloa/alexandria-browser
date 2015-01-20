@@ -321,6 +321,7 @@ header #serverID {
 	right: 40px;
 	line-height: 72px;
 	color: #979797;
+	cursor: default;
 }
 .input-container select {
 	background: transparent;
@@ -558,7 +559,13 @@ div#intro {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
-	padding: 1em;
+	padding: 1em;	
+}
+#add-media .container .tbl {
+	margin: 0;
+}
+#add-media #newMedia-net .container {
+	display: inline-block;
 }
 #add-media .container .row {
 	margin-top: 10px;
@@ -584,7 +591,7 @@ div#intro {
 	padding: 0;
 }
 #add-media #newMedia-tabs ul.newMedia-links {
-	margin-top: 1em;
+	margin: 1em 0;
 }
 #add-media #newMedia-tabs .container ul.newMedia-links {
 	margin-top: 0;
@@ -605,11 +612,14 @@ div#intro {
 	width: 50%;
 	margin-top: 1em;
 }
+#newMedia-tabs #newMedia-net .tbl {
+	width: 100%;
+}
 #newMedia-tabs .tbl .row:first-child {
 	font-weight: 600;
 }
 #newMedia-tabs .tbl .col {
-	padding-left: 5em;
+	padding: 0 1em;
 }
 #newMedia-tabs .tbl .row .col:first-child {
 	padding-left: 0;
