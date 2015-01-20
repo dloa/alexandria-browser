@@ -605,27 +605,30 @@ div#intro {
 	color: #464646;
 	cursor: pointer;
 }
-#newMedia-tabs .tbl {
+#newMedia-tabs .tblwrap {
 	display: inline-block;
 	zoom:1;*display:inline;
-	text-align: left;
-	width: 50%;
-	margin-top: 1em;
 }
-#newMedia-tabs #newMedia-net .tbl {
+#newMedia-tabs .tbl {
+	display: table;
 	width: 100%;
+	margin-top: 1em;
+	text-align: left;
 }
-#newMedia-tabs .tbl .row:first-child {
-	font-weight: 600;
+#newMedia-tabs #newMedia-notary .tblwrap .tbl {
 }
 #newMedia-tabs .tbl .col {
-	padding: 0 1em;
+	padding: 0 1em 1em;
 }
 #newMedia-tabs .tbl .row .col:first-child {
 	padding-left: 0;
 }
 #add-media #newMedia-tabs .tbl .row .col .input-container label {
 	display: inline;
+}
+#newMedia-pay .col input[type="text"] {
+	width: 3em;
+	padding: .2em .5em;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;
@@ -1199,6 +1202,9 @@ svg#volume {
 }
 .tbl .col {
 	display: table-cell;
+}
+.strong {
+	font-weight: 600;
 }
 /* BUTTONS */
 .apply-container {
