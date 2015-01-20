@@ -281,12 +281,19 @@ jQuery(document).ready(function($){
 
 }); // End Document.Ready
 
-// Default variables
+// DEFAULT VARIABLES
+
+var serverAddress = '54.172.28.195'; // Dev
+// var serverAddress = 'blue.a.blocktech.com'; // Demo
+
 var w = window.innerWidth;				
 var h = window.innerHeight-200;
+
 var datetime = new Date();
 var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];	
+
 var fadeTimer = 200;
+
 var activeJobsCache = [];
 var MaxResults;
 var newArchiveVolumeQueryStringCache = [];
@@ -619,7 +626,7 @@ function getJobs(searchTerm) {
 		$.ajax({
 			type: "POST",
 			data: queryString.toString(),
-			url: "http://54.172.28.195:3000/alexandria/v1/twitter/get/activejobs/betweenDates",
+			url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/activejobs/betweenDates",
 			success: function (e) {
 				console.log('getJobs() Ajax: get/activejobs/betweenDates ... '+searchTerm);
 				var data = $.parseJSON(e);
@@ -743,11 +750,12 @@ function getArchiveWords(arch, filterword) {
 	console.log('currentView = '+currentView);
 	$.ajax({
 		type: "POST",
-		url: "http://54.172.28.195:3000/alexandria/v1/twitter/get/archive/betweenDates/wordcloud",
+		url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/archive/betweenDates/wordcloud",
 		data: queryString.toString(),
 		success: function (e) {
 			console.log('getArchiveWords() Ajax: betweenDates/wordcloud ... '+queryString);
 			var data = $.parseJSON(e);
+			console.info(data);
 			// Load words
 			var cloudlistraw = [],i;
 			cloudlist = [];
@@ -873,7 +881,7 @@ function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 		console.log('API call: betweenDates/wordsearch/pagecount');
 		$.ajax({
 			type: "POST",
-			url: "http://54.172.28.195:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount",
+			url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount",
 			data: queryString.toString(),
 			success: function (e) {
 				console.log('wordSearch() Ajax: betweenDates/wordsearch/pagecount ... '+queryString);
@@ -929,7 +937,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 		}
 		$.ajax({
 			type: "POST",
-			url: "http://54.172.28.195:3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch",
+			url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch",
 			data: queryString.toString(),
 			success: function (e) {
 				console.log('wordSearch() Ajax: betweenDates/wordsearch ... '+queryString);
@@ -1148,7 +1156,7 @@ function volumeBars(arch, word, interval){
 	console.log('API call: get/interval/count ...');
 	$.ajax({
 		type: "POST",
-		url: "http://54.172.28.195:3000/alexandria/v1/twitter/get/interval/count",
+		url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/interval/count",
 		data: queryString.toString(),
 		success: function (e) {
 			if ( $('#footer').css('display') == 'none' ) {
