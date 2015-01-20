@@ -1,4 +1,9 @@
 jQuery(document).ready(function($){
+	if(serverAddress == '54.172.28.195'){
+		$('#serverID').text('Dev');
+	} else {
+		$('#serverID').text('Demo');
+	}
 	$('#spritz-container').hide();
 	$('#wait').fadeIn(fadeTimer);
 	$('#disabler').fadeIn(fadeTimer);
@@ -330,7 +335,7 @@ var layout = d3.layout.cloud()
 	
 var svg = d3.select("#vis").append("svg")
     .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight-193);
+    .attr("height", window.innerHeight-245);
 
 var background = svg.append("g"),
     vis = svg.append("g")

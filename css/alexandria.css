@@ -98,7 +98,6 @@ body, html { margin: 0; padding: 0;}
 body { 
 	overflow-x: hidden;
 	color: #464646;
-	border-top: 8px solid #92b4c6;
 	background-color: #ecedec;
 }
 html, button, input, select, textarea, h1, h2, h3, h4, p, text {
@@ -128,9 +127,9 @@ header {
 	left: 0;
 	width: 100%;
 	height: 72px;
+	line-height: 72px;
 	background-color: #FEFEFE;
 	z-index: 300;
-	padding: 1em;
 	box-shadow: 0 1px 3px rgba(68, 68, 68, 0.69);
 	-moz-box-shadow: 0 1px 3px rgba(68, 68, 68, 0.69);
 	text-align: center;
@@ -155,7 +154,7 @@ header input.search, .input-container select {
 	zoom: 1;*display:inline;
 	border-radius: 5px;
 	border: 1px solid #979797;
-	padding: 6px 1.2em 2px;
+	padding: 3px 1.2em;
 	outline: none;
 	width: 100%;
 	box-sizing: border-box;
@@ -215,7 +214,8 @@ div#viewlabel .timespanLabel span {
 	font-size: 1.45em;
 }
 #search > .input-container {
-	float: left;
+	display: inline-block;
+	zoom:1;*display:inline;
 	width: 78%;
 }
 #adv-search-toggle {
@@ -223,9 +223,8 @@ div#viewlabel .timespanLabel span {
 	font-size: .75em;
 	text-transform: capitalize;
 	color: #979797;
-	display: inline-block;
-	margin-top: .75em;
 	margin-left: .25em;
+	vertical-align: top;
 }
 .input-container {
 	position: relative;
@@ -251,10 +250,11 @@ div#viewlabel .timespanLabel span {
 	border: 1px solid #cdcdcd;
 	border-radius: 5px;
 	text-align: left;
+	line-height: normal;
 }
 #adv-search.abs {
 	position: absolute;
-	top: 200%;
+	top: 100%;
 	left: -8%;
 	display: none;
 }
@@ -314,6 +314,13 @@ div#viewlabel .timespanLabel span {
 header #adv-search input.search, .input-container select, .timeline-control-input.alex-ui-datepicker {
 	padding-left: 1rem;
 	line-height: 1em;
+}
+header #serverID {
+	position: absolute;
+	top: 0;
+	right: 40px;
+	line-height: 72px;
+	color: #979797;
 }
 .input-container select {
 	background: transparent;
