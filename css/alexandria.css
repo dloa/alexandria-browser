@@ -328,10 +328,14 @@ header #serverID {
 	width: 100%;
 	height: 100%;
 	padding-right: 5px;
-	font-size: .8em;
 	-webkit-appearance: none;
-	line-height: 1.75em;
 	cursor: pointer;
+	font-size: 1em;
+	line-height: 1.3em;
+}
+header .input-container select {
+	font-size: .8em;
+	line-height: 1.75em;
 }
 .alex-ui-slider.ui-slider.ui-slider-horizontal.ui-widget.ui-widget-content.ui-corner-all {
 	border-radius: 0;
