@@ -62,17 +62,17 @@ jQuery(document).ready(function($){
 			$(this).removeClass('toArchive');
 			return false;	
 		}
-		playingTimeline = true;
-		autoPlayTimeline();
+		if (playingTimeline == true){
+			autoPlayTimeline();
+		};
+		$('#search-main').val('');
+		$('.archiveLabel').fadeOut(fadeTimer);
+		$('#viewlabel .currentArchive').text('');
+		$('.sort-link').fadeOut(fadeTimer);
+		$('.view-controls .view-link').text('Cloud');
 		currentArchive = '*';
 		searchTerm = '';
 		currentView = 'archiveCloud';
-		$('.archiveLabel').fadeOut(fadeTimer);
-		$('#viewlabel .currentArchive').text('');
-		$('#search-main').val('');
-		$('.sort-link').fadeOut(fadeTimer);
-		$('.view-controls .view-link').text('Cloud');
-//		$('main').fadeOut(fadeTimer);
 		getJobs(searchTerm);
 	});
 	// Omnibox (search input)
@@ -104,7 +104,15 @@ jQuery(document).ready(function($){
 		$(this).prev('input').val('');
 		resetArchiveList = true
 		runSearch('');
-	});	
+	});
+	
+	// Intro view icon interactions
+	$('#enter-archives').click(function(){
+		currentArchive = '*';
+		searchTerm = '';
+		currentView = 'archiveCloud';
+		getJobs(searchTerm);
+	});
 
 	// Advanced Search toggle
 	$('#adv-search-toggle').click(function(){
