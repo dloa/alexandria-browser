@@ -489,6 +489,17 @@ div#intro {
 	color: #a3ccb1;
 	border-bottom: 1px solid #a3ccb1;
 }
+.links .module-icon {
+	display: inline-block;
+	zoom: 1;*display:inline;
+}
+.links .module-icon img {
+	width: 48px;
+	margin: 1.25em .75em 1em;
+}
+.links .module-icon a:hover {
+	border: 0 none transparent;
+}
 #add-media {
 	text-align: center;
 }
