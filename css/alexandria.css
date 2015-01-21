@@ -578,6 +578,7 @@ div#intro {
 }
 .exchange-wrap {
 	display: none;
+	margin: .25em 0 0;
 }
 #flo-usd.exchange-wrap {
 	display: block;

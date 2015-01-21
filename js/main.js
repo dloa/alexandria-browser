@@ -413,7 +413,8 @@ function getFLO() {
 					LTCUSD = parseFloat($('#ltc-usd span').text());
 					FLOUSD = FLOLTC*LTCUSD;
 					$('#flo-usd label').text('FLO/USD').next('span').text(FLOUSD);
-					$('span#usd-cost').text(Math.round((FLOUSD*10)*100000)/100000);
+					var FLOCost = parseFloat($('#flo-cost').text());
+					$('span#usd-cost').text(Math.round((FLOUSD*FLOCost)*100000)/100000);
 				}
 			});
 		}
@@ -1352,6 +1353,7 @@ function resizeTabs() {
 			tabHeight = thisTabHeight;
 		}
 	});
+	tabHeight = tabHeight+30;
 	$('#newMedia-tabs').css('height',tabHeight+'px');
 }
 
