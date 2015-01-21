@@ -619,6 +619,9 @@ div#intro {
 #newMedia-tabs .tbl .row.full .col {
 	padding-left: 0;
 }
+#newMedia-tabs fieldset {
+	display: none;
+}
 #add-media #newMedia-tabs .tbl .row .col .input-container label {
 	display: inline;
 }

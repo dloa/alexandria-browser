@@ -276,6 +276,7 @@ jQuery(document).ready(function($){
 		if (mediaType != '') {
 			$('fieldset#new-'+mediaType+'-meta').show();
 		}
+		resizeTabs();
 	});
 
 	$('#add-media .pagination li').click(function(){
