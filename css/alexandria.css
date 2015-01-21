@@ -529,7 +529,6 @@ div#intro {
 }
 #add-media #newMedia-tabs {
 	position: relative;
-	min-height: 36em;
 	margin: 30px 0 40px;
 }
 #add-media #newMedia-tabs .modal-tab {
@@ -1194,6 +1193,9 @@ svg#volume {
 /* TABLE LAYOUT */
 .tbl {
 	display: table;
+}
+.tbl.centered {
+	text-align: center !important;
 }
 .tbl .row {
 	display: table-row;

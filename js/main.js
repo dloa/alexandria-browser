@@ -256,6 +256,7 @@ jQuery(document).ready(function($){
 		$('#newMedia-tabs').find('.modal-tab#'+$(this).attr("name")).show().siblings().hide();
 		var activeTabName = $('#add-media-menu li.active').attr('name');
 		$('#add-media .pagination ul li').show();
+		resizeTabs();
 		var firstTab = $('#add-media-menu li:first-child').attr('name');
 		var lastTab = $('#add-media-menu li:last-child').attr('name');
 		if (activeTabName == lastTab) {
@@ -271,8 +272,8 @@ jQuery(document).ready(function($){
 	// Select Media Type
 	$('select#mediaType').change(function(){
 		var mediaType = $(this).val();
-		if(mediaType != ''){
-			$('#newMedia-info fieldset').hide();
+		$('#newMedia-info fieldset').hide();
+		if (mediaType != '') {
 			$('fieldset#new-'+mediaType+'-meta').show();
 		}
 	});
@@ -1297,15 +1298,18 @@ function spritzThis(extURL) {
 		$('#spritzer').data('controller').setUrl(extURL);
 	}
 }
-/*
-var onStartSpritzClick = function(event) {
-    var text = $('#inputText').val();
-    var locale = "en_us;";
- 
-    // Send to SpritzEngine to translate
-    SpritzClient.spritzify(text, locale, onSpritzifySuccess, onSpritzifyError);
-};
-*/
+
+/* ADD NEW CONTENT INTERFACE */
+function resizeTabs() {
+	var tabHeight = $('.modal-tab:visible').children().first().height();
+	$('.modal-tab:visible').children().each(function(){
+		var thisTabHeight = $(this).height();
+		if (thisTabHeight > tabHeight) {
+			tabHeight = thisTabHeight;
+		}
+	});
+	$('#newMedia-tabs').css('height',tabHeight+'px');
+}
 
 // URL PARSING
 function PageQuery(q) {
@@ -1524,6 +1528,7 @@ function loadShareMod() {
 	$('.twitter-archive').fadeOut(fadeTimer);
 	$('#app-shading').css('bottom',0);
 	$('.sharing-ui').fadeIn(fadeTimer);
+	resizeTabs();
 	$('#logo').addClass('toArchive');
 }
 

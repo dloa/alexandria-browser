@@ -192,12 +192,14 @@
 				</nav>
 				<div id="newMedia-tabs">
 					<div id="newMedia-media" class="modal-tab">
-						<h2>select media to share:</h2>
-						<ul class="newMedia-links">
-							<li>Browse...</li>
-							<li>From URL...</li>
-							<li>From Hash...</li>
-						</ul>
+						<div class="wrap">
+							<h2>select media to share:</h2>
+							<ul class="newMedia-links">
+								<li>Browse...</li>
+								<li>From URL...</li>
+								<li>From Hash...</li>
+							</ul>
+						</div>
 					</div>
 					<div id="newMedia-info" class="modal-tab">
 						<div class="left">
@@ -330,33 +332,37 @@
 						</div>
 					</div>
 					<div id="newMedia-net" class="modal-tab">
-						<h2>set distributed network:</h2>
-						<ul class="newMedia-links">
-							<li>Distributed Hash Table</li>
-						</ul>
-						<h3>-or-</h3>
-						<ul class="newMedia-links secondary">
-							<li>Storj.io</li>
-							<li>Filecoin</li>
-							<li>MaidSafe</li>
-						</ul>
-						<div class="container">
-							<div class="tblwrap">
-								<div class="tbl">
-									<div class="row strong">
-										<div class="col">
-											<label>Data Redundancy</label>
-										</div>
-										<div class="col">
-											<label>Cost</label>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col">
-											<input type="text" name="network-nodes" class="intInput" /> <label>nodes</label>
-										</div>
-										<div class="col">
-											$0 / year
+						<div class="tblwrap">
+							<div class="tbl centered">
+								<h2>set distributed network:</h2>
+								<ul class="newMedia-links">
+									<li>Distributed Hash Table</li>
+								</ul>
+								<h3>-or-</h3>
+								<ul class="newMedia-links secondary">
+									<li>Storj.io</li>
+									<li>Filecoin</li>
+									<li>MaidSafe</li>
+								</ul>
+								<div class="container">
+									<div class="tblwrap">
+										<div class="tbl">
+											<div class="row strong">
+												<div class="col">
+													<label>Data Redundancy</label>
+												</div>
+												<div class="col">
+													<label>Cost</label>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col">
+													<input type="text" name="network-nodes" class="intInput" /> <label>nodes</label>
+												</div>
+												<div class="col">
+													$0 / year
+												</div>
+											</div>
 										</div>
 									</div>
 								</div>
