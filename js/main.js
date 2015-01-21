@@ -828,7 +828,6 @@ function getArchiveWords(arch, filterword) {
 		success: function (e) {
 			console.log('getArchiveWords() Ajax: betweenDates/wordcloud ... '+queryString);
 			var data = $.parseJSON(e);
-			console.info(data);
 			// Load words
 			var cloudlistraw = [],i;
 			cloudlist = [];
@@ -840,7 +839,6 @@ function getArchiveWords(arch, filterword) {
 			// Sort the words array and list by volume
 			cloudlistraw.sort(function(a,b){ return a[1]>b[1]?1:-1; });
 			cloudlistraw.forEach(function(a){
-				console.info(a);
 				cloudlist.push(a[0]);
 			});
 			$('#wordsList li').sortElements(function(a, b){
@@ -881,7 +879,6 @@ function buildWordCloud(cloudlist, MaxResults) {
 	}
 	fontSizeMultiplier = ((MaxResults-totalResults)/MaxResults)+(document.emSize()[1]*.25); // Difference between largest and smallest word based on browser font size AND number of results
 	currentArchiveLowercase = currentArchive.toLowerCase();
-	console.info(cloudlist);
 	var maxWeight = cloudlist[cloudlist.length-1][1];
 	var minWeight = cloudlist[0][1];
 	layout.stop().words(cloudlist.map(function(d, i) {
@@ -1151,7 +1148,6 @@ function playTimeline() {
 			}
 		}
 	} else {
-		console.error('minVal == '+minVal+', maxVal == '+maxVal);
 		minVal = minVal+playbackDuration;
 		maxVal = maxVal+playbackDuration;
 	}
@@ -1430,7 +1426,6 @@ function displayItem(key){
 // BROWSER NAVIGATION CONTROLS
 window.onpopstate = function(event) {
 	freshLoad = false;
-	console.info("location: " + document.location + ", state: " + JSON.stringify(event.state));
 	prevStartDate = startDateValue;
 	prevEndDate = endDateValue;
 	displayItem('startDate');
@@ -1479,7 +1474,6 @@ function getLinkMeta(extURL) {
 	    type: 'GET',
 	    success: function(res) {
 	        var thisLink = $('.expanded_urls a[href="'+extURL+'"]').first();
-	        console.error(thisLink);
 	        if (!$(thisLink).hasClass('.scraped')){
 				var extContent = $(res.responseText).find().prevObject;
 				if ( $(extContent).filter('title').length > 0 ) {
@@ -1491,9 +1485,7 @@ function getLinkMeta(extURL) {
 					}
 				}
 				if(extContent.length > 0){
-					console.info(extContent);
 					var linkMeta = $(extContent).filter('meta');
-					console.info(linkMeta);
 					var ogMeta = [];
 					var twitterMeta = [];
 					$(linkMeta).each(function(i){
@@ -1551,7 +1543,6 @@ function getLinkContent(extURL) {
 	    	var extContent = $(res.responseText).find().prevObject;
 	    	extContent = extContent.find().prevObject;
 	    	var extText = $(extContent).filter('text');
-	    	console.info(extContent);
 		}
 	});
 }
