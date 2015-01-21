@@ -1540,16 +1540,17 @@ function loadShareMod() {
 }
 // Upload File
 function uploadFile(elem) {
-	// var uploader = document.getElementById('uploader');
 	var uploader = $(elem).attr('id');
 	upclick({
 		element: uploader,
 		// action: '/path_to/you_server_script.php', 
 		onstart: function(filename) {
-			alert('Start upload: '+filename);
+			// alert('Start upload: '+filename);
+			$('.'+uploader+' .media-filename').show().children('span').text(filename);
+			resizeTabs();
 		},
 		oncomplete: function(response_data) {
-			alert(response_data);
+			// alert(response_data);
 		}
 	});
 }

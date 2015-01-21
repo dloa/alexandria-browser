@@ -593,6 +593,9 @@ div#intro {
 #add-media #newMedia-tabs .container ul.newMedia-links {
 	margin-top: 0;
 }
+.uploaded-media-meta > * {
+	display: none;
+}
 #add-media #newMedia-tabs ul.newMedia-links li {
 	display: inline-block;
 	zoom: 1;*display:inline;
