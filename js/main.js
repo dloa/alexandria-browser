@@ -499,8 +499,9 @@ function draw(words, bounds) {
 		.style("font-size", function(d) { return d.size + "px"; })
 		.style("opacity", 1e-6)
 		.on("click", function(d) {
-			playingTimeline = true;
-			autoPlayTimeline();
+			if (playingTimeline == true) {
+				autoPlayTimeline();
+			}
 			$('#wait').fadeIn(fadeTimer);
 			$('#disabler').fadeIn(fadeTimer);
 			var item = d.text;
