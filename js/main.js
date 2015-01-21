@@ -249,6 +249,9 @@ jQuery(document).ready(function($){
 	}
 
 	// Add New Content Interface
+
+	// Get exchange rates
+	getFLO();
 	
 	// Tabs
 	$('#add-media-menu li').click(function(){
@@ -278,6 +281,8 @@ jQuery(document).ready(function($){
 		}
 		resizeTabs();
 	});
+	
+	// File uploader init
 	$('.uploader').each(function(){
 		uploadFile($(this));
 		$(this).click(function(){
@@ -382,6 +387,38 @@ var prevStartDate = '';
 var prevEndDate = '';
 
 var freshLoad = true;
+
+// Get crypto [cryptsy] exchange rates
+var FLOLTC;
+var LTCUSD;
+var FLOUSD;
+function getFLO() {
+	$.ajax({
+	    url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=61',
+	    type: 'GET',
+	    success: function(e) {
+			var el = $( '#sketchpad' );
+			el.html(e.responseText);
+			var data = $.parseJSON($('p', el).html());
+			$('#flo-ltc label').text(data.return.markets.FLO.label).next('span').text(data.return.markets.FLO.lasttradeprice);
+			FLOLTC = parseFloat($('#flo-ltc span').text());
+			$.ajax({
+				url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=1',
+				type: 'GET',
+				success: function(e) {
+					var el = $( '#sketchpad' );
+					el.html(e.responseText);
+					var data = $.parseJSON($('p', el).html());
+					$('#ltc-usd label').text(data.return.markets.LTC.label).next('span').text(data.return.markets.LTC.lasttradeprice);
+					LTCUSD = parseFloat($('#ltc-usd span').text());
+					FLOUSD = FLOLTC*LTCUSD;
+					$('#flo-usd label').text('FLO/USD').next('span').text(FLOUSD);
+					$('span#usd-cost').text(Math.round((FLOUSD*10)*100000)/100000);
+				}
+			});
+		}
+	});
+}
 
 // TIMELINE CHANGE
 

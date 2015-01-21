@@ -576,6 +576,15 @@ div#intro {
 #add-media .input-container label {
 	display: block;
 }
+.exchange-wrap {
+	display: none;
+}
+#flo-usd.exchange-wrap {
+	display: block;
+}
+.exchange-wrap label {
+	margin-right: .5em;
+}
 #add-media .input-container input[type="text"], #add-media .input-container textarea {
 	width: 100%;
 	box-sizing: border-box;
@@ -595,6 +604,12 @@ div#intro {
 }
 .uploaded-media-meta > * {
 	display: none;
+}
+.uploaded-media-meta label {
+	color: #464653;
+}
+input[type="file"] {
+	cursor: pointer;
 }
 #add-media #newMedia-tabs ul.newMedia-links li {
 	display: inline-block;
@@ -1374,6 +1389,9 @@ svg#volume {
 /* ==========================================================================
 	Helper classes
 	========================================================================== */
+#sketchpad {
+	display: none;
+}
 .left {
 	float: left;
 }
