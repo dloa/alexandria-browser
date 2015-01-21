@@ -278,6 +278,12 @@ jQuery(document).ready(function($){
 		}
 		resizeTabs();
 	});
+	$('.uploader').each(function(){
+		uploadFile($(this));
+		$(this).click(function(){
+			uploadFile($(this));
+		});
+	});
 
 	$('#add-media .pagination li').click(function(){
 		var activeTab = $('#add-media-menu li.active');
@@ -1531,6 +1537,21 @@ function loadShareMod() {
 	$('.sharing-ui').fadeIn(fadeTimer);
 	resizeTabs();
 	$('#logo').addClass('toArchive');
+}
+// Upload File
+function uploadFile(elem) {
+	// var uploader = document.getElementById('uploader');
+	var uploader = $(elem).attr('id');
+	upclick({
+		element: uploader,
+		// action: '/path_to/you_server_script.php', 
+		onstart: function(filename) {
+			alert('Start upload: '+filename);
+		},
+		oncomplete: function(response_data) {
+			alert(response_data);
+		}
+	});
 }
 
 // ERROR CONNECTING TO LIBRARIAN
