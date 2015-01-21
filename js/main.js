@@ -59,6 +59,7 @@ jQuery(document).ready(function($){
 			$('.sharing-ui').fadeOut(fadeTimer);
 			$('#intro').fadeIn(fadeTimer);
 			$('.twitter-archive').fadeIn(fadeTimer);
+			$('#search').fadeIn(fadeTimer);
 			$('#app-shading').css('bottom','60px');
 			$(this).removeClass('toArchive');
 			return false;	
