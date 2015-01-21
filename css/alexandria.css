@@ -529,7 +529,7 @@ div#intro {
 }
 #add-media #newMedia-tabs {
 	position: relative;
-	min-height: 24.46em;
+	min-height: 36em;
 	margin: 30px 0 40px;
 }
 #add-media #newMedia-tabs .modal-tab {
@@ -567,19 +567,13 @@ div#intro {
 #add-media #newMedia-net .container {
 	display: inline-block;
 }
-#add-media .container .row {
-	margin-top: 10px;
-}
-#add-media .container .row:first-child {
-	margin-top: 0;
-}
 #add-media .input-container {
 	text-align: left;
 }
 #add-media .input-container label {
 	display: block;
 }
-#add-media .input-container input[type="text"] {
+#add-media .input-container input[type="text"], #add-media .input-container textarea {
 	width: 100%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -618,17 +612,22 @@ div#intro {
 #newMedia-tabs #newMedia-notary .tblwrap .tbl {
 }
 #newMedia-tabs .tbl .col {
-	padding: 0 1em 1em;
+	padding: 0 0 1em 1em;
 }
 #newMedia-tabs .tbl .row .col:first-child {
+	padding-left: 0;
+}
+#newMedia-tabs .tbl .row.full .col {
 	padding-left: 0;
 }
 #add-media #newMedia-tabs .tbl .row .col .input-container label {
 	display: inline;
 }
-#newMedia-pay .col input[type="text"] {
-	width: 3em;
+#add-media #newMedia-tabs input[type="text"] {
 	padding: .2em .5em;
+}
+.intInput, #add-media #newMedia-pay .col input[type="text"] {
+	width: 3em;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;
@@ -1200,8 +1199,14 @@ svg#volume {
 	display: table-row;
 	width: 100%;
 }
+.tbl .row.full {
+	display: table;
+}
 .tbl .col {
 	display: table-cell;
+}
+.tbl .row.full .col {
+	padding: 0;
 }
 .strong {
 	font-weight: 600;

@@ -272,7 +272,8 @@ jQuery(document).ready(function($){
 	$('select#mediaType').change(function(){
 		var mediaType = $(this).val();
 		if(mediaType != ''){
-			console.log(mediaType);
+			$('#newMedia-info fieldset').hide();
+			$('fieldset#new-'+mediaType+'-meta').show();
 		}
 	});
 
