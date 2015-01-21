@@ -51,6 +51,7 @@ jQuery(document).ready(function($){
 			clearModal();
 		}
 		if($(this).hasClass('toArchive')){
+			currentView = 'archiveCloud';
 			var hasVolumeBars = $('svg#volume');
 			if(hasVolumeBars.length==0){
 				volumeBars('*', '', 7200000);
@@ -1360,7 +1361,6 @@ function resizeTabs() {
 			tabHeight = thisTabHeight;
 		}
 	});
-	tabHeight = tabHeight+30;
 	$('#newMedia-tabs').css('height',tabHeight+'px');
 }
 
@@ -1570,11 +1570,25 @@ function resetInterface() {
 	}
 }
 
-// Share New Content Module
-function loadShareMod() {
+// Hide Twitter Archives UI
+function hideArchivesUI() {
 	$('#intro').fadeOut(fadeTimer);
 	$('.twitter-archive').fadeOut(fadeTimer);
 	$('#app-shading').css('bottom',0);
+}
+
+// Podcasts View
+function loadPodcasts() {
+	currentView = 'podcastContent';
+	hideArchivesUI();
+	$('#logo').addClass('toArchive');
+}
+
+// Share New Content Module
+function loadShareMod() {
+	currentView = 'addNewContent';
+	$('#search').fadeOut(fadeTimer);
+	hideArchivesUI();
 	$('.sharing-ui').fadeIn(fadeTimer);
 	resizeTabs();
 	$('#logo').addClass('toArchive');
