@@ -67,6 +67,7 @@ jQuery(document).ready(function($){
 		currentArchive = '*';
 		searchTerm = '';
 		currentView = 'archiveCloud';
+		$('.archiveLabel').fadeOut(fadeTimer);
 		$('#viewlabel .currentArchive').text('');
 		$('#search-main').val('');
 		$('.sort-link').fadeOut(fadeTimer);
@@ -530,6 +531,7 @@ function draw(words, bounds) {
 				volumeBars(currentArchive, activeWord, 7200000);
 			} else {
 				currentArchive = item;
+				$('.archiveLabel').fadeIn(fadeTimer);
 				$('#viewlabel .currentArchive').text(currentArchive);
 				searchTerm = currentArchive;
 				currentView = 'wordsCloud';

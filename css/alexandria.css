@@ -198,6 +198,9 @@ div#viewlabel {
 div#viewlabel div {
 	margin: 0 0 .25em;
 }
+div#viewlabel .archiveLabel {
+	display: none;
+}
 div#viewlabel .currentArchive {
 	color: #92b4c6;
 	text-transform: capitalize;
