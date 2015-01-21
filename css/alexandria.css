@@ -191,8 +191,8 @@ div#viewlabel {
 	left: 32px;
 	z-index: 100;
 	color: #a8a8a8;
-	font-size: 22px;
-	font-size: 1.375rem;
+	font-size: 16px;
+	font-size: 1rem;
 	line-height: 1;
 }
 div#viewlabel div {
@@ -459,7 +459,7 @@ div#intro {
 	display: none;
 	position: fixed;
 	width: 100%;
-	top: 42%;
+	top: 33%;
 	z-index:100;
 	text-align: center;
 }
@@ -492,13 +492,20 @@ div#intro {
 .links .module-icon {
 	display: inline-block;
 	zoom: 1;*display:inline;
+	line-height: 2em;
+}
+.links .module-icon a {
+	display: inline-block;
+	margin: 1em 1em 2em;
+	padding: 1em;
+	font-size: 16px;
+	font-size: 1rem;
+}
+.links .module-icon a:hover {
+	border-bottom: 1px solid transparent;
 }
 .links .module-icon img {
 	width: 48px;
-	margin: 1.25em .75em 1em;
-}
-.links .module-icon a:hover {
-	border: 0 none transparent;
 }
 #add-media {
 	text-align: center;
