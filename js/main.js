@@ -56,6 +56,7 @@ jQuery(document).ready(function($){
 			if(hasVolumeBars.length==0){
 				volumeBars('*', '', 7200000);
 			}
+			$('main').fadeOut(fadeTimer);
 			$('.sharing-ui').fadeOut(fadeTimer);
 			$('#intro').fadeIn(fadeTimer);
 			$('.twitter-archive').fadeIn(fadeTimer);
@@ -336,7 +337,7 @@ var serverAddress = '54.172.28.195'; // Dev
 // var serverAddress = 'blue.a.blocktech.com'; // Demo
 
 var w = window.innerWidth;				
-var h = window.innerHeight-200;
+var h = window.innerHeight-245;
 
 var datetime = new Date();
 var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];	
@@ -360,7 +361,7 @@ var cloudlist = [],
 var fontSizeMultiplier;
 var layout = d3.layout.cloud()
 	.timeInterval(10)
-	.size([window.innerWidth, window.innerHeight-193])
+	.size([window.innerWidth, window.innerHeight-245])
 	.rotate(0)
 	.font("Avenir-Book")
 	.fontSize(function(d) { return d.size; })
@@ -373,7 +374,7 @@ var svg = d3.select("#vis").append("svg")
 
 var background = svg.append("g"),
     vis = svg.append("g")
-    .attr("transform", "translate(" + [window.innerWidth >> 1, window.innerHeight-200 >> 1] + ")");
+    .attr("transform", "translate(" + [window.innerWidth >> 1, window.innerHeight-245 >> 1] + ")");
 
 var currentView = 'archiveCloud';
 var currentArchive = '*';
@@ -1576,13 +1577,14 @@ function hideArchivesUI() {
 	$('#intro').fadeOut(fadeTimer);
 	$('.twitter-archive').fadeOut(fadeTimer);
 	$('#app-shading').css('bottom',0);
+	$('#logo').addClass('toArchive');
 }
 
-// Podcasts View
-function loadPodcasts() {
-	currentView = 'podcastContent';
+// Recemt Media View
+function loadRecentMedia() {
+	currentView = 'recentMediaList';
 	hideArchivesUI();
-	$('#logo').addClass('toArchive');
+	$('#browse-media').fadeIn(fadeTimer);
 }
 
 // Share New Content Module
@@ -1592,7 +1594,6 @@ function loadShareMod() {
 	hideArchivesUI();
 	$('.sharing-ui').fadeIn(fadeTimer);
 	resizeTabs();
-	$('#logo').addClass('toArchive');
 }
 // Upload File
 function uploadFile(elem) {

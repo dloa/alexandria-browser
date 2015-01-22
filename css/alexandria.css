@@ -466,63 +466,78 @@ div#intro {
 #intro h1 {
 	margin: 0 0 .5em;
 }
-#intro ul, #intro ul li {
+#intro ul, #intro ul li, .module-links ul, .module-links ul li {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
-#intro .links {
+#intro .links, .module-links {
 	font-size: 22px;
 	font-size: 1.375rem;
 }
-.links a {
+.links a, .module-links a {
 	color: #9da2cf;
 	text-decoration: none;
 	transition: all 1s ease;
 	-moz-transition: all 1s ease;
 	-webkit-transition: all 1s ease;
 	-o-transition: all 1s ease;
-	border-bottom: 1px solid transparent;
 	cursor: pointer;
 }
-.links a:hover {
+.links a:hover, .module-links a:hover {
 	color: #a3ccb1;
-	border-bottom: 1px solid #a3ccb1;
 }
-.links .module-icon {
+.links .module-icon, .module-links li {
 	display: inline-block;
 	zoom: 1;*display:inline;
 	line-height: 2em;
 }
-.links .module-icon a {
+.links .module-icon a, .module-links li a {
 	display: inline-block;
-	margin: 1em 1em 2em;
+	margin: 1em 0 2em;
 	padding: 1em;
 	font-size: 16px;
 	font-size: 1rem;
 }
-.links .module-icon a:hover {
-	border-bottom: 1px solid transparent;
-}
-.links .module-icon .imgwrap {
+.links .module-icon .imgwrap, .module-links li .imgwrap {
 	border: 1px solid currentColor;
 	width: 48px;
 	height: 48px;
 	padding: 20px;
 	border-radius: 48px;
+	line-height: 1;
+	display: inline-block;
 }
-.links .module-icon .imgwrap img {
+.module-links.mod-filter li .imgwrap, #browse-media-wrap .row .media-icon {
+	width: 24px;
+	height: 24px;
+	padding: 10px;
+	border-radius: 24px;
+}
+.links .module-icon .imgwrap img, .module-links li .imgwrap img {
 	width: 100%;
 	height: 100%;
 }
-#add-media {
-	text-align: center;
-}
-#add-media > * {
+#browse-media-wrap, #add-media > * {
 	width: 98%;
 	display: inline-block;
 	zoom: 1;*display:inline;
 	max-width: 880px;
+}
+#browse-media-wrap * {
+	text-align: left;
+}
+#browse-media-wrap .row > * {
+	display: inline-block;
+	margin: 0 0 0 .5em;
+}
+#browse-media-wrap .row .media-icon {
+	width: 24px;
+	padding: .5em;
+}
+/* ADD MEDIA INTERFACE */
+#add-media {
+	text-align: center;
 }
 #add-media-container {
 	border: 4px solid #979797;
@@ -809,8 +824,8 @@ div#lightbox img {
 
 main.wordCloud {
 	color: #000000;
-	bottom: 60px;
-	top: 93px;
+	bottom: 90px;
+	top: 120px;
 	position: fixed;
 }
 main.wordCloud#vis {
