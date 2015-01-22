@@ -1597,7 +1597,7 @@ function loadRecentMedia() {
 function loadMediaView(mediaType) {
 	console.log(mediaType);
 	$('main').fadeOut(fadeTimer);
-	$('#view-media').children().hide();
+	$('#view-media .entity-view').hide();
 	$('#view-media').fadeIn(fadeTimer);
 	$('#media-view-'+mediaType).fadeIn(fadeTimer);
 }
