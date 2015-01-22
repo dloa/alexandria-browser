@@ -494,10 +494,12 @@ div#intro {
 }
 .links .module-icon a, .module-links li a {
 	display: inline-block;
-	margin: 1em 0 2em;
-	padding: 1em;
+	margin: 1em 1em 0;
 	font-size: 16px;
 	font-size: 1rem;
+}
+.links .module-icon a {
+	margin-bottom: 2em;
 }
 .links .module-icon .imgwrap, .module-links li .imgwrap {
 	border: 1px solid currentColor;
@@ -518,14 +520,24 @@ div#intro {
 	width: 100%;
 	height: 100%;
 }
+#browse-media {
+	padding-top: 10px;
+}
 #browse-media-wrap, #add-media > * {
 	width: 98%;
 	display: inline-block;
 	zoom: 1;*display:inline;
 	max-width: 880px;
 }
-#browse-media-wrap * {
+#browse-media-wrap > * {
 	text-align: left;
+}
+#browse-media-wrap .row {
+	padding: .25em 0;
+}
+#browse-media-wrap .row.first {
+	padding-top: .75em;
+	border-top: 1px solid #979797;
 }
 #browse-media-wrap .row > * {
 	display: inline-block;
@@ -534,6 +546,12 @@ div#intro {
 #browse-media-wrap .row .media-icon {
 	width: 24px;
 	padding: .5em;
+}
+#browse-media-wrap .row .media-title {
+	cursor: pointer;
+}
+#browse-media-wrap .row .media-meta, #browse-media-wrap .row .media-runtime {
+	color: #9797a0;
 }
 /* ADD MEDIA INTERFACE */
 #add-media {

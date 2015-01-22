@@ -1585,6 +1585,7 @@ function loadRecentMedia() {
 	currentView = 'recentMediaList';
 	hideArchivesUI();
 	$('#browse-media').fadeIn(fadeTimer);
+	$('#browse-media-wrap .row').first().addClass('first');
 }
 
 // Share New Content Module
