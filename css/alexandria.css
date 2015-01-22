@@ -540,8 +540,9 @@ div#intro {
 	border-top: 1px solid #979797;
 }
 #browse-media-wrap .row > * {
-	display: inline-block;
 	margin: 0 0 0 .5em;
+	display: inline-block;
+	vertical-align: middle;
 }
 #browse-media-wrap .row .media-icon {
 	width: 24px;
@@ -552,6 +553,13 @@ div#intro {
 }
 #browse-media-wrap .row .media-meta, #browse-media-wrap .row .media-runtime {
 	color: #9797a0;
+	font-size: .85em;
+}
+#view-media {
+	padding-top: 48px;
+}
+#view-media > div {
+	display: none;
 }
 /* ADD MEDIA INTERFACE */
 #add-media {

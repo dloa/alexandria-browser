@@ -313,6 +313,12 @@ jQuery(document).ready(function($){
 		}
 	});
 
+	// Recent Media Interaction
+	$('.media-entity').click(function(){
+		var thisMediaType = $(this).attr('media-type');
+		loadMediaView(thisMediaType);
+	});
+
 	// API Server ID and Control
 	if(serverAddress == '54.172.28.195'){
 		$('#serverID').text('Dev');
@@ -1580,14 +1586,21 @@ function hideArchivesUI() {
 	$('#logo').addClass('toArchive');
 }
 
-// Recemt Media View
+// Recent Media View
 function loadRecentMedia() {
 	currentView = 'recentMediaList';
 	hideArchivesUI();
 	$('#browse-media').fadeIn(fadeTimer);
 	$('#browse-media-wrap .row').first().addClass('first');
 }
-
+// Load Media Page
+function loadMediaView(mediaType) {
+	console.log(mediaType);
+	$('main').fadeOut(fadeTimer);
+	$('#view-media').children().hide();
+	$('#view-media').fadeIn(fadeTimer);
+	$('#media-view-'+mediaType).fadeIn(fadeTimer);
+}
 // Share New Content Module
 function loadShareMod() {
 	currentView = 'addNewContent';
