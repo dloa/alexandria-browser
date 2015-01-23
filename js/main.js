@@ -131,7 +131,7 @@ jQuery(document).ready(function($){
 			}
 		}
 		if ( ( (!$(e.target).hasClass('settings-icon')) && (!$(e.target).parents('#timeline-settings')[0]) ) || ($(e.target).hasClass('applybtn')) ) {
-			if($('#timeline-settings').css('display') == 'block') {
+			if ( ($('#timeline-settings').css('display') == 'block') && ($('#timeline-settings').css('opacity')==1) ) {
 				$('#timeline-settings').fadeToggle(fadeTimer);
 			}
 		}
@@ -247,7 +247,7 @@ jQuery(document).ready(function($){
 		autoPlayTimeline();
 	});
 	$('#footer .settings-icon').click(function(){
-		$('#timeline-settings').fadeToggle(fadeTimer);
+		$('#timeline-settings').fadeIn(fadeTimer);
 	});
 	$(window).scroll(function(){
 		if($('#tweetListView').css('display') == 'block') {

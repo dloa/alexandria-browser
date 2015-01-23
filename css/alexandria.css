@@ -414,6 +414,7 @@ span.ui-slider-handle.ui-state-default.ui-corner-all {
 	bottom: 70px;
 	left: 20px;
 	z-index: 500;
+	color:#979797;
 }
 #timeline-controls div {
 	display: inline;
@@ -540,6 +541,24 @@ div#intro {
 .imgwrap svg path, .media-icon svg path {	
 	fill: currentcolor;
 	fill-opacity: 1;
+}
+.module-links.mod-filter a {
+	color:#979797;
+}
+.module-links.mod-filter a:hover {
+	color:#797979;
+}
+.module-links.mod-filter li .imgwrap {
+	border-color: #979797;
+}
+.module-links.mod-filter li .imgwrap:hover {
+	border-color: #797979;
+}
+.module-links.mod-filter li .imgwrap svg path {
+	color: #979797;
+}
+.module-links.mod-filter li .imgwrap:hover svg path {
+	fill: #797979;
 }
 .media-rating img {
 	margin: 0;
