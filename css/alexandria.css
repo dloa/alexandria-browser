@@ -198,6 +198,12 @@ div#viewlabel {
 div#viewlabel div {
 	margin: 0 0 .25em;
 }
+.view-media-ui {
+	display: none;
+}
+div#viewlabel a {
+	cursor: pointer;
+}
 div#viewlabel .archiveLabel {
 	display: none;
 }
@@ -609,7 +615,7 @@ div#intro {
 	display: block;
 }
 .row.entity-meta-header {
-	margin-top: 1em;
+	margin-top: .75em;
 }
 .entity-meta-header *, .row.entity-footer > * {
 	margin: 0 .25em;
@@ -632,8 +638,12 @@ div#intro {
 .entity-meta-header img {
 	height: 32px;
 }
-.entity-view .pull-right video, .entity-view .pull-right audio {
+.entity-view .pull-right video {
 	margin-top: 20px;
+}
+.entity-view .pull-right audio {
+	width: 60%;
+	margin: 0 0 0 .5em;
 }
 .entity-view .left {
 	width: 31%;

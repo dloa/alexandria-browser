@@ -132,12 +132,17 @@
 
 		<!-- Twitter Archives -->
 
-		<div id="viewlabel" class="twitter-archive">
-			<div class="archiveLabel">
-				Twitter Archive: <span class="currentArchive"></span>
+		<div id="viewlabel">
+			<div class="view-media-ui">
+				<a onclick="loadRecentMedia()" class="go-back">back</a>
 			</div>
-			<div class="timespanLabel">
-				Timeline: <span class="currentStartTime"></span> to <span class="currentEndTime"></span>
+			<div class="twitter-archive">
+				<div class="archiveLabel">
+					Twitter Archive: <span class="currentArchive"></span>
+				</div>
+				<div class="timespanLabel">
+					Timeline: <span class="currentStartTime"></span> to <span class="currentEndTime"></span>
+				</div>
 			</div>
 		</div>
 
@@ -534,10 +539,10 @@
 			<div id="browse-media-wrap">
 				<h2>Browse</h2>
 				<div class="row media-entity" media-type="podcast">
-					<div class="media-icon"><img src="img/podcast-icon.svg" class="load-entity"/></div><h3 class="media-title load-entity">Sovryn Tech</h3> <div class="media-meta load-entity">episode 0106: Decentralized Foursome</div> <div class="media-runtime">Runtime: <span>02:26:03</span></div> <div class="media-rating"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon">info</a><a class="playbtn-icon load-entity">play</a>
+					<div class="media-icon"><img src="img/podcast-icon.svg" class="load-entity"/></div><h3 class="media-title load-entity">Sovryn Tech</h3> <div class="media-meta load-entity">episode 0106: Decentralized Foursome</div> <div class="media-runtime">Runtime: <span>02:26:03</span></div> <div class="media-rating"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon load-entity">info</a><a class="playbtn-icon load-entity">play</a>
 				</div>
 				<div class="row media-entity" media-type="movie">
-					<div class="media-icon"><img src="img/movie-icon.svg" class="load-entity" /></div><h3 class="media-title load-entity">Apocalypse, CA</h3><div class="media-meta">(2011)</div> <div class="media-runtime">Runtime: <span>02:17:00</span></div> <div class="media-rating"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon">info</a><a class="playbtn-icon load-entity">play</a>
+					<div class="media-icon"><img src="img/movie-icon.svg" class="load-entity" /></div><h3 class="media-title load-entity">Apocalypse, CA</h3><div class="media-meta">(2011)</div> <div class="media-runtime">Runtime: <span>02:17:00</span></div> <div class="media-rating"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon load-entity">info</a><a class="playbtn-icon load-entity">play</a>
 					<div class="media-embed-wrap">
 					</div>
 				</div>
@@ -581,7 +586,9 @@
 						<h2>Sovryn Tech</h2>
 						<h3>Episode 0106</h3>
 						<div class="row">Posted on January 3, 2015 &bull; Technology &bull; Runtime: <span>02:26:03</span></div>
-						<div class="row">*****</div>
+						<div class="row entity-meta-header">
+							<span class="media-rating"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></span>
+						</div>
 						<div class="row entity-meta">
 							<p>A rare Sovryn Tech foursome! You've got to hear this!</p>
 							<p>Special Guest: -- Paige Peterson (twitter: @ioptio), Dr. Stephanie Murphy (twitter: @S_Murphy_Phd), Ryan Taylor (twitter: @RY4NT4YLOR)</p>
@@ -590,8 +597,8 @@
 						</div>
 						<div class="row entity-footer">
 							<a class="share-icon">share</a> <a class="tip-icon">tip</a>
+							<audio controls> <source src="http://10.0.100.136:8889/" type="audio/mpeg" /> </audio>
 						</div>
-						<audio controls> <source src="http://10.0.100.136:8889/" type="audio/mpeg" /> </audio>
 					</div>
 				</div>
 			</div>

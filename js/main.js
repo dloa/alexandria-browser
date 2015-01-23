@@ -1614,13 +1614,17 @@ function hideArchivesUI() {
 // Recent Media View
 function loadRecentMedia() {
 	currentView = 'recentMediaList';
+	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
+	$('.view-media-ui').fadeOut(fadeTimer);
 	$('#browse-media').fadeIn(fadeTimer);
 	$('#browse-media-wrap .row').first().addClass('first');
 }
 // Load Media Page
 function loadMediaView(mediaType) {
+	currentView = 'mediaEntity';
 	$('main').fadeOut(fadeTimer);
+	$('.view-media-ui').fadeIn(fadeTimer);
 	$('#view-media .entity-view').hide();
 	$('#view-media').fadeIn(fadeTimer);
 	$('#media-view-'+mediaType).fadeIn(fadeTimer);
