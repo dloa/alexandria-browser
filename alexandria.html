@@ -15,7 +15,7 @@
 		<link rel="stylesheet" href="js/vendor/spritz/spritz.min.css">
 		<link rel="stylesheet" href="css/alexandria.css">
 		<script type="text/javascript">
-//			var serverAddress = '54.172.28.195'; // Dev
+			// var serverAddress = '54.172.28.195'; // Dev
 			// var serverAddress = 'blue.a.blocktech.com'; // Demo
 			var SpritzSettings = {
 				clientId: "bca1146a623ec3d99",
@@ -538,6 +538,8 @@
 				</div>
 				<div class="row media-entity" media-type="movie">
 					<div class="media-icon"><img src="img/movie-icon.svg" /></div><h3 class="media-title">Apocalypse, CA</h3><div class="media-meta">(2011)</div> <div class="media-runtime">Runtime: <span>02:17:00</span></div> <div class="media-rating">*****</div> <a class="media-info">info</a><a class="media-playbtn">play</a>
+					<div class="media-embed-wrap">
+					</div>
 				</div>
 			</div>
 		</main>
@@ -546,22 +548,28 @@
 		<main id="view-media">
 			<div id="view-media-wrap">
 				<div id="media-view-movie" class="entity-view">
+					<!-- <video controls> <source src="http://10.0.100.136:8888/" type="video/mp4" /> </video> -->
+					<div style="clear:both"></div>
 					<div class="left">
 						<img src="img/Apocalypse-CA-poster.jpg" />
 					</div>
 					<div class="pull-right">
 						<h2>Apocalypse, CA</h2>
 						<div class="row">2011 &bull; Sci-Fi &amp; Comedy &bull; Runtime: <span>02:17:00</span></div>
-						<div class="row">*****</div>
+						<div class="row entity-meta-header">
+							<span class="media-stars"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></span>
+							<a href="http://www.rottentomatoes.com/m/apocalypse_ca/" target="_blank"><img src="img/rotton-tomatos-fresh.svg" width="32" /><label>86%</label></a>
+							<a href="http://www.imdb.com/title/tt1273193/" target="_blank"><img src="img/imdb-button.png" height="32" /></a>
+						</div>
 						<div class="row entity-meta">
-							<p>Wry, cynical and full of off-beat humor, "Apocalupse, CA" is the story of friends as they prepare for certain death at the hands of a massive asteroid, sex-inducing drugs, a three-hundred-foot Giant, and a horde of other absurd problems.</p>
+							<p>Wry, cynical and full of off-beat humor, "Apocalypse, CA" is the story of friends as they prepare for certain death at the hands of a massive asteroid, sex-inducing drugs, a three-hundred-foot Giant, and a horde of other absurd problems.</p>
 							<p>
 								Director: Chad Peters<br />
 								Starring: Nick Mathis, Erin Bodine, Anne McDaniels, Alexander Cardinale
 							</p>
 						</div>
 						<div class="row entity-footer">
-							[trailer] [watch] [720_._1080] [share] [tip]
+							<a class="wsite-button lightboxVideo" data-source="http://10.0.100.136:8888/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label> <span class="sep"></span> <a class="share-icon">share</a> <a class="tip-icon">tip</a>
 						</div>
 					</div>
 				</div>
@@ -581,8 +589,9 @@
 							-- Update on MaidSafe, Update on Alexandria, Thoughts on Social Media, Bluetooth Remote Vibrator, Thoughts on AR/VR, GPL</p>
 						</div>
 						<div class="row entity-footer">
-							[play] [share] [tip]
+							<a class="wsite-button">play</a> <span class="sep"></span> <a class="share-icon">share</a> <a class="tip-icon">tip</a>
 						</div>
+						<audio controls> <source src="http://10.0.100.136:8889/" type="audio/mpeg" /> </audio>
 					</div>
 				</div>
 			</div>

@@ -313,10 +313,31 @@ jQuery(document).ready(function($){
 		}
 	});
 
-	// Recent Media Interaction
+	// Recent Media interaction
 	$('.media-entity').click(function(){
 		var thisMediaType = $(this).attr('media-type');
 		loadMediaView(thisMediaType);
+	});
+	
+	// Alexandria Theme UI interactions
+	$('.alex-switch').click(function(){
+		$(this).toggleClass('switched-on');
+	});
+	
+	// Media Entity view interactions
+	$('.lightboxVideo').click(function(){
+		var videoSRC = $(this).attr('data-source');
+		var videoEmbed = '<video controls> <source src="'+ videoSRC +'" type="video/mp4" /> </video>';
+		$('#lightbox').children().remove();
+		$('#lightbox').show();
+		$('#lightbox').append(videoEmbed);
+		$('#lightbox video').css('width','80%');
+		var vidContentWidth = $('#lightbox video').width();
+		var vidContentHeight = $('#lightbox video').height();
+		$('#lightbox video').css({
+			'top': (window.innerHeight-vidContentHeight)/2+'px',
+			'left': (window.innerWidth-vidContentWidth)/2+'px'
+		});		
 	});
 
 	// API Server ID and Control

@@ -523,6 +523,25 @@ div#intro {
 	width: 100%;
 	height: 100%;
 }
+.media-stars img {
+	margin: 0;
+}
+/* MEDIA UI */
+.share-icon {
+	background: url('../img/share-icon.svg') no-repeat center center transparent;
+	background-size: contain;
+	color: transparent;
+	cursor: pointer;
+}
+.tip-icon {
+	width: 32px;
+	height: 32px;
+	border: 2px solid currentColor;
+	border-radius: 32px;
+	text-align: center;
+	line-height: 32px;
+	cursor: pointer;
+}
 #browse-media {
 	padding-top: 10px;
 }
@@ -538,6 +557,9 @@ div#intro {
 #browse-media-wrap .row {
 	padding: .25em 0;
 }
+#browse-media-wrap .row.media-entity {
+	cursor: pointer;
+}
 #browse-media-wrap .row.first {
 	padding-top: .75em;
 	border-top: 1px solid #979797;
@@ -551,9 +573,6 @@ div#intro {
 	width: 24px;
 	padding: .5em;
 }
-#browse-media-wrap .row .media-title {
-	cursor: pointer;
-}
 #browse-media-wrap .row .media-meta, #browse-media-wrap .row .media-runtime {
 	color: #9797a0;
 	font-size: .85em;
@@ -561,14 +580,55 @@ div#intro {
 
 /* MEDIA ENTITY VIEW */
 #view-media {
-	padding-top: 48px;
+	padding: 48px 0;
 }
 .entity-view {
 	display: none;
 	text-align: left;
 }
+.entity-view video, .entity-view audio {
+	width: 100%;
+	margin: 0 auto 40px;
+	display: block;
+}
+.row.entity-meta-header {
+	margin-top: 1em;
+}
+.entity-meta-header *, .row.entity-footer > * {
+	margin: 0 .25em;
+	display: inline-block;
+	vertical-align: middle;
+}
+.entity-meta-header :first-child, .row.entity-footer :first-child {
+	margin-left: 0;
+}
+.entity-meta-header a {
+	text-decoration: none;
+	color: inherit;
+}
+.entity-meta-header .sep {
+	width: .5em;
+}
+.entity-meta-header img {
+	height: 32px;
+}
+.entity-view .pull-right video, .entity-view .pull-right audio {
+	margin-top: 20px;
+}
 .entity-view .left {
 	width: 31%;
+}
+.row.entity-footer {
+	margin-top: 4em;
+}
+.row.entity-footer .alex-switch {
+	margin: 0;
+}
+.row.entity-footer .sep {
+	width: 3em;
+}
+.row.entity-footer .share-icon {
+	height: 38px;
 }
 /* TEMPORARY!!! */
 .entity-view .left img {
@@ -842,7 +902,7 @@ div#lightbox {
 	text-align: center;
 	background-color: rgba(150,150,150,.45);
 }
-div#lightbox img {
+div#lightbox * {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -850,6 +910,9 @@ div#lightbox img {
 	-moz-box-shadow: .2em .2em .5em rgba(20,20,20,.5);
 	-webkit-box-shadow: .2em .2em .5em rgba(20,20,20,.5);
 	border: 1px solid #646464;
+}
+div#lightbox video {
+	background-color:#000;
 }
 .archive-volume {
 	background-color: #e0e0e0;
@@ -1374,6 +1437,19 @@ svg#volume {
 .wsite-button:hover, .wsite-button.secondary:hover {
 	background: #242424;
 	color:#fff;
+}
+/* SWITCHES */
+.alex-switch {
+	width:54px;
+	height:32px;
+	background: url('../img/switch.svg') no-repeat center center transparent;
+	background-size: contain !important;
+	display: inline-block;
+	vertical-align: middle;
+	cursor: pointer;
+}
+.alex-switch.switched-on {
+	background: url('../img/switch-2.svg') no-repeat center center transparent;
 }
 
 /* ==========================================================================
