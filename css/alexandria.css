@@ -177,12 +177,20 @@ header input.search:focus{
 	top: 3px;
 	left: 32px;
 	z-index: 10;
-	background: url(../img/logo.svg) left bottom / 55px auto no-repeat;
+//	background: url(../img/logo.svg) left bottom / 55px auto no-repeat;
 	text-align: center;
 	font: 2em "Avenir-Medium";
 	margin-left: -1px;
 	margin-top: 6px;
 	cursor: pointer;
+}
+#logo img, #logo svg {
+	width: 100%;
+	height: 100%;
+}
+#logo svg path {
+	fill: #979797;
+	fill-opacity: 1;
 }
 div#viewlabel {
 	display: none;
@@ -499,7 +507,7 @@ div#intro {
 .links .module-icon, .module-links li {
 	display: inline-block;
 	zoom: 1;*display:inline;
-	line-height: 2em;
+	line-height: 2;
 }
 .links .module-icon a, .module-links li a {
 	display: inline-block;
@@ -525,9 +533,13 @@ div#intro {
 	padding: 10px;
 	border-radius: 24px;
 }
-.links .module-icon .imgwrap img, .module-links li .imgwrap img {
+.links .module-icon .imgwrap img, .module-links li .imgwrap img, .imgwrap svg, .media-icon svg {
 	width: 100%;
 	height: 100%;
+}
+.imgwrap svg path, .media-icon svg path {	
+	fill: currentcolor;
+	fill-opacity: 1;
 }
 .media-rating img {
 	margin: 0;
@@ -586,20 +598,23 @@ div#intro {
 	color: #9797a0;
 	font-size: .85em;
 }
-#browse-media-wrap .row .media-rating img {
+#browse-media-wrap .row .media-rating img, #browse-media-wrap .row .media-rating svg {
+	width: 26px;
 	height: 24px;
 }
 .playbtn-icon, .info-icon {
+	width: 24px;
+	height: 24px;	
 	color: transparent;
 	cursor: pointer;	
 }
-.info-icon {
-	background: url('../img/info-icon.svg') no-repeat center center transparent;
-	background-size: contain;
+.info-icon img, .info-icon svg, .playbtn-icon img, .playbtn-icon svg {
+	width: 100%;
+	height: 100%;
 }
-.playbtn-icon {
-	background: url('../img/play-icon-small.svg') no-repeat center center transparent;
-	background-size: contain;
+.info-icon svg path, .playbtn-icon svg path {
+	fill: #979797;
+	fill-opacity: 1;
 }
 /* MEDIA ENTITY VIEW */
 #view-media {
@@ -1125,7 +1140,6 @@ section#timeline {
 #footer .playbtn, .settings-icon {
 	position: absolute;
 	color: transparent;
-	text-indent: -9999px;
 	cursor: pointer;
 }
 #footer .playbtn {
@@ -1134,18 +1148,27 @@ section#timeline {
 	width: 40px;
 	left: 32px;
 	bottom: 10px;
+	text-indent: -9999px;
 }
 #footer .playbtn.playing {
 	background: url('../img/pause-icon.svg') center center no-repeat transparent;
 }
 .settings-icon {
-	background: url('../img/settings-icon.svg') no-repeat center center transparent;
+//	background: url('../img/settings-icon.svg') no-repeat center center transparent;
 	width:20px;
 	height:20px;
 	bottom: 20px;
 	left: 80px;
 }
-#footer .playbtn, #footer .playbtn.playing, .settings-icon {
+.settings-icon img, .settings-icon svg {
+	width: 100%;
+	height: 100%;
+}
+.settings-icon svg path {
+	fill: #000;
+	fill-opacity: 1;
+}
+#footer .playbtn {
 	background-size: contain;
 	-moz-background-size: contain;
 	-webkit-background-size: contain;

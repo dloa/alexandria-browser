@@ -27,7 +27,9 @@
 	<body>
 				<header>
 			
-			<div id="logo"><!--Alexandria--></div>
+			<div id="logo">
+				<img src="img/logo.svg" class="makesvg" />
+			</div>
 			
 			<div id="search">
 				<div class="input-container">
@@ -110,7 +112,7 @@
 					<li class="module-icon">						
 						<a id="enter-archives">
 							<div class="imgwrap">
-								<img src="img/archive-icon.svg" />
+								<img src="img/archive-icon.svg" class="makesvg" />
 							</div>
 							<div>Archives</div>
 						</a>
@@ -118,7 +120,7 @@
 					<li class="module-icon">
 						<a onclick="loadRecentMedia()">
 							<div class="imgwrap">
-								<img src="img/media-icon.svg" />							
+								<img src="img/media-icon.svg" class="makesvg" />							
 							</div>
 							<div>Media</div>
 						</a>
@@ -146,10 +148,6 @@
 			</div>
 		</div>
 
-		<div id="spritz-container">
-			<div id="spritzer" data-role="spritzer"></div>
-		</div>
-
 		<main id="vis" class="wordCloud twitter-archive"></main>
 
 		<main id="wordsListView" class="twitter-archive">
@@ -172,6 +170,11 @@
 				<ul id="archiveList"></ul>
 			</article>
 		</main>
+
+
+		<div id="spritz-container">
+			<div id="spritzer" data-role="spritzer"></div>
+		</div>
 
 		<div id="timeline-settings">
 			<h3>Playback Settings</h3>
@@ -197,7 +200,7 @@
 				<section id="timeline" class="timeline"></section>	
 			</div>
 			<div class="playbtn">play</div>
-			<div class="settings-icon">settings</div>
+			<div class="settings-icon"><img src="img/settings-icon.svg" class="makesvg" />settings</div>
 		</footer>
 
 		<!-- Share New Content -->
@@ -521,7 +524,7 @@
 					<li>
 						<a>
 							<div class="imgwrap">
-								<img src="img/podcast-icon.svg" />							
+								<img src="img/podcast-icon.svg" class="makesvg" />							
 							</div>
 							<div>Podcasts</div>
 						</a>
@@ -529,7 +532,7 @@
 					<li>
 						<a>
 							<div class="imgwrap">
-								<img src="img/movie-icon.svg" />							
+								<img src="img/movie-icon.svg" class="makesvg" />							
 							</div>
 							<div>Movies</div>
 						</a>
@@ -539,12 +542,10 @@
 			<div id="browse-media-wrap">
 				<h2>Browse</h2>
 				<div class="row media-entity" media-type="podcast">
-					<div class="media-icon"><img src="img/podcast-icon.svg" class="load-entity"/></div><h3 class="media-title load-entity">Sovryn Tech</h3> <div class="media-meta load-entity">episode 0106: Decentralized Foursome</div> <div class="media-runtime">Runtime: <span>02:26:03</span></div> <div class="media-rating"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon load-entity">info</a><a class="playbtn-icon load-entity">play</a>
+					<div class="media-icon"><img src="img/podcast-icon.svg" class="load-entity makesvg"/></div><h3 class="media-title load-entity">Sovryn Tech</h3> <div class="media-meta load-entity">episode 0106: Decentralized Foursome</div> <div class="media-runtime">Runtime: <span>02:26:03</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon load-entity"><img src="img/info-icon.svg" class="makesvg" />info</a><a class="playbtn-icon load-entity"><img src="img/play-icon-small.svg" class="makesvg" />play</a>
 				</div>
 				<div class="row media-entity" media-type="movie">
-					<div class="media-icon"><img src="img/movie-icon.svg" class="load-entity" /></div><h3 class="media-title load-entity">Apocalypse, CA</h3><div class="media-meta">(2011)</div> <div class="media-runtime">Runtime: <span>02:17:00</span></div> <div class="media-rating"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon load-entity">info</a><a class="playbtn-icon load-entity">play</a>
-					<div class="media-embed-wrap">
-					</div>
+					<div class="media-icon"><img src="img/movie-icon.svg" class="load-entity makesvg" /></div><h3 class="media-title load-entity">Apocalypse, CA</h3><div class="media-meta">(2011)</div> <div class="media-runtime">Runtime: <span>02:17:00</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon load-entity"><img src="img/info-icon.svg" class="makesvg" />info</a><a class="playbtn-icon load-entity"><img src="img/play-icon-small.svg" class="makesvg" />play</a>
 				</div>
 			</div>
 		</main>
@@ -563,8 +564,8 @@
 						<div class="row">2011 &bull; Sci-Fi &amp; Comedy &bull; Runtime: <span>02:17:00</span></div>
 						<div class="row entity-meta-header">
 							<span class="media-rating"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></span>
-							<a href="http://www.rottentomatoes.com/m/apocalypse_ca/" target="_blank"><img src="img/rotton-tomatos-fresh.svg" width="32" /><label>86%</label></a>
-							<a href="http://www.imdb.com/title/tt1273193/" target="_blank"><img src="img/imdb-button.png" height="32" /></a>
+							<a href="http://www.rottentomatoes.com/m/apocalypse_ca/" target="_blank"><img src="img/rotton-tomatos-fresh.svg" /><label>86%</label></a>
+							<a href="http://www.imdb.com/title/tt1273193/" target="_blank"><img src="img/imdb-button.png" /></a>
 						</div>
 						<div class="row entity-meta">
 							<p>Wry, cynical and full of off-beat humor, "Apocalypse, CA" is the story of friends as they prepare for certain death at the hands of a massive asteroid, sex-inducing drugs, a three-hundred-foot Giant, and a horde of other absurd problems.</p>
