@@ -314,8 +314,8 @@ jQuery(document).ready(function($){
 	});
 
 	// Recent Media interaction
-	$('.media-entity').click(function(){
-		var thisMediaType = $(this).attr('media-type');
+	$('.row.media-entity .media-title').click(function(){
+		var thisMediaType = $(this).parent('.media-entity').attr('media-type');
 		loadMediaView(thisMediaType);
 	});
 	
@@ -1616,7 +1616,6 @@ function loadRecentMedia() {
 }
 // Load Media Page
 function loadMediaView(mediaType) {
-	console.log(mediaType);
 	$('main').fadeOut(fadeTimer);
 	$('#view-media .entity-view').hide();
 	$('#view-media').fadeIn(fadeTimer);
