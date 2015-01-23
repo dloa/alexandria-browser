@@ -237,6 +237,10 @@ jQuery(document).ready(function($){
 		$("#timeline").dateRangeSlider("bounds", new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
 		volumeBars(currentArchive,'',7200000);
 	});
+	$('#timeline-controls .week').click(function(){
+		$("#timeline").dateRangeSlider("bounds", new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()-7), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
+		volumeBars(currentArchive,'',7200000);
+	});
 	$('.playbtn').click(function(){
 		autoPlayTimeline();
 	});
@@ -314,8 +318,8 @@ jQuery(document).ready(function($){
 	});
 
 	// Recent Media interaction
-	$('.row.media-entity .media-title').click(function(){
-		var thisMediaType = $(this).parent('.media-entity').attr('media-type');
+	$('.row.media-entity .load-entity').click(function(){
+		var thisMediaType = $(this).parents('.media-entity').attr('media-type');
 		loadMediaView(thisMediaType);
 	});
 	

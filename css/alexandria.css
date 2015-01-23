@@ -569,6 +569,9 @@ div#intro {
 	display: inline-block;
 	vertical-align: middle;
 }
+#browse-media-wrap .row .load-entity {
+	cursor: pointer;
+}
 #browse-media-wrap .row .media-icon {
 	width: 24px;
 	padding: .5em;
