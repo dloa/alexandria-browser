@@ -650,6 +650,12 @@ div#intro {
 	display: block;
 	width: 0;
 }
+.tip-amounts label, #tip-modal h3, .crypto-price, .credebit-price, #tip-modal .btnLightGray {
+	color: #919191;
+}
+#tip-modal .btnLightGray:hover {
+	color: #464646;
+}
 #tip-modal h3, .crypto-price, .credebit-price {
 	font-weight: bold;
 }
@@ -707,7 +713,7 @@ div#intro {
 }
 #tip-modal .modal-tab > :first-child {
 	background-color: transparent;
-	margin: 0 0 .5em;
+	margin: 0 0 .3em;
 	padding: 0;
 }
 .tip-input {
