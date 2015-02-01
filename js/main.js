@@ -1643,11 +1643,12 @@ function loadMediaView(mediaType) {
 }
 // Display Mdaol
 function loadTipModal(obj) {
-	console.log(obj);
 	if ($(obj).parents('.entity-footer #tip-modal').length == 0) {
 		$(obj).parents('.entity-footer').append($('#tip-modal'));
 	}
-	$(obj).parents('.entity-footer').find('#tip-modal').fadeToggle(fadeTimer);
+	var tipModalPos = $(obj).position().left-34;
+	$('#tip-modal .modal-tabs li:first-child').addClass('active');
+	$(obj).parents('.entity-footer').find('#tip-modal').css('left',tipModalPos+'px').fadeToggle(fadeTimer);
 }
 
 // Share New Content Module

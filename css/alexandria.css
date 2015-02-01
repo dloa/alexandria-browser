@@ -565,9 +565,12 @@ div#intro {
 	margin: 0;
 }
 /* MEDIA UI */
-.share-icon, .tip-icon {
+.share-icon, .tip-icon, .media-rating a {
 	width: 32px;
 	height: 32px;
+}
+.media-rating a {
+	display: inline-block;
 }
 .share-icon {
 	color: transparent;
@@ -579,13 +582,24 @@ div#intro {
 	color: transparent;
 	overflow: hidden;
 }
-.tip-icon svg, .share-icon svg {
+.media-rating svg, .tip-icon svg, .share-icon svg {
 	width: 100%;
 	height: 100%;
 }
 .share-icon svg path, .tip-icon svg path {
 	fill: #979797;
 	fill-opacity: 1;
+}
+.media-rating a {
+	cursor: default;
+}
+.media-rating svg polygon {
+	fill: #464646;
+	fill-opacity: 1;
+	stroke: #464646;
+}
+.media-rating .star-off svg polygon {
+	fill-opacity: 0;
 }
 #tip-modal {
 	position: fixed;
@@ -647,9 +661,30 @@ div#intro {
 #tip-modal li input[type="text"] {
 	width: 3em;
 }
+#tip-modal ul.modal-tabs {
+	margin: .5em auto 1em;
+}
+.modal-tabs li {
+	background-color: #ecf3f8;
+	color: #919191;
+}
+#tip-modal ul.modal-tabs li {
+	margin: 0;
+	display: table-cell;
+	padding: 0 .8em;
+	border-left: 2px solid #FFF;
+	cursor: pointer;
+}
+.modal-tabs li.active {
+	background-color: #c5d7e2;
+	color: #FFFFFF;
+}
+#tip-modal ul.modal-tabs li:first-child {
+	border: 0 none transparent;
+}
 #tip-modal .modal-tab {
 	text-align: center;
-	display: none;
+	display: none;	
 }
 #tip-modal .modal-tab:first-of-type {
 	display: block;
