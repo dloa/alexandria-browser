@@ -606,14 +606,16 @@
 					<li><input type="radio" name="tip-amount" id="tip-option-a" /><label for="tip-option-a">25&cent;</label></li>
 					<li><input type="radio" name="tip-amount" id="tip-option-b" /><label for="tip-option-b">50&cent;</label></li>
 					<li><input type="radio" name="tip-amount" id="tip-option-c" /><label for="tip-option-c">$1.00</label></li>
-					<li><input type="radio" name="tip-amount" /><input type="text" /></li>
+					<li><input type="radio" name="tip-amount" /><input type="text" placeholder="$5.00" /></li>
 				</ul>
-				<ul class="modal-tabs">
-					<li name="tip-flo">Florincoin</li>
-					<li name="tip-bitcoin">Bitcoin</li>
-					<li name="tip-paypal">PayPal</li>
-					<li name="tip-credebit">Credit/Debit</li>
-				</ul>
+				<div class="tbl">
+					<ul class="modal-tabs">
+						<li name="tip-flo">Florincoin</li>
+						<li name="tip-bitcoin">Bitcoin</li>
+						<li name="tip-paypal">PayPal</li>
+						<li name="tip-credebit">Credit/Debit</li>
+					</ul>
+				</div>
 				<div id="tip-flo" class="modal-tab">
 					<div class="row">
 						<div class="crypto-price flo-usd">$1.00 USD = <span class="flo-usd-output"></span> FLO</div>
@@ -636,6 +638,9 @@
 					</div>
 				</div>
 				<div id="tip-credebit" class="modal-tab">
+					<div class="row">
+						<div class="credebit-price">$1.00 USD</div>
+					</div>
 					<div class="row">
 						<a class="btnLightGray">Use Credit/Debit card</a>
 					</div>

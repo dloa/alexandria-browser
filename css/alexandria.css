@@ -590,6 +590,9 @@ div#intro {
 	fill: #979797;
 	fill-opacity: 1;
 }
+.share-icon:hover svg path, .tip-icon:hover svg path {
+	fill: #464646;
+}
 .media-rating a {
 	cursor: default;
 }
@@ -606,12 +609,11 @@ div#intro {
 	top: 100%;
 	left: 100%;
 	z-index: 500;
-	width: 56%;
 	min-width: 450px;
 	box-sizing: border-box;
 	float: none;
 	margin: 20px auto 0;
-	padding: 1em 60px 1em 35px;
+	padding: 1em 0;
 	background: none #fff;
 	border: 1px solid #cdcdcd;
 	border-radius: 5px;
@@ -623,7 +625,9 @@ div#intro {
 	left: 1em;
 	display: none;
 }
-
+.row.entity-footer #tip-modal * {
+	text-align: center;
+}
 #tip-modal:before {
 	top: -16px;
 	left: 34px;
@@ -664,6 +668,12 @@ div#intro {
 #tip-modal ul.modal-tabs {
 	margin: .5em auto 1em;
 }
+#tip-modal .tbl {
+	width: 100%;
+}
+#tip-modal ul.modal-tabs {
+	display: table-row;
+}
 .modal-tabs li {
 	background-color: #ecf3f8;
 	color: #919191;
@@ -686,8 +696,9 @@ div#intro {
 	text-align: center;
 	display: none;	
 }
-#tip-modal .modal-tab:first-of-type {
-	display: block;
+#tip-modal .modal-tab :first-child + * {
+	background-color: #edeff9;
+	padding: 1em 0;
 }
 #browse-media {
 	padding-top: 10px;

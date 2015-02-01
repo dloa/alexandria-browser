@@ -1647,7 +1647,7 @@ function loadTipModal(obj) {
 		$(obj).parents('.entity-footer').append($('#tip-modal'));
 	}
 	var tipModalPos = $(obj).position().left-34;
-	$('#tip-modal .modal-tabs li:first-child').addClass('active');
+	$('#tip-modal .modal-tabs li:first-child').click();
 	$(obj).parents('.entity-footer').find('#tip-modal').css('left',tipModalPos+'px').fadeToggle(fadeTimer);
 }
 
