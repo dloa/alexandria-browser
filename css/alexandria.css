@@ -700,10 +700,15 @@ div#intro {
 	text-align: center;
 	display: none;	
 }
-#tip-modal .modal-tab > :first-child + * {
+#tip-modal .modal-tab > * {
 	background-color: #edeff9;
-	margin: .5em 0 0;
+	margin: 0;
 	padding: 1em 0;
+}
+#tip-modal .modal-tab > :first-child {
+	background-color: transparent;
+	margin: 0 0 .5em;
+	padding: 0;
 }
 .tip-input {
 	margin-left: .2em;
@@ -727,6 +732,34 @@ div#qrcode {
 div#qrcode img {
 	width: 100%;
 	height: auto;
+}
+.row.entity-footer .cc-inputs > .row {
+	width: 16.9em;
+	margin: 0 auto;
+}
+.cc-inputs input {
+	width: 2em;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 0 none transparent;
+}
+.cc-inputs input[name="CC Number"] {
+	width: 100%;
+}
+.cc-inputs input[name="CC CVV"] {
+	width: 3em;
+}
+.cc-inputs input[name="CC Zip"] {
+	width: 5em;
+}
+.row.entity-footer .cc-inputs span.sep {
+	display: inline-blocK;
+	width: 2em;
+	margin-left:-.25em;
+}
+#submitCC {
+	margin-top: .5em;
 }
 #browse-media {
 	padding-top: 10px;

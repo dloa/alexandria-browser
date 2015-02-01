@@ -606,7 +606,7 @@
 					<li><input type="radio" name="tip-amount" id="tip-option-a" value="0.25" /><label for="tip-option-a">25&cent;</label></li>
 					<li><input type="radio" name="tip-amount" id="tip-option-b" value="0.50" /><label for="tip-option-b">50&cent;</label></li>
 					<li><input type="radio" name="tip-amount" id="tip-option-c" value="1.00" /><label for="tip-option-c">$1.00</label></li>
-					<li><input type="radio" name="tip-amount" id="tip-option-custom" /><label>$</label><input type="text" value="5.00" class="tip-input" /></li>
+					<li><input type="radio" name="tip-amount" id="tip-option-custom" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input" /></li>
 				</ul>
 				<div class="tbl">
 					<ul class="modal-tabs">
@@ -646,8 +646,21 @@
 					<div class="row">
 						<div class="credebit-price">$<span class="tip-value">1.00</span> USD</div>
 					</div>
-					<div class="row">
-						<a class="btnLightGray">Use Credit/Debit card</a>
+					<div class="cc-inputs">
+						<div class="row">
+							<input type="text" placeholder="Card Number" name="CC Number" />
+						</div>
+						<div class="row">
+							<input type="text" placeholder="MM" name="CC Exp Month" />
+							<input type="text" placeholder="YY" name="CC Exp Year" />
+							<span class="sep"></span>
+							<input type="password" placeholder="CVV" name="CC CVV" />
+							<span class="sep"></span>
+							<input type="text" placeholder="Zip" name="CC Zip" />
+						</div>
+						<div class="row">
+							<a class="btnLightGray" id="submitCC">Submit Payment</a>
+						</div>
 					</div>
 				</div>
 			</div>
