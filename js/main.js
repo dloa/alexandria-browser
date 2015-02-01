@@ -273,7 +273,7 @@ jQuery(document).ready(function($){
 	// Get exchange rates
 	getFLO();
 	
-	// Tabs
+	// Add Media Tabs
 	$('#add-media-menu li').click(function(){
 		$(this).addClass('active').siblings().removeClass('active');
 		$('#newMedia-tabs').find('.modal-tab#'+$(this).attr("name")).show().siblings().hide();
@@ -346,6 +346,12 @@ jQuery(document).ready(function($){
 			'top': (window.innerHeight-vidContentHeight)/2+'px',
 			'left': (window.innerWidth-vidContentWidth)/2+'px'
 		});		
+	});
+
+	// Tip Modal Tabs
+	$('.modal-tabs li').click(function(){
+		$(this).addClass('active').siblings().removeClass('active');
+		$('#tip-modal').find('.modal-tab#'+$(this).attr("name")).show().siblings('.modal-tab').hide();
 	});
 
 	// API Server ID and Control

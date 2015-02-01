@@ -640,6 +640,13 @@ div#intro {
 #tip-modal li input[type="text"] {
 	width: 3em;
 }
+#tip-modal .modal-tab {
+	text-align: center;
+	display: none;
+}
+#tip-modal .modal-tab:first-of-type {
+	display: block;
+}
 #browse-media {
 	padding-top: 10px;
 }
@@ -891,7 +898,7 @@ div#intro {
 input[type="file"] {
 	cursor: pointer;
 }
-#add-media #newMedia-tabs ul.newMedia-links li {
+#add-media #newMedia-tabs ul.newMedia-links li, .btnLightGray {
 	display: inline-block;
 	zoom: 1;*display:inline;
 	padding: .25em 1.25em;
