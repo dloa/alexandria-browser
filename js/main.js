@@ -268,7 +268,7 @@ jQuery(document).ready(function($){
 		getJobs('');
 	}
 
-	// Add New Content Interface
+	// Media Content Interface
 
 	// Get exchange rates
 	getCryptos();
@@ -368,6 +368,17 @@ jQuery(document).ready(function($){
 		$('#tip-modal').find('.modal-tab#'+$(this).attr("name")).show().siblings('.modal-tab').hide();
 	});
 
+	// Tip Modal Amount
+	$('input[name="tip-amount"]').click(function(){
+		if ($(this).attr('id')=='tip-option-custom') {
+			var tipAmount = parseFloat($(this).siblings('.tip-input').val());
+		} else {
+			var tipAmount = parseFloat($(this).val());
+		}
+		$('.tip-value').text(tipAmount);
+		$('.flo-usd .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
+	});
+	$('input[name="tip-amount"]').filter('[value="1.00"]').click();
 	// API Server ID and Control
 	if(serverAddress == '54.172.28.195'){
 		$('#serverID').text('Dev');
@@ -456,6 +467,7 @@ var prevEndDate = '';
 var freshLoad = true;
 
 // Get crypto [cryptsy] exchange rates
+var FLOCost;
 var FLOLTC;
 var LTCUSD;
 var FLOUSD;
@@ -502,7 +514,7 @@ function getCryptos() {
 					LTCUSD = parseFloat($('#ltc-usd span').text());
 					FLOUSD = FLOLTC*LTCUSD;
 					$('#flo-usd label').text('FLO/USD').next('span').text(FLOUSD);
-					var FLOCost = parseFloat($('#flo-cost').text());
+					FLOCost = parseFloat($('#flo-cost').text());
 					$('.flo-usd .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
 					$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);
 				}

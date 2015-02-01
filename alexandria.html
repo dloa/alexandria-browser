@@ -603,10 +603,10 @@
 			<div id="tip-modal">
 				<h3>Send a Tip</h3>
 				<ul class="tip-amounts">
-					<li><input type="radio" name="tip-amount" id="tip-option-a" /><label for="tip-option-a">25&cent;</label></li>
-					<li><input type="radio" name="tip-amount" id="tip-option-b" /><label for="tip-option-b">50&cent;</label></li>
-					<li><input type="radio" name="tip-amount" id="tip-option-c" /><label for="tip-option-c">$1.00</label></li>
-					<li><input type="radio" name="tip-amount" /><input type="text" placeholder="$5.00" /></li>
+					<li><input type="radio" name="tip-amount" id="tip-option-a" value="0.25" /><label for="tip-option-a">25&cent;</label></li>
+					<li><input type="radio" name="tip-amount" id="tip-option-b" value="0.50" /><label for="tip-option-b">50&cent;</label></li>
+					<li><input type="radio" name="tip-amount" id="tip-option-c" value="1.00" /><label for="tip-option-c">$1.00</label></li>
+					<li><input type="radio" name="tip-amount" id="tip-option-custom" /><label>$</label><input type="text" value="5.00" class="tip-input" /></li>
 				</ul>
 				<div class="tbl">
 					<ul class="modal-tabs">
@@ -618,7 +618,7 @@
 				</div>
 				<div id="tip-flo" class="modal-tab">
 					<div class="row">
-						<div class="crypto-price flo-usd">$1.00 USD = <span class="flo-usd-output"></span> FLO</div>
+						<div class="crypto-price flo-usd">$<span class="tip-value">1.00</span> USD = <span class="flo-usd-output"></span> FLO</div>
 					</div>
 					<div class="row">
 						<a class="btnLightGray">Use Alexandria Wallet</a>
@@ -628,7 +628,7 @@
 				</div>
 				<div id="tip-bitcoin" class="modal-tab">
 					<div class="row">
-						<div class="crypto-price btc-usd">$1.00 USD = <span class="btc-usd-output"></span> BTC</div>
+						<div class="crypto-price btc-usd">$<span class="tip-value">1.00</span> USD = <span class="btc-usd-output"></span> BTC</div>
 					</div>
 					<div class="row">
 						<a class="btnLightGray">Use Online Bitcoin Wallet</a>
@@ -644,7 +644,7 @@
 				</div>
 				<div id="tip-credebit" class="modal-tab">
 					<div class="row">
-						<div class="credebit-price">$1.00 USD</div>
+						<div class="credebit-price">$<span class="tip-value">1.00</span> USD</div>
 					</div>
 					<div class="row">
 						<a class="btnLightGray">Use Credit/Debit card</a>

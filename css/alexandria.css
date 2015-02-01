@@ -612,7 +612,7 @@ div#intro {
 	min-width: 450px;
 	box-sizing: border-box;
 	float: none;
-	margin: 20px auto 0;
+	margin: 1.5em auto;
 	padding: .5em 0 1em;
 	background: none #fff;
 	border: 1px solid #cdcdcd;
@@ -621,8 +621,7 @@ div#intro {
 }
 #tip-modal.abs {
 	position: absolute;
-	top: initial;
-	bottom: 170%;
+	top: 100%;
 	left: 1em;
 	display: none;
 }
@@ -630,9 +629,9 @@ div#intro {
 	text-align: center;
 }
 #tip-modal:before {
-	bottom: -16px;
+	top: -16px;
 	left: 34px;
-	border-width: 16px 16px 0;
+	border-width: 0 16px 16px;
 	content: "";
 	position:absolute;
 	border-style: solid;
@@ -641,9 +640,9 @@ div#intro {
 	width: 0;
 }
 #tip-modal:after {
-	bottom: -15px;
+	top: -15px;
 	left: 35px;
-	border-width: 15px 15px 0;
+	border-width: 0 15px 15px;
 	content: "";
 	position:absolute;
 	border-style: solid;
@@ -705,6 +704,10 @@ div#intro {
 	background-color: #edeff9;
 	margin: .5em 0 0;
 	padding: 1em 0;
+}
+.tip-input {
+	margin-left: .2em;
+	color: #444444;
 }
 #tip-modal .modal-tab p {
 	line-height: 1.4;
