@@ -604,6 +604,48 @@ div#intro {
 .media-rating .star-off svg polygon {
 	fill-opacity: 0;
 }
+#info-modal {
+	position: fixed;
+	top: 120%;
+	left: 100%;
+	z-index: 500;
+	min-width: 450px;
+	box-sizing: border-box;
+	float: none;
+	margin: 1.5em auto;
+	padding: .5em 0 1em;
+	background: none #fff;
+	border: 1px solid #cdcdcd;
+	border-radius: 5px;
+	line-height: 2;
+}
+#info-modal.abs {
+	position: absolute;
+	left: 1em;
+	display: none;
+}
+#info-modal:before {
+	top: -16px;
+	left: 34px;
+	border-width: 0 16px 16px;
+	content: "";
+	position:absolute;
+	border-style: solid;
+	border-color: #cdcdcd transparent;
+	display: block;
+	width: 0;
+}
+#info-modal:after {
+	top: -15px;
+	left: 35px;
+	border-width: 0 15px 15px;
+	content: "";
+	position:absolute;
+	border-style: solid;
+	border-color: #fff transparent;
+	display: block;
+	width: 0;
+}
 #tip-modal {
 	position: fixed;
 	top: 100%;
@@ -621,12 +663,8 @@ div#intro {
 }
 #tip-modal.abs {
 	position: absolute;
-	top: 100%;
 	left: 1em;
 	display: none;
-}
-.row.entity-footer #tip-modal * {
-	text-align: center;
 }
 #tip-modal:before {
 	top: -16px;
@@ -649,6 +687,9 @@ div#intro {
 	border-color: #fff transparent;
 	display: block;
 	width: 0;
+}
+.row.entity-footer #tip-modal * {
+	text-align: center;
 }
 .tip-amounts label, #tip-modal h3, .crypto-price, .credebit-price, #tip-modal .btnLightGray {
 	color: #919191;
@@ -781,6 +822,7 @@ div#qrcode img {
 }
 #browse-media-wrap .row {
 	padding: .25em 0;
+	position: relative;
 }
 #browse-media-wrap .row .media-title {
 	cursor: pointer;

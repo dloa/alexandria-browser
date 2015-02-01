@@ -5,6 +5,7 @@ jQuery(document).ready(function($){
 	$('#disabler').fadeIn(fadeTimer);
 	$('#adv-search').addClass('abs');
 	$('#timeline-settings').addClass('abs');
+	$('#info-modal').addClass('abs');
 	$('#tip-modal').addClass('abs');
 	$('.alex-ui-slider').slider();
 	$('.alex-ui-datepicker').datepicker();
@@ -1698,7 +1699,19 @@ function loadMediaView(mediaType) {
 	$('#view-media').fadeIn(fadeTimer);
 	$('#media-view-'+mediaType).fadeIn(fadeTimer);
 }
-// Display Mdaol
+// Display Media Info Modal
+function loadInfoModal(obj) {
+	if ( ($('#info-modal').css('display') == 'block') && ($('#timeline-settings').css('opacity')==1) ) {
+		$('#info-modal').fadeOut(fadeTimer);
+	} else {
+		if ($(obj).parents('.media-entity #info-modal').length == 0) {
+			$(obj).parents('.media-entity').append($('#info-modal'));
+		}
+		var infoModalPos = $(obj).position().left-40;
+		$(obj).parents('.media-entity').find('#info-modal').css('left',infoModalPos+'px').fadeIn(fadeTimer);
+	}
+}
+// Display Tip Modal
 function loadTipModal(obj) {
 	if ($(obj).parents('.entity-footer #tip-modal').length == 0) {
 		$(obj).parents('.entity-footer').append($('#tip-modal'));
