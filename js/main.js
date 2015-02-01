@@ -1708,7 +1708,7 @@ function loadInfoModal(obj) {
 			$(obj).parents('.media-entity').append($('#info-modal'));
 		}
 		var infoModalPos = $(obj).position().left-40;
-		$(obj).parents('.media-entity').find('#info-modal').css('left',infoModalPos+'px').fadeIn(fadeTimer);
+		$(obj).parents('.media-entity').find('#info-modal').fadeIn(fadeTimer);
 	}
 }
 // Display Tip Modal
