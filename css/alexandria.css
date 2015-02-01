@@ -609,8 +609,9 @@ div#intro {
 	top: 120%;
 	left: 100%;
 	z-index: 500;
-	min-width: 450px;
 	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 	float: none;
 	margin: 1.5em auto;
 	padding: .5em 0 1em;
@@ -651,8 +652,9 @@ div#intro {
 	top: 100%;
 	left: 100%;
 	z-index: 500;
-	min-width: 450px;
 	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 	float: none;
 	margin: 1.5em auto;
 	padding: .5em 0 1em;
