@@ -719,6 +719,11 @@ div#qrcode {
 	margin: 1em auto 0;
 	padding: 1em;
 	border-radius: 100%;
+	cursor: pointer;
+}
+div#qrcode img {
+	width: 100%;
+	height: auto;
 }
 #browse-media {
 	padding-top: 10px;
@@ -1112,7 +1117,7 @@ div#lightbox {
 	text-align: center;
 	background-color: rgba(150,150,150,.45);
 }
-div#lightbox * {
+div#lightbox > * {
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -1123,6 +1128,12 @@ div#lightbox * {
 }
 div#lightbox video {
 	background-color:#000;
+}
+div#lightbox #qrcode-lightbox {
+	margin-left: -220px;
+	margin-top: -220px;
+	padding: 20px;
+	background: #fff;
 }
 .archive-volume {
 	background-color: #e0e0e0;

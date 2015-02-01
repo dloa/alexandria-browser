@@ -273,6 +273,20 @@ jQuery(document).ready(function($){
 	// Get exchange rates
 	getCryptos();
 	
+	// QR Code Lightbox
+	$('#qrcode').click(function(){
+		$('#lightbox').html('<div id="qrcode-lightbox"></div>');
+		var qrcode = new QRCode("qrcode-lightbox", {
+			text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless",
+			width: 400,
+			height: 400,
+			colorDark : "#000000",
+			colorLight : "#FFFFFF",
+			correctLevel : QRCode.CorrectLevel.H
+		});
+		$('#lightbox').fadeIn(fadeTimer);
+	});
+	
 	// Add Media Tabs
 	$('#add-media-menu li').click(function(){
 		$(this).addClass('active').siblings().removeClass('active');
@@ -456,7 +470,6 @@ function getCryptos() {
 			el.html(e.responseText);
 			var data = $.parseJSON($('p', el).html());
 			BTCUSD = parseFloat(data.return.markets.BTC.lasttradeprice);
-			console.log(BTCUSD);
 			$('.btc-usd .btc-usd-output').text(Math.round((1/BTCUSD)*100000000)/100000000);
 			var qrcode = new QRCode("qrcode", {
 				text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless",
