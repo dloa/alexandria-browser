@@ -377,8 +377,16 @@ jQuery(document).ready(function($){
 		}
 		$('.tip-value').text(tipAmount);
 		$('.flo-usd .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
-	});
+	});	
 	$('input[name="tip-amount"]').filter('[value="1.00"]').click();
+	$('.tip-input').focus(function(){
+		$(this).siblings('input[type="radio"]').click();
+	});
+	$('.tip-input').keyup(function(){
+		var tipAmount = parseFloat($(this).val());
+		$('.tip-value').text(tipAmount);
+		$('.flo-usd .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
+	});
 	// API Server ID and Control
 	if(serverAddress == '54.172.28.195'){
 		$('#serverID').text('Dev');
