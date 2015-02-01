@@ -458,6 +458,15 @@ function getCryptos() {
 			BTCUSD = parseFloat(data.return.markets.BTC.lasttradeprice);
 			console.log(BTCUSD);
 			$('.btc-usd .btc-usd-output').text(Math.round((1/BTCUSD)*100000000)/100000000);
+			var qrcode = new QRCode("qrcode", {
+				text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless",
+				width: 64,
+				height: 64,
+				colorDark : "#000000",
+				colorLight : "#d8d8d8",
+				correctLevel : QRCode.CorrectLevel.H
+			});
+
 		}
 	});
 	$.ajax({

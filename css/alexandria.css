@@ -613,7 +613,7 @@ div#intro {
 	box-sizing: border-box;
 	float: none;
 	margin: 20px auto 0;
-	padding: .25em 0 1em;
+	padding: .5em 0 1em;
 	background: none #fff;
 	border: 1px solid #cdcdcd;
 	border-radius: 5px;
@@ -651,7 +651,7 @@ div#intro {
 	display: block;
 	width: 0;
 }
-#tip-modal h3 {
+#tip-modal h3, .crypto-price, .credebit-price {
 	font-weight: bold;
 }
 #tip-modal ul, #tip-modal ul li {
@@ -701,10 +701,24 @@ div#intro {
 	text-align: center;
 	display: none;	
 }
-#tip-modal .modal-tab :first-child + * {
+#tip-modal .modal-tab > :first-child + * {
 	background-color: #edeff9;
 	margin: .5em 0 0;
 	padding: 1em 0;
+}
+#tip-modal .modal-tab p {
+	line-height: 1.4;
+	margin-bottom: 0;
+	color: #919191;
+	font-size: .9em;
+}
+div#qrcode {
+	background: #d8d8d8;
+	width: 64px;
+	height: 64px;
+	margin: 1em auto 0;
+	padding: 1em;
+	border-radius: 100%;
 }
 #browse-media {
 	padding-top: 10px;
