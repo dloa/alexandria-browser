@@ -613,7 +613,7 @@ div#intro {
 	box-sizing: border-box;
 	float: none;
 	margin: 20px auto 0;
-	padding: 1em 0;
+	padding: .25em 0 1em;
 	background: none #fff;
 	border: 1px solid #cdcdcd;
 	border-radius: 5px;
@@ -621,7 +621,8 @@ div#intro {
 }
 #tip-modal.abs {
 	position: absolute;
-	top: 100%;
+	top: initial;
+	bottom: 170%;
 	left: 1em;
 	display: none;
 }
@@ -629,9 +630,9 @@ div#intro {
 	text-align: center;
 }
 #tip-modal:before {
-	top: -16px;
+	bottom: -16px;
 	left: 34px;
-	border-width: 0 16px 16px;
+	border-width: 16px 16px 0;
 	content: "";
 	position:absolute;
 	border-style: solid;
@@ -640,15 +641,18 @@ div#intro {
 	width: 0;
 }
 #tip-modal:after {
-	top: -15px;
+	bottom: -15px;
 	left: 35px;
-	border-width: 0 15px 15px;
+	border-width: 15px 15px 0;
 	content: "";
 	position:absolute;
 	border-style: solid;
 	border-color: #fff transparent;
 	display: block;
 	width: 0;
+}
+#tip-modal h3 {
+	font-weight: bold;
 }
 #tip-modal ul, #tip-modal ul li {
 	list-style: none;
@@ -670,6 +674,7 @@ div#intro {
 }
 #tip-modal .tbl {
 	width: 100%;
+	margin: .5em 0;
 }
 #tip-modal ul.modal-tabs {
 	display: table-row;
@@ -698,6 +703,7 @@ div#intro {
 }
 #tip-modal .modal-tab :first-child + * {
 	background-color: #edeff9;
+	margin: .5em 0 0;
 	padding: 1em 0;
 }
 #browse-media {

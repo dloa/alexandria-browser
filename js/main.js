@@ -271,7 +271,7 @@ jQuery(document).ready(function($){
 	// Add New Content Interface
 
 	// Get exchange rates
-	getFLO();
+	getCryptos();
 	
 	// Add Media Tabs
 	$('#add-media-menu li').click(function(){
@@ -445,7 +445,21 @@ var freshLoad = true;
 var FLOLTC;
 var LTCUSD;
 var FLOUSD;
-function getFLO() {
+var BTCUSD;
+function getCryptos() {
+// Bitcoin
+	$.ajax({
+	    url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=2',
+	    type: 'GET',
+	    success: function(e) {
+			var el = $( '#sketchpad' );
+			el.html(e.responseText);
+			var data = $.parseJSON($('p', el).html());
+			BTCUSD = parseFloat(data.return.markets.BTC.lasttradeprice);
+			console.log(BTCUSD);
+			$('.btc-usd .btc-usd-output').text(Math.round((1/BTCUSD)*100000000)/100000000);
+		}
+	});
 	$.ajax({
 	    url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=61',
 	    type: 'GET',
@@ -474,6 +488,7 @@ function getFLO() {
 		}
 	});
 }
+
 
 // TIMELINE CHANGE
 
@@ -1646,7 +1661,7 @@ function loadTipModal(obj) {
 	if ($(obj).parents('.entity-footer #tip-modal').length == 0) {
 		$(obj).parents('.entity-footer').append($('#tip-modal'));
 	}
-	var tipModalPos = $(obj).position().left-34;
+	var tipModalPos = $(obj).position().left-31;
 	$('#tip-modal .modal-tabs li:first-child').click();
 	$(obj).parents('.entity-footer').find('#tip-modal').css('left',tipModalPos+'px').fadeToggle(fadeTimer);
 }
