@@ -574,11 +574,12 @@ div#intro {
 .tip-icon {
 	width: 32px;
 	height: 32px;
-	border: 2px solid currentColor;
-	border-radius: 32px;
+//	border: 2px solid currentColor;
+//	border-radius: 32px;
 	text-align: center;
-	line-height: 32px;
+//	line-height: 32px;
 	cursor: pointer;
+	color: #979797;
 }
 #tip-modal {
 	position: fixed;
