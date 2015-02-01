@@ -565,21 +565,27 @@ div#intro {
 	margin: 0;
 }
 /* MEDIA UI */
+.share-icon, .tip-icon {
+	width: 32px;
+	height: 32px;
+}
 .share-icon {
-	background: url('../img/share-icon.svg') no-repeat center center transparent;
-	background-size: contain;
 	color: transparent;
 	cursor: pointer;
 }
 .tip-icon {
-	width: 32px;
-	height: 32px;
-//	border: 2px solid currentColor;
-//	border-radius: 32px;
 	text-align: center;
-//	line-height: 32px;
 	cursor: pointer;
-	color: #979797;
+	color: transparent;
+	overflow: hidden;
+}
+.tip-icon svg, .share-icon svg {
+	width: 100%;
+	height: 100%;
+}
+.share-icon svg path, .tip-icon svg path {
+	fill: #979797;
+	fill-opacity: 1;
 }
 #tip-modal {
 	position: fixed;
@@ -767,9 +773,6 @@ div#intro {
 }
 .row.entity-footer .sep {
 	width: 3em;
-}
-.row.entity-footer .share-icon {
-	height: 38px;
 }
 /* TEMPORARY!!! */
 .entity-view .left img {
