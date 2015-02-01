@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html class="no-js">
 	<head>
 		<meta charset="utf-8">
@@ -15,8 +15,6 @@
 		<link rel="stylesheet" href="js/vendor/spritz/spritz.min.css">
 		<link rel="stylesheet" href="css/alexandria.css">
 		<script type="text/javascript">
-			// var serverAddress = '54.172.28.195'; // Dev
-			// var serverAddress = 'blue.a.blocktech.com'; // Demo
 			var SpritzSettings = {
 				clientId: "bca1146a623ec3d99",
 				redirectUri: "/archview/thirdparty/login_success.html"
@@ -408,7 +406,7 @@
 										</div>
 									</div>
 									<div class="col">
-										<span id="flo-cost">10</span> FLO ($<span id="usd-cost"></span>)
+										<span id="flo-cost">10</span> FLO ($<span class="flo-usd-output"></span>)
 										<div id="flo-ltc" class="exchange-wrap"><label></label><span></span></div>
 										<div id="ltc-usd" class="exchange-wrap"><label></label><span></span></div>
 										<div id="flo-usd" class="exchange-wrap"><label></label><span></span></div>
@@ -542,9 +540,9 @@
 			<div id="browse-media-wrap">
 				<h2>Browse</h2>
 				<div class="row media-entity" media-type="podcast">
-					<div class="media-icon"><img src="img/podcast-icon.svg" class="load-entity makesvg"/></div><h3 class="media-title load-entity">Sovryn Tech</h3> <div class="media-meta load-entity">episode 0106: Decentralized Foursome</div> <div class="media-runtime">Runtime: <span>02:26:03</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon load-entity"><img src="img/info-icon.svg" class="makesvg" />info</a><a class="playbtn-icon load-entity"><img src="img/play-icon-small.svg" class="makesvg" />play</a>
+					<div class="media-icon load-entity"><img src="img/podcast-icon.svg" class="load-entity makesvg"/></div><h3 class="media-title load-entity">Sovryn Tech</h3> <div class="media-meta load-entity">episode 0106: Decentralized Foursome</div> <div class="media-runtime">Runtime: <span>02:26:03</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon load-entity"><img src="img/info-icon.svg" class="makesvg" />info</a><a class="playbtn-icon load-entity"><img src="img/play-icon-small.svg" class="makesvg" />play</a>
 				</div>
-				<div class="row media-entity" media-type="movie">
+				<div class="row media-entity load-entity" media-type="movie">
 					<div class="media-icon"><img src="img/movie-icon.svg" class="load-entity makesvg" /></div><h3 class="media-title load-entity">Apocalypse, CA</h3><div class="media-meta">(2011)</div> <div class="media-runtime">Runtime: <span>02:17:00</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon load-entity"><img src="img/info-icon.svg" class="makesvg" />info</a><a class="playbtn-icon load-entity"><img src="img/play-icon-small.svg" class="makesvg" />play</a>
 				</div>
 			</div>
@@ -554,8 +552,6 @@
 		<main id="view-media">
 			<div id="view-media-wrap">
 				<div id="media-view-movie" class="entity-view">
-					<!-- <video controls> <source src="http://10.0.100.136:8888/" type="video/mp4" /> </video> -->
-					<div style="clear:both"></div>
 					<div class="left">
 						<img src="img/Apocalypse-CA-poster.jpg" class="entity-image" />
 					</div>
@@ -575,7 +571,7 @@
 							</p>
 						</div>
 						<div class="row entity-footer">
-							<a class="wsite-button lightboxVideo" data-source="http://10.0.100.136:8888/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label> <span class="sep"></span> <a class="share-icon">share</a> <a class="tip-icon">tip</a>
+							<a class="wsite-button lightboxVideo" data-source="http://127.0.0.1:8888/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label> <span class="sep"></span> <a class="share-icon">share</a> <a class="tip-icon" onclick="loadTipModal($(this))">tip</a>
 						</div>
 					</div>
 				</div>
@@ -597,13 +593,36 @@
 							-- Update on MaidSafe, Update on Alexandria, Thoughts on Social Media, Bluetooth Remote Vibrator, Thoughts on AR/VR, GPL</p>
 						</div>
 						<div class="row entity-footer">
-							<a class="share-icon">share</a> <a class="tip-icon">tip</a>
-							<audio controls> <source src="http://10.0.100.136:8889/" type="audio/mpeg" /> </audio>
+							<a class="share-icon">share</a> <a class="tip-icon" onclick="loadTipModal($(this))">tip</a>
+							<audio controls> <source src="http://127.0.0.1:8889/" type="audio/mpeg" /> </audio>
 						</div>
 					</div>
 				</div>
 			</div>
 		</main>
+			<div id="tip-modal">
+				<h3>Send a Tip</h3>
+				<ul class="tip-amounts">
+					<li><input type="radio" name="tip-amount" id="tip-option-a" /><label for="tip-option-a">25￠</label></li>
+					<li><input type="radio" name="tip-amount" id="tip-option-b" /><label for="tip-option-b">50￠</label></li>
+					<li><input type="radio" name="tip-amount" id="tip-option-c" /><label for="tip-option-c">$1.00</label></li>
+					<li><input type="radio" name="tip-amount" /><input type="text" /></li>
+				</ul>
+				<ul class="modal-tabs">
+					<li>Florincoin</li>
+					<li>Bitcoin</li>
+					<li>PayPal</li>
+					<li>Credit/Debit</li>
+				</ul>
+				<div id="tip-flo" class="modal-tab">
+					<div class="row">
+						<div class="crypto-price flo-usd">$1.00 USD = <span class="flo-usd-output"></span> FLO</div>
+					</div>
+					<div class="row">
+						[Use Alexandria Wallet]
+					</div>
+				</div>
+			</div>
 		
 		<!-- Application components -->
 		

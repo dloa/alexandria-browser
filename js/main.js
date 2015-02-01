@@ -5,6 +5,7 @@ jQuery(document).ready(function($){
 	$('#disabler').fadeIn(fadeTimer);
 	$('#adv-search').addClass('abs');
 	$('#timeline-settings').addClass('abs');
+	$('#tip-modal').addClass('abs');
 	$('.alex-ui-slider').slider();
 	$('.alex-ui-datepicker').datepicker();
 	// Footer timeline contruct
@@ -57,6 +58,7 @@ jQuery(document).ready(function($){
 			if(hasVolumeBars.length==0){
 				volumeBars('*', '', 7200000);
 			}
+			$('#tip-modal').hide();
 			$('main').fadeOut(fadeTimer);
 			$('.sharing-ui').fadeOut(fadeTimer);
 			$('.view-media-ui').fadeOut(fadeTimer);
@@ -459,7 +461,8 @@ function getFLO() {
 					FLOUSD = FLOLTC*LTCUSD;
 					$('#flo-usd label').text('FLO/USD').next('span').text(FLOUSD);
 					var FLOCost = parseFloat($('#flo-cost').text());
-					$('span#usd-cost').text(Math.round((FLOUSD*FLOCost)*100000)/100000);
+					$('.flo-usd .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
+					$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);
 				}
 			});
 		}
@@ -1618,6 +1621,7 @@ function loadRecentMedia() {
 	currentView = 'recentMediaList';
 	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
+	$('#tip-modal').hide();
 	$('.view-media-ui').fadeOut(fadeTimer);
 	$('#browse-media').fadeIn(fadeTimer);
 	$('#browse-media-wrap .row').first().addClass('first');
@@ -1631,6 +1635,15 @@ function loadMediaView(mediaType) {
 	$('#view-media').fadeIn(fadeTimer);
 	$('#media-view-'+mediaType).fadeIn(fadeTimer);
 }
+// Display Mdaol
+function loadTipModal(obj) {
+	console.log(obj);
+	if ($(obj).parents('.entity-footer #tip-modal').length == 0) {
+		$(obj).parents('.entity-footer').append($('#tip-modal'));
+	}
+	$(obj).parents('.entity-footer').find('#tip-modal').fadeToggle(fadeTimer);
+}
+
 // Share New Content Module
 function loadShareMod() {
 	currentView = 'addNewContent';

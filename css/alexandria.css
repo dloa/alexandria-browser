@@ -237,7 +237,8 @@ div#viewlabel .timespanLabel span {
 }
 #adv-search-toggle {
 	cursor: pointer;
-	font-size: .75em;
+	font-size: 16px;
+	font-size: 1rem;
 	text-transform: capitalize;
 	color: #979797;
 	margin-left: .25em;
@@ -579,6 +580,66 @@ div#intro {
 	line-height: 32px;
 	cursor: pointer;
 }
+#tip-modal {
+	position: fixed;
+	top: 100%;
+	left: 100%;
+	z-index: 500;
+	width: 56%;
+	min-width: 450px;
+	box-sizing: border-box;
+	float: none;
+	margin: 20px auto 0;
+	padding: 1em 60px 1em 35px;
+	background: none #fff;
+	border: 1px solid #cdcdcd;
+	border-radius: 5px;
+	line-height: 2;
+}
+#tip-modal.abs {
+	position: absolute;
+	top: 100%;
+	left: 1em;
+	display: none;
+}
+
+#tip-modal:before {
+	top: -16px;
+	left: 34px;
+	border-width: 0 16px 16px;
+	content: "";
+	position:absolute;
+	border-style: solid;
+	border-color: #cdcdcd transparent;
+	display: block;
+	width: 0;
+}
+#tip-modal:after {
+	top: -15px;
+	left: 35px;
+	border-width: 0 15px 15px;
+	content: "";
+	position:absolute;
+	border-style: solid;
+	border-color: #fff transparent;
+	display: block;
+	width: 0;
+}
+#tip-modal ul, #tip-modal ul li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#tip-modal ul li {
+	display: inline-block;
+	margin: 0 .5em;
+}
+#tip-modal li input[type="radio"] {
+	margin: 0 5px 0 0;
+}
+#tip-modal li input[type="text"] {
+	width: 3em;
+}
 #browse-media {
 	padding-top: 10px;
 }
@@ -691,6 +752,7 @@ div#intro {
 }
 .row.entity-footer {
 	margin-top: 3em;
+	position: relative;
 }
 .row.entity-footer .alex-switch {
 	margin: 0;
