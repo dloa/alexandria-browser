@@ -10,7 +10,9 @@ jQuery(document).ready(function($){
 	$('.alex-ui-slider').slider();
 	$('.alex-ui-datepicker').datepicker();
 	// Footer timeline contruct
-	displayItem('startDate');
+	if (window.location.search.indexOf("startDate") > -1) {
+		displayItem('startDate');
+	}
 	console.log('startDate = '+startDateValue+', endDate = '+endDateValue)
 // BUILD TIMELINE
 	$("#timeline").dateRangeSlider({
@@ -68,6 +70,11 @@ jQuery(document).ready(function($){
 			$('#search').fadeIn(fadeTimer);
 			$('#app-shading').css('bottom','60px');
 			$(this).removeClass('toArchive');
+			var stateObj = {
+				currentView: currentView
+			};
+			var newURL = document.location.origin + document.location.pathname;
+			history.pushState(stateObj, 'Alexandria', newURL);
 			return false;	
 		}
 		if (playingTimeline == true){
@@ -265,8 +272,10 @@ jQuery(document).ready(function($){
 		volumeBars('*', '', 7200000);
 	} else if (window.location.search.indexOf("archive") > -1) {
 		displayItem('archive');
-	} else if (window.location.search.indexOf("word") == -1) {
+	} else if (window.location.search.indexOf("startDate") > -1) {
 		getJobs('');
+	} else if (window.location.search.indexOf("view")  > -1) {
+		displayItem('view');
 	}
 
 	// Media Content Interface
@@ -532,9 +541,7 @@ function getCryptos() {
 	});
 }
 
-
 // TIMELINE CHANGE
-
 function timeChange() {
 	resetArchiveList = true;
 	startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
@@ -744,7 +751,7 @@ function getJobs(searchTerm) {
 		if (window.location.search.indexOf("startDate") > -1) {
 			$("#timeline").dateRangeSlider("values", startDateValue, endDateValue);
 		}
-	} else {
+	} else {		
 		startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
 		endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
 	}
@@ -1529,8 +1536,13 @@ function displayItem(key){
 			wordSearch(currentArchive, activeWord, 40, 0);
 			volumeBars(currentArchive, activeWord, 7200000);
 			getArchiveWords(currentArchive);
-		}
-		
+		} else if (key == 'view') {
+			currentView = queryString(key);
+			if(currentView == 'addcontent'){
+				loadShareMod();
+				resetInterface();
+			}
+		}		
 	}
 }
 
@@ -1539,7 +1551,9 @@ window.onpopstate = function(event) {
 	freshLoad = false;
 	prevStartDate = startDateValue;
 	prevEndDate = endDateValue;
-	displayItem('startDate');
+	if (window.location.search.indexOf("startDate") > -1) {
+		displayItem('startDate');
+	}
 	$('main.wordCloud text').css({
 		'text-shadow':'0 0 0 rgba(200,200,200,.5)',
 		'opacity':'1',
@@ -1568,7 +1582,7 @@ window.onpopstate = function(event) {
 	totalPages = 0;
 	if(window.location.search != ''){
 	    $('#intro').remove();
-		displayItem('archive');
+//		displayItem('archive');
 	} else {
 		$('.archiveLabel').fadeOut(fadeTimer);
 		$('#viewlabel .currentArchive').text('');
@@ -1728,6 +1742,11 @@ function loadTipModal(obj) {
 // Share New Content Module
 function loadShareMod() {
 	currentView = 'addNewContent';
+	var stateObj = {
+		currentView: currentView
+	};
+	var newURL = document.location.origin + document.location.pathname +'?view=addcontent';
+	history.pushState(stateObj, 'Alexandria - Add Content', newURL);
 	$('#search').fadeOut(fadeTimer);
 	hideArchivesUI();
 	$('.sharing-ui').fadeIn(fadeTimer);
