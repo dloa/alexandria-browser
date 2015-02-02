@@ -372,6 +372,7 @@ jQuery(document).ready(function($){
 		}
 		$('.tip-value').text(tipAmount);
 		$('.flo-usd .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
+		$('.btc-usd .btc-usd-output').text(Math.round((tipAmount/BTCUSD)*100000000)/100000000);
 	});	
 	$('input[name="tip-amount"]').filter('[value="1.00"]').click();
 	$('.tip-input').focus(function(){
