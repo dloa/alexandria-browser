@@ -56,26 +56,7 @@ jQuery(document).ready(function($){
 			clearModal();
 		}
 		if($(this).hasClass('toArchive')){
-			currentView = 'archiveCloud';
-			var hasVolumeBars = $('svg#volume');
-			if(hasVolumeBars.length==0){
-				volumeBars('*', '', 7200000);
-			}
-			$('#tip-modal').hide();
-			$('main').fadeOut(fadeTimer);
-			$('.sharing-ui').fadeOut(fadeTimer);
-			$('.view-media-ui').fadeOut(fadeTimer);
-			$('#intro').fadeIn(fadeTimer);
-			$('.twitter-archive').fadeIn(fadeTimer);
-			$('#search').fadeIn(fadeTimer);
-			$('#app-shading').css('bottom','60px');
-			$(this).removeClass('toArchive');
-			var stateObj = {
-				currentView: currentView
-			};
-			var newURL = document.location.origin + document.location.pathname;
-			history.pushState(stateObj, 'Alexandria', newURL);
-			return false;	
+			resetAlexandria();
 		}
 		if (playingTimeline == true){
 			autoPlayTimeline();
@@ -1548,48 +1529,52 @@ function displayItem(key){
 
 // BROWSER NAVIGATION CONTROLS
 window.onpopstate = function(event) {
-	freshLoad = false;
-	prevStartDate = startDateValue;
-	prevEndDate = endDateValue;
-	if (window.location.search.indexOf("startDate") > -1) {
-		displayItem('startDate');
-	}
-	$('main.wordCloud text').css({
-		'text-shadow':'0 0 0 rgba(200,200,200,.5)',
-		'opacity':'1',
-		'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=100)',
-		'filter':'alpha(opacity=100)',
-		'-moz-opacity': '1',
-		'-khtml-opacity': '1',
-		'transition': 'all 1s ease',
-		'-moz-transition': 'all 1s ease',
-		'-webkit-transition': 'all 1s ease',
-		'-o-transition': 'all 1s ease'
-	});
-	$('#timeline-controls').fadeIn(fadeTimer);
-	console.log('prevStartDate = '+ prevStartDate);
-	console.log('startDateValue = '+ startDateValue);
-	console.log('prevEndDate = '+ prevEndDate);
-	console.log('endDateValue = '+ endDateValue);
-	if ( ( (prevStartDate != '') && (prevEndDate != '') ) && ( (startDateValue != prevStartDate) || (endDateValue != prevEndDate) ) ) {
-		$("#timeline").dateRangeSlider("values", startDateValue, endDateValue);
-		timeChange();
-	}
-	$("#tweetList li").fadeOut(fadeTimer);
-	$('.overlay').fadeOut(fadeTimer);
-	$("#tweetList li").remove();
-	currentPage = 0;
-	totalPages = 0;
-	if(window.location.search != ''){
-	    $('#intro').remove();
-//		displayItem('archive');
+	if(window.location.search == ''){
+		resetAlexandria();
 	} else {
-		$('.archiveLabel').fadeOut(fadeTimer);
-		$('#viewlabel .currentArchive').text('');
-		currentArchive = '*';
-		searchTerm = '';
-		currentView = 'archiveCloud';
-		runSearch(searchTerm);
+		freshLoad = false;
+		$('#intro').remove();
+		prevStartDate = startDateValue;
+		prevEndDate = endDateValue;
+		if (window.location.search.indexOf("startDate") > -1) {
+			displayItem('startDate');
+		}
+		$('main.wordCloud text').css({
+			'text-shadow':'0 0 0 rgba(200,200,200,.5)',
+			'opacity':'1',
+			'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=100)',
+			'filter':'alpha(opacity=100)',
+			'-moz-opacity': '1',
+			'-khtml-opacity': '1',
+			'transition': 'all 1s ease',
+			'-moz-transition': 'all 1s ease',
+			'-webkit-transition': 'all 1s ease',
+			'-o-transition': 'all 1s ease'
+		});
+		$('#timeline-controls').fadeIn(fadeTimer);
+		console.log('prevStartDate = '+ prevStartDate);
+		console.log('startDateValue = '+ startDateValue);
+		console.log('prevEndDate = '+ prevEndDate);
+		console.log('endDateValue = '+ endDateValue);
+		if ( ( (prevStartDate != '') && (prevEndDate != '') ) && ( (startDateValue != prevStartDate) || (endDateValue != prevEndDate) ) ) {
+			$("#timeline").dateRangeSlider("values", startDateValue, endDateValue);
+			timeChange();
+		}
+		$("#tweetList li").fadeOut(fadeTimer);
+		$('.overlay').fadeOut(fadeTimer);
+		$("#tweetList li").remove();
+		currentPage = 0;
+		totalPages = 0;
+		if (window.location.search.indexOf("archive") > -1) {
+			displayItem('archive');
+		} else if (window.location.search.indexOf("startDate") > -1) {
+			$('.archiveLabel').fadeOut(fadeTimer);
+			$('#viewlabel .currentArchive').text('');
+			currentArchive = '*';
+			searchTerm = '';
+			currentView = 'archiveCloud';
+			runSearch(searchTerm);
+		}
 	}
 };
 // External link meta data
@@ -1684,6 +1669,30 @@ function resetInterface() {
 		// set a timer and step timline forward
 		playTimerId = setTimeout ( 'playTimeline()', animDuration );
 	}
+}
+
+// RESET ALEXANDRIA
+function resetAlexandria() {
+	currentView = 'archiveCloud';
+	var hasVolumeBars = $('svg#volume');
+	if(hasVolumeBars.length==0){
+		volumeBars('*', '', 7200000);
+	}
+	$('#tip-modal').hide();
+	$('main').fadeOut(fadeTimer);
+	$('.sharing-ui').fadeOut(fadeTimer);
+	$('.view-media-ui').fadeOut(fadeTimer);
+	$('#intro').fadeIn(fadeTimer);
+	$('.twitter-archive').fadeIn(fadeTimer);
+	$('#search').fadeIn(fadeTimer);
+	$('#app-shading').css('bottom','60px');
+	$(this).removeClass('toArchive');
+	var stateObj = {
+		currentView: currentView
+	};
+	var newURL = document.location.origin + document.location.pathname;
+	history.pushState(stateObj, 'Alexandria', newURL);
+	return false;	
 }
 
 // Hide Twitter Archives UI
