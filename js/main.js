@@ -1701,19 +1701,18 @@ function loadMediaView(mediaType) {
 }
 // Display Media Info Modal
 function loadInfoModal(obj) {
-	if ( ($('#info-modal').css('display') == 'block') && ($('#timeline-settings').css('opacity')==1) ) {
+	if ( ($('#info-modal').css('display') == 'block') && ($('#info-modal').css('opacity')==1) ) {
 		$('#info-modal').fadeOut(fadeTimer);
 	} else {
-		if ($(obj).parents('.media-entity #info-modal').length == 0) {
-			$(obj).parents('.media-entity').append($('#info-modal'));
-		}
-		var infoModalPos = $(obj).position().left-40;
 		var objMeta = $(obj).parents('.media-entity');
+		if ($(objMeta).find('#info-modal').length == 0) {
+			$(objMeta).append($('#info-modal'));
+		}
 		$('#info-modal .entity-meta-header h2').html($(objMeta).find('.media-title').html());
 		$('#info-modal .entity-meta-header h3').html($(objMeta).find('.media-meta').html());
 		$('#info-modal .entity-meta-header .entity-runtime').html($(objMeta).find('.media-runtime').html());
 		$('#info-modal .media-image').html($(objMeta).find('.media-icon').html());
-		$(obj).parents('.media-entity').find('#info-modal').fadeIn(fadeTimer);
+		$(objMeta).find('#info-modal').fadeIn(fadeTimer);
 	}
 }
 // Display Tip Modal

@@ -890,6 +890,9 @@ div#qrcode img {
 	fill: #979797;
 	fill-opacity: 1;
 }
+.info-icon:hover svg path, .playbtn-icon:hover svg path {
+	fill: #464646;
+}
 /* MEDIA ENTITY VIEW */
 #view-media {
 	padding: 48px 0;
