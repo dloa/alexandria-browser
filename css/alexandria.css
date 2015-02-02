@@ -539,7 +539,7 @@ div#intro {
 	width: 100%;
 	height: 100%;
 }
-.imgwrap svg path, .media-icon svg path {	
+.imgwrap svg path, .media-icon svg path, #info-modal .media-image svg path {
 	fill: currentcolor;
 	fill-opacity: 1;
 }
@@ -651,6 +651,10 @@ div#intro {
 #info-modal .left {
 	width: 25%;
 	text-align: center;
+}
+#info-modal .media-image img, #info-modal .media-image svg {
+	width: 60%;
+	height: 60%;
 }
 #info-modal .media-rating {
 	margin: .25em 0 .5em;
@@ -870,6 +874,7 @@ div#qrcode img {
 #browse-media-wrap .row .media-rating img, #browse-media-wrap .row .media-rating svg {
 	width: 26px;
 	height: 24px;
+	vertical-align: middle;
 }
 .playbtn-icon, .info-icon {
 	width: 24px;

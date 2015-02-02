@@ -1708,6 +1708,11 @@ function loadInfoModal(obj) {
 			$(obj).parents('.media-entity').append($('#info-modal'));
 		}
 		var infoModalPos = $(obj).position().left-40;
+		var objMeta = $(obj).parents('.media-entity');
+		$('#info-modal .entity-meta-header h2').html($(objMeta).find('.media-title').html());
+		$('#info-modal .entity-meta-header h3').html($(objMeta).find('.media-meta').html());
+		$('#info-modal .entity-meta-header .entity-runtime').html($(objMeta).find('.media-runtime').html());
+		$('#info-modal .media-image').html($(objMeta).find('.media-icon').html());
 		$(obj).parents('.media-entity').find('#info-modal').fadeIn(fadeTimer);
 	}
 }
