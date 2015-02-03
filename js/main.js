@@ -332,8 +332,13 @@ jQuery(document).ready(function($){
 
 	// Recent Media interaction
 	$('.row.media-entity .load-entity').click(function(){
-		var thisMediaType = $(this).parents('.media-entity').attr('media-type');
-		loadMediaView(thisMediaType);
+		var thisMediaType = $(this).parents('.media-entity').attr('media-type');		
+		var thisMediaTitle = $(this).parents('.media-entity').find('.media-title').text();
+		var thisMediaMeta = $(this).parents('.media-entity').find('.media-meta').text();
+		console.log(thisMediaType);
+		console.log(thisMediaTitle);
+		console.log(thisMediaMeta);
+		loadMediaView(thisMediaType, thisMediaTitle, thisMediaMeta);
 	});
 	
 	// Alexandria Theme UI interactions
@@ -1528,6 +1533,13 @@ function displayItem(key){
 			if(currentView == 'addcontent'){
 				loadShareMod();
 				resetInterface();
+			} else if(currentView == 'media'){
+				if (window.location.search.indexOf("sort") > -1) {
+					loadRecentMedia();
+				} else if (window.location.search.indexOf("title") > -1) {
+					loadMediaView();
+				}
+				resetInterface();
 			}
 		}		
 	}
@@ -1717,15 +1729,35 @@ function loadRecentMedia() {
 	$('.view-media-ui').fadeOut(fadeTimer);
 	$('#browse-media').fadeIn(fadeTimer);
 	$('#browse-media-wrap .row').first().addClass('first');
+	// URL and Browser Nav for Recent Media Browse View
+	currentView = 'media';
+	var stateObj = {
+		currentView: currentView,
+		sort: 'recent'
+	};
+	var newURL = document.location.origin + document.location.pathname +'?view='+currentView+'&sort=recent';
+	history.pushState(stateObj, 'Alexandria - Add Content', newURL);
 }
 // Load Media Page
-function loadMediaView(mediaType) {
-	currentView = 'mediaEntity';
+function loadMediaView(mediaType, mediaTitle, mediaMeta) {
+	currentView = 'media';
 	$('main').fadeOut(fadeTimer);
+	hideArchivesUI();
+	$('#tip-modal').hide();
 	$('.view-media-ui').fadeIn(fadeTimer);
 	$('#view-media .entity-view').hide();
 	$('#view-media').fadeIn(fadeTimer);
 	$('#media-view-'+mediaType).fadeIn(fadeTimer);
+	// URL and Browser Nav for Media Entity View
+	var stateObj = {
+		currentView: currentView,
+		mediaType: mediaType,
+		mediaTitle: mediaTitle,
+		mediaMeta: mediaMeta
+	};
+	var newURL = document.location.origin + document.location.pathname +'?view='+currentView+'&title='+encodeURIComponent(mediaTitle)+'&entity='+encodeURIComponent(mediaMeta);
+	var newTitle = 'Alexandria - '+mediaTitle+' '+mediaMeta;
+	history.pushState(stateObj, newTitle, newURL);
 }
 // Display Media Info Modal
 function loadInfoModal(obj) {
