@@ -1534,11 +1534,14 @@ function displayItem(key){
 				loadShareMod();
 				resetInterface();
 			} else if(currentView == 'media'){
+/*
 				if (window.location.search.indexOf("sort") > -1) {
 					loadRecentMedia();
 				} else if (window.location.search.indexOf("title") > -1) {
 					loadMediaView();
 				}
+*/
+				loadRecentMedia();
 				resetInterface();
 			}
 		}		
