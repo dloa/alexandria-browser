@@ -223,22 +223,8 @@ jQuery(document).ready(function($){
 		}
 	});
 
-	if(window.location.search == ''){
-		resetInterface();	
-	    $('#intro').fadeIn(fadeTimer);
-	} else if (window.location.search.indexOf("archive") > -1) {
-		if ($('#timeline').children().length == 0) {
-			buildTimeline();
-		}
-		$('.twitter-archive').not('main').show();
-		displayItem('archive');
-	} else if (window.location.search.indexOf("startDate") > -1) {
-		$('.twitter-archive').not('main').show();
-		getJobs('');
-	} else if (window.location.search.indexOf("view")  > -1) {
-		displayItem('view');
-	}
-
+	loadAlexandriaView();
+	
 	// Media Content Interface
 	$('#addNewContent-icon').click(function(){
 		loadShareMod();
@@ -633,6 +619,7 @@ function draw(words, bounds) {
 					'-o-transition': 'all 3s ease'
 				});
 				$('#tweetList li').remove();
+				$('svg#volume').remove();
 				activeWord = item;
 				startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
 				endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
@@ -744,6 +731,7 @@ function runSearch(searchTerm) {
 	} else {
 		getJobs(searchTerm);
 	}	
+	$('svg#volume').remove();
 	volumeBars(currentArchive,'',7200000);
 }
 
@@ -876,6 +864,7 @@ function getJobs(searchTerm) {
 
 // Build archiveList and cloudlist array and call word cloud function
 function buildArchiveList() {
+	$('svg#volume').remove();
 	console.log(newArchiveVolumeCache);
 	$('#archiveList li').each(function(){
 		var volumeSpan = $(this).find('span.archive-volume').html();
@@ -936,6 +925,7 @@ function getArchiveWords(arch, filterword) {
 	// Loading spinner
 	$('#wait').fadeIn(fadeTimer);
 	$('#disabler').fadeIn(fadeTimer);
+	$('svg#volume').remove();
 	$('main article ul li').remove();
 	// $('.wordCloud').children().remove();
 	// Adjust interface display for Words cloud display
@@ -1325,6 +1315,7 @@ function clearModal() {
 			getJobs(searchTerm);
 		}
 	}
+	$('svg#volume').remove();
 	volumeBars(currentArchive,'',7200000);
 	$("#tweetList li").remove();
 	$('#timeline-controls').fadeIn(fadeTimer);
@@ -1359,7 +1350,6 @@ function volumeBars(arch, word, interval){
 				return false;
 			}
 			$('#volume.twitter-archive').show();
-			$('svg#volume').remove();
 			console.log('volumeBars() Ajax: get/interval/count ... '+queryString);
 			var data = $.parseJSON(e);
 			$.each(data,function(t, v){
@@ -1611,18 +1601,29 @@ window.onpopstate = function(event) {
 		$("#tweetList li").remove();
 		currentPage = 0;
 		totalPages = 0;
-		if (window.location.search.indexOf("archive") > -1) {
-			displayItem('archive');
-		} else if (window.location.search.indexOf("startDate") > -1) {
-			$('.archiveLabel').fadeOut(fadeTimer);
-			$('#viewlabel .currentArchive').text('');
-			currentArchive = '*';
-			searchTerm = '';
-			currentView = 'archiveCloud';
-			runSearch(searchTerm);
-		}
+		loadAlexandriaView();
 	}
 };
+
+// Load Alexandria View
+function loadAlexandriaView() {
+	if(window.location.search == ''){
+		resetInterface();	
+	    $('#intro').fadeIn(fadeTimer);
+	} else if (window.location.search.indexOf("archive") > -1) {
+		if ($('#timeline').children().length == 0) {
+			buildTimeline();
+		}
+		$('.twitter-archive').not('main').show();
+		displayItem('archive');
+	} else if (window.location.search.indexOf("startDate") > -1) {
+		$('.twitter-archive').not('main').show();
+		getJobs('');
+	} else if (window.location.search.indexOf("view")  > -1) {
+		displayItem('view');
+	}
+}
+
 // External link meta data
 function getLinkMeta(extURL) {
 	$.ajax({
@@ -1721,6 +1722,7 @@ function resetInterface() {
 function resetAlexandria() {
 	$('main').fadeOut(fadeTimer);
 	$('#tip-modal').hide();
+	$('#addNewContent-icon').fadeIn(fadeTimer);
 	$('.sharing-ui').fadeOut(fadeTimer);
 	$('.view-media-ui').fadeOut(fadeTimer);
 	$('#search').fadeIn(fadeTimer);
@@ -1816,8 +1818,11 @@ function loadShareMod() {
 		currentView: currentView
 	};
 	var newURL = document.location.origin + document.location.pathname +'?view=addcontent';
-	history.pushState(stateObj, 'Alexandria - Add Content', newURL);
+	history.pushState(stateObj, 'Alexandria > Add Content', newURL);
+	document.title = 'Alexandria > Add Content';
+	$('#addNewContent-icon').fadeOut(fadeTimer);
 	$('#search').fadeOut(fadeTimer);
+	$('main').not('.sharing-ui').fadeOut(fadeTimer);
 	hideArchivesUI();
 	$('.sharing-ui').fadeIn(fadeTimer);
 	resizeTabs();
