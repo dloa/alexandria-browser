@@ -227,6 +227,9 @@ jQuery(document).ready(function($){
 		resetInterface();	
 	    $('#intro').fadeIn(fadeTimer);
 	} else if (window.location.search.indexOf("archive") > -1) {
+		if ($('#timeline').children().length == 0) {
+			buildTimeline();
+		}
 		$('.twitter-archive').not('main').show();
 		displayItem('archive');
 	} else if (window.location.search.indexOf("startDate") > -1) {
@@ -1367,7 +1370,7 @@ function volumeBars(arch, word, interval){
 				setTimeout(function(){
 					volumeBars(arch, word, interval);
 					return false;
-				}, '1750');
+				}, '2000');
 			} else {
 				var largest = Math.max.apply(Math, dataset);
 				var mostRecent = Math.max.apply(Math, Object.keys(data));
@@ -1540,7 +1543,7 @@ function displayItem(key){
 			if (window.location.search.indexOf("word") == -1) {
 				document.title = 'Alexandria - '+currentArchive;
 				getArchiveWords(currentArchive);
-				volumeBars(currentArchive,'',7200000);
+//				volumeBars(currentArchive,'',7200000);
 			} else {
 				displayItem('word');
 			}
