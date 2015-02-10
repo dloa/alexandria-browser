@@ -987,12 +987,12 @@ div#qrcode img {
 	text-align: center;
 }
 #add-media-container {
-	border: 4px solid #979797;
+	border: 1px solid #979797;
 	border-radius: 9px;
 	margin-top: 40px;
 }
 #add-media nav {
-	border-bottom: 4px solid #979797;
+	border-bottom: 1px solid #979797;
 	display: table;
 	width: 100%;
 }
@@ -1012,7 +1012,7 @@ div#qrcode img {
 	display: table-cell;
 	color:#979797;
 	padding: .5em;
-	border-left: 2px solid #979797;
+	border-left: 1px solid #979797;
 }
 #add-media nav ul li:first-child {
 	border-left: 0 none transparent;
@@ -1149,9 +1149,11 @@ input[type="file"] {
 }
 #add-media #newMedia-tabs input[type="text"] {
 	padding: .2em .5em;
+	border: 1px solid #979797;
 }
 .intInput, #add-media #newMedia-pay .col input[type="text"] {
-	width: 3em;
+	width: 2.5em;
+	margin: 0 .2em;
 }
 ul.distNetList, ul.distNetList li {
 	list-style: none;
@@ -1625,7 +1627,7 @@ section#timeline {
 	width: 100%;
 	height: 100%;
 }
-.disabled label, #wait .spinner {
+.disabled label, #wait .spinner, .disabled input[type="text"] {
 	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
 	filter: alpha(opacity=50);
 	-moz-opacity: 0.5;

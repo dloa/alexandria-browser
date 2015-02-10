@@ -218,8 +218,6 @@
 							<h2>select media to share:</h2>
 							<ul class="newMedia-links">
 								<li id="upload-media-source" class="uploader">Browse...</li>
-								<li>From URL...</li>
-								<li>From Hash...</li>
 							</ul>
 							<div class="uploaded-media-meta upload-media-source">
 								<p class="media-filename"><label>File Name: </label> <span></span></p>
@@ -406,7 +404,7 @@
 						<div class="tblwrap">
 							<div class="tbl centered">
 								<ul class="distNetList">
-									<li><input type="checkbox" name="dNetwork" value="DHT" id="dNetDHT" checked /> <label for="dNetDHT">Distributed Hash Table</label></li>
+									<li><input type="checkbox" name="dNetwork" value="DHT" id="dNetDHT" checked /> <label for="dNetDHT">Mainline DHT</label></li>
 									<li class="disabled"><input type="checkbox" name="dNetwork" value="MaidSafe" id="dNetSafe" disabled /> <label for="dNetSafe">MaidSafe</label></li>
 									<li class="disabled"><input type="checkbox" name="dNetwork" value="Storj" id="dNetStorj" disabled /> <label for="dNetStorj">Storj.io</label></li>
 									<li class="disabled"><input type="checkbox" name="dNetwork" value="Filecoin" id="dNetFilecoin" disabled /> <label for="dNetFilecoin">Filecoin</label></li>
@@ -447,10 +445,10 @@
 										<input type="checkbox" id="payment-tips" name="payment-tips" /> <label for="payment-tips">Optional Tips</label>
 									</div>
 									<div class="col">									
-										<input type="text" name="tip-value-1" />
-										<input type="text" name="tip-value-2" />
-										<input type="text" name="tip-value-3" />
-										<input type="text" name="tip-value-4" />
+										<label>$</label><input type="text" name="tip-value-1" />
+										<label>$</label><input type="text" name="tip-value-2" />
+										<label>$</label><input type="text" name="tip-value-3" />
+										<label>$</label><input type="text" name="tip-value-4" />
 									</div>
 								</div>
 								<div class="row disabled">
@@ -458,7 +456,7 @@
 										<input type="checkbox" id="payment-stream" name="payment-stream" disabled /> <label for="payment-stream">Pay to Stream</label>
 									</div>
 									<div class="col">
-										<input type="text" name="stream-value" disabled /> <label>/each</label>
+										<label>$</label><input type="text" name="stream-value" disabled /> <label>/each</label>
 									</div>
 								</div>
 								<div class="row disabled">
@@ -466,7 +464,7 @@
 										<input type="checkbox" id="payment-download" name="payment-download" disabled /> <label for="payment-download">Pay to Download</label>
 									</div>
 									<div class="col">									
-										<input type="text" name="download-value" disabled /> <label>/each</label>
+										<label>$</label><input type="text" name="download-value" disabled /> <label>/each</label>
 									</div>
 								</div>
 								<div class="row disabled">
@@ -474,7 +472,7 @@
 										<input type="checkbox" id="payment-subs" name="payment-subs" disabled /> <label for="payment-subs">Subscription</label>
 									</div>
 									<div class="col">									
-										<input type="text" name="annual-value" disabled /> <label>/year</label>
+										<label>$</label><input type="text" name="annual-value" disabled /> <label>/year</label>
 									</div>
 								</div>
 							</div>
