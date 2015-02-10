@@ -1543,7 +1543,6 @@ function displayItem(key){
 			if (window.location.search.indexOf("word") == -1) {
 				document.title = 'Alexandria - '+currentArchive;
 				getArchiveWords(currentArchive);
-//				volumeBars(currentArchive,'',7200000);
 			} else {
 				displayItem('word');
 			}
@@ -1552,7 +1551,7 @@ function displayItem(key){
 			document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
 			// VOLUME BARS FOR TWEETLIST
 			wordSearch(currentArchive, activeWord, 40, 0);
-			volumeBars(currentArchive, activeWord, 7200000);
+//			volumeBars(currentArchive, activeWord, 7200000);
 			getArchiveWords(currentArchive);
 		} else if (key == 'view') {
 			currentView = queryString(key);
