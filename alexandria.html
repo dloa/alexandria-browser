@@ -207,9 +207,9 @@
 					<ul id="add-media-menu">
 						<li name="newMedia-media" class="active">Media</li>
 						<li name="newMedia-info">Information</li>
-						<li name="newMedia-notary">Digital Notary</li>
-						<li name="newMedia-net">Distribution Network</li>
+						<li name="newMedia-net">Distribution</li>
 						<li name="newMedia-pay">Payments</li>
+						<li name="newMedia-notary">Publishing</li>
 					</ul>
 				</nav>
 				<div id="newMedia-tabs">
@@ -401,44 +401,6 @@
 							</div>
 						</div>
 					</div>
-					<div id="newMedia-notary" class="modal-tab">
-						<h2>select proof of ownership/rights:</h2>
-						<div class="tblwrap">
-							<div class="tbl">
-								<div class="row strong">
-									<div class="col">
-										Choose Blockchain(s)
-									</div>
-									<div class="col">
-										Cost
-									</div>
-								</div>
-								<div class="row">
-									<div class="col">
-										<div class="input-container">
-											<input type="checkbox" name="digital-notary-flo" id="digital-notary-flo" /> <label for="digital-notary-flo">FlorinCoin</label>
-										</div>
-									</div>
-									<div class="col">
-										<span id="flo-cost">10</span> FLO ($<span class="flo-usd-output"></span>)
-										<div id="flo-ltc" class="exchange-wrap"><label></label><span></span></div>
-										<div id="ltc-usd" class="exchange-wrap"><label></label><span></span></div>
-										<div id="flo-usd" class="exchange-wrap"><label></label><span></span></div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col">
-										<div class="input-container disabled">
-											<input disabled type="checkbox" name="digital-notary-Factom" id="digital-notary-Factom" /> <label for="digital-notary-Factom">Factom</label>
-										</div>
-									</div>
-									<div class="col">
-										&nbsp;
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
 					<div id="newMedia-net" class="modal-tab">
 						<h2>select distribution network:</h2>
 						<div class="tblwrap">
@@ -518,6 +480,44 @@
 							</div>
 						</div>
 					</div>
+					<div id="newMedia-notary" class="modal-tab">
+						<h2>select publishing network:</h2>
+						<div class="tblwrap">
+							<div class="tbl">
+								<div class="row strong">
+									<div class="col">
+										Choose Blockchain(s)
+									</div>
+									<div class="col">
+										Cost
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<div class="input-container">
+											<input type="checkbox" name="digital-notary-flo" id="digital-notary-flo" /> <label for="digital-notary-flo">Florincoin</label>
+										</div>
+									</div>
+									<div class="col">
+										<span id="flo-cost">10</span> FLO ($<span class="flo-usd-output"></span>)
+										<div id="flo-ltc" class="exchange-wrap"><label></label><span></span></div>
+										<div id="ltc-usd" class="exchange-wrap"><label></label><span></span></div>
+										<div id="flo-usd" class="exchange-wrap"><label></label><span></span></div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col">
+										<div class="input-container disabled">
+											<input disabled type="checkbox" name="digital-notary-Factom" id="digital-notary-Factom" /> <label for="digital-notary-Factom">Factom</label>
+										</div>
+									</div>
+									<div class="col">
+										&nbsp;
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>					
 				</div>
 			</div> 
 			<div class="pagination">
