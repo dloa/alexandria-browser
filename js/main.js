@@ -743,8 +743,8 @@ function getJobs(searchTerm) {
 	} else {
 		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive);
 	}
-	history.pushState(stateObj, 'Alexandria', newURL);
-	document.title = 'Alexandria';
+	history.pushState(stateObj, 'Alexandria > Twitter Archives', newURL);
+	document.title = 'Alexandria > Twitter Archives';
 	if(resetArchiveList == true){
 		resetArchiveList = false;
 		newArchiveVolumeCache.length = 0;

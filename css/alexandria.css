@@ -1129,6 +1129,7 @@ input[type="file"] {
 	display: table;
 	width: 100%;
 	margin-top: 1em;
+	margin-bottom: 1em;
 	text-align: left;
 }
 #newMedia-tabs .tbl .col {
@@ -1158,11 +1159,11 @@ ul.distNetList, ul.distNetList li {
 	padding: 0;
 }
 ul.distNetList {
-	margin:.8em 0;
+	margin:0;
 	display: inline-block;
 }
 ul.distNetList li {
-	margin: 0 0 .8em;
+	margin: .8em 0 0;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;
@@ -1716,6 +1717,7 @@ div.close-modal:hover {
 .ui-rangeSlider-handle {
 	height: 100%;
 	width: .5em;
+	
 }
 .ui-rangeSlider-container div.ui-rangeSlider-bar {
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
