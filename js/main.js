@@ -27,24 +27,6 @@ jQuery(document).ready(function($){
 			clearModal();
 		}
 		resetAlexandria();
-/*
-		if($(this).hasClass('toArchive')){
-			resetAlexandria();
-		} else {
-			if (playingTimeline == true){
-				autoPlayTimeline();
-			};
-			$('#search-main').val('');
-			$('.archiveLabel').fadeOut(fadeTimer);
-			$('#viewlabel .currentArchive').text('');
-			$('.sort-link').fadeOut(fadeTimer);
-			$('.view-controls .view-link').text('Cloud');
-			currentArchive = '*';
-			searchTerm = '';
-			currentView = 'archiveCloud';
-			getJobs(searchTerm);
-		}
-*/ 
 	});
 	// Omnibox (search input)
 	$('#search-main').on("keydown", function (e) {		
@@ -525,7 +507,6 @@ function buildTimeline() {
 		$('.currentEndTime').text($("#timeline").dateRangeSlider("values").max);
 	}
 	$('#viewlabel').fadeIn(fadeTimer);
-//	volumeBars('*', '', 7200000);
 }
 
 
@@ -552,8 +533,8 @@ function timeChange() {
 			word: searchWord
 		};
 		var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive) + '&word='+encodeURIComponent(activeWord);
-		history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
-		document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
+		history.pushState(stateObj, 'Alexandria > '+currentArchive+' > ' + activeWord, newURL);
+		document.title = 'Alexandria > '+currentArchive+' > ' + activeWord;
 		wordSearch(currentArchive, searchWord, 40, 0);
 		resetArchiveList = true;
 	} else {			
@@ -569,8 +550,8 @@ function timeChange() {
 			} else {
 				var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue + '&archive='+encodeURIComponent(currentArchive);
 			}
-			history.pushState(stateObj, currentArchive, newURL);
-			document.title = 'Alexandria - '+currentArchive;
+			history.pushState(stateObj, 'Alexandria > '+currentArchive, newURL);
+			document.title = 'Alexandria > '+currentArchive;
 			getArchiveWords(searchTerm);
 		} else {
 			if(!searchTerm) {
@@ -632,8 +613,8 @@ function draw(words, bounds) {
 					word: activeWord
 				};
 				var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive) + '&word='+encodeURIComponent(activeWord);
-				history.pushState(stateObj, currentArchive+' > ' + activeWord, newURL);
-				document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
+				history.pushState(stateObj, 'Alexandria > '+currentArchive+' > ' + activeWord, newURL);
+				document.title = 'Alexandria > '+currentArchive+' > ' + activeWord;
 				// VOLUME BARS FOR TWEETLIST
 				wordSearch(currentArchive, activeWord, 40, 0);
 				volumeBars(currentArchive, activeWord, 7200000);
@@ -656,8 +637,8 @@ function draw(words, bounds) {
 				} else {
 					var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue + '&archive='+encodeURIComponent(currentArchive);
 				}
-				history.pushState(stateObj, currentArchive, newURL);
-				document.title = 'Alexandria - '+currentArchive;
+				history.pushState(stateObj, 'Alexandria > '+currentArchive, newURL);
+				document.title = 'Alexandria > '+currentArchive;
 				getArchiveWords(item);
 				volumeBars(currentArchive,'',7200000);
 			}
@@ -763,7 +744,7 @@ function getJobs(searchTerm) {
 		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive);
 	}
 	history.pushState(stateObj, 'Alexandria', newURL);
-
+	document.title = 'Alexandria';
 	if(resetArchiveList == true){
 		resetArchiveList = false;
 		newArchiveVolumeCache.length = 0;
@@ -872,7 +853,6 @@ function buildArchiveList() {
 			$(this).remove();
 		}
 	});
-//	$('#'+currentView).fadeIn(fadeTimer);
 	$('#archiveListView').css('height',$('#archiveList').height()+100+'px');
 	// Populate cloudlist array with raw data			
 	var cloudlistraw = [];
@@ -927,7 +907,6 @@ function getArchiveWords(arch, filterword) {
 	$('#disabler').fadeIn(fadeTimer);
 	$('svg#volume').remove();
 	$('main article ul li').remove();
-	// $('.wordCloud').children().remove();
 	// Adjust interface display for Words cloud display
 	$('.sort-link').fadeOut(fadeTimer);
 	// Construct query string
@@ -963,7 +942,6 @@ function getArchiveWords(arch, filterword) {
 			// Build the interface
 			$('.sort-link').text('Popular');
 			$('#wordsListView').css('height',$('#wordsList').height()+100+'px');
-//			$('main#'+currentView).fadeIn(fadeTimer);
 			buildWordCloud(cloudlistraw, defaultMaxResults);
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
@@ -1301,8 +1279,8 @@ function clearModal() {
 		word: ''
 	};
 	var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive);
-	history.pushState(stateObj, currentArchive, newURL);
-	document.title = 'Alexandria - '+currentArchive;
+	history.pushState(stateObj, 'Alexandria > '+currentArchive, newURL);
+	document.title = 'Alexandria > '+currentArchive;
 	currentPage = 0;
 	totalPages = 0;
 	$("#tweetList li").fadeOut(fadeTimer);
@@ -1541,7 +1519,6 @@ function displayItem(key){
 			document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
 			// VOLUME BARS FOR TWEETLIST
 			wordSearch(currentArchive, activeWord, 40, 0);
-//			volumeBars(currentArchive, activeWord, 7200000);
 			getArchiveWords(currentArchive);
 		} else if (key == 'view') {
 			currentView = queryString(key);
@@ -1549,13 +1526,6 @@ function displayItem(key){
 				loadShareMod();
 				resetInterface();
 			} else if(currentView == 'media'){
-/*
-				if (window.location.search.indexOf("sort") > -1) {
-					loadRecentMedia();
-				} else if (window.location.search.indexOf("title") > -1) {
-					loadMediaView();
-				}
-*/
 				loadRecentMedia();
 				resetInterface();
 			}
@@ -1736,6 +1706,7 @@ function resetAlexandria() {
 	};
 	var newURL = document.location.origin + document.location.pathname;
 	history.pushState(stateObj, 'Alexandria', newURL);
+	document.title = 'Alexandria';
 }
 
 // Hide Twitter Archives UI
@@ -1762,7 +1733,8 @@ function loadRecentMedia() {
 		sort: 'recent'
 	};
 	var newURL = document.location.origin + document.location.pathname +'?view='+currentView+'&sort=recent';
-	history.pushState(stateObj, 'Alexandria - Add Content', newURL);
+	history.pushState(stateObj, 'Alexandria > Media', newURL);
+	document.title = 'Alexandria > Media';
 }
 // Load Media Page
 function loadMediaView(mediaType, mediaTitle, mediaMeta) {
@@ -1782,8 +1754,9 @@ function loadMediaView(mediaType, mediaTitle, mediaMeta) {
 		mediaMeta: mediaMeta
 	};
 	var newURL = document.location.origin + document.location.pathname +'?view='+currentView+'&title='+encodeURIComponent(mediaTitle)+'&entity='+encodeURIComponent(mediaMeta);
-	var newTitle = 'Alexandria - '+mediaTitle+' '+mediaMeta;
+	var newTitle = 'Alexandria > '+mediaTitle+' '+mediaMeta;
 	history.pushState(stateObj, newTitle, newURL);
+	document.title = newTitle;
 }
 // Display Media Info Modal
 function loadInfoModal(obj) {
