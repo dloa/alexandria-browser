@@ -1,8 +1,6 @@
 jQuery(document).ready(function($){
 	replaceSVG();
 	$('#spritz-container').hide();
-	$('#wait').fadeIn(fadeTimer);
-	$('#disabler').fadeIn(fadeTimer);
 	$('#adv-search').addClass('abs');
 	$('#timeline-settings').addClass('abs');
 	$('#info-modal').addClass('abs');
@@ -11,41 +9,14 @@ jQuery(document).ready(function($){
 	$('.alex-ui-datepicker').datepicker();
 	// Footer timeline contruct
 	if (window.location.search.indexOf("startDate") > -1) {
+		$('.twitter-archive').not('main').show();
 		displayItem('startDate');
 	}
-	console.log('startDate = '+startDateValue+', endDate = '+endDateValue)
-// BUILD TIMELINE
-	$("#timeline").dateRangeSlider({
-		bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
-		defaultValues: {min: startDateValue, max: endDateValue},
-		arrows: false,
-		scales: [{
-		  first: function(value){ return value; },
-		  end: function(value) {return value; },
-		  next: function(value){
-			var next = new Date(value);
-			return new Date(next.setDate(value.getDate() + 1));
-		  },
-		  label: function(value){
-			return days[value.getDate()];
-		  },
-		  format: function(tickContainer, tickStart, tickEnd){
-			tickContainer.addClass("myCustomClass");
-		  }
-		}]
-	});
-
 	// Timeline selected values change
 	$("#timeline").bind("userValuesChanged", function(e, data){
 		timeChange();
 	});
 
-	// Timeline breadcrumbs
-	if ($('.currentStartTime').text()=='') {
-		$('.currentStartTime').text($("#timeline").dateRangeSlider("values").min);
-		$('.currentEndTime').text($("#timeline").dateRangeSlider("values").max);
-	}
-	$('#viewlabel').fadeIn(fadeTimer);
 	// UI/UX Navigation
 	// Click logo to go back to archive list with current timeline selection
 	$('#logo').click(function(){
@@ -111,6 +82,8 @@ jQuery(document).ready(function($){
 		currentArchive = '*';
 		searchTerm = '';
 		currentView = 'archiveCloud';
+		$('.twitter-archive').not('main').show();
+		buildTimeline();
 		getJobs(searchTerm);
 	});
 
@@ -253,17 +226,20 @@ jQuery(document).ready(function($){
 	if(window.location.search == ''){
 		resetInterface();	
 	    $('#intro').fadeIn(fadeTimer);
-		// Generate initial volume bars
-		volumeBars('*', '', 7200000);
 	} else if (window.location.search.indexOf("archive") > -1) {
+		$('.twitter-archive').not('main').show();
 		displayItem('archive');
 	} else if (window.location.search.indexOf("startDate") > -1) {
+		$('.twitter-archive').not('main').show();
 		getJobs('');
 	} else if (window.location.search.indexOf("view")  > -1) {
 		displayItem('view');
 	}
 
 	// Media Content Interface
+	$('#addNewContent-icon').click(function(){
+		loadShareMod();
+	});
 
 	// Get exchange rates
 	getCryptos();
@@ -387,7 +363,7 @@ jQuery(document).ready(function($){
 		var tipAmount = parseFloat($(this).val());
 		$('.tip-value').text(tipAmount);
 		$('.flo-usd .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
-	});
+	}); 
 	// API Server ID and Control
 	if(serverAddress == '54.172.28.195'){
 		$('#serverID').text('Dev');
@@ -408,8 +384,8 @@ jQuery(document).ready(function($){
 
 // DEFAULT VARIABLES
 
-var serverAddress = '54.172.28.195'; // Dev
-// var serverAddress = 'blue.a.blocktech.com'; // Demo
+// var serverAddress = '54.172.28.195'; // Dev
+var serverAddress = 'blue.a.blocktech.com'; // Demo
 
 var w = window.innerWidth;				
 var h = window.innerHeight-245;
@@ -531,6 +507,38 @@ function getCryptos() {
 		}
 	});
 }
+
+// BUILD TIMELINE
+function buildTimeline() {
+	console.log('startDate = '+startDateValue+', endDate = '+endDateValue)
+	$("#timeline").dateRangeSlider({
+		bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
+		defaultValues: {min: startDateValue, max: endDateValue},
+		arrows: false,
+		scales: [{
+		  first: function(value){ return value; },
+		  end: function(value) {return value; },
+		  next: function(value){
+			var next = new Date(value);
+			return new Date(next.setDate(value.getDate() + 1));
+		  },
+		  label: function(value){
+			return days[value.getDate()];
+		  },
+		  format: function(tickContainer, tickStart, tickEnd){
+			tickContainer.addClass("myCustomClass");
+		  }
+		}]
+	});
+	// Timeline breadcrumbs
+	if ($('.currentStartTime').text()=='') {
+		$('.currentStartTime').text($("#timeline").dateRangeSlider("values").min);
+		$('.currentEndTime').text($("#timeline").dateRangeSlider("values").max);
+	}
+	$('#viewlabel').fadeIn(fadeTimer);
+//	volumeBars('*', '', 7200000);
+}
+
 
 // TIMELINE CHANGE
 function timeChange() {
@@ -1343,15 +1351,19 @@ function volumeBars(arch, word, interval){
 				console.log('Timeline not present. Aborting volume bar generation.');
 				return false;
 			}
+			$('#volume.twitter-archive').show();
 			$('svg#volume').remove();
 			console.log('volumeBars() Ajax: get/interval/count ... '+queryString);
 			var data = $.parseJSON(e);
 			$.each(data,function(t, v){
 				dataset.push(v);
 			});
+			console.info(dataset);
 			var largest = Math.max.apply(Math, dataset);
 			var mostRecent = Math.max.apply(Math, Object.keys(data));
 			// Difference between most recent and current time
+			console.log('largest = '+ largest);
+			console.log('mostRecent = '+ largest);
 			console.log('Diff = '+((Date.parse(datetime))-mostRecent));
 			console.log('interval = '+interval);
 			if ( ( ( ( Date.parse(datetime) ) - mostRecent ) > interval*1.15 ) && (arch == '*') ) {
@@ -1699,13 +1711,9 @@ function resetAlexandria() {
 	$('.sharing-ui').fadeOut(fadeTimer);
 	$('.view-media-ui').fadeOut(fadeTimer);
 	$('#search').fadeIn(fadeTimer);
-	$('.twitter-archive').not('main').fadeIn(fadeTimer);
-	$('#app-shading').css('bottom','60px');
+	$('.twitter-archive').not('main').hide();
+	$('#app-shading').css('bottom','0');
 	currentView = 'archiveCloud';
-	var hasVolumeBars = $('svg#volume');
-	if(hasVolumeBars.length==0){
-		volumeBars('*', '', 7200000);
-	}
 	$('#logo').removeClass('toArchive');
 	$('#intro').fadeIn(fadeTimer);
 	var stateObj = {

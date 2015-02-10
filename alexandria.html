@@ -42,7 +42,7 @@
 						<div class="input-container">
 							<input type="text" class="search" />			
 							<div class="clearSearch">x</div>
-						</div>						
+						</div>
 					</div>
 					<div class="row">
 						<label>Refine Results</label>
@@ -98,7 +98,8 @@
 -->
 
 			<h2 class="sharing-ui">Share New Content</h2>
-
+			
+			<div id="addNewContent-icon"><img src="img/add-new-icon.svg" class="makesvg" /></div>
 			<div id="serverID"></div>
 
 		</header>
@@ -122,9 +123,6 @@
 							</div>
 							<div>Media</div>
 						</a>
-					</li>
-					<li>
-						<a onclick="loadShareMod()">+ Share new content</a>
 					</li>
 				</ul>
 			</div>
@@ -258,6 +256,14 @@
 										<div class="row full">
 											<div class="col">
 												<div class="input-container">
+													<label>Runtime</label>
+													<input type="text" />
+												</div>
+											</div>
+										</div>
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
 													<label>Director</label>
 													<input type="text" />
 												</div>
@@ -328,6 +334,14 @@
 											<div class="col">
 												<div class="input-container">
 													<label>Episode Name</label>
+													<input type="text" />
+												</div>
+											</div>
+										</div>
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
+													<label>Runtime</label>
 													<input type="text" />
 												</div>
 											</div>
@@ -429,15 +443,13 @@
 						<div class="tblwrap">
 							<div class="tbl centered">
 								<h2>set distributed network:</h2>
-								<ul class="newMedia-links">
-									<li>Distributed Hash Table</li>
+								<ul class="distNetList">
+									<li><input type="radio" name="dNetwork" value="DHT" id="dNetDHT" checked /> <label for="dNetDHT">Distributed Hash Table</label></li>
+									<li class="disabled"><input type="radio" name="dNetwork" value="MaidSafe" id="dNetSafe" disabled /> <label for="dNetSafe">MaidSafe</label></li>
+									<li class="disabled"><input type="radio" name="dNetwork" value="Storj" id="dNetStorj" disabled /> <label for="dNetStorj">Storj.io</label></li>
+									<li class="disabled"><input type="radio" name="dNetwork" value="Filecoin" id="dNetFilecoin" disabled /> <label for="dNetFilecoin">Filecoin</label></li>
 								</ul>
-								<h3>-or-</h3>
-								<ul class="newMedia-links secondary">
-									<li>Storj.io</li>
-									<li>Filecoin</li>
-									<li>MaidSafe</li>
-								</ul>
+<!--
 								<div class="container">
 									<div class="tblwrap">
 										<div class="tbl">
@@ -460,6 +472,7 @@
 										</div>
 									</div>
 								</div>
+-->
 							</div>
 						</div>
 					</div>
@@ -506,7 +519,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> 
 			<div class="pagination">
 				<ul>
 					<li class="prev">Previous</li>
