@@ -1364,7 +1364,10 @@ function volumeBars(arch, word, interval){
 			});
 			console.info(dataset);
 			if (dataset == "no archive found") {
-				volumeBars(arch, word, interval);
+				setTimeout(function(){
+					volumeBars(arch, word, interval);
+					return false;
+				}, '1750');
 			} else {
 				var largest = Math.max.apply(Math, dataset);
 				var mostRecent = Math.max.apply(Math, Object.keys(data));
