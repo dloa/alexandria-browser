@@ -1163,7 +1163,7 @@ ul.distNetList {
 	display: inline-block;
 }
 ul.distNetList li {
-	margin: .8em 0 0;
+	margin: 0 0 0.8em;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;
