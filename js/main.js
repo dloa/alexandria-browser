@@ -729,9 +729,10 @@ var searchTimerId = 0;
 var searchRunning;
 var searchTerm;
 
-function runSearch(searchTerm) {
+function runSearch(searchTerm) {	
 	clearTimeout ( searchTimerId );
 	searchRunning = 0;
+	$('.twitter-archive').not('main').show();
 	if($('#tweetListView').css('display') == 'block') {
 		clearModal();
 	}	
@@ -739,12 +740,15 @@ function runSearch(searchTerm) {
 		getArchiveWords(currentArchive, searchTerm);
 	} else {
 		getJobs(searchTerm);
-	}
+	}	
 	volumeBars(currentArchive,'',7200000);
 }
 
 // NEW GET ACTIVE JOBS AND VOLUMES
 function getJobs(searchTerm) {
+	if ($('#timeline').children().length == 0) {
+		buildTimeline();
+	}
 	document.title = 'Alexandria';
 	console.log('Searching for '+searchTerm);
 	if(window.location.search != '') {
@@ -912,7 +916,6 @@ function buildArchiveList() {
 	$('.view-link').fadeIn(fadeTimer);
 
 	// Build Word Cloud
-	volumeBars(currentArchive, '', 7200000);
 	console.info(cloudlist);
 	buildWordCloud(cloudlist, defaultMaxResults);
 }
@@ -1010,6 +1013,7 @@ function buildWordCloud(cloudlist, MaxResults) {
 		$('main').not('#'+currentView).not('#vis').fadeOut(fadeTimer);		
 	}
 	$('main #'+currentView).fadeIn(fadeTimer);
+	volumeBars(currentArchive, '', 7200000);
 }
 
 // Build TWEET LIST
@@ -1359,57 +1363,61 @@ function volumeBars(arch, word, interval){
 				dataset.push(v);
 			});
 			console.info(dataset);
-			var largest = Math.max.apply(Math, dataset);
-			var mostRecent = Math.max.apply(Math, Object.keys(data));
-			// Difference between most recent and current time
-			console.log('largest = '+ largest);
-			console.log('mostRecent = '+ largest);
-			console.log('Diff = '+((Date.parse(datetime))-mostRecent));
-			console.log('interval = '+interval);
-			if ( ( ( ( Date.parse(datetime) ) - mostRecent ) > interval*1.15 ) && (arch == '*') ) {
-				console.log('Librarian stopped archiving!');
+			if (dataset == "no archive found") {
+				volumeBars(arch, word, interval);
 			} else {
-				console.log('Librarian appears to be archiving');
-			}
-			var firstTimestamp = Math.min.apply(Math, Object.keys(data));
-			var missingIntervals = ((Date.parse(basicSliderBounds.max))-mostRecent)/interval;
-			// Fill in missing volume bars at end of timeline
-			while (missingIntervals > 0) {
-				data[Math.max.apply(Math, Object.keys(data))+interval] = 0;
-				missingIntervals--;
-			}
-			// Draw bars
-			if(missingIntervals == 0){
-				var drawdata = [];
-				$.each(data,function(t, v){
-					drawdata.push(v);
-				});
-				//Create SVG element
-				var svg = d3.select("body")
-							.append("svg")
-							.attr("width", "100%")
-							.attr("id","volume")
-							.attr("class","twitter-archive")
-							.attr("height", h);
-			
-				svg.selectAll("rect")
-				   .data(drawdata)
-				   .enter()
-				   .append("rect")
-				   .attr("x", function(d, i) {
-						return ((i * (w / drawdata.length))/w)*100+'%';
-				   })
-				   .attr("y", function(d) {
-						return h - (h*(d/largest));
-				   })
-				   .attr("width", Math.abs(((w / drawdata.length - barPadding)/w)*100)+'%')
-				   .attr("height", function(d) {
-						return h*(d/largest);
-				   })
-				   .attr("fill", function(d) {
-				   		var barFill = ((255-(Math.round((d/largest)*255 * 10)/10))*.75).toFixed(0);
-						return "rgb("+barFill+", "+ barFill +", " + barFill + ")";
-				   });
+				var largest = Math.max.apply(Math, dataset);
+				var mostRecent = Math.max.apply(Math, Object.keys(data));
+				// Difference between most recent and current time
+				console.log('largest = '+ largest);
+				console.log('mostRecent = '+ largest);
+				console.log('Diff = '+((Date.parse(datetime))-mostRecent));
+				console.log('interval = '+interval);
+				if ( ( ( ( Date.parse(datetime) ) - mostRecent ) > interval*1.15 ) && (arch == '*') ) {
+					console.log('Librarian stopped archiving!');
+				} else {
+					console.log('Librarian appears to be archiving');
+				}
+				var firstTimestamp = Math.min.apply(Math, Object.keys(data));
+				var missingIntervals = ((Date.parse(basicSliderBounds.max))-mostRecent)/interval;
+				// Fill in missing volume bars at end of timeline
+				while (missingIntervals > 0) {
+					data[Math.max.apply(Math, Object.keys(data))+interval] = 0;
+					missingIntervals--;
+				}
+				// Draw bars
+				if(missingIntervals == 0){
+					var drawdata = [];
+					$.each(data,function(t, v){
+						drawdata.push(v);
+					});
+					//Create SVG element
+					var svg = d3.select("body")
+								.append("svg")
+								.attr("width", "100%")
+								.attr("id","volume")
+								.attr("class","twitter-archive")
+								.attr("height", h);
+				
+					svg.selectAll("rect")
+					   .data(drawdata)
+					   .enter()
+					   .append("rect")
+					   .attr("x", function(d, i) {
+							return ((i * (w / drawdata.length))/w)*100+'%';
+					   })
+					   .attr("y", function(d) {
+							return h - (h*(d/largest));
+					   })
+					   .attr("width", Math.abs(((w / drawdata.length - barPadding)/w)*100)+'%')
+					   .attr("height", function(d) {
+							return h*(d/largest);
+					   })
+					   .attr("fill", function(d) {
+					   		var barFill = ((255-(Math.round((d/largest)*255 * 10)/10))*.75).toFixed(0);
+							return "rgb("+barFill+", "+ barFill +", " + barFill + ")";
+					   });
+				}
 			}
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
