@@ -1,10 +1,5 @@
 jQuery(document).ready(function($){
 	replaceSVG();
-	setTimeout(
-		function(){
-			$('img.makesvg:hidden').show();
-		},2000
-	);
 	$('#spritz-container').hide();
 	$('#adv-search').addClass('abs');
 	$('#timeline-settings').addClass('abs');
@@ -1586,26 +1581,27 @@ window.onpopstate = function(event) {
 
 // Load Alexandria View
 function loadAlexandriaView() {
-	if(window.location.search == ''){
-		resetInterface();
-		var readyStateCheckInterval = setInterval(function() {
-		    if (document.readyState === "complete") {
-		        clearInterval(readyStateCheckInterval);
-		        $('#intro').fadeIn(fadeTimer);
-		    }
-		}, 10);		    
-	} else if (window.location.search.indexOf("archive") > -1) {
-		if ($('#timeline').children().length == 0) {
-			buildTimeline();
-		}
-		$('.twitter-archive').not('main').show();
-		displayItem('archive');
-	} else if (window.location.search.indexOf("startDate") > -1) {
-		$('.twitter-archive').not('main').show();
-		getJobs('');
-	} else if (window.location.search.indexOf("view")  > -1) {
-		displayItem('view');
-	}
+	var readyStateCheckInterval = setInterval(function() {
+	    if (document.readyState === "complete") {
+	        clearInterval(readyStateCheckInterval);
+			$('img.makesvg:hidden').show();
+			if(window.location.search == ''){
+				resetInterface();
+				        $('#intro').fadeIn(fadeTimer);
+			} else if (window.location.search.indexOf("archive") > -1) {
+				if ($('#timeline').children().length == 0) {
+					buildTimeline();
+				}
+				$('.twitter-archive').not('main').show();
+				displayItem('archive');
+			} else if (window.location.search.indexOf("startDate") > -1) {
+				$('.twitter-archive').not('main').show();
+				getJobs('');
+			} else if (window.location.search.indexOf("view")  > -1) {
+				displayItem('view');
+			}
+	    }
+	}, 10);		    
 }
 
 // External link meta data
