@@ -381,6 +381,9 @@ header #serverID {
 	cursor: pointer;
 	font-size: 1em;
 	line-height: 1.3em;
+	background: url('../img/down-arrow-icon.svg') no-repeat 96% center transparent;
+	background-size: 22px;
+	padding: 10px;
 }
 header .input-container select {
 	font-size: .8em;
@@ -1041,6 +1044,7 @@ div#qrcode img {
 #add-media #newMedia-tabs {
 	position: relative;
 	margin: 30px 0 40px;
+	min-height: 180px;
 }
 #add-media .modal-tab label {
 	font-size: 18px;
@@ -1066,6 +1070,16 @@ div#qrcode img {
 	padding: 0 2.5%;
 	display: none;
 	color: #979797;
+}
+div#newMedia-media .wrap {
+	width: 15em;
+	margin: 0 auto;
+}
+div#newMedia-media .wrap .row {
+	margin: .8em 0 2em;
+}
+div#newMedia-media .wrap .row.choosefile {	
+	display: none;
 }
 #add-media #newMedia-tabs .modal-tab:first-child {
 	display: block;
@@ -1114,7 +1128,7 @@ div#qrcode img {
 	padding: 0;
 }
 #add-media #newMedia-tabs ul.newMedia-links {
-	margin: 1em 0;
+	margin: .8em 0 0;
 }
 #add-media #newMedia-tabs .container ul.newMedia-links {
 	margin-top: 0;

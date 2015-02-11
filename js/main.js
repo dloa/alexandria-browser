@@ -257,6 +257,9 @@ jQuery(document).ready(function($){
 		$('#newMedia-info fieldset').hide();
 		if (mediaType != '') {
 			$('fieldset#new-'+mediaType+'-meta').show();
+			$('.row.choosefile').show();
+		} else {
+			$('.row.choosefile').hide();
 		}
 		resizeTabs();
 	});

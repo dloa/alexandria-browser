@@ -255,13 +255,34 @@
 				</nav>
 				<div id="newMedia-tabs">
 					<div id="newMedia-media" class="modal-tab">
+						<h2>select media type:</h2>
 						<div class="wrap">
-							<h2>select media to share:</h2>
-							<ul class="newMedia-links">
-								<li id="upload-media-source" class="uploader">Browse...</li>
-							</ul>
-							<div class="uploaded-media-meta upload-media-source">
-								<p class="media-filename"><label>File Name: </label> <span></span></p>
+							<div class="row full">
+								<div class="col">
+									<div class="input-container select-container">
+										<select id="mediaType">
+											<option value=""></option>
+											<option value="movie">Movie</option>
+											<option value="music-song">Music - Song</option>
+											<option value="music-album">Music - Album</option>
+											<option value="podcast">Podcast</option>
+											<option value="video">Video</option>
+											<option value="book">Book</option>
+											<option value="thing">Thing</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="row full choosefile">
+								<div class="col">
+									<h2>select media to share:</h2>
+									<ul class="newMedia-links">
+										<li id="upload-media-source" class="uploader">Browse...</li>
+									</ul>
+									<div class="uploaded-media-meta upload-media-source">
+										<p class="media-filename"><label>File Name: </label> <span></span></p>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -270,22 +291,6 @@
 							<h2>Information</h2>
 							<div class="container">
 								<div class="tbl">
-									<div class="row full">
-										<div class="col">
-											<div class="input-container select-container">
-												<select id="mediaType">
-													<option value="">Select Media Type</option>
-													<option value="movie">Movie</option>
-													<option value="music">Music</option>
-													<option value="podcast">Podcast</option>
-													<option value="video">Video</option>
-													<option value="book">Book</option>
-													<option value="thing">Thing</option>
-												</select>
-											</div>
-										</div>
-									</div>
-								<!-- Media Type Forms -->
 									<!-- Movie Meta -->
 									<fieldset id="new-movie-meta">
 										<div class="row full">
@@ -357,6 +362,44 @@
 											</div>
 										</div>
 									</fieldset>
+									<!-- Music - Song Meta -->
+									<fieldset id="new-music-song-meta">
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
+													<label>Artist Name</label>
+													<input type="text" name="title" />
+												</div>
+											</div>
+										</div>
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
+													<label>Song Title</label>
+													<input type="text" name="title" />
+												</div>
+											</div>
+										</div>
+									</fieldset>
+									<!-- Music - Album Meta -->
+									<fieldset id="new-music-album-meta">
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
+													<label>Artist Name</label>
+													<input type="text" name="title" />
+												</div>
+											</div>
+										</div>
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
+													<label>Album Title</label>
+													<input type="text" name="title" />
+												</div>
+											</div>
+										</div>
+									</fieldset>
 									<!-- Podcast Meta -->
 									<fieldset id="new-podcast-meta">
 										<div class="row full">
@@ -424,6 +467,55 @@
 												<div class="input-container">
 													<label>Description</label>
 													<textarea></textarea>
+												</div>
+											</div>
+										</div>
+									</fieldset>
+									<!-- Video Meta -->
+									<fieldset id="new-video-meta">
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
+													<label>Video Title</label>
+													<input type="text" name="title" />
+												</div>
+											</div>
+										</div>
+									</fieldset>
+									<!-- Books Meta -->
+									<fieldset id="new-book-meta">
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
+													<label>Author Name</label>
+													<input type="text" name="title" />
+												</div>
+											</div>
+										</div>
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
+													<label>Book Title</label>
+													<input type="text" name="title" />
+												</div>
+											</div>
+										</div>
+									</fieldset>
+									<!-- Things Meta -->
+									<fieldset id="new-thing-meta">
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
+													<label>Designer Name</label>
+													<input type="text" name="title" />
+												</div>
+											</div>
+										</div>
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
+													<label>Thing Name</label>
+													<input type="text" name="title" />
 												</div>
 											</div>
 										</div>
@@ -802,3 +894,4 @@
 		<script src="js/main.js"></script>
 	</body>
 </html>
+mediaType
