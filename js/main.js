@@ -68,6 +68,7 @@ jQuery(document).ready(function($){
 		currentArchive = '*';
 		searchTerm = '';
 		currentView = 'archiveCloud';
+		$('svg#volume').remove();
 		$('.twitter-archive').not('main').show();
 		buildTimeline();
 		getJobs(searchTerm);
@@ -189,7 +190,7 @@ jQuery(document).ready(function($){
 	});	
 	// Timeline controls
 	$('#timeline-controls').click(function(){
-		$('svg#volume').remove();
+//		$('svg#volume').remove();
 	});
 	$('#timeline-controls .full').click(function(){
 		$("#timeline").dateRangeSlider("bounds", new Date(2014, 8, 8), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
@@ -614,7 +615,7 @@ function draw(words, bounds) {
 					'-o-transition': 'all 3s ease'
 				});
 				$('#tweetList li').remove();
-				$('svg#volume').remove();
+//				$('svg#volume').remove();
 				activeWord = item;
 				startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
 				endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
@@ -726,7 +727,7 @@ function runSearch(searchTerm) {
 	} else {
 		getJobs(searchTerm);
 	}	
-	$('svg#volume').remove();
+//	$('svg#volume').remove();
 	volumeBars(currentArchive,'',7200000);
 }
 
@@ -735,7 +736,6 @@ function getJobs(searchTerm) {
 	if ($('#timeline').children().length == 0) {
 		buildTimeline();
 	}
-	document.title = 'Alexandria';
 	console.log('Searching for '+searchTerm);
 	if(window.location.search != '') {
 		if (window.location.search.indexOf("startDate") > -1) {
@@ -748,15 +748,15 @@ function getJobs(searchTerm) {
 	var stateObj = {
 		startDateValue: startDateValue,
 		endDateValue: endDateValue,
-		archive: currentArchive,
+		archive: '*',
 		word: ''
 	};
 	console.log('currentArchive = '+ currentArchive);	
 	if(currentArchive == '*'){
 		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue;
-	} else {
+	}/* else {
 		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive);
-	}
+	} */
 	history.pushState(stateObj, 'Alexandria > Twitter Archives', newURL);
 	document.title = 'Alexandria > Twitter Archives';
 	if(resetArchiveList == true){
@@ -859,7 +859,7 @@ function getJobs(searchTerm) {
 
 // Build archiveList and cloudlist array and call word cloud function
 function buildArchiveList() {
-	$('svg#volume').remove();
+//	$('svg#volume').remove();
 	console.log(newArchiveVolumeCache);
 	$('#archiveList li').each(function(){
 		var volumeSpan = $(this).find('span.archive-volume').html();
@@ -919,7 +919,7 @@ function getArchiveWords(arch, filterword) {
 	// Loading spinner
 	$('#wait').fadeIn(fadeTimer);
 	$('#disabler').fadeIn(fadeTimer);
-	$('svg#volume').remove();
+//	$('svg#volume').remove();
 	$('main article ul li').remove();
 	// Adjust interface display for Words cloud display
 	$('.sort-link').fadeOut(fadeTimer);
@@ -1307,7 +1307,6 @@ function clearModal() {
 			getJobs(searchTerm);
 		}
 	}
-	$('svg#volume').remove();
 	volumeBars(currentArchive,'',7200000);
 	$("#tweetList li").remove();
 	$('#timeline-controls').fadeIn(fadeTimer);
@@ -1348,12 +1347,14 @@ function volumeBars(arch, word, interval){
 				dataset.push(v);
 			});
 			console.info(dataset);
-			if (dataset == "no archive found") {
-				setTimeout(function(){
+	        clearInterval(volumeBarInterval);
+		    if (dataset == "no archive found") {
+				var volumeBarInterval = setInterval(function() {
 					volumeBars(arch, word, interval);
 					return false;
-				}, '2000');
-			} else {
+				}, 2000);
+		    } else {
+				$('svg#volume').remove();
 				var largest = Math.max.apply(Math, dataset);
 				var mostRecent = Math.max.apply(Math, Object.keys(data));
 				// Difference between most recent and current time
@@ -1591,7 +1592,6 @@ window.onpopstate = function(event) {
 		loadAlexandriaView();
 	}
 };
-
 // Load Alexandria View
 function loadAlexandriaView() {
 	var readyStateCheckInterval = setInterval(function() {
@@ -1728,12 +1728,12 @@ function resetInterface() {
 
 // RESET ALEXANDRIA
 function resetAlexandria() {
-	$('main').fadeOut(fadeTimer);
+	$('main').hide(fadeTimer);
 	$('#tip-modal').hide();
-	$('#addNewContent-icon').fadeIn(fadeTimer);
-	$('.sharing-ui').fadeOut(fadeTimer);
-	$('.view-media-ui').fadeOut(fadeTimer);
-	$('#search').fadeIn(fadeTimer);
+	$('#addNewContent-icon').show(fadeTimer);
+	$('.sharing-ui').hide(fadeTimer);
+	$('.view-media-ui'). hide(fadeTimer);
+	$('#search').show(fadeTimer);
 	$('.twitter-archive').not('main').hide();
 	$('#app-shading').css('bottom','0');
 	currentView = 'archiveCloud';
@@ -1790,7 +1790,9 @@ function loadMediaView(mediaType, mediaTitle, mediaMeta) {
 		mediaTitle: mediaTitle,
 		mediaMeta: mediaMeta
 	};
-	var newURL = document.location.origin + document.location.pathname +'?view='+currentView+'&title='+encodeURIComponent(mediaTitle)+'&entity='+encodeURIComponent(mediaMeta);
+	var titleLower = mediaTitle.replace(/\s/g , "-").toLowerCase();
+	var mediaMetaLower = mediaMeta.replace(/\s/g , "-").toLowerCase();
+	var newURL = document.location.origin + document.location.pathname +'?view='+currentView+'&title='+encodeURIComponent(titleLower)+'&entity='+encodeURIComponent(mediaMetaLower);
 	var newTitle = 'Alexandria > '+mediaTitle+' '+mediaMeta;
 	history.pushState(stateObj, newTitle, newURL);
 	document.title = newTitle;

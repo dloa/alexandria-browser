@@ -160,6 +160,14 @@
 					<li class="module-icon">
 						<a onclick="loadRecentMedia()">
 							<div class="imgwrap">
+								<img src="img/recipes-icon.svg" class="makesvg" />							
+							</div>
+							<div>Recipes </div>
+						</a>
+					</li>
+					<li class="module-icon">
+						<a onclick="loadRecentMedia()">
+							<div class="imgwrap">
 								<img src="img/things-icon.svg" class="makesvg" />							
 							</div>
 							<div>Things</div>
@@ -268,6 +276,7 @@
 											<option value="podcast">Podcast</option>
 											<option value="video">Video</option>
 											<option value="book">Book</option>
+											<option value="recipe">Recipe</option>
 											<option value="thing">Thing</option>
 										</select>
 									</div>
@@ -501,6 +510,17 @@
 											</div>
 										</div>
 									</fieldset>
+									<!-- Books Meta -->
+									<fieldset id="new-recipe-meta">
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
+													<label>Recipe Title</label>
+													<input type="text" name="title" />
+												</div>
+											</div>
+										</div>
+									</fieldset>
 									<!-- Things Meta -->
 									<fieldset id="new-thing-meta">
 										<div class="row full">
@@ -705,6 +725,14 @@
 								<img src="img/books-icon.svg" class="makesvg" />							
 							</div>
 							<div>Books</div>
+						</a>
+					</li>
+					<li>
+						<a>
+							<div class="imgwrap">
+								<img src="img/recipes-icon.svg" class="makesvg" />							
+							</div>
+							<div>Recipes</div>
 						</a>
 					</li>
 					<li>
