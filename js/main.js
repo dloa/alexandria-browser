@@ -1803,21 +1803,51 @@ function loadInfoModal(childObj) {
     var count = 1;
     while ( !$(testObj).hasClass('media-entity') ) {
         testObj = testObj.parentNode;
-        if (!testObj) {
+        if (!testObj) {    	
 			if ( ($('#info-modal-small').css('display') == 'block') && ($('#info-modal-small').css('opacity')==1) ) {
 				$('#info-modal-small').fadeOut(fadeTimer);
 				return false;
 			} else {
+				// Info Modal for .Row
+			    var newTestObj = childObj.parentNode;
+			    var newCount = 1;
+			    while ( !$(newTestObj).hasClass('col') ) {
+					newTestObj = newTestObj.parentNode;
+			        if (!newTestObj) {
+						// Info Modal for LI
+						$('#info-modal-small').html('');
+						var objMeta = $(childObj).parents('li');
+						var localFile = $(objMeta).find('label').text().replace(/\s/g , "-").toLowerCase();
+						getInfoFile(localFile);
+						if ($(objMeta).find('#info-modal-media').length == 0) {
+							$(objMeta).append($('#info-modal-small'));
+						}
+						var infoInterval = setInterval(function() {
+						    if ($(objMeta).find('#info-modal-small').html()!='') {
+						        clearInterval(infoInterval);
+								$(objMeta).find('#info-modal-small').fadeIn(fadeTimer);
+						    }
+						}, 100);
+					}
+					newCount++;
+			    }
 				$('#info-modal-small').html('');
-				var objMeta = $(childObj).parents('li');
-				if ($(objMeta).find('#info-modal-small').length == 0) {
+				if(!objMeta){
+					var objMeta = $(childObj).parents('.col');
+					var localFile = $(objMeta).find('label').text().replace(/\s/g , "-").toLowerCase();
+				}
+				getInfoFile(localFile);
+				if ($(objMeta).find('#info-modal-media').length == 0) {
 					$(objMeta).append($('#info-modal-small'));
 				}
-				var localFile = $(objMeta).find('label').text().replace(/\s/g , "-").toLowerCase();
-				getInfoFile(localFile);
-				$(objMeta).find('#info-modal-small').fadeIn(fadeTimer);
-	        	return false;
+				var infoInterval = setInterval(function() {
+				    if ($(objMeta).find('#info-modal-small').html()!='') {
+				        clearInterval(infoInterval);
+						$(objMeta).find('#info-modal-small').fadeIn(fadeTimer);
+				    }
+				}, 100);
 			}
+			
         }
         count++;
     }

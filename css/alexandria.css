@@ -1179,6 +1179,7 @@ input[type="file"] {
 }
 #newMedia-tabs .tbl .col {
 	padding: 0 0 .8em 2em;
+	position: relative;
 }
 #newMedia-tabs .tbl .row .col:first-child {
 	padding-left: 0;
