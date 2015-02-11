@@ -1901,6 +1901,11 @@ function replaceSVG() {
 
 		}, 'xml');
 	});
+	setTimeout(
+		function(){
+			$('img.makesvg:hidden').show();
+		},500
+	);
 }
 
 // Spinner configuration

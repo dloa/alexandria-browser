@@ -10,7 +10,7 @@ select,
 textarea {
 	color: #222;
 }
- 
+
 html {
 	font-size: 1em;
 	line-height: 1.4;
@@ -137,6 +137,9 @@ header {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 }
+img.makesvg {
+	display: none;
+}
 .twitter-archive, .sharing-ui {
 	display: none;
 }
@@ -174,7 +177,7 @@ header input.search:focus{
 		box-shadow: 0 0 5px rgba(20, 20, 20, 0.2);	
 }
 #logo {
-	width: auto;
+	width: 300px;
 	height:55px;
 	position: absolute;
 	top: 3px;
