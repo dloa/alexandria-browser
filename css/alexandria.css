@@ -381,9 +381,9 @@ header #serverID {
 	cursor: pointer;
 	font-size: 1em;
 	line-height: 1.3em;
-	background: url('../img/down-arrow-icon.svg') no-repeat 96% center transparent;
-	background-size: 22px;
-	padding: 10px;
+	background: url('../img/down-arrow-icon.svg') no-repeat right 5px center transparent;
+	background-size: 1em;
+	padding: .5em;
 }
 header .input-container select {
 	font-size: .8em;
@@ -571,7 +571,7 @@ div#intro {
 	width: 100%;
 	height: 100%;
 }
-.imgwrap svg path, .media-icon svg path, #info-modal .media-image svg path {
+.imgwrap svg path, .media-icon svg path, #info-modal-media .media-image svg path {
 	fill: #979797;
 	fill-opacity: 1;
 }
@@ -639,9 +639,9 @@ div#intro {
 .media-rating .star-off svg polygon {
 	fill-opacity: 0;
 }
-#info-modal {
+.info-modal {
 	position: fixed;
-	top: 120%;
+	top: 110%;
 	left: 100%;
 	z-index: 500;
 	width: 96%;
@@ -656,12 +656,12 @@ div#intro {
 	border-radius: 5px;
 	line-height: 2;
 }
-#info-modal.abs {
+.info-modal.abs {
 	position: absolute;
 	left: 2%;
 	display: none;
 }
-#info-modal:before {
+.info-modal:before {
 	top: -16px;
 	left: 34px;
 	border-width: 0 16px 16px;
@@ -672,7 +672,7 @@ div#intro {
 	display: block;
 	width: 0;
 }
-#info-modal:after {
+.info-modal:after {
 	top: -15px;
 	left: 35px;
 	border-width: 0 15px 15px;
@@ -683,25 +683,25 @@ div#intro {
 	display: block;
 	width: 0;
 }
-#info-modal .left {
+#info-modal-media .left {
 	width: 25%;
 	text-align: center;
 }
-#info-modal .media-image img, #info-modal .media-image svg {
+#info-modal-media .media-image img, #info-modal-media .media-image svg {
 	width: 60%;
 	height: 60%;
 }
-#info-modal .media-rating {
+#info-modal-media .media-rating {
 	margin: .25em 0 .5em;
 }
-#info-modal .pull-right {
+#info-modal-media .pull-right {
 	width: 73%;
 }
-#info-modal .pull-right * {
+#info-modal-media .pull-right * {
 	text-align: left;
 	line-height: 1.4;
 }
-#info-modal .pull-right .entity-meta-content {
+#info-modal-media .pull-right .entity-meta-content {
 	font-size: .9em;
 }
 #tip-modal {
@@ -915,7 +915,11 @@ div#qrcode img {
 	width: 24px;
 	height: 24px;	
 	color: transparent;
-	cursor: pointer;	
+	cursor: pointer;
+}
+#add-media .info-icon {
+	float: right;
+	margin-left: .65em;
 }
 .info-icon img, .info-icon svg, .playbtn-icon img, .playbtn-icon svg {
 	width: 100%;
@@ -1196,6 +1200,7 @@ ul.distNetList {
 }
 ul.distNetList li {
 	margin: 0 0 0.8em;
+	position: relative;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;

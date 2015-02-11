@@ -3,7 +3,7 @@ jQuery(document).ready(function($){
 	$('#spritz-container').hide();
 	$('#adv-search').addClass('abs');
 	$('#timeline-settings').addClass('abs');
-	$('#info-modal').addClass('abs');
+	$('.info-modal').addClass('abs');
 	$('#tip-modal').addClass('abs');
 	$('.alex-ui-slider').slider();
 	$('.alex-ui-datepicker').datepicker();
@@ -73,7 +73,9 @@ jQuery(document).ready(function($){
 	$('#adv-search-toggle').click(function(){
 		$('#adv-search').fadeToggle(fadeTimer);
 	});
+
 	// Toggle modal on off-modal click
+	// REWRITE WITHOUT jQUERY //
 	$('body').on('click', function(e){
 		if ( ($(e.target).attr('id') != 'adv-search') && (!$(e.target).parents('#adv-search')[0]) && ($(e.target).attr('id') != 'adv-search-toggle') ) {			
 			if($('#adv-search').css('display') == 'block') {
@@ -91,6 +93,7 @@ jQuery(document).ready(function($){
 			}
 		}
 	});
+	
 	// Advanced Search clear button
 	$('#adv-search .cancel-btn').click(function(){
 		$('#adv-search').fadeToggle(fadeTimer).find('input[type="text"]').val('');
@@ -1772,20 +1775,38 @@ function loadMediaView(mediaType, mediaTitle, mediaMeta) {
 	document.title = newTitle;
 }
 // Display Media Info Modal
-function loadInfoModal(obj) {
-	if ( ($('#info-modal').css('display') == 'block') && ($('#info-modal').css('opacity')==1) ) {
-		$('#info-modal').fadeOut(fadeTimer);
-	} else {
-		var objMeta = $(obj).parents('.media-entity');
-		if ($(objMeta).find('#info-modal').length == 0) {
-			$(objMeta).append($('#info-modal'));
-		}
-		$('#info-modal .entity-meta-header h2').html($(objMeta).find('.media-title').html());
-		$('#info-modal .entity-meta-header h3').html($(objMeta).find('.media-meta').html());
-		$('#info-modal .entity-meta-header .entity-runtime').html($(objMeta).find('.media-runtime').html());
-		$('#info-modal .media-image').html($(objMeta).find('.media-icon').html());
-		$(objMeta).find('#info-modal').fadeIn(fadeTimer);
+function loadInfoModal(childObj) {
+	if ( ($('#info-modal-small').css('display') == 'block') && ($('#info-modal-small').css('opacity')==1) ) {
+		$('#info-modal-small').fadeOut(fadeTimer);
+		return false;
 	}
+    var testObj = childObj.parentNode;
+    var count = 1;
+    while ( !$(testObj).hasClass('media-entity') ) {
+        testObj = testObj.parentNode;
+        if (!testObj) {
+			var objMeta = $(childObj).parents('li');
+			if ($(objMeta).find('#info-modal-small').length == 0) {
+				$(objMeta).append($('#info-modal-small'));
+			}
+			$('#info-modal-small').html($(objMeta).find('label').text());
+			$(objMeta).find('#info-modal-small').fadeIn(fadeTimer);
+        	return false;
+        }
+        count++;
+    }
+	var objMeta = $(childObj).parents('.media-entity');
+	if ($(objMeta).find('#info-modal-media').length == 0) {
+		$(objMeta).append($('#info-modal-media'));
+	}
+	if ( ($('#info-modal-media').css('display') == 'block') && ($('#info-modal-media').css('opacity')==1) ) {
+		$('#info-modal-media').fadeOut(fadeTimer);
+	}
+	$('#info-modal-media .entity-meta-header h2').html($(objMeta).find('.media-title').html());
+	$('#info-modal-media .entity-meta-header h3').html($(objMeta).find('.media-meta').html());
+	$('#info-modal-media .entity-meta-header .entity-runtime').html($(objMeta).find('.media-runtime').html());
+	$('#info-modal-media .media-image').html($(objMeta).find('.media-icon').html());
+	$(objMeta).find('#info-modal-media').fadeIn(fadeTimer);
 }
 // Display Tip Modal
 function loadTipModal(obj) {
