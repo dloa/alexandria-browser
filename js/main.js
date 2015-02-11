@@ -1,5 +1,10 @@
 jQuery(document).ready(function($){
 	replaceSVG();
+	setTimeout(
+		function(){
+			$('img.makesvg:hidden').show();
+		},2000
+	);
 	$('#spritz-container').hide();
 	$('#adv-search').addClass('abs');
 	$('#timeline-settings').addClass('abs');
@@ -181,6 +186,9 @@ jQuery(document).ready(function($){
 		clearModal();
 	});	
 	// Timeline controls
+	$('#timeline-controls').click(function(){
+		$('svg#volume').remove();
+	});
 	$('#timeline-controls .full').click(function(){
 		$("#timeline").dateRangeSlider("bounds", new Date(2014, 8, 8), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
 		volumeBars(currentArchive,'',7200000);
@@ -286,6 +294,7 @@ jQuery(document).ready(function($){
 		console.log(thisMediaTitle);
 		console.log(thisMediaMeta);
 		loadMediaView(thisMediaType, thisMediaTitle, thisMediaMeta);
+		$('#viewlabel').fadeIn(fadeTimer);
 	});
 	
 	// Alexandria Theme UI interactions
@@ -1901,11 +1910,6 @@ function replaceSVG() {
 
 		}, 'xml');
 	});
-	setTimeout(
-		function(){
-			$('img.makesvg:hidden').show();
-		},500
-	);
 }
 
 // Spinner configuration
