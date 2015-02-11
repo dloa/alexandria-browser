@@ -1,4 +1,14 @@
 @font-face {
+    font-family: 'Avenir-Medium';
+    src: url('../fonts/avenir/Avenir-Medium.eot');
+    src: url('../fonts/avenir/Avenir-Medium.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/avenir/Avenir-Medium.woff') format('woff'),
+         url('../fonts/avenir/Avenir-Medium.ttf') format('truetype'),
+         url('../fonts/avenir/Avenir-Medium.svg#Avenir-Medium') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
     font-family: 'Avenir-Book';
     src: url('../fonts/avenir/Avenir-Book.eot');
     src: url('../fonts/avenir/Avenir-Book.eot?#iefix') format('embedded-opentype'),
@@ -7,7 +17,6 @@
          url('../fonts/avenir/Avenir-Book.svg#Avenir-Book') format('svg');
     font-weight: normal;
     font-style: normal;
-
 }
 @font-face {
     font-family: 'Avenir-Light';

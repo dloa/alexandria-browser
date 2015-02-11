@@ -1587,8 +1587,13 @@ window.onpopstate = function(event) {
 // Load Alexandria View
 function loadAlexandriaView() {
 	if(window.location.search == ''){
-		resetInterface();	
-	    $('#intro').fadeIn(fadeTimer);
+		resetInterface();
+		var readyStateCheckInterval = setInterval(function() {
+		    if (document.readyState === "complete") {
+		        clearInterval(readyStateCheckInterval);
+		        $('#intro').fadeIn(fadeTimer);
+		    }
+		}, 10);		    
 	} else if (window.location.search.indexOf("archive") > -1) {
 		if ($('#timeline').children().length == 0) {
 			buildTimeline();

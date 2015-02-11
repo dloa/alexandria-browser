@@ -100,9 +100,14 @@ body {
 	color: #464646;
 	background-color: #ecedec;
 }
-html, button, input, select, textarea, h1, h2, h3, h4, p, text {
+html, button, input, select, textarea, h2, h3, h4, p, text {
 	font-family: Avenir-Book, avenir, 'Open Sans', open_sansregular, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-weight: 400;
+	font-style: normal;
+}
+h1 {
+	font-family: Avenir-Medium, avenir, 'Open Sans', open_sansregular, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: normal
 	font-style: normal;
 }
 img {
@@ -507,10 +512,9 @@ div#intro {
 }
 #intro h1 {
 	margin: 0 0 .25em;
-	font-weight: bold;
 }
 #intro h2 {
-	margin-bottom: 2em;
+	margin-bottom: 1.4em;
 	color: #979797;
 }
 #intro ul, #intro ul li, .module-links ul, .module-links ul li {
@@ -548,17 +552,13 @@ div#intro {
 }
 .links .module-icon .imgwrap, .module-links li .imgwrap {
 	border: 1px solid #979797;
-	width: 48px;
-	height: 48px;
-	padding: 20px;
-	border-radius: 48px;
 	line-height: 1;
 	display: inline-block;
 }
 .links .module-icon a:hover .imgwrap {
 	border: 1px solid #9da2cf;
 }
-.module-links.mod-filter li .imgwrap, #browse-media-wrap .row .media-icon {
+.links .module-icon .imgwrap, .module-links li .imgwrap, .module-links.mod-filter li .imgwrap, #browse-media-wrap .row .media-icon {
 	width: 24px;
 	height: 24px;
 	padding: 10px;
@@ -1734,12 +1734,12 @@ div.close-modal:hover {
 }
 .ui-rangeSlider-handle {
 	height: 100%;
-	width: .5em;
-	background: url('../img/timeline-handles.svg') no-repeat 3px center transparent;
+	width: 10px;
+	background: url('../img/timeline-handles.svg') no-repeat 4px center transparent;
 	background-size: contain;
 }
 .ui-rangeSlider-handle.ui-rangeSlider-rightHandle {
-	background: url('../img/timeline-handles.svg') no-repeat -3px center transparent;
+	background: url('../img/timeline-handles.svg') no-repeat -4px center transparent;
 	background-size: contain;
 }
 .ui-rangeSlider-container div.ui-rangeSlider-bar {
