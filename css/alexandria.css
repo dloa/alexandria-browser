@@ -240,6 +240,7 @@ div#viewlabel .timespanLabel span {
 	min-width: 18em;
 	width: 35%;
 	font-size: 1.45em;
+	display: none;
 }
 #search > .input-container {
 	display: inline-block;
@@ -351,6 +352,7 @@ header #addNewContent-icon, header #serverID {
 	position: absolute;
 	top: 0;
 	line-height: 72px;
+	display: none;
 }
 header #addNewContent-icon {
 	right: 40px;
@@ -641,16 +643,14 @@ div#intro {
 }
 .info-modal {
 	position: fixed;
+	z-index: 500;
 	top: 110%;
 	left: 100%;
-	z-index: 500;
-	width: 96%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	float: none;
 	margin: 1.5em auto;
-	padding: 1.25em 2.5%;
 	background: none #fff;
 	border: 1px solid #cdcdcd;
 	border-radius: 5px;
@@ -658,7 +658,6 @@ div#intro {
 }
 .info-modal.abs {
 	position: absolute;
-	left: 2%;
 	display: none;
 }
 .info-modal:before {
@@ -682,6 +681,18 @@ div#intro {
 	border-color: #fff transparent;
 	display: block;
 	width: 0;
+}
+#info-modal-media.abs {
+	width: 96%;
+	left: 0;
+	padding: 1.25em 2.5%;
+}
+#info-modal-small.abs {
+	width: 170%;
+	top: 12px;
+	left: 100%;
+	margin-left: -63px;
+	padding: 1.25em .8em;
 }
 #info-modal-media .left {
 	width: 25%;

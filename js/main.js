@@ -1,5 +1,9 @@
 jQuery(document).ready(function($){
 	replaceSVG();
+	if (window.location.search.indexOf("view") == -1) {
+		$('#search').fadeIn(fadeTimer);
+		$('#addNewContent-icon').fadeIn(fadeTimer);
+	}
 	$('#spritz-container').hide();
 	$('#adv-search').addClass('abs');
 	$('#timeline-settings').addClass('abs');
@@ -1536,6 +1540,8 @@ function displayItem(key){
 				loadShareMod();
 				resetInterface();
 			} else if(currentView == 'media'){
+				$('#search').fadeIn(fadeTimer);
+				$('#addNewContent-icon').fadeIn(fadeTimer);
 				loadRecentMedia();
 				resetInterface();
 			}
@@ -1578,6 +1584,7 @@ window.onpopstate = function(event) {
 		}
 		$("#tweetList li").fadeOut(fadeTimer);
 		$('.overlay').fadeOut(fadeTimer);
+		$('.sharing-ui').fadeOut(fadeTimer);
 		$("#tweetList li").remove();
 		currentPage = 0;
 		totalPages = 0;
@@ -1591,9 +1598,12 @@ function loadAlexandriaView() {
 	    if (document.readyState === "complete") {
 	        clearInterval(readyStateCheckInterval);
 			$('img.makesvg:hidden').show();
-			if(window.location.search == ''){
+			if (window.location.search.indexOf("view") == -1) {
+				$('#addNewContent-icon').fadeIn(fadeTimer);
+			}
+			if (window.location.search == '') {
 				resetInterface();
-				        $('#intro').fadeIn(fadeTimer);
+		        $('#intro').fadeIn(fadeTimer);
 			} else if (window.location.search.indexOf("archive") > -1) {
 				if ($('#timeline').children().length == 0) {
 					buildTimeline();
@@ -1608,6 +1618,18 @@ function loadAlexandriaView() {
 			}
 	    }
 	}, 10);		    
+}
+
+// Load Local HTML file contents for info modal
+function getInfoFile(localFile) {
+	var localURL = 'modals/info-'+ localFile +'.html';
+	$.ajax({
+	    url: localURL,
+	    type: 'GET',
+	    success: function(res) {
+			$('#info-modal-small').html(res);
+	    }
+	});
 }
 
 // External link meta data
@@ -1715,7 +1737,6 @@ function resetAlexandria() {
 	$('.twitter-archive').not('main').hide();
 	$('#app-shading').css('bottom','0');
 	currentView = 'archiveCloud';
-	$('#logo').removeClass('toArchive');
 	$('#intro').fadeIn(fadeTimer);
 	var stateObj = {
 		currentView: currentView
@@ -1730,7 +1751,7 @@ function hideArchivesUI() {
 	$('#intro').fadeOut(fadeTimer);
 	$('.twitter-archive').fadeOut(fadeTimer);
 	$('#app-shading').css('bottom',0);
-	$('#logo').addClass('toArchive');
+	$('#app-overlay').hide();
 }
 
 // Recent Media View
@@ -1785,11 +1806,13 @@ function loadInfoModal(childObj) {
 				$('#info-modal-small').fadeOut(fadeTimer);
 				return false;
 			} else {
+				$('#info-modal-small').html('');
 				var objMeta = $(childObj).parents('li');
 				if ($(objMeta).find('#info-modal-small').length == 0) {
 					$(objMeta).append($('#info-modal-small'));
 				}
-				$('#info-modal-small').html($(objMeta).find('label').text());
+				var localFile = $(objMeta).find('label').text().replace(/\s/g , "-").toLowerCase();
+				getInfoFile(localFile);
 				$(objMeta).find('#info-modal-small').fadeIn(fadeTimer);
 	        	return false;
 			}
