@@ -15,10 +15,12 @@
 		<link rel="stylesheet" href="js/vendor/spritz/spritz.min.css">
 		<link rel="stylesheet" href="css/alexandria.css">
 		<script type="text/javascript">
-			var SpritzSettings = {
-				clientId: "bca1146a623ec3d99",
-				redirectUri: "/archview/thirdparty/login_success.html"
-			};
+			if(window.location.protocol != 'file:') {
+				var SpritzSettings = {
+					clientId: "bca1146a623ec3d99",
+					redirectUri: "/archview/thirdparty/login_success.html"
+				};
+			}
 		</script>
 	</head>
 	
@@ -925,4 +927,3 @@
 		<script src="js/main.js"></script>
 	</body>
 </html>
-mediaType

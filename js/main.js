@@ -1,5 +1,9 @@
 jQuery(document).ready(function($){
-	replaceSVG();
+	if(window.location.protocol != 'file:') {
+		replaceSVG();
+	} else {
+		$('img.makesvg:hidden').show();
+	}
 	if (window.location.search.indexOf("view") == -1) {
 		$('#search').fadeIn(fadeTimer);
 		$('#addNewContent-icon').fadeIn(fadeTimer);
@@ -263,8 +267,8 @@ jQuery(document).ready(function($){
 	$('select#mediaType').change(function(){
 		var mediaType = $(this).val();
 		$('#newMedia-info fieldset').hide();
-		if (mediaType != '') {
-			$('fieldset#new-'+mediaType+'-meta').show();
+		$('fieldset#new-'+mediaType+'-meta').show();
+		if ( (mediaType != '') && (mediaType != 'recipe') ) {
 			$('.row.choosefile').show();
 		} else {
 			$('.row.choosefile').hide();
@@ -1597,7 +1601,6 @@ function loadAlexandriaView() {
 	var readyStateCheckInterval = setInterval(function() {
 	    if (document.readyState === "complete") {
 	        clearInterval(readyStateCheckInterval);
-			$('img.makesvg:hidden').show();
 			if (window.location.search.indexOf("view") == -1) {
 				$('#addNewContent-icon').fadeIn(fadeTimer);
 			}
