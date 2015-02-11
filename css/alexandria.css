@@ -174,11 +174,11 @@ header input.search:focus{
 		box-shadow: 0 0 5px rgba(20, 20, 20, 0.2);	
 }
 #logo {
-	width: 55px;
+	width: auto;
 	height:55px;
 	position: absolute;
 	top: 3px;
-	left: 32px;
+	left: 10px;
 	z-index: 10;
 //	background: url(../img/logo.svg) left bottom / 55px auto no-repeat;
 	text-align: center;
@@ -246,6 +246,9 @@ div#viewlabel .timespanLabel span {
 	color: #979797;
 	margin-left: .25em;
 	vertical-align: top;
+}
+#adv-search-toggle:hover {
+	color:#464646;
 }
 .input-container {
 	position: relative;
@@ -352,8 +355,12 @@ header #addNewContent-icon path {
 	fill: #797979;
 	fill-opacity: 1;
 }
+header #addNewContent-icon:hover path {
+	fill:#464646;
+}
 header #serverID {
-	left: 100px;
+	display: none;
+	left: 305px;
 	cursor: default;
 	color: #979797;
 }
@@ -511,16 +518,11 @@ div#intro {
 	margin: .25em 0 -.5em;
 }
 .links a, .module-links a {
-	color: #9da2cf;
-	text-decoration: none;
-	transition: all 1s ease;
-	-moz-transition: all 1s ease;
-	-webkit-transition: all 1s ease;
-	-o-transition: all 1s ease;
+	color: #979797;
 	cursor: pointer;
 }
 .links a:hover, .module-links a:hover {
-	color: #a3ccb1;
+	color: #9da2cf;
 }
 .links .module-icon, .module-links li {
 	display: inline-block;
@@ -537,13 +539,16 @@ div#intro {
 	margin-bottom: 2em;
 }
 .links .module-icon .imgwrap, .module-links li .imgwrap {
-	border: 1px solid currentColor;
+	border: 1px solid #979797;
 	width: 48px;
 	height: 48px;
 	padding: 20px;
 	border-radius: 48px;
 	line-height: 1;
 	display: inline-block;
+}
+.links .module-icon a:hover .imgwrap {
+	border: 1px solid #9da2cf;
 }
 .module-links.mod-filter li .imgwrap, #browse-media-wrap .row .media-icon {
 	width: 24px;
@@ -556,8 +561,11 @@ div#intro {
 	height: 100%;
 }
 .imgwrap svg path, .media-icon svg path, #info-modal .media-image svg path {
-	fill: currentcolor;
+	fill: #979797;
 	fill-opacity: 1;
+}
+.links .module-icon a:hover svg path {
+	fill:#9da2cf;
 }
 .module-links.mod-filter a {
 	color:#979797;
@@ -1719,7 +1727,12 @@ div.close-modal:hover {
 .ui-rangeSlider-handle {
 	height: 100%;
 	width: .5em;
-	
+	background: url('../img/timeline-handles.svg') no-repeat 3px center transparent;
+	background-size: contain;
+}
+.ui-rangeSlider-handle.ui-rangeSlider-rightHandle {
+	background: url('../img/timeline-handles.svg') no-repeat -3px center transparent;
+	background-size: contain;
 }
 .ui-rangeSlider-container div.ui-rangeSlider-bar {
 	-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
