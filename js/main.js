@@ -85,7 +85,7 @@ jQuery(document).ready(function($){
 
 	// Toggle modal on off-modal click
 	// REWRITE WITHOUT jQUERY //
-	$('body').on('click', function(e){
+	$('body').on('click', function(e){		
 		if ( ($(e.target).attr('id') != 'adv-search') && (!$(e.target).parents('#adv-search')[0]) && ($(e.target).attr('id') != 'adv-search-toggle') ) {			
 			if($('#adv-search').css('display') == 'block') {
 				$('#adv-search').fadeToggle(fadeTimer);
@@ -96,10 +96,10 @@ jQuery(document).ready(function($){
 				$('#timeline-settings').fadeToggle(fadeTimer);
 			}
 		}
-		if ( (!$(e.target).hasClass('spritz-control')) && (!$(e.target).parents('#spritzer')[0]) ) {
-			if ($('#spritz-container').css('display') == 'block') {
-				$('#spritz-container').fadeOut(fadeTimer);
-			}
+		console.info($(e.target));
+		if ( ( $(e.target).attr('id')=='app-overlay') || ( $(e.target).attr('id')=='spritz-container') ) {
+			$('#spritz-container').hide();
+			$('#app-overlay').css('z-index','90');
 		}
 	});
 	
@@ -178,15 +178,19 @@ jQuery(document).ready(function($){
 		var code = e.keyCode || e.which;
 		if (code == 27) {
 			// esc pressed
-			if($('#wait').css('display') == 'block') {
-				$('#wait').hide();
-				$('#disabler').hide();
-			}
-			if ( ($('#tweetListView').css('display') == 'block') && ($('#lightbox').css('display') != 'block') ) {
+			if ($('#spritz-container').css('display')=='block') {
+				$('#spritz-container').hide();
+				$('#app-overlay').css('z-index','90');
+			} else if ( ($('#tweetListView').css('display') == 'block') && ($('#lightbox').css('display') != 'block') ) {
 				clearModal();
 			} else if ($('#lightbox').css('display') == 'block') {
 				$('#lightbox').fadeOut(fadeTimer);
 			}
+			if($('#wait').css('display') == 'block') {
+				$('#wait').hide();
+				$('#disabler').hide();
+			}
+			
 		}
 	});
 	$('.close-modal').click(function(){
@@ -1181,7 +1185,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 								} else if (new_expanded_url.split('/')[2] == 'www.youtube.com') {
 									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('=')[1].split('&')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
 								} else {
-									render_url = render_url+'<div class="row-spritz"><a class="spritz-control" onclick="spritzThis(\x27'+new_expanded_url+'\x27)"></a><div class="clearfix"></div><p class="spritz-caption click-to-spritz hidden-xs"><br /><a href="'+new_expanded_url+'" target="_blank">'+new_expanded_url+'</a></p></div>';
+								//	render_url = render_url+'<div class="row-spritz"><a class="spritz-control" onclick="spritzThis(\x27'+new_expanded_url+'\x27)"></a><div class="clearfix"></div><p class="spritz-caption click-to-spritz hidden-xs"><br /><a href="'+new_expanded_url+'" target="_blank">'+new_expanded_url+'</a></p></div>';
 								}
 							}
 						}
@@ -1460,8 +1464,9 @@ function infiniteScroll() {
 
 // SPRITZ
 function spritzThis(extURL) {
-	if ($('#spritz-container').css('display') != 'block') {
-		$('#spritz-container').fadeIn(fadeTimer);
+	if ( $('#spritz-container').css('display') == 'none' ) {
+		$('#app-overlay').css('z-index','900');
+		$('#spritz-container').show();
 		$('#spritzer').data('controller').setUrl(extURL);
 	}
 }
@@ -1648,7 +1653,7 @@ function getLinkMeta(extURL) {
 					var linkTitle = $(extContent).filter('title')[0].text;
 					if(!$(thisLink).parents('.expanded_urls').find('.extLinkTitle').length > 0) {
 						if ( ( $(thisLink).next().attr('class') != 'extLinkTitle' ) && ( linkTitle != '' ) ) {
-							$(thisLink).after('<div class="extLinkTitle"><a href="'+ extURL +'" target="_blank">'+linkTitle+'</a></div>');
+							$(thisLink).after('<div class="extLinkTitle"><a href="'+ extURL +'" target="_blank">'+linkTitle+'</a><div class="row-spritz"><a class="spritz-control" onclick="spritzThis(\x27'+ extURL +'\x27)"><img src="img/spritz-icon.svg" class="makesvg" /></a><div class="clearfix"></div><p class="spritz-caption click-to-spritz hidden-xs"><br /><a href="'+ extURL +'" target="_blank">'+ extURL +'</a></p></div></div>');
 						};
 					}
 				}
@@ -1695,7 +1700,11 @@ function getLinkMeta(extURL) {
 					});
 
 				}
-
+				if(window.location.protocol != 'file:') {
+					replaceSVG();
+				} else {
+					$('img.makesvg:hidden').show();
+				}				
 				$(thisLink).addClass('scraped');
 			}
 	    }

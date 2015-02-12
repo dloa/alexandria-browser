@@ -1422,40 +1422,44 @@ ul#tweetList li {
 	border: 0 none transparent;
 	padding: 0;
 }
+ul#tweetList li div.expanded_urls {
+	margin-bottom: 10px;
+	overflow: hidden;
+}
 ul#tweetList li div.expanded_urls > a {
 	word-break: break-all;
 	font-style: italic;
 	text-decoration: underline;
-	display: block;
+	display: none;	
+}
+ul#tweetList li div.expanded_urls .extLinkTitle {
+	position: relative;
+	padding-right: 30px;
 }
 ul#tweetList li div.expanded_urls .extLinkTitle a {
 	font-weight: bold;
 	text-decoration: none;
+	display: block;
 }
 .row-spritz {
-	clear: both;
-	margin: 1em 0;
+	position: absolute;
+	top: 4px;
+	right: 4px;
 }
 .spritz-control {
 	cursor: pointer;
-	width: 67px;
-	height: 66px;
+	width: 13px;
+	height: 18px;
 	overflow: hidden;
 	position: relative;
-	background: url('../img/spritz-control.png') no-repeat;
 	display: block;
-	margin-right: 7px;
 }
-.spritz-control:hover {
-	background-position: 0 -66px;
+.spritz-control img, .spritz-control svg {
+	max-width: 100%;
+	max-height: 100%;
 }
 .spritz-caption {
-	font-size: 14px;
-	font-weight: bold;
-	margin: 0;
-}
-.click-to-spritz:before {
-	content: "click to spritz";
+	display: none;
 }
 .extLinkTitle, .extLinkDesc, .tweetEmbedWrap, #tweetList li div.imgwrap img {
 	background-color: #fff;

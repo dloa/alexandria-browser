@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="13px" height="18px" viewBox="0 0 13 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch Beta 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+    <title>Path 2</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="Welcome-Screen" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="tweet-view" sketch:type="MSArtboardGroup" transform="translate(-903.000000, -508.000000)" fill="#1D84B7">
+            <g id="Group" sketch:type="MSLayerGroup" transform="translate(431.000000, 94.000000)">
+                <g id="action-links" transform="translate(435.000000, 414.000000)" sketch:type="MSShapeGroup">
+                    <g id="Spritz" transform="translate(31.000000, 0.000000)">
+                        <path d="M19,0 C19,0 16.1977457,2.61277354 11.3506682,5.21678802 C6.50359073,7.82080251 5.85341119,10.713392 6.02356063,13.2841689 C6.10285523,14.482226 7.12074764,16.0171963 8.35051167,16.8493006 C9.75956098,17.8027161 11.4723827,18 12.5,18 C14.4244821,18 16.0994615,16.7242712 17.1035124,15.5360145 C17.3629915,15.2289306 17.7383422,14.305369 17.8770623,13.7923249 C18.2751176,12.3201523 18.2605044,10.1323837 18.2605042,6.94043877 C18.2605039,2.63611846 19,0 19,0 Z" id="Path-2"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
