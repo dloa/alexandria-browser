@@ -1178,21 +1178,21 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 									expanded_url = expanded_url+'<br /><a href="'+new_expanded_url+'" target="_blank">'+new_expanded_url+'</a>';
 								}
 								if(new_expanded_url.split('/')[2] == 'youtu.be'){
-									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('?')[0].split('&')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
+									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="464" height="309" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('?')[0].split('&')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
 								} else if (new_expanded_url.split('/')[2] == 'vine.co') {
 									render_url = render_url+'<div class="tweetEmbedWrap"><iframe src="http://vine.co/v/'+ new_expanded_url.split('/')[4]+'/card" height="360" width="360" frameborder="0"></iframe></div>';
 								} else if (new_expanded_url.split('/')[2] == 'www.youtube.com') {
-									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="360" height="240" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('=')[1].split('&')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
-								} else {
-								//	render_url = render_url+'<div class="row-spritz"><a class="spritz-control" onclick="spritzThis(\x27'+new_expanded_url+'\x27)"></a><div class="clearfix"></div><p class="spritz-caption click-to-spritz hidden-xs"><br /><a href="'+new_expanded_url+'" target="_blank">'+new_expanded_url+'</a></p></div>';
+									render_url = render_url+'<div class="tweetEmbedWrap"><iframe width="464" height="309" src="http://www.youtube.com/embed/'+ new_expanded_url.split('/')[3].split('=')[1].split('&')[0] +'" frameborder="0" allowfullscreen></iframe></div>';
 								}
 							}
 						}
 					}
-
+					if (render_url != '') {
+						render_url = '<div class="render_url">' + render_url + '</div>';
+					}
 					var tweetDate = Date.parse(data[i].p.twitter.data.tweet_data[4]);
 					var niceTweetDate = data[i].p.twitter.data.tweet_data[4].split(' ');
-					$("#tweetList").append('<li style="display:none" class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<div style="clear:both"></div></div><div class="expanded_urls">' + expanded_url + '</div><div class="render_url">' + render_url + '</div><div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
+					$("#tweetList").append('<li style="display:none" class="responseRow" tweetdate="'+tweetDate+'" retweets="'+data[i].p.twitter.data.tweet_data[7]+'"><div><strong><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'" target="_blank" class="twitter-username">@' + data[i].p.twitter.data.tweet_data[9] + '</a></strong> <span class="tweet-date">' + niceTweetDate[0] + ' ' + niceTweetDate[1] + ' ' + niceTweetDate[2] + ' ' + niceTweetDate[5] + ' ' + niceTweetDate[3] + '</span></div><div class="tweetBody">' + data[i].p.twitter.data.tweet_data[10] + '<div style="clear:both"></div></div><div class="expanded_urls">' + expanded_url + '</div>'+ render_url +'<div class="left"><span class="rts">Retweets: '+data[i].p.twitter.data.tweet_data[7]+'</span> <span class="favs">Favorites: '+data[i].p.twitter.data.tweet_data[6]+'</span></div><a href="https://twitter.com/'+data[i].p.twitter.data.tweet_data[9]+'/status/'+data[i].p.twitter.data.tweet_data[3]+'" class="twitterbird" target="_blank"></a></li>');
 				}
 				$('#tweetList li:hidden').fadeIn(fadeTimer);
 				currentPage++;
@@ -1917,7 +1917,46 @@ function uploadFile(elem) {
 		}
 	});
 }
+// Show AutoFill Option on Add Media interface
+function showAutoFill(obj){
+	if (obj.value != '') {
+		$(obj).parents('fieldset').find('.autofill-button').slideDown(fadeTimer);
+	} else {
+		$(obj).parents('fieldset').find('.autofill-button').slideUp(fadeTimer);
+	}
+}
 
+// Get IMDB Info from API
+function getIMDBinfo() {
+	var IMDBid = document.getElementById('imdb-id').value;
+	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid +'&urlPoster=true';
+	$.ajax({
+	    url: IMDBapi,
+	    type: 'GET',
+	    success: function(e) {
+			var el = $( '#sketchpad' );
+			el.html(e.responseText);
+			var data = $.parseJSON($('p', el).html());
+	    	console.info(data);
+			for (var key in data) {
+				var obj = data[key];
+				var inputObj = document.getElementById('addMovie-'+key);
+				if(inputObj){
+					if(!obj[1]){
+						for (var subkey in obj[0]) {
+							var newObj = obj[0][subkey];
+							if(newObj){
+								obj = newObj;
+							}
+							console.info(subkey+'=>'+ obj);
+						}
+					}
+					inputObj.value = obj;
+				}
+			}
+	    }
+	});
+}
 // ERROR CONNECTING TO LIBRARIAN
 function librarianErr(){
 	console.error('Librarian Error');

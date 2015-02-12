@@ -308,8 +308,23 @@
 										<div class="row full">
 											<div class="col">
 												<div class="input-container">
+													<label>IMDB ID</label>
+													<input type="text" name="IMDB ID" id="imdb-id" onblur="showAutoFill(this);" />
+												</div>
+											</div>
+										</div>
+										<div class="row full">
+											<div class="col">
+												<div class="input-container autofill-button">
+													<a onclick="getIMDBinfo();">Autofill Fields</a>
+												</div>
+											</div>
+										</div>
+										<div class="row full">
+											<div class="col">
+												<div class="input-container">
 													<label>Title</label>
-													<input type="text" name="title" />
+													<input type="text" name="title" id="addMovie-title" />
 												</div>
 											</div>
 										</div>
@@ -317,7 +332,7 @@
 											<div class="col">
 												<div class="input-container">
 													<label>Runtime</label>
-													<input type="text" />
+													<input type="text" name="runtime' id="addMovie-runtime" />
 												</div>
 											</div>
 										</div>
@@ -325,7 +340,7 @@
 											<div class="col">
 												<div class="input-container">
 													<label>Director</label>
-													<input type="text" />
+													<input type="text" name="directors" id="addMovie-directors" />
 												</div>
 											</div>
 										</div>
@@ -333,7 +348,7 @@
 											<div class="col">
 												<div class="input-container">
 													<label>Screenwriter(s)</label>
-													<input type="text" />
+													<input type="text" name="writers" id="addMovie-writers" />
 												</div>
 											</div>
 										</div>
@@ -341,7 +356,7 @@
 											<div class="col">
 												<div class="input-container">
 													<label>Cast</label>
-													<textarea></textarea>
+													<textarea name="cast" id="addMovie-cast"></textarea>
 												</div>
 											</div>
 										</div>
@@ -349,19 +364,19 @@
 											<div class="col">
 												<div class="input-container">
 													<label>Year</label>
-													<input type="text" />
+													<input type="text" name="year" id="addMovie-year" />
 												</div>
 											</div>
 											<div class="col">
 												<div class="input-container">
 													<label>Genre</label>
-													<input type="text" />
+													<input type="text" name="genre" id="addMovie-genres" />
 												</div>
 											</div>
 											<div class="col">
 												<div class="input-container">
 													<label>Company</label>
-													<input type="text" />
+													<input type="text" name="company" id="addMovie-company" />
 												</div>
 											</div>
 										</div>
@@ -369,7 +384,7 @@
 											<div class="col">
 												<div class="input-container">
 													<label>Description</label>
-													<textarea></textarea>
+													<textarea name="description" id="addMovie-plot"></textarea>
 												</div>
 											</div>
 										</div>

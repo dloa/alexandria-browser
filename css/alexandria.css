@@ -15,7 +15,6 @@ html {
 	font-size: 1em;
 	line-height: 1.4;
 }
-
 ::-moz-selection {
 	background: #b3d4fc;
 	text-shadow: none;
@@ -947,6 +946,10 @@ div#qrcode img {
 	color: transparent;
 	cursor: pointer;
 }
+.autofill-button {
+	display: none;
+	cursor: pointer;
+}
 #add-media .info-icon {
 	float: right;
 	margin-left: .65em;
@@ -1446,7 +1449,7 @@ ul#tweetList li {
 	padding: 0;
 }
 ul#tweetList li div.expanded_urls {
-	margin-bottom: 10px;
+	margin-bottom: 1em;
 	overflow: hidden;
 }
 ul#tweetList li div.expanded_urls > a {
