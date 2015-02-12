@@ -96,7 +96,6 @@ jQuery(document).ready(function($){
 				$('#timeline-settings').fadeToggle(fadeTimer);
 			}
 		}
-		console.info($(e.target));
 		if ( ( $(e.target).attr('id')=='app-overlay') || ( $(e.target).attr('id')=='spritz-container') ) {
 			$('#spritz-container').hide();
 			$('#app-overlay').css('z-index','90');
@@ -1859,7 +1858,6 @@ function loadInfoModal(childObj) {
 				    }
 				}, 100);
 			}
-			
         }
         count++;
     }
