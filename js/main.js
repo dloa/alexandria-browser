@@ -1942,54 +1942,63 @@ function getIMDBinfo() {
 			var el = $( '#sketchpad' );
 			el.html(e.responseText);
 			var data = $.parseJSON($('p', el).html());
-			for (var key in data) {
-				var obj = data[key];
-				var inputObj = document.getElementById('addMovie-'+key);
-				if(inputObj){
-					var length = 0;
-					var newObj = [];
-					if(typeof obj == 'object'){
-						if (typeof obj[0] == 'object') {
-							for (var objIndex in obj) {
-								var subObj = obj[objIndex];
-								if (key == 'actors') {
-									newObj.push(subObj['actorName']);
-								} else {
-						            ++length;
-									for (var subkey in subObj) {
-										if(subObj[subkey].substring(0,2) != 'nm'){
-											newObj.push(subObj[subkey]);
+			var errorCode = data['code'];
+			if (errorCode) {
+				alert(data['message']);
+			} else {
+				for (var key in data) {
+					var obj = data[key];
+					var inputObj = document.getElementById('addMovie-'+key);
+					if(inputObj){
+						var length = 0;
+						var newObj = [];
+						if(typeof obj == 'object'){
+							if (typeof obj[0] == 'object') {
+								for (var objIndex in obj) {
+									var subObj = obj[objIndex];
+									if (key == 'actors') {
+										newObj.push(subObj['actorName']);
+									} else {
+							            ++length;
+										for (var subkey in subObj) {
+											if(subObj[subkey].substring(0,2) != 'nm'){
+												newObj.push(subObj[subkey]);
+											}
 										}
 									}
 								}
-							}
-						} else {
-							obj.forEach(function(a,i){
-					            ++length;
-								newObj.push(obj[i]);
-							});
-						}
-						obj = newObj;
-					}
-					var IMDBResult = '';
-					if (typeof obj == 'object') {
-						obj.forEach(function(a){
-							if (IMDBResult == '') {
-								IMDBResult = a;
 							} else {
-								IMDBResult = IMDBResult + ', ' + a;
+								obj.forEach(function(a,i){
+						            ++length;
+									newObj.push(obj[i]);
+								});
 							}
-						});
-					} else {
-						IMDBResult = obj;
-					}		
-					inputObj.value = IMDBResult;
-					$('fieldset:visible input').removeAttr('disabled');
-					$('fieldset:visible textarea').removeAttr('disabled');
-					$('.modal-tab:visible .autofill-button').slideUp(fadeTimer);
+							obj = newObj;
+						}
+						var IMDBResult = '';
+						if (typeof obj == 'object') {
+							obj.forEach(function(a){
+								if (IMDBResult == '') {
+									IMDBResult = a;
+								} else {
+									IMDBResult = IMDBResult + ', ' + a;
+								}
+							});
+						} else {
+							IMDBResult = obj;
+						}		
+						inputObj.value = IMDBResult;
+						$('.modal-tab:visible .autofill-button').slideUp(fadeTimer);
+					}
 				}
 			}
-	    }
+			$('fieldset:visible input').removeAttr('disabled');
+			$('fieldset:visible textarea').removeAttr('disabled');
+	    },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+		}
 	});
 }
 // ERROR CONNECTING TO LIBRARIAN
