@@ -298,18 +298,6 @@ jQuery(document).ready(function($){
 		}
 	});
 
-	// Recent Media interaction
-	$('.row.media-entity .load-entity').click(function(){
-		var thisMediaType = $(this).parents('.media-entity').attr('media-type');		
-		var thisMediaTitle = $(this).parents('.media-entity').find('.media-title').text();
-		var thisMediaMeta = $(this).parents('.media-entity').find('.media-meta').text();
-		console.log(thisMediaType);
-		console.log(thisMediaTitle);
-		console.log(thisMediaMeta);
-		loadMediaView(thisMediaType, thisMediaTitle, thisMediaMeta);
-		$('#viewlabel').fadeIn(fadeTimer);
-	});
-	
 	// Alexandria Theme UI interactions
 	$('.alex-switch').click(function(){
 		$(this).toggleClass('switched-on');
@@ -1790,7 +1778,7 @@ function loadRecentMedia() {
 					var mediaTitle = mediaInfo['title'];
 					var mediaMeta = '';
 					var mediaDesc = mediaInfo['description'];
-					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="media-icon load-entity"><img src="img/' + mediaType + '-icon.svg" class="load-entity makesvg" style="display: inline;"></div><h3 class="media-title load-entity">' + mediaTitle + '</h3> <div class="media-meta load-entity">' + mediaMeta + '</div> <div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon load-entity"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + mediaPubTime + '</div><div class="media-desc hidden">' + mediaDesc + '</div></div>';
+					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaMeta + '</div> <div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + mediaPubTime + '</div><div class="media-desc hidden">' + mediaDesc + '</div></div>';
 					$('#browse-media-wrap .row:first-of-type').before(mediaEntity);
 				}
 			}
@@ -1810,17 +1798,42 @@ function loadRecentMedia() {
 	history.pushState(stateObj, 'Alexandria > Media', newURL);
 	document.title = 'Alexandria > Media';
 }
+
+// Recent Media interaction
+function loadMediaEntity(obj) {
+	var parentObj = $(obj).parents('.media-entity');
+	loadMediaView(parentObj);
+}
+
 // Load Media Page
-function loadMediaView(mediaType, mediaTitle, mediaMeta) {
+function loadMediaView(objMeta) {
 	currentView = 'media';
 	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
 	$('#tip-modal').hide();
 	$('.view-media-ui').fadeIn(fadeTimer);
+	$('#viewlabel').fadeIn(fadeTimer);
 	$('#view-media .entity-view').hide();
 	$('#view-media').fadeIn(fadeTimer);
-	$('#media-view-'+mediaType).fadeIn(fadeTimer);
+	var mediaRuntime = $(objMeta).find('.media-runtime').html();
+	var mediaPubTime = $(objMeta).find('.media-pub-time').html();
+	var mediaTitle = $(objMeta).find('.media-title').html();
+	var mediaMeta = $(objMeta).find('.media-meta').html();
+	var mediaDesc = $(objMeta).find('.media-desc').html();
+	var mediaIcon = $(objMeta).find('.media-icon').html();
+	var mediaType = $(objMeta).attr('media-type');
+	$('#media-view-entity .entity-meta-header h2').html(mediaTitle);
+	$('#media-view-entity .entity-meta-header h3').html(mediaMeta);
+	$('#media-view-entity .entity-meta-header .entity-runtime').html(mediaRuntime);
+	$('#media-view-entity .media-image').html(mediaIcon);
+	$('#media-view-entity .entity-pub-time span').html(mediaPubTime);	
+	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
+	$('#media-view-entity .entity-footer').hide();
+	$('#media-view-entity .entity-footer.media-'+mediaType).show();
+	$('#media-view-entity').fadeIn(fadeTimer);
+
 	// URL and Browser Nav for Media Entity View
+/*
 	var stateObj = {
 		currentView: currentView,
 		mediaType: mediaType,
@@ -1833,6 +1846,7 @@ function loadMediaView(mediaType, mediaTitle, mediaMeta) {
 	var newTitle = 'Alexandria > '+mediaTitle+' '+mediaMeta;
 	history.pushState(stateObj, newTitle, newURL);
 	document.title = newTitle;
+	*/
 }
 // Display Media Info Modal
 function loadInfoModal(childObj) {
@@ -1912,12 +1926,12 @@ function loadInfoModal(childObj) {
 }
 // Display Tip Modal
 function loadTipModal(obj) {
-	if ($(obj).parents('.entity-footer #tip-modal').length == 0) {
-		$(obj).parents('.entity-footer').append($('#tip-modal'));
+	if ($(obj).parents('.entity-market #tip-modal').length == 0) {
+		$(obj).parents('.entity-market').append($('#tip-modal'));
 	}
 	var tipModalPos = $(obj).position().left-31;
 	$('#tip-modal .modal-tabs li:first-child').click();
-	$(obj).parents('.entity-footer').find('#tip-modal').css('left',tipModalPos+'px').fadeToggle(fadeTimer);
+	$(obj).parents('.entity-market').find('#tip-modal').css('left',tipModalPos+'px').fadeToggle(fadeTimer);
 }
 
 // Share New Content Module
