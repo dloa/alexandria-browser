@@ -1929,7 +1929,7 @@ function showAutoFill(obj){
 // Get IMDB Info from API
 function getIMDBinfo() {
 	var IMDBid = document.getElementById('imdb-id').value;
-	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid +'&urlPoster=true';
+	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid +'&actors=S&uniqueName=1';
 	$.ajax({
 	    url: IMDBapi,
 	    type: 'GET',
@@ -1942,15 +1942,41 @@ function getIMDBinfo() {
 				var obj = data[key];
 				var inputObj = document.getElementById('addMovie-'+key);
 				if(inputObj){
-					if(!obj[1]){
-						for (var subkey in obj[0]) {
-							var newObj = obj[0][subkey];
-							if(newObj){
-								obj = newObj;
+					var length = 0;
+					var newObj = [];
+					if(typeof obj == 'object'){
+						if (typeof obj[0] == 'object') {
+							for (var objIndex in obj) {
+					            ++length;
+								var subObj = obj[objIndex];
+								for (var subkey in subObj) {
+									newObj.push(subObj[subkey]);
+								}
 							}
-							console.info(subkey+'=>'+ obj);
+						} else {
+							obj.forEach(function(a,i){
+					            ++length;
+								newObj.push(obj[i]);
+							});
 						}
+						obj = newObj;
+					} else {
+						console.info(obj);
 					}
+					console.info(key +' Length = '+length);
+					/*
+					if(!obj[1]){
+						var newObj = [];
+						for (var subkey in obj[0]) {
+							var subObj = obj[0][subkey];
+							console.log(subkey +' => '+ subObj);
+							if(subObj){
+								newObj.push(subObj);
+							}
+						}
+						obj = newObj;
+					}
+					*/
 					inputObj.value = obj;
 				}
 			}
