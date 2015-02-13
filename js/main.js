@@ -1773,8 +1773,8 @@ function loadRecentMedia() {
 				if (!document.getElementById('media-'+mediaID)) {
 					var mediaType = data[i]['media-data']['alexandria-media']['type'];
 					var mediaInfo = data[i]['media-data']['alexandria-media']['info'];
-					var mediaRuntime = data[i]['media-data']['alexandria-media']['runtime'];
-					var mediaPubTime = new Date(parseInt(data[i]['media-data']['alexandria-media']['timestamp']));
+					var mediaRuntime = calcRuntime(data[i]['media-data']['alexandria-media']['runtime']);
+					var mediaPubTime = new Date(parseInt(data[i]['media-data']['alexandria-media']['timestamp'])*1000);
 					var mediaTitle = mediaInfo['title'];
 					var mediaMeta = '';
 					var mediaDesc = mediaInfo['description'];
@@ -1924,6 +1924,31 @@ function loadInfoModal(childObj) {
 	$('#info-modal-media .media-desc').html('<p>'+ mediaDesc +'</p>');
 	$(objMeta).find('#info-modal-media').fadeIn(fadeTimer);
 }
+// Calculate runtime from seconds
+function calcRuntime(seconds) {
+	var runSecs = seconds;
+	var runMins = 0;
+	var runHours = 0;
+	if (runSecs > 60) {
+		runMins = Math.floor(parseInt(seconds)/60);
+		runSecs = runSecs-(runMins*60);
+	}
+	if (runSecs < 10) {
+		runSecs = '0' + runSecs;
+	}
+	if (runMins > 60) {
+		runHours = Math.floor(parseInt(runMins)/60);
+		runMins = runMins-(runHours*60);
+	}
+	if (runMins < 10) {
+		runMins = '0' + runMins;
+	}
+	if (runHours < 10) {
+		runHours = '0' + runHours;
+	}
+	var runtime = runHours + ':' + runMins + ':' + runSecs;
+	return runtime;
+}
 // Display Tip Modal
 function loadTipModal(obj) {
 	if ($(obj).parents('.entity-market #tip-modal').length == 0) {
@@ -1950,7 +1975,7 @@ function loadShareMod() {
 	$('.sharing-ui').fadeIn(fadeTimer);
 	resizeTabs();
 }
-// Upload File
+// Select File
 function uploadFile(elem) {
 	var uploader = $(elem).attr('id');
 	upclick({
