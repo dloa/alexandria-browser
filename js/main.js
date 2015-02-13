@@ -1918,9 +1918,14 @@ function uploadFile(elem) {
 	});
 }
 // Show AutoFill Option on Add Media interface
+var IMDBID = '';
 function showAutoFill(obj){
-	if (obj.value != '') {
+	if ( (obj.value != '') && (obj.value != IMDBID) ) {
+		$('fieldset:visible input').attr('disabled','disabled');
+		$('fieldset:visible textarea').attr('disabled','disabled');
 		$(obj).parents('fieldset').find('.autofill-button').slideDown(fadeTimer);
+		getIMDBinfo();
+		IMDBID = obj.value;
 	} else {
 		$(obj).parents('fieldset').find('.autofill-button').slideUp(fadeTimer);
 	}
@@ -1977,9 +1982,11 @@ function getIMDBinfo() {
 						});
 					} else {
 						IMDBResult = obj;
-					}
-					
+					}		
 					inputObj.value = IMDBResult;
+					$('fieldset:visible input').removeAttr('disabled');
+					$('fieldset:visible textarea').removeAttr('disabled');
+					$('.modal-tab:visible .autofill-button').slideUp(fadeTimer);
 				}
 			}
 	    }
