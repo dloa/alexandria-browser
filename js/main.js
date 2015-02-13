@@ -1825,6 +1825,8 @@ function loadMediaView(objMeta) {
 	$('#media-view-entity .entity-meta-header h2').html(mediaTitle);
 	$('#media-view-entity .entity-meta-header h3').html(mediaMeta);
 	$('#media-view-entity .entity-meta-header .entity-runtime').html(mediaRuntime);
+	$('#media-view-entity .entity-meta-header .media-header').hide();
+	$('#media-view-entity .entity-meta-header .media-header.media-'+mediaType).show();
 	$('#media-view-entity .media-image').html(mediaIcon);
 	$('#media-view-entity .entity-pub-time span').html(mediaPubTime);	
 	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
