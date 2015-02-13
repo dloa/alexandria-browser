@@ -1945,6 +1945,8 @@ function getIMDBinfo() {
 			var errorCode = data['code'];
 			if (errorCode) {
 				alert(data['message']);
+				$('fieldset:visible input').val('');
+				$('fieldset:visible textarea').val('');
 			} else {
 				for (var key in data) {
 					var obj = data[key];
@@ -1988,10 +1990,10 @@ function getIMDBinfo() {
 							IMDBResult = obj;
 						}		
 						inputObj.value = IMDBResult;
-						$('.modal-tab:visible .autofill-button').slideUp(fadeTimer);
 					}
 				}
 			}
+			$('.modal-tab:visible .autofill-button').slideUp(fadeTimer);
 			$('fieldset:visible input').removeAttr('disabled');
 			$('fieldset:visible textarea').removeAttr('disabled');
 	    },
