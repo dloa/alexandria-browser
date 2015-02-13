@@ -1937,7 +1937,6 @@ function getIMDBinfo() {
 			var el = $( '#sketchpad' );
 			el.html(e.responseText);
 			var data = $.parseJSON($('p', el).html());
-	    	console.info(data);
 			for (var key in data) {
 				var obj = data[key];
 				var inputObj = document.getElementById('addMovie-'+key);
@@ -1947,10 +1946,16 @@ function getIMDBinfo() {
 					if(typeof obj == 'object'){
 						if (typeof obj[0] == 'object') {
 							for (var objIndex in obj) {
-					            ++length;
 								var subObj = obj[objIndex];
-								for (var subkey in subObj) {
-									newObj.push(subObj[subkey]);
+								if (key == 'actors') {
+									newObj.push(subObj['actorName']);
+								} else {
+						            ++length;
+									for (var subkey in subObj) {
+										if(subObj[subkey].substring(0,2) != 'nm'){
+											newObj.push(subObj[subkey]);
+										}
+									}
 								}
 							}
 						} else {
@@ -1960,24 +1965,21 @@ function getIMDBinfo() {
 							});
 						}
 						obj = newObj;
-					} else {
-						console.info(obj);
 					}
-					console.info(key +' Length = '+length);
-					/*
-					if(!obj[1]){
-						var newObj = [];
-						for (var subkey in obj[0]) {
-							var subObj = obj[0][subkey];
-							console.log(subkey +' => '+ subObj);
-							if(subObj){
-								newObj.push(subObj);
+					var IMDBResult = '';
+					if (length > 0) {
+						obj.forEach(function(a){
+							if (IMDBResult == '') {
+								IMDBResult = a;
+							} else {
+								IMDBResult = IMDBResult + ', ' + a;
 							}
-						}
-						obj = newObj;
+						});
+					} else {
+						IMDBResult = obj;
 					}
-					*/
-					inputObj.value = obj;
+					
+					inputObj.value = IMDBResult;
 				}
 			}
 	    }
