@@ -1967,7 +1967,7 @@ function getIMDBinfo() {
 						obj = newObj;
 					}
 					var IMDBResult = '';
-					if (length > 0) {
+					if (typeof obj == 'object') {
 						obj.forEach(function(a){
 							if (IMDBResult == '') {
 								IMDBResult = a;
