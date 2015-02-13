@@ -1942,6 +1942,7 @@ function getIMDBinfo() {
 			var el = $( '#sketchpad' );
 			el.html(e.responseText);
 			var data = $.parseJSON($('p', el).html());
+			console.info(data);
 			var errorCode = data['code'];
 			if (errorCode) {
 				alert(data['message']);
@@ -1951,7 +1952,9 @@ function getIMDBinfo() {
 				for (var key in data) {
 					var obj = data[key];
 					var inputObj = document.getElementById('addMovie-'+key);
-					if(inputObj){
+					if (key == 'urlPoster') {
+						$('.thumbnail-wrapper:visible').html('<p><a href="'+ obj +'" target="_blank" class="btnLightGray">Download from IMDB</a></p>');
+					} else if (inputObj) {
 						var length = 0;
 						var newObj = [];
 						if(typeof obj == 'object'){
