@@ -1,0 +1,50 @@
+<!DOCTYPE html> 
+<html class="no-js">
+	<head>
+		<meta charset="utf-8">
+			<link rel="stylesheet" href="js/vendor/spritz/spritz.min.css">
+			<style>
+				#spritzer {
+					text-align: center;
+					display: table;
+					position: fixed;
+					width: 100%;
+					height: 100%;
+				}
+				#spritz-wrap {
+					display: table-row;
+				}
+				#cell {
+					display: table-cell;
+					vertical-align: middle;
+				}
+				#spritzThis {
+					display: none;
+				}
+			</style>
+			<script type="text/javascript">
+				var SpritzSettings = {
+					clientId: "bca1146a623ec3d99",
+					redirectUri: "/archview/thirdparty/login_success.html"
+				};
+			</script>
+		</meta>
+	</head>
+	<body>
+		<div id="spritzer">
+			<div id="spritz-wrap">
+				<div id="cell">
+					<div data-role="spritzer"></div>
+				</div>
+			</div>
+
+		</div>
+		<div id="spritzThis">
+			The ancient library of Alexandria was said to hold more recorded history than any library before or since. Some texts may have held tens of thousands of years of history and cultural knowledge. Tragically, most of its contents were destroyed by wars, fires and pillaging over hundreds of years.
+			In the hopes of building a more robust, destruction-resistant, model of this library, we have combined a number of distributed technologies. The blockchain gives us a permanent publishing ledger and payments layer, and peer to peer file sharing technology allows our library to hold inconceivable amounts of history and knowledge. A distributed network of Librarians capture new content and collaborate to organize information.
+			Introducing Alexandria, a distributed, peer-to-peer library of movies, music, videos, podcasts, books, 3d printable, recipes, anything.
+		</div>
+		<script src="../js/vendor/jquery-2.1.1.min.js"></script>
+		<script type="text/javascript" src="../js/vendor/spritz-2.min.js"></script>
+	</body>
+</html>

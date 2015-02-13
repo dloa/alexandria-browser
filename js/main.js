@@ -1772,6 +1772,32 @@ function loadRecentMedia() {
 	hideArchivesUI();
 	$('#tip-modal').hide();
 	$('.view-media-ui').fadeOut(fadeTimer);
+	$.ajax({
+		type: "GET",
+		url: "http://54.172.28.195:41287/alexandria/v1/media/get/all",
+		data: queryString.toString(),
+		success: function (e) {
+			$('#browse-media-wrap .row').removeClass('first');
+			var data = $.parseJSON(e);
+			for (var i = 0; i < data.length; i++) {
+				console.info(data[i]['media-data']['alexandria-media']);
+				var mediaID = data[i]['txid'];
+				if (!document.getElementById('media-'+mediaID)) {
+					var mediaType = data[i]['media-data']['alexandria-media']['type'];
+					var mediaInfo = data[i]['media-data']['alexandria-media']['info'];
+					var mediaRuntime = data[i]['media-data']['alexandria-media']['runtime'];
+					var mediaPubTime = new Date(parseInt(data[i]['media-data']['alexandria-media']['timestamp']));
+					var mediaTitle = mediaInfo['title'];
+					var mediaMeta = '';
+					var mediaDesc = mediaInfo['description'];
+					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="media-icon load-entity"><img src="img/' + mediaType + '-icon.svg" class="load-entity makesvg" style="display: inline;"></div><h3 class="media-title load-entity">' + mediaTitle + '</h3> <div class="media-meta load-entity">' + mediaMeta + '</div> <div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon load-entity"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + mediaPubTime + '</div><div class="media-desc hidden">' + mediaDesc + '</div></div>';
+					$('#browse-media-wrap .row:first-of-type').before(mediaEntity);
+				}
+			}
+			$('#browse-media-wrap .row:first-of-type').addClass('first');
+			replaceSVG();
+		}
+	});
 	$('#browse-media').fadeIn(fadeTimer);
 	$('#browse-media-wrap .row').first().addClass('first');
 	// URL and Browser Nav for Recent Media Browse View
@@ -1861,6 +1887,7 @@ function loadInfoModal(childObj) {
         }
         count++;
     }
+    // Load Media Entity Info Modal
 	if ( ($('#info-modal-media').css('display') == 'block') && ($('#info-modal-media').css('opacity')==1) ) {
 		$('#info-modal-media').fadeOut(fadeTimer);
 		return false;
@@ -1869,10 +1896,18 @@ function loadInfoModal(childObj) {
 	if ($(objMeta).find('#info-modal-media').length == 0) {
 		$(objMeta).append($('#info-modal-media'));
 	}
-	$('#info-modal-media .entity-meta-header h2').html($(objMeta).find('.media-title').html());
-	$('#info-modal-media .entity-meta-header h3').html($(objMeta).find('.media-meta').html());
-	$('#info-modal-media .entity-meta-header .entity-runtime').html($(objMeta).find('.media-runtime').html());
-	$('#info-modal-media .media-image').html($(objMeta).find('.media-icon').html());
+	var mediaRuntime = $(objMeta).find('.media-runtime').html();
+	var mediaPubTime = $(objMeta).find('.media-pub-time').html();
+	var mediaTitle = $(objMeta).find('.media-title').html();
+	var mediaMeta = $(objMeta).find('.media-meta').html();
+	var mediaDesc = $(objMeta).find('.media-desc').html();
+	var mediaIcon = $(objMeta).find('.media-icon').html();
+	$('#info-modal-media .entity-meta-header h2').html(mediaTitle);
+	$('#info-modal-media .entity-meta-header h3').html(mediaMeta);
+	$('#info-modal-media .entity-meta-header .entity-runtime').html(mediaRuntime);
+	$('#info-modal-media .media-image').html(mediaIcon);
+	$('#info-modal-media .entity-pub-time span').html(mediaPubTime);	
+	$('#info-modal-media .media-desc').html('<p>'+ mediaDesc +'</p>');
 	$(objMeta).find('#info-modal-media').fadeIn(fadeTimer);
 }
 // Display Tip Modal
