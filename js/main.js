@@ -106,6 +106,9 @@ jQuery(document).ready(function($){
 		if ( ( ($('#info-modal-small').css('display') == 'block') && ($('#info-modal-small').css('opacity') == 1) ) && ( (!$(e.target).parents('#info-modal-small')[0]) && ( (!$(e.target).parents('.info-icon')[0]) ) ) ) {
 			$('#info-modal-small').fadeOut(fadeTimer);
 		}
+		if ( ( ($('#tip-modal').css('display') == 'block') && ($('#tip-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#tip-modal')[0]) && ( (!$(e.target).parents('.tip-icon')[0]) ) ) ) {
+			$('#tip-modal').fadeOut(fadeTimer);
+		}
 	});
 	
 	// Advanced Search clear button
