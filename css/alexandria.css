@@ -720,6 +720,9 @@ div#intro {
 	width: 60%;
 	height: 60%;
 }
+.media-rating {
+	display: none !important;
+}
 #info-modal-media .media-rating {
 	margin: .25em 0 .5em;
 }

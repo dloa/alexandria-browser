@@ -1795,7 +1795,7 @@ function loadRecentMedia() {
 					$('#browse-media-wrap .row:first-of-type').before(mediaEntity);
 				}
 			}
-			$('#browse-media-wrap .row:first-of-type').addClass('first');
+			$('#browse-media-wrap .row.media-entity:first-of-type').addClass('first');
 			replaceSVG();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
