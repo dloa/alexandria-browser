@@ -198,7 +198,12 @@ jQuery(document).ready(function($){
 				$('#wait').hide();
 				$('#disabler').hide();
 			}
-			
+			if($('.info-modal').css('display')=='block'){
+				$('.info-modal').fadeOut(fadeTimer);
+			}
+			if($('#tip-modal').css('display')=='block'){
+				$('#tip-modal').fadeOut(fadeTimer);
+			}
 		}
 	});
 	$('.close-modal').click(function(){
