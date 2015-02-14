@@ -607,13 +607,13 @@ div#intro {
 .module-links.mod-filter li .imgwrap {
 	border-color: #979797;
 }
-.module-links.mod-filter li .imgwrap:hover {
+.module-links.mod-filter li:hover .imgwrap {
 	border-color: #797979;
 }
 .module-links.mod-filter li .imgwrap svg path {
 	color: #979797;
 }
-.module-links.mod-filter li .imgwrap:hover svg path {
+.module-links.mod-filter li:hover .imgwrap svg path {
 	fill: #797979;
 }
 .media-rating img {

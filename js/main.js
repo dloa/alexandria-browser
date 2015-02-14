@@ -28,7 +28,7 @@ jQuery(document).ready(function($){
 	// UI/UX Navigation
 	// Click logo to go back to archive list with current timeline selection
 	$('#logo').click(function(){
-		if($(this).hasClass('disabled')){
+		if ( ($(this).hasClass('disabled')) || (window.location.search=='') ){
 			return false;
 		}
 		if($('#tweetListView').css('display') == 'block') {
@@ -99,6 +99,9 @@ jQuery(document).ready(function($){
 		if ( ( $(e.target).attr('id')=='app-overlay') || ( $(e.target).attr('id')=='spritz-container') ) {
 			$('#spritz-container').hide();
 			$('#app-overlay').css('z-index','90');
+		}
+		if ( ( ($('#info-modal-media').css('display') == 'block') && ($('#info-modal-media').css('opacity') == 1) ) && ( (!$(e.target).parents('#info-modal-media')[0]) && ( (!$(e.target).parents('.info-icon')[0]) ) ) ) {
+			$('#info-modal-media').fadeOut(fadeTimer);
 		}
 	});
 	
@@ -1326,6 +1329,10 @@ function volumeBars(arch, word, interval){
 	var basicSliderBounds = $("#timeline").dateRangeSlider("bounds");
 	var queryString = '{"Archive":"'+arch+'","Word":"'+word+'","StartDate":'+Date.parse(basicSliderBounds.min)+',"EndDate":'+Date.parse(basicSliderBounds.max)+',"Interval": '+interval+'}';
 	console.log('API call: get/interval/count ...');
+	var volumeBarInterval = '';
+	if (!volumeBarInterval != '') {
+	    clearTimeout(volumeBarInterval);
+	}
 	$.ajax({
 		type: "POST",
 		url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/interval/count",
@@ -1342,9 +1349,8 @@ function volumeBars(arch, word, interval){
 				dataset.push(v);
 			});
 			console.info(dataset);
-	        clearInterval(volumeBarInterval);
 		    if (dataset == "no archive found") {
-				var volumeBarInterval = setInterval(function() {
+				volumeBarInterval = setTimeout(function() {
 					volumeBars(arch, word, interval);
 					return false;
 				}, 2000);
@@ -1760,6 +1766,7 @@ function loadRecentMedia() {
 	hideArchivesUI();
 	$('#tip-modal').hide();
 	$('.view-media-ui').fadeOut(fadeTimer);
+	console.log('loadRecentMedia() media/get/all ...');
 	$.ajax({
 		type: "GET",
 		url: "http://54.172.28.195:41287/alexandria/v1/media/get/all",
@@ -1784,6 +1791,10 @@ function loadRecentMedia() {
 			}
 			$('#browse-media-wrap .row:first-of-type').addClass('first');
 			replaceSVG();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
 		}
 	});
 	$('#browse-media').fadeIn(fadeTimer);
