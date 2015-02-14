@@ -103,6 +103,9 @@ jQuery(document).ready(function($){
 		if ( ( ($('#info-modal-media').css('display') == 'block') && ($('#info-modal-media').css('opacity') == 1) ) && ( (!$(e.target).parents('#info-modal-media')[0]) && ( (!$(e.target).parents('.info-icon')[0]) ) ) ) {
 			$('#info-modal-media').fadeOut(fadeTimer);
 		}
+		if ( ( ($('#info-modal-small').css('display') == 'block') && ($('#info-modal-small').css('opacity') == 1) ) && ( (!$(e.target).parents('#info-modal-small')[0]) && ( (!$(e.target).parents('.info-icon')[0]) ) ) ) {
+			$('#info-modal-small').fadeOut(fadeTimer);
+		}
 	});
 	
 	// Advanced Search clear button
