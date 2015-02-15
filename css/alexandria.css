@@ -95,7 +95,7 @@ ul {
 
 body, html { margin: 0; padding: 0;}
 body { 
-	overflow-x: hidden;
+//	overflow-x: hidden;
 	color: #464646;
 	background-color: #ecedec;
 }
@@ -854,7 +854,8 @@ div#intro {
 }
 #tip-modal .modal-tab p {
 	line-height: 1.4;
-	margin-bottom: 0;
+	margin: 0;
+	padding: 0;
 	color: #919191;
 	font-size: .9em;
 }

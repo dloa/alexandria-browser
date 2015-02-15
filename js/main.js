@@ -1796,8 +1796,9 @@ function loadRecentMedia() {
 					var mediaTitle = mediaInfo['title'];
 					var mediaMeta = '';
 					var mediaDesc = mediaInfo['description'];
+					var mediaTid = data[i]['media-data']['alexandria-media']['torrent'];
 					var mediaFLO = data[i]['media-data']['alexandria-media']['publisher'];
-					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaMeta + '</div> <div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + mediaPubTime + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-FLO hidden">' + mediaFLO + '</div></div>';
+					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaMeta + '</div> <div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + mediaPubTime + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="media-FLO hidden">' + mediaFLO + '</div></div>';
 					$('#browse-media-wrap .row:first-of-type').before(mediaEntity);
 				}
 			}
@@ -1845,7 +1846,9 @@ function loadMediaView(objMeta) {
 	var mediaDesc = $(objMeta).find('.media-desc').html();
 	var mediaIcon = $(objMeta).find('.media-icon').html();
 	var mediaType = $(objMeta).attr('media-type');
+	var mediaTid = $(objMeta).find('.media-Tid').text();
 	var mediaFLO = $(objMeta).find('.media-FLO').text();
+	$('#media-view-entity .media-Tid').html(mediaTid);
 	$('#media-view-entity .media-FLO').html(mediaFLO);
 	$('#media-view-entity .entity-meta-header h2').html(mediaTitle);
 	$('#media-view-entity .entity-meta-header h3').html(mediaMeta);
@@ -1984,7 +1987,11 @@ function loadTipModal(obj) {
 	var tipModalPos = $(obj).position().left-31;
 	$('#tip-modal .modal-tabs li:first-child').click();
 	var mediaFLO = $('#media-view-entity .media-FLO').text();
-	$('#tipAdd-FLO').text(mediaFLO);
+	if (mediaFLO != '') {
+		$('#tipAdd-FLO').text(mediaFLO);
+	} else {
+		$('#tipAdd-FLO').text('No Address Available');
+	}
 	$(obj).parents('.entity-market').find('#tip-modal').css('left',tipModalPos+'px').fadeToggle(fadeTimer);
 }
 
