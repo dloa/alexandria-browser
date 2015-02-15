@@ -347,7 +347,7 @@ jQuery(document).ready(function($){
 			var tipAmount = parseFloat($(this).val());
 		}
 		$('.tip-value').text(tipAmount);
-		$('.flo-usd .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
+		$('#tip-modal .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
 		$('.btc-usd .btc-usd-output').text(Math.round((tipAmount/BTCUSD)*100000000)/100000000);
 	});	
 	$('input[name="tip-amount"]').filter('[value="1.00"]').click();
@@ -360,24 +360,25 @@ jQuery(document).ready(function($){
 	});
 
 	$('.tip-input').keyup(function(e){
-		console.log(e.target.value);
 		var charCode = e.keyCode;
 		var tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
-		if ( ( (charCode > 65) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186) || (isNaN(tipAmount) == true) ) {
+		if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186) || (isNaN(tipAmount) == true) ) {
 			document.getElementById('CustomTipAmount').value = prevTipAmount;
-			$('.tip-value').text('0');
-			$('.flo-usd .flo-usd-output').text('0');
+			$('.tip-value').text(prevTipAmount);
+			$('#tip-modal .flo-usd-output').text(Math.round((prevTipAmount/FLOUSD)*100000000)/100000000);
 			return false;
 		}
-		var decValue = document.getElementById('CustomTipAmount').value.split('.')[1];
-		if(decValue) {
-			if (decValue.length > 2){
-				document.getElementById('CustomTipAmount').value = tipAmount.toFixed(2);
+		if (tipAmount != prevTipAmount) {
+			var decValue = document.getElementById('CustomTipAmount').value.split('.')[1];
+			if(decValue) {
+				if (decValue.length > 2){
+					document.getElementById('CustomTipAmount').value = tipAmount.toFixed(2);
+				}
 			}
+			tipAmount = document.getElementById('CustomTipAmount').value;
+			$('.tip-value').text(tipAmount);
+			$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
 		}
-		tipAmount = document.getElementById('CustomTipAmount').value;
-		$('.tip-value').text(tipAmount);
-		$('.flo-usd .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
 	});
 	// API Server ID and Control
 	if(serverAddress == '54.172.28.195'){
@@ -517,7 +518,7 @@ function getCryptos() {
 					FLOUSD = FLOLTC*LTCUSD;
 					$('#flo-usd label').text('FLO/USD').next('span').text(FLOUSD);
 					FLOCost = parseFloat($('#flo-cost').text());
-					$('.flo-usd .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
+					$('#tip-modal .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
 					$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);
 				}
 			});

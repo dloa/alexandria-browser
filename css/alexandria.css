@@ -782,6 +782,9 @@ div#intro {
 .row.entity-market #tip-modal * {
 	text-align: center;
 }
+#tip-modal #tip-flo .row:first-of-type {
+	display: none;
+}
 .tip-amounts label, #tip-modal h3, .crypto-price, .credebit-price, #tip-modal .btnLightGray {
 	color: #919191;
 }
