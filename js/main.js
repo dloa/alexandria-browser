@@ -362,14 +362,13 @@ jQuery(document).ready(function($){
 	$('.tip-input').keyup(function(e){
 		console.log(e.target.value);
 		var charCode = e.keyCode;
-		console.log(charCode);
-		if ( ( (charCode > 65) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186) ) {
+		var tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
+		if ( ( (charCode > 65) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186) || (isNaN(tipAmount) == true) ) {
 			document.getElementById('CustomTipAmount').value = prevTipAmount;
 			$('.tip-value').text('0');
 			$('.flo-usd .flo-usd-output').text('0');
 			return false;
 		}
-		var tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
 		var decValue = document.getElementById('CustomTipAmount').value.split('.')[1];
 		if(decValue) {
 			if (decValue.length > 2){
