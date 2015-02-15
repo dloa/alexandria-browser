@@ -354,11 +354,32 @@ jQuery(document).ready(function($){
 	$('.tip-input').focus(function(){
 		$(this).siblings('input[type="radio"]').click();
 	});
-	$('.tip-input').keyup(function(){
-		var tipAmount = parseFloat($(this).val());
+
+	$('.tip-input').keydown(function(e){
+		prevTipAmount = document.getElementById('CustomTipAmount').value;
+	});
+
+	$('.tip-input').keyup(function(e){
+		console.log(e.target.value);
+		var charCode = e.keyCode;
+		console.log(charCode);
+		if ( ( (charCode > 65) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186) ) {
+			document.getElementById('CustomTipAmount').value = prevTipAmount;
+			$('.tip-value').text('0');
+			$('.flo-usd .flo-usd-output').text('0');
+			return false;
+		}
+		var tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
+		var decValue = document.getElementById('CustomTipAmount').value.split('.')[1];
+		if(decValue) {
+			if (decValue.length > 2){
+				document.getElementById('CustomTipAmount').value = tipAmount.toFixed(2);
+			}
+		}
+		tipAmount = document.getElementById('CustomTipAmount').value;
 		$('.tip-value').text(tipAmount);
-		$('.flo-usd .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
-	}); 
+		$('.flo-usd .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
+	});
 	// API Server ID and Control
 	if(serverAddress == '54.172.28.195'){
 		$('#serverID').text('Dev');
@@ -445,6 +466,8 @@ var prevStartDate = '';
 var prevEndDate = '';
 
 var freshLoad = true;
+
+var prevTipAmount = '';
 
 // Get crypto [cryptsy] exchange rates
 var FLOCost;

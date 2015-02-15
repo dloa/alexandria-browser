@@ -852,6 +852,9 @@ div#intro {
 	margin-left: .2em;
 	color: #444444;
 }
+#tip-modal .modal-tab .btnLightGray {
+	margin-bottom: 1em;
+}
 #tip-modal .modal-tab p {
 	line-height: 1.4;
 	margin: 0;
