@@ -229,7 +229,6 @@ jQuery(document).ready(function($){
 	});	
 	// Timeline controls
 	$('#timeline-controls').click(function(){
-//		$('svg#volume').remove();
 	});
 	$('#timeline-controls .full').click(function(){
 		$("#timeline").dateRangeSlider("bounds", new Date(2014, 8, 8), new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1));
@@ -548,7 +547,7 @@ function getCryptos() {
 function buildTimeline() {
 	console.log('startDate = '+startDateValue+', endDate = '+endDateValue)
 	$("#timeline").dateRangeSlider({
-		bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth()-1, datetime.getDate()), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
+		bounds: {min: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()-7), max: new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()+1)},
 		defaultValues: {min: startDateValue, max: endDateValue},
 		arrows: false,
 		scales: [{
@@ -1897,6 +1896,7 @@ function loadMediaView(objMeta) {
 	var mediaDesc = $(objMeta).find('.media-desc').html();
 	var mediaIcon = $(objMeta).find('.media-icon').html();
 	var mediaType = $(objMeta).attr('media-type');
+	if (mediaType = 'movie') { getRotten(); }
 	var mediaTid = $(objMeta).find('.media-Tid').text();
 	var mediaFLO = $(objMeta).find('.media-FLO').text();
 	$('#media-view-entity .media-Tid').html(mediaTid);
@@ -2167,6 +2167,43 @@ function getIMDBinfo() {
 		}
 	});
 }
+// MOVIE IMDB VERIFICATION CHECK
+function verifyIMDB() {
+	var IMDBid = document.getElementById('imdb-id').value;
+	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid +'&actors=S&uniqueName=1';
+	$.ajax({
+	    url: IMDBapi,
+	    type: 'GET',
+	    success: function(e) {
+	    },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+		}
+    });
+}
+// GET ROTTEN TOMATOES RATING
+function getRotten() {
+	var RottenID = document.getElementById('movie-rotten').innerHTML;
+	var RottenAPI = 'http://api.rottentomatoes.com/api/public/v1.0/movies/'+ RottenID +'.json?apikey=uatf974sbyb7reyrstwnpmzu';
+	$.ajax({
+	    url: RottenAPI,
+	    type: 'GET',
+	    success: function(e) {
+			var el = $( '#sketchpad' );
+			el.html(e.responseText);
+			var data = $.parseJSON($('p', el).html());
+			console.info(data);
+	    	document.getElementById('movie-rotten').innerHTML = data['ratings']['audience_score'];
+	    	document.getElementById('rotten-wrap').style.display = 'initial';
+	    },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+		}
+    });
+}
+
 // ERROR CONNECTING TO LIBRARIAN
 function librarianErr(){
 	console.error('Librarian Error');

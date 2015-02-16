@@ -1006,6 +1006,12 @@ div#qrcode img {
 	margin-right: 1em;
 	margin-left:0;
 }
+span#rotten-wrap {
+	display: none;
+}
+label#movie-rotten {
+	margin-right: 0;
+}
 .entity-view .entity-meta-header a {
 	text-decoration: none;
 	color: inherit;
