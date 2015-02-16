@@ -69,6 +69,7 @@ jQuery(document).ready(function($){
 	
 	// Intro view icon interactions
 	$('#enter-archives').click(function(){
+		$('.archiveLabel').fadeOut(fadeTimer).find('.currentArchive').html('');
 		currentArchive = '*';
 		searchTerm = '';
 		currentView = 'archiveCloud';
@@ -180,6 +181,23 @@ jQuery(document).ready(function($){
 	$('.getAllArchives').click(function(){
 		getAllArchives();
 	});	
+	
+	$('.archiveLabel').click(function(){
+		currentArchive = '*';
+		currentView = 'archiveCloud';
+		startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
+		endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
+		var stateObj = {
+			startDateValue: startDateValue,
+			endDateValue: endDateValue,
+			archive: currentArchive,
+			word: ''
+		};
+		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue;
+		history.pushState(stateObj, 'Alexandria > Twitter Archives', newURL);
+		document.title = 'Alexandria > Twitter Archives';
+		resetToArchives();
+	});
 	
 	// Modal controls
 	$(document).on("keyup", function (e) {
@@ -679,11 +697,8 @@ function draw(words, bounds) {
 					archive: currentArchive,
 					word: ''
 				};
-				if(window.location.search==''){
-					var newURL = document.location.origin + document.location.pathname +'?archive='+encodeURIComponent(currentArchive);
-				} else {
-					var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue + '&archive='+encodeURIComponent(currentArchive);
-				}
+				console.log('currentArchive = '+currentArchive);
+				var newURL = document.location.origin + document.location.pathname + '?startDate='+startDateValue+'&endDate='+endDateValue + '&archive='+encodeURIComponent(currentArchive);
 				history.pushState(stateObj, 'Alexandria > '+currentArchive, newURL);
 				document.title = 'Alexandria > '+currentArchive;
 				getArchiveWords(item);
@@ -777,18 +792,14 @@ function getJobs(searchTerm) {
 		startDateValue = Date.parse($("#timeline").dateRangeSlider("values").min);
 		endDateValue = Date.parse($("#timeline").dateRangeSlider("values").max);
 	}
+	currentArchive = '*';
 	var stateObj = {
 		startDateValue: startDateValue,
 		endDateValue: endDateValue,
-		archive: '*',
+		archive: currentArchive,
 		word: ''
 	};
-	console.log('currentArchive = '+ currentArchive);	
-	if(currentArchive == '*'){
-		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue;
-	}/* else {
-		var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive);
-	} */
+	var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue;
 	history.pushState(stateObj, 'Alexandria > Twitter Archives', newURL);
 	document.title = 'Alexandria > Twitter Archives';
 	if(resetArchiveList == true){
@@ -1588,6 +1599,7 @@ function displayItem(key){
 
 // BROWSER NAVIGATION CONTROLS
 window.onpopstate = function(event) {
+	console.log('currentArchive = '+ currentArchive);
 	if(window.location.search == ''){
 		resetAlexandria();
 	} else {
@@ -1597,6 +1609,12 @@ window.onpopstate = function(event) {
 		prevEndDate = endDateValue;
 		if (window.location.search.indexOf("startDate") > -1) {
 			displayItem('startDate');
+		}
+		if (window.location.search.indexOf("archive") < 0) {
+			currentArchive = '*';
+		}
+		if (currentArchive == '*') {
+			$('.archiveLabel').fadeOut(fadeTimer).find('.currentArchive').html('');;
 		}
 		$('main.wordCloud text').css({
 			'text-shadow':'0 0 0 rgba(200,200,200,.5)',
@@ -1628,6 +1646,16 @@ window.onpopstate = function(event) {
 		loadAlexandriaView();
 	}
 };
+function resetToArchives() {
+		$('.archiveLabel').fadeOut(fadeTimer).find('.currentArchive').html('');
+		$("#tweetList li").fadeOut(fadeTimer);
+		$('.overlay').fadeOut(fadeTimer);
+		$('.sharing-ui').fadeOut(fadeTimer);
+		$("#tweetList li").remove();
+		currentPage = 0;
+		totalPages = 0;
+		loadAlexandriaView();
+}
 // Load Alexandria View
 function loadAlexandriaView() {
 	var readyStateCheckInterval = setInterval(function() {

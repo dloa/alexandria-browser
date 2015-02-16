@@ -527,6 +527,7 @@ div#intro {
 }
 #intro h1 {
 	margin: 0 0 .25em;
+	font-weight: normal;
 }
 #intro h2 {
 	margin-bottom: 1em;
