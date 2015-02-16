@@ -224,6 +224,7 @@ div#viewlabel a {
 }
 div#viewlabel .archiveLabel {
 	display: none;
+	cursor: pointer;
 }
 div#viewlabel .currentArchive {
 	color: #92b4c6;
@@ -468,6 +469,7 @@ span.ui-slider-handle.ui-state-default.ui-corner-all {
 }
 #timeline-controls span {
 	cursor: pointer;
+	display: block;
 }
 input.timeline-control-input {
 	width: 1.25em;
