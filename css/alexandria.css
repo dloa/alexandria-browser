@@ -1008,6 +1008,13 @@ div#qrcode img {
 }
 span#rotten-wrap {
 	display: none;
+	height: 32px;	
+}
+span#rotten-wrap a, span#rotten-wrap img, span#rotten-wrap svg {
+	height: 100%;
+}
+span#rotten-wrap img, span#rotten-wrap svg {
+	width: 32px;
 }
 label#movie-rotten {
 	margin-right: 0;

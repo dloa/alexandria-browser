@@ -2184,7 +2184,7 @@ function verifyIMDB() {
 }
 // GET ROTTEN TOMATOES RATING
 function getRotten() {
-	var RottenID = document.getElementById('movie-rotten').innerHTML;
+	var RottenID = parseInt(document.getElementById('movie-rotten').innerHTML);
 	var RottenAPI = 'http://api.rottentomatoes.com/api/public/v1.0/movies/'+ RottenID +'.json?apikey=uatf974sbyb7reyrstwnpmzu';
 	$.ajax({
 	    url: RottenAPI,
@@ -2194,8 +2194,15 @@ function getRotten() {
 			el.html(e.responseText);
 			var data = $.parseJSON($('p', el).html());
 			console.info(data);
-	    	document.getElementById('movie-rotten').innerHTML = data['ratings']['audience_score'];
-	    	document.getElementById('rotten-wrap').style.display = 'initial';
+			var rating = data['ratings']['audience_score'];
+	    	document.getElementById('movie-rotten').innerHTML = rating;
+	    	if ( rating < 50 ) {
+	    		document.getElementById('rotten-img').src = 'img/rotten-tomatos-rotten.svg';
+	    	} else {
+	    		document.getElementById('rotten-img').src = 'img/rotten-tomatos-fresh.svg';
+	    	}
+	    	replaceSVG();
+	    	document.getElementById('rotten-wrap').style.display = 'inline-block';
 	    },
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.error(xhr.status);
