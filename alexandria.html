@@ -257,329 +257,157 @@
 			<div id="add-media-container">
 				<nav>
 					<ul id="add-media-menu">
-						<li name="newMedia-media" class="active">Media</li>
-						<li name="newMedia-info">Information</li>
+						<li name="newMedia-info" class="active">Information</li>
 						<li name="newMedia-net">Distribution</li>
 						<li name="newMedia-pay">Payments</li>
 						<li name="newMedia-notary">Publishing</li>
 					</ul>
 				</nav>
 				<div id="newMedia-tabs">
-					<div id="newMedia-media" class="modal-tab">
-						<h2>select media type:</h2>
-						<div class="wrap">
-							<div class="row full">
-								<div class="col">
-									<div class="input-container select-container">
-										<select id="mediaType">
-											<option value=""></option>
-											<option value="movie">Movie</option>
-											<option value="music-song">Music - Song</option>
-											<option value="music-album">Music - Album</option>
-											<option value="podcast">Podcast</option>
-											<option value="video">Video</option>
-											<option value="book">Book</option>
-											<option value="recipe">Recipe</option>
-											<option value="thing">Thing</option>
-										</select>
+					<div id="newMedia-info" class="modal-tab">
+						<div class="media-info-container">
+							<h2>select media type:</h2>
+							<div class="newMedia-media wrap">
+								<div class="row full">
+									<div class="col">
+										<div class="input-container select-container">
+											<select id="mediaType">
+												<option value=""></option>
+												<option value="movie">Movie</option>
+												<option value="music-song">Music - Song</option>
+												<option value="music-album">Music - Album</option>
+												<option value="podcast">Podcast</option>
+												<option value="video">Video</option>
+												<option value="book">Book</option>
+												<option value="recipe">Recipe</option>
+												<option value="thing">Thing</option>
+											</select>
+										</div>
 									</div>
 								</div>
 							</div>
-							<div class="row full choosefile">
-								<div class="col">
-									<h2>select media to share:</h2>
+							<div class="left">
+								<h2>Information</h2>
+								<div class="container">
+									<div class="tbl">
+										<!-- Media MetaData -->
+										<fieldset id="new-media-meta">
+											<div class="row full media-specific movie-meta podcast-meta video-meta">
+												<div class="col">
+													<div class="input-container">
+														<label><span id="media-meta-www">WWW</span> ID</label>
+														<input type="text" name="WWW ID" id="www-id" onblur="showAutoFill(this);" />
+													</div>
+												</div>
+											</div>
+											<div class="row full">
+												<div class="col">
+													<div class="input-container autofill-button">
+														Autofilling Fields ...
+													</div>
+												</div>
+											</div>
+											<div class="row full">
+												<div class="col">
+													<div class="input-container">
+														<label>Title</label>
+														<input type="text" name="title" id="addMedia-title" />
+													</div>
+												</div>
+											</div>
+											<div class="row full">
+												<div class="col">
+													<div class="input-container">
+														<label>Runtime</label>
+														<input type="text" name="runtime" id="addMedia-runtime" />
+													</div>
+												</div>
+											</div>
+											<div class="row full">
+												<div class="col">
+													<div class="input-container">
+														<label><span id="media-meta-creators1">Creators 1</span></label>
+														<input type="text" name="creators1" id="addMedia-creators1" />
+													</div>
+												</div>
+											</div>
+											<div class="row full media-specific movie-meta podcast-meta book-meta thing-meta"">
+												<div class="col">
+													<div class="input-container">
+														<label><span id="media-meta-creators2">Creators 2</span></label>
+														<input type="text" name="creators2" id="addMedia-creators2" />
+													</div>
+												</div>
+											</div>
+											<div class="row full media-specific movie-meta podcast-meta">
+												<div class="col">
+													<div class="input-container">
+														<label><span id="media-meta-creators3">Creators 3</span></label>
+														<textarea name="creators3" id="addMedia-creators3"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col">
+													<div class="input-container">
+														<label>Year</label>
+														<input type="text" name="year" id="addMedia-year" />
+													</div>
+												</div>
+												<div class="col">
+													<div class="input-container">
+														<label>Genre</label>
+														<input type="text" name="genre" id="addMedia-genres" />
+													</div>
+												</div>
+												<div class="col">
+													<div class="input-container">
+														<label>Company</label>
+														<input type="text" name="company" id="addMedia-company" />
+													</div>
+												</div>
+											</div>
+											<div class="row full">
+												<div class="col">
+													<div class="input-container">
+														<label><span id="media-meta-collection">Collection</span></label>
+														<input type="text" name="collection" id="addMedia-collection" />
+													</div>
+												</div>
+											</div>
+											<div class="row full">
+												<div class="col">
+													<div class="input-container">
+														<label>Description</label>
+														<textarea name="description" id="addMedia-plot"></textarea>
+													</div>
+												</div>
+											</div>
+											<div class="row full media-specific movie-meta">
+												<div class="col">
+													<div class="input-container">
+														<label>Rotten Tomatoes ID</label>
+														<input type="text" name="RottenTom ID" id="rotten-id" />
+													</div>
+												</div>
+											</div>
+										</fieldset>
+										<!-- Movie Meta -->
+									</div>
+								</div>
+							</div>
+							<div class="pull-right">
+								<h2>choose title artwork:</h2>
+								<div class="container">
 									<ul class="newMedia-links">
-										<li id="upload-media-source" class="uploader">Browse...</li>
+										<li id="upload-title-art" class="uploader">Browse...</li>
+										<li>From URL...</li>
 									</ul>
-									<div class="uploaded-media-meta upload-media-source">
+									<div class="uploaded-media-meta upload-title-art">
 										<p class="media-filename"><label>File Name: </label> <span></span></p>
 									</div>
+									<div class="thumbnail-wrapper"></div>
 								</div>
-							</div>
-						</div>
-					</div>
-					<div id="newMedia-info" class="modal-tab">
-						<div class="left">
-							<h2>Information</h2>
-							<div class="container">
-								<div class="tbl">
-									<!-- Movie Meta -->
-									<fieldset id="new-movie-meta">
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>IMDB ID</label>
-													<input type="text" name="IMDB ID" id="imdb-id" onblur="showAutoFill(this);" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container autofill-button">
-													Autofilling Fields ...
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Title</label>
-													<input type="text" name="title" id="addMovie-title" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Runtime</label>
-													<input type="text" name="runtime' id="addMovie-runtime" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Director</label>
-													<input type="text" name="directors" id="addMovie-directors" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Screenwriter(s)</label>
-													<input type="text" name="writers" id="addMovie-writers" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Cast</label>
-													<textarea name="cast" id="addMovie-actors"></textarea>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col">
-												<div class="input-container">
-													<label>Year</label>
-													<input type="text" name="year" id="addMovie-year" />
-												</div>
-											</div>
-											<div class="col">
-												<div class="input-container">
-													<label>Genre</label>
-													<input type="text" name="genre" id="addMovie-genres" />
-												</div>
-											</div>
-											<div class="col">
-												<div class="input-container">
-													<label>Company</label>
-													<input type="text" name="company" id="addMovie-company" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Description</label>
-													<textarea name="description" id="addMovie-plot"></textarea>
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Rotten Tomatoes ID</label>
-													<input type="text" name="RottenTom ID" id="rotten-id" />
-												</div>
-											</div>
-										</div>
-									</fieldset>
-									<!-- Music - Song Meta -->
-									<fieldset id="new-music-song-meta">
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Artist Name</label>
-													<input type="text" name="title" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Song Title</label>
-													<input type="text" name="title" />
-												</div>
-											</div>
-										</div>
-									</fieldset>
-									<!-- Music - Album Meta -->
-									<fieldset id="new-music-album-meta">
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Artist Name</label>
-													<input type="text" name="title" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Album Title</label>
-													<input type="text" name="title" />
-												</div>
-											</div>
-										</div>
-									</fieldset>
-									<!-- Podcast Meta -->
-									<fieldset id="new-podcast-meta">
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Podcast Name</label>
-													<input type="text" name="title" />
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col">
-												<div class="input-container">
-													<label>Episode Number</label>
-													<input type="text" />
-												</div>
-											</div>
-											<div class="col">
-												<div class="input-container">
-													<label>Episode Name</label>
-													<input type="text" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Runtime</label>
-													<input type="text" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Host(s)</label>
-													<input type="text" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Guest(s)</label>
-													<input type="text" />
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col">
-												<div class="input-container">
-													<label>Publish Date</label>
-													<input type="text" />
-												</div>
-											</div>
-											<div class="col">
-												<div class="input-container">
-													<label>Tags</label>
-													<input type="text" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Description</label>
-													<textarea></textarea>
-												</div>
-											</div>
-										</div>
-									</fieldset>
-									<!-- Video Meta -->
-									<fieldset id="new-video-meta">
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Video Title</label>
-													<input type="text" name="title" />
-												</div>
-											</div>
-										</div>
-									</fieldset>
-									<!-- Books Meta -->
-									<fieldset id="new-book-meta">
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Author Name</label>
-													<input type="text" name="title" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Book Title</label>
-													<input type="text" name="title" />
-												</div>
-											</div>
-										</div>
-									</fieldset>
-									<!-- Books Meta -->
-									<fieldset id="new-recipe-meta">
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Recipe Title</label>
-													<input type="text" name="title" />
-												</div>
-											</div>
-										</div>
-									</fieldset>
-									<!-- Things Meta -->
-									<fieldset id="new-thing-meta">
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Designer Name</label>
-													<input type="text" name="title" />
-												</div>
-											</div>
-										</div>
-										<div class="row full">
-											<div class="col">
-												<div class="input-container">
-													<label>Thing Name</label>
-													<input type="text" name="title" />
-												</div>
-											</div>
-										</div>
-									</fieldset>
-								</div>
-							</div>
-						</div>
-						<div class="pull-right">
-							<h2>choose title artwork:</h2>
-							<div class="container">
-								<ul class="newMedia-links">
-									<li id="upload-title-art" class="uploader">Browse...</li>
-									<li>From URL...</li>
-								</ul>
-								<div class="uploaded-media-meta upload-title-art">
-									<p class="media-filename"><label>File Name: </label> <span></span></p>
-								</div>
-								<div class="thumbnail-wrapper"></div>
 							</div>
 						</div>
 					</div>
@@ -702,6 +530,7 @@
 					</div>					
 				</div>
 			</div> 
+			<div class="clearfix"></div>
 			<div class="pagination">
 				<ul>
 					<li class="prev">Previous</li>
@@ -799,8 +628,8 @@
 								<div class="entity-runtime"></div>
 								<span class="media-rating"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></span>
 								<span class="media-header media-movie">
-									<span id="rotten-wrap"><a href="http://www.rottentomatoes.com/m/apocalypse_ca/" target="_blank"><img src="" id="rotten-img" class="makesvg" /><label id="movie-rotten">771266582</label>%</a></span>
 									<a href="http://www.imdb.com/title/tt1273193/" target="_blank"><img src="img/imdb-button.png" /></a>
+									<span id="rotten-wrap"><a href="http://www.rottentomatoes.com/m/apocalypse_ca/" target="_blank"><img src="" id="rotten-img" class="makesvg" /><label id="movie-rotten">771266582</label>%</a></span>
 								</span>
 							</div>
 						</div>

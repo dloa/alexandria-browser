@@ -301,11 +301,44 @@ jQuery(document).ready(function($){
 	$('select#mediaType').change(function(){
 		var mediaType = $(this).val();
 		$('#newMedia-info fieldset').hide();
-		$('fieldset#new-'+mediaType+'-meta').show();
-		if ( (mediaType != '') && (mediaType != 'recipe') ) {
-			$('.row.choosefile').show();
-		} else {
-			$('.row.choosefile').hide();
+		if (mediaType != '' ) {
+			$('fieldset .row.media-specific').hide();
+			if (mediaType == 'movie') {
+				$('#media-meta-www').text('IMDB');
+				$('#media-meta-creators1').text('Director');
+				$('#media-meta-creators2').text('Screenwriter(s)');
+				$('#media-meta-creators3').text('Cast');
+				$('#media-meta-collection').text('Series Title');
+			} else if (mediaType == 'music-song') {
+				$('#media-meta-creators1').text('Artist');
+				$('#media-meta-collection').text('Album Title');
+			} else if (mediaType == 'music-album') {
+				$('#media-meta-creators1').text('Artist');
+				$('#media-meta-collection').text('Collection');
+			} else if (mediaType == 'podcast') {
+				$('#media-meta-www').text('Soundcloud');
+				$('#media-meta-creators1').text('Host(s)');
+				$('#media-meta-creators2').text('Co-Host(s)');
+				$('#media-meta-creators3').text('Guest(s)');
+				$('#media-meta-collection').text('Series Title');
+			} else if (mediaType == 'video') {
+				$('#media-meta-www').text('YouTube');
+				$('#media-meta-creators1').text('Creator');
+				$('#media-meta-collection').text('Series Title');
+			} else if (mediaType == 'book') {
+				$('#media-meta-creators1').text('Author');
+				$('#media-meta-creators2').text('Editor(s)');
+				$('#media-meta-collection').text('Series Title');
+			} else if (mediaType == 'thing') {
+				$('#media-meta-creators1').text('Creator');
+				$('#media-meta-creators2').text('Contributors');
+				$('#media-meta-collection').text('Collection');
+			} else if (mediaType == 'recipe') {
+				$('#media-meta-creators1').text('Chef');
+				$('#media-meta-collection').text('Collection');
+			}
+			$('fieldset .row.media-specific.'+mediaType+'-meta').show();
+			$('fieldset#new-media-meta').show();
 		}
 		resizeTabs();
 	});
@@ -2094,7 +2127,7 @@ function showAutoFill(obj){
 
 // Get IMDB Info from API
 function getIMDBinfo() {
-	var IMDBid = document.getElementById('imdb-id').value;
+	var IMDBid = document.getElementById('www-id').value;
 	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid +'&actors=S&uniqueName=1';
 	$.ajax({
 	    url: IMDBapi,
