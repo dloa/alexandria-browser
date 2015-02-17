@@ -686,9 +686,15 @@ div#intro {
 	margin: 0;
 }
 /* MEDIA UI */
-.share-icon, .tip-icon, .media-rating a {
+.share-icon, .tip-icon, .media-rating a, .media-Tid a {
 	width: 32px;
 	height: 32px;
+	display: inline-block;
+	vertical-align: bottom;
+}
+.media-Tid a {
+	width: 27px;
+	height: 27px;
 }
 .media-rating a {
 	display: inline-block;
@@ -714,7 +720,7 @@ div#intro {
 	fill: #979797;
 	fill-opacity: 1;
 }
-.share-icon:hover svg path, .tip-icon:hover svg path {
+.share-icon:hover svg path, .tip-icon:hover svg path, .media-Tid a:hover svg path {
 	fill: #464646;
 }
 .media-rating a {
@@ -1376,7 +1382,7 @@ ul.distNetList li {
 #add-media .distNetList li .input-container {
 //	display: none;
 	width: 200%;
-	margin: .5em 0 1em -50%;
+	margin: .25em 0 1em -50%;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;

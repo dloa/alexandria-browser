@@ -368,8 +368,10 @@ jQuery(document).ready(function($){
 	$('input[name="dNetwork"]').click(function(){
 		if ($(this)[0]['checked']) {
 			$(this).siblings('.input-container').slideDown(fadeTimer);
+			resizeTabs(fadeTimer);
 		} else {
 			$(this).siblings('.input-container').slideUp(fadeTimer);
+			resizeTabs(fadeTimer);
 		}
 	});
 	
@@ -1594,7 +1596,13 @@ function spritzThis(extURL) {
 }
 
 /* ADD NEW CONTENT INTERFACE */
-function resizeTabs() {
+function resizeTabs(t) {
+	if (t) {		
+		var tabsTimeout = setTimeout(function() {
+			resizeTabs();
+		}, t);
+		return false;
+	}
 	$('.media-info-container').css('overflow','hidden');
 	var tabHeight = $('.modal-tab:visible').children().first().height();
 	$('.modal-tab:visible').children().each(function(){
@@ -1907,6 +1915,18 @@ function hideArchivesUI() {
 	$('#app-overlay').hide();
 }
 
+// Get All Publishers
+function getAllPublishers() {
+	$.ajax({
+		type: "GET",
+		url: "http://54.172.28.195:41288/alexandria/v1/publisher/get/all",
+		success: function (e) {
+			var data = $.parseJSON(e);
+			console.info(data);
+		}
+	});
+}
+
 // Recent Media View
 function loadRecentMedia() {
 	currentView = 'recentMediaList';
@@ -1918,7 +1938,7 @@ function loadRecentMedia() {
 	$.ajax({
 		type: "GET",
 		url: "http://54.172.28.195:41288/alexandria/v1/media/get/all",
-		data: queryString.toString(),
+//		data: ,
 		success: function (e) {
 			$('#browse-media-wrap .row').removeClass('first');
 			var data = $.parseJSON(e);
@@ -2022,7 +2042,7 @@ function loadMediaView(objMeta) {
 	}
 	var mediaTid = $(objMeta).find('.media-Tid').text();
 	var mediaFLO = $(objMeta).find('.media-FLO').text();
-	$('#media-view-entity .media-Tid').html(mediaTid);
+	$('#media-view-entity .media-Tid a').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
 	$('#media-view-entity .media-FLO').html(mediaFLO);
 	$('#media-view-entity .entity-meta-header h2').html(mediaTitle);
 	$('#media-view-entity .entity-meta-header h3').html(mediaMeta);

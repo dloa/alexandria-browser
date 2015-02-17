@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="22px" height="28px" viewBox="0 0 22 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch Beta 3.3 (11523) - http://www.bohemiancoding.com/sketch -->
+    <title>magnet + magnet-path + magnet-path</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="magnet-+-magnet-path-+-magnet-path" sketch:type="MSLayerGroup" stroke="#484848">
+            <path d="M21.112,20.157 L21.112,10.29 C21.084,8.584 20.502,6.483 18.94,4.449 C17.401,2.435 14.625,0.729 11.001,0.762 C7.374,0.731 4.598,2.437 3.06,4.45 C1.498,6.484 0.915,8.586 0.886,10.292 L0.886,20.158 L5.886,20.158 L5.886,10.292 C5.859,9.915 6.189,8.503 6.985,7.544 C7.804,6.565 8.833,5.797 10.999,5.766 C13.164,5.798 14.194,6.565 15.012,7.544 C15.81,8.503 16.138,9.916 16.111,10.292 L16.111,20.157 L21.112,20.157 L21.112,20.157 Z" id="magnet" sketch:type="MSShapeGroup"></path>
+            <path d="M0.886,27.237 L5.886,27.237 L5.886,22.157 L0.886,22.157 L0.886,27.237 L0.886,27.237 Z" id="magnet-path" sketch:type="MSShapeGroup"></path>
+            <path d="M21.112,22.157 L16.11,22.157 L16.11,27.237 L21.114,27.236 L21.112,22.157 Z" id="magnet-path" sketch:type="MSShapeGroup"></path>
+        </g>
+    </g>
+</svg>

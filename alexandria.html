@@ -429,8 +429,8 @@
 							<div class="tbl centered">
 								<ul class="distNetList">
 									<li><input type="checkbox" name="dNetwork" value="DHT" id="dNetDHT" checked /> <label for="dNetDHT">Mainline DHT</label> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a>
-										<div class="input-container" style="display:block">
-											<label>Insert DHT Hash:</label>
+										<div class="input-container required" style="display:block">
+											<label>Torrent Hash</label>
 											<input type="text" id="dht-hash" name="DHT Hash" />
 										</div>
 									</li>
@@ -653,9 +653,8 @@
 							</div>
 						</div>
 						<div class="row media-desc"></div>
-						<div class="row media-Tid"></div>
 						<div class="row media-FLO hidden"></div>
-						<div class="row entity-market"><a class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a> <a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a></div>
+						<div class="row entity-market"><span class="row media-Tid"><a href=""><img src="img/magnet-icon.svg" class="makesvg" /></a></span><a class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a> <a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a></div>
 						<div class="row entity-footer media-movie">
 							<a class="wsite-button lightboxVideo" data-source="http://127.0.0.1:8888/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label>
 						</div>
