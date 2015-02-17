@@ -100,11 +100,23 @@
 -->
 
 			<h2 class="sharing-ui">Share New Content</h2>
-			
-			<div id="addNewContent-icon"><img src="img/add-new-icon.svg" class="makesvg" /></div>
-			<div id="app-user-icon"><img src="img/user-icon.svg" class="makesvg" /></div>
+<!--			
 			<div id="serverID"></div>
-
+-->
+			<div id="header-menu">
+				<div id="addNewContent-icon" onclick="loadShareMod();"><img src="img/add-new-icon.svg" class="makesvg" /></div>
+				<div id="app-user-icon" onclick="loadUserModal();"><img src="img/user-icon.svg" class="makesvg" /></div>
+				<div id="user-modal">
+					<ul id="user-menu">
+						<li><a onclick="" id="user-menu-about">About</a></li>
+						<li><a onclick="" id="user-menu-wallet">Wallet</a></li>
+						<li><a onclick="" id="user-menu-history">History</a></li>
+						<li><a onclick="" id="user-menu-modules">Modules</a></li>
+						<li><a onclick="" id="user-menu-settings">Settings</a></li>
+						<li><a onclick="" id="user-menu-logout">Logout</a></li>
+					</ul>
+				</div>
+			</div>
 		</header>
 		
 		<div id="intro">

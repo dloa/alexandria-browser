@@ -6,10 +6,11 @@ jQuery(document).ready(function($){
 	}
 	if (window.location.search.indexOf("view") == -1) {
 		$('#search').fadeIn(fadeTimer);
-		$('#addNewContent-icon').fadeIn(fadeTimer);
+		$('#addNewContent-icon svg').fadeIn(fadeTimer);
 	}
 	$('#spritz-container').hide();
 	$('#adv-search').addClass('abs');
+	$('#user-modal').addClass('abs');
 	$('#timeline-settings').addClass('abs');
 	$('.info-modal').addClass('abs');
 	$('#tip-modal').addClass('abs');
@@ -109,6 +110,9 @@ jQuery(document).ready(function($){
 		}
 		if ( ( ($('#tip-modal').css('display') == 'block') && ($('#tip-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#tip-modal')[0]) && ( (!$(e.target).parents('.tip-icon')[0]) ) ) ) {
 			$('#tip-modal').fadeOut(fadeTimer);
+		}
+		if ( ( ($('#user-modal').css('display') == 'block') && ($('#user-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#user-modal')[0]) && ( (!$(e.target).parents('#app-user-icon')[0]) ) ) ) {
+			$('#user-modal').fadeOut(fadeTimer);
 		}
 	});
 	
@@ -222,6 +226,9 @@ jQuery(document).ready(function($){
 			if($('#tip-modal').css('display')=='block'){
 				$('#tip-modal').fadeOut(fadeTimer);
 			}
+			if($('#user-modal.abs').css('display')=='block'){
+				$('#user-modal.abs').fadeOut(fadeTimer);
+			}
 		}
 	});
 	$('.close-modal').click(function(){
@@ -257,7 +264,7 @@ jQuery(document).ready(function($){
 	loadAlexandriaView();
 	
 	// Media Content Interface
-	$('#addNewContent-icon').click(function(){
+	$('#addNewContent-icon svg').click(function(){
 		loadShareMod();
 	});
 
@@ -1668,7 +1675,7 @@ function displayItem(key){
 				resetInterface();
 			} else if(currentView == 'media'){
 				$('#search').fadeIn(fadeTimer);
-				$('#addNewContent-icon').fadeIn(fadeTimer);
+				$('#addNewContent-icon svg').fadeIn(fadeTimer);
 				loadRecentMedia();
 				resetInterface();
 			}
@@ -1741,7 +1748,7 @@ function loadAlexandriaView() {
 	    if (document.readyState === "complete") {
 	        clearInterval(readyStateCheckInterval);
 			if (window.location.search.indexOf("view") == -1) {
-				$('#addNewContent-icon').fadeIn(fadeTimer);
+				$('#addNewContent-icon svg').fadeIn(fadeTimer);
 			}
 			if (window.location.search == '') {
 				resetInterface();
@@ -1876,7 +1883,7 @@ function resetInterface() {
 function resetAlexandria() {
 	$('main').hide(fadeTimer);
 	$('#tip-modal').hide();
-	$('#addNewContent-icon').show(fadeTimer);
+	$('#addNewContent-icon svg').show(fadeTimer);
 	$('.sharing-ui').hide(fadeTimer);
 	$('.view-media-ui'). hide(fadeTimer);
 	$('#search').show(fadeTimer);
@@ -1921,7 +1928,7 @@ function loadRecentMedia() {
 				if (!document.getElementById('media-'+mediaID)) {
 					var mediaType = data[i]['media-data']['alexandria-media']['type'];
 					var mediaInfo = data[i]['media-data']['alexandria-media']['info'];
-					var mediaRuntime = calcRuntime(data[i]['media-data']['alexandria-media']['runtime']);
+					var mediaRuntime = calcRuntime(data[i]['extra-info']['runtime']);
 					var mediaPubTime = new Date(parseInt(data[i]['media-data']['alexandria-media']['timestamp'])*1000);
 					var mediaTitle = mediaInfo['title'];
 					var mediaMeta = '';
@@ -2065,7 +2072,7 @@ function loadInfoModal(childObj) {
 						// Info Modal for LI
 						$('#info-modal-small').html('');
 						var objMeta = $(childObj).parents('li');
-						var localFile = $(objMeta).find('label').text().replace(/\s/g , "-").toLowerCase();
+						var localFile = $(objMeta).children('label').text().replace(/\s/g , "-").toLowerCase();
 						getInfoFile(localFile);
 						if ($(objMeta).find('#info-modal-media').length == 0) {
 							$(objMeta).append($('#info-modal-small'));
@@ -2125,6 +2132,11 @@ function loadInfoModal(childObj) {
 	$('#info-modal-media .media-desc').html('<p>'+ mediaDesc +'</p>');
 	$(objMeta).find('#info-modal-media').fadeIn(fadeTimer);
 }
+// Load User Modal
+function loadUserModal() {
+	$('#user-modal.abs').fadeToggle(fadeTimer);
+}
+
 // Calculate runtime from seconds
 function calcRuntime(seconds) {
 	var runSecs = seconds;
@@ -2175,7 +2187,7 @@ function loadShareMod() {
 	var newURL = document.location.origin + document.location.pathname +'?view=addcontent';
 	history.pushState(stateObj, 'Alexandria > Add Content', newURL);
 	document.title = 'Alexandria > Add Content';
-	$('#addNewContent-icon').fadeOut(fadeTimer);
+	$('#addNewContent-icon svg').fadeOut(fadeTimer);
 	$('#search').fadeOut(fadeTimer);
 	$('main').not('.sharing-ui').fadeOut(fadeTimer);
 	hideArchivesUI();
