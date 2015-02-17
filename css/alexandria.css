@@ -640,6 +640,9 @@ div#intro {
 	color: transparent;
 	overflow: hidden;
 }
+#media-txnID {
+	display: none !important;
+}
 .media-rating svg, .tip-icon svg, .share-icon svg {
 	width: 100%;
 	height: 100%;

@@ -1961,6 +1961,8 @@ function loadMediaView(objMeta) {
 	$('#viewlabel').fadeIn(fadeTimer);
 	$('#view-media .entity-view').hide();
 	$('#view-media').fadeIn(fadeTimer);
+	var mediaID = $(objMeta).attr('id').split('-')[1];
+	$('#media-txnID').html(mediaID);	
 	var mediaRuntime = $(objMeta).find('.media-runtime').html();
 	var mediaPubTime = $(objMeta).find('.media-pub-time').html();
 	var mediaTitle = $(objMeta).find('.media-title').html();
@@ -1968,7 +1970,10 @@ function loadMediaView(objMeta) {
 	var mediaDesc = $(objMeta).find('.media-desc').html();
 	var mediaIcon = $(objMeta).find('.media-icon').html();
 	var mediaType = $(objMeta).attr('media-type');
-	if (mediaType = 'movie') { getRotten(); }
+	if (mediaType == 'movie') {
+		verifyIMDB();
+		getRotten();
+	}
 	var mediaTid = $(objMeta).find('.media-Tid').text();
 	var mediaFLO = $(objMeta).find('.media-FLO').text();
 	$('#media-view-entity .media-Tid').html(mediaTid);
@@ -2245,12 +2250,26 @@ function getIMDBinfo() {
 }
 // MOVIE IMDB VERIFICATION CHECK
 function verifyIMDB() {
-	var IMDBid = document.getElementById('imdb-id').value;
-	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid +'&actors=S&uniqueName=1';
+	var mediaTxnID = document.getElementById('media-txnID').innerHTML;
+	var IMDBid = document.getElementById('entity-imdb-id').innerHTML;
+	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid;
+	console.log(IMDBid);
 	$.ajax({
 	    url: IMDBapi,
 	    type: 'GET',
 	    success: function(e) {
+			var el = $( '#sketchpad' );
+			el.html(e.responseText);
+			var data = $.parseJSON($('p', el).html());
+			console.info(data['simplePlot']);
+			if(data['simplePlot'].indexOf('Alexandria:') > -1) {
+				var verifyTxn = data['simplePlot'].split('Alexandria:')[1];
+				if (trim11(verifyTxn) == mediaTxnID) {
+					document.getElementById('entity-imdb-id').innerHTML = 'Verified!';
+				} else {
+					document.getElementById('entity-imdb-id').innerHTML = 'NOT Verified!';
+				}
+			}
 	    },
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.error(xhr.status);
@@ -2408,4 +2427,16 @@ document.emSize=function(pa){
 	var fs= [who.offsetWidth,who.offsetHeight];
 	pa.removeChild(who);
 	return fs;
+}
+
+// Trim spaces from a string
+function trim11(str) {
+    str = str.replace(/^\s+/, '');
+    for (var i = str.length - 1; i >= 0; i--) {
+        if (/\S/.test(str.charAt(i))) {
+            str = str.substring(0, i + 1);
+            break;
+        }
+    }
+    return str;
 }
