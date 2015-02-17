@@ -992,6 +992,9 @@ div#qrcode img {
 .info-icon:hover svg path, .playbtn-icon:hover svg path {
 	fill: #464646;
 }
+.media-www-id {
+	display: none;
+}
 /* MEDIA ENTITY VIEW */
 #view-media {
 	padding: 48px 0;

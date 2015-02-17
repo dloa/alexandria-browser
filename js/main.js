@@ -1948,7 +1948,42 @@ function loadRecentMedia() {
 // Recent Media interaction
 function loadMediaEntity(obj) {
 	var parentObj = $(obj).parents('.media-entity');
-	loadMediaView(parentObj);
+	var mediaType = $(parentObj).attr('media-type');
+	if (mediaType == 'movie') {
+		var mediaTxnID = $(parentObj).attr('id').split('-')[1];
+//		$('#media-txnID').html(mediaTxnID);	
+		var IMDBid = $(parentObj).find('.media-www-id').text();
+		var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid;
+		console.log(IMDBid);
+		$.ajax({
+		    url: IMDBapi,
+		    type: 'GET',
+		    success: function(e) {
+				var el = $( '#sketchpad' );
+				el.html(e.responseText);
+				var data = $.parseJSON($('p', el).html());
+				console.info(data['simplePlot']);
+				if(data['simplePlot'].indexOf('Alexandria:') > -1) {
+					var verifyTxn = data['simplePlot'].split('Alexandria:')[1];
+					if (trim11(verifyTxn)== mediaTxnID) {
+						loadMediaView(parentObj);
+					} else {
+						alert('Incorrect TxnID');
+						return false;
+					}
+				} else {
+					alert('Not yet verified!');
+					return false;
+				}
+		    },
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.error(xhr.status);
+				console.error(thrownError);
+			}
+	    });
+	} else {
+		loadMediaView(parentObj);
+	}
 }
 
 // Load Media Page
@@ -1971,7 +2006,6 @@ function loadMediaView(objMeta) {
 	var mediaIcon = $(objMeta).find('.media-icon').html();
 	var mediaType = $(objMeta).attr('media-type');
 	if (mediaType == 'movie') {
-		verifyIMDB();
 		getRotten();
 	}
 	var mediaTid = $(objMeta).find('.media-Tid').text();
@@ -2247,35 +2281,6 @@ function getIMDBinfo() {
 			console.error(thrownError);
 		}
 	});
-}
-// MOVIE IMDB VERIFICATION CHECK
-function verifyIMDB() {
-	var mediaTxnID = document.getElementById('media-txnID').innerHTML;
-	var IMDBid = document.getElementById('entity-imdb-id').innerHTML;
-	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid;
-	console.log(IMDBid);
-	$.ajax({
-	    url: IMDBapi,
-	    type: 'GET',
-	    success: function(e) {
-			var el = $( '#sketchpad' );
-			el.html(e.responseText);
-			var data = $.parseJSON($('p', el).html());
-			console.info(data['simplePlot']);
-			if(data['simplePlot'].indexOf('Alexandria:') > -1) {
-				var verifyTxn = data['simplePlot'].split('Alexandria:')[1];
-				if (trim11(verifyTxn) == mediaTxnID) {
-					document.getElementById('entity-imdb-id').innerHTML = 'Verified!';
-				} else {
-					document.getElementById('entity-imdb-id').innerHTML = 'NOT Verified!';
-				}
-			}
-	    },
-		error: function (xhr, ajaxOptions, thrownError) {
-			console.error(xhr.status);
-			console.error(thrownError);
-		}
-    });
 }
 // GET ROTTEN TOMATOES RATING
 function getRotten() {
