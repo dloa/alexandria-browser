@@ -358,6 +358,14 @@ jQuery(document).ready(function($){
 		resizeTabs();
 	});
 	
+	$('input[name="dNetwork"]').click(function(){
+		if ($(this)[0]['checked']) {
+			$(this).siblings('.input-container').slideDown(fadeTimer);
+		} else {
+			$(this).siblings('.input-container').slideUp(fadeTimer);
+		}
+	});
+	
 	// File uploader init
 	$('.uploader').each(function(){
 		uploadFile($(this));
@@ -1902,13 +1910,13 @@ function loadRecentMedia() {
 	console.log('loadRecentMedia() media/get/all ...');
 	$.ajax({
 		type: "GET",
-		url: "http://54.172.28.195:41287/alexandria/v1/media/get/all",
+		url: "http://54.172.28.195:41288/alexandria/v1/media/get/all",
 		data: queryString.toString(),
 		success: function (e) {
 			$('#browse-media-wrap .row').removeClass('first');
 			var data = $.parseJSON(e);
+			console.info(data);
 			for (var i = 0; i < data.length; i++) {
-				console.info(data[i]['media-data']['alexandria-media']);
 				var mediaID = data[i]['txid'];
 				if (!document.getElementById('media-'+mediaID)) {
 					var mediaType = data[i]['media-data']['alexandria-media']['type'];
@@ -1951,10 +1959,8 @@ function loadMediaEntity(obj) {
 	var mediaType = $(parentObj).attr('media-type');
 	if (mediaType == 'movie') {
 		var mediaTxnID = $(parentObj).attr('id').split('-')[1];
-//		$('#media-txnID').html(mediaTxnID);	
 		var IMDBid = $(parentObj).find('.media-www-id').text();
 		var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid;
-		console.log(IMDBid);
 		$.ajax({
 		    url: IMDBapi,
 		    type: 'GET',
@@ -1962,7 +1968,6 @@ function loadMediaEntity(obj) {
 				var el = $( '#sketchpad' );
 				el.html(e.responseText);
 				var data = $.parseJSON($('p', el).html());
-				console.info(data['simplePlot']);
 				if(data['simplePlot'].indexOf('Alexandria:') > -1) {
 					var verifyTxn = data['simplePlot'].split('Alexandria:')[1];
 					if (trim11(verifyTxn)== mediaTxnID) {

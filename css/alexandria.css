@@ -992,7 +992,7 @@ div#qrcode img {
 .info-icon:hover svg path, .playbtn-icon:hover svg path {
 	fill: #464646;
 }
-.media-www-id {
+#browse-media-wrap .row .media-www-id {
 	display: none;
 }
 /* MEDIA ENTITY VIEW */
@@ -1309,6 +1309,11 @@ ul.distNetList {
 ul.distNetList li {
 	margin: 0 0 0.8em;
 	position: relative;
+}
+#add-media .distNetList li .input-container {
+//	display: none;
+	width: 200%;
+	margin: .5em 0 1em -50%;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;

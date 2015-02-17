@@ -416,7 +416,12 @@
 						<div class="tblwrap">
 							<div class="tbl centered">
 								<ul class="distNetList">
-									<li><input type="checkbox" name="dNetwork" value="DHT" id="dNetDHT" checked /> <label for="dNetDHT">Mainline DHT</label> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
+									<li><input type="checkbox" name="dNetwork" value="DHT" id="dNetDHT" checked /> <label for="dNetDHT">Mainline DHT</label> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a>
+										<div class="input-container" style="display:block">
+											<label>Insert DHT Hash:</label>
+											<input type="text" id="dht-hash" name="DHT Hash" />
+										</div>
+									</li>
 									<li class="disabled"><input type="checkbox" name="dNetwork" value="MaidSafe" id="dNetSafe" disabled /> <label for="dNetSafe">MaidSafe</label> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
 									<li class="disabled"><input type="checkbox" name="dNetwork" value="Storj" id="dNetStorj" disabled /> <label for="dNetStorj">Storj.io</label> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
 									<li class="disabled"><input type="checkbox" name="dNetwork" value="Filecoin" id="dNetFilecoin" disabled /> <label for="dNetFilecoin">Filecoin</label> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
