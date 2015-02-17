@@ -373,7 +373,29 @@ jQuery(document).ready(function($){
 		} else if ($(this).hasClass('prev')) {
 			$(activeTab).prev('#add-media-menu li').click();
 		} else if ($(this).hasClass('submit')) {
-			alert("Just like that! You're a rockstar! See how easy that was?");
+			if($('#mediaType').val() == ''){
+				$('#add-media nav ul li:first-child').click();
+				alert('Please select a media type');
+				return false;
+			}
+			var reqCheck = 0;
+			$('#add-media .required').each(function(){
+				var inputValue = $(this).find('input');
+				if ( !inputValue[0] ) {
+					var inputValue = $(this).find('textarea');
+				}
+				if ( (!$(inputValue).val()) || ($(inputValue).val() == '') ) {
+					var inputName = $(inputValue).siblings('label').text();
+					$('#add-media nav ul li:first-child').click();
+					alert('Please input a '+ inputName);
+					reqCheck = 1;
+				}
+			});
+			if (reqCheck == 1) {
+				reqCheck = 0;
+			} else {
+				alert("Just like that! You're a rockstar! See how easy that was?");
+			}
 		}
 	});
 
@@ -1558,6 +1580,7 @@ function spritzThis(extURL) {
 
 /* ADD NEW CONTENT INTERFACE */
 function resizeTabs() {
+	$('.media-info-container').css('overflow','hidden');
 	var tabHeight = $('.modal-tab:visible').children().first().height();
 	$('.modal-tab:visible').children().each(function(){
 		var thisTabHeight = $(this).height();
@@ -1565,6 +1588,7 @@ function resizeTabs() {
 			tabHeight = thisTabHeight;
 		}
 	});
+	$('.media-info-container').css('overflow','initial');
 	$('#newMedia-tabs').css('height',tabHeight+'px');
 }
 
@@ -2018,7 +2042,11 @@ function loadInfoModal(childObj) {
 				}
 				getInfoFile(localFile);
 				if ($(objMeta).find('#info-modal-media').length == 0) {
-					$(objMeta).append($('#info-modal-small'));
+					if($(childObj).hasClass('inline-block')){
+						$(childObj).parent().append($('#info-modal-small'));
+					} else {
+						$(objMeta).append($('#info-modal-small'));
+					}
 				}
 				var infoInterval = setInterval(function() {
 				    if ($(objMeta).find('#info-modal-small').html()!='') {
