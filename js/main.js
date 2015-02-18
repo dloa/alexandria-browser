@@ -1567,7 +1567,6 @@ function checkLibrarian() {
 			$.each(data,function(t, v){
 				dataset.push(v);
 			});
-			console.info(dataset);
 		    if (dataset == "no archive found") {
 				volumeBarInterval = setTimeout(function() {
 					checkLibrarian();
@@ -1995,11 +1994,12 @@ function loadRecentMedia() {
 					var mediaRuntime = calcRuntime(data[i]['extra-info']['runtime']);
 					var mediaPubTime = new Date(parseInt(data[i]['media-data']['alexandria-media']['timestamp'])*1000);
 					var mediaTitle = mediaInfo['title'];
-					var mediaMeta = '';
+					var mediaArtist = data[i]['extra-info']['artist'];
 					var mediaDesc = mediaInfo['description'];
 					var mediaTid = data[i]['media-data']['alexandria-media']['torrent'];
 					var mediaFLO = data[i]['media-data']['alexandria-media']['publisher'];
-					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaMeta + '</div> <div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + mediaPubTime + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="media-FLO hidden">' + mediaFLO + '</div></div>';
+					var mediaPymnt = data[i]['media-data']['alexandria-media']['payment']['type'];
+					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaArtist + '</div> <div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + mediaPubTime + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="media-FLO hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</div>';
 					$('#browse-media-wrap .row:first-of-type').before(mediaEntity);
 				}
 			}
@@ -2028,6 +2028,7 @@ function loadRecentMedia() {
 function loadMediaEntity(obj) {
 	var parentObj = $(obj).parents('.media-entity');
 	var mediaType = $(parentObj).attr('media-type');
+	// Check Movie for IMDB Verification
 	if (mediaType == 'movie') {
 		var mediaTxnID = $(parentObj).attr('id').split('-')[1];
 		var IMDBid = $(parentObj).find('.media-www-id').text();
@@ -2058,6 +2059,7 @@ function loadMediaEntity(obj) {
 			}
 	    });
 	} else {
+		// Load Media Entity View
 		loadMediaView(parentObj);
 	}
 }
@@ -2086,16 +2088,23 @@ function loadMediaView(objMeta) {
 	}
 	var mediaTid = $(objMeta).find('.media-Tid').text();
 	var mediaFLO = $(objMeta).find('.media-FLO').text();
+	var mediaPymnt = $(objMeta).find('.media-pymnt').text();
 	$('#media-view-entity .media-Tid a').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
 	$('#media-view-entity .media-FLO').html(mediaFLO);
 	$('#media-view-entity .entity-meta-header h2').html(mediaTitle);
 	$('#media-view-entity .entity-meta-header h3').html(mediaMeta);
+	$('#media-view-entity .entity-meta-header .entity-runtime').css('display',$(objMeta).find('.media-runtime').css('display'));
 	$('#media-view-entity .entity-meta-header .entity-runtime').html(mediaRuntime);
 	$('#media-view-entity .entity-meta-header .media-header').hide();
 	$('#media-view-entity .entity-meta-header .media-header.media-'+mediaType).show();
 	$('#media-view-entity .media-image').html(mediaIcon);
 	$('#media-view-entity .entity-pub-time span').html(mediaPubTime);	
 	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
+	if (mediaPymnt == 'none') {
+		$('#media-view-entity .tip-icon').hide();
+	} else {
+		$('#media-view-entity .tip-icon').show();
+	}
 	$('#media-view-entity .entity-footer').hide();
 	$('#media-view-entity .entity-footer.media-'+mediaType).show();
 	$('#media-view-entity').fadeIn(fadeTimer);

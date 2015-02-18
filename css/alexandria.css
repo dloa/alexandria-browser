@@ -1033,6 +1033,9 @@ div#qrcode img {
 	color: transparent;
 	cursor: pointer;
 }
+#browse-media-wrap .row.media-entity[media-type="book"] .media-runtime, #browse-media-wrap .row.media-entity[media-type="book"] .playbtn-icon, #browse-media-wrap .row.media-entity[media-type="book"] .btnLightGray {
+	display: none ;
+}
 .autofill-button {
 	display: none;
 	cursor: pointer;
@@ -1165,7 +1168,7 @@ label#movie-rotten {
 .entity-view .left svg {
 	width: 100%;
 	height: 100%;
-	max-height: 250px;
+	max-height: 180px;
 }
 .entity-view .left svg path {
 	fill: #979797;
@@ -1174,8 +1177,10 @@ label#movie-rotten {
 .entity-view .pull-right {
 	width: 64%;
 }
-.entity-view h2, .entity-view h3 {
+.entity-view .entity-meta-header h2, .entity-view .entity-meta-header h3 {
 	text-align: left;
+	display: block;
+	margin-left:0;
 }
 /* ADD MEDIA INTERFACE */
 #add-media {
