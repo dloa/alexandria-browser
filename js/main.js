@@ -1,4 +1,5 @@
 jQuery(document).ready(function($){
+	checkLibrarian();
 	if(window.location.protocol != 'file:') {
 		replaceSVG();
 	} else {
@@ -1549,6 +1550,49 @@ function volumeBars(arch, word, interval){
 		}
 	});
 }
+
+// Librarian Check
+function checkLibrarian() {
+	var startDate = Date.parse(new Date(datetime.getFullYear(), datetime.getMonth(), datetime.getDate()-1));
+	var endDate = Date.parse(datetime);
+	var queryString = '{"Archive":"*","Word":"","StartDate":'+ startDate +',"EndDate":'+ endDate +',"Interval": 1800000}';
+	console.log('Checking Librarian ... ');
+	$.ajax({
+		type: "POST",
+		url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/interval/count",
+		data: queryString.toString(),
+		success: function (e) {
+			var data = $.parseJSON(e);
+			var dataset = [];	
+			$.each(data,function(t, v){
+				dataset.push(v);
+			});
+			console.info(dataset);
+		    if (dataset == "no archive found") {
+				volumeBarInterval = setTimeout(function() {
+					checkLibrarian();
+					return false;
+				}, 2000);
+		    } else {
+				var largest = Math.max.apply(Math, dataset);
+				var mostRecent = Math.max.apply(Math, Object.keys(data));
+				if ( ( Date.parse(datetime) - mostRecent ) > 1800000*1.15 )  {
+					console.error('Librarian stopped archiving!');
+				} else {
+					console.log('Librarian appears to be archiving');
+				}
+		    }
+		},
+		error: function (XMLHttpRequest, textStatus, errorThrown) {
+			console.log(XMLHttpRequest);
+			console.log(textStatus);
+			console.log(errorThrown);
+			alert('Librarian stopped archiving!');
+			librarianErr();
+		}
+	});
+}
+
 
 // LIGHTBOX FUNCTION
 function lightbox(obj){
