@@ -1729,6 +1729,11 @@ function displayItem(key){
 				$('#addNewContent-icon svg').fadeIn(fadeTimer);
 				loadRecentMedia();
 				resetInterface();
+			} else if (currentView == 'publishers') {
+				$('#search').fadeIn(fadeTimer);
+				$('#addNewContent-icon svg').fadeIn(fadeTimer);
+				getAllPublishers();
+				resetInterface();
 			}
 		}		
 	}
@@ -1965,9 +1970,37 @@ function getAllPublishers() {
 		url: "http://54.172.28.195:41288/alexandria/v1/publisher/get/all",
 		success: function (e) {
 			var data = $.parseJSON(e);
-			console.info(data);
+			$('#browse-media-wrap .row').remove();
+			for (var i = 0; i < data.length; i++) {
+				var publisherID = data[i]['publisher-data']['alexandria-publisher']['address'];
+				var publisherName = data[i]['publisher-data']['alexandria-publisher']['name'];
+				var publisherDate = data[i]['publisher-data']['alexandria-publisher']['timestamp'];
+				var publisherEntity = '<div id="publisher-' + publisherID + '" class="row publisher-entity"><div class="publisher-icon" onclick="loadPublisherEntity(this);"><img src="img/user-icon.svg" class="makesvg publisher-image" onclick="loadPublisherEntity(this);" style="display: inline;"></div><h3 class="publisher-title" onclick="loadPublisherEntity(this);">' + publisherName + '</h3> <div class="publisher-date">' + new Date(parseInt(publisherDate)) + '</div><div class="media-FLO hidden">' + publisherID + '</div>';
+				if ($('#browse-media-wrap .row').length < 1){
+					$('#browse-media-wrap').append(publisherEntity);
+				} else {
+					$('#browse-media-wrap .row:first-of-type').before(publisherEntity);
+				}
+			}
+			$('#browse-media-wrap .row.media-entity:first-of-type').addClass('first');
+			replaceSVG();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
 		}
 	});
+	$('#browse-media').fadeIn(fadeTimer);
+	$('#browse-media-wrap .row').first().addClass('first');
+	// URL and Browser Nav for Recent Media Browse View
+	currentView = 'publishers';
+	var stateObj = {
+		currentView: currentView,
+		sort: 'recent'
+	};
+	var newURL = document.location.origin + document.location.pathname +'?view='+currentView+'&sort=recent';
+	history.pushState(stateObj, 'Alexandria > Publishers', newURL);
+	document.title = 'Alexandria > Publishers';
 }
 
 // Recent Media View
@@ -2000,7 +2033,11 @@ function loadRecentMedia() {
 					var mediaFLO = data[i]['media-data']['alexandria-media']['publisher'];
 					var mediaPymnt = data[i]['media-data']['alexandria-media']['payment']['type'];
 					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaArtist + '</div> <div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + mediaPubTime + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="media-FLO hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</div>';
-					$('#browse-media-wrap .row:first-of-type').before(mediaEntity);
+					if ($('#browse-media-wrap .row').length < 1){
+						$('#browse-media-wrap').append(mediaEntity);
+					} else {
+						$('#browse-media-wrap .row:first-of-type').before(mediaEntity);
+					}
 				}
 			}
 			$('#browse-media-wrap .row.media-entity:first-of-type').addClass('first');
