@@ -667,7 +667,7 @@ div#intro {
 	height: 100%;
 }
 .media-icon svg path, #info-modal-media .media-image svg path, #browse-media-wrap .row .publisher-icon svg path {
-	fill: #979797;
+	fill: #797979;
 	fill-opacity: 1;
 }
 .imgwrap svg path {
@@ -678,6 +678,10 @@ div#intro {
 	fill:#9da2cf;
 }
 #pie-noun_80449 path:first-of-type {
+	fill: transparent !important;
+	fill-opacity:0 !important;
+}
+#browse-media-wrap .row .publisher-icon svg g:first-of-type path {
 	fill: transparent !important;
 	fill-opacity:0 !important;
 }
@@ -1032,7 +1036,8 @@ div#qrcode img {
 	cursor: pointer;
 }
 #browse-media-wrap .row .media-icon, #browse-media-wrap .row .publisher-icon {
-	width: 24px;
+	width: 32px;
+	height: 32px;
 	padding: .5em;
 }
 #browse-media-wrap .row .media-meta, #browse-media-wrap .row .media-runtime, #browse-media-wrap .row .publisher-date {

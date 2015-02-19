@@ -1965,6 +1965,12 @@ function hideArchivesUI() {
 
 // Get All Publishers
 function getAllPublishers() {
+	currentView = 'publishers';
+	$('main').fadeOut(fadeTimer);
+	hideArchivesUI();
+	$('#tip-modal').hide();
+	$('.view-media-ui').fadeOut(fadeTimer);
+	console.log('loadRecentMedia() publisher/get/all ...');
 	$.ajax({
 		type: "GET",
 		url: "http://54.172.28.195:41288/alexandria/v1/publisher/get/all",
@@ -1975,7 +1981,7 @@ function getAllPublishers() {
 				var publisherID = data[i]['publisher-data']['alexandria-publisher']['address'];
 				var publisherName = data[i]['publisher-data']['alexandria-publisher']['name'];
 				var publisherDate = data[i]['publisher-data']['alexandria-publisher']['timestamp'];
-				var publisherEntity = '<div id="publisher-' + publisherID + '" class="row publisher-entity"><div class="publisher-icon" onclick="loadPublisherEntity(this);"><img src="img/user-icon.svg" class="makesvg publisher-image" onclick="loadPublisherEntity(this);" style="display: inline;"></div><h3 class="publisher-title" onclick="loadPublisherEntity(this);">' + publisherName + '</h3> <div class="publisher-date">' + new Date(parseInt(publisherDate)) + '</div><div class="media-FLO hidden">' + publisherID + '</div>';
+				var publisherEntity = '<div id="publisher-' + publisherID + '" class="row publisher-entity"><div class="publisher-icon" onclick="loadPublisherEntity(this);"><img src="img/publisher-icon.svg" class="makesvg publisher-image" onclick="loadPublisherEntity(this);" style="display: inline;"></div><h3 class="publisher-title" onclick="loadPublisherEntity(this);">' + publisherName + '</h3> <div class="publisher-date">' + new Date(parseInt(publisherDate)) + '</div><div class="media-FLO hidden">' + publisherID + '</div>';
 				if ($('#browse-media-wrap .row').length < 1){
 					$('#browse-media-wrap').append(publisherEntity);
 				} else {
@@ -1993,7 +1999,6 @@ function getAllPublishers() {
 	$('#browse-media').fadeIn(fadeTimer);
 	$('#browse-media-wrap .row').first().addClass('first');
 	// URL and Browser Nav for Recent Media Browse View
-	currentView = 'publishers';
 	var stateObj = {
 		currentView: currentView,
 		sort: 'recent'
@@ -2016,7 +2021,7 @@ function loadRecentMedia() {
 		url: "http://54.172.28.195:41288/alexandria/v1/media/get/all",
 //		data: ,
 		success: function (e) {
-			$('#browse-media-wrap .row').removeClass('first');
+			$('#browse-media-wrap .row').remove();
 			var data = $.parseJSON(e);
 			console.info(data);
 			for (var i = 0; i < data.length; i++) {
