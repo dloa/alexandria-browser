@@ -181,11 +181,11 @@ header input.search:focus{
 		box-shadow: 0 0 5px rgba(20, 20, 20, 0.2);	
 }
 #logo {
-	width: 300px;
+	width: 362px;
 	height:55px;
 	position: absolute;
-	top: 3px;
-	left: 10px;
+	top: 5px;
+	left: 19px;
 	z-index: 10;
 //	background: url(../img/logo.svg) left bottom / 55px auto no-repeat;
 	text-align: center;
@@ -194,9 +194,23 @@ header input.search:focus{
 	margin-top: 6px;
 	cursor: pointer;
 }
+#logo div {
+	display: inline-block;
+	vertical-align: middle;
+}
+div#logoImg {
+	width: 52px;
+}
+div#logoWord {
+	width: 300px;
+	margin-left: -10px;
+}
 #logo img, #logo svg {
 	width: 100%;
 	height: 100%;
+}
+#logo img:first-child, #logo svg:first-child {
+	
 }
 #logo svg path {
 	fill: #979797;
@@ -439,7 +453,7 @@ ul#user-menu {
 }
 ul#user-menu li {
 	margin: .5em 0 0;
-	padding: 0 24px;
+	padding: 0 48px 0 24px;
 	white-space: nowrap;
 }
 ul#user-menu li:first-child {
@@ -623,9 +637,6 @@ div#intro {
 #intro .links, .module-links {
 	font-size: 22px;
 	font-size: 1.375rem;
-}
-.module-links.mod-filter {
-	margin: .25em 0 -.5em;
 }
 .links a, .module-links a {
 	color: #979797;
@@ -1012,6 +1023,9 @@ div#qrcode img {
 	display: inline-block;
 	zoom: 1;*display:inline;
 	max-width: 880px;
+}
+div#browse-media-wrap {
+	margin-top: 10px;
 }
 #browse-media-wrap > * {
 	text-align: left;
@@ -2171,6 +2185,15 @@ svg#volume {
 	.main aside {
 		float: right;
 		width: 28%;
+	}
+}
+
+@media only screen and (max-width: 1050px) {
+	#logo {
+		width: 62px;
+	}
+	#logoWord {
+		display: none !important;
 	}
 }
 
