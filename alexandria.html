@@ -112,8 +112,8 @@
 				<div id="addNewContent-icon" onclick="loadAddContentModal();"><img src="img/add-new-icon.svg" class="makesvg" /></div>
 				<div id="add-menu-modal" class="header-modal">
 					<ul>
-						<li><a onclick="loadShareMod();"><img src="img/media-icon.svg" class="makesvg" /> Content</a></li>
-						<li><a onclick="" class="publisher-icon"><img src="img/publisher-icon.svg" class="makesvg" /> Publisher</a></li>
+						<li><a onclick="loadShareMod();"><img src="img/media-icon.svg" class="makesvg" /> Media</a></li>
+						<li><a onclick="loadCreatePublisherMod();" class="publisher-icon"><img src="img/publisher-icon.svg" class="makesvg" /> Publisher</a></li>
 					</ul>
 				</div>
 				<div id="app-user-icon" onclick="loadUserModal();"><img src="img/user-icon.svg" class="makesvg" /></div>
@@ -273,6 +273,40 @@
 			<div class="playbtn">play</div>
 			<div class="settings-icon"><img src="img/settings-icon.svg" class="makesvg" />settings</div>
 		</footer>
+
+		<!-- CREATE PUBLISHER -->
+		<main id="add-publisher" class="publisher-ui">
+			<ul id="publisher-process">
+				<li>
+					<h2>Step 1 - Generate new Florincoin Address</h2>
+					<ul>
+						<li>Open Florincoin QT Wallet > Click on Receive Coins > Click on New Address button</li>
+						<li>Label your new FLO address: "Alexandria Publisher"</li>
+						<li>Copy and paste your new FLO address here: <input type="text" /></li>
+					</ul>
+				</li>
+				<li>
+					<h2>Step 2 - Setup Publisher Identity</h2>
+					<div class="sublistWrap">
+						<ul>
+							<li><label>Publisher Name</label><input type="text" /></li>
+							<li><label>Email Address</label><input type="text" placeholder="optional" /></li>
+							<li><label>BitMessage Address</label><input type="text" placeholder="optional" /></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<h2>Step 3 - Sign Message in Florincoin Wallet</h2>
+					<p style="text-align:center">Copy this: <span class="copybox">[concatenated-string]</span></p>
+					<ul>
+						<li>Go back to the Florincoin Wallet and select your "Alexandria Publisher" address.</li>
+						<li>Click the "Sign Message" button, and paste the copied text into the centered field.</li>
+						<li>When you click "Sign Message" button on this new screen, it will create a signature in the bottom field.</li>
+					</ul>
+					<p style="text-align:center">Copy that signature and paste it here: <input type="text" /></p>
+				</li>
+			</ul>
+		</main>
 
 		<!-- Share New Content -->
 		

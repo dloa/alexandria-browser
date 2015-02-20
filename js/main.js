@@ -1730,6 +1730,9 @@ function displayItem(key){
 			if(currentView == 'addcontent'){
 				loadShareMod();
 				resetInterface();
+			} else if(currentView == 'addpublisher'){
+				loadCreatePublisherMod();
+				resetInterface();
 			} else if(currentView == 'media'){
 				$('#search').fadeIn(fadeTimer);
 				$('#addNewContent-icon svg').fadeIn(fadeTimer);
@@ -2364,6 +2367,26 @@ function loadShareMod() {
 	$('.sharing-ui').fadeIn(fadeTimer);
 	resizeTabs();
 }
+
+// Create Publisher Module
+function loadCreatePublisherMod() {
+	$('.header-modal').hide();
+	currentView = 'addNewPublisher';
+	var stateObj = {
+		currentView: currentView
+	};
+	var newURL = document.location.origin + document.location.pathname +'?view=addpublisher';
+	history.pushState(stateObj, 'Alexandria > Add Publisher', newURL);
+	document.title = 'Alexandria > Add Publisher';
+	$('#addNewContent-icon svg').fadeOut(fadeTimer);
+	$('#search').fadeOut(fadeTimer);
+	$('main').not('.publisher-ui').fadeOut(fadeTimer);
+	hideArchivesUI();
+	$('.sharing-ui').fadeOut(fadeTimer);
+	$('.publisher-ui').fadeIn(fadeTimer);
+	resizeTabs();
+}
+
 // Select File
 function uploadFile(elem) {
 	var uploader = $(elem).attr('id');
