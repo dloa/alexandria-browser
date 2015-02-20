@@ -105,6 +105,7 @@
 -->
 
 			<h2 class="sharing-ui">Share New Content</h2>
+			<h2 class="publisher-ui">Create New Publisher</h2>
 <!--			
 			<div id="serverID"></div>
 -->
@@ -278,32 +279,26 @@
 		<main id="add-publisher" class="publisher-ui">
 			<ul id="publisher-process">
 				<li>
-					<h2>Step 1 - Generate new Florincoin Address</h2>
-					<ul>
-						<li>Open Florincoin QT Wallet > Click on Receive Coins > Click on New Address button</li>
-						<li>Label your new FLO address: "Alexandria Publisher"</li>
-						<li>Copy and paste your new FLO address here: <input type="text" size="36" /></li>
-					</ul>
-				</li>
-				<li>
-					<h2>Step 2 - Setup Publisher Identity</h2>
+					<h3>Step 1 - Publisher Information</h3>
 					<div class="sublistWrap">
 						<ul>
-							<li><label>Publisher Name</label><input type="text" size="24"/></li>
-							<li><label>Email Address</label><input type="text" placeholder="optional" size="24" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
-							<li><label>BitMessage Address</label><input type="text" placeholder="optional" size="24" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
+							<li><label>Publisher Name</label><input type="text" size="36"/></li>
+							<li><label>Florincoin Address</label><input type="text" size="36" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
+							<li><label>Email Address</label><input type="text" placeholder="optional" size="36" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
+							<li><label>BitMessage Address</label><input type="text" placeholder="optional" size="36" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
 						</ul>
 					</div>
 				</li>
 				<li>
-					<h2>Step 3 - Sign Message in Florincoin Wallet</h2>
-					<p style="text-align:center">Copy this: <span class="copybox">[concatenated-string]</span></p>
+					<h3>Step 2 - Sign Message</h3>
+					<p style="text-align:center">Copy the generated code below to your clipboard. <br /><span class="copybox">[concatenated-string]</span></p>
 					<ul>
 						<li>Go back to the Florincoin Wallet and select your "Alexandria Publisher" address.</li>
 						<li>Click the "Sign Message" button, and paste the copied text into the centered field.</li>
 						<li>When you click "Sign Message" button on this new screen, it will create a signature in the bottom field.</li>
 					</ul>
-					<p style="text-align:center">Copy that signature and paste it here: <input type="text" size="36" /></p>
+					<p style="text-align:center">Copy that signature and paste it here:<br />
+					<input type="text" size="36" /></p>
 				</li>
 			</ul>
 		</main>

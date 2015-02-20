@@ -824,6 +824,11 @@ div#intro {
 	margin-left: -63px;
 	padding: 1.25em .8em;
 }
+#info-modal-small ul, #info-modal-small li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
 #info-modal-media .left {
 	width: 25%;
 	text-align: center;
