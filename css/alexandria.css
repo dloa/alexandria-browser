@@ -399,7 +399,7 @@ header #addNewContent-icon path, header #app-user-icon path {
 header #addNewContent-icon:hover path, header #app-user-icon:hover path {
 	fill:#464646;
 }
-#user-modal {
+.header-modal {
 	position: fixed;
 	top: 100%;
 	left: 100%;
@@ -415,13 +415,16 @@ header #addNewContent-icon:hover path, header #app-user-icon:hover path {
 	border-radius: 5px;
 	line-height: 2;
 }
-#user-modal.abs {
+.header-modal.abs {
 	position: absolute;
 	right: -20px;
 	display: none;
 	left: initial;
 }
-#user-modal:before {
+#add-menu-modal {
+	right: 20px;
+}
+.header-modal:before {
 	top: -16px;
 	right: 14px;
 	border-width: 0 16px 16px;
@@ -432,7 +435,7 @@ header #addNewContent-icon:hover path, header #app-user-icon:hover path {
 	display: block;
 	width: 0;
 }
-#user-modal:after {
+.header-modal:after {
 	top: -15px;
 	right: 15px;
 	border-width: 0 15px 15px;
@@ -443,33 +446,33 @@ header #addNewContent-icon:hover path, header #app-user-icon:hover path {
 	display: block;
 	width: 0;
 }
-ul#user-menu, ul#user-menu li {
+.header-modal ul, .header-modal ul li {
 	list-style: none;
 	text-align: left;
 }
-ul#user-menu {
+.header-modal ul {
 	margin: 0;
 	padding: 5px 0 0;
 }
-ul#user-menu li {
+.header-modal ul li {
 	margin: .5em 0 0;
 	padding: 0 48px 0 24px;
 	white-space: nowrap;
 }
-ul#user-menu li:first-child {
+.header-modal ul li:first-child {
 	margin-top: 0;
 }
-ul#user-menu li a {
+.header-modal ul li a {
 	cursor: pointer;
 }
-ul#user-menu li img, ul#user-menu li svg {
+.header-modal ul li img, .header-modal ul li svg {
 	display: inline;
 	width: 24px;
 	height: 24px;
 	margin: -5px 5px 0 0;
 	vertical-align: middle;
 }
-ul#user-menu li svg path {
+.header-modal ul li svg path {
 	fill: #797979;
 	fill-opacity: 1;
 }
@@ -673,11 +676,11 @@ div#intro {
 	padding: 10px;
 	border-radius: 24px;
 }
-.links .module-icon .imgwrap img, .module-links li .imgwrap img, .imgwrap svg, .media-icon svg, #browse-media-wrap .row .publisher-icon svg {
+.links .module-icon .imgwrap img, .module-links li .imgwrap img, .imgwrap svg, .media-icon svg, .publisher-icon svg, #browse-media-wrap .row .publisher-icon svg {
 	width: 100%;
 	height: 100%;
 }
-.media-icon svg path, #info-modal-media .media-image svg path, #browse-media-wrap .row .publisher-icon svg path {
+.media-icon svg path, #info-modal-media .media-image svg path, .publisher-icon svg path, #browse-media-wrap .row .publisher-icon svg path {
 	fill: #797979;
 	fill-opacity: 1;
 }
@@ -692,7 +695,7 @@ div#intro {
 	fill: transparent !important;
 	fill-opacity:0 !important;
 }
-#browse-media-wrap .row .publisher-icon svg g:first-of-type path {
+.publisher-icon svg g:first-of-type path {
 	fill: transparent !important;
 	fill-opacity:0 !important;
 }

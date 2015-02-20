@@ -11,7 +11,7 @@ jQuery(document).ready(function($){
 	}
 	$('#spritz-container').hide();
 	$('#adv-search').addClass('abs');
-	$('#user-modal').addClass('abs');
+	$('.header-modal').addClass('abs');
 	$('#timeline-settings').addClass('abs');
 	$('.info-modal').addClass('abs');
 	$('#tip-modal').addClass('abs');
@@ -114,6 +114,9 @@ jQuery(document).ready(function($){
 		}
 		if ( ( ($('#user-modal').css('display') == 'block') && ($('#user-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#user-modal')[0]) && ( (!$(e.target).parents('#app-user-icon')[0]) ) ) ) {
 			$('#user-modal').fadeOut(fadeTimer);
+		}
+		if ( ( ($('#add-menu-modal').css('display') == 'block') && ($('#add-menu-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#add-menu-modal')[0]) && ( (!$(e.target).parents('#addNewContent-icon')[0]) ) ) ) {
+			$('#add-menu-modal').fadeOut(fadeTimer);
 		}
 	});
 	
@@ -229,6 +232,9 @@ jQuery(document).ready(function($){
 			}
 			if($('#user-modal.abs').css('display')=='block'){
 				$('#user-modal.abs').fadeOut(fadeTimer);
+			}
+			if($('#add-menu-modal.abs').css('display')=='block'){
+				$('#add-menu-modal.abs').fadeOut(fadeTimer);
 			}
 		}
 	});
@@ -1586,7 +1592,7 @@ function checkLibrarian() {
 			console.log(XMLHttpRequest);
 			console.log(textStatus);
 			console.log(errorThrown);
-			alert('Librarian stopped archiving!');
+			console.error('Librarian stopped archiving!');
 			librarianErr();
 		}
 	});
@@ -1973,7 +1979,7 @@ function getAllPublishers() {
 	console.log('loadRecentMedia() publisher/get/all ...');
 	$.ajax({
 		type: "GET",
-		url: "http://54.172.28.195:41288/alexandria/v1/publisher/get/all",
+		url: "http://54.172.28.195:41289/alexandria/v1/publisher/get/all",
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
@@ -2019,7 +2025,7 @@ function loadRecentMedia() {
 	console.log('loadRecentMedia() media/get/all ...');
 	$.ajax({
 		type: "GET",
-		url: "http://54.172.28.195:41288/alexandria/v1/media/get/all",
+		url: "http://54.172.28.195:41289/alexandria/v1/media/get/all",
 //		data: ,
 		success: function (e) {
 			$('#browse-media-wrap .row').remove();
@@ -2105,6 +2111,49 @@ function loadMediaEntity(obj) {
 		// Load Media Entity View
 		loadMediaView(parentObj);
 	}
+}
+
+// Initialize WebTorrent
+function webtorrentinit(){
+	var client = new WebTorrent()
+	var magnetUri = 'CW35T7WXXRC5RSS4IGDFIZ7CJN4MAUDC'
+	
+	client.add(magnetUri, function (torrent) {
+	  // create HTTP server for this torrent
+	  var server = torrent.createServer()
+	  server.listen(port) // start the server listening to a port
+	
+	  // visit http://localhost:<port>/ to see a list of files
+	
+	  // access individual files at http://localhost:<port>/<index> where index is the index
+	  // in the torrent.files array
+	
+	  // later, cleanup...
+	  server.close()
+	  client.destroy()
+	})
+}
+
+// Load WebTorrent Magnet
+function loadWebTorrent() {
+	var client = new WebTorrent()
+	var magnetUri = 'CW35T7WXXRC5RSS4IGDFIZ7CJN4MAUDC'
+	
+	client.add(magnetUri, function (torrent) {
+	  // Got torrent metadata!
+	  console.log('Torrent info hash:', torrent.infoHash)
+	
+	  // Let's say the first file is a webm (vp8) or mp4 (h264) video...
+	  var file = torrent.files[0]
+	
+	  // Create a video element
+	  var video = document.createElement('video')
+	  video.controls = true
+	  document.body.appendChild(video)
+	
+	  // Stream the video into the video tag
+	  file.createReadStream().pipe(video)
+	})
 }
 
 // Load Media Page
@@ -2248,6 +2297,10 @@ function loadInfoModal(childObj) {
 	$('#info-modal-media .media-desc').html('<p>'+ mediaDesc +'</p>');
 	$(objMeta).find('#info-modal-media').fadeIn(fadeTimer);
 }
+// Load Add Content Modal
+function loadAddContentModal() {
+	$('#add-menu-modal.abs').fadeToggle(fadeTimer);
+}
 // Load User Modal
 function loadUserModal() {
 	$('#user-modal.abs').fadeToggle(fadeTimer);
@@ -2296,6 +2349,7 @@ function loadTipModal(obj) {
 
 // Share New Content Module
 function loadShareMod() {
+	$('.header-modal').hide();
 	currentView = 'addNewContent';
 	var stateObj = {
 		currentView: currentView

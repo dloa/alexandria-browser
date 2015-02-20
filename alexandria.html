@@ -109,9 +109,15 @@
 			<div id="serverID"></div>
 -->
 			<div id="header-menu">
-				<div id="addNewContent-icon" onclick="loadShareMod();"><img src="img/add-new-icon.svg" class="makesvg" /></div>
+				<div id="addNewContent-icon" onclick="loadAddContentModal();"><img src="img/add-new-icon.svg" class="makesvg" /></div>
+				<div id="add-menu-modal" class="header-modal">
+					<ul>
+						<li><a onclick="loadShareMod();"><img src="img/media-icon.svg" class="makesvg" /> Content</a></li>
+						<li><a onclick="" class="publisher-icon"><img src="img/publisher-icon.svg" class="makesvg" /> Publisher</a></li>
+					</ul>
+				</div>
 				<div id="app-user-icon" onclick="loadUserModal();"><img src="img/user-icon.svg" class="makesvg" /></div>
-				<div id="user-modal">
+				<div id="user-modal" class="header-modal">
 					<ul id="user-menu">
 						<li><a onclick="" id="user-menu-about"><img src="img/logo.svg" class="makesvg" /> About</a></li>
 						<li><a onclick="" id="user-menu-wallet"><img src="img/wallet-icon.svg" class="makesvg" /> Wallet</a></li>
@@ -661,7 +667,7 @@
 						<div class="row media-FLO hidden"></div>
 						<div class="row entity-market"><span class="row media-Tid"><a href=""><img src="img/magnet-icon.svg" class="makesvg" /></a></span><a class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a> <a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a></div>
 						<div class="row entity-footer media-movie">
-							<a class="wsite-button lightboxVideo" data-source="http://127.0.0.1:8888/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label>
+							<a class="wsite-button lightboxVideo" data-source="http://localhost:3000/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label>
 						</div>
 						<div class="row entity-footer media-podcast">
 							<audio controls> <source src="http://127.0.0.1:8889/" type="audio/mpeg" /> </audio>
@@ -788,6 +794,7 @@
 		<script type="text/javascript" src="js/vendor/spritz-1.2.min.js"></script>
 		<script src="js/vendor/jquery.xdomainajax.js"></script>
 		<script src="js/vendor/qrcode.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
 		<!-- File Upload JS -->
 		<script src="js/vendor/upclick-min.js"></script> <!-- change to https://code.google.com/p/ocupload/ -->
 		<script src="js/main.js"></script>
