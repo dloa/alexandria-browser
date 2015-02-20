@@ -1231,6 +1231,9 @@ label#movie-rotten {
 	margin: 0;
 	padding: 0;
 }
+#publisher-process li {
+	position: relative;
+}
 #publisher-process li p, #publisher-process li li {
 	line-height: 1.7;
 }
@@ -1239,6 +1242,7 @@ label#movie-rotten {
 }
 #add-publisher .sublistWrap > ul, #add-publisher  .sublistWrap label {
 	display: inline-block;
+	margin-left: 0;
 }
 #add-publisher  .sublistWrap label {
 	width: 10.5em;
