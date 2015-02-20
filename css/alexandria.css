@@ -456,7 +456,7 @@ header #addNewContent-icon:hover path, header #app-user-icon:hover path {
 }
 .header-modal ul li {
 	margin: .5em 0 0;
-	padding: 0 48px 0 24px;
+	padding: 0 36px 0 24px;
 	white-space: nowrap;
 }
 .header-modal ul li:first-child {
@@ -1021,7 +1021,7 @@ div#qrcode img {
 #browse-media {
 	padding-top: 10px;
 }
-#browse-media-wrap, #add-media > *, #view-media-wrap {
+#browse-media-wrap, #add-media > *, #view-media-wrap, #publisher-process {
 	width: 98%;
 	display: inline-block;
 	zoom: 1;*display:inline;
@@ -1221,6 +1221,31 @@ label#movie-rotten {
 	display: block;
 	margin-left:0;
 }
+/* CREATE PUBLISHER INTERFACE */
+#add-publisher, #add-media-container {
+	margin-top: 40px;
+}
+#publisher-process, #publisher-process li {
+	list-style: none;
+	text-align: left;
+	margin: 0;
+	padding: 0;
+}
+#publisher-process li p, #publisher-process li li {
+	line-height: 1.7;
+}
+#add-publisher .sublistWrap {
+	text-align: center;
+}
+#add-publisher .sublistWrap > ul, #add-publisher  .sublistWrap label {
+	display: inline-block;
+}
+#add-publisher  .sublistWrap label {
+	width: 10.5em;
+}
+#add-publisher input {
+	margin: 0 .5em 1em;
+}
 /* ADD MEDIA INTERFACE */
 #add-media {
 	text-align: center;
@@ -1228,7 +1253,6 @@ label#movie-rotten {
 #add-media-container {
 	border: 1px solid #979797;
 	border-radius: 9px;
-	margin-top: 40px;
 }
 #add-media nav {
 	border-bottom: 1px solid #979797;
