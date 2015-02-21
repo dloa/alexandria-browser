@@ -144,7 +144,7 @@ header {
 img.makesvg {
 	display: none;
 }
-.twitter-archive, .sharing-ui {
+.twitter-archive, .sharing-ui, .publisher-ui {
 	display: none;
 }
 .twitter-archive#volume {
@@ -1257,6 +1257,18 @@ label#movie-rotten {
 }
 #add-publisher input {
 	margin: 0 .5em 1em;
+	border: 1px solid #979797;
+	padding: 3px 7px;
+}
+#newPublisherString {
+	background: none #f4f4f4;
+	padding: 1em 1.75em;
+	display: inline-block;
+	margin: 1em 0 0;
+	border-radius: 8px;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border: 1px solid #979797;
 }
 /* ADD MEDIA INTERFACE */
 #add-media {
@@ -1409,10 +1421,15 @@ input[type="file"] {
 	zoom: 1;*display:inline;
 	padding: .25em 1.25em;
 	background: none #d8d8d8;
+	border: 1px solid #979797;
 	border-radius: 8px;
 	color: #464646;
 	text-decoration: none;
 	cursor: pointer;
+}
+.btnLightGray:hover {
+	color: #f4f4f4;
+	background-color: #464646;
 }
 #newMedia-tabs .tblwrap {
 	display: inline-block;
