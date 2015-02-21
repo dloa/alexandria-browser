@@ -1236,10 +1236,13 @@ label#movie-rotten {
 	margin: 0;
 	padding: 0;
 }
+#publisher-process {
+	max-width:660px;
+}
 #publisher-process li {
 	position: relative;
 }
-#publisher-process li p, #publisher-process li li {
+#publisher-process li p, #publisher-process li li, #publisher-process .btnLightGray {
 	line-height: 1.7;
 }
 #add-publisher .sublistWrap {
@@ -1247,7 +1250,7 @@ label#movie-rotten {
 }
 #add-publisher .sublistWrap > ul, #add-publisher  .sublistWrap label {
 	display: inline-block;
-	margin-left: 0;
+	padding-left: 0;
 }
 #add-publisher  .sublistWrap label {
 	width: 10.5em;
@@ -1301,7 +1304,7 @@ label#movie-rotten {
 #add-media #newMedia-tabs {
 	position: relative;
 	margin: 30px 0 40px;
-	min-height: 180px;
+//	min-height: 180px;
 }
 #add-media .modal-tab label {
 	font-size: 18px;
@@ -1343,9 +1346,11 @@ div.newMedia-media.wrap .row.choosefile {
 }
 #add-media #newMedia-tabs .modal-tab .media-info-container .left {
 	width: 58.62%;
+	display: none;
 }
 #add-media #newMedia-tabs .modal-tab .media-info-container .pull-right {
 	width: 38.46%;
+	display: none;
 }
 #add-media .container {
 	border: 1px solid #979797;
