@@ -282,10 +282,10 @@
 					<h3>Step 1 - Input Publisher Information</h3>
 					<div class="sublistWrap">
 						<ul>
-							<li><label>Publisher Name</label><input type="text" size="36" id="newPublisher-name" onblur="concatForSig();" /></li>
-							<li><label>Florincoin Address</label><input type="text" size="36" id="newPublisher-floAdd" onblur="concatForSig();" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
-							<li><label>Email Address</label><input type="text" placeholder="optional" size="36" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
-							<li><label>BitMessage Address</label><input type="text" placeholder="optional" size="36" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
+							<li><label>Publisher Name</label><input type="text" size="36" id="newPublisher-name" /></li>
+							<li><label>Florincoin Address</label><input type="text" size="36" id="newPublisher-floAdd" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
+							<li><label>Email Address</label><input type="text" id="newPublisher-emailmd5" placeholder="optional" size="36" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
+							<li><label>BitMessage Address</label><input type="text" id="newPublisher-bitmsg" placeholder="optional" size="36" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
 							<li><a onclick="concatForSig();" class="btnLightGray pull-right">Generate Code</a></li>
 						</ul>
 					</div>
@@ -299,9 +299,9 @@
 						<li>When you click "Sign Message" button on this new screen, it will create a signature in the bottom field.</li>
 					</ul>
 					<p style="text-align:center">Copy that signature and paste it here:<br />
-					<input type="text" size="36" /></p>
+					<input type="text" id="newPublisher-sign" size="36" /></p>
 				</li>
-				<li style="text-align:center"><a onclick="" class="btnLightGray">Submit to ΛLΞXΛNDRIΛ</a></li>
+				<li style="text-align:center"><a onclick="postPublisher();" class="btnLightGray">Publish to ΛLΞXΛNDRIΛ</a></li>
 			</ul>
 		</main>
 
@@ -825,7 +825,8 @@
 		<script type="text/javascript" src="js/vendor/spritz-1.2.min.js"></script>
 		<script src="js/vendor/jquery.xdomainajax.js"></script>
 		<script src="js/vendor/qrcode.min.js"></script>
-		<script src="https://cdn.jsdelivr.net/webtorrent/latest/webtorrent.min.js"></script>
+		<script src="js/vendor/webtoolkit.md5.js"></script>
+		<script src="js/vendor/upclick-min.js"></script>
 		<!-- File Upload JS -->
 		<script src="js/vendor/upclick-min.js"></script> <!-- change to https://code.google.com/p/ocupload/ -->
 		<script src="js/main.js"></script>

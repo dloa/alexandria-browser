@@ -1996,7 +1996,11 @@ function getAllPublishers() {
 				var publisherID = data[i]['publisher-data']['alexandria-publisher']['address'];
 				var publisherName = data[i]['publisher-data']['alexandria-publisher']['name'];
 				var publisherDate = data[i]['publisher-data']['alexandria-publisher']['timestamp'];
-				var publisherEntity = '<div id="publisher-' + publisherID + '" class="row publisher-entity"><div class="publisher-icon" onclick="loadPublisherEntity(this);"><img src="img/publisher-icon.svg" class="makesvg publisher-image" onclick="loadPublisherEntity(this);" style="display: inline;"></div><h3 class="publisher-title" onclick="loadPublisherEntity(this);">' + publisherName + '</h3> <div class="publisher-date">' + new Date(parseInt(publisherDate)*1000) + '</div><div class="media-FLO hidden">' + publisherID + '</div>';
+				var publisherDateLen = data[i]['publisher-data']['alexandria-publisher']['timestamp'].toString().length;
+				if (publisherDateLen < 13) {
+					publisherDate = parseInt(publisherDate)*1000;
+				}
+				var publisherEntity = '<div id="publisher-' + publisherID + '" class="row publisher-entity"><div class="publisher-icon" onclick="loadPublisherEntity(this);"><img src="img/publisher-icon.svg" class="makesvg publisher-image" onclick="loadPublisherEntity(this);" style="display: inline;"></div><h3 class="publisher-title" onclick="loadPublisherEntity(this);">' + publisherName + '</h3> <div class="publisher-date">' + new Date(parseInt(publisherDate)) + '</div><div class="media-FLO hidden">' + publisherID + '</div>';
 				if ($('#browse-media-wrap .row').length < 1){
 					$('#browse-media-wrap').append(publisherEntity);
 				} else {
@@ -2411,6 +2415,34 @@ function concatForSig(){
 	var sigTimestamp = new Date();
 	var concatString = sigName+'-'+sigAdd+'-'+Date.parse(sigTimestamp);
 	document.getElementById('newPublisherString').innerHTML = concatString;
+}
+
+// Submit Publisher to Blockchain
+function postPublisher() {
+	var pubName = document.getElementById('newPublisher-name').value;
+	var pubAdd = document.getElementById('newPublisher-floAdd').value;
+	var pubTime = document.getElementById('newPublisherString').innerHTML.split('-')[2];
+	var pubEmailMD5 = MD5(document.getElementById('newPublisher-emailmd5').value.toLowerCase());
+	var pubBitMsg = document.getElementById('newPublisher-bitmsg').value;
+	var pubSig = document.getElementById('newPublisher-sign').value;
+	var queryString = '{ "alexandria-publisher": { "name": "'+ pubName +'", "address": "'+ pubAdd +'", "timestamp":'+ pubTime +', "bitmessage": "'+ pubBitMsg +'", "emailmd5":"'+ pubEmailMD5 +'"}, "signature":"'+ pubSig +'"}';
+	if ( (!pubName) || (!pubAdd) || (!pubSig) ) {
+		console.error('Incomplete Input!');
+		return false;
+	}
+	console.log(queryString);
+	$.ajax({
+	    url: 'http://54.172.28.195:41288/alexandria/v1/send/',
+	    type: 'POST',
+		data: queryString.toString(),
+	    success: function(e) {
+	    	alert('Publisher Announced!');
+	    },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+		}
+	});
 }
 
 // Select File
