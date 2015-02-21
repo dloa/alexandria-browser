@@ -318,6 +318,8 @@ jQuery(document).ready(function($){
 		if (mediaType != '' ) {
 			$('fieldset .row.media-specific').hide();
 			$('fieldset .col.media-specific').hide();
+			$('#newMedia-info .left').fadeIn(fadeTimer);
+			$('#newMedia-info .pull-right').fadeIn(fadeTimer);
 			if (mediaType == 'movie') {
 				$('#media-meta-www').text('IMDB');
 				$('#media-meta-runtime').text('Runtime');
@@ -368,6 +370,9 @@ jQuery(document).ready(function($){
 			$('fieldset .col.media-specific.'+mediaType+'-meta').show();
 			$('fieldset .row.media-specific.'+mediaType+'-meta').show();
 			$('fieldset#new-media-meta').show();
+		} else {
+			$('#newMedia-info .left').fadeOut(fadeTimer);
+			$('#newMedia-info .pull-right').fadeOut(fadeTimer);
 		}
 		resizeTabs();
 	});
@@ -2364,6 +2369,7 @@ function loadShareMod() {
 	$('#search').fadeOut(fadeTimer);
 	$('main').not('.sharing-ui').fadeOut(fadeTimer);
 	hideArchivesUI();
+	$('.publisher-ui').fadeOut(fadeTimer);
 	$('.sharing-ui').fadeIn(fadeTimer);
 	resizeTabs();
 }
@@ -2385,6 +2391,27 @@ function loadCreatePublisherMod() {
 	$('.sharing-ui').fadeOut(fadeTimer);
 	$('.publisher-ui').fadeIn(fadeTimer);
 	resizeTabs();
+}
+
+// Create String to Generate Signature
+function concatForSig(){
+	var sigName = document.getElementById('newPublisher-name').value;
+	var sigAdd = document.getElementById('newPublisher-floAdd').value;
+	if ( (!sigName) || (!sigAdd) ) {
+		if ( (!sigName) && (!sigAdd) ) {
+			document.getElementById('newPublisherString').innerHTML = '[Input data to generate code above]';
+		} else if (!sigName) {
+			document.getElementById('newPublisherString').innerHTML = '[Enter a Publisher Name above]';
+		} else if (!sigAdd) {
+			document.getElementById('newPublisherString').innerHTML = '[Enter a Florincoin Address above]';
+		}
+		console.error('Incomplete Input!');
+		return false;
+	}
+	var concatString = '';
+	var sigTimestamp = new Date();
+	var concatString = sigName+'-'+sigAdd+'-'+Date.parse(sigTimestamp);
+	document.getElementById('newPublisherString').innerHTML = concatString;
 }
 
 // Select File
