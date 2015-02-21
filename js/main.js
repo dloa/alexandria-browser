@@ -2436,6 +2436,8 @@ function postPublisher() {
 	    type: 'POST',
 		data: queryString.toString(),
 	    success: function(e) {
+	    	$('.publisher-ui').fadeOut(fadeTimer);
+	    	resetAlexandria();
 	    	alert('Publisher Announced!');
 	    },
 		error: function (xhr, ajaxOptions, thrownError) {
