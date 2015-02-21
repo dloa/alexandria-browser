@@ -2405,7 +2405,6 @@ function concatForSig(){
 		} else if (!sigAdd) {
 			document.getElementById('newPublisherString').innerHTML = '[Enter a Florincoin Address above]';
 		}
-		console.error('Incomplete Input!');
 		return false;
 	}
 	var concatString = '';
