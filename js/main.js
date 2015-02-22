@@ -455,7 +455,16 @@ jQuery(document).ready(function($){
 					if ( $(this).val() != '' ) {
 						var infoKeyName = $(this).attr('name');
 						var infoKeyValue = $(this).val();
-						if ((infoKeyValue) && (isNaN(infoKeyValue))){
+						if (infoKeyName == 'runtime'){
+							if ((infoKeyValue) && (infoKeyValue.split(':'))){
+								if (infoKeyValue.split(':').length != 0){
+									infoKeyValue = calcSeconds(infoKeyValue);
+								} else {
+									alert('Please enter a valid runtime');
+									return false;
+								}
+							}
+ 						} else if ((infoKeyValue) && (isNaN(infoKeyValue))){
 							infoKeyValue = '"'+ infoKeyValue+'"';
 						}
 						if (mediaExtraInfo == '') {
@@ -481,7 +490,9 @@ jQuery(document).ready(function($){
 				} else {
 					var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
 				}
+				console.info(queryString);
 				console.info($.parseJSON(queryString));
+/*
 				$.ajax({
 				    url: 'http://54.172.28.195:41289/alexandria/v1/send/',
 				    type: 'POST',
@@ -496,6 +507,7 @@ jQuery(document).ready(function($){
 						console.error(thrownError);
 					}
 				});
+*/
 			}
 		}
 	});
@@ -2133,7 +2145,6 @@ function loadRecentMedia() {
 					if(mediaInfo['extra-info']){
 						if(mediaInfo['extra-info']['runtime']){
 							mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
-							console.log(mediaRuntime);
 						}
 						if(mediaInfo['extra-info']['artist']){
 							mediaArtist = mediaInfo['extra-info']['artist'];
@@ -2391,6 +2402,21 @@ function calcRuntime(seconds) {
 	var runtime = runHours + ':' + runMins + ':' + runSecs;
 	return runtime;
 }
+
+// Calculate seconds from Runtime
+function calcSeconds(runtime) {
+	if (!runtime) {
+		console.error('Provide an input time to calculate to seconds');
+		return false;
+	}
+	var runtimeArray = runtime.split(':');
+	var runtimeHours = parseInt(runtimeArray[0]);
+	var runtimeMins = parseInt(runtimeArray[1]);
+	var runtimeSeconds = parseInt(runtimeArray[2]);
+	runtimeSeconds = ((runtimeHours*60)*60)+(runtimeMins*60)+runtimeSeconds;
+	return runtimeSeconds;
+}
+
 // Display Tip Modal
 function loadTipModal(obj) {
 	if ($(obj).parents('.entity-market #tip-modal').length == 0) {
