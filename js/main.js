@@ -490,9 +490,6 @@ jQuery(document).ready(function($){
 				} else {
 					var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
 				}
-				console.info(queryString);
-				console.info($.parseJSON(queryString));
-/*
 				$.ajax({
 				    url: 'http://54.172.28.195:41289/alexandria/v1/send/',
 				    type: 'POST',
@@ -507,7 +504,6 @@ jQuery(document).ready(function($){
 						console.error(thrownError);
 					}
 				});
-*/
 			}
 		}
 	});
