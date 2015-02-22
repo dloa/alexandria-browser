@@ -434,18 +434,41 @@ jQuery(document).ready(function($){
 				var mediaType = document.getElementById('mediaType').value;
 				var mediaDesc = replace(replace(document.getElementById('addMedia-desc').value,'\r',' '),'\n',' ');
 				var mediaInfo = '';
-				$('#new-media-meta input[type="text"]').each(function(){
+				$('#new-media-meta input[type="text"].info-field').each(function(){
 					if ( $(this).val() != '' ) {
 						var infoKeyName = $(this).attr('name');
 						var infoKeyValue = $(this).val();
+						if ((infoKeyValue) && (isNaN(infoKeyValue))){
+							infoKeyValue = '"'+ infoKeyValue+'"';
+						}
 						if (mediaInfo == '') {
-							mediaInfo = '"' + infoKeyName + '":"'+ infoKeyValue +'"';
+							mediaInfo = '"' + infoKeyName + '":'+ infoKeyValue +'';
 						} else {
-							mediaInfo = mediaInfo + ',' + '"' + infoKeyName + '":"'+ infoKeyValue +'"';
+							mediaInfo = mediaInfo + ',' + '"' + infoKeyName + '":'+ infoKeyValue +'';
 						}
 					}
 				});
 				mediaInfo = mediaInfo + ',' + '"description":"'+ mediaDesc +'"';
+
+				var mediaExtraInfo = '';
+				$('#new-media-meta input[type="text"]').not('.info-field').each(function(){
+					if ( $(this).val() != '' ) {
+						var infoKeyName = $(this).attr('name');
+						var infoKeyValue = $(this).val();
+						if ((infoKeyValue) && (isNaN(infoKeyValue))){
+							infoKeyValue = '"'+ infoKeyValue+'"';
+						}
+						if (mediaExtraInfo == '') {
+							mediaExtraInfo = '"' + infoKeyName + '":'+ infoKeyValue +'';
+						} else {
+							mediaExtraInfo = mediaExtraInfo + ',' + '"' + infoKeyName + '":'+ infoKeyValue +'';
+						}
+					}
+				});
+				if (mediaExtraInfo != '') {
+					mediaInfo = mediaInfo+', "extra-info": {'+mediaExtraInfo+'}';
+				}
+				
 				if ($('#newMedia-pay input[type="checkbox"]:checked').length != 0) {
 					var payCurrency = 'USD';
 					var payType = 'tip';
@@ -458,9 +481,22 @@ jQuery(document).ready(function($){
 				} else {
 					var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
 				}
-//				var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "payment": { "currency":"'++'", "type": "'++'", "amount": '++' }, "info": { "extra-info": {mediaInfo}, "year":'++', "size":'++', "title": "'++'", "description": "'++'"} }, "signature":"'+ mediaSig +'" }';
-				console.info(queryString);
 				console.info($.parseJSON(queryString));
+/*				$.ajax({
+				    url: 'http://54.172.28.195:41289/alexandria/v1/send/',
+				    type: 'POST',
+					data: queryString.toString(),
+				    success: function(e) {
+				    	$('.sharing-ui').fadeOut(fadeTimer);
+				    	resetAlexandria();
+				    	alert('Media Published!');
+				    },
+					error: function (xhr, ajaxOptions, thrownError) {
+						console.error(xhr.status);
+						console.error(thrownError);
+					}
+				});
+*/
 				alert("Just like that! You're a rockstar! See how easy that was?");
 			}
 		}
@@ -2035,7 +2071,7 @@ function getAllPublishers() {
 				var publisherName = data[i]['publisher-data']['alexandria-publisher']['name'];
 				var publisherDate = data[i]['publisher-data']['alexandria-publisher']['timestamp'];
 				var publisherDateLen = data[i]['publisher-data']['alexandria-publisher']['timestamp'].toString().length;
-				if (publisherDateLen < 13) {
+				if (publisherDateLen == 10) {
 					publisherDate = parseInt(publisherDate)*1000;
 				}
 				var publisherEntity = '<div id="publisher-' + publisherID + '" class="row publisher-entity"><div class="publisher-icon" onclick="loadPublisherEntity(this);"><img src="img/publisher-icon.svg" class="makesvg publisher-image" onclick="loadPublisherEntity(this);" style="display: inline;"></div><h3 class="publisher-title" onclick="loadPublisherEntity(this);">' + publisherName + '</h3> <div class="publisher-date">' + new Date(parseInt(publisherDate)) + '</div><div class="media-FLO hidden">' + publisherID + '</div>';
@@ -2076,7 +2112,6 @@ function loadRecentMedia() {
 	$.ajax({
 		type: "GET",
 		url: "http://54.172.28.195:41289/alexandria/v1/media/get/all",
-//		data: ,
 		success: function (e) {
 			$('#browse-media-wrap .row').remove();
 			var data = $.parseJSON(e);
@@ -2084,17 +2119,37 @@ function loadRecentMedia() {
 			for (var i = 0; i < data.length; i++) {
 				var mediaID = data[i]['txid'];
 				if (!document.getElementById('media-'+mediaID)) {
+					var mediaPublisher = data[i]['publisher-name'];
 					var mediaType = data[i]['media-data']['alexandria-media']['type'];
 					var mediaInfo = data[i]['media-data']['alexandria-media']['info'];
-					var mediaRuntime = calcRuntime(data[i]['extra-info']['runtime']);
-					var mediaPubTime = new Date(parseInt(data[i]['media-data']['alexandria-media']['timestamp'])*1000);
+					var mediaPubTime = data[i]['media-data']['alexandria-media']['timestamp'];
+					var mediaPubTimeLen = data[i]['media-data']['alexandria-media']['timestamp'].toString().length;
+					if (mediaPubTimeLen == 10) {
+						mediaPubTime = parseInt(mediaPubTime)*1000;
+					}					
 					var mediaTitle = mediaInfo['title'];
-					var mediaArtist = data[i]['extra-info']['artist'];
 					var mediaDesc = mediaInfo['description'];
+					var mediaRuntime = 0;
+					var mediaArtist = '';
+					console.info(mediaInfo['extra-info']);
+					if(mediaInfo['extra-info']){
+						if(mediaInfo['extra-info']['runtime']){
+							mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
+							console.log(mediaRuntime);
+						}
+						if(mediaInfo['extra-info']['artist']){
+							mediaArtist = mediaInfo['extra-info']['artist'];
+						}						
+					}
+					if (mediaRuntime != 0) {
+						mediaRuntime = '<div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div>';
+					} else {
+						mediaRuntime = '';
+					}
 					var mediaTid = data[i]['media-data']['alexandria-media']['torrent'];
 					var mediaFLO = data[i]['media-data']['alexandria-media']['publisher'];
 					var mediaPymnt = data[i]['media-data']['alexandria-media']['payment']['type'];
-					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaArtist + '</div> <div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + mediaPubTime + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="media-FLO hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</div>';
+					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '</div> '+ mediaRuntime +' <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="media-FLO hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</div>';
 					if ($('#browse-media-wrap .row').length < 1){
 						$('#browse-media-wrap').append(mediaEntity);
 					} else {
@@ -2161,49 +2216,6 @@ function loadMediaEntity(obj) {
 		// Load Media Entity View
 		loadMediaView(parentObj);
 	}
-}
-
-// Initialize WebTorrent
-function webtorrentinit(){
-	var client = new WebTorrent()
-	var magnetUri = 'CW35T7WXXRC5RSS4IGDFIZ7CJN4MAUDC'
-	
-	client.add(magnetUri, function (torrent) {
-	  // create HTTP server for this torrent
-	  var server = torrent.createServer()
-	  server.listen(port) // start the server listening to a port
-	
-	  // visit http://localhost:<port>/ to see a list of files
-	
-	  // access individual files at http://localhost:<port>/<index> where index is the index
-	  // in the torrent.files array
-	
-	  // later, cleanup...
-	  server.close()
-	  client.destroy()
-	})
-}
-
-// Load WebTorrent Magnet
-function loadWebTorrent() {
-	var client = new WebTorrent()
-	var magnetUri = 'CW35T7WXXRC5RSS4IGDFIZ7CJN4MAUDC'
-	
-	client.add(magnetUri, function (torrent) {
-	  // Got torrent metadata!
-	  console.log('Torrent info hash:', torrent.infoHash)
-	
-	  // Let's say the first file is a webm (vp8) or mp4 (h264) video...
-	  var file = torrent.files[0]
-	
-	  // Create a video element
-	  var video = document.createElement('video')
-	  video.controls = true
-	  document.body.appendChild(video)
-	
-	  // Stream the video into the video tag
-	  file.createReadStream().pipe(video)
-	})
 }
 
 // Load Media Page
@@ -2361,14 +2373,14 @@ function calcRuntime(seconds) {
 	var runSecs = seconds;
 	var runMins = 0;
 	var runHours = 0;
-	if (runSecs > 60) {
+	if (runSecs > 59) {
 		runMins = Math.floor(parseInt(seconds)/60);
 		runSecs = runSecs-(runMins*60);
 	}
 	if (runSecs < 10) {
 		runSecs = '0' + runSecs;
 	}
-	if (runMins > 60) {
+	if (runMins > 59) {
 		runHours = Math.floor(parseInt(runMins)/60);
 		runMins = runMins-(runHours*60);
 	}
@@ -2459,7 +2471,7 @@ function concatForSig(){
 function parseMagnetURI() {
 	var magnetURI = document.getElementById('dht-hash').value;
 	console.log(magnetURI);
-	var mediaBTIH = magnetURI.split('btih:')[1].split('&')[0];
+	var mediaBTIH = magnetURI.split('urn:')[1].split('&')[0];
 	document.getElementById('btih-hash').value = mediaBTIH;
 	var mediaWS = magnetURI.split('&ws=')[1].split('&')[0];
 	if (mediaWS) {
@@ -2505,7 +2517,7 @@ function postPublisher() {
 	}
 	console.log(queryString);
 	$.ajax({
-	    url: 'http://54.172.28.195:41288/alexandria/v1/send/',
+	    url: 'http://54.172.28.195:41289/alexandria/v1/send/',
 	    type: 'POST',
 		data: queryString.toString(),
 	    success: function(e) {
@@ -2537,14 +2549,18 @@ function uploadFile(elem) {
 	});
 }
 // Show AutoFill Option on Add Media interface
-var IMDBID = '';
+var mediaWwwID = '';
 function showAutoFill(obj){
-	if ( (obj.value != '') && (obj.value != IMDBID) ) {
+	if ( (obj.value != '') && (obj.value != mediaWwwID) ) {
 		$('fieldset:visible input').attr('disabled','disabled');
 		$('fieldset:visible textarea').attr('disabled','disabled');
 		$(obj).parents('fieldset').find('.autofill-button').slideDown(fadeTimer);
-		getIMDBinfo();
-		IMDBID = obj.value;
+		mediaWwwID = obj.value;
+		if ($(obj).siblings('label').text().split(' ')[0] == 'IMDB') {
+			getIMDBinfo();
+		} else if ($(obj).siblings('label').text().split(' ')[0] == 'YouTube') {
+			getYouTubeinfo();
+		}
 	} else {
 		$(obj).parents('fieldset').find('.autofill-button').slideUp(fadeTimer);
 	}
@@ -2553,7 +2569,7 @@ function showAutoFill(obj){
 // Get IMDB Info from API
 function getIMDBinfo() {
 	var IMDBid = document.getElementById('www-id').value;
-	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid +'&actors=S&uniqueName=1';
+	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ mediaWwwID +'&actors=S&uniqueName=1';
 	$.ajax({
 	    url: IMDBapi,
 	    type: 'GET',
@@ -2624,6 +2640,12 @@ function getIMDBinfo() {
 			console.error(thrownError);
 		}
 	});
+}
+// Get YouTube Info from API
+function getYouTubeinfo() {
+	$('.modal-tab:visible .autofill-button').slideUp(fadeTimer);
+	$('fieldset:visible input').removeAttr('disabled');
+	$('fieldset:visible textarea').removeAttr('disabled');	
 }
 // GET ROTTEN TOMATOES RATING
 function getRotten() {
