@@ -1260,7 +1260,7 @@ label#movie-rotten {
 	border: 1px solid #979797;
 	padding: 3px 7px;
 }
-#newPublisherString {
+#newPublisherString, #newMediaString {
 	background: none #f4f4f4;
 	padding: 1em 1.75em;
 	display: inline-block;
@@ -1316,7 +1316,10 @@ label#movie-rotten {
 #add-media #newMedia-tabs {
 	position: relative;
 	margin: 30px 0 40px;
-//	min-height: 180px;
+	transition: all .25s ease;
+	-webkit-transition: all .25s ease;
+	-moz-transition: all .25s ease;
+	-o-transition: all .25s ease;
 }
 #add-media .modal-tab label {
 	font-size: 18px;
@@ -1342,6 +1345,11 @@ label#movie-rotten {
 	padding: 0 2.5%;
 	display: none;
 	color: #979797;
+}
+#add-media #newMedia-tabs .modal-tab p {
+	clear: both;
+	margin: 1em 0 0;
+	overflow: hidden;
 }
 div.newMedia-media.wrap {
 	width: 15em;
@@ -1459,7 +1467,7 @@ input[type="file"] {
 	display: inline;
 }
 #add-media #newMedia-tabs input[type="text"] {
-	padding: .2em .5em;
+	padding: .2em .5em 0;
 	border: 1px solid #979797;
 }
 .intInput, #add-media #newMedia-pay .col input[type="text"] {
@@ -1483,6 +1491,12 @@ ul.distNetList li {
 //	display: none;
 	width: 200%;
 	margin: .25em 0 1em -50%;
+}
+#newMedia-notary .input-container .input-container {
+	padding: 10px 10px 0;
+}
+#newMediaPublisherFLO {
+	margin: .25em 0 1em 0;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;

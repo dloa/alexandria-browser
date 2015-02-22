@@ -381,7 +381,7 @@
 												<div class="col">
 													<div class="input-container required">
 														<label><span id="media-meta-creators1">Creators 1</span></label>
-														<input type="text" name="creators1" id="addMedia-creators1" />
+														<input type="text" name="artist" id="addMedia-creators1" />
 													</div>
 												</div>
 											</div>
@@ -433,7 +433,7 @@
 												<div class="col">
 													<div class="input-container required">
 														<label>Description</label>
-														<textarea name="description" id="addMedia-plot"></textarea>
+														<textarea name="description" id="addMedia-desc"></textarea>
 													</div>
 												</div>
 											</div>
@@ -470,10 +470,11 @@
 						<div class="tblwrap">
 							<div class="tbl centered">
 								<ul class="distNetList">
-									<li><input type="checkbox" name="dNetwork" value="DHT" id="dNetDHT" checked /> <label for="dNetDHT">Mainline DHT</label> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a>
+									<li><input type="checkbox" name="dNetwork" value="DHT" id="dNetDHT" checked disabled /> <label for="dNetDHT">Mainline DHT</label> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a>
 										<div class="input-container required" style="display:block">
-											<label>Torrent Hash</label>
-											<input type="text" id="dht-hash" name="DHT Hash" />
+											<label>Torrent Magnet URI</label>
+											<input type="text" id="dht-hash" name="DHT Hash" onblur="parseMagnetURI();" />
+											<input type="hidden" id="btih-hash" name="btih Hash Value" />
 										</div>
 									</li>
 									<li class="disabled"><input type="checkbox" name="dNetwork" value="MaidSafe" id="dNetSafe" disabled /> <label for="dNetSafe">MaidSafe</label> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
@@ -516,10 +517,10 @@
 										<input type="checkbox" id="payment-tips" name="payment-tips" /> <label for="payment-tips">Optional Tips</label>
 									</div>
 									<div class="col">									
-										<label>$</label><input type="text" name="tip-value-1" />
-										<label>$</label><input type="text" name="tip-value-2" />
-										<label>$</label><input type="text" name="tip-value-3" />
-										<label>$</label><input type="text" name="tip-value-4" />
+										<label>$</label><input type="text" name="tip-value-1" class="tip-amount-value" />
+										<label>$</label><input type="text" name="tip-value-2" class="tip-amount-value" />
+										<label>$</label><input type="text" name="tip-value-3" class="tip-amount-value" />
+										<label>$</label><input type="text" name="tip-value-4" class="tip-amount-value" />
 									</div>
 								</div>
 								<div class="row disabled">
@@ -564,7 +565,15 @@
 								<div class="row">
 									<div class="col">
 										<div class="input-container">
-											<input type="checkbox" name="digital-notary-flo" id="digital-notary-flo" checked /> <label for="digital-notary-flo">Florincoin</label> 										<a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a>
+											<input type="checkbox" name="digital-notary-flo" id="digital-notary-flo" checked disabled /> <label for="digital-notary-flo">Florincoin</label> 										<a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a>
+											<div class="input-container required" style="display:block">
+												<label>Publisher Florincoin Address</label>
+												<input type="text" id="newMediaPublisherFLO" name="New Media Publisher FLO Address" />
+											</div>
+											<p><a onclick="concatMediaSig();" class="btnLightGray pull-right">Generate Code</a></p>
+					<p style="text-align:center">Copy the generated code below to your clipboard. <br /><span class="copybox" id="newMediaString">[Input data to generate code above]</span></p>
+											<p style="text-align:center">Copy that signature and paste it here:<br />
+											<input type="text" id="newMedia-sign" size="36" /><br /><br /></p>
 										</div>
 									</div>
 									<div class="col">

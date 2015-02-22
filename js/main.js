@@ -316,8 +316,7 @@ jQuery(document).ready(function($){
 		var mediaType = $(this).val();
 		$('#newMedia-info fieldset').hide();
 		if (mediaType != '' ) {
-			$('fieldset .row.media-specific').hide();
-			$('fieldset .col.media-specific').hide();
+			$('fieldset .media-specific').hide();
 			$('#newMedia-info .left').fadeIn(fadeTimer);
 			$('#newMedia-info .pull-right').fadeIn(fadeTimer);
 			if (mediaType == 'movie') {
@@ -367,9 +366,9 @@ jQuery(document).ready(function($){
 				$('#media-meta-taxonomy').text('Cuisine');
 				$('#media-meta-collection').text('Collection');
 			}
-			$('fieldset .col.media-specific.'+mediaType+'-meta').show();
-			$('fieldset .row.media-specific.'+mediaType+'-meta').show();
+			$('fieldset .media-specific.'+mediaType+'-meta').show();
 			$('fieldset#new-media-meta').show();
+			
 		} else {
 			$('#newMedia-info .left').fadeOut(fadeTimer);
 			$('#newMedia-info .pull-right').fadeOut(fadeTimer);
@@ -423,6 +422,45 @@ jQuery(document).ready(function($){
 			if (reqCheck == 1) {
 				reqCheck = 0;
 			} else {
+				if ( $('input[type="checkbox"][name="dNetwork"]:checked').length < 1 ) {
+					$('#newMedia-net').click();
+					alert('Please select a Distribution Network');
+					return false;
+				}
+				var Tid = document.getElementById('btih-hash').value;
+				var FLOadd = document.getElementById('newMediaPublisherFLO').value;
+				var pubTime = document.getElementById('newMediaString').innerHTML.split('-')[2];
+				var mediaSig = document.getElementById('newMedia-sign').value;
+				var mediaType = document.getElementById('mediaType').value;
+				var mediaDesc = replace(replace(document.getElementById('addMedia-desc').value,'\r',' '),'\n',' ');
+				var mediaInfo = '';
+				$('#new-media-meta input[type="text"]').each(function(){
+					if ( $(this).val() != '' ) {
+						var infoKeyName = $(this).attr('name');
+						var infoKeyValue = $(this).val();
+						if (mediaInfo == '') {
+							mediaInfo = '"' + infoKeyName + '":"'+ infoKeyValue +'"';
+						} else {
+							mediaInfo = mediaInfo + ',' + '"' + infoKeyName + '":"'+ infoKeyValue +'"';
+						}
+					}
+				});
+				mediaInfo = mediaInfo + ',' + '"description":"'+ mediaDesc +'"';
+				if ($('#newMedia-pay input[type="checkbox"]:checked').length != 0) {
+					var payCurrency = 'USD';
+					var payType = 'tip';
+					var payAmount = [];
+					$('.tip-amount-value').each(function(){
+						var tipAmount = $(this).val()*100;
+						payAmount.push(tipAmount);
+					});
+					var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "payment": { "currency":"'+ payCurrency +'", "type": "'+ payType +'", "amount": "'+ payAmount +'"}, "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
+				} else {
+					var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
+				}
+//				var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "payment": { "currency":"'++'", "type": "'++'", "amount": '++' }, "info": { "extra-info": {mediaInfo}, "year":'++', "size":'++', "title": "'++'", "description": "'++'"} }, "signature":"'+ mediaSig +'" }';
+				console.info(queryString);
+				console.info($.parseJSON(queryString));
 				alert("Just like that! You're a rockstar! See how easy that was?");
 			}
 		}
@@ -2397,7 +2435,7 @@ function loadCreatePublisherMod() {
 	resizeTabs();
 }
 
-// Create String to Generate Signature
+// Create String to Generate Publisher Signature
 function concatForSig(){
 	var sigName = document.getElementById('newPublisher-name').value;
 	var sigAdd = document.getElementById('newPublisher-floAdd').value;
@@ -2415,6 +2453,41 @@ function concatForSig(){
 	var sigTimestamp = new Date();
 	var concatString = sigName+'-'+sigAdd+'-'+Date.parse(sigTimestamp);
 	document.getElementById('newPublisherString').innerHTML = concatString;
+}
+
+// Parse Magnet URI
+function parseMagnetURI() {
+	var magnetURI = document.getElementById('dht-hash').value;
+	console.log(magnetURI);
+	var mediaBTIH = magnetURI.split('btih:')[1].split('&')[0];
+	document.getElementById('btih-hash').value = mediaBTIH;
+	var mediaWS = magnetURI.split('&ws=')[1].split('&')[0];
+	if (mediaWS) {
+		console.log(mediaWS);
+	}
+}
+
+// Create String to Generate Media Submission Signature
+function concatMediaSig() {
+	var Tid = document.getElementById('btih-hash').value;
+	var FLOadd = document.getElementById('newMediaPublisherFLO').value;
+	if ( (!Tid) || (!FLOadd) ) {
+		if ( (!Tid) && (!FLOadd) ) {
+			document.getElementById('newMediaString').innerHTML = '[Input data to generate code above]';
+			console.error("Input Torrent Magnet URI and Publisher's FLO Address");
+		} else if (!Tid) {
+			document.getElementById('newMediaString').innerHTML = '[Enter a Torrent Magnet URI]';
+			console.error("Input Torrent Magnet URI");
+		} else if (!FLOadd) {
+			document.getElementById('newMediaString').innerHTML = '[Enter a Florincoin Address above]';
+			console.error("Input Publisher's FLO Address");
+		}
+		return false;
+	}
+	var concatString = '';
+	var sigTimestamp = new Date();
+	var concatString = Tid+'-'+FLOadd+'-'+Date.parse(sigTimestamp);
+	document.getElementById('newMediaString').innerHTML = concatString;
 }
 
 // Submit Publisher to Blockchain
@@ -2714,4 +2787,22 @@ function trim11(str) {
         }
     }
     return str;
+}
+
+// Replace Carriage Returns in String
+function replace(string,text,by) {
+// Replaces text with by in string
+    var strLength = string.length, txtLength = text.length;
+    if ((strLength == 0) || (txtLength == 0)) return string;
+
+    var i = string.indexOf(text);
+    if ((!i) && (text != string.substring(0,txtLength))) return string;
+    if (i == -1) return string;
+
+    var newstr = string.substring(0,i) + by;
+
+    if (i+txtLength < strLength)
+        newstr += replace(string.substring(i+txtLength,strLength),text,by);
+
+    return newstr;
 }
