@@ -244,8 +244,11 @@ div#viewlabel .currentArchive {
 	color: #92b4c6;
 	text-transform: capitalize;
 }
-div#viewlabel .timespanLabel span {
+div#viewlabel .timespanLabel span, #media-breadcrumbs {
 	color: #a3ccb1;
+}
+#media-breadcrumbs-type {
+	text-transform: capitalize;
 }
 #search {
 	position: relative;
@@ -1113,7 +1116,7 @@ div#browse-media-wrap {
 }
 /* MEDIA ENTITY VIEW */
 #view-media {
-	padding: 48px 0;
+	padding: 62px 0;
 }
 .entity-view {
 	display: none;
@@ -1497,6 +1500,42 @@ ul.distNetList li {
 }
 #newMediaPublisherFLO {
 	margin: .25em 0 1em 0;
+}
+#tip-alexandria-modal {
+	display: none;
+	position: absolute;
+	top: 100px;
+	width: 80%;
+	left: 10%;
+	background: none #fff;
+	padding: 2.25em;
+	box-sizing: border-box;
+	border: 1px solid #979797;
+	box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+	-moz-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+	-webkit-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+}
+#add-media #tip-alexandria-modal * {
+	text-align: center;
+	vertical-align: middle;
+}
+#add-media #tip-alexandria-modal .input-container {
+	margin: 1em 0;
+}
+#add-media #tip-alexandria-modal .input-container input {
+	width: 5em;
+}
+#add-media #tip-alexandria-modal .input-container label {
+	display: inline;
+	vertical-align: middle;
+}
+#add-media #tip-alexandria-modal .row {
+	width: 80%;
+	float: none;
+	margin: 0 auto;
+}
+#add-media #tip-alexandria-modal .row a {
+	cursor: pointer;
 }
 .pagination ul, .pagination ul li {
 	list-style: none;

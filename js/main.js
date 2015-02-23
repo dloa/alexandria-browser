@@ -406,105 +406,7 @@ jQuery(document).ready(function($){
 				alert('Please select a media type');
 				return false;
 			}
-			var reqCheck = 0;
-			$('#add-media .required').each(function(){
-				var inputValue = $(this).find('input');
-				if ( !inputValue[0] ) {
-					var inputValue = $(this).find('textarea');
-				}
-				if ( (!$(inputValue).val()) || ($(inputValue).val() == '') ) {
-					var inputName = $(inputValue).siblings('label').text();
-					$('#add-media nav ul li:first-child').click();
-					alert('Please input a '+ inputName);
-					reqCheck = 1;
-				}
-			});
-			if (reqCheck == 1) {
-				reqCheck = 0;
-			} else {
-				if ( $('input[type="checkbox"][name="dNetwork"]:checked').length < 1 ) {
-					$('#newMedia-net').click();
-					alert('Please select a Distribution Network');
-					return false;
-				}
-				var Tid = document.getElementById('btih-hash').value;
-				var FLOadd = document.getElementById('newMediaPublisherFLO').value;
-				var pubTime = document.getElementById('newMediaString').innerHTML.split('-')[2];
-				var mediaSig = document.getElementById('newMedia-sign').value;
-				var mediaType = document.getElementById('mediaType').value;
-				var mediaDesc = replace(replace(document.getElementById('addMedia-desc').value,'\r',' '),'\n',' ');
-				var mediaInfo = '';
-				$('#new-media-meta input[type="text"].info-field').each(function(){
-					if ( $(this).val() != '' ) {
-						var infoKeyName = $(this).attr('name');
-						var infoKeyValue = $(this).val();
-						if ((infoKeyValue) && (isNaN(infoKeyValue))){
-							infoKeyValue = '"'+ infoKeyValue+'"';
-						}
-						if (mediaInfo == '') {
-							mediaInfo = '"' + infoKeyName + '":'+ infoKeyValue +'';
-						} else {
-							mediaInfo = mediaInfo + ',' + '"' + infoKeyName + '":'+ infoKeyValue +'';
-						}
-					}
-				});
-				mediaInfo = mediaInfo + ',' + '"description":"'+ mediaDesc +'"';
-
-				var mediaExtraInfo = '';
-				$('#new-media-meta input[type="text"]').not('.info-field').each(function(){
-					if ( $(this).val() != '' ) {
-						var infoKeyName = $(this).attr('name');
-						var infoKeyValue = $(this).val();
-						if (infoKeyName == 'runtime'){
-							if ((infoKeyValue) && (infoKeyValue.split(':'))){
-								if (infoKeyValue.split(':').length != 0){
-									infoKeyValue = calcSeconds(infoKeyValue);
-								} else {
-									alert('Please enter a valid runtime');
-									return false;
-								}
-							}
- 						} else if ((infoKeyValue) && (isNaN(infoKeyValue))){
-							infoKeyValue = '"'+ infoKeyValue+'"';
-						}
-						if (mediaExtraInfo == '') {
-							mediaExtraInfo = '"' + infoKeyName + '":'+ infoKeyValue +'';
-						} else {
-							mediaExtraInfo = mediaExtraInfo + ',' + '"' + infoKeyName + '":'+ infoKeyValue +'';
-						}
-					}
-				});
-				if (mediaExtraInfo != '') {
-					mediaInfo = mediaInfo+', "extra-info": {'+mediaExtraInfo+'}';
-				}
-				
-				if ($('#newMedia-pay input[type="checkbox"]:checked').length != 0) {
-					var payCurrency = 'USD';
-					var payType = 'tip';
-					var payAmount = [];
-					$('.tip-amount-value').each(function(){
-						var tipAmount = $(this).val()*100;
-						payAmount.push(tipAmount);
-					});
-					var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "payment": { "currency":"'+ payCurrency +'", "type": "'+ payType +'", "amount": "'+ payAmount +'"}, "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
-				} else {
-					var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
-				}
-				$.ajax({
-				    url: 'http://54.172.28.195:41289/alexandria/v1/send/',
-				    type: 'POST',
-					data: queryString.toString(),
-				    success: function(e) {
-				    	$('.sharing-ui').fadeOut(fadeTimer);
-				    	resetAlexandria();
-				    	alert('Media Published!');
-				    },
-					error: function (xhr, ajaxOptions, thrownError) {
-						console.error(xhr.status);
-						console.error(thrownError);
-					}
-				});
-			}
+			mediaReqCheck();
 		}
 	});
 
@@ -672,6 +574,8 @@ var LTCUSD;
 var FLOUSD;
 var BTCUSD;
 function getCryptos() {
+	clearTimeout ( cryptoTimerId );
+	cryptoTimerRunning = 0;
 // Bitcoin
 	$.ajax({
 	    url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=2',
@@ -716,6 +620,7 @@ function getCryptos() {
 					FLOCost = parseFloat($('#flo-cost').text());
 					$('#tip-modal .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
 					$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);
+					$('#tip-alexandria-modal .flo-usd-output').text(Math.round((document.getElementById('alexandria-tip-amount').value*FLOUSD)*100000)/100000);
 				}
 			});
 		}
@@ -937,6 +842,8 @@ function getAllArchives(){
 var searchValue = '';
 var newSearchValue = '';
 var searchTimerId = 0;
+var cryptoTimerId = 0;
+var cryptoTimerRunning = 0;
 var searchRunning;
 var searchTerm;
 
@@ -2034,6 +1941,7 @@ function resetAlexandria() {
 	$('main').hide(fadeTimer);
 	$('#tip-modal').hide();
 	$('#addNewContent-icon svg').show(fadeTimer);
+	$('.publisher-ui').hide(fadeTimer);
 	$('.sharing-ui').hide(fadeTimer);
 	$('.view-media-ui'). hide(fadeTimer);
 	$('#search').show(fadeTimer);
@@ -2114,6 +2022,8 @@ function loadRecentMedia() {
 	hideArchivesUI();
 	$('#tip-modal').hide();
 	$('.view-media-ui').fadeOut(fadeTimer);
+	document.getElementById('media-breadcrumbs-type').innerHTML = '';
+	document.getElementById('media-breadcrumbs').innerHTML = '';
 	console.log('loadRecentMedia() media/get/all ...');
 	$.ajax({
 		type: "GET",
@@ -2137,7 +2047,6 @@ function loadRecentMedia() {
 					var mediaDesc = mediaInfo['description'];
 					var mediaRuntime = 0;
 					var mediaArtist = '';
-					console.info(mediaInfo['extra-info']);
 					if(mediaInfo['extra-info']){
 						if(mediaInfo['extra-info']['runtime']){
 							mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
@@ -2229,19 +2138,21 @@ function loadMediaView(objMeta) {
 	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
 	$('#tip-modal').hide();
-	$('.view-media-ui').fadeIn(fadeTimer);
-	$('#viewlabel').fadeIn(fadeTimer);
 	$('#view-media .entity-view').hide();
 	$('#view-media').fadeIn(fadeTimer);
 	var mediaID = $(objMeta).attr('id').split('-')[1];
 	$('#media-txnID').html(mediaID);	
 	var mediaRuntime = $(objMeta).find('.media-runtime').html();
 	var mediaPubTime = $(objMeta).find('.media-pub-time').html();
+	var mediaType = $(objMeta).attr('media-type');
+	document.getElementById('media-breadcrumbs-type').innerHTML = mediaType;
 	var mediaTitle = $(objMeta).find('.media-title').html();
+	document.getElementById('media-breadcrumbs').innerHTML = mediaTitle;
+	$('.view-media-ui').fadeIn(fadeTimer);
+	$('#viewlabel').fadeIn(fadeTimer);
 	var mediaMeta = $(objMeta).find('.media-meta').html();
 	var mediaDesc = $(objMeta).find('.media-desc').html();
 	var mediaIcon = $(objMeta).find('.media-icon').html();
-	var mediaType = $(objMeta).attr('media-type');
 	if (mediaType == 'movie') {
 		getRotten();
 	}
@@ -2694,6 +2605,135 @@ function getRotten() {
 			console.error(thrownError);
 		}
     });
+}
+
+// TIMER FOR CHANGING EXCHANGE RATES
+function changeCryptoRates() {
+	if (cryptoTimerRunning == 1) {
+		return false;
+	} else {
+		// set a timer and run search if done typing
+		cryptoTimerRunning = 1;
+		cryptoTimerId = setTimeout ( 'getCryptos()', 1000 );
+	}
+}
+
+// CHECK REQUIRED FIELDS FOR MEDIA SUBMISSION
+function mediaReqCheck() {
+		var reqCheck = 0;
+		$('#add-media .required').each(function(){
+			var inputValue = $(this).find('input');
+			if ( !inputValue[0] ) {
+				var inputValue = $(this).find('textarea');
+			}
+			if ( (!$(inputValue).val()) || ($(inputValue).val() == '') ) {
+				var inputName = $(inputValue).siblings('label').text();
+				$('#add-media nav ul li:first-child').click();
+				alert('Please input a '+ inputName);
+				reqCheck = 1;
+			}
+		});
+		if (reqCheck == 1) {
+			reqCheck = 0;
+		} else {
+			if ( $('input[type="checkbox"][name="dNetwork"]:checked').length < 1 ) {
+				$('#newMedia-net').click();
+				alert('Please select a Distribution Network');
+				return false;
+			}
+			showTipAlexandriaModal();
+		}
+}
+
+// LOAD TIP-TO-ALEXANDRIA MODAL
+function showTipAlexandriaModal() {
+	getCryptos();
+	$('#tip-alexandria-modal').fadeIn(fadeTimer);
+}
+
+// SUBMIT MEDIA TO BLOCKCHAIN
+function postMedia(tipAlexandria) {
+	var tipToAlexandria = 0;
+	if (tipAlexandria == 1) {
+		tipToAlexandria = document.getElementById('alexandria-tip-amount').value;;
+	}
+	var Tid = document.getElementById('btih-hash').value;
+	var FLOadd = document.getElementById('newMediaPublisherFLO').value;
+	var pubTime = document.getElementById('newMediaString').innerHTML.split('-')[2];
+	var mediaSig = document.getElementById('newMedia-sign').value;
+	var mediaType = document.getElementById('mediaType').value;
+	var mediaDesc = replace(replace(document.getElementById('addMedia-desc').value,'\r',' '),'\n',' ');
+	var mediaInfo = '';
+	$('#new-media-meta input[type="text"].info-field').each(function(){
+		if ( $(this).val() != '' ) {
+			var infoKeyName = $(this).attr('name');
+			var infoKeyValue = $(this).val();
+			if ((infoKeyValue) && (isNaN(infoKeyValue))){
+				infoKeyValue = '"'+ infoKeyValue+'"';
+			}
+			if (mediaInfo == '') {
+				mediaInfo = '"' + infoKeyName + '":'+ infoKeyValue +'';
+			} else {
+				mediaInfo = mediaInfo + ',' + '"' + infoKeyName + '":'+ infoKeyValue +'';
+			}
+		}
+	});
+	mediaInfo = mediaInfo + ',' + '"description":"'+ mediaDesc +'"';
+
+	var mediaExtraInfo = '';
+	$('#new-media-meta input[type="text"]').not('.info-field').each(function(){
+		if ( $(this).val() != '' ) {
+			var infoKeyName = $(this).attr('name');
+			var infoKeyValue = $(this).val();
+			if (infoKeyName == 'runtime'){
+				if ((infoKeyValue) && (infoKeyValue.split(':'))){
+					if (infoKeyValue.split(':').length != 0){
+						infoKeyValue = calcSeconds(infoKeyValue);
+					} else {
+						alert('Please enter a valid runtime');
+						return false;
+					}
+				}
+				} else if ((infoKeyValue) && (isNaN(infoKeyValue))){
+				infoKeyValue = '"'+ infoKeyValue+'"';
+			}
+			if (mediaExtraInfo == '') {
+				mediaExtraInfo = '"' + infoKeyName + '":'+ infoKeyValue +'';
+			} else {
+				mediaExtraInfo = mediaExtraInfo + ',' + '"' + infoKeyName + '":'+ infoKeyValue +'';
+			}
+		}
+	});
+	if (mediaExtraInfo != '') {
+		mediaInfo = mediaInfo+', "extra-info": {'+mediaExtraInfo+'}';
+	}
+	
+	if ($('#newMedia-pay input[type="checkbox"]:checked').length != 0) {
+		var payCurrency = 'USD';
+		var payType = 'tip';
+		var payAmount = [];
+		$('.tip-amount-value').each(function(){
+			var tipAmount = $(this).val()*100;
+			payAmount.push(tipAmount);
+		});
+		var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "payment": { "currency":"'+ payCurrency +'", "type": "'+ payType +'", "amount": "'+ payAmount +'"}, "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
+	} else {
+		var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
+	}
+	$.ajax({
+	    url: 'http://54.172.28.195:41289/alexandria/v1/send/',
+	    type: 'POST',
+		data: queryString.toString(),
+	    success: function(e) {
+	    	$('.sharing-ui').fadeOut(fadeTimer);
+	    	resetAlexandria();
+	    	alert('Media Published!');
+	    },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+		}
+	});
 }
 
 // ERROR CONNECTING TO LIBRARIAN
