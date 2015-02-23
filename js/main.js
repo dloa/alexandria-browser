@@ -15,6 +15,7 @@ jQuery(document).ready(function($){
 	$('#timeline-settings').addClass('abs');
 	$('.info-modal').addClass('abs');
 	$('#tip-modal').addClass('abs');
+	$('#share-modal').addClass('abs');
 	$('.alex-ui-slider').slider();
 	$('.alex-ui-datepicker').datepicker();
 	// Footer timeline contruct
@@ -111,6 +112,9 @@ jQuery(document).ready(function($){
 		}
 		if ( ( ($('#tip-modal').css('display') == 'block') && ($('#tip-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#tip-modal')[0]) && ( (!$(e.target).parents('.tip-icon')[0]) ) ) ) {
 			$('#tip-modal').fadeOut(fadeTimer);
+		}
+		if ( ( ($('#share-modal').css('display') == 'block') && ($('#share-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#share-modal')[0]) && ( (!$(e.target).parents('.share-icon')[0]) ) ) ) {
+			$('#share-modal').fadeOut(fadeTimer);
 		}
 		if ( ( ($('#user-modal').css('display') == 'block') && ($('#user-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#user-modal')[0]) && ( (!$(e.target).parents('#app-user-icon')[0]) ) ) ) {
 			$('#user-modal').fadeOut(fadeTimer);
@@ -229,6 +233,9 @@ jQuery(document).ready(function($){
 			}
 			if($('#tip-modal').css('display')=='block'){
 				$('#tip-modal').fadeOut(fadeTimer);
+			}
+			if($('#share-modal').css('display')=='block'){
+				$('#share-modal').fadeOut(fadeTimer);
 			}
 			if($('#user-modal.abs').css('display')=='block'){
 				$('#user-modal.abs').fadeOut(fadeTimer);
@@ -1939,6 +1946,7 @@ function resetInterface() {
 // RESET ALEXANDRIA
 function resetAlexandria() {
 	$('main').hide(fadeTimer);
+	$('#share-modal').hide();
 	$('#tip-modal').hide();
 	$('#addNewContent-icon svg').show(fadeTimer);
 	$('.publisher-ui').hide(fadeTimer);
@@ -1970,6 +1978,7 @@ function getAllPublishers() {
 	currentView = 'publishers';
 	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
+	$('#share-modal').hide();
 	$('#tip-modal').hide();
 	$('.view-media-ui').fadeOut(fadeTimer);
 	console.log('loadRecentMedia() publisher/get/all ...');
@@ -2020,6 +2029,7 @@ function loadRecentMedia() {
 	currentView = 'recentMediaList';
 	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
+	$('#share-modal').hide();
 	$('#tip-modal').hide();
 	$('.view-media-ui').fadeOut(fadeTimer);
 	document.getElementById('media-breadcrumbs-type').innerHTML = '';
@@ -2137,6 +2147,7 @@ function loadMediaView(objMeta) {
 	currentView = 'media';
 	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
+	$('#share-modal').hide();
 	$('#tip-modal').hide();
 	$('#view-media .entity-view').hide();
 	$('#view-media').fadeIn(fadeTimer);
@@ -2322,6 +2333,16 @@ function calcSeconds(runtime) {
 	var runtimeSeconds = parseInt(runtimeArray[2]);
 	runtimeSeconds = ((runtimeHours*60)*60)+(runtimeMins*60)+runtimeSeconds;
 	return runtimeSeconds;
+}
+
+// DISPLAY SHARE MODAL
+function loadShareModal(obj) {
+	if ($(obj).parents('.entity-market #share-modal').length == 0) {
+		$(obj).parents('.entity-market').append($('#share-modal'));
+	}
+	var shareModalPos = $(obj).position().left-31;
+	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2').text();
+	$(obj).parents('.entity-market').find('#share-modal').css('left', shareModalPos +'px').fadeToggle(fadeTimer);
 }
 
 // Display Tip Modal
