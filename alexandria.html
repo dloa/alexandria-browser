@@ -208,7 +208,7 @@
 
 		<div id="viewlabel">
 			<div class="view-media-ui">
-				<a onclick="loadRecentMedia()" class="go-back">back</a>
+				<a onclick="loadRecentMedia()" class="go-back">Media</a> > <span id="media-breadcrumbs-type"></span> > <span id="media-breadcrumbs"></span>
 			</div>
 			<div class="twitter-archive">
 				<div class="archiveLabel">
@@ -592,6 +592,15 @@
 										&nbsp;
 									</div>
 								</div>
+							</div>
+						</div>
+						<div id="tip-alexandria-modal">
+							<h3>Would you like to include a tip to support ΛLΞXΛNDRIΛ development?</h3>
+							<div class="input-container">
+								<input type="text" name="Tip Amount" id="alexandria-tip-amount" value="5" onkeyup="changeCryptoRates();" /> <label>FLO</label> ($<span class="flo-usd-output"></span>)
+							</div>
+							<div class="row">
+								<a onclick="postMedia(0);" class="left">No</a><a onclick="postMedia(1);" class="pull-right">Yes</a>
 							</div>
 						</div>
 					</div>					
