@@ -856,7 +856,7 @@ div#intro {
 #info-modal-media .pull-right .entity-meta-content {
 	font-size: .9em;
 }
-#tip-modal {
+#tip-modal, #share-modal {
 	position: fixed;
 	top: 100%;
 	left: 100%;
@@ -872,12 +872,22 @@ div#intro {
 	border-radius: 5px;
 	line-height: 2;
 }
-#tip-modal.abs {
+#tip-modal.abs, #share-modal.abs {
 	position: absolute;
 	left: 1em;
 	display: none;
 }
-#tip-modal:before {
+#share-modal {
+	min-width: 180px;
+	max-width: 360px;
+	padding-left: 1em;
+	padding-right: 1em;
+}
+#share-modal p {
+	margin-top: 0;
+	line-height: 1.4;
+}
+#tip-modal:before, #share-modal:before {
 	top: -16px;
 	left: 34px;
 	border-width: 0 16px 16px;
@@ -888,7 +898,7 @@ div#intro {
 	display: block;
 	width: 0;
 }
-#tip-modal:after {
+#tip-modal:after, #share-modal:after {
 	top: -15px;
 	left: 35px;
 	border-width: 0 15px 15px;
@@ -899,19 +909,19 @@ div#intro {
 	display: block;
 	width: 0;
 }
-.row.entity-market #tip-modal * {
+.row.entity-market #tip-modal *, .row.entity-market #share-modal * {
 	text-align: center;
 }
 #tip-modal #tip-flo .row:first-of-type {
 	display: none;
 }
-.tip-amounts label, #tip-modal h3, .crypto-price, .credebit-price, #tip-modal .btnLightGray {
+.tip-amounts label, #tip-modal h3, .crypto-price, .credebit-price, #tip-modal .btnLightGray, #share-modal h3 {
 	color: #919191;
 }
 #tip-modal .btnLightGray:hover {
 	color: #464646;
 }
-#tip-modal h3, .crypto-price, .credebit-price {
+#tip-modal h3, .crypto-price, .credebit-price, #share-modal h3 {
 	font-weight: bold;
 }
 #tip-modal ul, #tip-modal ul li {

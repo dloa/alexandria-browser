@@ -373,7 +373,7 @@
 												<div class="col">
 													<div class="input-container">
 														<label><span id="media-meta-runtime">Runtime</span></label>
-														<input type="text" name="runtime" id="addMedia-runtime" />
+														<input type="text" name="runtime" id="addMedia-runtime" placeholder="00:00:00" />
 													</div>
 												</div>
 											</div>
@@ -713,7 +713,7 @@
 						</div>
 						<div class="row media-desc"></div>
 						<div class="row media-FLO hidden"></div>
-						<div class="row entity-market"><span class="row media-Tid"><a href=""><img src="img/magnet-icon.svg" class="makesvg" /></a></span><a class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a> <a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a></div>
+						<div class="row entity-market"><span class="row media-Tid"><a href=""><img src="img/magnet-icon.svg" class="makesvg" /></a></span><a onclick="loadShareModal($(this));" class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a> <a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a></div>
 						<div class="row entity-footer media-movie">
 							<a class="wsite-button lightboxVideo" data-source="http://localhost:3000/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label>
 						</div>
@@ -748,6 +748,12 @@
 				<div class="row media-desc">
 				</div>
 			</div>
+		</div>
+		<div id="share-modal">
+			<h3>Share</h3>
+			<p><span id="share-title"></span></p>
+			<p><span id="share-url"></span><a onclick=""><img src="img/copy-icon.png" class="makesvg" /></a></p>
+			
 		</div>
 		<div id="tip-modal">
 			<h3>Send a Tip</h3>
