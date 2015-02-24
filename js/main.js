@@ -2102,6 +2102,23 @@ function loadRecentMedia() {
 	document.title = 'Alexandria > Media';
 }
 
+// PUBLISHER SINGLE ENTITY VIEW
+function loadPublisherEntity(obj) {
+	var parentObj = $(obj).parents('.publisher-entity');
+	// Load Media Entity View
+	loadPublisherView(parentObj);
+}
+
+function loadPublisherView(objMeta) {
+	currentView = 'publishers';
+	$('main').fadeOut(fadeTimer);
+	hideArchivesUI();
+	$('#view-publisher .entity-view').hide();
+	$('#view-publisher').fadeIn(fadeTimer);
+	var publisherID = $(objMeta).attr('id').split('-')[1];
+	searchAPI('publisher', 'txid', publisherID);
+}
+
 // Recent Media interaction
 function loadMediaEntity(obj) {
 	var parentObj = $(obj).parents('.media-entity');
@@ -2152,6 +2169,7 @@ function loadMediaView(objMeta) {
 	$('#view-media .entity-view').hide();
 	$('#view-media').fadeIn(fadeTimer);
 	var mediaID = $(objMeta).attr('id').split('-')[1];
+	searchAPI('media', 'txid', mediaID);
 	$('#media-txnID').html(mediaID);	
 	var mediaRuntime = $(objMeta).find('.media-runtime').html();
 	var mediaPubTime = $(objMeta).find('.media-pub-time').html();
@@ -2206,6 +2224,22 @@ function loadMediaView(objMeta) {
 	document.title = newTitle;
 	*/
 }
+
+// MEDIA + PUBLISHER SEARCH API
+function searchAPI(module, searchOn, searchFor) {
+	queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":"'+searchFor+'"}';
+	console.log(queryString);
+	$.ajax({
+		type: "POST",
+		url: "http://54.172.28.195:41289/alexandria/v1/search",
+		data: queryString.toString(),
+		success: function (e) {
+			var data = $.parseJSON(e);
+			console.info(data.response);
+		}
+	});
+}
+
 // Display Media Info Modal
 function loadInfoModal(childObj) {
     var testObj = childObj.parentNode;
@@ -2595,6 +2629,26 @@ function getIMDBinfo() {
 }
 // Get YouTube Info from API
 function getYouTubeinfo() {
+	var YouTubeId = document.getElementById('www-id').value;
+	var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBH_FceJKLSmo0hk9y2zBdZ8ZTmUiNJr8o&part=snippet&id='+ YouTubeId;
+	$.ajax({
+	    url: url,
+	    type: 'GET',
+	    success: function(e) {
+			var el = $( '#sketchpad' );
+			el.html(e.responseText);
+			var data = $.parseJSON($('p', el).html());
+			var mediaData = data['items'][0]['snippet'];
+			document.getElementById('addMedia-title').value = mediaData['title'];
+			document.getElementById('addMedia-creators1').value = mediaData['channelTitle'];
+			document.getElementById('addMedia-desc').innerHTML = mediaData['description'];
+	    },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+	    }
+    });
+	
 	$('.modal-tab:visible .autofill-button').slideUp(fadeTimer);
 	$('fieldset:visible input').removeAttr('disabled');
 	$('fieldset:visible textarea').removeAttr('disabled');	
