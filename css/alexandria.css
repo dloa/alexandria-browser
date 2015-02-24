@@ -750,11 +750,17 @@ div#intro {
 #media-txnID {
 	display: none !important;
 }
-.media-rating svg, .tip-icon svg, .share-icon svg {
+.copy-icon {
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	cursor: pointer;
+}
+.media-rating svg, .tip-icon svg, .share-icon svg, .copy-icon svg {
 	width: 100%;
 	height: 100%;
 }
-.share-icon svg path, .tip-icon svg path {
+.share-icon svg path, .tip-icon svg path, .copy-icon svg path {
 	fill: #979797;
 	fill-opacity: 1;
 }
@@ -880,11 +886,9 @@ div#intro {
 #share-modal {
 	min-width: 180px;
 	max-width: 360px;
-	padding-left: 1em;
-	padding-right: 1em;
 }
 #share-modal p {
-	margin-top: 0;
+	margin-top: .25em;
 	line-height: 1.4;
 }
 #tip-modal:before, #share-modal:before {
@@ -971,7 +975,7 @@ div#intro {
 	text-align: center;
 	display: none;	
 }
-#tip-modal .modal-tab > * {
+#tip-modal .modal-tab > *, #share-title {
 	background-color: #edeff9;
 	margin: 0;
 	padding: 1em 0;
@@ -988,12 +992,18 @@ div#intro {
 #tip-modal .modal-tab .btnLightGray {
 	margin-bottom: 1em;
 }
-#tip-modal .modal-tab p {
+#tip-modal .modal-tab p, #share-title {
 	line-height: 1.4;
-	margin: 0;
-	padding: 0;
 	color: #919191;
 	font-size: .9em;
+}
+#tip-modal .modal-tab p {
+	margin: 0;
+	padding: 0;
+}
+#share-title {
+	display: block;
+	padding: 1em .5em;
 }
 div#qrcode {
 	background: #d8d8d8;
