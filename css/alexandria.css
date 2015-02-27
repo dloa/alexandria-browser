@@ -1223,6 +1223,9 @@ label#movie-rotten {
 	margin: 1em 0;
 	position: relative;
 }
+.entity-view .row.entity-footer.media-video {
+	margin-top: 0;
+}
 .entity-view .row.entity-footer .alex-switch {
 	margin: 0;
 }
