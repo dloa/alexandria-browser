@@ -1990,7 +1990,7 @@ function getAllPublishers() {
 			console.info(data);
 			$('#browse-media-wrap .row').remove();
 			for (var i = 0; i < data.length; i++) {
-				var publisherID = data[i]['publisher-data']['alexandria-publisher']['address'];
+				var publisherID = data[i]['txid'];
 				var publisherName = data[i]['publisher-data']['alexandria-publisher']['name'];
 				var publisherDate = data[i]['publisher-data']['alexandria-publisher']['timestamp'];
 				var publisherDateLen = data[i]['publisher-data']['alexandria-publisher']['timestamp'].toString().length;
@@ -2189,6 +2189,10 @@ function loadMediaView(objMeta) {
 	var mediaFLO = $(objMeta).find('.media-FLO').text();
 	var mediaPymnt = $(objMeta).find('.media-pymnt').text();
 	$('#media-view-entity .media-Tid a').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
+	if (mediaType == 'video') {
+		var videoHash = mediaTid.split('btih:')[1];
+		var videoEmbed = '<video controls> <source src="http://localhost:3000/stream/'+ videoHash +'/'+mediaTitle+'" type="audio/mpeg" /> </video>'
+	}
 	$('#media-view-entity .media-FLO').html(mediaFLO);
 	$('#media-view-entity .entity-meta-header h2').html(mediaTitle);
 	$('#media-view-entity .entity-meta-header h3').html(mediaMeta);
