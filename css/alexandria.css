@@ -1165,6 +1165,11 @@ div#browse-media-wrap {
 	margin-right: 1em;
 	margin-left:0;
 }
+.entity-view .media-poster {
+	max-width: 260px;
+	float: left;
+	margin-right: 2em;
+}
 span#rotten-wrap {
 	display: none;
 	height: 32px;	
@@ -1476,7 +1481,7 @@ input[type="file"] {
 	margin-bottom: 1em;
 	text-align: left;
 }
-#newMedia-tabs .tbl .col {
+#newMedia-tabs .tbl .col { 
 	padding: 0 0 .8em 2em;
 	position: relative;
 }
@@ -1485,6 +1490,9 @@ input[type="file"] {
 }
 #newMedia-tabs .tbl .row.full .col {
 	padding-left: 0;
+}
+#newMedia-tabs .pull-right .row {
+	margin-bottom: 2em;
 }
 #newMedia-tabs fieldset {
 	display: none;

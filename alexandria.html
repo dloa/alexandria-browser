@@ -369,6 +369,14 @@
 													</div>
 												</div>
 											</div>
+											<div class="row full">
+												<div class="col">
+													<div class="input-container required">
+														<label>Filename</label>
+														<input type="text" name="filename" id="addMedia-filename" />
+													</div>
+												</div>
+											</div>
 											<div class="row full media-specific movie-meta music-song-meta music-album-meta podcast-meta video-meta recipe-meta">
 												<div class="col">
 													<div class="input-container">
@@ -453,6 +461,30 @@
 							<div class="pull-right">
 								<h2>choose title artwork:</h2>
 								<div class="container">
+									<div class="row full">
+										<div class="col">
+											<div class="input-container">
+												<label><span id="media-meta-poster">Poster Filename</span></label>
+												<input type="text" name="poster" id="addMedia-poster" />
+											</div>
+										</div>
+									</div>
+									<div class="row full">
+										<div class="col">
+											<div class="input-container">
+												<label><span id="media-meta-posterFrame">Poster Frame Filename</span></label>
+												<input type="text" name="posterFrame" id="addMedia-posterFrame" />
+											</div>
+										</div>
+									</div>
+									<div class="row full">
+										<div class="col">
+											<div class="input-container">
+												<label><span id="media-meta-trailer">Trailer Filename</span></label>
+												<input type="text" name="trailer" id="addMedia-trailer" />
+											</div>
+										</div>
+									</div>
 									<ul class="newMedia-links">
 										<li id="upload-title-art" class="uploader">Browse...</li>
 										<li>From URL...</li>
@@ -679,13 +711,6 @@
 			</div>	
 			<div id="browse-media-wrap">
 				<h2>Browse</h2>
-				<div class="row media-entity" media-type="podcast" id="media-NoTxnId">
-					<div class="media-icon"><img src="img/podcast-icon.svg" class="makesvg" onclick="loadMediaEntity(this);" /></div><h3 class="media-title" onclick="loadMediaEntity(this);">Episode 0106: Decentralized Foursome</h3> <div class="media-meta" onclick="loadMediaEntity(this);">Sovryn Tech</div> <div class="media-runtime">Runtime: <span>02:26:03</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" />play</a><div class="media-pub-time hidden"></div><div class="media-desc hidden">A rare Sovryn Tech foursome! You've got to hear this!<br />Special Guest: -- Paige Peterson (twitter: @ioptio), Dr. Stephanie Murphy (twitter: @S_Murphy_Phd), Ryan Taylor (twitter: @RY4NT4YLOR)<br />Stories of the Week: -- Update on MaidSafe, Update on Alexandria, Thoughts on Social Media, Bluetooth Remote Vibrator, Thoughts on AR/VR, GPL</div>
-				</div>
-				<div class="row media-entity" media-type="movie" id="media-2142d554f25240bddfec953ea96c33e1ea0656aeffbe59d4b81fe29c6b96401d">
-					<div class="media-icon"><img src="img/movie-icon.svg" class="makesvg" onclick="loadMediaEntity(this);" /></div><h3 class="media-title" onclick="loadMediaEntity(this);">Apocalypse, CA</h3><div class="media-meta">(2011)</div> <div class="media-runtime">Runtime: <span>02:17:00</span></div> <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" />play</a><div class="media-pub-time hidden"></div><div class="media-desc hidden">Wry, cynical and full of off-beat humor, "Apocalypse, CA" is the story of friends as they prepare for certain death at the hands of a massive asteroid, sex-inducing drugs, a three-hundred-foot Giant, and a horde of other absurd problems.<br />Director: Chad Peters<br />Starring: Nick Mathis, Erin Bodine, Anne McDaniels, Alexander Cardinale</div>
-					<div class="media-www-id">tt1273193</div>
-				</div>
 			</div>
 		</main>
 
@@ -700,7 +725,7 @@
 -->
 					<div>
 						<div class="row entity-footer media-video">
-							<video controls> <source src="http://localhost:3000/stream/15B7D9FED7BC45D8CA5C41865467E24B78C05062/ApocalypseCA-Trailer-720p.m4v" type="audio/mpeg" /> </video>
+<!--							<video controls> <source src="" type="audio/mpeg" /> </video> -->
 						</div>
 						<div class="row entity-meta-header">
 							<h2></h2>
@@ -737,7 +762,7 @@
 		</div>
 		<div id="info-modal-media" class="info-modal">
 			<div class="left">
-				<div class="media-image"><img src="img/sovryntech200x200.jpg" class="entity-image" /></div>
+				<div class="media-image"><img src="" class="entity-image" /></div>
 				<div class="media-rating"><a class="star-on"><img src="img/star-on.svg" class="makesvg" /></a><a class="star-on"><img src="img/star-on.svg" class="makesvg" /></a><a class="star-on"><img src="img/star-on.svg" class="makesvg" /></a><a class="star-on"><img src="img/star-on.svg" class="makesvg" /></a><a class="star-off"><img src="img/star-off.svg" class="makesvg" /></a></div>
 				<div class="btnLightGray" onclick="loadMediaEntity(this);">play</div>
 			</div>
