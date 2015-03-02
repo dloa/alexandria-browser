@@ -2114,11 +2114,12 @@ function loadPublisherEntity(obj) {
 }
 
 function loadPublisherView(objMeta) {
-	currentView = 'publishers';
+	currentView = 'publishers';	
 	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
 	$('#share-modal').hide();
 	$('#tip-modal').hide();
+	$('#publisher-media-list li').remove();
 	$('#view-publisher .entity-view').show();
 	$('#view-publisher').fadeIn(fadeTimer);	
 	var publisherID = '';
@@ -2130,6 +2131,9 @@ function loadPublisherView(objMeta) {
 	publisherID = thisPublisher[0]['txid'];
 	thisPublisher = thisPublisher[0]['publisher-data']['alexandria-publisher'];
 	console.info(thisPublisher);
+	var publisherAddress = thisPublisher['address'];
+	var thisPubliserMedia = searchAPI('media', 'publisher', publisherAddress);
+	console.info(thisPubliserMedia);
 	var publisherName = thisPublisher['name'];
 	var publisherTime = thisPublisher['timestamp'];
 	if (thisPublisher['emailmd5']) {
@@ -2140,7 +2144,43 @@ function loadPublisherView(objMeta) {
 	}
 	publisherTime = new Date(parseInt(publisherTime));
 	document.getElementById('view-publisher-name').innerHTML = publisherName;
-	document.getElementById('publisher-txnID').innerHTML = publisherID;
+	document.getElementById('publisher-FLO-address').innerHTML = publisherAddress;
+	for (var i = 0; i < thisPubliserMedia.length; i++) {
+		var mediaID = thisPubliserMedia[i]['txid'];
+		var mediaType = thisPubliserMedia[i]['media-data']['alexandria-media']['type'];
+		var mediaInfo = thisPubliserMedia[i]['media-data']['alexandria-media']['info'];
+		var mediaPubTime = thisPubliserMedia[i]['media-data']['alexandria-media']['timestamp'];
+		var mediaPubTimeLen = thisPubliserMedia[i]['media-data']['alexandria-media']['timestamp'].toString().length;
+		if (mediaPubTimeLen == 10) {
+			mediaPubTime = parseInt(mediaPubTime)*1000;
+		}					
+		var mediaTitle = mediaInfo['title'];
+		var mediaDesc = mediaInfo['description'];
+		var mediaRuntime = 0;
+		var mediaArtist = '';
+		var mediaFilename = '';
+		var mediaTid = thisPubliserMedia[i]['media-data']['alexandria-media']['torrent'];
+		var mediaFLO = thisPubliserMedia[i]['media-data']['alexandria-media']['publisher'];
+		var mediaPymnt = thisPubliserMedia[i]['media-data']['alexandria-media']['payment']['type'];
+		if(mediaInfo['extra-info']){
+			if(mediaInfo['extra-info']['runtime']){
+				mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
+			}
+			if(mediaInfo['extra-info']['artist']){
+				mediaArtist = mediaInfo['extra-info']['artist'];
+			}						
+			if(mediaInfo['extra-info']['filename']){
+				mediaFilename = mediaInfo['extra-info']['filename'];
+			}						
+		}
+		if (mediaRuntime != 0) {
+			mediaRuntime = '<div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div>';
+		} else {
+			mediaRuntime = '';
+		}
+		var mediaEntity = '<li id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '" media-filename="'+mediaFilename+'"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> '+ mediaRuntime +' <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="media-FLO hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</li>';
+		$('#publisher-media-list').prepend(mediaEntity);
+	}
 	$('#view-publisher .entity-pub-time span').html(publisherTime);
 }
 
@@ -2263,8 +2303,10 @@ function loadMediaView(objMeta) {
 	$('#media-view-entity .entity-meta-header .media-header.media-'+mediaType).show();
 	// $('#media-view-entity .media-image').html(mediaIcon);
 	$('#media-view-entity .entity-pub-time span').html(mediaPubTime);
-	if (mediaInfo['extra-info']['poster']) {
-		mediaDesc = '<img src="http://localhost:3000/stream/'+ videoHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;
+	if (mediaInfo['extra-info']) {
+		if (mediaInfo['extra-info']['poster']) {
+			mediaDesc = '<img src="http://localhost:3000/stream/'+ videoHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;
+		}
 	}
 	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
 	if (mediaPymnt == 'none') {
