@@ -1981,6 +1981,7 @@ function getAllPublishers() {
 	$('#share-modal').hide();
 	$('#tip-modal').hide();
 	$('.view-media-ui').fadeOut(fadeTimer);
+	$('.view-publisher-ui').fadeOut(fadeTimer);
 	console.log('loadRecentMedia() publisher/get/all ...');
 	$.ajax({
 		type: "GET",
@@ -2028,6 +2029,7 @@ function getAllPublishers() {
 function loadRecentMedia() {
 	currentView = 'recentMediaList';
 	$('main').fadeOut(fadeTimer);
+	$('.view-publisher-ui').fadeOut(fadeTimer);
 	hideArchivesUI();
 	$('#share-modal').hide();
 	$('#tip-modal').hide();
@@ -2121,6 +2123,8 @@ function loadPublisherView(objMeta) {
 	$('#tip-modal').hide();
 	$('#publisher-media-list li').remove();
 	$('#view-publisher .entity-view').show();
+	$('#viewlabel').fadeIn(fadeTimer);
+	$('.view-publisher-ui').fadeIn(fadeTimer);
 	$('#view-publisher').fadeIn(fadeTimer);	
 	var publisherID = '';
 	if (objMeta) {
@@ -2135,6 +2139,7 @@ function loadPublisherView(objMeta) {
 	var thisPubliserMedia = searchAPI('media', 'publisher', publisherAddress);
 	console.info(thisPubliserMedia);
 	var publisherName = thisPublisher['name'];
+	document.getElementById('publisher-breadcrumbs').innerHTML = publisherName;
 	var publisherTime = thisPublisher['timestamp'];
 	if (thisPublisher['emailmd5']) {
 		var publisherMD5 = thisPublisher['emailmd5'];
@@ -2236,6 +2241,7 @@ function loadMediaEntity(obj) {
 function loadMediaView(objMeta) {
 	currentView = 'media';
 	$('main').fadeOut(fadeTimer);
+	$('.view-publisher-ui').fadeOut(fadeTimer);
 	hideArchivesUI();
 	$('#share-modal').hide();
 	$('#tip-modal').hide();

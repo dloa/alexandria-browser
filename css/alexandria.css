@@ -144,7 +144,7 @@ header {
 img.makesvg {
 	display: none;
 }
-.twitter-archive, .sharing-ui, .publisher-ui {
+.twitter-archive, .sharing-ui, .publisher-ui, .view-publisher-view {
 	display: none;
 }
 .twitter-archive#volume {
@@ -244,7 +244,7 @@ div#viewlabel .currentArchive {
 	color: #92b4c6;
 	text-transform: capitalize;
 }
-div#viewlabel .timespanLabel span, #media-breadcrumbs {
+div#viewlabel .timespanLabel span, #media-breadcrumbs, #publisher-breadcrumbs {
 	color: #a3ccb1;
 }
 #media-breadcrumbs-type {
@@ -1085,7 +1085,7 @@ div#browse-media-wrap {
 	padding: .25em 0;
 	position: relative;
 }
-#browse-media-wrap .row .media-title {
+.media-title, .publisher-title {
 	cursor: pointer;
 }
 #browse-media-wrap .row.first, #publisher-media-list li:first-child {
