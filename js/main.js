@@ -2117,10 +2117,31 @@ function loadPublisherView(objMeta) {
 	currentView = 'publishers';
 	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
-	$('#view-publisher .entity-view').hide();
-	$('#view-publisher').fadeIn(fadeTimer);
-	var publisherID = $(objMeta).attr('id').split('-')[1];
-	searchAPI('publisher', 'txid', publisherID);
+	$('#share-modal').hide();
+	$('#tip-modal').hide();
+	$('#view-publisher .entity-view').show();
+	$('#view-publisher').fadeIn(fadeTimer);	
+	var publisherID = '';
+	if (objMeta) {
+		var publisherID = $(objMeta).attr('id').split('-')[1];	
+	} else {
+	}
+	var thisPublisher = searchAPI('publisher', 'txid', publisherID);
+	publisherID = thisPublisher[0]['txid'];
+	thisPublisher = thisPublisher[0]['publisher-data']['alexandria-publisher'];
+	console.info(thisPublisher);
+	var publisherName = thisPublisher['name'];
+	var publisherTime = thisPublisher['timestamp'];
+	if (thisPublisher['emailmd5']) {
+		var publisherMD5 = thisPublisher['emailmd5'];
+		document.getElementById('publisher-gravatar').src = 'http://www.gravatar.com/avatar/'+publisherMD5;
+	} else {
+		document.getElementById('publisher-gravatar').style.display = 'none';
+	}
+	publisherTime = new Date(parseInt(publisherTime));
+	document.getElementById('view-publisher-name').innerHTML = publisherName;
+	document.getElementById('publisher-txnID').innerHTML = publisherID;
+	$('#view-publisher .entity-pub-time span').html(publisherTime);
 }
 
 // Recent Media interaction
@@ -2543,7 +2564,7 @@ function postPublisher() {
 	var pubName = document.getElementById('newPublisher-name').value;
 	var pubAdd = document.getElementById('newPublisher-floAdd').value;
 	var pubTime = document.getElementById('newPublisherString').innerHTML.split('-')[2];
-	var pubEmailMD5 = MD5(document.getElementById('newPublisher-emailmd5').value.toLowerCase());
+	var pubEmailMD5 = MD5(trim11(document.getElementById('newPublisher-emailmd5').value).toLowerCase());
 	var pubBitMsg = document.getElementById('newPublisher-bitmsg').value;
 	var pubSig = document.getElementById('newPublisher-sign').value;
 	var queryString = '{ "alexandria-publisher": { "name": "'+ pubName +'", "address": "'+ pubAdd +'", "timestamp":'+ pubTime +', "bitmessage": "'+ pubBitMsg +'", "emailmd5":"'+ pubEmailMD5 +'"}, "signature":"'+ pubSig +'"}';
