@@ -878,6 +878,9 @@ div#intro {
 	border-radius: 5px;
 	line-height: 2;
 }
+#view-publisher-wrap #tip-modal, #view-publisher-wrap #share-modal {
+	width: 310px;
+}
 #tip-modal.abs, #share-modal.abs {
 	position: absolute;
 	left: 1em;
@@ -1055,6 +1058,11 @@ div#qrcode img {
 	zoom: 1;*display:inline;
 	max-width: 880px;
 }
+.row.media-list {
+	width: 100%;
+	clear: both;
+	float: left;
+}
 #publisher-media-list, #publisher-media-list li {
 	margin: 0;
 	padding: 0;
@@ -1062,6 +1070,7 @@ div#qrcode img {
 }
 #publisher-media-list {
 	margin-top: 1em;
+	clear: both;
 }
 .entity-view .entity-meta-header #publisher-FLO-address {
 	margin: 0;
@@ -1166,9 +1175,30 @@ div#browse-media-wrap {
 	display: inline-block;
 	vertical-align: middle;
 }
+#publisher-view-entity.entity-view .entity-meta-header > * {
+	display: block;
+	margin: 0;
+}
 .entity-view .entity-meta-header .media-header {
 	margin: .5em 0 0;
 }
+#publisher-avatar {
+	float: left;
+	margin-right: 1em;
+}
+#publisher-view-entity .entity-meta-header {
+	width: -moz-calc(100% - 230px);
+	width: -webkit-calc(100% - 230px);
+	width: -o-calc(100% - 230px);
+	width: calc(100% - 230px);
+	float: left;
+	margin-top: 0;
+}
+#publisher-view-entity .entity-meta-content {
+	float: right;
+	position: relative;
+}
+
 .entity-view .entity-meta-header :first-child, .row.entity-footer :first-child, .row.entity-market :first-child {
 	margin-left: 0;
 }

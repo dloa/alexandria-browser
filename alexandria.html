@@ -719,13 +719,14 @@
 		<main id="view-publisher">
 			<div id="view-publisher-wrap">
 				<div id="publisher-view-entity" class="entity-view">
+					<img src="" id="publisher-avatar" />
 					<div class="row entity-meta-header">
-						<img src="" id="publisher-gravatar" /><h2 id="view-publisher-name"></h2>
+						<h2 id="view-publisher-name"></h2>
 						<div id="publisher-FLO-address"></div>
-						<div class="entity-meta-content">
-							<div class="entity-pub-time">Posted <span>[timestamp]</span></div>
-							<div class="entity-bitmsg"></div>
-						</div>
+						<div class="entity-pub-time">Posted <span>[timestamp]</span></div>
+					</div>
+					<div class="entity-meta-content">
+						<div class="entity-market"><a onclick="loadShareModal($(this));" class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a> <a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a> <a id="publisher-bitmsg" href="">BitMsg</a></div>
 					</div>
 					<div class="row media-list">
 						<ul id="publisher-media-list"></ul>
