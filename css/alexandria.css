@@ -1049,7 +1049,7 @@ div#qrcode img {
 #browse-media {
 	padding-top: 10px;
 }
-#browse-media-wrap, #add-media > *, #view-media-wrap, #publisher-process {
+#browse-media-wrap, #add-media > *, #view-media-wrap, #publisher-process, #view-publisher-wrap {
 	width: 98%;
 	display: inline-block;
 	zoom: 1;*display:inline;
@@ -1134,8 +1134,8 @@ div#browse-media-wrap {
 #browse-media-wrap .row .media-www-id {
 	display: none;
 }
-/* MEDIA ENTITY VIEW */
-#view-media {
+/* MEDIA & PUBLISHER ENTITY VIEW */
+#view-media, #view-publisher {
 	padding: 62px 0;
 }
 .entity-view {
@@ -1190,7 +1190,7 @@ label#movie-rotten {
 .entity-view .entity-meta-header .sep {
 	width: .5em;
 }
-.entity-view .entity-meta-header img {
+#view-media .entity-view .entity-meta-header img {
 	height: 32px;
 }
 .entity-view .entity-meta-header .entity-meta-content, .entity-view .entity-meta-header .entity-meta-content div {
