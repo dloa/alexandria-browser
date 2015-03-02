@@ -2138,10 +2138,17 @@ function loadPublisherView(objMeta) {
 	var publisherTime = thisPublisher['timestamp'];
 	if (thisPublisher['emailmd5']) {
 		var publisherMD5 = thisPublisher['emailmd5'];
-		document.getElementById('publisher-gravatar').src = 'http://www.gravatar.com/avatar/'+publisherMD5;
+		document.getElementById('publisher-avatar').src = 'http://www.gravatar.com/avatar/'+publisherMD5;
 	} else {
 		document.getElementById('publisher-gravatar').style.display = 'none';
 	}
+	if (thisPublisher['bitmessage']) {
+		var publisherBitmsg = thisPublisher['bitmessage'];
+		document.getElementById('publisher-bitmsg').href = 'bitmessage:'+publisherBitmsg;
+	} else {
+		document.getElementById('publisher-bitmsg').style.display = 'none';
+	}
+	
 	publisherTime = new Date(parseInt(publisherTime));
 	document.getElementById('view-publisher-name').innerHTML = publisherName;
 	document.getElementById('publisher-FLO-address').innerHTML = publisherAddress;
@@ -2181,6 +2188,7 @@ function loadPublisherView(objMeta) {
 		var mediaEntity = '<li id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '" media-filename="'+mediaFilename+'"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> '+ mediaRuntime +' <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="media-FLO hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</li>';
 		$('#publisher-media-list').prepend(mediaEntity);
 	}
+	replaceSVG();	
 	$('#view-publisher .entity-pub-time span').html(publisherTime);
 }
 
