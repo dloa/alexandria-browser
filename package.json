@@ -8,7 +8,7 @@
     "url": "https://github.com/blocktech/alexandriaux"
   },
   "license": "GPL-3.0",
-  "main": "app://host/src/app/index.html",
+  "main": "app://host/src/app/alexandria.html",
   "version": "0.0.0",
   "releaseName": "",
   "scripts": {
@@ -22,7 +22,7 @@
     "min_width": 960,
     "min_height": 520,
     "resizable": true,
-    "show": false,
+    "show": true,
     "position": "center"
   },
   "dependencies": {

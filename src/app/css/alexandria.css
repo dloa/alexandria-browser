@@ -140,6 +140,11 @@ header {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
+	-webkit-app-region: drag;
+}
+
+header #search, header #header-menu {
+	-webkit-app-region: no-drag
 }
 img.makesvg {
 	display: none;
