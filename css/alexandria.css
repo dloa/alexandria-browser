@@ -1277,6 +1277,10 @@ label#movie-rotten {
 .entity-view .row.media-desc {
 	margin-bottom: 2em;
 }
+img.poster-frame {
+	float: left;
+	margin-right: 1em;
+}
 .entity-view .row.entity-footer, .entity-view .row.entity-market {
 	margin: 1em 0;
 	position: relative;

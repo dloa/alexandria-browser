@@ -1985,6 +1985,7 @@ function getAllPublishers() {
 	currentView = 'publishers';
 	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
+	$('#browse-media-wrap .row').remove();
 	$('#share-modal').hide();
 	$('#tip-modal').hide();
 	$('#user-modal').fadeOut(fadeTimer);
@@ -1997,7 +1998,6 @@ function getAllPublishers() {
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
-			$('#browse-media-wrap .row').remove();
 			for (var i = 0; i < data.length; i++) {
 				var publisherID = data[i]['txid'];
 				var publisherName = data[i]['publisher-data']['alexandria-publisher']['name'];
@@ -2039,6 +2039,7 @@ function loadRecentMedia() {
 	$('main').fadeOut(fadeTimer);
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	hideArchivesUI();
+	$('#browse-media-wrap .row').remove();
 	$('#user-modal').fadeOut(fadeTimer);
 	$('#share-modal').hide();
 	$('#tip-modal').hide();
@@ -2051,7 +2052,6 @@ function loadRecentMedia() {
 		type: "GET",
 		url: "http://54.172.28.195:41289/alexandria/v1/media/get/all",
 		success: function (e) {
-			$('#browse-media-wrap .row').remove();
 			var data = $.parseJSON(e);
 			console.info(data);
 			for (var i = 0; i < data.length; i++) {
@@ -2291,6 +2291,7 @@ function loadMediaView(objMeta) {
 	var mediaRuntime = 0;
 	var mediaArtist = '';
 	var mediaFilename = '';
+	var wwwId = '';
 	var mediaTid = thisMediaData[0]['media-data']['alexandria-media']['torrent'];
 	var mediaFLO = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
 	var mediaPymnt = thisMediaData[0]['media-data']['alexandria-media']['payment']['type'];
@@ -2312,7 +2313,14 @@ function loadMediaView(objMeta) {
 		}						
 		if(mediaInfo['extra-info']['filename']){
 			mediaFilename = mediaInfo['extra-info']['filename'];
-		}						
+		}
+		if(mediaInfo['extra-info']['wwwId']) {
+			wwwId = mediaInfo['extra-info']['wwwId'];
+		}
+	}
+	if ( (mediaType == 'video') && (wwwId != '') ) {
+		var youtubePoster = getYouTubePic(wwwId);
+		console.log(youtubePoster);
 	}
 	document.getElementById('media-breadcrumbs-publisher').innerHTML = mediaPublisher;
 	document.getElementById('media-breadcrumbs-type').innerHTML = mediaType;
@@ -2354,7 +2362,7 @@ function loadMediaView(objMeta) {
 	$('#media-view-entity .entity-footer').hide();
 	$('#media-view-entity .entity-footer.media-'+mediaType).show();
 	$('#media-view-entity').fadeIn(fadeTimer);
-
+	document.title = 'Alexandria > Media';
 	// URL and Browser Nav for Media Entity View
 /*
 	var stateObj = {
@@ -2718,7 +2726,7 @@ function showAutoFill(obj){
 	}
 }
 
-// Get IMDB Info from API
+// Get IMDB Info from API for Autofill
 function getIMDBinfo() {
 	var IMDBid = document.getElementById('www-id').value;
 	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ mediaWwwID +'&actors=S&uniqueName=1';
@@ -2793,7 +2801,7 @@ function getIMDBinfo() {
 		}
 	});
 }
-// Get YouTube Info from API
+// Get YouTube Info from API for Autofill
 function getYouTubeinfo() {
 	var YouTubeId = document.getElementById('www-id').value;
 	var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBH_FceJKLSmo0hk9y2zBdZ8ZTmUiNJr8o&part=snippet&id='+ YouTubeId;
@@ -2818,8 +2826,7 @@ function getYouTubeinfo() {
 	$('fieldset:visible input').removeAttr('disabled');
 	$('fieldset:visible textarea').removeAttr('disabled');	
 }
-
-// Get Soundcloud Info from API
+// Get Soundcloud Info from API for Autofill
 function getSoundcloudInfo() {
 	var SoundcloudId = document.getElementById('www-id').value;
 	var url = 'https://api.soundcloud.com/tracks/'+ SoundcloudId + '.json?client_id=0e74cd0666418c8b8a26f967b1e3a7bb';
@@ -2841,6 +2848,26 @@ function getSoundcloudInfo() {
 	$('.modal-tab:visible .autofill-button').slideUp(fadeTimer);
 	$('fieldset:visible input').removeAttr('disabled');
 	$('fieldset:visible textarea').removeAttr('disabled');	
+}
+
+// GET YOUTUBE SCREENGRAB FOR VIDEO VIEW
+function getYouTubePic(YouTubeId) {
+	var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBH_FceJKLSmo0hk9y2zBdZ8ZTmUiNJr8o&part=snippet&id='+ YouTubeId;
+	$.ajax({
+	    url: url,
+	    type: 'GET',
+	    success: function(e) {
+			var el = $( '#sketchpad' );
+			el.html(e.responseText);
+			var data = $.parseJSON($('p', el).html());
+			var mediaData = data['items'][0]['snippet']['thumbnails']['medium']['url'];
+			$('#media-view-entity .row.media-desc').prepend('<img src="'+mediaData+'" class="poster-frame" />');
+	    },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+	    }
+    });
 }
 
 // GET ROTTEN TOMATOES RATING
