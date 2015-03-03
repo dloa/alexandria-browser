@@ -331,24 +331,16 @@
 					<div id="newMedia-info" class="modal-tab">
 						<div class="media-info-container">
 							<h2>select media type:</h2>
-							<div class="newMedia-media wrap">
-								<div class="row full">
-									<div class="col">
-										<div class="input-container select-container">
-											<select id="mediaType">
-												<option value=""></option>
-												<option value="movie">Movie</option>
-												<option value="music-song">Music - Song</option>
-												<option value="music-album">Music - Album</option>
-												<option value="podcast">Podcast</option>
-												<option value="video">Video</option>
-												<option value="book">Book</option>
-												<option value="recipe">Recipe</option>
-												<option value="thing">Thing</option>
-											</select>
-										</div>
-									</div>
-								</div>
+							<div class="input-container links module-links">
+								<ul id="media-type-select-list">
+									<li class="module-icon"><a onclick="selectMediaType('movie');"><div class="imgwrap"><img src="img/movie-icon.svg" class="makesvg" /></div><div>Movie</div></a></li>
+									<li class="module-icon"><a onclick="selectMediaType('music');"><div class="imgwrap"><img src="img/music-icon.svg" class="makesvg" /></div><div>Music</div></a></li>
+									<li class="module-icon"><a onclick="selectMediaType('podcast');"><div class="imgwrap"><img src="img/podcast-icon.svg" class="makesvg" /></div><div>Podcast</div></a></li>
+									<li class="module-icon"><a onclick="selectMediaType('video');"><div class="imgwrap"><img src="img/video-icon.svg" class="makesvg" /></div><div>Video</div></a></li>
+									<li class="module-icon"><a onclick="selectMediaType('book');"><div class="imgwrap"><img src="img/book-icon.svg" class="makesvg" /></div><div>Book</div></a></li>
+									<li class="module-icon"><a onclick="selectMediaType('recipe');"><div class="imgwrap"><img src="img/recipes-icon.svg" class="makesvg" /></div><div>Recipe</div></a></li>
+									<li class="module-icon"><a onclick="selectMediaType('thing');"><div class="imgwrap"><img src="img/things-icon.svg" class="makesvg" /></div><div>Thing</div></a></li>
+								</ul>
 							</div>
 							<div class="left">
 								<h2>Information</h2>

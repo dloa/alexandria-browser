@@ -318,71 +318,6 @@ jQuery(document).ready(function($){
 		}
 	});
 	
-	// Select Media Type
-	$('select#mediaType').change(function(){
-		var mediaType = $(this).val();
-		$('#newMedia-info fieldset').hide();
-		if (mediaType != '' ) {
-			$('fieldset .media-specific').hide();
-			$('#newMedia-info .left').fadeIn(fadeTimer);
-			$('#newMedia-info .pull-right').fadeIn(fadeTimer);
-			if (mediaType == 'movie') {
-				$('#media-meta-www').text('IMDB');
-				$('#media-meta-runtime').text('Runtime');
-				$('#media-meta-creators1').text('Director');
-				$('#media-meta-creators2').text('Screenwriter(s)');
-				$('#media-meta-creators3').text('Cast');
-				$('#media-meta-taxonomy').text('Genre');
-				$('#media-meta-collection').text('Series Title');
-			} else if (mediaType == 'music-song') {
-				$('#media-meta-runtime').text('Runtime');
-				$('#media-meta-creators1').text('Artist');
-				$('#media-meta-taxonomy').text('Genre');
-				$('#media-meta-collection').text('Album Title');
-			} else if (mediaType == 'music-album') {
-				$('#media-meta-runtime').text('Runtime');
-				$('#media-meta-creators1').text('Artist');
-				$('#media-meta-taxonomy').text('Genre');
-				$('#media-meta-collection').text('Collection');
-			} else if (mediaType == 'podcast') {
-				$('#media-meta-www').text('Soundcloud');
-				$('#media-meta-runtime').text('Runtime');
-				$('#media-meta-creators1').text('Host(s)');
-				$('#media-meta-creators2').text('Co-Host(s)');
-				$('#media-meta-creators3').text('Guest(s)');
-				$('#media-meta-taxonomy').text('Genre');
-				$('#media-meta-collection').text('Series Title');
-			} else if (mediaType == 'video') {
-				$('#media-meta-www').text('YouTube');
-				$('#media-meta-runtime').text('Runtime');
-				$('#media-meta-creators1').text('Creator');
-				$('#media-meta-taxonomy').text('Genre');
-				$('#media-meta-collection').text('Series Title');
-			} else if (mediaType == 'book') {
-				$('#media-meta-creators1').text('Author');
-				$('#media-meta-creators2').text('Editor(s)');
-				$('#media-meta-taxonomy').text('Genre');
-				$('#media-meta-collection').text('Series Title');
-			} else if (mediaType == 'thing') {
-				$('#media-meta-creators1').text('Creator');
-				$('#media-meta-creators2').text('Contributors');
-				$('#media-meta-collection').text('Collection');
-			} else if (mediaType == 'recipe') {
-				$('#media-meta-creators1').text('Chef');
-				$('#media-meta-runtime').text('Number of Servings');
-				$('#media-meta-taxonomy').text('Cuisine');
-				$('#media-meta-collection').text('Collection');
-			}
-			$('fieldset .media-specific.'+mediaType+'-meta').show();
-			$('fieldset#new-media-meta').show();
-			
-		} else {
-			$('#newMedia-info .left').fadeOut(fadeTimer);
-			$('#newMedia-info .pull-right').fadeOut(fadeTimer);
-		}
-		resizeTabs();
-	});
-	
 	$('input[name="dNetwork"]').click(function(){
 		if ($(this)[0]['checked']) {
 			$(this).siblings('.input-container').slideDown(fadeTimer);
@@ -3005,6 +2940,69 @@ function showTipAlexandriaModal() {
 	$('#tip-alexandria-modal').fadeIn(fadeTimer);
 }
 
+// Select Media Type
+function selectMediaType(mediaType) {
+	$('#newMedia-info fieldset').hide();
+	if (mediaType != '' ) {
+		$('fieldset .media-specific').hide();
+		$('#newMedia-info .left').fadeIn(fadeTimer);
+		$('#newMedia-info .pull-right').fadeIn(fadeTimer);
+		if (mediaType == 'movie') {
+			$('#media-meta-www').text('IMDB');
+			$('#media-meta-runtime').text('Runtime');
+			$('#media-meta-creators1').text('Director');
+			$('#media-meta-creators2').text('Screenwriter(s)');
+			$('#media-meta-creators3').text('Cast');
+			$('#media-meta-taxonomy').text('Genre');
+			$('#media-meta-collection').text('Series Title');
+		} else if (mediaType == 'music-song') {
+			$('#media-meta-runtime').text('Runtime');
+			$('#media-meta-creators1').text('Artist');
+			$('#media-meta-taxonomy').text('Genre');
+			$('#media-meta-collection').text('Album Title');
+		} else if (mediaType == 'music-album') {
+			$('#media-meta-runtime').text('Runtime');
+			$('#media-meta-creators1').text('Artist');
+			$('#media-meta-taxonomy').text('Genre');
+			$('#media-meta-collection').text('Collection');
+		} else if (mediaType == 'podcast') {
+			$('#media-meta-www').text('Soundcloud');
+			$('#media-meta-runtime').text('Runtime');
+			$('#media-meta-creators1').text('Host(s)');
+			$('#media-meta-creators2').text('Co-Host(s)');
+			$('#media-meta-creators3').text('Guest(s)');
+			$('#media-meta-taxonomy').text('Genre');
+			$('#media-meta-collection').text('Series Title');
+		} else if (mediaType == 'video') {
+			$('#media-meta-www').text('YouTube');
+			$('#media-meta-runtime').text('Runtime');
+			$('#media-meta-creators1').text('Creator');
+			$('#media-meta-taxonomy').text('Genre');
+			$('#media-meta-collection').text('Series Title');
+		} else if (mediaType == 'book') {
+			$('#media-meta-creators1').text('Author');
+			$('#media-meta-creators2').text('Editor(s)');
+			$('#media-meta-taxonomy').text('Genre');
+			$('#media-meta-collection').text('Series Title');
+		} else if (mediaType == 'thing') {
+			$('#media-meta-creators1').text('Creator');
+			$('#media-meta-creators2').text('Contributors');
+			$('#media-meta-collection').text('Collection');
+		} else if (mediaType == 'recipe') {
+			$('#media-meta-creators1').text('Chef');
+			$('#media-meta-runtime').text('Number of Servings');
+			$('#media-meta-taxonomy').text('Cuisine');
+			$('#media-meta-collection').text('Collection');
+		}
+		$('fieldset .media-specific.'+mediaType+'-meta').show();
+		$('fieldset#new-media-meta').show();
+		
+	} else {
+		$('#newMedia-info .left').fadeOut(fadeTimer);
+		$('#newMedia-info .pull-right').fadeOut(fadeTimer);
+	}
+	resizeTabs();
+}
 // SUBMIT MEDIA TO BLOCKCHAIN
 function postMedia(tipAlexandria) {
 	var tipToAlexandria = 0;
