@@ -2098,7 +2098,6 @@ function changeCustomTipAmount() {
 
 // Change Tip Amount
 function changeTipAmount(opt) {
-	console.info(opt);
 	if ($(opt).attr('id')=='tip-option-custom') {
 		var tipAmount = parseFloat($(opt).siblings('.tip-input').val());
 	} else {
@@ -2107,7 +2106,6 @@ function changeTipAmount(opt) {
 	$('.tip-value').text(tipAmount);
 	$('#tip-modal .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
 	$('.btc-usd .btc-usd-output').text(Math.round((tipAmount/BTCUSD)*100000000)/100000000);
-	console.info(tipAmount);
 }
 
 // SET CUSTOM TIP AMOUNT BY INPUT
@@ -2190,7 +2188,6 @@ function loadMediaView(objMeta) {
 		}
 		$('.tip-amounts').append('<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet();" onKeyUp="customTipAmountInput(event);" /></li>');
 	}
-	$('input[name="tip-amount"]:eq(2)').click();
 	if(mediaInfo['extra-info']){
 		if(mediaInfo['extra-info']['runtime']){
 			mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
@@ -2578,6 +2575,7 @@ function loadTipModal(obj) {
 		$(obj).parents('.entity-market').append($('#tip-modal'));
 	}
 	$('#tip-modal .modal-tabs li:first-child').click();
+	$('input[name="tip-amount"]:eq(2)').click();
 	var mediaFLO = $('main:visible .FLO-address').html();
 	if (mediaFLO != '') {
 		$('#tipAdd-FLO').html(mediaFLO);

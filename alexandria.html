@@ -878,10 +878,10 @@
 		<div id="tip-modal">
 			<h3>Send a Tip</h3>
 			<ul class="tip-amounts">
-				<li><input type="radio" name="tip-amount" id="tip-option-a" value="0.25" /><label for="tip-option-a">25&cent;</label></li>
-				<li><input type="radio" name="tip-amount" id="tip-option-b" value="0.50" /><label for="tip-option-b">50&cent;</label></li>
-				<li><input type="radio" name="tip-amount" id="tip-option-c" value="1.00" /><label for="tip-option-c">$1.00</label></li>
-				<li><input type="radio" name="tip-amount" id="tip-option-custom" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input" name="CustomTipAmount"  id="CustomTipAmount" /></li>
+				<li><input type="radio" name="tip-amount" id="tip-option-0" value="0.25" onclick="changeTipAmount(this);" /><label for="tip-option-0">25&cent;</label></li>
+				<li><input type="radio" name="tip-amount" id="tip-option-1" value="0.50" onclick="changeTipAmount(this);" /><label for="tip-option-1">50&cent;</label></li>
+				<li><input type="radio" name="tip-amount" id="tip-option-2" value="1" onclick="changeTipAmount(this);" /><label for="tip-option-2">$1.00</label></li>
+				<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet();" onKeyUp="customTipAmountInput(event);" /></li>
 			</ul>
 			<div class="tbl">
 				<ul class="modal-tabs">
