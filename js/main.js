@@ -2941,7 +2941,9 @@ function showTipAlexandriaModal() {
 }
 
 // Select Media Type
-function selectMediaType(mediaType) {
+function selectMediaType(obj, mediaType) {
+	$('#media-type-select-list a').removeClass('active');
+	obj.className = 'active';
 	$('#newMedia-info fieldset').hide();
 	if (mediaType != '' ) {
 		$('fieldset .media-specific').hide();
@@ -3013,8 +3015,8 @@ function postMedia(tipAlexandria) {
 	var FLOadd = document.getElementById('newMediaPublisherFLO').value;
 	var pubTime = document.getElementById('newMediaString').innerHTML.split('-')[2];
 	var mediaSig = document.getElementById('newMedia-sign').value;
-	var mediaType = document.getElementById('mediaType').value;
-	var mediaDesc = replace(replace(document.getElementById('addMedia-desc').value,'\r',' '),'\n',' ');
+	var mediaType = $('#media-type-select-list a.active').attr('value');
+	var mediaDesc = replace(repace(document.getElementById('addMedia-desc').value,'\r',' '),'\n',' ');
 	var mediaInfo = '';
 	$('#new-media-meta input[type="text"].info-field').each(function(){
 		if ( $(this).val() != '' ) {

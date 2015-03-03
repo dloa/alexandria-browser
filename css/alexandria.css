@@ -670,9 +670,6 @@ div#intro {
 	line-height: 1;
 	display: inline-block;
 }
-.links .module-icon a:hover .imgwrap {
-	border: 1px solid #9da2cf;
-}
 .links .module-icon .imgwrap, .module-links li .imgwrap, .module-links.mod-filter li .imgwrap, #browse-media-wrap .row .media-icon, #browse-media-wrap .row .publisher-icon {
 	width: 24px;
 	height: 24px;
@@ -705,26 +702,30 @@ ul#media-type-select-list {
 	fill: transparent !important;
 	fill-opacity:0 !important;
 }
-.module-links.mod-filter a {
+.module-links a {
 	color:#979797;
 }
-.module-links.mod-filter a:hover {
+.module-links a:hover {
 	color:#797979;
 }
-.module-links.mod-filter li .imgwrap {
+.module-links li .imgwrap {
 	border-color: #979797;
 }
-.module-links.mod-filter li .active .imgwrap {
-	background-color: #fff;
+.module-links li .active .imgwrap {
+	border-color: #92b4c6;
+	background-color: #92b4c6;
 }
-.module-links.mod-filter li .active .imgwrap, .module-links.mod-filter li:hover .imgwrap {
+.module-links li .active .imgwrap, .module-links li:hover .imgwrap {
 	border-color: #797979;
 }
-.module-links.mod-filter li .imgwrap svg path {
+.module-links li .imgwrap svg path {
 	color: #979797;
 }
-.module-links.mod-filter li:hover .imgwrap svg path, .module-links.mod-filter li .active .imgwrap svg path {
+.module-links li:hover .imgwrap svg path {
 	fill: #797979;
+}
+.module-links li .active .imgwrap svg path {
+	fill: #fff;
 }
 .media-rating img {
 	margin: 0;
