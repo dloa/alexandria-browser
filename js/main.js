@@ -1927,6 +1927,10 @@ function getAllPublishers() {
 	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
 	$('#browse-media-wrap .row').remove();
+	$('.sharing-ui').fadeOut(fadeTimer);
+	$('.publisher-ui').fadeOut(fadeTimer);
+	$('#search').fadeIn(fadeTimer);
+	$('#addNewContent-icon svg').show(fadeTimer);
 	$('#share-modal').hide();
 	$('#tip-modal').hide();
 	$('#user-modal').fadeOut(fadeTimer);
@@ -1939,49 +1943,27 @@ function getAllPublishers() {
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
-			for (var i = 0; i < data.length; i++) {
-				var publisherID = data[i]['txid'];
-				var publisherName = data[i]['publisher-data']['alexandria-publisher']['name'];
-				var publisherDate = data[i]['publisher-data']['alexandria-publisher']['timestamp'];
-				var publisherDateLen = data[i]['publisher-data']['alexandria-publisher']['timestamp'].toString().length;
-				if (publisherDateLen == 10) {
-					publisherDate = parseInt(publisherDate)*1000;
-				}
-				var publisherEntity = '<div id="publisher-' + publisherID + '" class="row publisher-entity"><div class="publisher-icon" onclick="loadPublisherEntity(this);"><img src="img/publisher-icon.svg" class="makesvg publisher-image" onclick="loadPublisherEntity(this);" style="display: inline;"></div><h3 class="publisher-title" onclick="loadPublisherEntity(this);">' + publisherName + '</h3> <div class="publisher-date">' + new Date(parseInt(publisherDate)) + '</div><div class="FLO-address hidden">' + publisherID + '</div>';
-				if ($('#browse-media-wrap .row').length < 1){
-					$('#browse-media-wrap').append(publisherEntity);
-				} else {
-					$('#browse-media-wrap .row:first-of-type').before(publisherEntity);
-				}
-			}
-			$('#browse-media-wrap .row:first-of-type').addClass('first');
-			replaceSVG();
+			populateSearchResults(data, 'publisher');
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.error(xhr.status);
 			console.error(thrownError);
 		}
 	});
-	$('#browse-media-wrap h2').text('Browse Publishers');
-	$('#browse-media').fadeIn(fadeTimer);
-	// URL and Browser Nav for Recent Media Browse View
-	var stateObj = {
-		currentView: currentView,
-		sort: 'recent'
-	};
-	var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
-	history.pushState(stateObj, 'Alexandria > Publishers', newURL);
-	document.title = 'Alexandria > Publishers';
 }
 
 // Recent Media View
 function loadRecentMedia() {
-	currentView = 'recentMediaList';
+	currentView = 'media';
 	$('main').fadeOut(fadeTimer);
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	hideArchivesUI();
 	$('#browse-media-wrap .row').remove();
 	$('#user-modal').fadeOut(fadeTimer);
+	$('.sharing-ui').fadeOut(fadeTimer);
+	$('.publisher-ui').fadeOut(fadeTimer);
+	$('#search').fadeIn(fadeTimer);
+	$('#addNewContent-icon svg').show(fadeTimer);
 	$('#share-modal').hide();
 	$('#tip-modal').hide();
 	$('.view-media-ui').fadeOut(fadeTimer);
@@ -1995,51 +1977,7 @@ function loadRecentMedia() {
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
-			for (var i = 0; i < data.length; i++) {
-				var mediaID = data[i]['txid'];
-				if (!document.getElementById('media-'+mediaID)) {
-					var mediaPublisher = data[i]['publisher-name'];
-					var mediaType = data[i]['media-data']['alexandria-media']['type'];
-					var mediaInfo = data[i]['media-data']['alexandria-media']['info'];
-					var mediaPubTime = data[i]['media-data']['alexandria-media']['timestamp'];
-					var mediaPubTimeLen = data[i]['media-data']['alexandria-media']['timestamp'].toString().length;
-					if (mediaPubTimeLen == 10) {
-						mediaPubTime = parseInt(mediaPubTime)*1000;
-					}					
-					var mediaTitle = mediaInfo['title'];
-					var mediaDesc = mediaInfo['description'];
-					var mediaRuntime = 0;
-					var mediaArtist = '';
-					var mediaFilename = '';
-					var mediaTid = data[i]['media-data']['alexandria-media']['torrent'];
-					var mediaFLO = data[i]['media-data']['alexandria-media']['publisher'];
-					var mediaPymnt = data[i]['media-data']['alexandria-media']['payment']['type'];
-					if(mediaInfo['extra-info']){
-						if(mediaInfo['extra-info']['runtime']){
-							mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
-						}
-						if(mediaInfo['extra-info']['artist']){
-							mediaArtist = mediaInfo['extra-info']['artist'];
-						}						
-						if(mediaInfo['extra-info']['filename']){
-							mediaFilename = mediaInfo['extra-info']['filename'];
-						}						
-					}
-					if (mediaRuntime != 0) {
-						mediaRuntime = '<div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div>';
-					} else {
-						mediaRuntime = '';
-					}
-					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '" media-filename="'+mediaFilename+'"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '</div> '+ mediaRuntime +' <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="FLO-address hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</div>';
-					if ($('#browse-media-wrap .row').length < 1){
-						$('#browse-media-wrap').append(mediaEntity);
-					} else {
-						$('#browse-media-wrap .row:first-of-type').before(mediaEntity);
-					}
-				}
-			}
-			$('#browse-media-wrap .row:first-of-type').addClass('first');
-			replaceSVG();
+			populateSearchResults(data, 'media');
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.error(xhr.status);
@@ -2321,9 +2259,29 @@ function loadMediaView(objMeta) {
 	*/
 }
 
+// ADVANCED SEARCH
+function selectSearchMediaType(obj){
+	$(obj).toggleClass('active');
+}
+
+// EXECUTE ADVANCED SEARCH
+function buildSearch() {
+	var searchProtocol = document.getElementById('searchModule').value;
+	var searchIn = '';
+	if (searchProtocol == 'media') {
+		searchIn = 'info_title';
+	} else {
+		searchIn = 'name';
+	}
+	var AdvSearchResults = searchAPI(searchProtocol, /*$('#search .module-links.mod-filter .active').attr('value'),*/ searchIn, document.getElementById('searchTermInput').value);
+	console.info(AdvSearchResults);
+	$('#adv-search').fadeOut(fadeTimer);
+	populateSearchResults(AdvSearchResults, searchProtocol);
+}
+
 // MEDIA + PUBLISHER SEARCH API
 function searchAPI(module, searchOn, searchFor) {
-	queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":"'+searchFor+'"}';
+	queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":"'+searchFor+'","search-like": true}';
 	console.log(queryString);
 	var mediaData;
 	$('#browse-media-wrap .row').remove();
@@ -2345,16 +2303,32 @@ function filterMediaByType() {
 	$('#browse-media .module-links a.active').each(function(){
 		filteredMedia.push($(this).attr('value'));
 	});
-	console.log(filteredMedia);
 	var filteredMedia = searchAPI('media', 'type', filteredMedia.toString());
-	for (var i = 0; i < filteredMedia.length; i++) {
-		var mediaID = filteredMedia[i]['txid'];
-		if (!document.getElementById('media-'+mediaID)) {
-			var mediaPublisher = filteredMedia[i]['publisher-name'];
-			var mediaType = filteredMedia[i]['media-data']['alexandria-media']['type'];
-			var mediaInfo = filteredMedia[i]['media-data']['alexandria-media']['info'];
-			var mediaPubTime = filteredMedia[i]['media-data']['alexandria-media']['timestamp'];
-			var mediaPubTimeLen = filteredMedia[i]['media-data']['alexandria-media']['timestamp'].toString().length;
+	console.log(filteredMedia);
+	populateSearchResults(filteredMedia, 'media');
+}
+
+// POPULATE SEARCH RESULTS
+function populateSearchResults(results, module) {
+	$('main').not('#browse-media').fadeOut(fadeTimer);
+	$('.view-publisher-ui').fadeOut(fadeTimer);
+	hideArchivesUI();
+	$('#browse-media-wrap .row').remove();
+	$('#user-modal').fadeOut(fadeTimer);
+	$('#share-modal').hide();
+	$('#tip-modal').hide();
+	$('.view-media-ui').fadeOut(fadeTimer);
+	document.getElementById('media-breadcrumbs-type').innerHTML = '';
+	document.getElementById('media-breadcrumbs-publisher').innerHTML = '';
+	document.getElementById('media-breadcrumbs').innerHTML = '';
+	if (module =='media') {
+		for (var i = 0; i < results.length; i++) {
+			var mediaID = results[i]['txid'];
+			var mediaPublisher = results[i]['publisher-name'];
+			var mediaType = results[i]['media-data']['alexandria-media']['type'];
+			var mediaInfo = results[i]['media-data']['alexandria-media']['info'];
+			var mediaPubTime = results[i]['media-data']['alexandria-media']['timestamp'];
+			var mediaPubTimeLen = results[i]['media-data']['alexandria-media']['timestamp'].toString().length;
 			if (mediaPubTimeLen == 10) {
 				mediaPubTime = parseInt(mediaPubTime)*1000;
 			}					
@@ -2363,9 +2337,9 @@ function filterMediaByType() {
 			var mediaRuntime = 0;
 			var mediaArtist = '';
 			var mediaFilename = '';
-			var mediaTid = filteredMedia[i]['media-data']['alexandria-media']['torrent'];
-			var mediaFLO = filteredMedia[i]['media-data']['alexandria-media']['publisher'];
-			var mediaPymnt = filteredMedia[i]['media-data']['alexandria-media']['payment']['type'];
+			var mediaTid = results[i]['media-data']['alexandria-media']['torrent'];
+			var mediaFLO = results[i]['media-data']['alexandria-media']['publisher'];
+			var mediaPymnt = results[i]['media-data']['alexandria-media']['payment']['type'];
 			if(mediaInfo['extra-info']){
 				if(mediaInfo['extra-info']['runtime']){
 					mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
@@ -2389,11 +2363,46 @@ function filterMediaByType() {
 				$('#browse-media-wrap .row:first-of-type').before(mediaEntity);
 			}
 		}
+		$('#browse-media-wrap h2').text('Browse Media');
+		currentView = 'media';
+		var stateObj = {
+			currentView: currentView,
+			sort: 'recent'
+		};
+		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
+		history.pushState(stateObj, 'Alexandria > Media', newURL);
+		document.title = 'Alexandria > Media';
+	} else {
+		for (var i = 0; i < results.length; i++) {
+			console.info(results[i]);
+			var publisherID = results[i]['txid'];
+			var publisherName = results[i]['publisher-data']['alexandria-publisher']['name'];
+			var publisherDate = results[i]['publisher-data']['alexandria-publisher']['timestamp'];
+			var publisherDateLen = results[i]['publisher-data']['alexandria-publisher']['timestamp'].toString().length;
+			if (publisherDateLen == 10) {
+				publisherDate = parseInt(publisherDate)*1000;
+			}
+			var publisherEntity = '<div id="publisher-' + publisherID + '" class="row publisher-entity"><div class="publisher-icon" onclick="loadPublisherEntity(this);"><img src="img/publisher-icon.svg" class="makesvg publisher-image" onclick="loadPublisherEntity(this);" style="display: inline;"></div><h3 class="publisher-title" onclick="loadPublisherEntity(this);">' + publisherName + '</h3> <div class="publisher-date">' + new Date(parseInt(publisherDate)) + '</div><div class="FLO-address hidden">' + publisherID + '</div>';
+			if ($('#browse-media-wrap .row').length < 1){
+				$('#browse-media-wrap').append(publisherEntity);
+			} else {
+				$('#browse-media-wrap .row:first-of-type').before(publisherEntity);
+			}
+		}
+		$('#browse-media-wrap h2').text('Browse Publishers');
+		currentView = 'publishers';
+		var stateObj = {
+			currentView: currentView,
+			sort: 'recent'
+		};
+		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
+		history.pushState(stateObj, 'Alexandria > Publishers', newURL);
+		document.title = 'Alexandria > Publishers';
 	}
 	$('#browse-media-wrap .row:first-of-type').addClass('first');
+	$('#browse-media').fadeIn(fadeTimer);
 	replaceSVG();
 }
-
 // Display Media Info Modal
 function loadInfoModal(childObj) {
     var testObj = childObj.parentNode;
@@ -2940,7 +2949,7 @@ function showTipAlexandriaModal() {
 	$('#tip-alexandria-modal').fadeIn(fadeTimer);
 }
 
-// Select Media Type
+// Select Media Type on Media Submission
 function selectMediaType(obj, mediaType) {
 	$('#media-type-select-list a').removeClass('active');
 	obj.className = 'active';

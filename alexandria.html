@@ -50,12 +50,82 @@
 				<div id="adv-search">
 					<h3>Advanced Search Options</h3>
 					<div class="row">
-						<label>Archive Search</label>
+						<label>Module</label>
 						<div class="input-container">
-							<input type="text" class="search" />			
+							<select id="searchModule">
+								<option value="media">Media</option>
+								<option value="publisher">Publishers</option>
+							</select>
+						</div>
+					</div>
+					<div class="module-links mod-filter">
+						<ul>
+							<li>
+								<a onclick="selectSearchMediaType(this)" value="movie">
+									<div class="imgwrap">
+										<img src="img/movie-icon.svg" class="makesvg" />							
+									</div>
+									<div>Movies</div>
+								</a>
+							</li>
+							<li>
+								<a onclick="selectSearchMediaType(this)" value="music">
+									<div class="imgwrap">
+										<img src="img/music-icon.svg" class="makesvg" />							
+									</div>
+									<div>Music</div>
+								</a>
+							</li>
+							<li>
+								<a onclick="selectSearchMediaType(this)" value="podcast">
+									<div class="imgwrap">
+										<img src="img/podcast-icon.svg" class="makesvg" />							
+									</div>
+									<div>Podcasts</div>
+								</a>
+							</li>
+							<li>
+								<a onclick="selectSearchMediaType(this)" value="video">
+									<div class="imgwrap">
+										<img src="img/video-icon.svg" class="makesvg" />							
+									</div>
+									<div>Videos</div>
+								</a>
+							</li>
+							<li>
+								<a onclick="selectSearchMediaType(this)" value="book">
+									<div class="imgwrap">
+										<img src="img/book-icon.svg" class="makesvg" />							
+									</div>
+									<div>Books</div>
+								</a>
+							</li>
+							<li>
+								<a onclick="selectSearchMediaType(this)" value="recipe">
+									<div class="imgwrap">
+										<img src="img/recipes-icon.svg" class="makesvg" />							
+									</div>
+									<div>Recipes</div>
+								</a>
+							</li>
+							<li>
+								<a onclick="selectSearchMediaType(this)" value="thing">
+									<div class="imgwrap">
+										<img src="img/things-icon.svg" class="makesvg" />							
+									</div>
+									<div>Things</div>
+								</a>
+							</li>
+						</ul>
+					</div>	
+					<div class="row">
+						<label>Search Term</label>
+						<div class="input-container">
+							<input type="text" class="search" id="searchTermInput" />			
 							<div class="clearSearch">x</div>
 						</div>
 					</div>
+<!--
 					<div class="row">
 						<label>Refine Results</label>
 						<div class="input-container first">
@@ -71,18 +141,6 @@
 						</div>						
 					</div>
 					<div class="row">
-						<label>Module</label>
-						<div class="input-container">
-							<select>
-								<option value="twitter">Twitter Archive</option>
-								<option value="rss">RSS Archive</option>
-								<option value="market">Market Archive</option>
-								<option value="movies">Movies</option>
-								<option value="music">Music</option>
-							</select>
-						</div>
-					</div>
-					<div class="row">
 						<label>Results</label>
 						<div class="input-container slider-container">
 							<div class="alex-ui-slider"></div>
@@ -94,9 +152,10 @@
 							<input type="text" class="alex-ui-datepicker search"> - <input type="text" class="alex-ui-datepicker search">
 						</div>
 					</div>
+-->
 					<div class="row">
 						<div class="input-container buttons">
-							<span class="cancel-btn icongfx">Cancel</span> <span class="go-btn icongfx">Go</span>
+							<span class="cancel-btn icongfx">Cancel</span> <span class="go-btn icongfx" onclick="buildSearch();">Go</span>
 						</div>
 					</div>
 				</div>

@@ -502,6 +502,12 @@ header .input-container select {
 	font-size: .8em;
 	line-height: 1.75em;
 }
+#search .module-links li a {
+	margin: 1.25em .5em 0;
+}
+#search .module-links {
+	text-align: center;
+}
 .alex-ui-slider.ui-slider.ui-slider-horizontal.ui-widget.ui-widget-content.ui-corner-all {
 	border-radius: 0;
 	border-right: 0 none transparent;
