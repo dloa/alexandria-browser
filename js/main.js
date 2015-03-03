@@ -385,47 +385,6 @@ jQuery(document).ready(function($){
 		$('#tip-modal').find('.modal-tab#'+$(this).attr("name")).show().siblings('.modal-tab').hide();
 	});
 
-	// Tip Modal Amount
-	$('input[name="tip-amount"]').click(function(){
-		if ($(this).attr('id')=='tip-option-custom') {
-			var tipAmount = parseFloat($(this).siblings('.tip-input').val());
-		} else {
-			var tipAmount = parseFloat($(this).val());
-		}
-		$('.tip-value').text(tipAmount);
-		$('#tip-modal .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
-		$('.btc-usd .btc-usd-output').text(Math.round((tipAmount/BTCUSD)*100000000)/100000000);
-	});	
-	$('input[name="tip-amount"]').filter('[value="1.00"]').click();
-	$('.tip-input').focus(function(){
-		$(this).siblings('input[type="radio"]').click();
-	});
-
-	$('.tip-input').keydown(function(e){
-		prevTipAmount = document.getElementById('CustomTipAmount').value;
-	});
-
-	$('.tip-input').keyup(function(e){
-		var charCode = e.keyCode;
-		var tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
-		if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186) || (isNaN(tipAmount) == true) ) {
-			document.getElementById('CustomTipAmount').value = prevTipAmount;
-			$('.tip-value').text(prevTipAmount);
-			$('#tip-modal .flo-usd-output').text(Math.round((prevTipAmount/FLOUSD)*100000000)/100000000);
-			return false;
-		}
-		if (tipAmount != prevTipAmount) {
-			var decValue = document.getElementById('CustomTipAmount').value.split('.')[1];
-			if(decValue) {
-				if (decValue.length > 2){
-					document.getElementById('CustomTipAmount').value = tipAmount.toFixed(2);
-				}
-			}
-			tipAmount = document.getElementById('CustomTipAmount').value;
-			$('.tip-value').text(tipAmount);
-			$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
-		}
-	});
 	// API Server ID and Control
 	if(serverAddress == '54.172.28.195'){
 		$('#serverID').text('Dev');
@@ -2132,6 +2091,53 @@ function loadMediaEntity(obj) {
 	}
 }
 
+// Change Custom Tip Amount
+function changeCustomTipAmount() {
+	$('#tip-option-custom').click();
+}
+
+// Change Tip Amount
+function changeTipAmount(opt) {
+	console.info(opt);
+	if ($(opt).attr('id')=='tip-option-custom') {
+		var tipAmount = parseFloat($(opt).siblings('.tip-input').val());
+	} else {
+		var tipAmount = parseFloat($(opt).val());
+	}
+	$('.tip-value').text(tipAmount);
+	$('#tip-modal .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
+	$('.btc-usd .btc-usd-output').text(Math.round((tipAmount/BTCUSD)*100000000)/100000000);
+	console.info(tipAmount);
+}
+
+// SET CUSTOM TIP AMOUNT BY INPUT
+function prevTipAmountSet() {
+	prevTipAmount = document.getElementById('CustomTipAmount').value;
+}
+
+function customTipAmountInput(event) {
+	var charCode = event.charCode;
+	var tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
+	if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186) || (isNaN(tipAmount) == true) ) {
+		document.getElementById('CustomTipAmount').value = prevTipAmount;
+		$('.tip-value').text(prevTipAmount);
+		$('#tip-modal .flo-usd-output').text(Math.round((prevTipAmount/FLOUSD)*100000000)/100000000);
+		return false;
+	}
+	if (tipAmount != prevTipAmount) {
+		var decValue = document.getElementById('CustomTipAmount').value.split('.')[1];
+		if(decValue) {
+			if (decValue.length > 2){
+				document.getElementById('CustomTipAmount').value = tipAmount.toFixed(2);
+			}
+		}
+		tipAmount = document.getElementById('CustomTipAmount').value;
+		document.getElementById('tip-option-custom').value = tipAmount;
+		$('.tip-value').text(tipAmount);
+		$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
+	}
+}
+
 // Load Media Page
 function loadMediaView(objMeta) {
 	currentView = 'media';
@@ -2179,10 +2185,12 @@ function loadMediaView(objMeta) {
 		var tipAmounts = thisMediaData[0]['media-data']['alexandria-media']['payment']['amount'].split(',');
 		for (var i = 0; i < tipAmounts.length; i++) {
 			var thisTipAmount = tipAmounts[i]/100;
-			var tipOption = '<li><input type="radio" name="tip-amount" id="tip-option-'+i+'" value="'+ thisTipAmount +'"><label for="tip-option-a">$'+ thisTipAmount +'</label></li>';
+			var tipOption = '<li><input type="radio" name="tip-amount" id="tip-option-'+i+'" value="'+ thisTipAmount +'" onclick="changeTipAmount(this);"><label for="tip-option-'+i+'">$'+ thisTipAmount +'</label></li>';
 			$('.tip-amounts').append(tipOption);
-		}		
+		}
+		$('.tip-amounts').append('<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet();" onKeyUp="customTipAmountInput(event);" /></li>');
 	}
+	$('input[name="tip-amount"]:eq(2)').click();
 	if(mediaInfo['extra-info']){
 		if(mediaInfo['extra-info']['runtime']){
 			mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
