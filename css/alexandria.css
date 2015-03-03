@@ -711,13 +711,16 @@ div#intro {
 .module-links.mod-filter li .imgwrap {
 	border-color: #979797;
 }
-.module-links.mod-filter li:hover .imgwrap {
+.module-links.mod-filter li .active .imgwrap {
+	background-color: #fff;
+}
+.module-links.mod-filter li .active .imgwrap, .module-links.mod-filter li:hover .imgwrap {
 	border-color: #797979;
 }
 .module-links.mod-filter li .imgwrap svg path {
 	color: #979797;
 }
-.module-links.mod-filter li:hover .imgwrap svg path {
+.module-links.mod-filter li:hover .imgwrap svg path, .module-links.mod-filter li .active .imgwrap svg path {
 	fill: #797979;
 }
 .media-rating img {
