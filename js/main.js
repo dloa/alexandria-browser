@@ -393,6 +393,12 @@ jQuery(document).ready(function($){
 		}
 	});
 	
+	$('#browse-media .module-links a').click(function(){
+		$(this).toggleClass('active');
+		filterMediaByType();		
+	});
+	
+
 	// File uploader init
 	$('.uploader').each(function(){
 		uploadFile($(this));
@@ -2385,6 +2391,7 @@ function searchAPI(module, searchOn, searchFor) {
 	queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":"'+searchFor+'"}';
 	console.log(queryString);
 	var mediaData;
+	$('#browse-media-wrap .row').remove();
 	$.ajax({
 		type: "POST",
 		url: "http://54.172.28.195:41289/alexandria/v1/search",
@@ -2395,6 +2402,61 @@ function searchAPI(module, searchOn, searchFor) {
 		async:   false
 	});
 	return mediaData;
+}
+
+// MEDIA TYPE FILTER
+function filterMediaByType() {
+	var filteredMedia = [];
+	$('#browse-media .module-links a.active').each(function(){
+		filteredMedia.push($(this).attr('value'));
+	});
+	console.log(filteredMedia);
+	var filteredMedia = searchAPI('media', 'type', filteredMedia.toString());
+	for (var i = 0; i < filteredMedia.length; i++) {
+		var mediaID = filteredMedia[i]['txid'];
+		if (!document.getElementById('media-'+mediaID)) {
+			var mediaPublisher = filteredMedia[i]['publisher-name'];
+			var mediaType = filteredMedia[i]['media-data']['alexandria-media']['type'];
+			var mediaInfo = filteredMedia[i]['media-data']['alexandria-media']['info'];
+			var mediaPubTime = filteredMedia[i]['media-data']['alexandria-media']['timestamp'];
+			var mediaPubTimeLen = filteredMedia[i]['media-data']['alexandria-media']['timestamp'].toString().length;
+			if (mediaPubTimeLen == 10) {
+				mediaPubTime = parseInt(mediaPubTime)*1000;
+			}					
+			var mediaTitle = mediaInfo['title'];
+			var mediaDesc = mediaInfo['description'];
+			var mediaRuntime = 0;
+			var mediaArtist = '';
+			var mediaFilename = '';
+			var mediaTid = filteredMedia[i]['media-data']['alexandria-media']['torrent'];
+			var mediaFLO = filteredMedia[i]['media-data']['alexandria-media']['publisher'];
+			var mediaPymnt = filteredMedia[i]['media-data']['alexandria-media']['payment']['type'];
+			if(mediaInfo['extra-info']){
+				if(mediaInfo['extra-info']['runtime']){
+					mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
+				}
+				if(mediaInfo['extra-info']['artist']){
+					mediaArtist = mediaInfo['extra-info']['artist'];
+				}						
+				if(mediaInfo['extra-info']['filename']){
+					mediaFilename = mediaInfo['extra-info']['filename'];
+				}						
+			}
+			if (mediaRuntime != 0) {
+				mediaRuntime = '<div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div>';
+			} else {
+				mediaRuntime = '';
+			}
+			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '" media-filename="'+mediaFilename+'"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '</div> '+ mediaRuntime +' <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="FLO-address hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</div>';
+			if ($('#browse-media-wrap .row').length < 1){
+				$('#browse-media-wrap').append(mediaEntity);
+			} else {
+				$('#browse-media-wrap .row:first-of-type').before(mediaEntity);
+			}
+		}
+	}
+	$('#browse-media-wrap .row:first-of-type').addClass('first');
+	replaceSVG();
 }
 
 // Display Media Info Modal
