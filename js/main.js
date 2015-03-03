@@ -2281,7 +2281,11 @@ function buildSearch() {
 
 // MEDIA + PUBLISHER SEARCH API
 function searchAPI(module, searchOn, searchFor) {
-	queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":"'+searchFor+'","search-like": true}';
+	if ( (searchOn == 'type') && (searchFor.length > 1) ) {
+		queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":['+searchFor+'],"search-like": true}';		
+	} else {
+		queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":"'+searchFor+'","search-like": true}';
+	}
 	console.log(queryString);
 	var mediaData;
 	$('#browse-media-wrap .row').remove();
@@ -2300,10 +2304,22 @@ function searchAPI(module, searchOn, searchFor) {
 // MEDIA TYPE FILTER
 function filterMediaByType() {
 	var filteredMedia = [];
-	$('#browse-media .module-links a.active').each(function(){
-		filteredMedia.push($(this).attr('value'));
+	$('#browse-media .module-links a.active').each(function(i){
+		filteredMedia[i] = $(this).attr('value');
 	});
-	var filteredMedia = searchAPI('media', 'type', filteredMedia.toString());
+	console.info(filteredMedia);
+	if (filteredMedia.length > 1) {
+		var filteredMediaStr = '';
+		for (var i = 0; i < filteredMedia.length; i++) {
+			if (filteredMediaStr == '') {
+				filteredMediaStr = '"'+filteredMedia[i]+'"';
+			} else {
+				filteredMediaStr = filteredMediaStr+',"'+filteredMedia[i]+'"';
+			}
+		}
+		filteredMedia = filteredMediaStr;
+	}
+	var filteredMedia = searchAPI('media', 'type', filteredMedia);
 	console.log(filteredMedia);
 	populateSearchResults(filteredMedia, 'media');
 }

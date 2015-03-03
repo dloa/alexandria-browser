@@ -260,6 +260,9 @@ div#viewlabel .timespanLabel span, #media-breadcrumbs, #publisher-breadcrumbs {
 	display: none;
 	left: 48px;
 }
+header #search, header #header-menu {
+    -webkit-app-region: no-drag
+}
 #search > .input-container {
 	display: inline-block;
 	zoom:1;*display:inline;
