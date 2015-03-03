@@ -1946,8 +1946,15 @@ function resetInterface() {
 // RESET ALEXANDRIA
 function resetAlexandria() {
 	$('main').hide(fadeTimer);
-	$('#share-modal').hide();
-	$('#tip-modal').hide();
+	$('#browse-media-wrap .row').remove();
+	$('#share-modal').css({
+			left:'initial',
+			right:'initial'
+		}).hide();
+	$('#tip-modal').css({
+			'left':'initial',
+			'right':'initial'
+		}).hide();
 	$('#addNewContent-icon svg').show(fadeTimer);
 	$('.publisher-ui').hide(fadeTimer);
 	$('.sharing-ui').hide(fadeTimer);
@@ -1980,6 +1987,7 @@ function getAllPublishers() {
 	hideArchivesUI();
 	$('#share-modal').hide();
 	$('#tip-modal').hide();
+	$('#user-modal').fadeOut(fadeTimer);
 	$('.view-media-ui').fadeOut(fadeTimer);
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	console.log('loadRecentMedia() publisher/get/all ...');
@@ -1998,7 +2006,7 @@ function getAllPublishers() {
 				if (publisherDateLen == 10) {
 					publisherDate = parseInt(publisherDate)*1000;
 				}
-				var publisherEntity = '<div id="publisher-' + publisherID + '" class="row publisher-entity"><div class="publisher-icon" onclick="loadPublisherEntity(this);"><img src="img/publisher-icon.svg" class="makesvg publisher-image" onclick="loadPublisherEntity(this);" style="display: inline;"></div><h3 class="publisher-title" onclick="loadPublisherEntity(this);">' + publisherName + '</h3> <div class="publisher-date">' + new Date(parseInt(publisherDate)) + '</div><div class="media-FLO hidden">' + publisherID + '</div>';
+				var publisherEntity = '<div id="publisher-' + publisherID + '" class="row publisher-entity"><div class="publisher-icon" onclick="loadPublisherEntity(this);"><img src="img/publisher-icon.svg" class="makesvg publisher-image" onclick="loadPublisherEntity(this);" style="display: inline;"></div><h3 class="publisher-title" onclick="loadPublisherEntity(this);">' + publisherName + '</h3> <div class="publisher-date">' + new Date(parseInt(publisherDate)) + '</div><div class="FLO-address hidden">' + publisherID + '</div>';
 				if ($('#browse-media-wrap .row').length < 1){
 					$('#browse-media-wrap').append(publisherEntity);
 				} else {
@@ -2031,10 +2039,12 @@ function loadRecentMedia() {
 	$('main').fadeOut(fadeTimer);
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	hideArchivesUI();
+	$('#user-modal').fadeOut(fadeTimer);
 	$('#share-modal').hide();
 	$('#tip-modal').hide();
 	$('.view-media-ui').fadeOut(fadeTimer);
 	document.getElementById('media-breadcrumbs-type').innerHTML = '';
+	document.getElementById('media-breadcrumbs-publisher').innerHTML = '';
 	document.getElementById('media-breadcrumbs').innerHTML = '';
 	console.log('loadRecentMedia() media/get/all ...');
 	$.ajax({
@@ -2079,7 +2089,7 @@ function loadRecentMedia() {
 					} else {
 						mediaRuntime = '';
 					}
-					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '" media-filename="'+mediaFilename+'"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '</div> '+ mediaRuntime +' <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="media-FLO hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</div>';
+					var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '" media-filename="'+mediaFilename+'"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '</div> '+ mediaRuntime +' <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="FLO-address hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</div>';
 					if ($('#browse-media-wrap .row').length < 1){
 						$('#browse-media-wrap').append(mediaEntity);
 					} else {
@@ -2118,9 +2128,15 @@ function loadPublisherEntity(obj) {
 function loadPublisherView(objMeta) {
 	currentView = 'publishers';	
 	$('main').fadeOut(fadeTimer);
+	$('#share-modal').css({
+			left:'initial',
+			right:'initial'
+		}).hide();
+	$('#tip-modal').css({
+			'left':'initial',
+			'right':'initial'
+		}).hide();
 	hideArchivesUI();
-	$('#share-modal').hide();
-	$('#tip-modal').hide();
 	$('#publisher-media-list li').remove();
 	$('#view-publisher .entity-view').show();
 	$('#viewlabel').fadeIn(fadeTimer);
@@ -2190,7 +2206,7 @@ function loadPublisherView(objMeta) {
 		} else {
 			mediaRuntime = '';
 		}
-		var mediaEntity = '<li id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '" media-filename="'+mediaFilename+'"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> '+ mediaRuntime +' <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="media-FLO hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</li>';
+		var mediaEntity = '<li id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '" media-filename="'+mediaFilename+'"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> '+ mediaRuntime +' <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="FLO-address hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</li>';
 		$('#publisher-media-list').prepend(mediaEntity);
 	}
 	replaceSVG();	
@@ -2241,10 +2257,16 @@ function loadMediaEntity(obj) {
 function loadMediaView(objMeta) {
 	currentView = 'media';
 	$('main').fadeOut(fadeTimer);
+	$('#share-modal').css({
+			left:'initial',
+			right:'initial'
+		}).hide();
+	$('#tip-modal').css({
+			'left':'initial',
+			'right':'initial'
+		}).hide();
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	hideArchivesUI();
-	$('#share-modal').hide();
-	$('#tip-modal').hide();
 	$('#view-media .entity-view').hide();
 	$('#view-media').fadeIn(fadeTimer);	
 	var mediaID = '';
@@ -2292,6 +2314,7 @@ function loadMediaView(objMeta) {
 			mediaFilename = mediaInfo['extra-info']['filename'];
 		}						
 	}
+	document.getElementById('media-breadcrumbs-publisher').innerHTML = mediaPublisher;
 	document.getElementById('media-breadcrumbs-type').innerHTML = mediaType;
 	document.getElementById('media-breadcrumbs').innerHTML = mediaTitle;
 	if (mediaType == 'movie') {
@@ -2306,7 +2329,7 @@ function loadMediaView(objMeta) {
 		$('.row.entity-footer.media-video').html(videoEmbed);
 	}
 	$('#media-txnID').html(mediaID);	
-	$('#media-view-entity .media-FLO').html(mediaFLO);
+	$('main:visible .FLO-address').html(mediaFLO);
 	$('#media-view-entity .entity-meta-header h2').html(mediaTitle);
 	if (mediaArtist) {
 		$('#media-view-entity .entity-meta-header h3').html(mediaArtist);
@@ -2500,9 +2523,15 @@ function loadShareModal(obj) {
 	if ($(obj).parents('.entity-market #share-modal').length == 0) {
 		$(obj).parents('.entity-market').append($('#share-modal'));
 	}
-	var shareModalPos = $(obj).position().left-31;
+	if(currentView=='media'){
+		var modalPos = 'left';
+		var shareModalPos = $(obj).position().left-31;
+	} else {
+		var modalPos = 'right';
+		var shareModalPos = $(obj).parent().width() - $(obj).position().left - 80;
+	}
 	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2').text();
-	$(obj).parents('.entity-market').find('#share-modal').css('left', shareModalPos +'px').fadeToggle(fadeTimer);
+	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
 }
 
 // Display Tip Modal
@@ -2510,15 +2539,23 @@ function loadTipModal(obj) {
 	if ($(obj).parents('.entity-market #tip-modal').length == 0) {
 		$(obj).parents('.entity-market').append($('#tip-modal'));
 	}
-	var tipModalPos = $(obj).position().left-31;
 	$('#tip-modal .modal-tabs li:first-child').click();
-	var mediaFLO = $('#media-view-entity .media-FLO').text();
+	var mediaFLO = $('main:visible .FLO-address').html();
 	if (mediaFLO != '') {
-		$('#tipAdd-FLO').text(mediaFLO);
+		$('#tipAdd-FLO').html(mediaFLO);
 	} else {
 		$('#tipAdd-FLO').text('No Address Available');
 	}
-	$(obj).parents('.entity-market').find('#tip-modal').css('left',tipModalPos+'px').fadeToggle(fadeTimer);
+	if(currentView=='media'){
+		var modalPos = 'left';
+		var tipModalPos = $(obj).position().left-31;
+	} else {
+		var modalPos = 'right';
+		console.log($(obj).parent().width());
+		console.log($(obj).position().left);
+		var tipModalPos = $(obj).parent().width() - $(obj).position().left - 80;
+	}
+	$(obj).parents('.entity-market').find('#tip-modal').css(modalPos,tipModalPos+'px').fadeToggle(fadeTimer);
 }
 
 // Share New Content Module
@@ -2673,6 +2710,8 @@ function showAutoFill(obj){
 			getIMDBinfo();
 		} else if ($(obj).siblings('label').text().split(' ')[0] == 'YouTube') {
 			getYouTubeinfo();
+		} else if ($(obj).siblings('label').text().split(' ')[0] == 'Soundcloud') {
+			getSoundcloudInfo();
 		}
 	} else {
 		$(obj).parents('fieldset').find('.autofill-button').slideUp(fadeTimer);
@@ -2775,11 +2814,35 @@ function getYouTubeinfo() {
 			console.error(thrownError);
 	    }
     });
-	
 	$('.modal-tab:visible .autofill-button').slideUp(fadeTimer);
 	$('fieldset:visible input').removeAttr('disabled');
 	$('fieldset:visible textarea').removeAttr('disabled');	
 }
+
+// Get Soundcloud Info from API
+function getSoundcloudInfo() {
+	var SoundcloudId = document.getElementById('www-id').value;
+	var url = 'https://api.soundcloud.com/tracks/'+ SoundcloudId + '.json?client_id=0e74cd0666418c8b8a26f967b1e3a7bb';
+	$.ajax({
+	    url: url,
+	    success: function(e) {
+			document.getElementById('addMedia-title').value = e['title'];
+			document.getElementById('addMedia-creators1').value = e['user']['username'];
+			document.getElementById('addMedia-runtime').value = e['duration'];
+			document.getElementById('addMedia-year').value = e['release_year'];
+			document.getElementById('addMedia-genres').value = e['genre'];
+			document.getElementById('addMedia-desc').innerHTML = e['description'];
+	    },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+	    }
+    });
+	$('.modal-tab:visible .autofill-button').slideUp(fadeTimer);
+	$('fieldset:visible input').removeAttr('disabled');
+	$('fieldset:visible textarea').removeAttr('disabled');	
+}
+
 // GET ROTTEN TOMATOES RATING
 function getRotten() {
 	var RottenID = parseInt(document.getElementById('movie-rotten').innerHTML);

@@ -22,6 +22,11 @@
 				};
 			}
 		</script>
+		<script type="text/javascript">
+			SC.initialize({
+				client_id: '0e74cd0666418c8b8a26f967b1e3a7bb'
+			});
+		</script>
 	</head>
 	
 	<body>
@@ -121,6 +126,8 @@
 				<div id="user-modal" class="header-modal">
 					<ul id="user-menu">
 						<li><a onclick="" id="user-menu-about"><img src="img/logo.svg" class="makesvg" /> About</a></li>
+						<li><a onclick="loadRecentMedia();" id="user-menu-about"><img src="img/media-icon.svg" class="makesvg" /> Media</a></li>
+						<li><a onclick="getAllPublishers();" id="user-menu-about" class="publisher-icon"><img src="img/publisher-icon.svg" class="makesvg" /> Publishers</a></li>
 						<li><a onclick="" id="user-menu-wallet"><img src="img/wallet-icon.svg" class="makesvg" /> Wallet</a></li>
 						<li><a onclick="" id="user-menu-history"><img src="img/history-icon.svg" class="makesvg" /> History</a></li>
 						<li><a onclick="" id="user-menu-modules"><img src="img/module-icon.svg" class="makesvg" /> Modules</a></li>
@@ -208,7 +215,7 @@
 
 		<div id="viewlabel">
 			<div class="view-media-ui">
-				<a onclick="loadRecentMedia()" class="go-back">Media</a> > <span id="media-breadcrumbs-type"></span> > <span id="media-breadcrumbs"></span>
+				<a onclick="loadRecentMedia()" class="go-back">Media</a> > <span id="media-breadcrumbs-publisher"></span> > <span id="media-breadcrumbs-type"></span> > <span id="media-breadcrumbs"></span>
 			</div>
 			<div class="view-publisher-ui">
 				<a onclick="getAllPublishers()" class="go-back">Publishers</a> > <span id="publisher-breadcrumbs"></span>
@@ -720,13 +727,13 @@
 <!-- view-publisher -->
  
 		<main id="view-publisher">
-			<div id="view-publisher-wrap">
+			<div id="view-publisher-wrap" class="view-publisher-ui">
 				<div id="publisher-view-entity" class="entity-view">
 					<img src="" id="publisher-avatar" />
 					<div class="row entity-meta-header">
 						<h2 id="view-publisher-name"></h2>
-						<div id="publisher-FLO-address"></div>
-						<div class="entity-pub-time">Posted <span>[timestamp]</span></div>
+						<div id="publisher-FLO-address" class="FLO-address hidden"></div>
+						<div class="entity-pub-time">Created <span>[timestamp]</span></div>
 					</div>
 					<div class="entity-meta-content">
 						<div class="entity-market"><a onclick="loadShareModal($(this));" class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a> <a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a> <a id="publisher-bitmsg" href="">BitMsg</a></div>
@@ -766,7 +773,7 @@
 							</div>
 						</div>
 						<div class="row media-desc"></div>
-						<div class="row media-FLO hidden"></div>
+						<div class="row FLO-address hidden"></div>
 						<div class="row entity-market"><span class="row media-Tid"><a href=""><img src="img/magnet-icon.svg" class="makesvg" /></a></span><a onclick="loadShareModal($(this));" class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a> <a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a></div>
 						<div class="row entity-footer media-movie">
 							<a class="wsite-button lightboxVideo" data-source="http://localhost:3000/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label>
@@ -904,8 +911,11 @@
 		<script src="js/vendor/qrcode.min.js"></script>
 		<script src="js/vendor/webtoolkit.md5.js"></script>
 		<script src="js/vendor/upclick-min.js"></script>
-		<!-- File Upload JS -->
-		<script src="js/vendor/upclick-min.js"></script> <!-- change to https://code.google.com/p/ocupload/ -->
+		<script src="http://connect.soundcloud.com/sdk.js"></script>
+	<!-- File Upload JS 
+		<script src="js/vendor/upclick-min.js"></script>
+		change to https://code.google.com/p/ocupload/
+	-->
 		<script src="js/main.js"></script>
 	</body>
 </html>

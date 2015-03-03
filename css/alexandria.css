@@ -878,12 +878,12 @@ div#intro {
 	border-radius: 5px;
 	line-height: 2;
 }
-#view-publisher-wrap #tip-modal, #view-publisher-wrap #share-modal {
-	width: 310px;
+#tip-modal {
+	min-width: 
 }
 #tip-modal.abs, #share-modal.abs {
 	position: absolute;
-	left: 1em;
+	left: initial;
 	display: none;
 }
 #share-modal {
@@ -916,7 +916,18 @@ div#intro {
 	display: block;
 	width: 0;
 }
-.row.entity-market #tip-modal *, .row.entity-market #share-modal * {
+.view-publisher-ui #tip-modal:before, .view-publisher-ui #share-modal:before {
+	left: initial;
+	right: 48px;
+}
+.view-publisher-ui #tip-modal:after, .view-publisher-ui #share-modal:after {
+	left: initial;
+	right: 49px;
+}
+.entity-market {
+	position: relative;
+}
+.entity-market #tip-modal *, .entity-market #share-modal * {
 	text-align: center;
 }
 #tip-modal #tip-flo .row:first-of-type {
@@ -935,6 +946,7 @@ div#intro {
 	list-style: none;
 	margin: 0;
 	padding: 0;
+	white-space: nowrap;
 }
 #tip-modal ul li {
 	display: inline-block;
@@ -1002,7 +1014,7 @@ div#intro {
 }
 #tip-modal .modal-tab p {
 	margin: 0;
-	padding: 0;
+	padding: 0 10px;
 }
 #share-title {
 	display: block;
