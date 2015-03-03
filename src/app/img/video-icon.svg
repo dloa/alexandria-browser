@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="40px" height="30px" viewBox="0 0 40 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch Beta 3.2.2 (9983) - http://www.bohemiancoding.com/sketch -->
+    <title>Shape</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="video-button" sketch:type="MSArtboardGroup" transform="translate(-18.000000, -23.000000)" fill="#979797">
+            <g id="Oval-3-+-Shape" sketch:type="MSLayerGroup" transform="translate(6.000000, 6.000000)">
+                <path d="M43.7629474,47 L20.2370526,47 C15.6951579,47 12,43.291831 12,38.7339437 L12,25.2660563 C12,20.708169 15.6951579,17 20.2370526,17 L43.7629474,17 C48.3048421,17 52,20.708169 52,25.2660563 L52,38.7339437 C52,43.291831 48.3048421,47 43.7629474,47 L43.7629474,47 Z M20.2370526,19.1126761 C16.856,19.1126761 14.1052632,21.8730986 14.1052632,25.2660563 L14.1052632,38.7339437 C14.1052632,42.1269014 16.856,44.8873239 20.2370526,44.8873239 L43.7629474,44.8873239 C47.144,44.8873239 49.8947368,42.1269014 49.8947368,38.7339437 L49.8947368,25.2660563 C49.8947368,21.8730986 47.144,19.1126761 43.7629474,19.1126761 L20.2370526,19.1126761 L20.2370526,19.1126761 Z M27.3684211,39.3726056 L27.3684211,25.4234507 L40.9632632,32.3979225 L27.3684211,39.3726056 Z" id="Shape" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>
