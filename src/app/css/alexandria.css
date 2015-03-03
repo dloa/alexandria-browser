@@ -141,6 +141,7 @@ header {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	-webkit-app-region: drag;
+	-webkit-user-select: none;
 }
 
 header #search, header #header-menu {
