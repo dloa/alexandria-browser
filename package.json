@@ -1,0 +1,44 @@
+{
+  "name": "Alexandria UX",
+  "homepage": "https://blocktech.com",
+  "bugs": "https://github.com/blocktech/alexandriaux/issues",
+  "single-instance": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blocktech/alexandriaux"
+  },
+  "license": "GPL-3.0",
+  "main": "app://host/src/app/index.html",
+  "version": "0.0.0",
+  "releaseName": "",
+  "scripts": {
+    "test": "grunt --verbose"
+  },
+  "window": {
+    "title": "Alexandria",
+    "icon": "src/app/img/logo.png",
+    "toolbar": false,
+    "frame": false,
+    "min_width": 960,
+    "min_height": 520,
+    "resizable": true,
+    "show": false,
+    "position": "center"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "bower": "1.3.8",
+    "grunt": "0.4.5",
+    "grunt-bower-clean": "^0.2.1",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-compress": "^0.9.1",
+    "grunt-exec": "0.4.x",
+    "grunt-jsbeautifier": "*",
+    "grunt-node-webkit-builder": "0.1.x",
+    "grunt-shell": "^1.1.1",
+    "load-grunt-tasks": "0.4.0",
+    "nw-gyp": "^0.12.2",
+    "tmp": "0.0.23"
+  }
+}
