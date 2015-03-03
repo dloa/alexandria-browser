@@ -448,7 +448,7 @@ var background = svg.append("g"),
     vis = svg.append("g")
     .attr("transform", "translate(" + [window.innerWidth >> 1, window.innerHeight-245 >> 1] + ")");
 
-var currentView = 'archiveCloud';
+var currentView = 'front';
 var currentArchive = '*';
 var currentArchiveLowercase = '*';
 var activeWord;
@@ -1862,7 +1862,7 @@ function resetAlexandria() {
 	$('#search').show(fadeTimer);
 	$('.twitter-archive').not('main').hide();
 	$('#app-shading').css('bottom','0');
-	currentView = 'archiveCloud';
+	currentView = 'front';
 	$('#intro').fadeIn(fadeTimer);
 	var stateObj = {
 		currentView: currentView
@@ -2307,11 +2307,16 @@ function searchAPI(module, searchOn, searchFor) {
 }
 
 // MEDIA TYPE FILTER
-function filterMediaByType() {
+function filterMediaByType(obj) {
 	var filteredMedia = [];
-	$('#browse-media .module-links a.active').each(function(i){
-		filteredMedia[i] = $(this).attr('value');
-	});
+	if (currentView == 'front') {
+		filteredMedia[0] = obj;
+		$('#browse-media .module-links a[value="'+ obj +'"').addClass('active');
+	} else {
+		$('#browse-media .module-links a.active').each(function(i){
+			filteredMedia[i] = $(this).attr('value');
+		});
+	}
 	console.info(filteredMedia);
 	if (filteredMedia.length > 1) {
 		var filteredMediaStr = '';
