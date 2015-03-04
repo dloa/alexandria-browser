@@ -444,6 +444,7 @@ var FLOLTC;
 var LTCUSD;
 var FLOUSD;
 var BTCUSD;
+var cryptoTimerId = 0;
 function getCryptos() {
 	clearTimeout ( cryptoTimerId );
 	cryptoTimerRunning = 0;
