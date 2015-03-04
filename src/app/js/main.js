@@ -1,3 +1,85 @@
+/* some global variables to make mistakes only once */
+// DEFAULT VARIABLES
+
+// var serverAddress = '54.172.28.195'; // Dev
+var serverAddress = 'blue.a.blocktech.com'; // Demo
+var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
+
+var w = window.innerWidth;				
+var h = window.innerHeight-245;
+
+var datetime = new Date();
+var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];	
+
+var fadeTimer = 200;
+
+var activeJobsCache = [];
+var MaxResults;
+var newArchiveVolumeQueryStringCache = [];
+var newArchiveVolumeCache = [];
+var defaultMaxResults = 50;
+var cloudlist = [],
+    max,
+    scale = 1,
+    complete = 0,
+    keyword = "",
+    tags,
+    fontSize,
+    maxLength = 30,
+    fetcher;
+var fontSizeMultiplier;
+var layout = d3.layout.cloud()
+	.timeInterval(10)
+	.size([window.innerWidth, window.innerHeight-245])
+	.rotate(0)
+	.font("Avenir-Book")
+	.fontSize(function(d) { return d.size; })
+	.text(function(d) { return d.text; })
+	.on("end", draw);
+
+var svg = d3.select("#vis").append("svg")
+    .attr("width", window.innerWidth)
+    .attr("height", window.innerHeight-245);
+
+var background = svg.append("g"),
+    vis = svg.append("g")
+    .attr("transform", "translate(" + [window.innerWidth >> 1, window.innerHeight-245 >> 1] + ")");
+
+var currentView = 'front';
+var currentArchive = '*';
+var currentArchiveLowercase = '*';
+var activeWord;
+var searchResults = [];
+var searchResultsCache = [];
+var resetArchiveList = false;
+var currentPage = 0;
+var totalPages = 0;
+var cloudCache = [];
+
+var playingTimeline = false;
+var animDuration = 3500;
+
+var expandList = true;
+
+var startDateValue = Date.parse(datetime)-86400000;
+var endDateValue = Date.parse(datetime);
+
+var prevStartDate = '';
+var prevEndDate = '';
+
+var freshLoad = true;
+
+var prevTipAmount = '';
+
+// Get crypto [cryptsy] exchange rates
+var FLOCost;
+var FLOLTC;
+var LTCUSD;
+var FLOUSD;
+var BTCUSD;
+var cryptoTimerId = 0;
+
+
 jQuery(document).ready(function($){
 	checkLibrarian();
 	if(window.location.protocol != 'file:') {
@@ -39,7 +121,7 @@ jQuery(document).ready(function($){
 		}
 		resetAlexandria();
 	});
-	
+
 	// Intro view icon interactions
 	$('#enter-archives').click(function(){
 		$('.archiveLabel').fadeOut(fadeTimer).find('.currentArchive').html('');
@@ -364,87 +446,9 @@ jQuery(document).ready(function($){
 			$('#serverID').text('Dev');
 		}		
 	});
-	
+
 }); // End Document.Ready
 
-// DEFAULT VARIABLES
-
-// var serverAddress = '54.172.28.195'; // Dev
-var serverAddress = 'blue.a.blocktech.com'; // Demo
-
-var w = window.innerWidth;				
-var h = window.innerHeight-245;
-
-var datetime = new Date();
-var days = ["0", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"];	
-
-var fadeTimer = 200;
-
-var activeJobsCache = [];
-var MaxResults;
-var newArchiveVolumeQueryStringCache = [];
-var newArchiveVolumeCache = [];
-var defaultMaxResults = 50;
-var cloudlist = [],
-    max,
-    scale = 1,
-    complete = 0,
-    keyword = "",
-    tags,
-    fontSize,
-    maxLength = 30,
-    fetcher;
-var fontSizeMultiplier;
-var layout = d3.layout.cloud()
-	.timeInterval(10)
-	.size([window.innerWidth, window.innerHeight-245])
-	.rotate(0)
-	.font("Avenir-Book")
-	.fontSize(function(d) { return d.size; })
-	.text(function(d) { return d.text; })
-	.on("end", draw);
-	
-var svg = d3.select("#vis").append("svg")
-    .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight-245);
-
-var background = svg.append("g"),
-    vis = svg.append("g")
-    .attr("transform", "translate(" + [window.innerWidth >> 1, window.innerHeight-245 >> 1] + ")");
-
-var currentView = 'front';
-var currentArchive = '*';
-var currentArchiveLowercase = '*';
-var activeWord;
-var searchResults = [];
-var searchResultsCache = [];
-var resetArchiveList = false;
-var currentPage = 0;
-var totalPages = 0;
-var cloudCache = [];
-
-var playingTimeline = false;
-var animDuration = 3500;
-
-var expandList = true;
-
-var startDateValue = Date.parse(datetime)-86400000;
-var endDateValue = Date.parse(datetime);
-
-var prevStartDate = '';
-var prevEndDate = '';
-
-var freshLoad = true;
-
-var prevTipAmount = '';
-
-// Get crypto [cryptsy] exchange rates
-var FLOCost;
-var FLOLTC;
-var LTCUSD;
-var FLOUSD;
-var BTCUSD;
-var cryptoTimerId = 0;
 function getCryptos() {
 	clearTimeout ( cryptoTimerId );
 	cryptoTimerRunning = 0;
@@ -783,7 +787,7 @@ function getJobs(searchTerm) {
 		$.ajax({
 			type: "POST",
 			data: queryString.toString(),
-			url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/activejobs/betweenDates",
+			url: apiURL + "/twitter/get/activejobs/betweenDates",
 			success: function (e) {
 				console.log('getJobs() Ajax: get/activejobs/betweenDates ... '+searchTerm);
 				var data = $.parseJSON(e);
@@ -906,7 +910,7 @@ function getArchiveWords(arch, filterword) {
 	console.log('currentView = '+currentView);
 	$.ajax({
 		type: "POST",
-		url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/archive/betweenDates/wordcloud",
+		url: apiURL + "/twitter/get/archive/betweenDates/wordcloud",
 		data: queryString.toString(),
 		success: function (e) {
 			console.log('getArchiveWords() Ajax: betweenDates/wordcloud ... '+queryString);
@@ -1034,7 +1038,7 @@ function totalPagesAPI(arch, word, StartDate, EndDate, rpp){
 		console.log('API call: betweenDates/wordsearch/pagecount');
 		$.ajax({
 			type: "POST",
-			url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch/pagecount",
+			url: apiURL + "/twitter/get/tweets/betweenDates/wordsearch/pagecount",
 			data: queryString.toString(),
 			success: function (e) {
 				console.log('wordSearch() Ajax: betweenDates/wordsearch/pagecount ... '+queryString);
@@ -1090,7 +1094,7 @@ function tweetListPageAPI(arch, word, StartDate, EndDate, rpp) {
 		}
 		$.ajax({
 			type: "POST",
-			url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/tweets/betweenDates/wordsearch",
+			url: apiURL + "/twitter/get/tweets/betweenDates/wordsearch",
 			data: queryString.toString(),
 			success: function (e) {
 				console.log('wordSearch() Ajax: betweenDates/wordsearch ... '+queryString);
@@ -1312,7 +1316,7 @@ function volumeBars(arch, word, interval){
 	}
 	$.ajax({
 		type: "POST",
-		url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/interval/count",
+		url: apiURL + "/twitter/get/interval/count",
 		data: queryString.toString(),
 		success: function (e) {
 			if ( $('#footer').css('display') == 'none' ) {
@@ -1404,7 +1408,7 @@ function checkLibrarian() {
 	console.log('Checking Librarian ... ');
 	$.ajax({
 		type: "POST",
-		url: "http://"+ serverAddress +":3000/alexandria/v1/twitter/get/interval/count",
+		url: apiURL + "/twitter/get/interval/count",
 		data: queryString.toString(),
 		success: function (e) {
 			var data = $.parseJSON(e);
