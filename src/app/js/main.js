@@ -743,7 +743,9 @@ function loadPublisherView(objMeta) {
 		var mediaFilename = '';
 		var mediaTid = thisPubliserMedia[i]['media-data']['alexandria-media']['torrent'];
 		var mediaFLO = thisPubliserMedia[i]['media-data']['alexandria-media']['publisher'];
-		var mediaPymnt = thisPubliserMedia[i]['media-data']['alexandria-media']['payment']['type'];
+		if(thisPubliserMedia[i]['media-data']['alexandria-media']['payment']){
+			var mediaPymnt = thisPubliserMedia[i]['media-data']['alexandria-media']['payment']['type'];
+		}
 		if(mediaInfo['extra-info']){
 			if(mediaInfo['extra-info']['runtime']){
 				mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
@@ -893,8 +895,10 @@ function loadMediaView(objMeta) {
 	var wwwId = '';
 	var mediaTid = thisMediaData[0]['media-data']['alexandria-media']['torrent'];
 	var mediaFLO = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
-	var mediaPymnt = thisMediaData[0]['media-data']['alexandria-media']['payment']['type'];
-	if (mediaPymnt == 'tip') {
+	if(thisMediaData[i]['media-data']['alexandria-media']['payment']){
+		var mediaPymnt = thisMediaData[0]['media-data']['alexandria-media']['payment']['type'];
+	}
+	if ((mediaPymtn) && (mediaPymnt == 'tip')) {
 		$('.tip-amounts li').remove();
 		var tipAmounts = thisMediaData[0]['media-data']['alexandria-media']['payment']['amount'].split(',');
 		for (var i = 0; i < tipAmounts.length; i++) {
