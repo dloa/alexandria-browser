@@ -389,7 +389,7 @@ header #addNewContent-icon, header #app-user-icon {
 	width: 25px;
 	cursor: pointer;
 }
-header #addNewContent-icon svg, header #serverID {
+header #serverID {
 	display: none;
 }
 header #addNewContent-icon {

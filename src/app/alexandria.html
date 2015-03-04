@@ -178,9 +178,6 @@
 
 			<h2 class="sharing-ui">Share New Content</h2>
 			<h2 class="publisher-ui">Create New Publisher</h2>
-<!--			
-			<div id="serverID"></div>
--->
 			<div id="header-menu">
 				<div id="addNewContent-icon" onclick="loadAddContentModal();"><img src="img/add-new-icon.svg" class="makesvg" /></div>
 				<div id="add-menu-modal" class="header-modal">
@@ -199,7 +196,7 @@
 						<li><a onclick="" id="user-menu-history"><img src="img/history-icon.svg" class="makesvg" /> History</a></li>
 						<li><a onclick="" id="user-menu-modules"><img src="img/module-icon.svg" class="makesvg" /> Modules</a></li>
 						<li><a onclick="" id="user-menu-settings"><img src="img/settings-icon.svg" class="makesvg" /> Settings</a></li>
-						<li><a onclick="" id="user-menu-logout"><img src="img/log-out-icon.svg" class="makesvg" /> Logout</a></li>
+						<li><a onclick="" id="user-menu-logout"><img src="img/log-out-icon.svg" class="makesvg" /> Exit</a></li>
 					</ul>
 				</div>
 			</div>
@@ -211,11 +208,11 @@
 			<div class="links">
 				<ul>
 					<li class="module-icon">						
-						<a id="enter-archives">
+						<a onclick="loadRecentMedia();">
 							<div class="imgwrap">
-								<img src="img/archive-icon.svg" class="makesvg" />
+								<img src="img/media-icon.svg" class="makesvg" />
 							</div>
-							<div>Archives</div>
+							<div>Media</div>
 						</a>
 					</li>
 					<li class="module-icon">
@@ -278,8 +275,6 @@
 			</div>
 		</div>
 
-		<!-- Twitter Archives -->
-
 		<div id="viewlabel">
 			<div class="view-media-ui">
 				<a onclick="loadRecentMedia()" class="go-back">Media</a> > <span id="media-breadcrumbs-publisher"></span> > <span id="media-breadcrumbs-type"></span> > <span id="media-breadcrumbs"></span>
@@ -297,33 +292,7 @@
 			</div>
 		</div>
 
-		<main id="vis" class="wordCloud twitter-archive"></main>
-
-		<main id="wordsListView" class="twitter-archive">
-			<article>
-				<ul id="wordsList"></ul>
-			</article>
-		</main>
-
-		<main id="tweetListView" class="overlay">
-			<article>
-				<ul id="tweetList"></ul>
-				<div class="close-modal">x</div>
-			</article>
-		</main>
-
 		<div id="app-overlay" class="overlay"></div>
-
-		<main id="archiveListView" class="twitter-archive">
-			<article>
-				<ul id="archiveList"></ul>
-			</article>
-		</main>
-
-
-		<div id="spritz-container">
-			<div id="spritzer" data-role="spritzer"></div>
-		</div>
 
 		<div id="timeline-settings">
 			<h3>Playback Settings</h3>
@@ -462,7 +431,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="row full media-specific movie-meta podcast-meta book-meta thing-meta"">
+											<div class="row full media-specific movie-meta podcast-meta book-meta thing-meta">
 												<div class="col">
 													<div class="input-container">
 														<label><span id="media-meta-creators2">Creators 2</span></label>
@@ -590,30 +559,6 @@
 									<li class="disabled"><input type="checkbox" name="dNetwork" value="Storj" id="dNetStorj" disabled /> <label for="dNetStorj">Storj.io</label> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
 									<li class="disabled"><input type="checkbox" name="dNetwork" value="Filecoin" id="dNetFilecoin" disabled /> <label for="dNetFilecoin">Filecoin</label> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
 								</ul>
-<!--
-								<div class="container">
-									<div class="tblwrap">
-										<div class="tbl">
-											<div class="row strong">
-												<div class="col">
-													<label>Data Redundancy</label>
-												</div>
-												<div class="col">
-													<label>Cost</label>
-												</div>
-											</div>
-											<div class="row">
-												<div class="col">
-													<input type="text" name="network-nodes" class="intInput" /> <label>nodes</label>
-												</div>
-												<div class="col">
-													$0 / year
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
--->
 							</div>
 						</div>
 					</div>
@@ -924,34 +869,6 @@
 					<div id="qrcode"></div>
 				</div>
 			</div>
-<!--
-			<div id="tip-paypal" class="modal-tab">
-				<div class="row">
-					<a class="btnLightGray">Use Paypal</a>
-				</div>
-			</div>
-			<div id="tip-credebit" class="modal-tab">
-				<div class="row">
-					<div class="credebit-price">$<span class="tip-value">1.00</span> USD</div>
-				</div>
-				<div class="cc-inputs">
-					<div class="row">
-						<input type="text" placeholder="Card Number" name="CC Number" />
-					</div>
-					<div class="row">
-						<input type="text" placeholder="MM" name="CC Exp Month" maxlength="2" />
-						<input type="text" placeholder="YY" name="CC Exp Year" maxlength="2" />
-						<span class="sep"></span>
-						<input type="password" placeholder="CVV" name="CC CVV" maxlength="3" />
-						<span class="sep"></span>
-						<input type="text" placeholder="Zip" name="CC Zip" maxlength="5" />
-					</div>
-					<div class="row">
-						<a class="btnLightGray" id="submitCC">Submit Payment</a>
-					</div>
-				</div>
-			</div>
--->
 		</div>
 		
 		<!-- Application components -->
@@ -972,25 +889,15 @@
 		<script src="vendor/jquery/dist/jquery.min.js"></script>
 		<script src="vendor/jquery-ui/jquery-ui.min.js"></script>
 
-                <script src="vendor/jqrangeslider/jQRangeSliderMouseTouch.js"></script>
-	        <script src="vendor/jqrangeslider/jQRangeSliderDraggable.js"></script>
-	        <script src="vendor/jqrangeslider/jQRangeSliderHandle.js"></script>
-	        <script src="vendor/jqrangeslider/jQRangeSliderBar.js"></script>
-	        <script src="vendor/jqrangeslider/jQRangeSliderLabel.js"></script>
-	        <script src="vendor/jqrangeslider/jQRangeSlider.js"></script>
-	        <script src="vendor/jqrangeslider/jQDateRangeSliderHandle.js"></script>
-		<script src="vendor/jqrangeslider/jQDateRangeSlider.js"></script>
-
 		<script src="vendor/spin.js/spin.js"></script>
-		<script src="vendor/jQuery-linkify/dist/jquery.linkify.min.js"></script>
 
-	        <script src="vendor/mousetrap/mousetrap.min.js"></script>
+<!--	<script src="vendor/mousetrap/mousetrap.min.js"></script> -->
+
                 <!-- these are not ported to bower yet -->
-		<script type="text/javascript" src="js/vendor/spritz-1.2.min.js"></script>
-		<script src="js/vendor/jquery.xdomainajax.js"></script>
+	<script src="js/vendor/jquery.xdomainajax.js"></script>
 		<script src="js/vendor/qrcode.min.js"></script>
 		<script src="js/vendor/webtoolkit.md5.js"></script>
-		<script src="js/vendor/upclick-min.js"></script>
+<!--		<script src="js/vendor/upclick-min.js"></script> -->
 		<script src="http://connect.soundcloud.com/sdk.js"></script>
 	<!-- File Upload JS 
 		<script src="js/vendor/upclick-min.js"></script>
