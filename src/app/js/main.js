@@ -895,10 +895,10 @@ function loadMediaView(objMeta) {
 	var wwwId = '';
 	var mediaTid = thisMediaData[0]['media-data']['alexandria-media']['torrent'];
 	var mediaFLO = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
-	if(thisMediaData[i]['media-data']['alexandria-media']['payment']){
+	if(thisMediaData[0]['media-data']['alexandria-media']['payment']) {
 		var mediaPymnt = thisMediaData[0]['media-data']['alexandria-media']['payment']['type'];
 	}
-	if ((mediaPymtn) && (mediaPymnt == 'tip')) {
+	if ((mediaPymnt) && (mediaPymnt == 'tip')) {
 		$('.tip-amounts li').remove();
 		var tipAmounts = thisMediaData[0]['media-data']['alexandria-media']['payment']['amount'].split(',');
 		for (var i = 0; i < tipAmounts.length; i++) {
