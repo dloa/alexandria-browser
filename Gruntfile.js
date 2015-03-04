@@ -39,8 +39,6 @@ module.exports = function (grunt) {
 	require('load-grunt-tasks')(grunt);
 
 	grunt.registerTask('default', [
-		'submodule',
-		'jshint',
 		'bower_clean',
 		'injectgit'
 	]);
@@ -52,14 +50,8 @@ module.exports = function (grunt) {
 	grunt.registerTask('build', [
 		'injectgit',
 		'bower_clean',
-		'submodule',
 		'nodewebkit',
 		'shell:setexecutable'
-	]);
-
-	grunt.registerTask('submodule', [
-		'clean:submodule',
-		'shell:submodule',
 	]);
 
 	grunt.registerTask('dist', [
@@ -125,36 +117,13 @@ module.exports = function (grunt) {
 	});
 
 	grunt.initConfig({
-		githooks: {
-			all: {
-				'pre-commit': 'jsbeautifier:verify jshint',
-			}
-		},
-
-		jsbeautifier: {
-			options: {
-				config: ".jsbeautifyrc"
-			},
-
-			default: {
-				src: ["src/app/lib/**/*.js", "src/app/*.js", "*.js", "*.json"],
-			},
-
-			verify: {
-				src: ["src/app/lib/**/*.js", "src/app/*.js", "*.js", "*.json"],
-				options: {
-					mode: 'VERIFY_ONLY'
-				}
-			}
-		},
-
 		nodewebkit: {
 			options: {
 				version: '0.9.2',
 				build_dir: './build', // Where the build version of my node-webkit app is saved
 				keep_nw: true,
 				embed_nw: false,
-				mac_icns: icons.mac, // Path to the Mac icon file
+				mac_icns: config.mac.icon, // Path to the Mac icon file
 				macZip: buildPlatforms.win, // Zip nw for mac in windows. Prevent path too long if build all is used.
 				mac: buildPlatforms.mac,
 				win: buildPlatforms.win,
@@ -203,32 +172,8 @@ module.exports = function (grunt) {
 			}
 		},
 
-		jshint: {
-			gruntfile: {
-				options: {
-					jshintrc: '.jshintrc'
-				},
-				src: 'Gruntfile.js'
-			},
-			src: {
-				options: {
-					jshintrc: 'src/app/.jshintrc'
-				},
-				src: ['src/app/lib/*.js', 'src/app/lib/**/*.js', 'src/app/*.js']
-			}
-		},
 
 		shell: {
-			submodule: {
-				command: [
-					'git submodule update --init'
-				].join('&&')
-			},
-			submoduleUpdate: {
-				command: [
-					'git submodule foreach git pull origin master'
-				].join('&&')
-			},
 			setexecutable: {
 				command: function () {
 					if (process.platform === "win32") {
@@ -317,7 +262,6 @@ module.exports = function (grunt) {
 
 		clean: {
 			releases: ['build/releases/' + projectNameNS + '/**'],
-			submodule: ['src/content/packages/**', 'src/content/languages/**', 'src/content/themes/**'],
 			css: ['src/app/themes/**'],
 			dist: ['dist/windows/*.exe', 'dist/mac/*.dmg'],
 			update: ['build/updater/*.*']
