@@ -39,36 +39,6 @@ jQuery(document).ready(function($){
 		}
 		resetAlexandria();
 	});
-	// Omnibox (search input)
-	$('#search-main').on("keydown", function (e) {		
-		playingTimeline = true;
-		autoPlayTimeline();
-		searchValue = $('#search-main').val();
-		if($('#tweetListView').css('display') == 'block') {
-			resetArchiveList = true;
-		}
-	});
-	$('#search-main').on("keyup", function (e) {
-		newSearchValue = $('#search-main').val();
-		var code = e.keyCode || e.which;
-		if (code == 32) {
-			// pressin the space bar
-		} else if ( (newSearchValue != searchValue) || (code == 16) ) {
-			// nothing changed in search content
-			if (searchTimerId) {
-				clearTimeout ( searchTimerId );
-			}
-			// set a timer and run search if done typing
-			searchTimerId = setTimeout ( 'runSearch("'+ newSearchValue +'")', 2000 );
-		}
-	});
-
-	// Click icon in omnibox to clear and run search
-	$('#search .clearSearch').click(function(){
-		$(this).prev('input').val('');
-		resetArchiveList = true
-		runSearch('');
-	});
 	
 	// Intro view icon interactions
 	$('#enter-archives').click(function(){
@@ -328,12 +298,6 @@ jQuery(document).ready(function($){
 		}
 	});
 	
-	$('#browse-media .module-links a').click(function(){
-		$(this).toggleClass('active');
-		filterMediaByType();		
-	});
-	
-
 	// File uploader init
 	$('.uploader').each(function(){
 		uploadFile($(this));
@@ -743,31 +707,6 @@ function getAllArchives(){
 	var startDate = Date.parse(basicSliderBounds.min);
 	var endDate = Date.parse(datetime);
 	$("#timeline").dateRangeSlider("values", startDate, endDate);
-}
-
-// RUN SEARCH
-var searchValue = '';
-var newSearchValue = '';
-var searchTimerId = 0;
-var cryptoTimerId = 0;
-var cryptoTimerRunning = 0;
-var searchRunning;
-var searchTerm;
-
-function runSearch(searchTerm) {	
-	clearTimeout ( searchTimerId );
-	searchRunning = 0;
-	$('.twitter-archive').not('main').show();
-	if($('#tweetListView').css('display') == 'block') {
-		clearModal();
-	}	
-	if (currentView.slice(0,5) == 'words') {
-		getArchiveWords(currentArchive, searchTerm);
-	} else {
-		getJobs(searchTerm);
-	}	
-//	$('svg#volume').remove();
-	volumeBars(currentArchive,'',7200000);
 }
 
 // NEW GET ACTIVE JOBS AND VOLUMES
@@ -1885,6 +1824,7 @@ function getAllPublishers() {
 	currentView = 'publishers';
 	$('main').fadeOut(fadeTimer);
 	hideArchivesUI();
+	$('#browse-media .module-links a.active').removeClass('active');
 	$('#browse-media-wrap .row').remove();
 	$('.sharing-ui').fadeOut(fadeTimer);
 	$('.publisher-ui').fadeOut(fadeTimer);
@@ -1917,6 +1857,7 @@ function loadRecentMedia() {
 	$('main').fadeOut(fadeTimer);
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	hideArchivesUI();
+	$('#browse-media .module-links a.active').removeClass('active');
 	$('#browse-media-wrap .row').remove();
 	$('#user-modal').fadeOut(fadeTimer);
 	$('.sharing-ui').fadeOut(fadeTimer);
@@ -2271,6 +2212,7 @@ function selectSearchMediaType(obj){
 
 // EXECUTE ADVANCED SEARCH
 function buildSearch() {
+	$('#browse-media .module-links a.active').removeClass('active');
 	var searchProtocol = document.getElementById('searchModule').value;
 	var searchIn = '';
 	if (searchProtocol == 'media') {
@@ -2306,11 +2248,17 @@ function searchAPI(module, searchOn, searchFor) {
 	return mediaData;
 }
 
+function setMediaTypeFilter(obj) {
+	$(obj).toggleClass('active');
+	filterMediaByType();		
+}
+
 // MEDIA TYPE FILTER
 function filterMediaByType(obj) {
 	var filteredMedia = [];
 	if (currentView == 'front') {
 		filteredMedia[0] = obj;
+		$('#browse-media .module-links a.active').removeClass('active');
 		$('#browse-media .module-links a[value="'+ obj +'"').addClass('active');
 	} else {
 		$('#browse-media .module-links a.active').each(function(i){
