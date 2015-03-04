@@ -1,0 +1,4 @@
+popcorntime: arch-dependent-file-in-usr-share
+popcorntime: changelog-file-missing-in-native-package
+popcorntime: embedded-library
+popcorntime: unstripped-binary-or-object
