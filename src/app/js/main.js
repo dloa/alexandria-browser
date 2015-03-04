@@ -1060,6 +1060,24 @@ function populateSearchResults(results, module) {
 	document.getElementById('media-breadcrumbs-type').innerHTML = '';
 	document.getElementById('media-breadcrumbs-publisher').innerHTML = '';
 	document.getElementById('media-breadcrumbs').innerHTML = '';
+	if (!results) {
+		console.error('No Media Results');
+		var mediaEntity = '<div class="row media-entity"><div class="media-icon"><img src="img/media-icon.svg" class="makesvg entity-image" style="display: inline;"></div><h3 class="media-title">No Results Found</h3></div>';
+		$('#browse-media-wrap').append(mediaEntity);
+		$('#browse-media-wrap h2').text('Browse Media');
+		currentView = 'media';
+		var stateObj = {
+			currentView: currentView,
+			sort: 'recent'
+		};
+		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
+		history.pushState(stateObj, 'Alexandria > Media', newURL);
+		document.title = 'Alexandria > Media';
+		$('#browse-media-wrap .row:first-of-type').addClass('first');
+		$('#browse-media').fadeIn(fadeTimer);
+		replaceSVG();
+		return false;
+	}
 	if (module =='media') {
 		for (var i = 0; i < results.length; i++) {
 			var mediaID = results[i]['txid'];
