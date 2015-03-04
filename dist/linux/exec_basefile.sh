@@ -8,7 +8,7 @@ Unexpected Error:
 =================
 at: $current
 ... Please try again."
-exit 1
+exit 1 
 }
 
 #progressbar on download
@@ -49,7 +49,7 @@ func_error
 #Variables
 version="PT_VERSION"
 tos="https://popcorntime.io/tos"
-downloadlink="http://get.popcorntime.io/build/Popcorn-Time-$version-Linux-$arch.tar.gz"
+downloadlink="http://cdn.popcorntime.io/build/Popcorn-Time-$version-Linux-$arch.tar.gz"
 
 #Disclaimer
 clear

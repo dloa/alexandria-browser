@@ -1,19 +1,52 @@
-﻿; Popcorn Time 
+﻿; Popcorn Time
 ; Installer Source for NSIS 3.0 or higher
+
+;Enable Unicode encoding
+Unicode True
 
 ;Include Modern UI
 !include "MUI2.nsh"
 !include "FileFunc.nsh"
 
+;Check file paths
+!if /FILEEXISTS "..\..\package.json"
+    ;File exists!
+    !define WIN_PATHS
+!else
+    ;File does NOT exist!
+!endif
+
+;Parse Gruntfile.js
+!ifdef WIN_PATHS
+    !searchparse /file "..\..\Gruntfile.js" "version: '" APP_NW "',"
+!else
+    !searchparse /file "../../Gruntfile.js" "version: '" APP_NW "',"
+!endif
+
 ;Parse package.json
-!searchparse /file "..\..\package.json" '"name": "' APP_NAME '",'
+!ifdef WIN_PATHS
+    !searchparse /file "..\..\package.json" '"name": "' APP_NAME '",'
+!else
+    !searchparse /file "../../package.json" '"name": "' APP_NAME '",'
+!endif
 !searchreplace APP_NAME "${APP_NAME}" "-" " "
-!searchparse /file "..\..\package.json" '"version": "' PT_VERSION '",'
-!searchreplace PT_VERSION "${PT_VERSION}" "-" "."
-!searchparse /file "..\..\package.json" '"homepage": "' APP_URL '",'
-!searchparse /file "..\..\package.json" '"name": "' DATA_FOLDER '",'
+!ifdef WIN_PATHS
+    !searchparse /file "..\..\package.json" '"version": "' PT_VERSION '",'
+!else
+    !searchparse /file "../../package.json" '"version": "' PT_VERSION '",'
+!endif
+!searchreplace PT_VERSION_CLEAN "${PT_VERSION}" "-" ".0"
+!ifdef WIN_PATHS
+    !searchparse /file "..\..\package.json" '"homepage": "' APP_URL '",'
+    !searchparse /file "..\..\package.json" '"name": "' DATA_FOLDER '",'
+!else
+    !searchparse /file "../../package.json" '"homepage": "' APP_URL '",'
+    !searchparse /file "../../package.json" '"name": "' DATA_FOLDER '",'
+!endif
 
 ;General Settings
+!define COMPANY_NAME "Popcorn Official"
+!define UNINSTALL_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
 Name "${APP_NAME}"
 Caption "${APP_NAME} v${PT_VERSION}"
 BrandingText "${APP_NAME} v${PT_VERSION}"
@@ -21,10 +54,10 @@ VIAddVersionKey "ProductName" "${APP_NAME}"
 VIAddVersionKey "ProductVersion" "v${PT_VERSION}"
 VIAddVersionKey "FileDescription" "${APP_NAME} v${PT_VERSION} Installer"
 VIAddVersionKey "FileVersion" "v${PT_VERSION}"
-VIAddVersionKey "CompanyName" "Popcorn Official"
+VIAddVersionKey "CompanyName" "${COMPANY_NAME}"
 VIAddVersionKey "LegalCopyright" "${APP_URL}"
-VIProductVersion "${PT_VERSION}.0"
-OutFile "${APP_NAME}-${PT_VERSION}-Setup.exe"
+VIProductVersion "${PT_VERSION_CLEAN}.0"
+OutFile "${APP_NAME}-${PT_VERSION}-Win-Setup.exe"
 CRCCheck on
 SetCompressor /SOLID lzma
 
@@ -35,14 +68,22 @@ InstallDir "$LOCALAPPDATA\${APP_NAME}"
 RequestExecutionLevel user
 
 ;Define UI settings
-!define MUI_UI_HEADERIMAGE_RIGHT "..\..\src\app\images\icon.png"
-!define MUI_ICON "..\..\src\app\images\popcorntime.ico"
-!define MUI_UNICON "..\..\src\app\images\popcorntime.ico"
+!ifdef WIN_PATHS
+    !define MUI_UI_HEADERIMAGE_RIGHT "..\..\src\app\images\icon.png"
+    !define MUI_ICON "..\..\src\app\images\popcorntime.ico"
+    !define MUI_UNICON "..\..\src\app\images\popcorntime.ico"
+!else
+    !define MUI_UI_HEADERIMAGE_RIGHT "../../src/app/images/icon.png"
+    !define MUI_ICON "../../src/app/images\popcorntime.ico"
+    !define MUI_UNICON "../../src/app/images\popcorntime.ico"
+!endif
 !define MUI_WELCOMEFINISHPAGE_BITMAP "installer-image.bmp"
 !define MUI_UNWELCOMEFINISHPAGE_BITMAP "uninstaller-image.bmp"
 !define MUI_ABORTWARNING
 !define MUI_FINISHPAGE_LINK "${APP_URL}"
 !define MUI_FINISHPAGE_LINK_LOCATION "${APP_URL}"
+!define MUI_FINISHPAGE_RUN "$INSTDIR\node-webkit\${APP_NAME}.exe"
+!define MUI_FINISHPAGE_RUN_PARAMETERS "."
 
 ;Define the pages
 !insertmacro MUI_PAGE_WELCOME
@@ -201,77 +242,140 @@ FunctionEnd
 
 Section ; Node Webkit Files
 
-	;Delete existing install
-	RMDir /r "$INSTDIR"
+    ;Delete existing install
+    RMDir /r "$INSTDIR"
 
-	;Set output path to InstallDir
-	SetOutPath "$INSTDIR\node-webkit"
+    ;Set output path to InstallDir
+    SetOutPath "$INSTDIR\node-webkit"
 
-	;Add the files
-	File "..\..\build\cache\win\0.9.2\*.dll"
-	File "/oname=${APP_NAME}.exe" "..\..\build\cache\win\0.9.2\nw.exe"
-	File "..\..\build\cache\win\0.9.2\nw.pak"
+    ;Check to see if this nw uses datfiles
+    !ifdef WIN_PATHS
+        !define DATPATH "..\..\build\cache\win\${APP_NW}\"
+    !else
+        !define DATPATH "../../build/cache/win/${APP_NW}/"
+    !endif
+
+    !ifdef DATPATH
+        !if /FILEEXISTS "${DATPATH}icudtl.dat"
+            ;File exists!
+            !define DATFILES
+        !else
+            ;File does NOT exist!
+        !endif
+    !endif
+    
+    ;Add the files
+    !ifdef WIN_PATHS
+        File "..\..\build\cache\win\${APP_NW}\*.dll"
+        File "/oname=${APP_NAME}.exe" "..\..\build\cache\win\${APP_NW}\nw.exe"
+        File "..\..\build\cache\win\${APP_NW}\nw.pak"
+    !else
+        File "../../build/cache/win/${APP_NW}/*.dll"
+        File "/oname=${APP_NAME}.exe" "../../build/cache/win/${APP_NW}/nw.exe"
+        File "../../build/cache/win/${APP_NW}/nw.pak"
+    !endif
+
+    !ifdef DATFILES
+        File "${DATPATH}*.dat"
+    !endif
 
 SectionEnd
 
 Section ; App Files
 
-	;Set output path to InstallDir
-	SetOutPath "$INSTDIR\src\app"
+    ;Set output path to InstallDir
+    SetOutPath "$INSTDIR\src\app"
 
-	;Add the files
-	File /r "..\..\src\app\css"
-	File /r "..\..\src\app\fonts"
-	File /r "..\..\src\app\images"
-	File /r "..\..\src\app\language"
-	File /r "..\..\src\app\lib"
-	File /r "..\..\src\app\templates"
-	File /r "..\..\src\app\themes"
-	File /r /x ".*" /x "test*" /x "example*" "..\..\src\app\vendor"
-	File "..\..\src\app\index.html"
-	File "..\..\src\app\*.js"
-	File /oname=License.txt "..\..\dist\windows\LICENSE.txt"
+    ;Add the files
+    !ifdef WIN_PATHS
+        File /r "..\..\src\app\css"
+        File /r "..\..\src\app\fonts"
+        File /r "..\..\src\app\images"
+        File /r "..\..\src\app\language"
+        File /r "..\..\src\app\lib"
+        File /r "..\..\src\app\templates"
+        File /r "..\..\src/app\themes"
+        File /r /x ".*" /x "test*" /x "example*" "..\..\src\app\vendor"
+        File "..\..\src\app\index.html"
+        File "..\..\src\app\*.js"
+        File /oname=License.txt "..\..\dist\windows\LICENSE.txt"
+    !else
+        File /r "../../src/app/css"
+        File /r "../../src/app/fonts"
+        File /r "../../src/app/images"
+        File /r "../../src/app/language"
+        File /r "../../src/app/lib"
+        File /r "../../src/app/templates"
+        File /r "../../src/app/themes"
+        File /r /x ".*" /x "test*" /x "example*" "../../src/app/vendor"
+        File "../../src/app/index.html"
+        File "../../src/app/*.js"
+        File /oname=License.txt "../../dist/windows/LICENSE.txt"
+    !endif
 
-	SetOutPath "$INSTDIR"
-	File "..\..\package.json"
-	File /NONFATAL "..\..\.git.json"
+    SetOutPath "$INSTDIR"
+    !ifdef WIN_PATHS
+        File "..\..\package.json"
+        File "..\..\CHANGELOG.md"
+        File /NONFATAL "..\..\.git.json"
+    !else
+        File "../../package.json"
+        File "../../CHANGELOG.md"
+        File /NONFATAL "../../.git.json"
+    !endif
 
-	SetOutPath "$INSTDIR\node_modules"
-	File /r /x "*grunt*" /x "stylus" /x "nw-gyp" /x "bower" /x ".bin" /x "bin" /x "test"  /x "test*" /x "example*" /x ".*" "..\..\node_modules\*.*"
+    SetOutPath "$INSTDIR\node_modules"
+    !ifdef WIN_PATHS
+        File /r /x "*grunt*" /x "stylus" /x "nw-gyp" /x "bower" /x ".bin" /x "bin" /x "test"  /x "test*" /x "example*" /x ".*" "..\..\node_modules\*.*"
+    !else
+        File /r /x "*grunt*" /x "stylus" /x "nw-gyp" /x "bower" /x ".bin" /x "bin" /x "test"  /x "test*" /x "example*" /x ".*" "../../node_modules/*.*"
+    !endif
 
-	;Create uninstaller
-	WriteUninstaller "$INSTDIR\Uninstall.exe"
+    ;Create uninstaller
+    WriteUninstaller "$INSTDIR\Uninstall.exe"
 
 SectionEnd
 
 Section ; Shortcuts
 
-	;Working Directory
-	SetOutPath "$INSTDIR"
-	
-	CreateShortCut "$INSTDIR\${APP_NAME}.lnk" "$INSTDIR\node-webkit\${APP_NAME}.exe" "." "$INSTDIR\src\app\images\popcorntime.ico" "" "" "" "${APP_NAME}"
+    ;Working Directory
+    SetOutPath "$INSTDIR"
+    
+    CreateShortCut "$INSTDIR\${APP_NAME}.lnk" "$INSTDIR\node-webkit\${APP_NAME}.exe" "." "$INSTDIR\src\app\images\popcorntime.ico" "" "" "" "${APP_NAME}"
 
-	;Start Menu Shortcut
-	RMDir /r "$SMPROGRAMS\${APP_NAME}"
-	CreateDirectory "$SMPROGRAMS\${APP_NAME}"
-	CreateShortCut "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\node-webkit\${APP_NAME}.exe" "." "$INSTDIR\src\app\images\popcorntime.ico" "" "" "" "${APP_NAME} ${PT_VERSION}"
-	CreateShortCut "$SMPROGRAMS\${APP_NAME}\Uninstall ${APP_NAME}.lnk" "$INSTDIR\Uninstall.exe" "" "$INSTDIR\src\app\images\popcorntime.ico" "" "" "" "Uninstall ${APP_NAME}"
+    ;Start Menu Shortcut
+    RMDir /r "$SMPROGRAMS\${APP_NAME}"
+    CreateDirectory "$SMPROGRAMS\${APP_NAME}"
+    CreateShortCut "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\node-webkit\${APP_NAME}.exe" "." "$INSTDIR\src\app\images\popcorntime.ico" "" "" "" "${APP_NAME} ${PT_VERSION}"
+    CreateShortCut "$SMPROGRAMS\${APP_NAME}\Uninstall ${APP_NAME}.lnk" "$INSTDIR\Uninstall.exe" "" "$INSTDIR\src\app\images\popcorntime.ico" "" "" "" "Uninstall ${APP_NAME}"
 
-	;Desktop Shortcut
-	Delete "$DESKTOP\${APP_NAME}.lnk"
-	CreateShortCut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\node-webkit\${APP_NAME}.exe" "." "$INSTDIR\src\app\images\popcorntime.ico" "" "" "" "${APP_NAME} ${PT_VERSION}"
+    ;Desktop Shortcut
+    Delete "$DESKTOP\${APP_NAME}.lnk"
+    CreateShortCut "$DESKTOP\${APP_NAME}.lnk" "$INSTDIR\node-webkit\${APP_NAME}.exe" "." "$INSTDIR\src\app\images\popcorntime.ico" "" "" "" "${APP_NAME} ${PT_VERSION}"
+
+    ;Add/remove programs uninstall entry
+    ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+    IntFmt $0 "0x%08X" $0
+	WriteRegDWORD HKCU "${UNINSTALL_KEY}" "EstimatedSize" "$0"
+	WriteRegStr HKCU "${UNINSTALL_KEY}" "DisplayName" "${APP_NAME}"
+    WriteRegStr HKCU "${UNINSTALL_KEY}" "DisplayIcon" "$INSTDIR\src\app\images\popcorntime.ico"
+    WriteRegStr HKCU "${UNINSTALL_KEY}" "Publisher" "${COMPANY_NAME}"
+    WriteRegStr HKCU "${UNINSTALL_KEY}" "UninstallString" "$INSTDIR\Uninstall.exe"
+    WriteRegStr HKCU "${UNINSTALL_KEY}" "URLInfoAbout" "${APP_URL}"
+    WriteRegStr HKCU "${UNINSTALL_KEY}" "HelpLink" "https://discuss.popcorntime.io"
 
 SectionEnd
 
 ; Uninstaller
 Section "uninstall" 
 
-	RMDir /r "$INSTDIR"
-	RMDir /r "$SMPROGRAMS\${APP_NAME}"
-	Delete "$DESKTOP\${APP_NAME}.lnk"
-	
-	MessageBox MB_YESNO|MB_ICONQUESTION "$(removeDataFolder)" IDNO NoUninstallData
-	RMDir /r "$LOCALAPPDATA\${DATA_FOLDER}"
-	NoUninstallData:
-	
+    RMDir /r "$INSTDIR"
+    RMDir /r "$SMPROGRAMS\${APP_NAME}"
+    Delete "$DESKTOP\${APP_NAME}.lnk"
+    
+    MessageBox MB_YESNO|MB_ICONQUESTION "$(removeDataFolder)" IDNO NoUninstallData
+    RMDir /r "$LOCALAPPDATA\${DATA_FOLDER}"
+    NoUninstallData:
+    DeleteRegKey HKCU "${UNINSTALL_KEY}"
+    
 SectionEnd
