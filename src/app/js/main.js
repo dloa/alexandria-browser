@@ -2318,7 +2318,9 @@ function populateSearchResults(results, module) {
 			var mediaFilename = '';
 			var mediaTid = results[i]['media-data']['alexandria-media']['torrent'];
 			var mediaFLO = results[i]['media-data']['alexandria-media']['publisher'];
-			var mediaPymnt = results[i]['media-data']['alexandria-media']['payment']['type'];
+			if(results[i]['media-data']['alexandria-media']['payment']){
+				var mediaPymnt = results[i]['media-data']['alexandria-media']['payment']['type'];
+			}
 			if(mediaInfo['extra-info']){
 				if(mediaInfo['extra-info']['runtime']){
 					mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
