@@ -489,11 +489,13 @@ header #addNewContent-icon:hover path, header #app-user-icon:hover path {
 	fill-opacity: 1;
 }
 header #serverID {
-	display: none;
-	left: 305px;
-	cursor: default;
-	color: #979797;
-}
+  display: block;
+  right: 105px;
+  cursor: default;
+  color: #979797;
+  position: absolute;
+  top: 0;
+ }
 .input-container select {
 	background: transparent;
 	width: 100%;

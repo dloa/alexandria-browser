@@ -1,8 +1,8 @@
 /* some global variables to make mistakes only once */
 // DEFAULT VARIABLES
 
-// var serverAddress = '54.172.28.195'; // Dev
-var serverAddress = 'blue.a.blocktech.com'; // Demo
+var serverAddress = '54.172.28.195'; // Dev
+// var serverAddress = 'blue.a.blocktech.com'; // Demo
 var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
 
 var w = window.innerWidth;				
@@ -224,6 +224,21 @@ jQuery(document).ready(function($){
 	$('.modal-tabs li').click(function(){
 		$(this).addClass('active').siblings().removeClass('active');
 		$('#tip-modal').find('.modal-tab#'+$(this).attr("name")).show().siblings('.modal-tab').hide();
+	});
+	// API Server ID and Control
+	if(serverAddress == '54.172.28.195'){
+		$('#serverID').text('Dev');
+	} else {
+		$('#serverID').text('Localhost');
+	}
+	$('#serverID').click(function(){
+		if(serverAddress == '54.172.28.195'){
+			serverAddress = 'localhost'
+			$('#serverID').text('Localhost');
+		} else {
+			serverAddress = '54.172.28.195'
+			$('#serverID').text('Dev');
+		}		
 	});
 }); // End Document.Ready
 
@@ -598,8 +613,8 @@ function getAllPublishers() {
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	console.log('loadRecentMedia() publisher/get/all ...');
 	$.ajax({
-		type: "GET",
-		url: "http://54.172.28.195:41289/alexandria/v1/publisher/get/all",
+		type: 'GET',
+		url: 'http://'+serverAddress+':41289/alexandria/v1/publisher/get/all',
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
@@ -633,7 +648,7 @@ function loadRecentMedia() {
 	console.log('loadRecentMedia() media/get/all ...');
 	$.ajax({
 		type: "GET",
-		url: "http://54.172.28.195:41289/alexandria/v1/media/get/all",
+		url: 'http://'+ serverAddress +':41289/alexandria/v1/media/get/all',
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
@@ -998,7 +1013,7 @@ function searchAPI(module, searchOn, searchFor) {
 	$('#browse-media-wrap .row').remove();
 	$.ajax({
 		type: "POST",
-		url: "http://54.172.28.195:41289/alexandria/v1/search",
+		url: 'http://'+ serverAddress +':41289/alexandria/v1/search',
 		data: queryString.toString(),
 		success: function (e) {
 			mediaData = $.parseJSON(e).response;
@@ -1439,7 +1454,7 @@ function postPublisher() {
 	}
 	console.log(queryString);
 	$.ajax({
-	    url: 'http://54.172.28.195:41289/alexandria/v1/send/',
+	    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
 	    type: 'POST',
 		data: queryString.toString(),
 	    success: function(e) {
@@ -1842,7 +1857,7 @@ function postMedia(tipAlexandria) {
 		var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
 	}
 	$.ajax({
-	    url: 'http://54.172.28.195:41289/alexandria/v1/send/',
+	    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
 	    type: 'POST',
 		data: queryString.toString(),
 	    success: function(e) {
