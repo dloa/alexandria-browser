@@ -1,0 +1,44 @@
+Welcome to ΛLΞXΛNDRIΛ !
+
+* installing
+ΛLΞXΛNDRIΛ is a simple web-app that we wraped in some node-webkit magic,
+you have 3 ways of looking at it: directly, through a web server, as a
+node-webkit app.
+
+** pre-requesite
+we use twitter's bower to install our dependencies, you need to install
+bower and it's bower files:
+
+#+begin_src shell
+sudo npm install -g bower
+bower install
+#+end_src
+
+** directly
+just open your favorite webbrowser on the main html file, just works, w00t !
+
+#+begin_src shell
+firefox src/app/alexandria.html
+#+end_src
+** through a web server
+
+you can easily install a small web server for testing purposes or deploy src
+to your own
+#+begin_src shell
+sudo npm install -g http-server
+cd src/app && http-server
+#+end_src
+
+now your app is served on http://localhost:8080
+** node-webkit app
+#+begin_src shell
+npm install
+bower install # yeah, just in case do it again
+sudo npm install -g grunt-cli
+grunt dist
+#+end_src
+
+your node-webkit app is now in the build folder
+
+
+
