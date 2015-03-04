@@ -454,7 +454,7 @@ function displayItem(key){
 				resetInterface();
 			} else if(currentView == 'media'){
 				$('#search').fadeIn(fadeTimer);
-				loadRecentMedia();
+				filterMediaByType();
 				resetInterface();
 			} else if (currentView == 'publishers') {
 				$('#search').fadeIn(fadeTimer);
@@ -613,7 +613,6 @@ function getAllPublishers() {
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	console.log('loadRecentMedia() publisher/get/all ...');
 	$.ajax({
-		type: 'GET',
 		url: 'http://'+serverAddress+':41289/alexandria/v1/publisher/get/all',
 		success: function (e) {
 			var data = $.parseJSON(e);
@@ -625,51 +624,6 @@ function getAllPublishers() {
 			console.error(thrownError);
 		}
 	});
-}
-
-// Recent Media View
-function loadRecentMedia() {
-	currentView = 'media';
-	$('#intro').fadeOut(fadeTimer);
-	$('main').fadeOut(fadeTimer);
-	$('.view-publisher-ui').fadeOut(fadeTimer);
-	$('#browse-media .module-links a.active').removeClass('active');
-	$('#browse-media-wrap .row').remove();
-	$('#user-modal').fadeOut(fadeTimer);
-	$('.sharing-ui').fadeOut(fadeTimer);
-	$('.publisher-ui').fadeOut(fadeTimer);
-	$('#search').fadeIn(fadeTimer);
-	$('#share-modal').hide();
-	$('#tip-modal').hide();
-	$('.view-media-ui').fadeOut(fadeTimer);
-	document.getElementById('media-breadcrumbs-type').innerHTML = '';
-	document.getElementById('media-breadcrumbs-publisher').innerHTML = '';
-	document.getElementById('media-breadcrumbs').innerHTML = '';
-	console.log('loadRecentMedia() media/get/all ...');
-	$.ajax({
-		type: "GET",
-		url: 'http://'+ serverAddress +':41289/alexandria/v1/media/get/all',
-		success: function (e) {
-			var data = $.parseJSON(e);
-			console.info(data);
-			populateSearchResults(data, 'media');
-		},
-		error: function (xhr, ajaxOptions, thrownError) {
-			console.error(xhr.status);
-			console.error(thrownError);
-		}
-	});
-	$('#browse-media-wrap h2').text('Browse Media');
-	$('#browse-media').fadeIn(fadeTimer);
-	// URL and Browser Nav for Recent Media Browse View
-	currentView = 'media';
-	var stateObj = {
-		currentView: currentView,
-		sort: 'recent'
-	};
-	var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
-	history.pushState(stateObj, 'Alexandria > Media', newURL);
-	document.title = 'Alexandria > Media';
 }
 
 // PUBLISHER SINGLE ENTITY VIEW
@@ -1029,7 +983,7 @@ function searchAPI(module, searchOn, searchFor) {
 
 function setMediaTypeFilter(obj) {
 	$(obj).toggleClass('active');
-	filterMediaByType();		
+	filterMediaByType();
 }
 
 // MEDIA TYPE FILTER
@@ -1045,7 +999,7 @@ function filterMediaByType(obj) {
 				filteredMedia[i] = $(this).attr('value');
 			});
 		} else {
-			loadRecentMedia();
+			filterMediaByType();
 			return false;
 		}
 	}

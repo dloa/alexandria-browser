@@ -190,7 +190,7 @@
 				<div id="user-modal" class="header-modal">
 					<ul id="user-menu">
 						<li><a onclick="" id="user-menu-about"><img src="img/logo.svg" class="makesvg" /> About</a></li>
-						<li><a onclick="loadRecentMedia();" id="user-menu-about"><img src="img/media-icon.svg" class="makesvg" /> Media</a></li>
+						<li><a onclick="filterMediaByType();" id="user-menu-about"><img src="img/media-icon.svg" class="makesvg" /> Media</a></li>
 						<li><a onclick="getAllPublishers();" id="user-menu-about" class="publisher-icon"><img src="img/publisher-icon.svg" class="makesvg" /> Publishers</a></li>
 						<li><a onclick="" id="user-menu-wallet"><img src="img/wallet-icon.svg" class="makesvg" /> Wallet</a></li>
 						<li><a onclick="" id="user-menu-history"><img src="img/history-icon.svg" class="makesvg" /> History</a></li>
@@ -209,7 +209,7 @@
 			<div class="links">
 				<ul>
 					<li class="module-icon">						
-						<a onclick="loadRecentMedia();">
+						<a onclick="filterMediaByType();">
 							<div class="imgwrap">
 								<img src="img/media-icon.svg" class="makesvg" />
 							</div>
@@ -278,7 +278,7 @@
 
 		<div id="viewlabel">
 			<div class="view-media-ui">
-				<a onclick="loadRecentMedia()" class="go-back">Media</a> > <span id="media-breadcrumbs-publisher"></span> > <span id="media-breadcrumbs-type"></span> > <span id="media-breadcrumbs"></span>
+				<a onclick="filterMediaByType();" class="go-back">Media</a> > <span id="media-breadcrumbs-publisher"></span> > <span id="media-breadcrumbs-type"></span> > <span id="media-breadcrumbs"></span>
 			</div>
 			<div class="view-publisher-ui">
 				<a onclick="getAllPublishers()" class="go-back">Publishers</a> > <span id="publisher-breadcrumbs"></span>
@@ -675,7 +675,7 @@
 			<div class="module-links mod-filter">
 				<ul> 
 					<li>						
-						<a onclick="loadRecentMedia();">
+						<a onclick="filterMediaByType();">
 							<div class="imgwrap">
 								<img src="img/media-icon.svg" class="makesvg" />
 							</div>
