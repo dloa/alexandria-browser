@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Atom
+Comment=<%= description %>
+GenericName=Text Editor
+Exec=<%= installDir %>/share/popcorntime/Popcorn-Time %U
+Icon=<%= iconName %>
+Type=Application
+StartupNotify=true
+Categories=AudioVideo;Player;
+MimeType=application/x-bittorrent;x-scheme-handler/magnet;
