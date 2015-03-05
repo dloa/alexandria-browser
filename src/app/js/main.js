@@ -399,18 +399,20 @@ function router () {
 			if (!paths[2]) {
 				filterMediaByType();
 			} else {
-				var searchOn = paths[2].replace("-"," ");
-				if ( (searchOn == 'type') && (paths[3]) ) {
-					var searchFor = [paths[3]];
-				} else if ((searchOn != 'type') && (paths[3])) {
-					var searchFor = paths[3].replace("-"," ");
+				var searchOn = paths[2].replace("-","_");
+				if (searchOn.length == 64) {
+					loadMediaView();
 				} else {
-					var searchFor = '';
+					if ( (searchOn == 'type') && (paths[3]) ) {
+						var searchFor = [paths[3]];
+					} else if ((searchOn != 'type') && (paths[3])) {
+						var searchFor = paths[3].replace("-"," ");
+					} else {
+						var searchFor = '';
+					}
+					searchResults = searchAPI(currentView, searchOn, searchFor);
+					populateSearchResults(searchResults, currentView);
 				}
-				console.log(paths[3]);
-				console.info(searchFor);
-				searchResults = searchAPI(currentView, searchOn, searchFor);
-				populateSearchResults(searchResults, currentView);
 			}
     	} else if (route.templateId == 'publisher') {
 			resetInterface();
@@ -812,6 +814,7 @@ function loadMediaView(objMeta) {
 	if (objMeta) {
 		mediaID = $(objMeta).attr('id').split('-')[1];
 	} else {
+		mediaID = location.hash.slice(1).split('/')[2];		
 	}
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
 	console.info(thisMediaData);
