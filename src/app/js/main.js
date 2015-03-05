@@ -39,7 +39,7 @@ jQuery(document).ready(function($){
 	$('.alex-ui-slider').slider();
 	$('.alex-ui-datepicker').datepicker();
 	// UI/UX Navigation
-	// Click logo to go back to archive list with current timeline selection
+	// Click logo
 	$('#logo').click(function(){
 		if ( ($(this).hasClass('disabled')) || (window.location.search=='') ){
 			return false;
@@ -310,31 +310,7 @@ function clearModal() {
 		'-webkit-transition': 'all 1s ease',
 		'-o-transition': 'all 1s ease'
 	});
-	if (currentView.slice(0,7) == 'archive') {
-		currentArchive = '*';
-	}
-	var stateObj = {
-		archive: currentArchive,
-		word: ''
-	};
-	var newURL = document.location.origin + document.location.pathname +'?startDate='+startDateValue+'&endDate='+endDateValue+'&archive='+encodeURIComponent(currentArchive);
-	history.pushState(stateObj, 'Alexandria > '+currentArchive, newURL);
-	document.title = 'Alexandria > '+currentArchive;
-	currentPage = 0;
-	totalPages = 0;
-	$("#tweetList li").fadeOut(fadeTimer);
 	$('.overlay').fadeOut(fadeTimer);
-	$('.view-controls').fadeIn(fadeTimer);
-	if (resetArchiveList == true) {
-		if (currentView.slice(0,5) == 'words') {
-			getArchiveWords(searchTerm);
-		} else {
-			getJobs(searchTerm);
-		}
-	}
-	volumeBars(currentArchive,'',7200000);
-	$("#tweetList li").remove();
-	$('#timeline-controls').fadeIn(fadeTimer);
 	return false;
 }
 
@@ -383,7 +359,43 @@ function resizeTabs(t) {
 	$('#newMedia-tabs').css('height',tabHeight+'px');
 }
 
-// URL PARSING
+// HASHBANG URL ROUTING
+// A hash to store our routes:
+var routes = {};  
+// The route registering function:
+function route (path, templateId, controller) {  
+  routes[path] = {templateId: templateId, controller: controller};
+}
+route('/', 'ΛLΞXΛNDRIΛ', function () {});  
+route('/media', 'ΛLΞXΛNDRIΛ Media', function () {  
+    this.greeting = 'Hello world!';
+    this.moreText = 'Bacon ipsum...';
+});
+route('/publishers', 'ΛLΞXΛNDRIΛ Publishers', function () {  
+    this.heading = 'I\'m page two!';
+});
+var el = null;  
+function router () {  
+    // Lazy load view element:
+    el = el || document.getElementById('view');
+    // Current route url (getting rid of '#' in hash as well):
+    var url = location.hash.slice(1) || '/';
+    // Get route by url:
+    var route = routes[url];
+    // Do we have both a view and a route?
+    if (el && route.controller) {
+    	console.info(route);
+        // Render route template with John Resig's template engine:
+//        el.innerHTML = tmpl(route.templateId, new route.controller());
+    }
+}
+// Listen on hash change:
+window.addEventListener('hashchange', router);  
+// Listen on page load:
+window.addEventListener('load', router);  
+
+// QUERY URL PARSING
+
 function PageQuery(q) {
 	if(q.length > 1) this.q = q.substring(1, q.length);
 	else this.q = null;
@@ -418,33 +430,7 @@ function displayItem(key){
 	if(queryString(key)=='false') {	
 		console.log("you didn't enter a ?"+key+"=value querystring item.");
 	} else {
-		if (key == 'startDate') {
-			startDateValue = queryString(key);
-			$('.currentStartTime').text(new Date(parseInt(startDateValue)));
-			displayItem('endDate');
-		} else if(key == 'endDate'){
-			endDateValue = queryString(key);
-			$('.currentEndTime').text(new Date(parseInt(endDateValue)));
-		} else if(key == 'archive'){
-			currentArchive = queryString(key);
-			$('.archiveLabel').fadeIn(fadeTimer);
-			$('#viewlabel .currentArchive').text(currentArchive);
-			searchTerm = currentArchive;
-			currentView = 'wordsCloud';
-			activeWord = '';
-			if (window.location.search.indexOf("word") == -1) {
-				document.title = 'Alexandria - '+currentArchive;
-				getArchiveWords(currentArchive);
-			} else {
-				displayItem('word');
-			}
-		} else if (key == 'word') {
-			activeWord = queryString(key);
-			document.title = 'Alexandria - '+currentArchive+' - ' + activeWord;
-			// VOLUME BARS FOR TWEETLIST
-			wordSearch(currentArchive, activeWord, 40, 0);
-			getArchiveWords(currentArchive);
-		} else if (key == 'view') {
+		if (key == 'view') {
 			currentView = queryString(key);
 			if(currentView == 'addcontent'){
 				loadShareMod();
@@ -467,61 +453,19 @@ function displayItem(key){
 
 // BROWSER NAVIGATION CONTROLS
 window.onpopstate = function(event) {
-	console.log('currentArchive = '+ currentArchive);
 	if(window.location.search == ''){
 		resetAlexandria();
 	} else {
 		freshLoad = false;
 		$('#intro').fadeOut(fadeTimer);
-		prevStartDate = startDateValue;
-		prevEndDate = endDateValue;
-		if (window.location.search.indexOf("startDate") > -1) {
-			displayItem('startDate');
-		}
-		if (window.location.search.indexOf("archive") < 0) {
-			currentArchive = '*';
-		}
-		if (currentArchive == '*') {
-			$('.archiveLabel').fadeOut(fadeTimer).find('.currentArchive').html('');;
-		}
-		$('main.wordCloud text').css({
-			'text-shadow':'0 0 0 rgba(200,200,200,.5)',
-			'opacity':'1',
-			'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=100)',
-			'filter':'alpha(opacity=100)',
-			'-moz-opacity': '1',
-			'-khtml-opacity': '1',
-			'transition': 'all 1s ease',
-			'-moz-transition': 'all 1s ease',
-			'-webkit-transition': 'all 1s ease',
-			'-o-transition': 'all 1s ease'
-		});
-		$('#timeline-controls').fadeIn(fadeTimer);
-		console.log('prevStartDate = '+ prevStartDate);
-		console.log('startDateValue = '+ startDateValue);
-		console.log('prevEndDate = '+ prevEndDate);
-		console.log('endDateValue = '+ endDateValue);
-		if ( ( (prevStartDate != '') && (prevEndDate != '') ) && ( (startDateValue != prevStartDate) || (endDateValue != prevEndDate) ) ) {
-			$("#timeline").dateRangeSlider("values", startDateValue, endDateValue);
-			timeChange();
-		}
-		$("#tweetList li").fadeOut(fadeTimer);
 		$('.overlay').fadeOut(fadeTimer);
 		$('.sharing-ui').fadeOut(fadeTimer);
-		$("#tweetList li").remove();
-		currentPage = 0;
-		totalPages = 0;
 		loadAlexandriaView();
 	}
 };
 function resetToArchives() {
-		$('.archiveLabel').fadeOut(fadeTimer).find('.currentArchive').html('');
-		$("#tweetList li").fadeOut(fadeTimer);
 		$('.overlay').fadeOut(fadeTimer);
 		$('.sharing-ui').fadeOut(fadeTimer);
-		$("#tweetList li").remove();
-		currentPage = 0;
-		totalPages = 0;
 		loadAlexandriaView();
 }
 // Load Alexandria View
@@ -532,15 +476,6 @@ function loadAlexandriaView() {
 			if (window.location.search == '') {
 				resetInterface();
 		        $('#intro').fadeIn(fadeTimer);
-			} else if (window.location.search.indexOf("archive") > -1) {
-				if ($('#timeline').children().length == 0) {
-					buildTimeline();
-				}
-				$('.twitter-archive').not('main').show();
-				displayItem('archive');
-			} else if (window.location.search.indexOf("startDate") > -1) {
-				$('.twitter-archive').not('main').show();
-				getJobs('');
 			} else if (window.location.search.indexOf("view")  > -1) {
 				displayItem('view');
 			}
@@ -585,7 +520,6 @@ function resetAlexandria() {
 	$('.view-media-ui').hide();
 	$('.view-publisher-ui').hide();
 	$('#search').show();
-	$('.twitter-archive').not('main').hide();
 	$('#app-shading').css('bottom','0');
 	currentView = 'front';
 	$('#intro').fadeIn(fadeTimer);
@@ -593,8 +527,8 @@ function resetAlexandria() {
 		currentView: currentView
 	};
 	var newURL = document.location.origin + document.location.pathname;
-	history.pushState(stateObj, 'Alexandria', newURL);
-	document.title = 'Alexandria';
+	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ', newURL);
+	document.title = 'ΛLΞXΛNDRIΛ';
 }
 
 // Get All Publishers
@@ -924,7 +858,7 @@ function loadMediaView(objMeta) {
 	$('#media-view-entity .entity-footer').hide();
 	$('#media-view-entity .entity-footer.media-'+mediaType).show();
 	$('#media-view-entity').fadeIn(fadeTimer);
-	document.title = 'Alexandria > Media';
+	document.title = 'ΛLΞXΛNDRIΛ > Media';
 	// URL and Browser Nav for Media Entity View
 /*
 	var stateObj = {
@@ -1062,8 +996,8 @@ function populateSearchResults(results, module) {
 			sort: 'recent'
 		};
 		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
-		history.pushState(stateObj, 'Alexandria > Media', newURL);
-		document.title = 'Alexandria > Media';
+		history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Media', newURL);
+		document.title = 'ΛLΞXΛNDRIΛ > Media';
 		$('#browse-media-wrap .row:first-of-type').addClass('first');
 		$('#browse-media').fadeIn(fadeTimer);
 		replaceSVG();
@@ -1120,8 +1054,8 @@ function populateSearchResults(results, module) {
 			sort: 'recent'
 		};
 		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
-		history.pushState(stateObj, 'Alexandria > Media', newURL);
-		document.title = 'Alexandria > Media';
+		history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Media', newURL);
+		document.title = 'ΛLΞXΛNDRIΛ > Media';
 	} else {
 		for (var i = 0; i < results.length; i++) {
 			console.info(results[i]);
@@ -1146,8 +1080,8 @@ function populateSearchResults(results, module) {
 			sort: 'recent'
 		};
 		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
-		history.pushState(stateObj, 'Alexandria > Publishers', newURL);
-		document.title = 'Alexandria > Publishers';
+		history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Publishers', newURL);
+		document.title = 'ΛLΞXΛNDRIΛ > Publishers';
 	}
 	$('#browse-media-wrap .row:first-of-type').addClass('first');
 	$('#browse-media').fadeIn(fadeTimer);
@@ -1332,8 +1266,8 @@ function loadShareMod() {
 		currentView: currentView
 	};
 	var newURL = document.location.origin + document.location.pathname +'?view=addcontent';
-	history.pushState(stateObj, 'Alexandria > Add Content', newURL);
-	document.title = 'Alexandria > Add Content';
+	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Add Content', newURL);
+	document.title = 'ΛLΞXΛNDRIΛ > Add Content';
 	$('#search').fadeOut(fadeTimer);
 	$('#intro').fadeOut(fadeTimer);
 	$('main').not('.sharing-ui').fadeOut(fadeTimer);
@@ -1350,8 +1284,8 @@ function loadCreatePublisherMod() {
 		currentView: currentView
 	};
 	var newURL = document.location.origin + document.location.pathname +'?view=addpublisher';
-	history.pushState(stateObj, 'Alexandria > Add Publisher', newURL);
-	document.title = 'Alexandria > Add Publisher';
+	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Add Publisher', newURL);
+	document.title = 'ΛLΞXΛNDRIΛ > Add Publisher';
 	$('#search').fadeOut(fadeTimer);
 	$('#intro').fadeOut(fadeTimer);
 	$('main').not('.publisher-ui').fadeOut(fadeTimer);
