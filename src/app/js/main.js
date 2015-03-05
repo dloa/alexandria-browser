@@ -570,7 +570,7 @@ function resetInterface() {
 
 // RESET ALEXANDRIA
 function resetAlexandria() {
-	$('main').hide(fadeTimer);
+	$('main').hide();
 	$('#browse-media-wrap .row').remove();
 	$('#share-modal').css({
 			left:'initial',
@@ -580,10 +580,11 @@ function resetAlexandria() {
 			'left':'initial',
 			'right':'initial'
 		}).hide();
-	$('.publisher-ui').hide(fadeTimer);
-	$('.sharing-ui').hide(fadeTimer);
-	$('.view-media-ui'). hide(fadeTimer);
-	$('#search').show(fadeTimer);
+	$('.publisher-ui').hide();
+	$('.sharing-ui').hide();
+	$('.view-media-ui').hide();
+	$('.view-publisher-ui').hide();
+	$('#search').show();
 	$('.twitter-archive').not('main').hide();
 	$('#app-shading').css('bottom','0');
 	currentView = 'front';
@@ -948,7 +949,17 @@ function selectSearchMediaType(obj){
 
 // EXECUTE ADVANCED SEARCH
 function buildSearch() {
-	$('#browse-media .module-links a.active').removeClass('active');
+	$('#intro').fadeOut(fadeTimer);
+	$('main').not('#browse-media').fadeOut(fadeTimer);
+	$('#browse-media-wrap .row').remove();
+	$('.sharing-ui').fadeOut(fadeTimer);
+	$('.publisher-ui').fadeOut(fadeTimer);
+	$('#search').fadeIn(fadeTimer);
+	$('#share-modal').hide();
+	$('#tip-modal').hide();
+	$('#user-modal').fadeOut(fadeTimer);
+	$('.view-media-ui').fadeOut(fadeTimer);
+	$('.view-publisher-ui').fadeOut(fadeTimer);
 	var searchProtocol = document.getElementById('searchModule').value;
 	var searchIn = '';
 	if (searchProtocol == 'media') {
@@ -985,7 +996,11 @@ function searchAPI(module, searchOn, searchFor) {
 }
 
 function setMediaTypeFilter(obj) {
-	$(obj).toggleClass('active');
+	if(!obj) {
+		$('#browse-media .module-links a.active').removeClass('active');
+	} else {
+		$(obj).toggleClass('active');
+	}
 	filterMediaByType();
 }
 
@@ -993,9 +1008,6 @@ function setMediaTypeFilter(obj) {
 function filterMediaByType(obj) {
 	$('#intro').fadeOut(fadeTimer);
 	$('main').not('#browse-media').fadeOut(fadeTimer);
-	if(!obj) {
-		$('#browse-media .module-links a.active').removeClass('active');
-	}
 	$('#browse-media-wrap .row').remove();
 	$('.sharing-ui').fadeOut(fadeTimer);
 	$('.publisher-ui').fadeOut(fadeTimer);
@@ -1015,9 +1027,6 @@ function filterMediaByType(obj) {
 			$('#browse-media .module-links a.active').each(function(i){
 				filteredMedia[i] = $(this).attr('value');
 			});
-		} else {
-			filterMediaByType();
-			return false;
 		}
 	}
 	console.info(filteredMedia);

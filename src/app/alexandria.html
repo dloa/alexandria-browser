@@ -326,27 +326,15 @@
 		<main id="add-publisher" class="publisher-ui">
 			<ul id="publisher-process">
 				<li>
-					<h3>Step 1 - Input Publisher Information</h3>
+					<h3>Publisher Information</h3>
 					<div class="sublistWrap">
 						<ul>
 							<li><label>Publisher Name</label><input type="text" size="36" id="newPublisher-name" /></li>
 							<li><label>Florincoin Address</label><input type="text" size="36" id="newPublisher-floAdd" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
 							<li><label>Email Address</label><input type="text" id="newPublisher-emailmd5" placeholder="optional" size="36" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
 							<li><label>BitMessage Address</label><input type="text" id="newPublisher-bitmsg" placeholder="optional" size="36" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" />info</a></li>
-							<li><a onclick="concatForSig();" class="btnLightGray pull-right">Generate Code</a></li>
 						</ul>
 					</div>
-				</li>
-				<li>
-					<h3>Step 2 - Sign Message</h3>
-					<p style="text-align:center">Copy the generated code below to your clipboard. <br /><span class="copybox" id="newPublisherString">[Input data to generate code above]</span></p>
-					<ul>
-						<li>Go back to the Florincoin Wallet and select your "Alexandria Publisher" address.</li>
-						<li>Click the "Sign Message" button, and paste the copied text into the centered field.</li>
-						<li>When you click "Sign Message" button on this new screen, it will create a signature in the bottom field.</li>
-					</ul>
-					<p style="text-align:center">Copy that signature and paste it here:<br />
-					<input type="text" id="newPublisher-sign" size="36" /></p>
 				</li>
 				<li style="text-align:center"><a onclick="postPublisher();" class="btnLightGray">Publish to ΛLΞXΛNDRIΛ</a></li>
 			</ul>
@@ -624,10 +612,6 @@
 												<label>Publisher Florincoin Address</label>
 												<input type="text" id="newMediaPublisherFLO" name="New Media Publisher FLO Address" />
 											</div>
-											<p><a onclick="concatMediaSig();" class="btnLightGray pull-right">Generate Code</a></p>
-					<p style="text-align:center">Copy the generated code below to your clipboard. <br /><span class="copybox" id="newMediaString">[Input data to generate code above]</span></p>
-											<p style="text-align:center">Copy that signature and paste it here:<br />
-											<input type="text" id="newMedia-sign" size="36" /><br /><br /></p>
 										</div>
 									</div>
 									<div class="col">
@@ -675,7 +659,7 @@
 			<div class="module-links mod-filter">
 				<ul> 
 					<li>						
-						<a onclick="filterMediaByType();">
+						<a onclick="setMediaTypeFilter();">
 							<div class="imgwrap">
 								<img src="img/media-icon.svg" class="makesvg" />
 							</div>
