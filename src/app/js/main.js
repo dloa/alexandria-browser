@@ -370,6 +370,8 @@ function route (path, templateId, controller) {
 route('/', 'front', function () {  });  
 route('/media', 'media', function () {  });
 route('/publishers', 'publisher', function () {  });
+route('/add-media', 'addmedia', function () {  });
+route('/add-publisher', 'addpublisher', function () {  });
 var el = null;  
 function router () {  
 
@@ -429,6 +431,12 @@ function router () {
 					populateSearchResults(searchResults, currentView);
 				}
 			}
+    	} else if (route.templateId == 'addmedia') {
+			loadShareMod();
+			resetInterface();
+    	} else if (route.templateId == 'addpublisher') {
+			loadCreatePublisherMod();
+			resetInterface();
     	}
 //		buildHistory();
     	console.info(route);
