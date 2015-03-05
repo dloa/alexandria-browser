@@ -396,14 +396,36 @@ function router () {
     		resetAlexandria();
     	} else if (route.templateId == 'media') {
 			resetInterface();
-			filterMediaByType();
+			if (!paths[2]) {
+				filterMediaByType();
+			} else {
+				var searchOn = paths[2].replace("-"," ");
+				if ( (searchOn == 'type') && (paths[3]) ) {
+					var searchFor = [paths[3]];
+				} else if ((searchOn != 'type') && (paths[3])) {
+					var searchFor = paths[3].replace("-"," ");
+				} else {
+					var searchFor = '';
+				}
+				console.log(paths[3]);
+				console.info(searchFor);
+				searchResults = searchAPI(currentView, searchOn, searchFor);
+				populateSearchResults(searchResults, currentView);
+			}
     	} else if (route.templateId == 'publisher') {
 			resetInterface();
-			if(paths[2]) {
-				var searchResults = searchAPI(currentView, 'name', paths[2]);
-				populateSearchResults(searchResults, currentView);
-			} else {
+			if (!paths[2]) {
 				getAllPublishers();
+			} else {
+				var publisherName = paths[2].replace("-"," ");
+				var searchResults;
+				if (paths[3]) {
+					searchResults = searchAPI(currentView, 'info-address', paths[3]);
+					loadPublisherView();
+				} else {
+					searchResults = searchAPI(currentView, 'name', publisherName);
+					populateSearchResults(searchResults, currentView);
+				}
 			}
     	}
 //		buildHistory();
@@ -472,14 +494,6 @@ function displayItem(key){
 				resetInterface();
 			} else if(currentView == 'addpublisher'){
 				loadCreatePublisherMod();
-				resetInterface();
-			} else if(currentView == 'media'){
-				$('#search').fadeIn(fadeTimer);
-				filterMediaByType();
-				resetInterface();
-			} else if (currentView == 'publisher') {
-				$('#search').fadeIn(fadeTimer);
-				getAllPublishers();
 				resetInterface();
 			}
 		}		
@@ -614,16 +628,21 @@ function loadPublisherView(objMeta) {
 	$('#view-publisher').fadeIn(fadeTimer);	
 	var publisherID = '';
 	if (objMeta) {
-		var publisherID = $(objMeta).attr('id').split('-')[1];	
+		publisherID = $(objMeta).attr('id').split('-')[1];	
 	} else {
+		publisherID = location.hash.slice(1).split('/')[3];
 	}
-	var thisPublisher = searchAPI('publisher', 'txid', publisherID);
+	if (publisherID.length == 34) {
+		var thisPublisher = searchAPI('publisher', 'address', publisherID);
+	} else {
+		var thisPublisher = searchAPI('publisher', 'txid', publisherID);
+	}
+	console.info(thisPublisher);
 	publisherID = thisPublisher[0]['txid'];
 	thisPublisher = thisPublisher[0]['publisher-data']['alexandria-publisher'];
-	console.info(thisPublisher);
 	var publisherAddress = thisPublisher['address'];
-	var thisPubliserMedia = searchAPI('media', 'publisher', publisherAddress);
-	console.info(thisPubliserMedia);
+	var thisPublisherMedia = searchAPI('media', 'publisher', publisherAddress);
+	console.info(thisPublisherMedia);
 	var publisherName = thisPublisher['name'];
 	document.getElementById('publisher-breadcrumbs').innerHTML = publisherName;
 	var publisherTime = thisPublisher['timestamp'];
@@ -644,13 +663,13 @@ function loadPublisherView(objMeta) {
 	publisherTime = new Date(parseInt(publisherTime));
 	document.getElementById('view-publisher-name').innerHTML = publisherName;
 	document.getElementById('publisher-FLO-address').innerHTML = publisherAddress;
-	if (thisPubliserMedia) {
-		for (var i = 0; i < thisPubliserMedia.length; i++) {
-			var mediaID = thisPubliserMedia[i]['txid'];
-			var mediaType = thisPubliserMedia[i]['media-data']['alexandria-media']['type'];
-			var mediaInfo = thisPubliserMedia[i]['media-data']['alexandria-media']['info'];
-			var mediaPubTime = thisPubliserMedia[i]['media-data']['alexandria-media']['timestamp'];
-			var mediaPubTimeLen = thisPubliserMedia[i]['media-data']['alexandria-media']['timestamp'].toString().length;
+	if (thisPublisherMedia) {
+		for (var i = 0; i < thisPublisherMedia.length; i++) {
+			var mediaID = thisPublisherMedia[i]['txid'];
+			var mediaType = thisPublisherMedia[i]['media-data']['alexandria-media']['type'];
+			var mediaInfo = thisPublisherMedia[i]['media-data']['alexandria-media']['info'];
+			var mediaPubTime = thisPublisherMedia[i]['media-data']['alexandria-media']['timestamp'];
+			var mediaPubTimeLen = thisPublisherMedia[i]['media-data']['alexandria-media']['timestamp'].toString().length;
 			if (mediaPubTimeLen == 10) {
 				mediaPubTime = parseInt(mediaPubTime)*1000;
 			}					
@@ -659,10 +678,10 @@ function loadPublisherView(objMeta) {
 			var mediaRuntime = 0;
 			var mediaArtist = '';
 			var mediaFilename = '';
-			var mediaTid = thisPubliserMedia[i]['media-data']['alexandria-media']['torrent'];
-			var mediaFLO = thisPubliserMedia[i]['media-data']['alexandria-media']['publisher'];
-			if(thisPubliserMedia[i]['media-data']['alexandria-media']['payment']){
-				var mediaPymnt = thisPubliserMedia[i]['media-data']['alexandria-media']['payment']['type'];
+			var mediaTid = thisPublisherMedia[i]['media-data']['alexandria-media']['torrent'];
+			var mediaFLO = thisPublisherMedia[i]['media-data']['alexandria-media']['publisher'];
+			if(thisPublisherMedia[i]['media-data']['alexandria-media']['payment']){
+				var mediaPymnt = thisPublisherMedia[i]['media-data']['alexandria-media']['payment']['type'];
 			}
 			if(mediaInfo['extra-info']){
 				if(mediaInfo['extra-info']['runtime']){
@@ -1033,6 +1052,7 @@ function populateSearchResults(results, module) {
 		return false;
 	}
 	if (module =='media') {
+		console.info(results);
 		for (var i = 0; i < results.length; i++) {
 			var mediaID = results[i]['txid'];
 			var mediaPublisher = results[i]['publisher-name'];
