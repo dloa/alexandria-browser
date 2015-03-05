@@ -121,7 +121,7 @@ jQuery(document).ready(function($){
 		clearModal();
 	});	
 
-	loadAlexandriaView();
+//	loadAlexandriaView();
 	
 	// Media Content Interface
 	$('#addNewContent-icon svg').click(function(){
@@ -365,29 +365,50 @@ var routes = {};
 // The route registering function:
 function route (path, templateId, controller) {  
   routes[path] = {templateId: templateId, controller: controller};
+  console.info(routes);
 }
-route('/', 'ΛLΞXΛNDRIΛ', function () {});  
-route('/media', 'ΛLΞXΛNDRIΛ Media', function () {  
-    this.greeting = 'Hello world!';
-    this.moreText = 'Bacon ipsum...';
-});
-route('/publishers', 'ΛLΞXΛNDRIΛ Publishers', function () {  
-    this.heading = 'I\'m page two!';
-});
+route('/', 'front', function () {  });  
+route('/media', 'media', function () {  });
+route('/publishers', 'publishers', function () {  });
 var el = null;  
 function router () {  
+
     // Lazy load view element:
-    el = el || document.getElementById('view');
+//	el = el || document.getElementById('view');
+
     // Current route url (getting rid of '#' in hash as well):
     var url = location.hash.slice(1) || '/';
+
     // Get route by url:
     var route = routes[url];
-    // Do we have both a view and a route?
-    if (el && route.controller) {
+
+    // Route the URL
+    if (route.controller) {
+    	currentView = route.templateId;
+    	if (route.templateId == 'front') {
+    		resetAlexandria();
+    	} else if (route.templateId == 'media') {
+			filterMediaByType();
+			resetInterface();
+    	} else if (route.templateId == 'publishers') {
+			$('#search').fadeIn(fadeTimer);
+			getAllPublishers();
+			resetInterface();
+    	}
+		var stateObj = {
+			currentView: currentView,
+			sort: 'recent'
+		};
+		var newURL = document.location.origin + document.location.pathname;
+		document.title = 'ΛLΞXΛNDRIΛ';
+		if (currentView != 'front') {
+			newURL = newURL+'#/'+currentView;
+			document.title = 'ΛLΞXΛNDRIΛ > '+currentView.charAt(0).toUpperCase() + currentView.slice(1);
+		}
+		history.pushState(stateObj, 'ΛLΞXΛNDRIΛ', newURL);
     	console.info(route);
-        // Render route template with John Resig's template engine:
-//        el.innerHTML = tmpl(route.templateId, new route.controller());
     }
+
 }
 // Listen on hash change:
 window.addEventListener('hashchange', router);  
@@ -452,6 +473,7 @@ function displayItem(key){
 }
 
 // BROWSER NAVIGATION CONTROLS
+/*
 window.onpopstate = function(event) {
 	if(window.location.search == ''){
 		resetAlexandria();
@@ -463,12 +485,9 @@ window.onpopstate = function(event) {
 		loadAlexandriaView();
 	}
 };
-function resetToArchives() {
-		$('.overlay').fadeOut(fadeTimer);
-		$('.sharing-ui').fadeOut(fadeTimer);
-		loadAlexandriaView();
-}
+*/
 // Load Alexandria View
+/*
 function loadAlexandriaView() {
 	var readyStateCheckInterval = setInterval(function() {
 	    if (document.readyState === "complete") {
@@ -482,7 +501,7 @@ function loadAlexandriaView() {
 	    }
 	}, 10);		    
 }
-
+*/
 // Load Local HTML file contents for info modal
 function getInfoFile(localFile) {
 	var localURL = 'modals/info-'+ localFile +'.html';
@@ -507,6 +526,7 @@ function resetInterface() {
 function resetAlexandria() {
 	$('main').hide();
 	$('#browse-media-wrap .row').remove();
+	$('#search').fadeIn(fadeTimer);
 	$('#share-modal').css({
 			left:'initial',
 			right:'initial'
@@ -521,14 +541,7 @@ function resetAlexandria() {
 	$('.view-publisher-ui').hide();
 	$('#search').show();
 	$('#app-shading').css('bottom','0');
-	currentView = 'front';
 	$('#intro').fadeIn(fadeTimer);
-	var stateObj = {
-		currentView: currentView
-	};
-	var newURL = document.location.origin + document.location.pathname;
-	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ', newURL);
-	document.title = 'ΛLΞXΛNDRIΛ';
 }
 
 // Get All Publishers
@@ -991,6 +1004,7 @@ function populateSearchResults(results, module) {
 		$('#browse-media-wrap').append(mediaEntity);
 		$('#browse-media-wrap h2').text('Browse Media');
 		currentView = 'media';
+/*
 		var stateObj = {
 			currentView: currentView,
 			sort: 'recent'
@@ -998,6 +1012,7 @@ function populateSearchResults(results, module) {
 		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
 		history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Media', newURL);
 		document.title = 'ΛLΞXΛNDRIΛ > Media';
+*/
 		$('#browse-media-wrap .row:first-of-type').addClass('first');
 		$('#browse-media').fadeIn(fadeTimer);
 		replaceSVG();
@@ -1049,6 +1064,7 @@ function populateSearchResults(results, module) {
 		}
 		$('#browse-media-wrap h2').text('Browse Media');
 		currentView = 'media';
+/*
 		var stateObj = {
 			currentView: currentView,
 			sort: 'recent'
@@ -1056,6 +1072,7 @@ function populateSearchResults(results, module) {
 		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
 		history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Media', newURL);
 		document.title = 'ΛLΞXΛNDRIΛ > Media';
+*/
 	} else {
 		for (var i = 0; i < results.length; i++) {
 			console.info(results[i]);
@@ -1075,6 +1092,7 @@ function populateSearchResults(results, module) {
 		}
 		$('#browse-media-wrap h2').text('Browse Publishers');
 		currentView = 'publishers';
+/*
 		var stateObj = {
 			currentView: currentView,
 			sort: 'recent'
@@ -1082,6 +1100,7 @@ function populateSearchResults(results, module) {
 		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
 		history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Publishers', newURL);
 		document.title = 'ΛLΞXΛNDRIΛ > Publishers';
+*/
 	}
 	$('#browse-media-wrap .row:first-of-type').addClass('first');
 	$('#browse-media').fadeIn(fadeTimer);
@@ -1262,12 +1281,14 @@ function loadShareMod() {
 	$('.header-modal').hide();
 	$('.view-media-ui').hide();
 	currentView = 'addNewContent';
+/*
 	var stateObj = {
 		currentView: currentView
 	};
 	var newURL = document.location.origin + document.location.pathname +'?view=addcontent';
 	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Add Content', newURL);
 	document.title = 'ΛLΞXΛNDRIΛ > Add Content';
+*/
 	$('#search').fadeOut(fadeTimer);
 	$('#intro').fadeOut(fadeTimer);
 	$('main').not('.sharing-ui').fadeOut(fadeTimer);
@@ -1280,12 +1301,14 @@ function loadShareMod() {
 function loadCreatePublisherMod() {
 	$('.header-modal').hide();
 	currentView = 'addNewPublisher';
+/*
 	var stateObj = {
 		currentView: currentView
 	};
 	var newURL = document.location.origin + document.location.pathname +'?view=addpublisher';
 	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Add Publisher', newURL);
 	document.title = 'ΛLΞXΛNDRIΛ > Add Publisher';
+*/
 	$('#search').fadeOut(fadeTimer);
 	$('#intro').fadeOut(fadeTimer);
 	$('main').not('.publisher-ui').fadeOut(fadeTimer);
