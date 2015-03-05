@@ -11,6 +11,7 @@ var h = window.innerHeight-245;
 var fadeTimer = 200;
 
 var currentView = 'front';
+var subView = '';
 var prevTipAmount = '';
 
 // Get crypto [cryptsy] exchange rates
@@ -388,14 +389,16 @@ function router () {
     	currentView = route.templateId;
     	if (currentView == 'front') {
     		resetAlexandria();
-    	} else if (currentView == 'media') {
-			resetInterface();
+    		return false;
+    	}
+		resetInterface();
+    	if (currentView == 'media') {
 			if (!paths[2]) {
 				filterMediaByType();
 			} else {
 				var searchOn = paths[2].replace("-","_");
 				if (searchOn.length == 64) {
-					loadMediaView();
+					loadArtifactView();
 				} else {
 					if ( (searchOn == 'type') && (paths[3]) ) {
 						var searchFor = [paths[3]];
@@ -409,8 +412,6 @@ function router () {
 				}
 			}
     	} else if (currentView == 'publishers') {
-    		console.log(currentView);
-			resetInterface();
 			if (!paths[2]) {
 				getAllPublishers();
 			} else {
@@ -427,13 +428,10 @@ function router () {
 			}
     	} else if (currentView == 'add-media') {
 			loadShareMod();
-			resetInterface();
     	} else if (currentView == 'add-publisher') {
 			loadCreatePublisherMod();
-			resetInterface();
     	}
 		buildHistory();
-    	console.info(route);
     }
 
 }
@@ -443,14 +441,29 @@ window.addEventListener('hashchange', router);
 window.addEventListener('load', router);  
 
 function buildHistory() {
-	var stateObj = {
-		currentView: currentView,
-	};
 	var newURL = document.location.origin + document.location.pathname;
-	document.title = 'ΛLΞXΛNDRIΛ';
-	if (currentView != 'front') {
+	if ( (currentView != 'front') && (subView == '') ) {
 		newURL = newURL+'#/'+currentView;
-		document.title = 'ΛLΞXΛNDRIΛ > '+currentView.charAt(0).toUpperCase() + currentView.slice(1);
+	} else if (subView != '') {
+		if (currentView == 'artifact') {
+			document.title = 'ΛLΞXΛNDRIΛ > Media > '+ subView;
+			newURL = newURL+'#/media/'+subView;
+		} else if (currentView == 'publisher') {
+			document.title = 'ΛLΞXΛNDRIΛ > Publishers > '+ subView;
+			newURL = newURL+'#/publisher/'+subView;
+		}
+	} else {
+		document.title = 'ΛLΞXΛNDRIΛ';
+	}
+	if (subView == '') {
+		var stateObj = {
+			currentView: currentView
+		};
+	} else {
+		var stateObj = {
+			currentView: currentView,
+			subView: subView
+		};
 	}
 	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ', newURL);
 }
@@ -521,6 +534,7 @@ function resetInterface() {
 // RESET ALEXANDRIA
 function resetAlexandria() {
 	currentView = 'front';
+	subView = '';
 	$('main').hide();
 	$('#browse-media-wrap .row').remove();
 	$('#search').fadeIn(fadeTimer);
@@ -609,6 +623,7 @@ function loadPublisherView(objMeta) {
 	}
 	console.info(thisPublisher);
 	publisherID = thisPublisher[0]['txid'];
+	subView = publisherID;
 	thisPublisher = thisPublisher[0]['publisher-data']['alexandria-publisher'];
 	var publisherAddress = thisPublisher['address'];
 	var thisPublisherMedia = searchAPI('media', 'publisher', publisherAddress);
@@ -696,7 +711,7 @@ function loadMediaEntity(obj) {
 				if(data['simplePlot'].indexOf('Alexandria:') > -1) {
 					var verifyTxn = data['simplePlot'].split('Alexandria:')[1];
 					if (trim11(verifyTxn)== mediaTxnID) {
-						loadMediaView(parentObj);
+						loadArtifactView(parentObj);
 					} else {
 						alert('Incorrect TxnID');
 						return false;
@@ -713,7 +728,7 @@ function loadMediaEntity(obj) {
 	    });
 	} else {
 		// Load Media Entity View
-		loadMediaView(parentObj);
+		loadArtifactView(parentObj);
 	}
 }
 
@@ -763,8 +778,8 @@ function customTipAmountInput(event) {
 }
 
 // Load Media Page
-function loadMediaView(objMeta) {
-	currentView = 'media';
+function loadArtifactView(objMeta) {
+	currentView = 'artifact';
 	$('#intro').fadeOut(fadeTimer);
 	$('main').fadeOut(fadeTimer);
 	$('#share-modal').css({
@@ -784,6 +799,7 @@ function loadMediaView(objMeta) {
 	} else {
 		mediaID = location.hash.slice(1).split('/')[2];		
 	}
+	subView = mediaID;
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
 	console.info(thisMediaData);
 	mediaID = thisMediaData[0]['txid'];
@@ -957,6 +973,7 @@ function setMediaTypeFilter(obj) {
 
 // MEDIA TYPE FILTER
 function filterMediaByType(obj) {
+	subView = '';
 	$('#intro').fadeOut(fadeTimer);
 	$('main').not('#browse-media').fadeOut(fadeTimer);
 	$('#browse-media-wrap .row').remove();
@@ -999,6 +1016,7 @@ function filterMediaByType(obj) {
 
 // POPULATE SEARCH RESULTS
 function populateSearchResults(results, module) {
+	artifact = '';
 	document.getElementById('media-breadcrumbs-type').innerHTML = '';
 	document.getElementById('media-breadcrumbs-publisher').innerHTML = '';
 	document.getElementById('media-breadcrumbs').innerHTML = '';
@@ -1009,15 +1027,6 @@ function populateSearchResults(results, module) {
 		$('#browse-media-wrap h2').text('Browse Media');
 		currentView = 'media';
 		buildHistory();
-/*
-		var stateObj = {
-			currentView: currentView,
-			sort: 'recent'
-		};
-		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
-		history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Media', newURL);
-		document.title = 'ΛLΞXΛNDRIΛ > Media';
-*/
 		$('#browse-media-wrap .row:first-of-type').addClass('first');
 		$('#browse-media').fadeIn(fadeTimer);
 		replaceSVG();
