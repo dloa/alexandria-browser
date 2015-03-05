@@ -41,7 +41,7 @@ jQuery(document).ready(function($){
 	// UI/UX Navigation
 	// Click logo
 	$('#logo').click(function(){
-		if ( ($(this).hasClass('disabled')) || (window.location.search=='') ){
+		if ( ($(this).hasClass('disabled')) || (window.location.hash=='') ){
 			return false;
 		}
 		if($('#tweetListView').css('display') == 'block') {
@@ -369,7 +369,7 @@ function route (path, templateId, controller) {
 }
 route('/', 'front', function () {  });  
 route('/media', 'media', function () {  });
-route('/publishers', 'publishers', function () {  });
+route('/publishers', 'publisher', function () {  });
 var el = null;  
 function router () {  
 
@@ -379,8 +379,15 @@ function router () {
     // Current route url (getting rid of '#' in hash as well):
     var url = location.hash.slice(1) || '/';
 
+	var paths = url.split('/');
+	console.log(paths);
+	if (paths[1]) {
+		var module = '/'+paths[1];
+	} else {
+		var module = url;
+	}
     // Get route by url:
-    var route = routes[url];
+    var route = routes[module];
 
     // Route the URL
     if (route.controller) {
@@ -388,24 +395,18 @@ function router () {
     	if (route.templateId == 'front') {
     		resetAlexandria();
     	} else if (route.templateId == 'media') {
+			resetInterface();
 			filterMediaByType();
+    	} else if (route.templateId == 'publisher') {
 			resetInterface();
-    	} else if (route.templateId == 'publishers') {
-			$('#search').fadeIn(fadeTimer);
-			getAllPublishers();
-			resetInterface();
+			if(paths[2]) {
+				var searchResults = searchAPI(currentView, 'name', paths[2]);
+				populateSearchResults(searchResults, currentView);
+			} else {
+				getAllPublishers();
+			}
     	}
-		var stateObj = {
-			currentView: currentView,
-			sort: 'recent'
-		};
-		var newURL = document.location.origin + document.location.pathname;
-		document.title = 'ΛLΞXΛNDRIΛ';
-		if (currentView != 'front') {
-			newURL = newURL+'#/'+currentView;
-			document.title = 'ΛLΞXΛNDRIΛ > '+currentView.charAt(0).toUpperCase() + currentView.slice(1);
-		}
-		history.pushState(stateObj, 'ΛLΞXΛNDRIΛ', newURL);
+//		buildHistory();
     	console.info(route);
     }
 
@@ -414,6 +415,19 @@ function router () {
 window.addEventListener('hashchange', router);  
 // Listen on page load:
 window.addEventListener('load', router);  
+
+function buildHistory() {
+	var stateObj = {
+		currentView: currentView,
+	};
+	var newURL = document.location.origin + document.location.pathname;
+	document.title = 'ΛLΞXΛNDRIΛ';
+	if (currentView != 'front') {
+		newURL = newURL+'#/'+currentView;
+		document.title = 'ΛLΞXΛNDRIΛ > '+currentView.charAt(0).toUpperCase() + currentView.slice(1);
+	}
+	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ', newURL);
+}
 
 // QUERY URL PARSING
 
@@ -463,7 +477,7 @@ function displayItem(key){
 				$('#search').fadeIn(fadeTimer);
 				filterMediaByType();
 				resetInterface();
-			} else if (currentView == 'publishers') {
+			} else if (currentView == 'publisher') {
 				$('#search').fadeIn(fadeTimer);
 				getAllPublishers();
 				resetInterface();
@@ -546,7 +560,7 @@ function resetAlexandria() {
 
 // Get All Publishers
 function getAllPublishers() {
-	currentView = 'publishers';
+	currentView = 'publisher';
 	$('#intro').fadeOut(fadeTimer);
 	$('main').fadeOut(fadeTimer);
 	$('#browse-media .module-links a.active').removeClass('active');
@@ -582,7 +596,7 @@ function loadPublisherEntity(obj) {
 }
 
 function loadPublisherView(objMeta) {
-	currentView = 'publishers';
+	currentView = 'publisher';
 	$('#intro').fadeOut(fadeTimer);
 	$('main').fadeOut(fadeTimer);
 	$('#share-modal').css({
@@ -908,13 +922,13 @@ function buildSearch() {
 	$('.view-media-ui').fadeOut(fadeTimer);
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	var searchProtocol = document.getElementById('searchModule').value;
-	var searchIn = '';
+	var searchOn = '';
 	if (searchProtocol == 'media') {
-		searchIn = 'info_title';
+		searchOn = 'info_title';
 	} else {
-		searchIn = 'name';
+		searchOn = 'name';
 	}
-	var AdvSearchResults = searchAPI(searchProtocol, /*$('#search .module-links.mod-filter .active').attr('value'),*/ searchIn, document.getElementById('searchTermInput').value);
+	var AdvSearchResults = searchAPI(searchProtocol, /*$('#search .module-links.mod-filter .active').attr('value'),*/ searchOn, document.getElementById('searchTermInput').value);
 	console.info(AdvSearchResults);
 	$('#adv-search').fadeOut(fadeTimer);
 	populateSearchResults(AdvSearchResults, searchProtocol);
@@ -1091,7 +1105,7 @@ function populateSearchResults(results, module) {
 			}
 		}
 		$('#browse-media-wrap h2').text('Browse Publishers');
-		currentView = 'publishers';
+		currentView = 'publisher';
 /*
 		var stateObj = {
 			currentView: currentView,

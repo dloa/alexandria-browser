@@ -637,6 +637,7 @@ main {
 	background-color: #ffffff;
 }
 div#intro {
+	display: none;
 	position: fixed;
 	width: 100%;
 	top: 31%;
