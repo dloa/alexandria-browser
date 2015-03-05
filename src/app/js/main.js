@@ -665,13 +665,14 @@ function loadPublisherView(objMeta) {
 	var publisherName = thisPublisher['name'];
 	document.getElementById('publisher-breadcrumbs').innerHTML = publisherName;
 	var publisherTime = thisPublisher['timestamp'];
-	if (thisPublisher['emailmd5']) {
-		var publisherMD5 = thisPublisher['emailmd5'];
+	var publisherMD5;
+	if ( (thisPublisher['emailmd5'] != '') && (thisPublisher['emailmd5'] != 'd41d8cd98f00b204e9800998ecf8427e') ) {
+		publisherMD5 = thisPublisher['emailmd5'];
 		document.getElementById('publisher-avatar').src = 'http://www.gravatar.com/avatar/'+publisherMD5;
 	} else {
-		document.getElementById('publisher-gravatar').style.display = 'none';
+		document.getElementById('publisher-avatar').style.display = 'none';
 	}
-	if (thisPublisher['bitmessage']) {
+	if (thisPublisher['bitmessage'] != '') {
 		var publisherBitmsg = thisPublisher['bitmessage'];
 		document.getElementById('publisher-bitmsg').href = 'bitmessage:'+publisherBitmsg;
 	} else {
@@ -681,43 +682,45 @@ function loadPublisherView(objMeta) {
 	publisherTime = new Date(parseInt(publisherTime));
 	document.getElementById('view-publisher-name').innerHTML = publisherName;
 	document.getElementById('publisher-FLO-address').innerHTML = publisherAddress;
-	for (var i = 0; i < thisPubliserMedia.length; i++) {
-		var mediaID = thisPubliserMedia[i]['txid'];
-		var mediaType = thisPubliserMedia[i]['media-data']['alexandria-media']['type'];
-		var mediaInfo = thisPubliserMedia[i]['media-data']['alexandria-media']['info'];
-		var mediaPubTime = thisPubliserMedia[i]['media-data']['alexandria-media']['timestamp'];
-		var mediaPubTimeLen = thisPubliserMedia[i]['media-data']['alexandria-media']['timestamp'].toString().length;
-		if (mediaPubTimeLen == 10) {
-			mediaPubTime = parseInt(mediaPubTime)*1000;
-		}					
-		var mediaTitle = mediaInfo['title'];
-		var mediaDesc = mediaInfo['description'];
-		var mediaRuntime = 0;
-		var mediaArtist = '';
-		var mediaFilename = '';
-		var mediaTid = thisPubliserMedia[i]['media-data']['alexandria-media']['torrent'];
-		var mediaFLO = thisPubliserMedia[i]['media-data']['alexandria-media']['publisher'];
-		if(thisPubliserMedia[i]['media-data']['alexandria-media']['payment']){
-			var mediaPymnt = thisPubliserMedia[i]['media-data']['alexandria-media']['payment']['type'];
-		}
-		if(mediaInfo['extra-info']){
-			if(mediaInfo['extra-info']['runtime']){
-				mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
+	if (thisPubliserMedia) {
+		for (var i = 0; i < thisPubliserMedia.length; i++) {
+			var mediaID = thisPubliserMedia[i]['txid'];
+			var mediaType = thisPubliserMedia[i]['media-data']['alexandria-media']['type'];
+			var mediaInfo = thisPubliserMedia[i]['media-data']['alexandria-media']['info'];
+			var mediaPubTime = thisPubliserMedia[i]['media-data']['alexandria-media']['timestamp'];
+			var mediaPubTimeLen = thisPubliserMedia[i]['media-data']['alexandria-media']['timestamp'].toString().length;
+			if (mediaPubTimeLen == 10) {
+				mediaPubTime = parseInt(mediaPubTime)*1000;
+			}					
+			var mediaTitle = mediaInfo['title'];
+			var mediaDesc = mediaInfo['description'];
+			var mediaRuntime = 0;
+			var mediaArtist = '';
+			var mediaFilename = '';
+			var mediaTid = thisPubliserMedia[i]['media-data']['alexandria-media']['torrent'];
+			var mediaFLO = thisPubliserMedia[i]['media-data']['alexandria-media']['publisher'];
+			if(thisPubliserMedia[i]['media-data']['alexandria-media']['payment']){
+				var mediaPymnt = thisPubliserMedia[i]['media-data']['alexandria-media']['payment']['type'];
 			}
-			if(mediaInfo['extra-info']['artist']){
-				mediaArtist = mediaInfo['extra-info']['artist'];
-			}						
-			if(mediaInfo['extra-info']['filename']){
-				mediaFilename = mediaInfo['extra-info']['filename'];
-			}						
+			if(mediaInfo['extra-info']){
+				if(mediaInfo['extra-info']['runtime']){
+					mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
+				}
+				if(mediaInfo['extra-info']['artist']){
+					mediaArtist = mediaInfo['extra-info']['artist'];
+				}						
+				if(mediaInfo['extra-info']['filename']){
+					mediaFilename = mediaInfo['extra-info']['filename'];
+				}						
+			}
+			if (mediaRuntime != 0) {
+				mediaRuntime = '<div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div>';
+			} else {
+				mediaRuntime = '';
+			}
+			var mediaEntity = '<li id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '" media-filename="'+mediaFilename+'"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> '+ mediaRuntime +' <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="FLO-address hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</li>';
+			$('#publisher-media-list').prepend(mediaEntity);
 		}
-		if (mediaRuntime != 0) {
-			mediaRuntime = '<div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div>';
-		} else {
-			mediaRuntime = '';
-		}
-		var mediaEntity = '<li id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '" media-filename="'+mediaFilename+'"><div class="media-icon" onclick="loadMediaEntity(this);"><img src="img/' + mediaType + '-icon.svg" class="makesvg entity-image" onclick="loadMediaEntity(this);" style="display: inline;"></div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> '+ mediaRuntime +' <div class="media-rating makeChildrenSVG"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-on.svg"><img src="img/star-off.svg"></div> <a class="info-icon" onclick="loadInfoModal(this)"><img src="img/info-icon.svg" class="makesvg" style="display: inline;">info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);"><img src="img/play-icon-small.svg" class="makesvg" style="display: inline;">play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div><div class="media-Tid hidden">' + mediaTid + '</div><div class="FLO-address hidden">' + mediaFLO + '</div><div class="media-pymnt hidden">'+mediaPymnt+'</li>';
-		$('#publisher-media-list').prepend(mediaEntity);
 	}
 	replaceSVG();	
 	$('#view-publisher .entity-pub-time span').html(publisherTime);
@@ -988,6 +991,20 @@ function setMediaTypeFilter(obj) {
 
 // MEDIA TYPE FILTER
 function filterMediaByType(obj) {
+	$('#intro').fadeOut(fadeTimer);
+	$('main').not('#browse-media').fadeOut(fadeTimer);
+	if(!obj) {
+		$('#browse-media .module-links a.active').removeClass('active');
+	}
+	$('#browse-media-wrap .row').remove();
+	$('.sharing-ui').fadeOut(fadeTimer);
+	$('.publisher-ui').fadeOut(fadeTimer);
+	$('#search').fadeIn(fadeTimer);
+	$('#share-modal').hide();
+	$('#tip-modal').hide();
+	$('#user-modal').fadeOut(fadeTimer);
+	$('.view-media-ui').fadeOut(fadeTimer);
+	$('.view-publisher-ui').fadeOut(fadeTimer);
 	var filteredMedia = [];
 	if (currentView == 'front') {
 		filteredMedia[0] = obj;
@@ -1022,14 +1039,6 @@ function filterMediaByType(obj) {
 
 // POPULATE SEARCH RESULTS
 function populateSearchResults(results, module) {
-	$('#intro').fadeOut(fadeTimer);
-	$('main').not('#browse-media').fadeOut(fadeTimer);
-	$('.view-publisher-ui').fadeOut(fadeTimer);
-	$('#browse-media-wrap .row').remove();
-	$('#user-modal').fadeOut(fadeTimer);
-	$('#share-modal').hide();
-	$('#tip-modal').hide();
-	$('.view-media-ui').fadeOut(fadeTimer);
 	document.getElementById('media-breadcrumbs-type').innerHTML = '';
 	document.getElementById('media-breadcrumbs-publisher').innerHTML = '';
 	document.getElementById('media-breadcrumbs').innerHTML = '';
@@ -1401,15 +1410,17 @@ function concatMediaSig() {
 function postPublisher() {
 	var pubName = document.getElementById('newPublisher-name').value;
 	var pubAdd = document.getElementById('newPublisher-floAdd').value;
-	var pubTime = document.getElementById('newPublisherString').innerHTML.split('-')[2];
-	var pubEmailMD5 = MD5(trim11(document.getElementById('newPublisher-emailmd5').value).toLowerCase());
+	var pubEmailMD5 = '';
+	if (document.getElementById('newPublisher-emailmd5').value != '') {
+		pubEmailMD5 = MD5(trim11(document.getElementById('newPublisher-emailmd5').value).toLowerCase());
+	}
 	var pubBitMsg = document.getElementById('newPublisher-bitmsg').value;
-	var pubSig = document.getElementById('newPublisher-sign').value;
-	var queryString = '{ "alexandria-publisher": { "name": "'+ pubName +'", "address": "'+ pubAdd +'", "timestamp":'+ pubTime +', "bitmessage": "'+ pubBitMsg +'", "emailmd5":"'+ pubEmailMD5 +'"}, "signature":"'+ pubSig +'"}';
-	if ( (!pubName) || (!pubAdd) || (!pubSig) ) {
-		console.error('Incomplete Input!');
+	var pubTime = Date.parse(new Date()).toString();
+	var pubSig = generateSignature(pubName, pubAdd, pubTime);
+	if (pubSig == false) {
 		return false;
 	}
+	var queryString = '{ "alexandria-publisher": { "name": "'+ pubName +'", "address": "'+ pubAdd +'", "timestamp":'+ pubTime +', "bitmessage": "'+ pubBitMsg +'", "emailmd5":"'+ pubEmailMD5 +'"}, "signature":"'+ pubSig +'"}';
 	console.log(queryString);
 	$.ajax({
 	    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
@@ -1425,6 +1436,42 @@ function postPublisher() {
 			console.error(thrownError);
 		}
 	});
+}
+
+// GENERATE SIGNATURE FOR PUBLISHING
+function generateSignature(pubName, pubAdd, pubTime) {
+	if ( (!pubName) || (!pubAdd) || (!pubTime) ) {
+		alert('Incomplete input');
+		return false;
+	}
+	var queryString = '{ "address":"'+ pubAdd +'", "text":"'+ pubName + '-' + pubAdd + '-' + pubTime +'" }';
+	console.log(queryString);
+	var signature;
+	var stopError;
+	$.ajax({
+	    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign/',
+	    type: 'POST',
+		data: queryString.toString(),
+	    success: function(e) {
+			var res = $.parseJSON(e);
+			if (res['status'] == 'failure') {
+				alert(res['response'][0]);
+				stopError = 1;
+			} else {
+				signature = res['response'][0];
+			}
+	    }, 
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+		},
+		async:   false
+	});
+	if (stopError == 1) {
+		return false;
+	} else {
+		return signature;
+	}
 }
 
 // Select File
@@ -1753,10 +1800,13 @@ function postMedia(tipAlexandria) {
 	}
 	var Tid = document.getElementById('btih-hash').value;
 	var FLOadd = document.getElementById('newMediaPublisherFLO').value;
-	var pubTime = document.getElementById('newMediaString').innerHTML.split('-')[2];
-	var mediaSig = document.getElementById('newMedia-sign').value;
+	var pubTime = Date.parse(new Date()).toString();
+	var mediaSig = generateSignature(Tid, FLOadd, pubTime);
+	if (mediaSig == false) {
+		return false;
+	}
 	var mediaType = $('#media-type-select-list a.active').attr('value');
-	var mediaDesc = replace(repace(document.getElementById('addMedia-desc').value,'\r',' '),'\n',' ');
+	var mediaDesc = replace(replace(document.getElementById('addMedia-desc').value,'\r',' '),'\n',' ');
 	var mediaInfo = '';
 	$('#new-media-meta input[type="text"].info-field').each(function(){
 		if ( $(this).val() != '' ) {
@@ -1814,6 +1864,7 @@ function postMedia(tipAlexandria) {
 	} else {
 		var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
 	}
+	console.log(queryString);
 	$.ajax({
 	    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
 	    type: 'POST',
