@@ -120,8 +120,6 @@ jQuery(document).ready(function($){
 	$('.close-modal').click(function(){
 		clearModal();
 	});	
-
-//	loadAlexandriaView();
 	
 	// Media Content Interface
 	$('#addNewContent-icon svg').click(function(){
@@ -369,18 +367,13 @@ function route (path, templateId, controller) {
 }
 route('/', 'front', function () {  });  
 route('/media', 'media', function () {  });
-route('/publishers', 'publisher', function () {  });
-route('/add-media', 'addmedia', function () {  });
-route('/add-publisher', 'addpublisher', function () {  });
+route('/publishers', 'publishers', function () {  });
+route('/add-media', 'add-media', function () {  });
+route('/add-publisher', 'add-publisher', function () {  });
 var el = null;  
 function router () {  
-
-    // Lazy load view element:
-//	el = el || document.getElementById('view');
-
     // Current route url (getting rid of '#' in hash as well):
     var url = location.hash.slice(1) || '/';
-
 	var paths = url.split('/');
 	console.log(paths);
 	if (paths[1]) {
@@ -390,13 +383,12 @@ function router () {
 	}
     // Get route by url:
     var route = routes[module];
-
     // Route the URL
     if (route.controller) {
     	currentView = route.templateId;
-    	if (route.templateId == 'front') {
+    	if (currentView == 'front') {
     		resetAlexandria();
-    	} else if (route.templateId == 'media') {
+    	} else if (currentView == 'media') {
 			resetInterface();
 			if (!paths[2]) {
 				filterMediaByType();
@@ -416,7 +408,8 @@ function router () {
 					populateSearchResults(searchResults, currentView);
 				}
 			}
-    	} else if (route.templateId == 'publisher') {
+    	} else if (currentView == 'publishers') {
+    		console.log(currentView);
 			resetInterface();
 			if (!paths[2]) {
 				getAllPublishers();
@@ -424,6 +417,7 @@ function router () {
 				var publisherName = paths[2].replace("-"," ");
 				var searchResults;
 				if (paths[3]) {
+					currentView = currentView.slice(0,-1);
 					searchResults = searchAPI(currentView, 'info-address', paths[3]);
 					loadPublisherView();
 				} else {
@@ -431,14 +425,14 @@ function router () {
 					populateSearchResults(searchResults, currentView);
 				}
 			}
-    	} else if (route.templateId == 'addmedia') {
+    	} else if (currentView == 'add-media') {
 			loadShareMod();
 			resetInterface();
-    	} else if (route.templateId == 'addpublisher') {
+    	} else if (currentView == 'add-publisher') {
 			loadCreatePublisherMod();
 			resetInterface();
     	}
-//		buildHistory();
+		buildHistory();
     	console.info(route);
     }
 
@@ -496,49 +490,13 @@ function queryString(key){
 function displayItem(key){
 	if(queryString(key)=='false') {	
 		console.log("you didn't enter a ?"+key+"=value querystring item.");
-	} else {
-		if (key == 'view') {
-			currentView = queryString(key);
-			if(currentView == 'addcontent'){
-				loadShareMod();
-				resetInterface();
-			} else if(currentView == 'addpublisher'){
-				loadCreatePublisherMod();
-				resetInterface();
-			}
-		}		
 	}
 }
 
 // BROWSER NAVIGATION CONTROLS
 /*
 window.onpopstate = function(event) {
-	if(window.location.search == ''){
-		resetAlexandria();
-	} else {
-		freshLoad = false;
-		$('#intro').fadeOut(fadeTimer);
-		$('.overlay').fadeOut(fadeTimer);
-		$('.sharing-ui').fadeOut(fadeTimer);
-		loadAlexandriaView();
-	}
 };
-*/
-// Load Alexandria View
-/*
-function loadAlexandriaView() {
-	var readyStateCheckInterval = setInterval(function() {
-	    if (document.readyState === "complete") {
-	        clearInterval(readyStateCheckInterval);
-			if (window.location.search == '') {
-				resetInterface();
-		        $('#intro').fadeIn(fadeTimer);
-			} else if (window.location.search.indexOf("view")  > -1) {
-				displayItem('view');
-			}
-	    }
-	}, 10);		    
-}
 */
 // Load Local HTML file contents for info modal
 function getInfoFile(localFile) {
@@ -562,6 +520,7 @@ function resetInterface() {
 
 // RESET ALEXANDRIA
 function resetAlexandria() {
+	currentView = 'front';
 	$('main').hide();
 	$('#browse-media-wrap .row').remove();
 	$('#search').fadeIn(fadeTimer);
@@ -580,11 +539,12 @@ function resetAlexandria() {
 	$('#search').show();
 	$('#app-shading').css('bottom','0');
 	$('#intro').fadeIn(fadeTimer);
+	buildHistory();
 }
 
 // Get All Publishers
 function getAllPublishers() {
-	currentView = 'publisher';
+	currentView = 'publishers';
 	$('#intro').fadeOut(fadeTimer);
 	$('main').fadeOut(fadeTimer);
 	$('#browse-media .module-links a.active').removeClass('active');
@@ -915,8 +875,8 @@ function loadMediaView(objMeta) {
 	$('#media-view-entity .entity-footer').hide();
 	$('#media-view-entity .entity-footer.media-'+mediaType).show();
 	$('#media-view-entity').fadeIn(fadeTimer);
-	document.title = 'ΛLΞXΛNDRIΛ > Media';
 	// URL and Browser Nav for Media Entity View
+	buildHistory();
 /*
 	var stateObj = {
 		currentView: currentView,
@@ -1048,6 +1008,7 @@ function populateSearchResults(results, module) {
 		$('#browse-media-wrap').append(mediaEntity);
 		$('#browse-media-wrap h2').text('Browse Media');
 		currentView = 'media';
+		buildHistory();
 /*
 		var stateObj = {
 			currentView: currentView,
@@ -1109,6 +1070,7 @@ function populateSearchResults(results, module) {
 		}
 		$('#browse-media-wrap h2').text('Browse Media');
 		currentView = 'media';
+		buildHistory();
 /*
 		var stateObj = {
 			currentView: currentView,
@@ -1136,7 +1098,8 @@ function populateSearchResults(results, module) {
 			}
 		}
 		$('#browse-media-wrap h2').text('Browse Publishers');
-		currentView = 'publisher';
+		currentView = 'publishers';
+		buildHistory();
 /*
 		var stateObj = {
 			currentView: currentView,
@@ -1325,7 +1288,8 @@ function loadTipModal(obj) {
 function loadShareMod() {
 	$('.header-modal').hide();
 	$('.view-media-ui').hide();
-	currentView = 'addNewContent';
+	currentView = 'add-media';
+	buildHistory();
 /*
 	var stateObj = {
 		currentView: currentView
@@ -1345,7 +1309,8 @@ function loadShareMod() {
 // Create Publisher Module
 function loadCreatePublisherMod() {
 	$('.header-modal').hide();
-	currentView = 'addNewPublisher';
+	currentView = 'add-publisher';
+	buildHistory();
 /*
 	var stateObj = {
 		currentView: currentView
