@@ -358,7 +358,7 @@ function resizeTabs(t) {
 	$('#newMedia-tabs').css('height',tabHeight+'px');
 }
 
-// HASHBANG URL ROUTING
+// HASH URL ROUTING
 // A hash to store our routes:
 var routes = {};  
 // The route registering function:
@@ -368,6 +368,7 @@ function route (path, templateId, controller) {
 }
 route('/', 'front', function () {  });  
 route('/media', 'media', function () {  });
+route('/publishers', 'publishers', function () {  });
 route('/publishers', 'publishers', function () {  });
 route('/add-media', 'add-media', function () {  });
 route('/add-publisher', 'add-publisher', function () {  });
@@ -443,6 +444,7 @@ window.addEventListener('load', router);
 function buildHistory() {
 	var newURL = document.location.origin + document.location.pathname;
 	if ( (currentView != 'front') && (subView == '') ) {
+		document.title = 'ΛLΞXΛNDRIΛ > '+ currentView.charAt(0).toUpperCase() + currentView.slice(1);
 		newURL = newURL+'#/'+currentView;
 	} else if (subView != '') {
 		if (currentView == 'artifact') {
@@ -450,7 +452,7 @@ function buildHistory() {
 			newURL = newURL+'#/media/'+subView;
 		} else if (currentView == 'publisher') {
 			document.title = 'ΛLΞXΛNDRIΛ > Publishers > '+ subView;
-			newURL = newURL+'#/publisher/'+subView;
+			newURL = newURL+'#/publishers/'+subView;
 		}
 	} else {
 		document.title = 'ΛLΞXΛNDRIΛ';
@@ -688,6 +690,7 @@ function loadPublisherView(objMeta) {
 			$('#publisher-media-list').prepend(mediaEntity);
 		}
 	}
+	buildHistory();
 	replaceSVG();	
 	$('#view-publisher .entity-pub-time span').html(publisherTime);
 }
@@ -1021,12 +1024,16 @@ function populateSearchResults(results, module) {
 	document.getElementById('media-breadcrumbs-publisher').innerHTML = '';
 	document.getElementById('media-breadcrumbs').innerHTML = '';
 	if (!results) {
-		console.error('No Media Results');
+		if (module =='media') {
+			currentView = module;
+		} else {
+			currentView = 'publishers';
+		}
+		buildHistory();
 		var mediaEntity = '<div class="row media-entity"><div class="media-icon"><img src="img/media-icon.svg" class="makesvg entity-image" style="display: inline;"></div><h3 class="media-title">No Results Found</h3></div>';
 		$('#browse-media-wrap').append(mediaEntity);
-		$('#browse-media-wrap h2').text('Browse Media');
-		currentView = 'media';
-		buildHistory();
+		var currentViewUpper = currentView.charAt(0).toUpperCase() + currentView.slice(1);;
+		$('#browse-media-wrap h2').text('Browse '+ currentViewUpper);
 		$('#browse-media-wrap .row:first-of-type').addClass('first');
 		$('#browse-media').fadeIn(fadeTimer);
 		replaceSVG();
@@ -1079,16 +1086,6 @@ function populateSearchResults(results, module) {
 		}
 		$('#browse-media-wrap h2').text('Browse Media');
 		currentView = 'media';
-		buildHistory();
-/*
-		var stateObj = {
-			currentView: currentView,
-			sort: 'recent'
-		};
-		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
-		history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Media', newURL);
-		document.title = 'ΛLΞXΛNDRIΛ > Media';
-*/
 	} else {
 		for (var i = 0; i < results.length; i++) {
 			console.info(results[i]);
@@ -1108,20 +1105,11 @@ function populateSearchResults(results, module) {
 		}
 		$('#browse-media-wrap h2').text('Browse Publishers');
 		currentView = 'publishers';
-		buildHistory();
-/*
-		var stateObj = {
-			currentView: currentView,
-			sort: 'recent'
-		};
-		var newURL = document.location.origin + document.location.pathname +'?view='+currentView;
-		history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Publishers', newURL);
-		document.title = 'ΛLΞXΛNDRIΛ > Publishers';
-*/
 	}
 	$('#browse-media-wrap .row:first-of-type').addClass('first');
 	$('#browse-media').fadeIn(fadeTimer);
 	replaceSVG();
+	buildHistory();
 }
 // Display Media Info Modal
 function loadInfoModal(childObj) {
