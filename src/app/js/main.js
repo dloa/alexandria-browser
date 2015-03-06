@@ -282,15 +282,8 @@ function buildHistory() {
 			}
 		}
 	} else if (subView != '') {
-		if (currentView == 'artifact') {
-			document.title = 'ΛLΞXΛNDRIΛ > Media > '+ subView;
-			newURL = newURL+'#/media/'+subView;
-		} else if (currentView == 'publisher') {
-			document.title = 'ΛLΞXΛNDRIΛ > Publishers > '+ subView;
-			newURL = newURL+'#/'+subView;
-		}
-	} else {
-		document.title = 'ΛLΞXΛNDRIΛ';
+		newURL = newURL+'#/'+subView;
+		document.title = (currentView == 'artifact') ? ('ΛLΞXΛNDRIΛ > Media > '+ subView) : (document.title = 'ΛLΞXΛNDRIΛ > Publishers > '+ subView);
 	}
 	if ( (location.hash.slice(1).split('/')[2] == 'type') && (document.getElementById('loaded').innerHTML != '1') ) {
 		var parseTypes = location.hash.split('type/')[1];
