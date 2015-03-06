@@ -182,34 +182,40 @@ function router () {
 			if (!paths[2]) {
 				filterMediaByType();
 			} else {
-				var searchOn = paths[2].replace("-","_");
-				if (searchOn.length == 64) {
-					loadArtifactView();
-				} else {
-					console.info(paths);
-					if ( (paths[2] == 'type') && (paths[3]) ) {
-						var parseTypes = location.hash.split('type/')[1];
-						var parseTypeLen = parseTypes.split('-');						
-						if (parseTypeLen.length > 1) {
-							var searchForStr = '';
-							for (var i = 0; i < parseTypeLen.length; i++) {
-								if (searchForStr == '') {
-									searchForStr = '"'+ parseTypeLen[i]+'"';
-								} else {
-									searchForStr = searchForStr +',"'+ parseTypeLen[i]+'"';
-								}
-							}
-							searchFor = searchForStr;
-						} else {
-							var searchFor = [paths[3]];
-						}
-					} else if ((paths[2] != 'type') && (paths[3])) {
-						var searchFor = paths[3].replace("-"," ");
-					} else {
-						var searchFor = '';
-					}
-					var searchResults = searchAPI(currentView, searchOn, searchFor);
+				if (paths[2] == 'search') {
+					var searchTerm = paths[3].toString().replace("-"," ");
+					var searchResults = searchAPI(currentView, '*', searchTerm);
 					populateSearchResults(searchResults, currentView);
+				} else {
+					var searchOn = paths[2].replace("-","_");
+					if (searchOn.length == 64) {
+						loadArtifactView();
+					} else {
+						console.info(paths);
+						if ( (paths[2] == 'type') && (paths[3]) ) {
+							var parseTypes = location.hash.split('type/')[1];
+							var parseTypeLen = parseTypes.split('-');						
+							if (parseTypeLen.length > 1) {
+								var searchForStr = '';
+								for (var i = 0; i < parseTypeLen.length; i++) {
+									if (searchForStr == '') {
+										searchForStr = '"'+ parseTypeLen[i]+'"';
+									} else {
+										searchForStr = searchForStr +',"'+ parseTypeLen[i]+'"';
+									}
+								}
+								var searchFor = searchForStr;
+							} else {
+								var searchFor = [paths[3]];
+							}
+						} else if ((paths[2] != 'type') && (paths[3])) {
+							var searchFor = paths[3].replace("-"," ");
+						} else {
+							var searchFor = '';
+						}
+						var searchResults = searchAPI(currentView, searchOn, searchFor);
+						populateSearchResults(searchResults, currentView);
+					}
 				}
 			}
     	} else if (currentView == 'publishers') {
@@ -279,7 +285,13 @@ function buildHistory() {
 			var locationInfo = location.hash.slice(1).split('/');
 			if ( (currentView != 'media') && (!history.state.searchResults) ) {
 				newURL = newURL+'#/'+currentView;
-			} else if (history.state.searchResults == true) {
+			} else if ((currentView != 'media') && (history.state.searchResults) ) {
+				var searchUrl = location.hash.slice(1).split('/');
+				newURL = newURL+'#/'+currentView;
+				for (var i = 2; i < searchUrl.length; i++) {
+					newURL = newURL+'/'+ searchUrl[i];
+				}
+			} else if (location.hash.slice(1).split('/').length > 2) {
 				var searchUrl = location.hash.slice(1).split('/');
 				newURL = newURL+'#/'+currentView;
 				for (var i = 2; i < searchUrl.length; i++) {
@@ -292,11 +304,13 @@ function buildHistory() {
 				}
 			}
 		}
-	} else if (subView != '') {
+	} else if ( subView != '' ) {
 		newURL = newURL+'#/'+subView;
 		document.title = (currentView == 'artifact') ? ('ΛLΞXΛNDRIΛ > Media > '+ subView) : (document.title = 'ΛLΞXΛNDRIΛ > Publishers > '+ subView);
-	} else if (history.state.searchResults == true) {
+	} else if ( (history.state.searchResults == true) && (history.state.currentView == 'publishers') ) {
 		document.title = 'ΛLΞXΛNDRIΛ > Publishers > '+ history.state.searchTerm;
+	} else if ( (history.state.searchResults == true) && (history.state.currentView == 'media') ) {
+		document.title = 'ΛLΞXΛNDRIΛ > Media > '+ history.state.searchTerm;
 	}
 	if ( (location.hash.slice(1).split('/')[2] == 'type') && (document.getElementById('loaded').innerHTML != '1') ) {
 		var parseTypes = location.hash.split('type/')[1];
@@ -312,12 +326,13 @@ function buildHistory() {
 		}
 		console.log(filterTypes);
 	}
-	if ( (location.hash.slice(1).split('/').length > 3) && (location.hash.slice(1).split('/')[2] != 'type') ) {
+	if ( (location.hash.slice(1).split('/').length > 3) && (location.hash.slice(1).split('/')[2] != 'type') && (location.hash.slice(1).split('/')[2] != 'search') ) {
 		for (var i = 2; i < location.hash.slice(1).split('/').length; i++) {
 			newURL = newURL+'/'+location.hash.slice(1).split('/')[i];
 		}
 	}
-	if (filterTypes.length > 0) {
+	if ( (filterTypes != '') && (filterTypes.length > 0) ) {
+		console.info(filterTypes + ' ' + filterTypes.length);
 		var urlTypes = '';
 		for (var i = 0; i < filterTypes.length; i++) {
 			if (urlTypes == '') {
@@ -327,7 +342,7 @@ function buildHistory() {
 			}
 			newURL = urlTypes;
 		}
-	} else if (currentView == 'media') {
+	} else if ( (currentView == 'media') && (location.hash.slice(1).split('/')[2] != 'search') ) {
 		newURL = newURL+'#/'+currentView;
 	}
 	if (subView == '') {
@@ -772,7 +787,7 @@ function buildSearch() {
 	$('.view-media-ui').fadeOut(fadeTimer);
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	var searchProtocol = document.getElementById('searchModule').value;
-	var searchOn = (searchProtocol == 'media') ? (searchOn = 'info_title') : (searchOn = 'name') ;
+	var searchOn = (searchProtocol == 'media') ? (searchOn = '*') : (searchOn = 'name') ;
 	var AdvSearchResults = searchAPI(searchProtocol, /*$('#search .module-links.mod-filter .active').attr('value'),*/ searchOn, document.getElementById('searchTermInput').value);
 	console.info(AdvSearchResults);
 	if (searchProtocol == 'publisher') {
@@ -783,6 +798,15 @@ function buildSearch() {
 		}
 		var newTitle = 'Alexandria > Publishers';
 		var newUrl = document.location.origin + document.location.pathname +'#/publishers/'+document.getElementById('searchTermInput').value.replace(/\s/g , "-").toLowerCase();
+		window.history.replaceState(stateObj, newTitle, newUrl);
+	} else if (searchProtocol == 'media') {
+		var stateObj = {
+			currentView: 'media',
+			searchResults: true,
+			searchTerm: document.getElementById('searchTermInput').value
+		}
+		var newTitle = 'Alexandria > Media';
+		var newUrl = document.location.origin + document.location.pathname +'#/media/search/'+document.getElementById('searchTermInput').value.replace(/\s/g , "-").toLowerCase();
 		window.history.replaceState(stateObj, newTitle, newUrl);
 	}
 	$('#adv-search').fadeOut(fadeTimer);
