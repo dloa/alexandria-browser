@@ -242,7 +242,6 @@ function router () {
     	}
     } else {
     	// ROUTE DOESN'T EXIST - IF ADDRESS LOAD PUBLISHER
-    	console.info(paths);
     	if (paths[1].length == 34) {
 			var searchResults = searchAPI('publisher', 'address', paths[1]);
 			loadPublisherView();
@@ -292,6 +291,7 @@ function buildHistory() {
 					newURL = newURL+'/'+ searchUrl[i];
 				}
 			} else if (location.hash.slice(1).split('/').length > 2) {
+				console.log(newURL);
 				var searchUrl = location.hash.slice(1).split('/');
 				newURL = newURL+'#/'+currentView;
 				for (var i = 2; i < searchUrl.length; i++) {
@@ -303,6 +303,13 @@ function buildHistory() {
 					newURL = newURL+'/'+ searchUrl[i];
 				}
 			}
+		} else if (searchTypes.length > 0) {
+			var searchUrl = location.hash.slice(1).split('/');
+			newURL = newURL+'#/'+currentView;
+			for (var i = 2; i < searchUrl.length; i++) {
+				newURL = newURL+'/'+ searchUrl[i];
+			}
+			searchTypes = [];
 		}
 	} else if ( subView != '' ) {
 		newURL = newURL+'#/'+subView;
@@ -768,9 +775,11 @@ function customTipAmountInput(event) {
 	}
 }
 
+var searchTypes = [];
 // ADVANCED SEARCH
 function selectSearchMediaType(obj){
 	$(obj).toggleClass('active');
+	searchTypes.push($(obj).attr('value'));
 }
 
 // EXECUTE ADVANCED SEARCH
@@ -810,7 +819,7 @@ function buildSearch() {
 		window.history.replaceState(stateObj, newTitle, newUrl);
 	}
 	$('#adv-search').fadeOut(fadeTimer);
-	populateSearchResults(AdvSearchResults, searchProtocol);	
+	populateSearchResults(AdvSearchResults, searchProtocol);
 }
 
 // CLEAR ADVANCED SEARCH
@@ -920,12 +929,22 @@ function populateSearchResults(results, module) {
 		replaceSVG();
 		return false;
 	}
-	if (module =='media') {
+	if (searchTypes.length > 0) {
+		for (var i = 0; i < searchTypes.length; i++) {
+			$('#browse-media .module-links a[value="'+ searchTypes[i] +'"').addClass('active');
+		}
 		console.info(results);
+	} else {
+		$('#browse-media .module-links a').removeClass('active');
+	}
+	if (module =='media') {
 		for (var i = 0; i < results.length; i++) {
+			var mediaType = results[i]['media-data']['alexandria-media']['type'];
+			if ( (searchTypes) && (searchTypes.indexOf(mediaType) == -1) ) {
+				continue;
+			}
 			var mediaID = results[i]['txid'];
 			var mediaPublisher = results[i]['publisher-name'];
-			var mediaType = results[i]['media-data']['alexandria-media']['type'];
 			var mediaInfo = results[i]['media-data']['alexandria-media']['info'];
 			var mediaPubTime = results[i]['media-data']['alexandria-media']['timestamp'];
 			var mediaPubTimeLen = results[i]['media-data']['alexandria-media']['timestamp'].toString().length;
@@ -969,7 +988,6 @@ function populateSearchResults(results, module) {
 		currentView = 'media';
 	} else {
 		for (var i = 0; i < results.length; i++) {
-			console.info(results[i]);
 			var publisherID = results[i]['txid'];
 			var publisherName = results[i]['publisher-data']['alexandria-publisher']['name'];
 			var publisherDate = results[i]['publisher-data']['alexandria-publisher']['timestamp'];
@@ -1147,6 +1165,7 @@ function loadShareModal(obj) {
 		var modalPos = 'right';
 		var shareModalPos = $(obj).parent().width() - $(obj).position().left - 80;
 	}
+	document.getElementById('share-url').innerHTML = location.href;
 	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2').text();
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
 	buildHistory();
@@ -1831,7 +1850,6 @@ function lightbox(obj){
 		'left': (window.innerWidth-imgContentWidth)/2+'px'
 	});
 }
-
 
 // INT SORT
 jQuery.fn.sortElements = (function(){

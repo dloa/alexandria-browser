@@ -1044,6 +1044,13 @@ ul#media-type-select-list {
 	display: block;
 	padding: 1em .5em;
 }
+span#share-url {
+  word-wrap: break-word;
+  padding: 0 1em 1.5em;
+  display: block;
+  font-size: .9em;
+  color: #919191;
+}
 div#qrcode {
 	background: #d8d8d8;
 	width: 64px;
