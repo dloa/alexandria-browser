@@ -286,10 +286,17 @@ function buildHistory() {
 					newURL = newURL+'/'+ searchUrl[i];
 				}
 			}
+			if ( (currentView == 'publishers') && (!history.state.searchResults) && (document.getElementById('loaded').innerHTML != '1') ) {
+				for (var i = 2; i < searchUrl.length; i++) {
+					newURL = newURL+'/'+ searchUrl[i];
+				}
+			}
 		}
 	} else if (subView != '') {
 		newURL = newURL+'#/'+subView;
 		document.title = (currentView == 'artifact') ? ('ΛLΞXΛNDRIΛ > Media > '+ subView) : (document.title = 'ΛLΞXΛNDRIΛ > Publishers > '+ subView);
+	} else if (history.state.searchResults == true) {
+		document.title = 'ΛLΞXΛNDRIΛ > Publishers > '+ history.state.searchTerm;
 	}
 	if ( (location.hash.slice(1).split('/')[2] == 'type') && (document.getElementById('loaded').innerHTML != '1') ) {
 		var parseTypes = location.hash.split('type/')[1];
@@ -771,7 +778,8 @@ function buildSearch() {
 	if (searchProtocol == 'publisher') {
 		var stateObj = {
 			currentView: 'publishers',
-			searchResults: true
+			searchResults: true,
+			searchTerm: document.getElementById('searchTermInput').value
 		}
 		var newTitle = 'Alexandria > Publishers';
 		var newUrl = document.location.origin + document.location.pathname +'#/publishers/'+document.getElementById('searchTermInput').value.replace(/\s/g , "-").toLowerCase();
