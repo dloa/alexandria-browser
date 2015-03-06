@@ -459,6 +459,7 @@ window.addEventListener('hashchange', router);
 window.addEventListener('load', router);
 
 function buildHistory() {	
+	console.log('History popped!');
 	var newURL = document.location.origin + document.location.pathname;
 	if ( (currentView != 'front') && (subView == '') ) {
 		document.title = 'ΛLΞXΛNDRIΛ > '+ currentView.charAt(0).toUpperCase() + currentView.slice(1);
@@ -1001,6 +1002,7 @@ function buildSearch() {
 	console.info(AdvSearchResults);
 	$('#adv-search').fadeOut(fadeTimer);
 	populateSearchResults(AdvSearchResults, searchProtocol);
+	
 }
 
 // MEDIA + PUBLISHER SEARCH API
