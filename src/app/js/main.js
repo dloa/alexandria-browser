@@ -241,6 +241,12 @@ function router () {
 			var searchResults = searchAPI('publisher', 'address', paths[1]);
 			loadPublisherView();
     	} else if (paths[1].length == 64) {
+			var searchResults = searchAPI('publisher', 'txid', paths[1]);
+			if (!searchResults) {
+				loadArtifactView();
+			} else {
+				loadPublisherView();
+			}
     	}
     }
 
@@ -580,7 +586,11 @@ function loadArtifactView(objMeta) {
 	if (objMeta) {
 		mediaID = $(objMeta).attr('id').split('-')[1];
 	} else {
-		mediaID = location.hash.slice(1).split('/')[2];		
+		if (location.hash.slice(1).split('/')[2]) {
+			mediaID = location.hash.slice(1).split('/')[2];
+		} else {
+			mediaID = location.hash.slice(1).split('/')[1];
+		}
 	}
 	subView = mediaID;
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
