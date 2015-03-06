@@ -450,9 +450,9 @@ function loadPublisherView(objMeta) {
 	var thisPublisher = (publisherID.length == 34) ? (searchAPI('publisher', 'address', publisherID)) : searchAPI('publisher', 'txid', publisherID);
 	console.info(thisPublisher);
 	publisherID = thisPublisher[0]['txid'];
-	subView = publisherID;
 	thisPublisher = thisPublisher[0]['publisher-data']['alexandria-publisher'];
 	var publisherAddress = thisPublisher['address'];
+	subView = publisherAddress;
 	var thisPublisherMedia = searchAPI('media', 'publisher', publisherAddress);
 	console.info(thisPublisherMedia);
 	var publisherName = thisPublisher['name'];
