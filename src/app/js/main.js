@@ -239,6 +239,9 @@ jQuery(document).ready(function($){
 			$('#serverID').text('Dev');
 		}		
 	});
+	var loadedTimer = setTimeout(function(){
+		document.getElementById('loaded').innerHTML = '1';
+	}, 3000);
 }); // End Document.Ready
 
 function getCryptos() {
@@ -399,9 +402,24 @@ function router () {
 				if (searchOn.length == 64) {
 					loadArtifactView();
 				} else {
-					if ( (searchOn == 'type') && (paths[3]) ) {
-						var searchFor = [paths[3]];
-					} else if ((searchOn != 'type') && (paths[3])) {
+					console.info(paths);
+					if ( (paths[2] == 'type') && (paths[3]) ) {
+						var parseTypes = location.hash.split('type/')[1];
+						var parseTypeLen = parseTypes.split('-');						
+						if (parseTypeLen.length > 1) {
+							var searchForStr = '';
+							for (var i = 0; i < parseTypeLen.length; i++) {
+								if (searchForStr == '') {
+									searchForStr = '"'+ parseTypeLen[i]+'"';
+								} else {
+									searchForStr = searchForStr +',"'+ parseTypeLen[i]+'"';
+								}
+							}
+							searchFor = searchForStr;
+						} else {
+							var searchFor = [paths[3]];
+						}
+					} else if ((paths[2] != 'type') && (paths[3])) {
 						var searchFor = paths[3].replace("-"," ");
 					} else {
 						var searchFor = '';
@@ -440,15 +458,14 @@ window.addEventListener('hashchange', router);
 // Listen on page load:
 window.addEventListener('load', router);  
 
-function buildHistory() {
+function buildHistory() {	
 	var newURL = document.location.origin + document.location.pathname;
 	if ( (currentView != 'front') && (subView == '') ) {
 		document.title = 'ΛLΞXΛNDRIΛ > '+ currentView.charAt(0).toUpperCase() + currentView.slice(1);
-		var locationInfo = location.hash.slice(1).split('/');
-		newURL = newURL+'#/'+currentView;
-		if (locationInfo.length > 3) {
-			for (var i = 2; i < locationInfo.length; i++) {
-				newURL = newURL+'/'+locationInfo[i];
+		if ( ($('#browse-media .module-links a.active').length == 0) && (location.hash.slice(1).split('/')[2] != 'type') ) {
+			var locationInfo = location.hash.slice(1).split('/');
+			if (currentView != 'media') {
+				newURL = newURL+'#/'+currentView;
 			}
 		}
 	} else if (subView != '') {
@@ -461,6 +478,38 @@ function buildHistory() {
 		}
 	} else {
 		document.title = 'ΛLΞXΛNDRIΛ';
+	}
+	if ( (location.hash.slice(1).split('/')[2] == 'type') && (document.getElementById('loaded').innerHTML != '1') ) {
+		var parseTypes = location.hash.split('type/')[1];
+		var parseTypeLen = parseTypes.split('-');
+		if (parseTypeLen.length > 1) {
+			for (var i = 0; i < parseTypeLen.length; i++) {
+				filterTypes.push(parseTypeLen[i]);
+				$('#browse-media .module-links a[value="'+ parseTypeLen[i] +'"').addClass('active');
+			}
+		} else {
+			$('#browse-media .module-links a[value="'+ parseTypes +'"').addClass('active');
+			filterTypes = [parseTypes];
+		}
+		console.log(filterTypes);
+	}
+	if ( (location.hash.slice(1).split('/').length > 3) && (location.hash.slice(1).split('/')[2] != 'type') ) {
+		for (var i = 2; i < location.hash.slice(1).split('/').length; i++) {
+			newURL = newURL+'/'+location.hash.slice(1).split('/')[i];
+		}
+	}
+	if (filterTypes.length > 0) {
+		var urlTypes = '';
+		for (var i = 0; i < filterTypes.length; i++) {
+			if (urlTypes == '') {
+				urlTypes = newURL+'#/media/type/' + filterTypes[i];
+			} else {
+				urlTypes = urlTypes + '-' + filterTypes[i];
+			}
+			newURL = urlTypes;
+		}
+	} else if (currentView == 'media') {
+		newURL = newURL+'#/'+currentView;
 	}
 	if (subView == '') {
 		var stateObj = {
@@ -543,6 +592,7 @@ function resetInterface() {
 function resetAlexandria() {
 	currentView = 'front';
 	subView = '';
+	filterTypes = [];
 	$('main').hide();
 	$('#browse-media-wrap .row').remove();
 	$('#search').fadeIn(fadeTimer);
@@ -568,6 +618,7 @@ function resetAlexandria() {
 function getAllPublishers() {
 	currentView = 'publishers';
 	subView = '';
+	filterTypes = [];
 	$('#intro').fadeOut(fadeTimer);
 	$('main').fadeOut(fadeTimer);
 	$('#browse-media .module-links a.active').removeClass('active');
@@ -605,6 +656,7 @@ function loadPublisherEntity(obj) {
 
 function loadPublisherView(objMeta) {
 	currentView = 'publisher';
+	filterTypes = [];
 	$('#intro').fadeOut(fadeTimer);
 	$('main').fadeOut(fadeTimer);
 	$('#share-modal').css({
@@ -790,6 +842,7 @@ function customTipAmountInput(event) {
 // Load Media Page
 function loadArtifactView(objMeta) {
 	currentView = 'artifact';
+	filterTypes = [];
 	$('#intro').fadeOut(fadeTimer);
 	$('main').fadeOut(fadeTimer);
 	$('#share-modal').css({
@@ -978,10 +1031,14 @@ function setMediaTypeFilter(obj) {
 	} else {
 		$(obj).toggleClass('active');
 	}
+	if (!$('#browse-media .module-links a.active')) {
+		filterTypes = [];
+	}
 	filterMediaByType();
 }
 
 // MEDIA TYPE FILTER
+var filterTypes = [];
 function filterMediaByType(obj) {
 	subView = '';
 	$('#intro').fadeOut(fadeTimer);
@@ -1007,7 +1064,7 @@ function filterMediaByType(obj) {
 			});
 		}
 	}
-	console.info(filteredMedia);
+	filterTypes = filteredMedia;
 	if (filteredMedia.length > 1) {
 		var filteredMediaStr = '';
 		for (var i = 0; i < filteredMedia.length; i++) {
@@ -1035,6 +1092,7 @@ function populateSearchResults(results, module) {
 			currentView = module;
 		} else {
 			currentView = 'publishers';
+			filterTypes = [];
 		}
 		buildHistory();
 		var mediaEntity = '<div class="row media-entity"><div class="media-icon"><img src="img/media-icon.svg" class="makesvg entity-image" style="display: inline;"></div><h3 class="media-title">No Results Found</h3></div>';
@@ -1294,6 +1352,7 @@ function loadShareMod() {
 	$('.header-modal').hide();
 	$('.view-media-ui').hide();
 	currentView = 'add-media';
+	filterTypes = [];
 	buildHistory();
 /*
 	var stateObj = {
@@ -1315,6 +1374,7 @@ function loadShareMod() {
 function loadCreatePublisherMod() {
 	$('.header-modal').hide();
 	currentView = 'add-publisher';
+	filterTypes = [];
 	buildHistory();
 /*
 	var stateObj = {
