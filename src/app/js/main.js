@@ -287,7 +287,7 @@ function buildHistory() {
 			newURL = newURL+'#/media/'+subView;
 		} else if (currentView == 'publisher') {
 			document.title = 'ΛLΞXΛNDRIΛ > Publishers > '+ subView;
-			newURL = newURL+'#/publishers/'+subView;
+			newURL = newURL+'#/'+subView;
 		}
 	} else {
 		document.title = 'ΛLΞXΛNDRIΛ';
