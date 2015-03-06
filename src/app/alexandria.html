@@ -41,7 +41,7 @@
 		
 		<header style="-webkit-app-region: drag">
 
-			<div id="logo">
+			<div id="logo" onclick="resetAlexandria()">
 				<div id="logoImg">
 					<img src="img/logo.svg" class="makesvg" />
 				</div>
@@ -164,7 +164,7 @@
 -->
 					<div class="row">
 						<div class="input-container buttons">
-							<span class="cancel-btn icongfx">Cancel</span> <span class="go-btn icongfx" onclick="buildSearch();">Go</span>
+							<span class="cancel-btn icongfx" onclick="cancelSearch();">Cancel</span> <span class="go-btn icongfx" onclick="buildSearch();">Go</span>
 						</div>
 					</div>
 				</div>
@@ -347,10 +347,10 @@
 			<div id="add-media-container">
 				<nav>
 					<ul id="add-media-menu">
-						<li name="newMedia-info" class="active">Information</li>
-						<li name="newMedia-net">Distribution</li>
-						<li name="newMedia-pay">Payments</li>
-						<li name="newMedia-notary">Publishing</li>
+						<li name="newMedia-info" class="active" onclick="changeAddMediaTab(this);">Information</li>
+						<li name="newMedia-net" onclick="changeAddMediaTab(this);">Distribution</li>
+						<li name="newMedia-pay" onclick="changeAddMediaTab(this);">Payments</li>
+						<li name="newMedia-notary" onclick="changeAddMediaTab(this);">Publishing</li>
 					</ul>
 				</nav>
 				<div id="newMedia-tabs">
@@ -649,8 +649,8 @@
 			<div class="clearfix"></div>
 			<div class="pagination">
 				<ul>
-					<li class="prev">Previous</li>
-					<li class="next">Next</li>
+					<li class="prev" onclick="paginateMediaTabs(this)">Previous</li>
+					<li class="next" onclick="paginateMediaTabs(this)">Next</li>
 				</ul>
 			</div>
 		</main>
@@ -860,7 +860,7 @@
 					<a class="btnLightGray">Use Online Bitcoin Wallet</a>
 					<p>Or manually send BTC to:<br />
 					[insert BTC address]</p>
-					<div id="qrcode"></div>
+					<div id="qrcode" onclick="loadQR();"></div>
 				</div>
 			</div>
 		</div>

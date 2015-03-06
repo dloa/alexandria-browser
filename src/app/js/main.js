@@ -24,32 +24,8 @@ var cryptoTimerId = 0;
 
 
 jQuery(document).ready(function($){
-	if(window.location.protocol != 'file:') {
-		replaceSVG();
-	} else {
-		$('img.makesvg:hidden').show();
-	}
-	if (window.location.search.indexOf("view") == -1) {
-		$('#search').fadeIn(fadeTimer);
-	}
-	$('#adv-search').addClass('abs');
-	$('.header-modal').addClass('abs');
-	$('.info-modal').addClass('abs');
-	$('#tip-modal').addClass('abs');
-	$('#share-modal').addClass('abs');
-	$('.alex-ui-slider').slider();
-	$('.alex-ui-datepicker').datepicker();
-	// UI/UX Navigation
-	// Click logo
-	$('#logo').click(function(){
-		if ( ($(this).hasClass('disabled')) || (window.location.hash=='') ){
-			return false;
-		}
-		if($('#tweetListView').css('display') == 'block') {
-			clearModal();
-		}
-		resetAlexandria();
-	});
+
+	loadAlexandria();
 
 	// Advanced Search toggle
 	$('#adv-search-toggle').click(function(){
@@ -57,7 +33,6 @@ jQuery(document).ready(function($){
 	});
 
 	// Toggle modal on off-modal click
-	// REWRITE WITHOUT jQUERY //
 	$('body').on('click', function(e){		
 		if ( ($(e.target).attr('id') != 'adv-search') && (!$(e.target).parents('#adv-search')[0]) && ($(e.target).attr('id') != 'adv-search-toggle') ) {			
 			if($('#adv-search').css('display') == 'block') {
@@ -82,11 +57,6 @@ jQuery(document).ready(function($){
 		if ( ( ($('#add-menu-modal').css('display') == 'block') && ($('#add-menu-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#add-menu-modal')[0]) && ( (!$(e.target).parents('#addNewContent-icon')[0]) ) ) ) {
 			$('#add-menu-modal').fadeOut(fadeTimer);
 		}
-	});
-	
-	// Advanced Search clear button
-	$('#adv-search .cancel-btn').click(function(){
-		$('#adv-search').fadeToggle(fadeTimer).find('input[type="text"]').val('');
 	});
 	
 	// Modal controls
@@ -118,51 +88,7 @@ jQuery(document).ready(function($){
 			}
 		}
 	});
-	$('.close-modal').click(function(){
-		clearModal();
-	});	
-	
-	// Media Content Interface
-	$('#addNewContent-icon svg').click(function(){
-		loadShareMod();
-	});
 
-	// Get exchange rates
-	getCryptos();
-	
-	// QR Code Lightbox
-	$('#qrcode').click(function(){
-		$('#lightbox').html('<div id="qrcode-lightbox"></div>');
-		var qrcode = new QRCode("qrcode-lightbox", {
-			text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless",
-			width: 400,
-			height: 400,
-			colorDark : "#000000",
-			colorLight : "#FFFFFF",
-			correctLevel : QRCode.CorrectLevel.H
-		});
-		$('#lightbox').fadeIn(fadeTimer);
-	});
-	
-	// Add Media Tabs
-	$('#add-media-menu li').click(function(){
-		$(this).addClass('active').siblings().removeClass('active');
-		$('#newMedia-tabs').find('.modal-tab#'+$(this).attr("name")).show().siblings().hide();
-		var activeTabName = $('#add-media-menu li.active').attr('name');
-		$('#add-media .pagination ul li').show();
-		resizeTabs();
-		var firstTab = $('#add-media-menu li:first-child').attr('name');
-		var lastTab = $('#add-media-menu li:last-child').attr('name');
-		if (activeTabName == lastTab) {
-			$('#add-media .pagination ul li:last-child').removeClass('next').addClass('submit').text('Submit');
-		} else {
-			$('#add-media .pagination ul li:last-child').removeClass('submit').addClass('next').text('Next');
-		}
-		if (activeTabName == firstTab) {
-			$('#add-media .pagination ul li.prev').hide();
-		}
-	});
-	
 	$('input[name="dNetwork"]').click(function(){
 		if ($(this)[0]['checked']) {
 			$(this).siblings('.input-container').slideDown(fadeTimer);
@@ -170,31 +96,6 @@ jQuery(document).ready(function($){
 		} else {
 			$(this).siblings('.input-container').slideUp(fadeTimer);
 			resizeTabs(fadeTimer);
-		}
-	});
-	
-/*
-	// File uploader init
-	$('.uploader').each(function(){
-		uploadFile($(this));
-		$(this).click(function(){
-			uploadFile($(this));
-		});
-	});
-*/
-	$('#add-media .pagination li').click(function(){
-		var activeTab = $('#add-media-menu li.active');
-		if ($(this).hasClass('next')) {
-			$(activeTab).next('#add-media-menu li').click();
-		} else if ($(this).hasClass('prev')) {
-			$(activeTab).prev('#add-media-menu li').click();
-		} else if ($(this).hasClass('submit')) {
-			if($('#mediaType').val() == ''){
-				$('#add-media nav ul li:first-child').click();
-				alert('Please select a media type');
-				return false;
-			}
-			mediaReqCheck();
 		}
 	});
 
@@ -224,6 +125,7 @@ jQuery(document).ready(function($){
 		$(this).addClass('active').siblings().removeClass('active');
 		$('#tip-modal').find('.modal-tab#'+$(this).attr("name")).show().siblings('.modal-tab').hide();
 	});
+
 	// API Server ID and Control
 	if(serverAddress == '54.172.28.195'){
 		$('#serverID').text('Dev');
@@ -239,130 +141,18 @@ jQuery(document).ready(function($){
 			$('#serverID').text('Dev');
 		}		
 	});
+	
+	// SET LOADED VALUE
 	var loadedTimer = setTimeout(function(){
 		document.getElementById('loaded').innerHTML = '1';
 	}, 3000);
+
+	// Get exchange rates
+	getCryptos();
+	
 }); // End Document.Ready
 
-function getCryptos() {
-	clearTimeout ( cryptoTimerId );
-	cryptoTimerRunning = 0;
-// Bitcoin
-	$.ajax({
-	    url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=2',
-	    type: 'GET',
-	    success: function(e) {
-			var el = $( '#sketchpad' );
-			el.html(e.responseText);
-			var data = $.parseJSON($('p', el).html());
-			BTCUSD = parseFloat(data.return.markets.BTC.lasttradeprice);
-			$('.btc-usd .btc-usd-output').text(Math.round((1/BTCUSD)*100000000)/100000000);
-			var qrcode = new QRCode("qrcode", {
-				text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless",
-				width: 64,
-				height: 64,
-				colorDark : "#000000",
-				colorLight : "#d8d8d8",
-				correctLevel : QRCode.CorrectLevel.H
-			});
-
-		}
-	});
-	$.ajax({
-	    url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=61',
-	    type: 'GET',
-	    success: function(e) {
-			var el = $( '#sketchpad' );
-			el.html(e.responseText);
-			var data = $.parseJSON($('p', el).html());
-			$('#flo-ltc label').text(data.return.markets.FLO.label).next('span').text(data.return.markets.FLO.lasttradeprice);
-			FLOLTC = parseFloat($('#flo-ltc span').text());
-			$.ajax({
-				url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=1',
-				type: 'GET',
-				success: function(e) {
-					var el = $( '#sketchpad' );
-					el.html(e.responseText);
-					var data = $.parseJSON($('p', el).html());
-					$('#ltc-usd label').text(data.return.markets.LTC.label).next('span').text(data.return.markets.LTC.lasttradeprice);
-					LTCUSD = parseFloat($('#ltc-usd span').text());
-					FLOUSD = FLOLTC*LTCUSD;
-					$('#flo-usd label').text('FLO/USD').next('span').text(FLOUSD);
-					FLOCost = parseFloat($('#flo-cost').text());
-					$('#tip-modal .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
-					$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);
-					$('#tip-alexandria-modal .flo-usd-output').text(Math.round((document.getElementById('alexandria-tip-amount').value*FLOUSD)*100000)/100000);
-				}
-			});
-		}
-	});
-}
-
-// CLEAR MODAL
-function clearModal() {
-	$('main.wordCloud text').css({
-		'text-shadow':'0 0 0 rgba(200,200,200,.5)',
-		'opacity':'1',
-		'-ms-filter': 'progid:DXImageTransform.Microsoft.Alpha(Opacity=100)',
-		'filter':'alpha(opacity=100)',
-		'-moz-opacity': '1',
-		'-khtml-opacity': '1',
-		'transition': 'all 1s ease',
-		'-moz-transition': 'all 1s ease',
-		'-webkit-transition': 'all 1s ease',
-		'-o-transition': 'all 1s ease'
-	});
-	$('.overlay').fadeOut(fadeTimer);
-	return false;
-}
-
-// LIGHTBOX FUNCTION
-function lightbox(obj){
-	var imgContent = $(obj).find('img').clone();
-	$('#lightbox').children().remove();
-	$('#lightbox').append(imgContent);
-	$('#lightbox').show();
-	var imgContentWidth = $(imgContent).width();
-	var maxWH = .95; // Max width and height for lightboxed image
-	if (imgContentWidth > window.innerWidth*maxWH) {
-		$('#lightbox img').css('width',window.innerWidth*maxWH+'px');
-		imgContentWidth = $('#lightbox img').width();
-	}
-	var imgContentHeight = $('#lightbox img').height();
-	if (imgContentHeight > window.innerHeight*maxWH) {
-		$('#lightbox img').css('width','auto');
-		$('#lightbox img').css('height',window.innerHeight*maxWH+'px');
-		imgContentHeight = $('#lightbox img').height();
-		imgContentWidth = $('#lightbox img').width();
-	}
-	$('#lightbox img').css({
-		'top': (window.innerHeight-imgContentHeight)/2+'px',
-		'left': (window.innerWidth-imgContentWidth)/2+'px'
-	});
-}
-
-/* ADD NEW CONTENT INTERFACE */
-function resizeTabs(t) {
-	if (t) {		
-		var tabsTimeout = setTimeout(function() {
-			resizeTabs();
-		}, t);
-		return false;
-	}
-	$('.media-info-container').css('overflow','hidden');
-	var tabHeight = $('.modal-tab:visible').children().first().height();
-	$('.modal-tab:visible').children().each(function(){
-		var thisTabHeight = $(this).height();
-		if (thisTabHeight > tabHeight) {
-			tabHeight = thisTabHeight;
-		}
-	});
-	$('.media-info-container').css('overflow','initial');
-	$('#newMedia-tabs').css('height',tabHeight+'px');
-}
-
 // HASH URL ROUTING
-// A hash to store our routes:
 var routes = {};  
 // The route registering function:
 function route (path, templateId, controller) {  
@@ -458,6 +248,17 @@ window.addEventListener('hashchange', router);
 // Listen on page load:
 window.addEventListener('load', router);
 
+// TIMER FOR CHANGING EXCHANGE RATES
+function changeCryptoRates() {
+	if (cryptoTimerRunning == 1) {
+		return false;
+	} else {
+		// set a timer and run search if done typing
+		cryptoTimerRunning = 1;
+		cryptoTimerId = setTimeout ( 'getCryptos()', 1000 );
+	}
+}
+
 function buildHistory() {	
 	console.log('History popped!');
 	var newURL = document.location.origin + document.location.pathname;
@@ -525,94 +326,58 @@ function buildHistory() {
 	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ', newURL);
 }
 
-// QUERY URL PARSING
-
-function PageQuery(q) {
-	if(q.length > 1) this.q = q.substring(1, q.length);
-	else this.q = null;
-	this.keyValuePairs = new Array();
-	if(q) {
-		for(var i=0; i < this.q.split("&").length; i++) {
-			this.keyValuePairs[i] = this.q.split("&")[i];
-		}
-	}
-	this.getKeyValuePairs = function() { return this.keyValuePairs; }
-	this.getValue = function(s) {
-		for(var j=0; j < this.keyValuePairs.length; j++) {
-			if(this.keyValuePairs[j].split("=")[0] == s)
-				return this.keyValuePairs[j].split("=")[1];
-		}
-		return false;
-	}
-	this.getParameters = function() {
-		var a = new Array(this.getLength());
-		for(var j=0; j < this.keyValuePairs.length; j++) {
-			a[j] = this.keyValuePairs[j].split("=")[0];
-		}
-		return a;
-	}
-	this.getLength = function() { return this.keyValuePairs.length; } 
-}
-function queryString(key){
-	var page = new PageQuery(window.location.search);
-	return unescape(page.getValue(key)); 
-}
-function displayItem(key){
-	if(queryString(key)=='false') {	
-		console.log("you didn't enter a ?"+key+"=value querystring item.");
-	}
-}
-
-// BROWSER NAVIGATION CONTROLS
-/*
-window.onpopstate = function(event) {
-};
-*/
-// Load Local HTML file contents for info modal
-function getInfoFile(localFile) {
-	var localURL = 'modals/info-'+ localFile +'.html';
+function getCryptos() {
+	clearTimeout ( cryptoTimerId );
+	cryptoTimerRunning = 0;
+// Bitcoin
 	$.ajax({
-	    url: localURL,
+	    url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=2',
 	    type: 'GET',
-	    success: function(res) {
-			$('#info-modal-small').html(res);
-	    }
+	    success: function(e) {
+			var el = $( '#sketchpad' );
+			el.html(e.responseText);
+			var data = $.parseJSON($('p', el).html());
+			BTCUSD = parseFloat(data.return.markets.BTC.lasttradeprice);
+			$('.btc-usd .btc-usd-output').text(Math.round((1/BTCUSD)*100000000)/100000000);
+			var qrcode = new QRCode("qrcode", {
+				text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless",
+				width: 64,
+				height: 64,
+				colorDark : "#000000",
+				colorLight : "#d8d8d8",
+				correctLevel : QRCode.CorrectLevel.H
+			});
+
+		}
 	});
-}
-
-// RESET INTERFACE
-function resetInterface() {
-	// Reset Interface
-	$('#intro').hide();
-	$('#wait').fadeOut(fadeTimer);
-	$('#disabler').hide();
-	$('.search').attr('disabled',false);
-}
-
-// RESET ALEXANDRIA
-function resetAlexandria() {
-	currentView = 'front';
-	subView = '';
-	filterTypes = [];
-	$('main').hide();
-	$('#browse-media-wrap .row').remove();
-	$('#search').fadeIn(fadeTimer);
-	$('#share-modal').css({
-			left:'initial',
-			right:'initial'
-		}).hide();
-	$('#tip-modal').css({
-			'left':'initial',
-			'right':'initial'
-		}).hide();
-	$('.publisher-ui').hide();
-	$('.sharing-ui').hide();
-	$('.view-media-ui').hide();
-	$('.view-publisher-ui').hide();
-	$('#search').show();
-	$('#app-shading').css('bottom','0');
-	$('#intro').fadeIn(fadeTimer);
-	buildHistory();
+	$.ajax({
+	    url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=61',
+	    type: 'GET',
+	    success: function(e) {
+			var el = $( '#sketchpad' );
+			el.html(e.responseText);
+			var data = $.parseJSON($('p', el).html());
+			$('#flo-ltc label').text(data.return.markets.FLO.label).next('span').text(data.return.markets.FLO.lasttradeprice);
+			FLOLTC = parseFloat($('#flo-ltc span').text());
+			$.ajax({
+				url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=1',
+				type: 'GET',
+				success: function(e) {
+					var el = $( '#sketchpad' );
+					el.html(e.responseText);
+					var data = $.parseJSON($('p', el).html());
+					$('#ltc-usd label').text(data.return.markets.LTC.label).next('span').text(data.return.markets.LTC.lasttradeprice);
+					LTCUSD = parseFloat($('#ltc-usd span').text());
+					FLOUSD = FLOLTC*LTCUSD;
+					$('#flo-usd label').text('FLO/USD').next('span').text(FLOUSD);
+					FLOCost = parseFloat($('#flo-cost').text());
+					$('#tip-modal .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
+					$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);
+					$('#tip-alexandria-modal .flo-usd-output').text(Math.round((document.getElementById('alexandria-tip-amount').value*FLOUSD)*100000)/100000);
+				}
+			});
+		}
+	});
 }
 
 // Get All Publishers
@@ -672,17 +437,8 @@ function loadPublisherView(objMeta) {
 	$('#viewlabel').fadeIn(fadeTimer);
 	$('.view-publisher-ui').fadeIn(fadeTimer);
 	$('#view-publisher').fadeIn(fadeTimer);	
-	var publisherID = '';
-	if (objMeta) {
-		publisherID = $(objMeta).attr('id').split('-')[1];	
-	} else {
-		publisherID = location.hash.slice(1).split('/')[2];
-	}
-	if (publisherID.length == 34) {
-		var thisPublisher = searchAPI('publisher', 'address', publisherID);
-	} else {
-		var thisPublisher = searchAPI('publisher', 'txid', publisherID);
-	}
+	var publisherID = (objMeta) ? ($(objMeta).attr('id').split('-')[1]) : (location.hash.slice(1).split('/')[2]) ;
+	var thisPublisher = (publisherID.length == 34) ? (searchAPI('publisher', 'address', publisherID)) : searchAPI('publisher', 'txid', publisherID);
 	console.info(thisPublisher);
 	publisherID = thisPublisher[0]['txid'];
 	subView = publisherID;
@@ -729,7 +485,7 @@ function loadPublisherView(objMeta) {
 			if(thisPublisherMedia[i]['media-data']['alexandria-media']['payment']){
 				var mediaPymnt = thisPublisherMedia[i]['media-data']['alexandria-media']['payment']['type'];
 			}
-			if(mediaInfo['extra-info']){
+			if (mediaInfo['extra-info']) {
 				if(mediaInfo['extra-info']['runtime']){
 					mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
 				}
@@ -801,11 +557,7 @@ function changeCustomTipAmount() {
 
 // Change Tip Amount
 function changeTipAmount(opt) {
-	if ($(opt).attr('id')=='tip-option-custom') {
-		var tipAmount = parseFloat($(opt).siblings('.tip-input').val());
-	} else {
-		var tipAmount = parseFloat($(opt).val());
-	}
+	var tipAmount = ($(opt).attr('id')=='tip-option-custom') ? (parseFloat($(opt).siblings('.tip-input').val())) : parseFloat($(opt).val()) ;
 	$('.tip-value').text(tipAmount);
 	$('#tip-modal .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
 	$('.btc-usd .btc-usd-output').text(Math.round((tipAmount/BTCUSD)*100000000)/100000000);
@@ -991,26 +743,27 @@ function buildSearch() {
 	$('.view-media-ui').fadeOut(fadeTimer);
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	var searchProtocol = document.getElementById('searchModule').value;
-	var searchOn = '';
-	if (searchProtocol == 'media') {
-		searchOn = 'info_title';
-	} else {
-		searchOn = 'name';
-	}
+	var searchOn = (searchProtocol == 'media') ? (searchOn = 'info_title') : (searchOn = 'name') ;
 	var AdvSearchResults = searchAPI(searchProtocol, /*$('#search .module-links.mod-filter .active').attr('value'),*/ searchOn, document.getElementById('searchTermInput').value);
 	console.info(AdvSearchResults);
 	$('#adv-search').fadeOut(fadeTimer);
-	populateSearchResults(AdvSearchResults, searchProtocol);
-	
+	populateSearchResults(AdvSearchResults, searchProtocol);	
 }
+
+// CLEAR ADVANCED SEARCH
+function cancelSearch() {
+	$('#adv-search').fadeToggle(fadeTimer).find('input[type="text"]').val('');
+}
+
 
 // MEDIA + PUBLISHER SEARCH API
 function searchAPI(module, searchOn, searchFor) {
 	if ( (searchOn == 'type') && (searchFor.length > 1) ) {
-		queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":['+searchFor+'],"search-like": true}';		
+		searchFor = '['+searchFor+']';
 	} else {
-		queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":"'+searchFor+'","search-like": true}';
+		searchFor = '"'+searchFor+'"';
 	}
+	queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":'+searchFor+',"search-like": true}';
 	console.log(queryString);
 	var mediaData;
 	$('#browse-media-wrap .row').remove();
@@ -1257,6 +1010,19 @@ function loadInfoModal(childObj) {
 	$('#info-modal-media .media-desc').html('<p>'+ mediaDesc +'</p>');
 	$(objMeta).find('#info-modal-media').fadeIn(fadeTimer);
 }
+
+// Load Local HTML file contents for info modal
+function getInfoFile(localFile) {
+	var localURL = 'modals/info-'+ localFile +'.html';
+	$.ajax({
+	    url: localURL,
+	    type: 'GET',
+	    success: function(res) {
+			$('#info-modal-small').html(res);
+	    }
+	});
+}
+
 // Load Add Content Modal
 function loadAddContentModal() {
 	$('#add-menu-modal.abs').fadeToggle(fadeTimer);
@@ -1348,6 +1114,19 @@ function loadTipModal(obj) {
 	$(obj).parents('.entity-market').find('#tip-modal').css(modalPos,tipModalPos+'px').fadeToggle(fadeTimer);
 }
 
+function loadQR() {
+	$('#lightbox').html('<div id="qrcode-lightbox"></div>');
+	var qrcode = new QRCode("qrcode-lightbox", {
+		text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless",
+		width: 400,
+		height: 400,
+		colorDark : "#000000",
+		colorLight : "#FFFFFF",
+		correctLevel : QRCode.CorrectLevel.H
+	});
+	$('#lightbox').fadeIn(fadeTimer);
+}
+
 // Share New Content Module
 function loadShareMod() {
 	$('.header-modal').hide();
@@ -1369,6 +1148,22 @@ function loadShareMod() {
 	$('.publisher-ui').fadeOut(fadeTimer);
 	$('.sharing-ui').fadeIn(fadeTimer);
 	resizeTabs();
+}
+
+function paginateMediaTabs(obj) {
+	var activeTab = $('#add-media-menu li.active');
+	if ($(obj).hasClass('next')) {
+		$(activeTab).next('#add-media-menu li').click();
+	} else if ($(obj).hasClass('prev')) {
+		$(activeTab).prev('#add-media-menu li').click();
+	} else if ($(obj).hasClass('submit')) {
+		if($('#mediaType').val() == ''){
+			$('#add-media nav ul li:first-child').click();
+			alert('Please select a media type');
+			return false;
+		}
+		mediaReqCheck();
+	}
 }
 
 // Create Publisher Module
@@ -1516,22 +1311,25 @@ function generateSignature(pubName, pubAdd, pubTime) {
 	}
 }
 
-// Select File
-function uploadFile(elem) {
-	var uploader = $(elem).attr('id');
-	upclick({
-		element: uploader,
-		// action: '/path_to/you_server_script.php', 
-		onstart: function(filename) {
-			// alert('Start upload: '+filename);
-			$('.'+uploader+' .media-filename').show().children('span').text(filename);
-			resizeTabs();
-		},
-		oncomplete: function(response_data) {
-			// alert(response_data);
-		}
-	});
+// ADD MEDIA TABS
+function changeAddMediaTab(obj) {
+	$(obj).addClass('active').siblings().removeClass('active');
+	$('#newMedia-tabs').find('.modal-tab#'+$(obj).attr("name")).show().siblings().hide();
+	var activeTabName = $('#add-media-menu li.active').attr('name');
+	$('#add-media .pagination ul li').show();
+	resizeTabs();
+	var firstTab = $('#add-media-menu li:first-child').attr('name');
+	var lastTab = $('#add-media-menu li:last-child').attr('name');
+	if (activeTabName == lastTab) {
+		$('#add-media .pagination ul li:last-child').removeClass('next').addClass('submit').text('Submit');
+	} else {
+		$('#add-media .pagination ul li:last-child').removeClass('submit').addClass('next').text('Next');
+	}
+	if (activeTabName == firstTab) {
+		$('#add-media .pagination ul li.prev').hide();
+	}
 }
+
 // Show AutoFill Option on Add Media interface
 var mediaWwwID = '';
 function showAutoFill(obj){
@@ -1725,17 +1523,6 @@ function getRotten() {
     });
 }
 
-// TIMER FOR CHANGING EXCHANGE RATES
-function changeCryptoRates() {
-	if (cryptoTimerRunning == 1) {
-		return false;
-	} else {
-		// set a timer and run search if done typing
-		cryptoTimerRunning = 1;
-		cryptoTimerId = setTimeout ( 'getCryptos()', 1000 );
-	}
-}
-
 // CHECK REQUIRED FIELDS FOR MEDIA SUBMISSION
 function mediaReqCheck() {
 		var reqCheck = 0;
@@ -1922,6 +1709,113 @@ function postMedia(tipAlexandria) {
 		}
 	});
 }
+
+/* ADD NEW CONTENT INTERFACE */
+function resizeTabs(t) {
+	if (t) {		
+		var tabsTimeout = setTimeout(function() {
+			resizeTabs();
+		}, t);
+		return false;
+	}
+	$('.media-info-container').css('overflow','hidden');
+	var tabHeight = $('.modal-tab:visible').children().first().height();
+	$('.modal-tab:visible').children().each(function(){
+		var thisTabHeight = $(this).height();
+		if (thisTabHeight > tabHeight) {
+			tabHeight = thisTabHeight;
+		}
+	});
+	$('.media-info-container').css('overflow','initial');
+	$('#newMedia-tabs').css('height',tabHeight+'px');
+}
+
+// LOAD ALEXANDRIA
+function loadAlexandria() {
+	if(window.location.protocol != 'file:') {
+		replaceSVG();
+	} else {
+		$('img.makesvg:hidden').show();
+	}
+	if (window.location.search.indexOf("view") == -1) {
+		$('#search').fadeIn(fadeTimer);
+	}
+	$('#adv-search').addClass('abs');
+	$('.header-modal').addClass('abs');
+	$('.info-modal').addClass('abs');
+	$('#tip-modal').addClass('abs');
+	$('#share-modal').addClass('abs');
+	$('.alex-ui-slider').slider();
+	$('.alex-ui-datepicker').datepicker();
+}
+
+// RESET INTERFACE
+function resetInterface() {
+	// Reset Interface
+	$('#intro').hide();
+	$('#wait').fadeOut(fadeTimer);
+	$('#disabler').hide();
+	$('.search').attr('disabled',false);
+}
+
+// RESET ALEXANDRIA
+function resetAlexandria() {
+	currentView = 'front';
+	subView = '';
+	filterTypes = [];
+	$('main').hide();
+	$('#browse-media-wrap .row').remove();
+	$('#search').fadeIn(fadeTimer);
+	$('#share-modal').css({
+			left:'initial',
+			right:'initial'
+		}).hide();
+	$('#tip-modal').css({
+			'left':'initial',
+			'right':'initial'
+		}).hide();
+	$('.publisher-ui').hide();
+	$('.sharing-ui').hide();
+	$('.view-media-ui').hide();
+	$('.view-publisher-ui').hide();
+	$('#search').show();
+	$('#app-shading').css('bottom','0');
+	$('#intro').fadeIn(fadeTimer);
+	buildHistory();
+}
+
+// CLEAR MODAL
+function clearModal() {
+	$('.overlay').fadeOut(fadeTimer);
+	return false;
+}
+
+// LIGHTBOX FUNCTION
+function lightbox(obj){
+	var imgContent = $(obj).find('img').clone();
+	$('#lightbox').children().remove();
+	$('#lightbox').append(imgContent);
+	$('#lightbox').show();
+	var imgContentWidth = $(imgContent).width();
+	var maxWH = .95; // Max width and height for lightboxed image
+	if (imgContentWidth > window.innerWidth*maxWH) {
+		$('#lightbox img').css('width',window.innerWidth*maxWH+'px');
+		imgContentWidth = $('#lightbox img').width();
+	}
+	var imgContentHeight = $('#lightbox img').height();
+	if (imgContentHeight > window.innerHeight*maxWH) {
+		$('#lightbox img').css('width','auto');
+		$('#lightbox img').css('height',window.innerHeight*maxWH+'px');
+		imgContentHeight = $('#lightbox img').height();
+		imgContentWidth = $('#lightbox img').width();
+	}
+	$('#lightbox img').css({
+		'top': (window.innerHeight-imgContentHeight)/2+'px',
+		'left': (window.innerWidth-imgContentWidth)/2+'px'
+	});
+}
+
+
 // Interger sort order function
 jQuery.fn.sortElements = (function(){
     var sort = [].sort;
@@ -2069,3 +1963,9 @@ function replace(string,text,by) {
 
     return newstr;
 }
+
+// BROWSER NAVIGATION CONTROLS
+/*
+window.onpopstate = function(event) {
+};
+*/
