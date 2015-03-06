@@ -3,11 +3,10 @@ var serverAddress = '54.172.28.195'; // Dev
 // var serverAddress = 'blue.a.blocktech.com'; // Demo
 var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
 
-var fadeTimer = 200;
-
 var currentView = 'front';
 var subView = '';
 var prevTipAmount = '';
+var fadeTimer = 200;
 
 var routes = {};  
 var filterTypes = [];
@@ -172,7 +171,7 @@ function router () {
     // Get route by url:
     var route = routes[module];
     // Route the URL
-    if (route.controller) {
+    if ( (route) && (route.controller) ) {
     	currentView = route.templateId;
     	if (currentView == 'front') {
     		resetAlexandria();
@@ -209,7 +208,7 @@ function router () {
 					} else {
 						var searchFor = '';
 					}
-					searchResults = searchAPI(currentView, searchOn, searchFor);
+					var searchResults = searchAPI(currentView, searchOn, searchFor);
 					populateSearchResults(searchResults, currentView);
 				}
 			}
@@ -234,6 +233,14 @@ function router () {
 			loadShareMod();
     	} else if (currentView == 'add-publisher') {
 			loadCreatePublisherMod();
+    	}
+    } else {
+    	// ROUTE DOESN'T EXIST - IF ADDRESS LOAD PUBLISHER
+    	console.info(paths);
+    	if (paths[1].length == 34) {
+			var searchResults = searchAPI('publisher', 'address', paths[1]);
+			loadPublisherView();
+    	} else if (paths[1].length == 64) {
     	}
     }
 
@@ -325,7 +332,6 @@ function buildHistory() {
 }
 
 // GET CRYPTO EXCHANGE RATES
-
 function getCryptos() {
 	clearTimeout ( cryptoTimerId );
 	cryptoTimerRunning = 0;
@@ -437,7 +443,11 @@ function loadPublisherView(objMeta) {
 	$('#viewlabel').fadeIn(fadeTimer);
 	$('.view-publisher-ui').fadeIn(fadeTimer);
 	$('#view-publisher').fadeIn(fadeTimer);	
-	var publisherID = (objMeta) ? ($(objMeta).attr('id').split('-')[1]) : (location.hash.slice(1).split('/')[2]) ;
+	if (location.hash.slice(1).split('/')[2]) {
+		var publisherID = (objMeta) ? ($(objMeta).attr('id').split('-')[1]) : (location.hash.slice(1).split('/')[2]) ;
+	} else {
+		var publisherID = (objMeta) ? ($(objMeta).attr('id').split('-')[1]) : (location.hash.slice(1).split('/')[1]) ;
+	}
 	var thisPublisher = (publisherID.length == 34) ? (searchAPI('publisher', 'address', publisherID)) : searchAPI('publisher', 'txid', publisherID);
 	console.info(thisPublisher);
 	publisherID = thisPublisher[0]['txid'];
@@ -1828,7 +1838,6 @@ function replaceSVG() {
 		var imgID = $img.attr('id');
 		var imgClass = $img.attr('class');
 		var imgURL = $img.attr('src');
-
 		jQuery.get(imgURL, function(data) {
 			// Get the SVG tag, ignore the rest
 			var $svg = jQuery(data).find('svg');
@@ -1905,15 +1914,11 @@ function trim11(str) {
 function replace(string,text,by) {
     var strLength = string.length, txtLength = text.length;
     if ((strLength == 0) || (txtLength == 0)) return string;
-
     var i = string.indexOf(text);
     if ((!i) && (text != string.substring(0,txtLength))) return string;
     if (i == -1) return string;
-
     var newstr = string.substring(0,i) + by;
-
     if (i+txtLength < strLength)
         newstr += replace(string.substring(i+txtLength,strLength),text,by);
-
     return newstr;
 }
