@@ -444,7 +444,13 @@ function buildHistory() {
 	var newURL = document.location.origin + document.location.pathname;
 	if ( (currentView != 'front') && (subView == '') ) {
 		document.title = 'ΛLΞXΛNDRIΛ > '+ currentView.charAt(0).toUpperCase() + currentView.slice(1);
+		var locationInfo = location.hash.slice(1).split('/');
 		newURL = newURL+'#/'+currentView;
+		if (locationInfo.length > 3) {
+			for (var i = 2; i < locationInfo.length; i++) {
+				newURL = newURL+'/'+locationInfo[i];
+			}
+		}
 	} else if (subView != '') {
 		if (currentView == 'artifact') {
 			document.title = 'ΛLΞXΛNDRIΛ > Media > '+ subView;
@@ -527,8 +533,9 @@ function getInfoFile(localFile) {
 // RESET INTERFACE
 function resetInterface() {
 	// Reset Interface
+	$('#intro').hide();
 	$('#wait').fadeOut(fadeTimer);
-	$('#disabler').fadeOut(fadeTimer);
+	$('#disabler').hide();
 	$('.search').attr('disabled',false);
 }
 
