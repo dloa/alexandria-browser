@@ -633,9 +633,13 @@ function loadArtifactView(objMeta) {
 	$('.view-media-ui').fadeIn(fadeTimer);
 	$('#viewlabel').fadeIn(fadeTimer);
 	$('#media-view-entity .media-Tid a').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
-	if (mediaType == 'video') {
+	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
 		var videoHash = mediaTid.split('btih:')[1];
-		var videoEmbed = '<video controls> <source src="http://localhost:3000/stream/'+ videoHash +'/'+ mediaFilename +'" type="audio/mpeg" /> </video>';
+		var videoEmbed = '<video controls> <source src="http://localhost:3000/stream/'+ videoHash +'/'+ mediaFilename +'" type="video/mp4" /> </video>';
+		$('.row.entity-footer.media-video').html(videoEmbed);
+	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
+		var audioHash = mediaTid.split('btih:')[1];
+		var audioEmbed = '<audio controls> <source src="http://localhost:3000/stream/'+ videoHash +'/'+ mediaFilename +'" type="audio/mpeg" /> </audio>';
 		$('.row.entity-footer.media-video').html(videoEmbed);
 	}
 	$('#media-txnID').html(mediaID);	
@@ -1531,16 +1535,11 @@ function selectMediaType(obj, mediaType) {
 			$('#media-meta-creators3').text('Cast');
 			$('#media-meta-taxonomy').text('Genre');
 			$('#media-meta-collection').text('Series Title');
-		} else if (mediaType == 'music-song') {
+		} else if (mediaType == 'music') {
 			$('#media-meta-runtime').text('Runtime');
 			$('#media-meta-creators1').text('Artist');
 			$('#media-meta-taxonomy').text('Genre');
 			$('#media-meta-collection').text('Album Title');
-		} else if (mediaType == 'music-album') {
-			$('#media-meta-runtime').text('Runtime');
-			$('#media-meta-creators1').text('Artist');
-			$('#media-meta-taxonomy').text('Genre');
-			$('#media-meta-collection').text('Collection');
 		} else if (mediaType == 'podcast') {
 			$('#media-meta-www').text('Soundcloud');
 			$('#media-meta-runtime').text('Runtime');

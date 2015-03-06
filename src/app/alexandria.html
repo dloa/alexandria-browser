@@ -405,7 +405,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="row full media-specific movie-meta music-song-meta music-album-meta podcast-meta video-meta recipe-meta">
+											<div class="row full media-specific movie-meta music-music-meta podcast-meta video-meta recipe-meta">
 												<div class="col">
 													<div class="input-container">
 														<label><span id="media-meta-runtime">Runtime</span></label>
@@ -450,7 +450,7 @@
 														<input type="text" name="genre" id="addMedia-genres" />
 													</div>
 												</div>
-												<div class="col media-specific movie-meta music-song-meta music-album-meta podcast-meta video-meta book-meta thing-meta">
+												<div class="col media-specific movie-meta music-music-meta podcast-meta video-meta book-meta thing-meta">
 													<div class="input-container">
 														<label>Company</label>
 														<input type="text" name="company" id="addMedia-company" />
@@ -762,8 +762,9 @@
 -->
 					<div>
 						<div class="row entity-footer media-video">
-<!--							<video controls> <source src="" type="audio/mpeg" /> </video> -->
 						</div>
+						<div class="row entity-footer media-podcast"></div>
+						<div class="row entity-footer media-music"></div>
 						<div class="row entity-meta-header">
 							<h2></h2>
 							<h3></h3>
@@ -783,12 +784,6 @@
 						<div class="row entity-market"><span class="row media-Tid"><a href=""><img src="img/magnet-icon.svg" class="makesvg" /></a></span><a onclick="loadShareModal($(this));" class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a> <a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a></div>
 						<div class="row entity-footer media-movie">
 							<a class="wsite-button lightboxVideo" data-source="http://localhost:3000/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label>
-						</div>
-						<div class="row entity-footer media-podcast">
-							<audio controls> <source src="http://127.0.0.1:8889/" type="audio/mpeg" /> </audio>
-						</div>
-						<div class="row entity-footer media-song">
-							<audio controls> <source src="http://127.0.0.1:8889/" type="audio/mpeg" /> </audio>
 						</div>
 					</div>
 				</div>				
@@ -878,9 +873,6 @@
 		<div id="sketchpad"></div>
 		
 		<div id="loaded"></div>
-
-		<script src="vendor/d3/d3.min.js"></script>
-		<script src="vendor/d3.layout.cloud/d3.layout.cloud.js"></script>
 
 		<script src="vendor/jquery/dist/jquery.min.js"></script>
 		<script src="vendor/jquery-ui/jquery-ui.min.js"></script>
