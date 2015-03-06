@@ -645,7 +645,6 @@ function getAllPublishers() {
 			console.error(thrownError);
 		}
 	});
-	buildHistory();
 }
 
 // PUBLISHER SINGLE ENTITY VIEW
