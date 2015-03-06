@@ -369,7 +369,6 @@ function route (path, templateId, controller) {
 route('/', 'front', function () {  });  
 route('/media', 'media', function () {  });
 route('/publishers', 'publishers', function () {  });
-route('/publishers', 'publishers', function () {  });
 route('/add-media', 'add-media', function () {  });
 route('/add-publisher', 'add-publisher', function () {  });
 var el = null;  
@@ -377,7 +376,6 @@ function router () {
     // Current route url (getting rid of '#' in hash as well):
     var url = location.hash.slice(1) || '/';
 	var paths = url.split('/');
-	console.log(paths);
 	if (paths[1]) {
 		var module = '/'+paths[1];
 	} else {
@@ -416,14 +414,16 @@ function router () {
 			if (!paths[2]) {
 				getAllPublishers();
 			} else {
-				var publisherName = paths[2].replace("-"," ");
 				var searchResults;
-				if (paths[3]) {
-					currentView = currentView.slice(0,-1);
-					searchResults = searchAPI(currentView, 'info-address', paths[3]);
+				if (paths[2].length == 34)  {
+					searchResults = searchAPI('publisher', 'address', paths[2]);
+					loadPublisherView();
+				} else if (paths[2].length == 64)  {
+					searchResults = searchAPI('publisher', 'txid', paths[2]);
 					loadPublisherView();
 				} else {
-					searchResults = searchAPI(currentView, 'name', publisherName);
+					var publisherName = paths[2].replace("-"," ");
+					searchResults = searchAPI('publisher', 'name', publisherName);
 					populateSearchResults(searchResults, currentView);
 				}
 			}
@@ -432,7 +432,6 @@ function router () {
     	} else if (currentView == 'add-publisher') {
 			loadCreatePublisherMod();
     	}
-		buildHistory();
     }
 
 }
@@ -561,6 +560,7 @@ function resetAlexandria() {
 // Get All Publishers
 function getAllPublishers() {
 	currentView = 'publishers';
+	subView = '';
 	$('#intro').fadeOut(fadeTimer);
 	$('main').fadeOut(fadeTimer);
 	$('#browse-media .module-links a.active').removeClass('active');
@@ -586,6 +586,7 @@ function getAllPublishers() {
 			console.error(thrownError);
 		}
 	});
+	buildHistory();
 }
 
 // PUBLISHER SINGLE ENTITY VIEW
@@ -616,7 +617,7 @@ function loadPublisherView(objMeta) {
 	if (objMeta) {
 		publisherID = $(objMeta).attr('id').split('-')[1];	
 	} else {
-		publisherID = location.hash.slice(1).split('/')[3];
+		publisherID = location.hash.slice(1).split('/')[2];
 	}
 	if (publisherID.length == 34) {
 		var thisPublisher = searchAPI('publisher', 'address', publisherID);
@@ -646,7 +647,6 @@ function loadPublisherView(objMeta) {
 	} else {
 		document.getElementById('publisher-bitmsg').style.display = 'none';
 	}
-	
 	publisherTime = new Date(parseInt(publisherTime));
 	document.getElementById('view-publisher-name').innerHTML = publisherName;
 	document.getElementById('publisher-FLO-address').innerHTML = publisherAddress;
@@ -1254,6 +1254,7 @@ function loadShareModal(obj) {
 	}
 	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2').text();
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
+	buildHistory();
 }
 
 // Display Tip Modal
