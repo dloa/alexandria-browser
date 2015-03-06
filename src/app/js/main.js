@@ -1,12 +1,7 @@
 /* some global variables to make mistakes only once */
-// DEFAULT VARIABLES
-
 var serverAddress = '54.172.28.195'; // Dev
 // var serverAddress = 'blue.a.blocktech.com'; // Demo
 var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
-
-var w = window.innerWidth;				
-var h = window.innerHeight-245;
 
 var fadeTimer = 200;
 
@@ -14,7 +9,9 @@ var currentView = 'front';
 var subView = '';
 var prevTipAmount = '';
 
-// Get crypto [cryptsy] exchange rates
+var routes = {};  
+var filterTypes = [];
+
 var FLOCost;
 var FLOLTC;
 var LTCUSD;
@@ -152,8 +149,6 @@ jQuery(document).ready(function($){
 	
 }); // End Document.Ready
 
-// HASH URL ROUTING
-var routes = {};  
 // The route registering function:
 function route (path, templateId, controller) {  
   routes[path] = {templateId: templateId, controller: controller};
@@ -243,8 +238,10 @@ function router () {
     }
 
 }
+
 // Listen on hash change:
 window.addEventListener('hashchange', router);  
+
 // Listen on page load:
 window.addEventListener('load', router);
 
@@ -259,6 +256,7 @@ function changeCryptoRates() {
 	}
 }
 
+// MAKE HISTORY
 function buildHistory() {	
 	console.log('History popped!');
 	var newURL = document.location.origin + document.location.pathname;
@@ -326,6 +324,8 @@ function buildHistory() {
 	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ', newURL);
 }
 
+// GET CRYPTO EXCHANGE RATES
+
 function getCryptos() {
 	clearTimeout ( cryptoTimerId );
 	cryptoTimerRunning = 0;
@@ -380,7 +380,7 @@ function getCryptos() {
 	});
 }
 
-// Get All Publishers
+// GET ALL PUBLISHERS
 function getAllPublishers() {
 	currentView = 'publishers';
 	subView = '';
@@ -510,7 +510,7 @@ function loadPublisherView(objMeta) {
 	$('#view-publisher .entity-pub-time span').html(publisherTime);
 }
 
-// Recent Media interaction
+// LOAD MEDIA ARTIFACT VIEW
 function loadMediaEntity(obj) {
 	var parentObj = $(obj).parents('.media-entity');
 	var mediaType = $(parentObj).attr('media-type');
@@ -550,48 +550,6 @@ function loadMediaEntity(obj) {
 	}
 }
 
-// Change Custom Tip Amount
-function changeCustomTipAmount() {
-	$('#tip-option-custom').click();
-}
-
-// Change Tip Amount
-function changeTipAmount(opt) {
-	var tipAmount = ($(opt).attr('id')=='tip-option-custom') ? (parseFloat($(opt).siblings('.tip-input').val())) : parseFloat($(opt).val()) ;
-	$('.tip-value').text(tipAmount);
-	$('#tip-modal .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
-	$('.btc-usd .btc-usd-output').text(Math.round((tipAmount/BTCUSD)*100000000)/100000000);
-}
-
-// SET CUSTOM TIP AMOUNT BY INPUT
-function prevTipAmountSet() {
-	prevTipAmount = document.getElementById('CustomTipAmount').value;
-}
-
-function customTipAmountInput(event) {
-	var charCode = event.charCode;
-	var tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
-	if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186) || (isNaN(tipAmount) == true) ) {
-		document.getElementById('CustomTipAmount').value = prevTipAmount;
-		$('.tip-value').text(prevTipAmount);
-		$('#tip-modal .flo-usd-output').text(Math.round((prevTipAmount/FLOUSD)*100000000)/100000000);
-		return false;
-	}
-	if (tipAmount != prevTipAmount) {
-		var decValue = document.getElementById('CustomTipAmount').value.split('.')[1];
-		if(decValue) {
-			if (decValue.length > 2){
-				document.getElementById('CustomTipAmount').value = tipAmount.toFixed(2);
-			}
-		}
-		tipAmount = document.getElementById('CustomTipAmount').value;
-		document.getElementById('tip-option-custom').value = tipAmount;
-		$('.tip-value').text(tipAmount);
-		$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
-	}
-}
-
-// Load Media Page
 function loadArtifactView(objMeta) {
 	currentView = 'artifact';
 	filterTypes = [];
@@ -724,6 +682,47 @@ function loadArtifactView(objMeta) {
 	*/
 }
 
+// CHANGE CUSTOM TIP AMOUNT
+function changeCustomTipAmount() {
+	$('#tip-option-custom').click();
+}
+
+// CHANGE FLO TIP AMOUNT
+function changeTipAmount(opt) {
+	var tipAmount = ($(opt).attr('id')=='tip-option-custom') ? (parseFloat($(opt).siblings('.tip-input').val())) : parseFloat($(opt).val()) ;
+	$('.tip-value').text(tipAmount);
+	$('#tip-modal .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
+	$('.btc-usd .btc-usd-output').text(Math.round((tipAmount/BTCUSD)*100000000)/100000000);
+}
+
+// SET CUSTOM TIP AMOUNT BY INPUT
+function prevTipAmountSet() {
+	prevTipAmount = document.getElementById('CustomTipAmount').value;
+}
+
+function customTipAmountInput(event) {
+	var charCode = event.charCode;
+	var tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
+	if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186) || (isNaN(tipAmount) == true) ) {
+		document.getElementById('CustomTipAmount').value = prevTipAmount;
+		$('.tip-value').text(prevTipAmount);
+		$('#tip-modal .flo-usd-output').text(Math.round((prevTipAmount/FLOUSD)*100000000)/100000000);
+		return false;
+	}
+	if (tipAmount != prevTipAmount) {
+		var decValue = document.getElementById('CustomTipAmount').value.split('.')[1];
+		if(decValue) {
+			if (decValue.length > 2){
+				document.getElementById('CustomTipAmount').value = tipAmount.toFixed(2);
+			}
+		}
+		tipAmount = document.getElementById('CustomTipAmount').value;
+		document.getElementById('tip-option-custom').value = tipAmount;
+		$('.tip-value').text(tipAmount);
+		$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
+	}
+}
+
 // ADVANCED SEARCH
 function selectSearchMediaType(obj){
 	$(obj).toggleClass('active');
@@ -779,6 +778,7 @@ function searchAPI(module, searchOn, searchFor) {
 	return mediaData;
 }
 
+// MEDIA TYPE FILTER
 function setMediaTypeFilter(obj) {
 	if(!obj) {
 		$('#browse-media .module-links a.active').removeClass('active');
@@ -791,8 +791,6 @@ function setMediaTypeFilter(obj) {
 	filterMediaByType();
 }
 
-// MEDIA TYPE FILTER
-var filterTypes = [];
 function filterMediaByType(obj) {
 	subView = '';
 	$('#intro').fadeOut(fadeTimer);
@@ -930,7 +928,8 @@ function populateSearchResults(results, module) {
 	replaceSVG();
 	buildHistory();
 }
-// Display Media Info Modal
+
+// DISPLAY MEDIA INFO MODAL
 function loadInfoModal(childObj) {
     var testObj = childObj.parentNode;
     var count = 1;
@@ -987,7 +986,7 @@ function loadInfoModal(childObj) {
         }
         count++;
     }
-    // Load Media Entity Info Modal
+    // LOAD MEDIA ENTITY INFO MODAL
 	if ( ($('#info-modal-media').css('display') == 'block') && ($('#info-modal-media').css('opacity')==1) ) {
 		$('#info-modal-media').fadeOut(fadeTimer);
 		return false;
@@ -1011,7 +1010,7 @@ function loadInfoModal(childObj) {
 	$(objMeta).find('#info-modal-media').fadeIn(fadeTimer);
 }
 
-// Load Local HTML file contents for info modal
+// LOAD LOCAL HTML FILES FOR INFO MODAL
 function getInfoFile(localFile) {
 	var localURL = 'modals/info-'+ localFile +'.html';
 	$.ajax({
@@ -1023,16 +1022,16 @@ function getInfoFile(localFile) {
 	});
 }
 
-// Load Add Content Modal
+// LOAD ADD CONTENT MODAL
 function loadAddContentModal() {
 	$('#add-menu-modal.abs').fadeToggle(fadeTimer);
 }
-// Load User Modal
+// LOAD USER MODAL
 function loadUserModal() {
 	$('#user-modal.abs').fadeToggle(fadeTimer);
 }
 
-// Calculate runtime from seconds
+// CALCULATE RUNTIME FROM SECONDS
 function calcRuntime(seconds) {
 	var runSecs = seconds;
 	var runMins = 0;
@@ -1058,7 +1057,7 @@ function calcRuntime(seconds) {
 	return runtime;
 }
 
-// Calculate seconds from Runtime
+// CALCULATE SECONDS FROM RUNTIME
 function calcSeconds(runtime) {
 	if (!runtime) {
 		console.error('Provide an input time to calculate to seconds');
@@ -1089,7 +1088,7 @@ function loadShareModal(obj) {
 	buildHistory();
 }
 
-// Display Tip Modal
+// DISPLAY TIP MODAL
 function loadTipModal(obj) {
 	if ($(obj).parents('.entity-market #tip-modal').length == 0) {
 		$(obj).parents('.entity-market').append($('#tip-modal'));
@@ -1114,6 +1113,7 @@ function loadTipModal(obj) {
 	$(obj).parents('.entity-market').find('#tip-modal').css(modalPos,tipModalPos+'px').fadeToggle(fadeTimer);
 }
 
+// DISPLAY QR CODE FOR BTC
 function loadQR() {
 	$('#lightbox').html('<div id="qrcode-lightbox"></div>');
 	var qrcode = new QRCode("qrcode-lightbox", {
@@ -1127,7 +1127,7 @@ function loadQR() {
 	$('#lightbox').fadeIn(fadeTimer);
 }
 
-// Share New Content Module
+// NEW MEDIA MODULE
 function loadShareMod() {
 	$('.header-modal').hide();
 	$('.view-media-ui').hide();
@@ -1150,6 +1150,7 @@ function loadShareMod() {
 	resizeTabs();
 }
 
+// ADD MEDIA TAB PAGINATION
 function paginateMediaTabs(obj) {
 	var activeTab = $('#add-media-menu li.active');
 	if ($(obj).hasClass('next')) {
@@ -1166,7 +1167,7 @@ function paginateMediaTabs(obj) {
 	}
 }
 
-// Create Publisher Module
+// NEW PUBLISHER MODULE
 function loadCreatePublisherMod() {
 	$('.header-modal').hide();
 	currentView = 'add-publisher';
@@ -1188,27 +1189,7 @@ function loadCreatePublisherMod() {
 	resizeTabs();
 }
 
-// Create String to Generate Publisher Signature
-function concatForSig(){
-	var sigName = document.getElementById('newPublisher-name').value;
-	var sigAdd = document.getElementById('newPublisher-floAdd').value;
-	if ( (!sigName) || (!sigAdd) ) {
-		if ( (!sigName) && (!sigAdd) ) {
-			document.getElementById('newPublisherString').innerHTML = '[Input data to generate code above]';
-		} else if (!sigName) {
-			document.getElementById('newPublisherString').innerHTML = '[Enter a Publisher Name above]';
-		} else if (!sigAdd) {
-			document.getElementById('newPublisherString').innerHTML = '[Enter a Florincoin Address above]';
-		}
-		return false;
-	}
-	var concatString = '';
-	var sigTimestamp = new Date();
-	var concatString = sigName+'-'+sigAdd+'-'+Date.parse(sigTimestamp);
-	document.getElementById('newPublisherString').innerHTML = concatString;
-}
-
-// Parse Magnet URI
+// PARSE MAGNET URI
 function parseMagnetURI() {
 	var magnetURI = document.getElementById('dht-hash').value;
 	console.log(magnetURI);
@@ -1220,30 +1201,7 @@ function parseMagnetURI() {
 	}
 }
 
-// Create String to Generate Media Submission Signature
-function concatMediaSig() {
-	var Tid = document.getElementById('btih-hash').value;
-	var FLOadd = document.getElementById('newMediaPublisherFLO').value;
-	if ( (!Tid) || (!FLOadd) ) {
-		if ( (!Tid) && (!FLOadd) ) {
-			document.getElementById('newMediaString').innerHTML = '[Input data to generate code above]';
-			console.error("Input Torrent Magnet URI and Publisher's FLO Address");
-		} else if (!Tid) {
-			document.getElementById('newMediaString').innerHTML = '[Enter a Torrent Magnet URI]';
-			console.error("Input Torrent Magnet URI");
-		} else if (!FLOadd) {
-			document.getElementById('newMediaString').innerHTML = '[Enter a Florincoin Address above]';
-			console.error("Input Publisher's FLO Address");
-		}
-		return false;
-	}
-	var concatString = '';
-	var sigTimestamp = new Date();
-	var concatString = Tid+'-'+FLOadd+'-'+Date.parse(sigTimestamp);
-	document.getElementById('newMediaString').innerHTML = concatString;
-}
-
-// Submit Publisher to Blockchain
+// SUBMIT PUBLISHER TO BLOCKCHAIN
 function postPublisher() {
 	var pubName = document.getElementById('newPublisher-name').value;
 	var pubAdd = document.getElementById('newPublisher-floAdd').value;
@@ -1330,7 +1288,7 @@ function changeAddMediaTab(obj) {
 	}
 }
 
-// Show AutoFill Option on Add Media interface
+// SHOW AUTOFILL ON ADD MEDIA
 var mediaWwwID = '';
 function showAutoFill(obj){
 	if ( (obj.value != '') && (obj.value != mediaWwwID) ) {
@@ -1350,7 +1308,7 @@ function showAutoFill(obj){
 	}
 }
 
-// Get IMDB Info from API for Autofill
+// GET IMDB INFO FOR AUTOFILL
 function getIMDBinfo() {
 	var IMDBid = document.getElementById('www-id').value;
 	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ mediaWwwID +'&actors=S&uniqueName=1';
@@ -1425,7 +1383,7 @@ function getIMDBinfo() {
 		}
 	});
 }
-// Get YouTube Info from API for Autofill
+// GET YOUTUBE INFO FOR AUTOFILL
 function getYouTubeinfo() {
 	var YouTubeId = document.getElementById('www-id').value;
 	var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBH_FceJKLSmo0hk9y2zBdZ8ZTmUiNJr8o&part=snippet&id='+ YouTubeId;
@@ -1450,7 +1408,7 @@ function getYouTubeinfo() {
 	$('fieldset:visible input').removeAttr('disabled');
 	$('fieldset:visible textarea').removeAttr('disabled');	
 }
-// Get Soundcloud Info from API for Autofill
+// GET SOUNDCLOUD INFO FOR AUTOFILL
 function getSoundcloudInfo() {
 	var SoundcloudId = document.getElementById('www-id').value;
 	var url = 'https://api.soundcloud.com/tracks/'+ SoundcloudId + '.json?client_id=0e74cd0666418c8b8a26f967b1e3a7bb';
@@ -1556,7 +1514,7 @@ function showTipAlexandriaModal() {
 	$('#tip-alexandria-modal').fadeIn(fadeTimer);
 }
 
-// Select Media Type on Media Submission
+// SELECT MEDIA TYPE ON ADD MEDIA
 function selectMediaType(obj, mediaType) {
 	$('#media-type-select-list a').removeClass('active');
 	obj.className = 'active';
@@ -1816,7 +1774,7 @@ function lightbox(obj){
 }
 
 
-// Interger sort order function
+// INT SORT
 jQuery.fn.sortElements = (function(){
     var sort = [].sort;
     return function(comparator, getSortable) {
@@ -1849,7 +1807,7 @@ jQuery.fn.sortElements = (function(){
     };
 })();
 
-// Alphabetical sort
+// ALPHA SORT
 function sortUnorderedList(ul, sortDescending) {
 	var mylist = $('#'+ul);
 	var listitems = mylist.children('li').get();
@@ -1859,9 +1817,7 @@ function sortUnorderedList(ul, sortDescending) {
 	$.each(listitems, function(idx, itm) { mylist.append(itm); });
 }
 
-/*
-* Replace all SVG images with inline SVG
-*/
+// REPLACE .SVG WITH WEB SVG
 function replaceSVG() {
 	jQuery('.makeChildrenSVG').each(function(){
 		jQuery(this).children('img').each(function(){
@@ -1897,7 +1853,7 @@ function replaceSVG() {
 	});
 }
 
-// Spinner configuration
+// SPINNER
 var largeSpinConfig = {
 	lines: 17, // The number of lines to draw
 	length: 7, // The length of each line
@@ -1919,7 +1875,7 @@ var largeSpinConfig = {
 var target = document.getElementById('wait');
 var spinner = new Spinner(largeSpinConfig).spin(target);
 
-// Default browser font size for word cloud
+// DEFAULT BROWSER FONT SIZE
 document.emSize=function(pa){
 	pa= pa || document.body;
 	var who= document.createElement('div');
@@ -1934,7 +1890,7 @@ document.emSize=function(pa){
 	return fs;
 }
 
-// Trim spaces from a string
+// TRIM SPACES FROM STR
 function trim11(str) {
     str = str.replace(/^\s+/, '');
     for (var i = str.length - 1; i >= 0; i--) {
@@ -1946,9 +1902,8 @@ function trim11(str) {
     return str;
 }
 
-// Replace Carriage Returns in String
+// REPLACE CARRIAGE RETURNS IN STR
 function replace(string,text,by) {
-// Replaces text with by in string
     var strLength = string.length, txtLength = text.length;
     if ((strLength == 0) || (txtLength == 0)) return string;
 
