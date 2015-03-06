@@ -1963,9 +1963,3 @@ function replace(string,text,by) {
 
     return newstr;
 }
-
-// BROWSER NAVIGATION CONTROLS
-/*
-window.onpopstate = function(event) {
-};
-*/
