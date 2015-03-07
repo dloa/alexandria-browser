@@ -83,6 +83,12 @@ jQuery(document).ready(function($){
 			if($('#add-menu-modal.abs').css('display')=='block'){
 				$('#add-menu-modal.abs').fadeOut(fadeTimer);
 			}
+			$('.overlay-modal').each(function(){
+				if ($(this).css('display')=='block'){
+					$(this).hide();
+					document.getElementById('app-overlay').style.display = 'none';
+				}
+			});
 		}
 	});
 
@@ -885,6 +891,7 @@ function searchAPI(module, searchOn, searchFor) {
 function setMediaTypeFilter(obj) {
 	if(!obj) {
 		$('#browse-media .module-links a.active').removeClass('active');
+		filterTypes = [];
 	} else {
 		$(obj).toggleClass('active');
 	}
@@ -1798,6 +1805,28 @@ function resizeTabs(t) {
 	});
 	$('.media-info-container').css('overflow','initial');
 	$('#newMedia-tabs').css('height',tabHeight+'px');
+}
+
+// GO MODAL
+function showGoModal() {
+	document.getElementById('user-modal').style.display = 'none';
+	if ( (document.getElementById('go-modal').style.display == 'none') || (document.getElementById('go-modal').style.display == '') ) {
+		document.getElementById('go-modal').style.display = 'block';
+		document.getElementById('app-overlay').style.display = 'block';
+	} else {
+		document.getElementById('go-modal').style.display = 'none';
+		document.getElementById('app-overlay').style.display = 'none';
+	}
+}
+
+function goToLocation() {
+	document.getElementById('go-modal').style.display = 'none';
+	document.getElementById('app-overlay').style.display = 'none';
+	var stateObj = {}
+	var newTitle = '';
+	var newUrl = document.getElementById('go-to-input').value;
+	window.history.replaceState(stateObj, newTitle, newUrl);
+	router();	
 }
 
 // LOAD ALEXANDRIA
