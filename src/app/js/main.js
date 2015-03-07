@@ -320,8 +320,6 @@ function buildHistory() {
 			for (var i = 2; i < searchUrl.length; i++) {
 				newURL = newURL+'/'+ searchUrl[i];
 			}
-			console.info(location.hash.indexOf('search'));
-			console.log(searchQuery);
 			if ( (filterTypes != '') && (filterTypes.length > 0) && (location.hash.indexOf('search') > -1) && (document.getElementById('loaded').innerHTML == '1') ) {
 				newURL = (newURL.split('?')[0]) ? (newURL.split('?')[0] + '?types=' + searchQuery) : (newURL + '?types=' + searchQuery) ;
 			}
@@ -368,7 +366,7 @@ function buildHistory() {
 			}
 			newURL = urlTypes;
 		}
-	} else if ( (currentView == 'media') && (location.hash.slice(1).split('/')[2] == 'search') && (filterTypes.length == 0) ) {
+	} else if ( (currentView == 'media') && (location.hash.slice(1).split('/')[2] == 'search') && (filterTypes.length == 0) && (resetSearch == 0) ) {
 		newURL = document.location.origin + document.location.pathname + '#/'+currentView;
 		var searchUrl = location.hash.slice(1).split('/');
 		var searchQuery = '';
@@ -393,6 +391,7 @@ function buildHistory() {
 		};
 	}
 	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ', newURL);
+	resetSearch = 0;
 }
 
 // GET CRYPTO EXCHANGE RATES
@@ -901,10 +900,12 @@ function searchAPI(module, searchOn, searchFor) {
 	return mediaData;
 }
 // MEDIA TYPE FILTER
+var resetSearch = 0;
 function setMediaTypeFilter(obj) {
 	if(!obj) {
 		$('#browse-media .module-links a.active').removeClass('active');
 		filterTypes = [];
+		resetSearch = 1;
 	} else {
 		$(obj).toggleClass('active');
 	}
@@ -1348,6 +1349,7 @@ function postPublisher() {
 	    success: function(e) {
 	    	$('.publisher-ui').fadeOut(fadeTimer);
 	    	resetAlexandria();
+	    	$('#publisher-process input[type="text"]').val('');
 	    	alert('Publisher Announced!');
 	    },
 		error: function (xhr, ajaxOptions, thrownError) {
@@ -1778,6 +1780,8 @@ function postMedia(tipAlexandria) {
 	    success: function(e) {
 	    	$('.sharing-ui').fadeOut(fadeTimer);
 	    	resetAlexandria();
+	    	$('#add-media input[type="text"]').val('');
+	    	$('#add-media textarea').val('');
 	    	alert('Media Published!');
 	    },
 		error: function (xhr, ajaxOptions, thrownError) {
