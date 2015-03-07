@@ -1213,7 +1213,7 @@ div#browse-media-wrap {
 .entity-view .row.entity-meta-header {
 	margin-top: .75em;
 }
-.entity-view .entity-meta-header *, .row.entity-footer > *, .row.entity-market > * {
+.entity-view .entity-meta-header *, .row.entity-footer > *, .row.entity-market > *, .entity-market > * {
 	margin: 0 .25em;
 	display: inline-block;
 	vertical-align: middle;
@@ -1315,6 +1315,9 @@ img.poster-frame {
 .entity-view .row.entity-footer, .entity-view .row.entity-market {
 	margin: 1em 0;
 	position: relative;
+}
+#view-media .row.entity-market {
+  float: left;
 }
 .entity-view .row.entity-footer.media-video {
 	margin-top: 0;

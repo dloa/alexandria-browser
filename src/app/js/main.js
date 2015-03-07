@@ -484,11 +484,21 @@ function getAllPublishers() {
 
 // PUBLISHER SINGLE ENTITY VIEW
 function loadPublisherEntity(obj) {
-	var parentObj = $(obj).parents('.publisher-entity');
-	// Load Media Entity View
+	$('.view-media-ui').fadeOut(fadeTimer);
+	document.getElementById('media-breadcrumbs-type').innerHTML = '';
+	document.getElementById('media-breadcrumbs-publisher').innerHTML = '';
+	document.getElementById('media-breadcrumbs').innerHTML = '';
+	var publisherNav = $(obj).parents('.publisher-entity').hasClass('publisher-entity');
+	if (publisherNav == true) {
+		var parentObj = $(obj).parents('.publisher-entity');
+	} else {
+		var parentObj = obj;
+	}
+	document.getElementById('publisher-avatar').src = '';
 	loadPublisherView(parentObj);
 }
 
+// LOAD PUBLISHER ENTITY VIEW
 function loadPublisherView(objMeta) {
 	currentView = 'publisher';
 	filterTypes = [];
@@ -509,8 +519,10 @@ function loadPublisherView(objMeta) {
 	$('#view-publisher').fadeIn(fadeTimer);	
 	if (location.hash.slice(1).split('/')[2]) {
 		var publisherID = (objMeta) ? ($(objMeta).attr('id').split('-')[1]) : (location.hash.slice(1).split('/')[2]) ;
-	} else {
+	} else if (location.hash.slice(1).split('/')[1]) {
 		var publisherID = (objMeta) ? ($(objMeta).attr('id').split('-')[1]) : (location.hash.slice(1).split('/')[1]) ;
+	} else {
+		var publisherID = $(objMeta).attr('id').split('-')[1];
 	}
 	var thisPublisher = (publisherID.length == 34) ? (searchAPI('publisher', 'address', publisherID)) : searchAPI('publisher', 'txid', publisherID);
 	console.info(thisPublisher);
@@ -655,6 +667,7 @@ function loadArtifactView(objMeta) {
 	console.info(thisMediaData);
 	mediaID = thisMediaData[0]['txid'];
 	var mediaPublisher = thisMediaData[0]['publisher-name'];
+	var publisherID = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
 	var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
 	var mediaInfo = thisMediaData[0]['media-data']['alexandria-media']['info'];
 	var mediaPubTime = thisMediaData[0]['media-data']['alexandria-media']['timestamp'];
@@ -702,7 +715,7 @@ function loadArtifactView(objMeta) {
 		var youtubePoster = getYouTubePic(wwwId);
 		console.log(youtubePoster);
 	}
-	document.getElementById('media-breadcrumbs-publisher').innerHTML = mediaPublisher;
+	document.getElementById('media-breadcrumbs-publisher').innerHTML = '<a onclick="loadPublisherEntity(this)" id="publisher-' + publisherID + '">'+mediaPublisher+'</a>';
 	document.getElementById('media-breadcrumbs-type').innerHTML = mediaType;
 	document.getElementById('media-breadcrumbs').innerHTML = mediaTitle;
 	if (mediaType == 'movie') {
@@ -1199,17 +1212,11 @@ function loadShareModal(obj) {
 	if ($(obj).parents('.entity-market #share-modal').length == 0) {
 		$(obj).parents('.entity-market').append($('#share-modal'));
 	}
-	if(currentView=='media'){
-		var modalPos = 'left';
-		var shareModalPos = $(obj).position().left-31;
-	} else {
-		var modalPos = 'right';
-		var shareModalPos = $(obj).parent().width() - $(obj).position().left - 80;
-	}
+	var modalPos = (currentView=='artifact') ? ('left') : ('right');
+	var shareModalPos = (currentView=='artifact') ? ($(obj).parent().width() - $(obj).position().left - 81) : ($(obj).parent().width() - $(obj).position().left - 75);
 	document.getElementById('share-url').innerHTML = location.href;
 	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2').text();
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
-	buildHistory();
 }
 
 // DISPLAY TIP MODAL
@@ -1225,15 +1232,8 @@ function loadTipModal(obj) {
 	} else {
 		$('#tipAdd-FLO').text('No Address Available');
 	}
-	if(currentView=='media'){
-		var modalPos = 'left';
-		var tipModalPos = $(obj).position().left-31;
-	} else {
-		var modalPos = 'right';
-		console.log($(obj).parent().width());
-		console.log($(obj).position().left);
-		var tipModalPos = $(obj).parent().width() - $(obj).position().left - 80;
-	}
+	var modalPos = (currentView=='artifact') ? ('left') : ('right');
+	var tipModalPos = (currentView=='artifact') ? ($(obj).parent().width() - $(obj).position().left) : ($(obj).parent().width() - $(obj).position().left - 80);
 	$(obj).parents('.entity-market').find('#tip-modal').css(modalPos,tipModalPos+'px').fadeToggle(fadeTimer);
 }
 
