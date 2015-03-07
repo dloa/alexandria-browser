@@ -716,7 +716,7 @@ function loadArtifactView(objMeta) {
 		console.log(youtubePoster);
 	}
 	document.getElementById('media-breadcrumbs-publisher').innerHTML = '<a onclick="loadPublisherEntity(this)" id="publisher-' + publisherID + '">'+mediaPublisher+'</a>';
-	document.getElementById('media-breadcrumbs-type').innerHTML = mediaType;
+	document.getElementById('media-breadcrumbs-type').innerHTML = '<a onclick="filterMediaByType(&apos;'+mediaType+'&apos;)">'+mediaType+'</a>';
 	document.getElementById('media-breadcrumbs').innerHTML = mediaTitle;
 	if (mediaType == 'movie') {
 		getRotten();
@@ -928,7 +928,7 @@ function filterMediaByType(obj) {
 	$('.view-media-ui').fadeOut(fadeTimer);
 	$('.view-publisher-ui').fadeOut(fadeTimer);
 	var filteredMedia = [];
-	if (currentView == 'front') {
+	if (currentView != 'media') {
 		filteredMedia = [obj];
 		$('#browse-media .module-links a.active').removeClass('active');
 		$('#browse-media .module-links a[value="'+ obj +'"').addClass('active');
