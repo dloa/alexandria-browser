@@ -1134,6 +1134,7 @@ div#browse-media-wrap {
 #browse-media-wrap .row.first, #publisher-media-list li:first-child {
 	padding-top: .75em;
 	border-top: 1px solid #979797;
+	position: relative;
 }
 #browse-media-wrap > .row > *, #publisher-media-list li > * {
 	margin: 0 0 0 .5em;
