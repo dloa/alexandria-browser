@@ -1387,6 +1387,31 @@ function parseMagnetURI() {
 	}
 }
 
+// CHECK TIP AMOUNTS ARE USD VALUES
+function checkTipAmounts() {
+	var tipError = 0;
+	var TipInputs = document.getElementsByClassName(' set-tip-amount');
+	for (i = 0; i < TipInputs.length; i++) {
+		var tipValue = $(TipInputs[i]).val();
+		if (tipValue != '') {
+			for (i2 = 0; i2 < tipValue.length; i2++) {
+				if ( (!tipValue[i2] == '.') && (isNaN(parseInt(tipValue[i2]))) ) {
+					tipError = 1;
+				}
+			}
+		}
+		if (tipValue.split('.')) {
+			var deci = tipValue.split('.')[1];
+			if ( ( (deci) && (deci.length > 2) ) || (tipValue.split('.').length > 2) ) {
+				tipError = 1;
+			}
+		}
+	}
+	if (tipError == 1) {
+		alert('Input a valid tip amount');
+	}
+}
+
 // SUBMIT PUBLISHER TO BLOCKCHAIN
 function postPublisher() {
 	var pubName = document.getElementById('newPublisher-name').value;
