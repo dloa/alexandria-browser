@@ -1205,13 +1205,40 @@ function calcRuntime(seconds) {
 	return runtime;
 }
 
+// CHECK RUNTIME VALIDITY
+function isRuntime(runtime) {
+	var runtimeError = 0;
+	var runtimeArray = runtime.value.split(':');
+	console.log(runtimeArray.length);
+	console.info(runtimeArray);
+	if (runtimeArray.length < 3) {
+		runtimeError = 1;
+	}
+	for (var i = 0; i < runtimeArray.length; i++) {
+		for (var i2 = 0; i2 < runtimeArray[i].length; i2++) {
+			console.log(isNaN(parseInt(runtimeArray[i][i2])));
+			if (isNaN(parseInt(runtimeArray[i][i2]))) {
+				runtimeError = 1;
+			}
+		}
+		if ( (runtimeArray[i].length > 2) || ( (i > 0) && (runtimeArray[i] > 59) ) || (isNaN(parseInt(runtimeArray[i]))) ) {
+			runtimeError = 1;
+		}
+	}
+	if (runtimeError != 0) {
+		alert('Please input a valid runtime');	
+	}
+}
+
 // CALCULATE SECONDS FROM RUNTIME
 function calcSeconds(runtime) {
 	if (!runtime) {
-		console.error('Provide an input time to calculate to seconds');
 		return false;
 	}
 	var runtimeArray = runtime.split(':');
+	if (runtimeArray.length < 3) {
+		alert('Please input a valid runtime');
+	}
 	var runtimeHours = parseInt(runtimeArray[0]);
 	var runtimeMins = parseInt(runtimeArray[1]);
 	var runtimeSeconds = parseInt(runtimeArray[2]);
@@ -1336,13 +1363,27 @@ function loadCreatePublisherMod() {
 
 // PARSE MAGNET URI
 function parseMagnetURI() {
+	var errorCheck = 0;
+	if (document.getElementById('dht-hash').value == '') {
+		return false;
+	}
 	var magnetURI = document.getElementById('dht-hash').value;
-	console.log(magnetURI);
-	var mediaBTIH = magnetURI.split('urn:')[1].split('&')[0];
-	document.getElementById('btih-hash').value = mediaBTIH;
-	var mediaWS = magnetURI.split('&ws=')[1].split('&')[0];
-	if (mediaWS) {
-		console.log(mediaWS);
+	var isMagnet = magnetURI.indexOf('magnet:?xt=urn:');
+	var hasWS = magnetURI.indexOf('&ws');
+	if (isMagnet == -1) {
+		errorCheck = 1;
+	} else {
+		var mediaBTIH = magnetURI.split('urn:')[1].split('&')[0];
+		document.getElementById('btih-hash').value = mediaBTIH;
+		if (hasWS > 0) {
+			var mediaWS = magnetURI.split('&ws=')[1].split('&')[0];
+			if (mediaWS) {
+				console.log(mediaWS);
+			}
+		}
+	}
+	if (errorCheck = 1) {
+		console.error('Input a valid magnet link');
 	}
 }
 
@@ -1561,6 +1602,7 @@ function getSoundcloudInfo() {
 	$.ajax({
 	    url: url,
 	    success: function(e) {
+	    	console.info(e);
 			document.getElementById('addMedia-title').value = e['title'];
 			document.getElementById('addMedia-creators1').value = e['user']['username'];
 			document.getElementById('addMedia-runtime').value = e['duration'];
@@ -1569,6 +1611,11 @@ function getSoundcloudInfo() {
 			document.getElementById('addMedia-desc').innerHTML = e['description'];
 	    },
 		error: function (xhr, ajaxOptions, thrownError) {
+			if (xhr.status == 404) {
+				alert('Soundcloud ID not found');
+				$('fieldset:visible input').val('');
+				$('fieldset:visible textarea').val('');
+			}
 			console.error(xhr.status);
 			console.error(thrownError);
 	    }
