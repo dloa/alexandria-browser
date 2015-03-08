@@ -62,8 +62,15 @@ function updateMediaAPI() {
                 setTimeout(updateMediaAPI, 15*10e3)
                 _.each(data.body, function (item) {
                     var it = item['media-data']['alexandria-media']
+                    var id = it.torrent.replace('btih:','');
+
+                    console.log ('torrent', id)
+                    var torrent = Client.get(id)
+                    if (torrent)
+                        return console.log ('torrent already added', it.torrent)
+
                     var dbItem = {
-                        _id: it.torrent,
+                        _id: id,
                         magnet: 'magnet:?xt=urn:' + it.torrent
                             + '&dn=' + encodeURIComponent(it.info.title)
                             + '&ws=' + encodeURIComponent('http://localhost:3000/download/')
