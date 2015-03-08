@@ -301,6 +301,7 @@ function changeCryptoRates() {
 function buildHistory() {
 	console.log('History popped!');
 	var newURL = document.location.origin + document.location.pathname;
+	console.log(document.title);
 	if ( (currentView != 'front') && (subView == '') ) {
 		document.title = 'ΛLΞXΛNDRIΛ > '+ currentView.charAt(0).toUpperCase() + currentView.slice(1);
 		newURL = newURL+'#/'+currentView;
@@ -340,9 +341,14 @@ function buildHistory() {
 	} else if (history.state) {
 		if ( (history.state.searchResults == true) && (history.state.currentView == 'publishers') ) {
 			document.title = 'ΛLΞXΛNDRIΛ > Publishers > '+ history.state.searchTerm;
+			var newTitle = 'ΛLΞXΛNDRIΛ > Publishers > '+ history.state.searchTerm;
 		} else if ( (history.state.searchResults == true) && (history.state.currentView == 'media') ) {
 			document.title = 'ΛLΞXΛNDRIΛ > Media > '+ history.state.searchTerm;
+			var newTitle = 'ΛLΞXΛNDRIΛ > Media > '+ history.state.searchTerm;
 		}
+	} else {
+		document.title = 'ΛLΞXΛNDRIΛ';
+		var newTitle = 'ΛLΞXΛNDRIΛ';
 	}
 	if ( (location.hash.slice(1).split('/')[2] == 'type') && (document.getElementById('loaded').innerHTML != '1') ) {
 		var parseTypes = location.hash.split('type/')[1];
@@ -398,7 +404,7 @@ function buildHistory() {
 			subView: subView
 		};
 	}
-	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ', newURL);
+	history.pushState(stateObj, newTitle, newURL);
 	resetSearch = 0;
 }
 
@@ -1997,14 +2003,9 @@ function resetInterface() {
 // RESET ALEXANDRIA
 function resetAlexandria() {
 	currentView = 'front';
+	document.title = 'ΛLΞXΛNDRIΛ';
 	subView = '';
 	filterTypes = [];
-	var stateObj = {
-		currentView: 'front',
-	}
-	var newTitle = 'ΛLΞXΛNDRIΛ';
-	var newUrl = document.location.origin + document.location.pathname;
-	window.history.replaceState(stateObj, newTitle, newUrl);
 	$('main').hide();
 	hideOverlay();
 	$('#browse-media-wrap .row').remove();
