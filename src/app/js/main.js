@@ -362,7 +362,6 @@ function buildHistory() {
 			newURL = newURL+'/'+location.hash.slice(1).split('/')[i];
 		}
 	}
-	console.info(newURL);
 	if ( (filterTypes != '') && (filterTypes.length > 0) && (location.hash.slice(1).split('/')[2] != 'search') ) {
 		newURL = document.location.origin + document.location.pathname;
 		$('#browse-media .module-links a').removeClass('active');
@@ -388,7 +387,6 @@ function buildHistory() {
 		} else if ( (location.hash.indexOf('search') > -1) && (document.getElementById('loaded').innerHTML == '1') && (searchQuery == '') ) {
 			newURL = newURL.split('?')[0];
 		}
-		console.info(newURL);
 	}
 	if (subView == '') {
 		var stateObj = {
@@ -493,7 +491,6 @@ function getAllPublishers() {
 
 // PUBLISHER SINGLE ENTITY VIEW
 function loadPublisherEntity(obj) {
-	$('.view-media-ui').fadeOut(fadeTimer);
 	document.getElementById('media-breadcrumbs-type').innerHTML = '';
 	document.getElementById('media-breadcrumbs-publisher').innerHTML = '';
 	document.getElementById('media-breadcrumbs').innerHTML = '';
@@ -513,6 +510,7 @@ function loadPublisherView(objMeta) {
 	filterTypes = [];
 	$('#intro').fadeOut(fadeTimer);
 	$('main').fadeOut(fadeTimer);
+	$('.view-media-ui').fadeOut(fadeTimer);
 	$('#share-modal').css({
 			left:'initial',
 			right:'initial'
@@ -1019,7 +1017,7 @@ function populateSearchResults(results, module) {
 		$('#browse-media .module-links a').removeClass('active');
 	}
 
-	if (module =='media') {
+	if (module =='media') {		
 		for (var i = 0; i < results.length; i++) {
 			var mediaType = results[i]['media-data']['alexandria-media']['type'];
 			if (filterTypes[0]) {
