@@ -1,10 +1,10 @@
 var MIN_PERCENTAGE_LOADED = 0.5,
-	MIN_SIZE_LOADED = 10 * 1024 * 1024,
-	gui = require('nw.gui'),
-	win = gui.Window.get(),
-	os = require('os'),
-	path = require('path'),
-	mime = require('mime'),
+    MIN_SIZE_LOADED = 10 * 1024 * 1024,
+    gui = require('nw.gui'),
+    win = gui.Window.get(),
+    os = require('os'),
+    path = require('path'),
+    mime = require('mime'),
     ScreenResolution = {
 	get SD() {
 		return window.screen.width < 1280 || window.screen.height < 720;
