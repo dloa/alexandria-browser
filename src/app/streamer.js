@@ -1,7 +1,7 @@
 /* this can only work in node, we'd need an exclude for browser, or use browserify */
 
 if (require === undefined)
-    return;
+    throw new Error("not in node");
 
 var WebTorrent = require('webtorrent'),
     request = require('request'),
