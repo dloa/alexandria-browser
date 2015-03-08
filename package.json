@@ -28,6 +28,7 @@
   "dependencies": {
     "express": "^4.12.2",
     "range-parser": "^1.0.2",
+    "underscore": "^1.8.2",
     "webtorrent": "^0.29.0"
   },
   "devDependencies": {

@@ -3,11 +3,10 @@
 if (require === undefined)
     return;
 
-var Streamer = require('popcorn-streamer'),
-    WebTorrent = require('webtorrent'),
+var WebTorrent = require('webtorrent'),
     request = require('request'),
     rangeParser = require('range-parser'),
-    _ = require('lodash'),
+    _ = require('underscore'),
     mime = require('mime'),
     path = require('path'),
     express = require('express'),
@@ -16,7 +15,7 @@ var Streamer = require('popcorn-streamer'),
 
 var mediaAPIUrl = "http://54.172.28.195:41289/alexandria/v1/media"
 var blacklist = {'btih:CW35T7WXXRC5RSS4IGDFIZ7CJN4MAUDC': true}
-var p = path.join(process.ENV['HOME'], '.blocktech/';)
+var p = path.join(process.env['HOME'], '.blocktech/')
 
 var DLOpts = {
     tmp: path.join(p, '/DL/tmp'),
@@ -58,7 +57,7 @@ var seed = function (doc) {
 
 function updateMediaAPI() {
     request({json: true, url: mediaAPIUrl + '/get/all'},
-            function (data) {
+            function (err, data) {
                 console.log("got API message")
                 setTimeout(updateMediaAPI, 15*10e3)
                 _.each(data.body, function (item) {
@@ -76,11 +75,13 @@ function updateMediaAPI() {
                 })
             })
 }
+updateMediaAPI()
 
 /* this is taken from popcorn's streamer-server, but it needs to be adapted
    to serve routes and not single files, so we keep it forked */
 
 server.get('/stream/:id/:filename', function (request, response){
+    console.log ('asked for', request.params.id, request.params.filename)
     var getType = mime.lookup.bind(mime);
 
     var torrent = Client.get(request.params.id)
@@ -135,4 +136,6 @@ server.get('/stream/:id/:filename', function (request, response){
 
     return file.createReadStream(range).pipe(response)
 })
+
+console.log ('streamer started on port', 3000)
 server.listen(3000)
