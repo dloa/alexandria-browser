@@ -91,8 +91,7 @@ jQuery(document).ready(function($){
 			}
 			$('.overlay-modal').each(function(){
 				if ($(this).css('display')=='block'){
-					$(this).hide();
-					document.getElementById('app-overlay').style.display = 'none';
+					hideOverlay();
 				}
 			});
 			$('.bubble-modal').each(function(){
@@ -747,7 +746,7 @@ function loadArtifactView(objMeta) {
 	$('main:visible .FLO-address').html(mediaFLO);
 	$('#media-view-entity .entity-meta-header h2').html(mediaTitle);
 	if (mediaArtist) {
-		$('#media-view-entity .entity-meta-header h3').html(mediaArtist);
+		document.getElementById('media-artist-name').outerHTML = '<h3 id="media-artist-name" onclick="searchByField(&apos;media&apos;, &apos;info_extra&apos;, &apos;'+ mediaArtist +'&apos;)">'+ mediaArtist +'</h3>';
 	}
 	$('#media-view-entity .entity-meta-header .entity-runtime').css('display',$(objMeta).find('.media-runtime').css('display'));
 	$('#media-view-entity .entity-meta-header .entity-runtime').html(mediaRuntime);
@@ -860,7 +859,7 @@ function buildSearch() {
 			searchResults: true,
 			searchTerm: document.getElementById('searchTermInput').value
 		}
-		var newTitle = 'ΛLΞXΛNDRIΛ > Publishers';
+		var newTitle = 'ΛLΞXΛNDRIΛ > Publisher Search';
 		var newUrl = document.location.origin + document.location.pathname +'#/publishers/'+document.getElementById('searchTermInput').value.replace(/\s/g , "-").toLowerCase();
 		window.history.replaceState(stateObj, newTitle, newUrl);
 	} else if (searchProtocol == 'media') {
@@ -869,7 +868,7 @@ function buildSearch() {
 			searchResults: true,
 			searchTerm: document.getElementById('searchTermInput').value
 		}
-		var newTitle = 'ΛLΞXΛNDRIΛ > Media';
+		var newTitle = 'ΛLΞXΛNDRIΛ > Media Search';
 		var newUrl = document.location.origin + document.location.pathname +'#/media/search/'+document.getElementById('searchTermInput').value.replace(/\s/g , "-").toLowerCase();
 		window.history.replaceState(stateObj, newTitle, newUrl);
 	}
@@ -887,7 +886,27 @@ function cancelSearch() {
 	$('#adv-search').fadeToggle(fadeTimer).find('input[type="text"]').val('');
 }
 
-
+// SEARCH BY FIELD
+function searchByField(module, searchOn, searchFor) {
+	var AdvSearchResults = searchAPI(module, searchOn, searchFor);
+	subView = '';
+	$('main').not('#browse-media').fadeOut(fadeTimer);
+	$('#browse-media .module-links a').removeClass('active');
+	$('#share-modal').hide();
+	$('#tip-modal').hide();
+	$('#user-modal').fadeOut(fadeTimer);
+	$('.view-media-ui').fadeOut(fadeTimer);
+	$('.view-publisher-ui').fadeOut(fadeTimer);
+	var stateObj = {
+		currentView: 'media',
+		searchResults: true,
+		searchTerm: document.getElementById('searchTermInput').value
+	}
+	var newTitle = 'ΛLΞXΛNDRIΛ > Media Search';
+	var newUrl = document.location.origin + document.location.pathname + '#/media/search/' + searchFor.replace(/\s/g , "-").toLowerCase();
+	window.history.replaceState(stateObj, newTitle, newUrl);
+	populateSearchResults(AdvSearchResults, module);
+}
 // MEDIA + PUBLISHER SEARCH API
 function searchAPI(module, searchOn, searchFor) {
 	if ( (searchOn == 'type') && (searchFor.length > 1) ) {
@@ -1335,7 +1354,11 @@ function paginateMediaTabs(obj) {
 			alert('Please select a media type');
 			return false;
 		}
-		mediaReqCheck();
+		var reqCheck = mediaReqCheck();
+		console.log(reqCheck);
+		if (reqCheck == true) {
+			showTipAlexandriaModal();
+		}
 	}
 }
 
@@ -1723,13 +1746,15 @@ function mediaReqCheck() {
 		}
 		if (reqCheck == 1) {
 			reqCheck = 0;
+			hideOverlay();
+			return false;
 		} else {
 			if ( $('input[type="checkbox"][name="dNetwork"]:checked').length < 1 ) {
 				$('#newMedia-net').click();
 				alert('Please select a Distribution Network');
 				return false;
 			}
-			showTipAlexandriaModal();
+			return true;
 		}
 }
 
@@ -1737,6 +1762,15 @@ function mediaReqCheck() {
 function showTipAlexandriaModal() {
 	getCryptos();
 	$('#tip-alexandria-modal').fadeIn(fadeTimer);
+	$('#app-overlay').fadeIn(fadeTimer);
+	document.getElementById('app-overlay').style.display = 'block';
+}
+
+// HIDE OVERLAY AND MODAL
+function hideOverlay() {
+	$('.overlay-modal').fadeOut(fadeTimer);
+	document.getElementById('disabler').style.display = 'none';	
+	document.getElementById('app-overlay').style.display = 'none';
 }
 
 // SELECT MEDIA TYPE ON ADD MEDIA
@@ -1801,93 +1835,96 @@ function selectMediaType(obj, mediaType) {
 }
 // SUBMIT MEDIA TO BLOCKCHAIN
 function postMedia(tipAlexandria) {
-	var tipToAlexandria = 0;
-	if (tipAlexandria == 1) {
-		tipToAlexandria = document.getElementById('alexandria-tip-amount').value;;
-	}
-	var Tid = document.getElementById('btih-hash').value;
-	var FLOadd = document.getElementById('newMediaPublisherFLO').value;
-	var pubTime = Date.parse(new Date()).toString();
-	var mediaSig = generateSignature(Tid, FLOadd, pubTime);
-	if (mediaSig == false) {
-		return false;
-	}
-	var mediaType = $('#media-type-select-list a.active').attr('value');
-	var mediaDesc = replace(replace(document.getElementById('addMedia-desc').value,'\r',' '),'\n',' ');
-	var mediaInfo = '';
-	$('#new-media-meta input[type="text"].info-field').each(function(){
-		if ( $(this).val() != '' ) {
-			var infoKeyName = $(this).attr('name');
-			var infoKeyValue = $(this).val();
-			if ((infoKeyValue) && (isNaN(infoKeyValue))){
-				infoKeyValue = '"'+ infoKeyValue+'"';
-			}
-			if (mediaInfo == '') {
-				mediaInfo = '"' + infoKeyName + '":'+ infoKeyValue +'';
-			} else {
-				mediaInfo = mediaInfo + ',' + '"' + infoKeyName + '":'+ infoKeyValue +'';
-			}
+	var reqCheck = mediaReqCheck();
+	if (reqCheck == true) {
+		var tipToAlexandria = 0;
+		if (tipAlexandria == 1) {
+			tipToAlexandria = document.getElementById('alexandria-tip-amount').value;;
 		}
-	});
-	mediaInfo = mediaInfo + ',' + '"description":"'+ mediaDesc +'"';
-
-	var mediaExtraInfo = '';
-	$('#newMedia-info input[type="text"]').not('.info-field').each(function(){
-		if ( $(this).val() != '' ) {
-			var infoKeyName = $(this).attr('name');
-			var infoKeyValue = $(this).val();
-			if (infoKeyName == 'runtime'){
-				if ((infoKeyValue) && (infoKeyValue.split(':'))){
-					if (infoKeyValue.split(':').length != 0){
-						infoKeyValue = calcSeconds(infoKeyValue);
-					} else {
-						alert('Please enter a valid runtime');
-						return false;
-					}
+		var Tid = document.getElementById('btih-hash').value;
+		var FLOadd = document.getElementById('newMediaPublisherFLO').value;
+		var pubTime = Date.parse(new Date()).toString();
+		var mediaSig = generateSignature(Tid, FLOadd, pubTime);
+		if (mediaSig == false) {
+			return false;
+		}
+		var mediaType = $('#media-type-select-list a.active').attr('value');
+		var mediaDesc = replace(replace(document.getElementById('addMedia-desc').value,'\r',' '),'\n',' ');
+		var mediaInfo = '';
+		$('#new-media-meta input[type="text"].info-field').each(function(){
+			if ( $(this).val() != '' ) {
+				var infoKeyName = $(this).attr('name');
+				var infoKeyValue = $(this).val();
+				if ((infoKeyValue) && (isNaN(infoKeyValue))){
+					infoKeyValue = '"'+ infoKeyValue+'"';
 				}
-				} else if ((infoKeyValue) && (isNaN(infoKeyValue))){
-				infoKeyValue = '"'+ infoKeyValue+'"';
+				if (mediaInfo == '') {
+					mediaInfo = '"' + infoKeyName + '":'+ infoKeyValue +'';
+				} else {
+					mediaInfo = mediaInfo + ',' + '"' + infoKeyName + '":'+ infoKeyValue +'';
+				}
 			}
-			if (mediaExtraInfo == '') {
-				mediaExtraInfo = '"' + infoKeyName + '":'+ infoKeyValue +'';
-			} else {
-				mediaExtraInfo = mediaExtraInfo + ',' + '"' + infoKeyName + '":'+ infoKeyValue +'';
-			}
-		}
-	});
-	if (mediaExtraInfo != '') {
-		mediaInfo = mediaInfo+', "extra-info": {'+mediaExtraInfo+'}';
-	}
-	
-	if ($('#newMedia-pay input[type="checkbox"]:checked').length != 0) {
-		var payCurrency = 'USD';
-		var payType = 'tip';
-		var payAmount = [];
-		$('.tip-amount-value').each(function(){
-			var tipAmount = $(this).val()*100;
-			payAmount.push(tipAmount);
 		});
-		var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "payment": { "currency":"'+ payCurrency +'", "type": "'+ payType +'", "amount": "'+ payAmount +'"}, "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
-	} else {
-		var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
-	}
-	console.log(queryString);
-	$.ajax({
-	    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
-	    type: 'POST',
-		data: queryString.toString(),
-	    success: function(e) {
-	    	$('.sharing-ui').fadeOut(fadeTimer);
-	    	resetAlexandria();
-	    	$('#add-media input[type="text"]').val('');
-	    	$('#add-media textarea').val('');
-	    	alert('Media Published!');
-	    },
-		error: function (xhr, ajaxOptions, thrownError) {
-			console.error(xhr.status);
-			console.error(thrownError);
+		mediaInfo = mediaInfo + ',' + '"description":"'+ mediaDesc +'"';
+	
+		var mediaExtraInfo = '';
+		$('#newMedia-info input[type="text"]').not('.info-field').each(function(){
+			if ( $(this).val() != '' ) {
+				var infoKeyName = $(this).attr('name');
+				var infoKeyValue = $(this).val();
+				if (infoKeyName == 'runtime'){
+					if ((infoKeyValue) && (infoKeyValue.split(':'))){
+						if (infoKeyValue.split(':').length != 0){
+							infoKeyValue = calcSeconds(infoKeyValue);
+						} else {
+							alert('Please enter a valid runtime');
+							return false;
+						}
+					}
+					} else if ((infoKeyValue) && (isNaN(infoKeyValue))){
+					infoKeyValue = '"'+ infoKeyValue+'"';
+				}
+				if (mediaExtraInfo == '') {
+					mediaExtraInfo = '"' + infoKeyName + '":'+ infoKeyValue +'';
+				} else {
+					mediaExtraInfo = mediaExtraInfo + ',' + '"' + infoKeyName + '":'+ infoKeyValue +'';
+				}
+			}
+		});
+		if (mediaExtraInfo != '') {
+			mediaInfo = mediaInfo+', "extra-info": {'+mediaExtraInfo+'}';
 		}
-	});
+		
+		if ($('#newMedia-pay input[type="checkbox"]:checked').length != 0) {
+			var payCurrency = 'USD';
+			var payType = 'tip';
+			var payAmount = [];
+			$('.tip-amount-value').each(function(){
+				var tipAmount = $(this).val()*100;
+				payAmount.push(tipAmount);
+			});
+			var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "payment": { "currency":"'+ payCurrency +'", "type": "'+ payType +'", "amount": "'+ payAmount +'"}, "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
+		} else {
+			var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
+		}
+		console.log(queryString);
+		$.ajax({
+		    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
+		    type: 'POST',
+			data: queryString.toString(),
+		    success: function(e) {
+		    	$('.sharing-ui').fadeOut(fadeTimer);
+		    	resetAlexandria();
+		    	$('#add-media input[type="text"]').val('');
+		    	$('#add-media textarea').val('');
+		    	alert('Media Published!');
+		    },
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.error(xhr.status);
+				console.error(thrownError);
+			}
+		});
+	}
 }
 
 /* ADD NEW CONTENT INTERFACE */
@@ -1917,14 +1954,12 @@ function showGoModal() {
 		document.getElementById('go-modal').style.display = 'block';
 		document.getElementById('app-overlay').style.display = 'block';
 	} else {
-		document.getElementById('go-modal').style.display = 'none';
-		document.getElementById('app-overlay').style.display = 'none';
+		hideOverlay();
 	}
 }
 
 function goToLocation() {
-	document.getElementById('go-modal').style.display = 'none';
-	document.getElementById('app-overlay').style.display = 'none';
+	hideOverlay();
 	var stateObj = {}
 	var newTitle = '';
 	var newUrl = document.getElementById('go-to-input').value;
@@ -1973,6 +2008,7 @@ function resetAlexandria() {
 	var newUrl = document.location.origin + document.location.pathname;
 	window.history.replaceState(stateObj, newTitle, newUrl);
 	$('main').hide();
+	hideOverlay();
 	$('#browse-media-wrap .row').remove();
 	$('#search').fadeIn(fadeTimer);
 	$('#share-modal').css({

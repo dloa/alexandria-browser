@@ -641,7 +641,7 @@ div#intro {
 	position: fixed;
 	width: 100%;
 	top: 31%;
-	z-index:100;
+	z-index:10;
 	text-align: center;
 }
 #intro h1 {
@@ -1370,6 +1370,9 @@ img.poster-frame {
 	display: block;
 	margin-left:0;
 }
+#media-artist-name {
+	cursor: pointer;
+}
 /* CREATE PUBLISHER INTERFACE */
 #add-publisher, #add-media-container {
 	margin-top: 40px;
@@ -1671,26 +1674,26 @@ ul.distNetList li {
 	width: 80%;
 	left: 10%;
 }
-#add-media #tip-alexandria-modal * {
+#tip-alexandria-modal * {
 	text-align: center;
 	vertical-align: middle;
 }
-#add-media #tip-alexandria-modal .input-container {
+#tip-alexandria-modal .input-container {
 	margin: 1em 0;
 }
-#add-media #tip-alexandria-modal .input-container input {
+#tip-alexandria-modal .input-container input {
 	width: 5em;
 }
-#add-media #tip-alexandria-modal .input-container label {
+#tip-alexandria-modal .input-container label {
 	display: inline;
 	vertical-align: middle;
 }
-#add-media #tip-alexandria-modal .row {
+#tip-alexandria-modal .row {
 	width: 80%;
 	float: none;
 	margin: 0 auto;
 }
-#add-media #tip-alexandria-modal .row a {
+#tip-alexandria-modal .row a {
 	cursor: pointer;
 }
 .pagination ul, .pagination ul li {
