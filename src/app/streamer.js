@@ -105,7 +105,7 @@ server.get('/stream/:id/:filename', function (request, response){
 
     var file = _.findWhere(torrent.files, {name: request.params.filename})
     if (!file) {
-        return errorOut (response, 404, 'File not found: ' + torrent.files);
+        return errorOut (response, 404, 'File not found: ' + _.pluck(torrent.files, "name"));
     }
 
     if (request.method === 'OPTIONS' && request.headers && request.headers['access-control-request-headers']) {
