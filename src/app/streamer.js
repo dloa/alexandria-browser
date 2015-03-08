@@ -77,6 +77,13 @@ function updateMediaAPI() {
 }
 updateMediaAPI()
 
+
+function errorOut(response, code, message) {
+    response.statusCode = code;
+    console.error (message)
+    return response.end(message)
+}
+
 /* this is taken from popcorn's streamer-server, but it needs to be adapted
    to serve routes and not single files, so we keep it forked */
 
@@ -86,14 +93,12 @@ server.get('/stream/:id/:filename', function (request, response){
 
     var torrent = Client.get(request.params.id)
     if (!torrent) {
-        response.statusCode = 500;
-        return response.end('Id not found')
+        return errorOut (response, 500, 'Id not found')
     }
 
     var file = _.findWhere(torrent.files, {name: request.params.filename})
     if (!file) {
-        response.statusCode = 404;
-        return console.error (torrent.files, file) | response.end('File not found: ' + torrent.files)
+        return errorOut (response, 404, 'File not found: ' + torrent.files);
     }
 
     if (request.method === 'OPTIONS' && request.headers && request.headers['access-control-request-headers']) {
