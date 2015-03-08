@@ -45,6 +45,9 @@ jQuery(document).ready(function($){
 		if ( ( ($('#tip-modal').css('display') == 'block') && ($('#tip-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#tip-modal')[0]) && ( (!$(e.target).parents('.tip-icon')[0]) ) ) ) {
 			$('#tip-modal').fadeOut(fadeTimer);
 		}
+		if ( (document.getElementById('bitmsg-modal').style.display == 'block') && ( (!$(e.target).parents('#bitmsg-modal')[0]) && (!$(e.target).parents('.bitmsg-icon')[0]) ) ) {
+			document.getElementById('bitmsg-modal').style.display = 'none';
+		}
 		if ( ( ($('#share-modal').css('display') == 'block') && ($('#share-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#share-modal')[0]) && ( (!$(e.target).parents('.share-icon')[0]) ) ) ) {
 			$('#share-modal').fadeOut(fadeTimer);
 		}
@@ -77,6 +80,9 @@ jQuery(document).ready(function($){
 			if($('#share-modal').css('display')=='block'){
 				$('#share-modal').fadeOut(fadeTimer);
 			}
+			if($('#bitmsg-modal').css('display')=='block'){
+				$('#bitmsg-modal').fadeOut(fadeTimer);
+			}
 			if($('#user-modal.abs').css('display')=='block'){
 				$('#user-modal.abs').fadeOut(fadeTimer);
 			}
@@ -87,6 +93,11 @@ jQuery(document).ready(function($){
 				if ($(this).css('display')=='block'){
 					$(this).hide();
 					document.getElementById('app-overlay').style.display = 'none';
+				}
+			});
+			$('.bubble-modal').each(function(){
+				if ($(this).css('display')=='block'){
+					$(this).hide();
 				}
 			});
 		}
@@ -543,7 +554,7 @@ function loadPublisherView(objMeta) {
 	}
 	if (thisPublisher['bitmessage'] != '') {
 		var publisherBitmsg = thisPublisher['bitmessage'];
-		document.getElementById('publisher-bitmsg').href = 'bitmessage:'+publisherBitmsg;
+		document.getElementById('bitmsg-address').innerHTML = publisherBitmsg;
 	} else {
 		document.getElementById('publisher-bitmsg').style.display = 'none';
 	}
@@ -1214,9 +1225,9 @@ function loadShareModal(obj) {
 		$(obj).parents('.entity-market').append($('#share-modal'));
 	}
 	var modalPos = (currentView=='artifact') ? ('left') : ('right');
-	var shareModalPos = (currentView=='artifact') ? ($(obj).parent().width() - $(obj).position().left - 81) : ($(obj).parent().width() - $(obj).position().left - 75);
+	var shareModalPos = $(obj).parent().width() - $(obj).position().left - 84;
 	document.getElementById('share-url').innerHTML = location.href;
-	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2').text();
+	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2:visible').text();
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
 }
 
@@ -1250,6 +1261,15 @@ function loadQR() {
 		correctLevel : QRCode.CorrectLevel.H
 	});
 	$('#lightbox').fadeIn(fadeTimer);
+}
+
+// DISPLAY BITMSG MODAL
+function bitMsgModal() {
+	if ( (document.getElementById('bitmsg-modal').style.display == 'none') || (document.getElementById('bitmsg-modal').style.display == '') ) {
+		document.getElementById('bitmsg-modal').style.display = 'block';
+	} else {
+		document.getElementById('bitmsg-modal').style.display = 'none';
+	}
 }
 
 // NEW MEDIA MODULE
@@ -1848,6 +1868,7 @@ function loadAlexandria() {
 	$('.info-modal').addClass('abs');
 	$('#tip-modal').addClass('abs');
 	$('#share-modal').addClass('abs');
+	$('#bitmsg-modal').addClass('abs');
 	$('.alex-ui-slider').slider();
 	$('.alex-ui-datepicker').datepicker();
 }
@@ -2062,4 +2083,17 @@ function replace(string,text,by) {
     if (i+txtLength < strLength)
         newstr += replace(string.substring(i+txtLength,strLength),text,by);
     return newstr;
+}
+
+// SELECT TEXT ON SINGLE CLICK
+function selectText(containerid) {
+	if (document.selection) {
+	    var range = document.body.createTextRange();
+	    range.moveToElementText(document.getElementById(containerid));
+	    range.select();
+	} else if (window.getSelection) {
+	    var range = document.createRange();
+	    range.selectNode(document.getElementById(containerid));
+	    window.getSelection().addRange(range);
+	}
 }

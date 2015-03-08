@@ -748,11 +748,14 @@ ul#media-type-select-list {
 	margin: 0;
 }
 /* MEDIA UI */
-.share-icon, .tip-icon, .media-rating a, .media-Tid a {
+.share-icon, .tip-icon, .media-rating a, .media-Tid a, #publisher-bitmsg {
 	width: 32px;
 	height: 32px;
 	display: inline-block;
 	vertical-align: bottom;
+}
+#publisher-bitmsg {
+	width: 64px;
 }
 .media-Tid a {
 	width: 27px;
@@ -761,7 +764,7 @@ ul#media-type-select-list {
 .media-rating a {
 	display: inline-block;
 }
-.share-icon {
+.share-icon, #publisher-bitmsg {
 	color: transparent;
 	cursor: pointer;
 }
@@ -780,15 +783,15 @@ ul#media-type-select-list {
 	height: 32px;
 	cursor: pointer;
 }
-.media-rating svg, .tip-icon svg, .share-icon svg, .copy-icon svg {
+.media-rating svg, .tip-icon svg, .share-icon svg, .copy-icon svg, #publisher-bitmsg svg {
 	width: 100%;
 	height: 100%;
 }
-.share-icon svg path, .tip-icon svg path, .copy-icon svg path {
+.share-icon svg path, .tip-icon svg path, .copy-icon svg path, #publisher-bitmsg svg path {
 	fill: #979797;
 	fill-opacity: 1;
 }
-.share-icon:hover svg path, .tip-icon:hover svg path, .media-Tid a:hover svg path {
+.share-icon:hover svg path, .tip-icon:hover svg path, .media-Tid a:hover svg path, #publisher-bitmsg:hover svg path {
 	fill: #464646;
 }
 .media-rating a {
@@ -886,7 +889,7 @@ ul#media-type-select-list {
 #info-modal-media .pull-right .entity-meta-content {
 	font-size: .9em;
 }
-#tip-modal, #share-modal {
+#tip-modal, #share-modal, #bitmsg-modal {
 	position: fixed;
 	top: 100%;
 	left: 100%;
@@ -905,10 +908,13 @@ ul#media-type-select-list {
 #tip-modal {
 	min-width: 
 }
-#tip-modal.abs, #share-modal.abs {
+#tip-modal.abs, #share-modal.abs, #bitmsg-modal.abs {
 	position: absolute;
 	left: initial;
 	display: none;
+}
+#bitmsg-modal {
+	right: -1em;
 }
 #share-modal {
 	min-width: 180px;
@@ -918,7 +924,7 @@ ul#media-type-select-list {
 	margin-top: .25em;
 	line-height: 1.4;
 }
-#tip-modal:before, #share-modal:before {
+#tip-modal:before, #share-modal:before, #bitmsg-modal:before {
 	top: -16px;
 	left: 34px;
 	border-width: 0 16px 16px;
@@ -929,7 +935,7 @@ ul#media-type-select-list {
 	display: block;
 	width: 0;
 }
-#tip-modal:after, #share-modal:after {
+#tip-modal:after, #share-modal:after, #bitmsg-modal:after  {
 	top: -15px;
 	left: 35px;
 	border-width: 0 15px 15px;
@@ -940,13 +946,23 @@ ul#media-type-select-list {
 	display: block;
 	width: 0;
 }
-.view-publisher-ui #tip-modal:before, .view-publisher-ui #share-modal:before {
+.view-publisher-ui #tip-modal:before, .view-publisher-ui #share-modal:before, #bitmsg-modal:before {
 	left: initial;
 	right: 48px;
 }
-.view-publisher-ui #tip-modal:after, .view-publisher-ui #share-modal:after {
+.view-publisher-ui #tip-modal:after, .view-publisher-ui #share-modal:after, #bitmsg-modal:after {
 	left: initial;
 	right: 49px;
+}
+.selectable {
+	display: inline-block;
+	padding: .5em 0 0;
+	white-space: nowrap;
+	border-bottom: 1px dotted #92b4c6;
+	margin: 0 1.25em;
+	cursor: pointer;
+	font-size: .9em;
+	color: #919191;
 }
 .entity-market {
 	position: relative;
@@ -1028,6 +1044,9 @@ ul#media-type-select-list {
 	margin-left: .2em;
 	color: #444444;
 }
+span#tip-flo-usd-output.selectable {
+  margin: 0;
+}
 #tip-modal .modal-tab .btnLightGray {
 	margin-bottom: 1em;
 }
@@ -1044,12 +1063,14 @@ ul#media-type-select-list {
 	display: block;
 	padding: 1em .5em;
 }
-span#share-url {
+#share-url-wrap {
+	padding: 0 1em;
+}
+span#share-url.selectable {
   word-wrap: break-word;
-  padding: 0 1em 1.5em;
+  white-space: normal;
+  padding: 0 1em 1em;
   display: block;
-  font-size: .9em;
-  color: #919191;
 }
 div#qrcode {
 	background: #d8d8d8;

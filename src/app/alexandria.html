@@ -743,7 +743,14 @@
 						<div class="entity-pub-time">Created <span>[timestamp]</span></div>
 					</div>
 					<div class="entity-meta-content">
-						<div class="entity-market"><a onclick="loadShareModal($(this));" class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a> <a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a> <a id="publisher-bitmsg" href="">BitMsg</a></div>
+						<div class="entity-market">
+							<a onclick="loadShareModal($(this));" class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a>
+							<a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a>
+							<a id="publisher-bitmsg" onclick="bitMsgModal();" class="bitmsg-icon"><img src="img/bitmsg-icon.svg" class="makesvg" />BitMsg</a>
+							<div id="bitmsg-modal" class="bubble-modal">
+								<span id="bitmsg-address" onclick="selectText('bitmsg-address');" class="selectable"></span>
+							</div>
+						</div>
 					</div>
 					<div class="row media-list">
 						<ul id="publisher-media-list"></ul>
@@ -815,7 +822,7 @@
 		<div id="share-modal">
 			<h3>Share</h3>
 			<p><span id="share-title"></span></p>
-			<p><span id="share-url"></span></p>
+			<p id="share-url-wrap"><span id="share-url" onclick="selectText('share-url');" class="selectable"></span></p>
 			
 		</div>
 		<div id="tip-modal">
@@ -844,8 +851,8 @@
 				<!--
 					<a class="btnLightGray">Use Alexandria Wallet</a>
 				-->
-					<p>Send <span class="flo-usd-output"></span> FLO to:<br />
-					<span id="tipAdd-FLO">[insert FLO address]</span></p>
+					<p>Send <span id="tip-flo-usd-output" class="flo-usd-output selectable" onclick="selectText('tip-flo-usd-output');" class="selectable"></span> FLO to:<br />
+					<span id="tipAdd-FLO" onclick="selectText('tipAdd-FLO');" class="selectable">[insert FLO address]</span></p>
 				</div>
 			</div>
 			<div id="tip-bitcoin" class="modal-tab">
