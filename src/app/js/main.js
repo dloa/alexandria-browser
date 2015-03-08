@@ -1409,6 +1409,7 @@ function checkTipAmounts() {
 	}
 	if (tipError == 1) {
 		alert('Input a valid tip amount');
+		return false;
 	}
 }
 
@@ -1714,6 +1715,12 @@ function mediaReqCheck() {
 				reqCheck = 1;
 			}
 		});
+		if (document.getElementById('payment-tips').checked) {
+			checkTipAmounts();
+		}
+		if ( (document.getElementById('newMediaPublisherFLO').value.length != 34) && (document.getElementById('newMediaPublisherFLO').value != '') ) {
+			alert('Please input a valid Florincoin Address');
+		}
 		if (reqCheck == 1) {
 			reqCheck = 0;
 		} else {
