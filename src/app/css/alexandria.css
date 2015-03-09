@@ -604,12 +604,7 @@ div#intro {
 	margin-bottom: 1em;
 	color: #979797;
 }
-#intro ul, #intro ul li, .module-links ul, .module-links ul li {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-#intro .links, .module-links {
+.module-links {
 	font-size: 22px;
 	font-size: 1.375rem;
 }
@@ -639,29 +634,26 @@ div#intro {
 	line-height: 1;
 	display: inline-block;
 }
-.links .module-icon .imgwrap, .module-links li .imgwrap, .module-links.mod-filter li .imgwrap, #browse-media-wrap .row .media-icon, #browse-media-wrap .row .publisher-icon {
+.module-links li .imgwrap, .module-links.mod-filter li .imgwrap, .browse-icon {
 	width: 24px;
 	height: 24px;
 	padding: 10px;
 	border-radius: 24px;
 }
-.links .module-icon .imgwrap img, .module-links li .imgwrap img, .imgwrap svg, .media-icon svg, .publisher-icon svg, #browse-media-wrap .row .publisher-icon svg {
+.links .module-icon .imgwrap img, .module-links li .imgwrap img, .imgwrap svg, .browse-icon svg  {
 	width: 100%;
 	height: 100%;
 }
 ul#media-type-select-list {
 	text-align: center;
 }
-.media-icon svg path, #info-modal-media .media-image svg path, .publisher-icon svg path, #browse-media-wrap .row .publisher-icon svg path {
+.browse-icon svg path, .media-image svg path, .browse-icon svg path {
 	fill: #797979;
 	fill-opacity: 1;
 }
 .imgwrap svg path {
 	fill: #92b4c6;
 	fill-opacity: 1;
-}
-.links .module-icon a:hover svg path {
-	fill:#9da2cf;
 }
 #pie-noun_80449 path:first-of-type {
 	fill: transparent !important;
@@ -696,9 +688,6 @@ ul#media-type-select-list {
 .module-links li .active .imgwrap svg path {
 	fill: #fff;
 }
-.media-rating img {
-	margin: 0;
-}
 .info-icon img, .info-icon svg, .playbtn-icon img, .playbtn-icon svg {
 	width: 100%;
 	height: 100%;
@@ -712,17 +701,6 @@ ul#media-type-select-list {
 }
 #browse-media-wrap .row .media-www-id {
 	display: none;
-}
-.media-rating a {
-	cursor: default;
-}
-.media-rating svg polygon {
-	fill: #464646;
-	fill-opacity: 1;
-	stroke: #464646;
-}
-.media-rating .star-off svg polygon {
-	fill-opacity: 0;
 }
 #browse-media {
 	padding-top: 10px;
@@ -773,7 +751,7 @@ div#browse-media-wrap {
 #browse-media-wrap .row .load-entity {
 	cursor: pointer;
 }
-#browse-media-wrap .row .media-icon, #browse-media-wrap .row .publisher-icon, #publisher-media-list li .media-icon {
+.browse-icon {
 	width: 32px;
 	height: 32px;
 	padding: .5em;
@@ -781,11 +759,6 @@ div#browse-media-wrap {
 #browse-media-wrap .row .media-meta, #browse-media-wrap .row .media-runtime, #browse-media-wrap .row .publisher-date, #publisher-media-list li .media-runtime {
 	color: #9797a0;
 	font-size: .85em;
-}
-#browse-media-wrap .row .media-rating img, #browse-media-wrap .row .media-rating svg {
-	width: 26px;
-	height: 24px;
-	vertical-align: middle;
 }
 .playbtn-icon, .info-icon {
 	width: 24px;
@@ -801,7 +774,7 @@ div#browse-media-wrap {
 .entity-view .entity-meta-header #publisher-FLO-address {
 	margin: 0;
 }
-.share-icon, .tip-icon, .media-rating a, .media-Tid a, #publisher-bitmsg {
+.share-icon, .tip-icon, .media-Tid a, #publisher-bitmsg {
 	width: 32px;
 	height: 32px;
 	display: inline-block;
@@ -813,9 +786,6 @@ div#browse-media-wrap {
 .media-Tid a {
 	width: 27px;
 	height: 27px;
-}
-.media-rating a {
-	display: inline-block;
 }
 .share-icon, #publisher-bitmsg {
 	color: transparent;
@@ -876,10 +846,6 @@ div#browse-media-wrap {
 
 .entity-view .entity-meta-header :first-child, .row.entity-footer :first-child, .row.entity-market :first-child {
 	margin-left: 0;
-}
-.entity-view .entity-meta-header span.media-rating {
-	margin-right: 1em;
-	margin-left:0;
 }
 .entity-view .media-poster {
 	max-width: 260px;
@@ -983,7 +949,7 @@ img.poster-frame {
 	height: 32px;
 	cursor: pointer;
 }
-.media-rating svg, .tip-icon svg, .share-icon svg, .copy-icon svg, #publisher-bitmsg svg {
+.tip-icon svg, .share-icon svg, .copy-icon svg, #publisher-bitmsg svg {
 	width: 100%;
 	height: 100%;
 }
@@ -1065,12 +1031,6 @@ img.poster-frame {
 	width: 60%;
 	height: 60%;
 }
-.media-rating {
-	display: none !important;
-}
-#info-modal-media .media-rating {
-	margin: .25em 0 .5em;
-}
 #info-modal-media .pull-right {
 	width: 73%;
 }
@@ -1081,7 +1041,7 @@ img.poster-frame {
 #info-modal-media .pull-right .entity-meta-content {
 	font-size: .9em;
 }
-#tip-modal, #share-modal, #bitmsg-modal {
+.bubble-modal {
 	position: fixed;
 	top: 100%;
 	left: 100%;
@@ -1097,13 +1057,16 @@ img.poster-frame {
 	border-radius: 5px;
 	line-height: 2;
 }
-#tip-modal {
-	min-width: 
-}
-#tip-modal.abs, #share-modal.abs, #bitmsg-modal.abs {
+.bubble-modal.abs {
 	position: absolute;
 	left: initial;
 	display: none;
+}
+#view-media .bubble-modal {
+	top: 160%;
+}
+#view-media .bubble-modal#share-modal {
+	margin-left: -1px;
 }
 #bitmsg-modal {
 	right: -1em;
@@ -1116,7 +1079,7 @@ img.poster-frame {
 	margin-top: .25em;
 	line-height: 1.4;
 }
-#tip-modal:before, #share-modal:before, #bitmsg-modal:before {
+.bubble-modal:before {
 	top: -16px;
 	left: 34px;
 	border-width: 0 16px 16px;
@@ -1127,7 +1090,7 @@ img.poster-frame {
 	display: block;
 	width: 0;
 }
-#tip-modal:after, #share-modal:after, #bitmsg-modal:after  {
+.bubble-modal:after  {
 	top: -15px;
 	left: 35px;
 	border-width: 0 15px 15px;
@@ -1138,31 +1101,30 @@ img.poster-frame {
 	display: block;
 	width: 0;
 }
-.view-publisher-ui #tip-modal:before, .view-publisher-ui #share-modal:before, #bitmsg-modal:before {
+.view-publisher-ui .bubble-modal:before {
 	left: initial;
 	right: 48px;
 }
-.view-publisher-ui #tip-modal:after, .view-publisher-ui #share-modal:after, #bitmsg-modal:after {
+.view-publisher-ui .bubble-modal:after {
 	left: initial;
 	right: 49px;
 }
-
 .entity-market {
 	position: relative;
 }
-.entity-market #tip-modal *, .entity-market #share-modal * {
+.entity-market .bubble-modal * {
 	text-align: center;
 }
 #tip-modal #tip-flo .row:first-of-type {
 	display: none;
 }
-.tip-amounts label, #tip-modal h3, .crypto-price, .credebit-price, #tip-modal .btnLightGray, #share-modal h3 {
+.tip-amounts label, .bubble-modal h3, .crypto-price, .credebit-price, .bubble-modal .btnLightGray {
 	color: #919191;
 }
-#tip-modal .btnLightGray:hover {
+.bubble-modal .btnLightGray:hover {
 	color: #464646;
 }
-#tip-modal h3, .crypto-price, .credebit-price, #share-modal h3 {
+.bubble-modal h3, .crypto-price, .credebit-price {
 	font-weight: bold;
 }
 #tip-modal ul, #tip-modal ul li {
@@ -1233,10 +1195,16 @@ span#tip-flo-usd-output.selectable {
 #tip-modal .modal-tab .btnLightGray {
 	margin-bottom: 1em;
 }
-#tip-modal .modal-tab p, #share-title {
+#tip-modal .modal-tab p, #share-title, .info-modal p, .entity-meta-content {
 	line-height: 1.4;
 	color: #919191;
 	font-size: .9em;
+}
+.info-modal p {
+	margin: 0;
+}
+.info-modal .entity-meta-content, .info-modal .media-desc {
+	margin-top: 1em;
 }
 #tip-modal .modal-tab p {
 	margin: 0;
@@ -1539,11 +1507,6 @@ div.newMedia-media.wrap .row.choosefile {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 }
-#add-media #newMedia-tabs ul.newMedia-links, #add-media #newMedia-tabs ul.newMedia-links li {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
 #add-media #newMedia-tabs ul.newMedia-links {
 	margin: .8em 0 0;
 }
@@ -1557,17 +1520,6 @@ div.newMedia-media.wrap .row.choosefile {
 	color: #464653;
 }
 input[type="file"] {
-	cursor: pointer;
-}
-#add-media #newMedia-tabs ul.newMedia-links li, .btnLightGray {
-	display: inline-block;
-	zoom: 1;*display:inline;
-	padding: .25em 1.25em;
-	background: none #d8d8d8;
-	border: 1px solid #979797;
-	border-radius: 8px;
-	color: #464646;
-	text-decoration: none;
 	cursor: pointer;
 }
 .btnLightGray:hover {
@@ -1651,7 +1603,7 @@ ul.distNetList li {
 	margin-top: .5em;
 }
 
-/* Application components */
+/* APPLICATION */
 #app-shading {
 	position: fixed;
 	top: 70px;
@@ -1815,6 +1767,17 @@ div#lightbox #qrcode-lightbox {
 	font-weight: 600;
 }
 /* BUTTONS */
+.btnLightGray {
+	display: inline-block;
+	zoom: 1;*display:inline;
+	padding: .25em 1.25em;
+	background: none #d8d8d8;
+	border: 1px solid #979797;
+	border-radius: 8px;
+	color: #464646;
+	text-decoration: none;
+	cursor: pointer;
+}
 .apply-container {
 	text-align: center;
 }
@@ -2051,6 +2014,11 @@ div#lightbox #qrcode-lightbox {
 }
 .posRelative {
 	position: relative;
+}
+.noList {
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 /* ==========================================================================
 	Print styles

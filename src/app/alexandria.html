@@ -62,7 +62,7 @@
 						</div>
 					</div>
 					<div class="module-links mod-filter">
-						<ul>
+						<ul class="noList">
 							<li>
 								<a onclick="selectSearchMediaType(this)" value="movie">
 									<div class="imgwrap">
@@ -175,7 +175,7 @@
 			<h2 class="publisher-ui">Create New Publisher</h2>
 			<div id="header-menu">
 				<div id="addNewContent-icon" onclick="loadAddContentModal();"><img src="img/add-new-icon.svg" class="makesvg" /></div>
-				<div id="add-menu-modal" class="header-modal">
+				<div id="add-menu-modal" class="header-modal ">
 					<ul>
 						<li><a onclick="loadShareMod();"><img src="img/media-icon.svg" class="makesvg" /> Media</a></li>
 						<li><a onclick="loadCreatePublisherMod();" class="publisher-icon"><img src="img/publisher-icon.svg" class="makesvg" /> Publisher</a></li>
@@ -202,8 +202,8 @@
 		<div id="intro">
 			<h1>Welcome to ΛLΞXΛNDRIΛ</h1>
 			<h2>A decentralized peer-to-peer library for the world.</h2>
-			<div class="links">
-				<ul>
+			<div class="module-links">
+				<ul class="noList">
 					<li class="module-icon">						
 						<a onclick="setMediaTypeFilter();">
 							<div class="imgwrap">
@@ -315,8 +315,8 @@
 					<div id="newMedia-info" class="modal-tab">
 						<div class="media-info-container">
 							<h2>select media type:</h2>
-							<div class="input-container links module-links">
-								<ul id="media-type-select-list">
+							<div class="input-container module-links">
+								<ul id="media-type-select-list noList">
 									<li class="module-icon"><a onclick="selectMediaType(this,'movie');" value="movie"><div class="imgwrap"><img src="img/movie-icon.svg" class="makesvg" /></div><div>Movie</div></a></li>
 									<li class="module-icon"><a onclick="selectMediaType(this,'music');" value="music"><div class="imgwrap"><img src="img/music-icon.svg" class="makesvg" /></div><div>Music</div></a></li>
 									<li class="module-icon"><a onclick="selectMediaType(this,'podcast');" value="podcast"><div class="imgwrap"><img src="img/podcast-icon.svg" class="makesvg" /></div><div>Podcast</div></a></li>
@@ -479,9 +479,9 @@
 											</div>
 										</div>
 									</div>
-									<ul class="newMedia-links">
-										<li id="upload-title-art" class="uploader">Browse...</li>
-										<li>From URL...</li>
+									<ul class="noList">
+										<li id="upload-title-art" class="uploader btnLightGray">Browse...</li>
+										<li class="btnLightGray">From URL...</li>
 									</ul>
 									<div class="uploaded-media-meta upload-title-art">
 										<p class="media-filename"><label>File Name: </label> <span></span></p>
@@ -607,7 +607,7 @@
 		<!-- browse-media -->
 		<main id="browse-media">
 			<div class="module-links mod-filter">
-				<ul> 
+				<ul class="noList"> 
 					<li>						
 						<a onclick="setMediaTypeFilter();">
 							<div class="imgwrap">
@@ -687,8 +687,8 @@
 					<img src="" id="publisher-avatar" />
 					<div class="row entity-meta-header">
 						<h2 id="view-publisher-name"></h2>
-						<div id="publisher-FLO-address" class="FLO-address hidden"></div>
-						<div class="entity-pub-time">Created <span>[timestamp]</span></div>
+						<div id="publisher-FLO-address" class="FLO-address visuallyhidden"></div>
+						<div class="entity-pub-time entity-meta-content">Created <span>[timestamp]</span></div>
 					</div>
 					<div class="entity-meta-content">
 						<div class="entity-market">
@@ -728,7 +728,6 @@
 							<div class="entity-meta-content">
 								<div class="entity-pub-time">Posted <span>[timestamp]</span></div>
 								<div class="entity-runtime"></div>
-								<span class="media-rating"><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-on.svg" /><img src="img/star-off.svg" /></span>
 								<span class="media-header media-movie">
 									<a href="http://www.imdb.com/title/tt1273193/" target="_blank"><img src="img/imdb-button.png" /></a>
 									<span id="rotten-wrap"><a href="http://www.rottentomatoes.com/m/apocalypse_ca/" target="_blank"><img src="" id="rotten-img" class="makesvg" /><label id="movie-rotten">771266582</label>%</a></span>
@@ -736,7 +735,7 @@
 							</div>
 						</div>
 						<div class="row media-desc"></div>
-						<div class="row FLO-address hidden"></div>
+						<div class="row FLO-address visuallyhidden"></div>
 						<div class="row entity-market"><span class="row media-Tid"><a href=""><img src="img/magnet-icon.svg" class="makesvg" /></a></span><a onclick="loadShareModal($(this));" class="share-icon"><img src="img/share-icon.svg" class="makesvg">share</a> <a class="tip-icon" onclick="loadTipModal($(this))"><img src="img/tip-icon.svg" class="makesvg" />tip</a></div>
 						<div class="row entity-footer media-movie">
 							<a class="wsite-button lightboxVideo" data-source="http://localhost:3000/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label>
@@ -751,7 +750,6 @@
 		<div id="info-modal-media" class="info-modal">
 			<div class="left">
 				<div class="media-image"><img src="" class="entity-image" /></div>
-				<div class="media-rating"><a class="star-on"><img src="img/star-on.svg" class="makesvg" /></a><a class="star-on"><img src="img/star-on.svg" class="makesvg" /></a><a class="star-on"><img src="img/star-on.svg" class="makesvg" /></a><a class="star-on"><img src="img/star-on.svg" class="makesvg" /></a><a class="star-off"><img src="img/star-off.svg" class="makesvg" /></a></div>
 				<div class="btnLightGray" onclick="loadMediaEntity(this);">play</div>
 			</div>
 			<div class="pull-right">
@@ -759,21 +757,21 @@
 					<h2></h2>
 					<h3></h3>
 					<div class="entity-meta-content">
-						<div class="entity-pub-time">Posted <span>[timestamp]</span></div>
-						<div class="entity-runtime"></div>
+						<p class="entity-pub-time">Posted <span>[timestamp]</span></p>
+						<p class="entity-runtime"></p>
 					</div>
 				</div>
 				<div class="row media-desc">
 				</div>
 			</div>
 		</div>
-		<div id="share-modal">
+		<div id="share-modal" class="bubble-modal">
 			<h3>Share</h3>
 			<p><span id="share-title"></span></p>
 			<p id="share-url-wrap"><span id="share-url" onclick="selectText('share-url');" class="selectable"></span></p>
 			
 		</div>
-		<div id="tip-modal">
+		<div id="tip-modal" class="bubble-modal">
 			<h3>Send a Tip</h3>
 			<ul class="tip-amounts">
 				<li><input type="radio" name="tip-amount" id="tip-option-0" value="0.25" onclick="changeTipAmount(this);" /><label for="tip-option-0">25&cent;</label></li>
