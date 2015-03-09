@@ -165,6 +165,7 @@ route('/media', 'media', function () {  });
 route('/publishers', 'publishers', function () {  });
 route('/add-media', 'add-media', function () {  });
 route('/add-publisher', 'add-publisher', function () {  });
+route('/search', 'search', function () {  });
 var el = null;  
 function router () {  
     // Current route url (getting rid of '#' in hash as well):
@@ -199,6 +200,7 @@ function router () {
 						}
 					}
 					populateSearchResults(searchResults, currentView);
+					buildHistory();
 				} else {
 					var searchOn = paths[2].replace("-","_");
 					if (searchOn.length == 64) {
@@ -228,6 +230,7 @@ function router () {
 						}
 						var searchResults = searchAPI(currentView, searchOn, searchFor);
 						populateSearchResults(searchResults, currentView);
+						buildHistory();
 					}
 				}
 			}
@@ -246,12 +249,15 @@ function router () {
 					var publisherName = paths[2].replace("-"," ");
 					searchResults = searchAPI('publisher', 'name', publisherName);
 					populateSearchResults(searchResults, currentView);
+					buildHistory();
 				}
 			}
     	} else if (currentView == 'add-media') {
 			loadShareMod();
     	} else if (currentView == 'add-publisher') {
 			loadCreatePublisherMod();
+    	} else if (currentView == 'search') {
+    		fullSearch(paths[2].toString().replace("-"," ").split('?')[0]);
     	}
     } else {
     	// ROUTE DOESN'T EXIST - IF ADDRESS LOAD PUBLISHER
@@ -295,7 +301,8 @@ function buildHistory() {
 	if ( (currentView != 'front') && (subView == '') ) {
 		document.title = 'ΛLΞXΛNDRIΛ > '+ currentView.charAt(0).toUpperCase() + currentView.slice(1);
 		newURL = newURL+'#/'+currentView;
-		if ( ($('#browse-media .module-links a.active').length == 0) && (location.hash.slice(1).split('/')[2] != 'type') && (location.hash.slice(1).split('/')[2] != 'search') ) {
+		console.log(newURL);
+		if ( ($('#browse-media .module-links a.active').length == 0) && (location.hash.slice(1).split('/')[2] != 'type') && (location.hash.slice(1).split('/')[2] != 'search') && (location.hash.slice(1).split('/')[1] != 'search') ) {
 			var locationInfo = location.hash.slice(1).split('/');
 			var urlHash = location.hash.slice(1).split('/');
 			if (location.hash.slice(1).split('/').length > 2) {
@@ -335,6 +342,9 @@ function buildHistory() {
 		} else if ( (history.state.searchResults == true) && (history.state.currentView == 'media') ) {
 			document.title = 'ΛLΞXΛNDRIΛ > Media > '+ history.state.searchTerm;
 			var newTitle = 'ΛLΞXΛNDRIΛ > Media > '+ history.state.searchTerm;
+		} else if ( (history.state.searchResults == true) && (history.state.currentView == 'search') ) {
+			document.title = 'ΛLΞXΛNDRIΛ > Search > '+ history.state.searchTerm;
+			var newTitle = 'ΛLΞXΛNDRIΛ > Search > '+ history.state.searchTerm;
 		}
 	} else {
 		document.title = 'ΛLΞXΛNDRIΛ';
@@ -479,6 +489,7 @@ function getAllPublishers() {
 			var data = $.parseJSON(e);
 			console.info(data);
 			populateSearchResults(data, 'publisher');
+			buildHistory();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.error(xhr.status);
@@ -844,10 +855,19 @@ function fullSearch(searchFor) {
 	var mediaResults = searchAPI('media', '*', searchFor);
 	console.info(mediaResults);
 	$('#adv-search').fadeOut(fadeTimer);
-	subView = '';
-	$('#browse-media .module-links a').removeClass('active');
+	var stateObj = {
+		currentView: 'search',
+		searchResults: true,
+		searchTerm: document.getElementById('searchTermInput').value
+	}
+	var newTitle = 'ΛLΞXΛNDRIΛ > Search';
+	var newUrl = document.location.origin + document.location.pathname +'#/search/'+ searchFor.replace(/\s/g , "-").toLowerCase();
+	window.history.replaceState(stateObj, newTitle, newUrl);	$('#browse-media .module-links a').removeClass('active');
 	populateSearchResults(publisherResults, 'publisher');
 	populateSearchResults(mediaResults, 'media');
+	currentView = 'search';
+	subView = '';
+	buildHistory();
 }
 
 // ADVANCED SEARCH
@@ -904,6 +924,7 @@ function buildSearch() {
 	subView = '';
 	$('#browse-media .module-links a').removeClass('active');
 	populateSearchResults(AdvSearchResults, searchProtocol);
+	buildHistory();
 }
 
 // CLEAR ADVANCED SEARCH
@@ -932,6 +953,7 @@ function searchByField(module, searchOn, searchFor) {
 	var newUrl = document.location.origin + document.location.pathname + '#/media/search/' + searchFor.replace(/\s/g , "-").toLowerCase();
 	window.history.replaceState(stateObj, newTitle, newUrl);
 	populateSearchResults(AdvSearchResults, module);
+	buildHistory();
 }
 
 // MEDIA + PUBLISHER SEARCH API
@@ -1015,6 +1037,7 @@ function filterMediaByType(obj) {
 	}
 	var filteredMedia = searchAPI('media', 'type', filteredMedia);
 	populateSearchResults(filteredMedia, 'media');
+	buildHistory();
 }
 
 // POPULATE SEARCH RESULTS
@@ -1099,7 +1122,9 @@ function populateSearchResults(results, module) {
 			}
 		}
 		$('#browse-media-wrap h2').text('Browse Media');
-		currentView = 'media';
+		if (history.state.searchResults != true) {
+			currentView = 'media';
+		}
 	} else {
 		for (var i = 0; i < results.length; i++) {
 			var publisherID = results[i]['txid'];
@@ -1117,12 +1142,13 @@ function populateSearchResults(results, module) {
 			}
 		}
 		$('#browse-media-wrap h2').text('Browse Publishers');
-		currentView = 'publishers';
+		if (history.state.searchResults != true) {
+			currentView = 'publishers';
+		}
 	}
 	$('#browse-media-wrap .row:first-of-type').addClass('first');
-	$('#browse-media').fadeIn(fadeTimer);
+	$('#browse-media').fadeIn(fadeTimer);	
 	replaceSVG();
-	buildHistory();
 }
 
 // DISPLAY MEDIA INFO MODAL
