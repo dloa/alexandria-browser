@@ -95,7 +95,6 @@ function errorOut(response, code, message) {
    to serve routes and not single files, so we keep it forked */
 
 server.get('/stream/:id/:filename', function (request, response){
-    console.log ('asked for', request.params.id, request.params.filename)
     var getType = mime.lookup.bind(mime);
 
     var torrent = Client.get(request.params.id)
@@ -137,7 +136,6 @@ server.get('/stream/:id/:filename', function (request, response){
 	return;
     }
 
-    console.log("range request", range)
     response.statusCode = 206;
     response.setHeader('Content-Length', range.end - range.start + 1);
     response.setHeader('Content-Range', 'bytes '+range.start+'-'+range.end+'/'+file.length);
