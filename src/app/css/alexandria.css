@@ -342,10 +342,10 @@ header #adv-search input.search, .input-container select {
 	right: 25px;
 	line-height: 72px;
 }
-header #addNewContent-icon, header #app-user-icon, header #serverID {
+.header-icon, header #serverID {
 	line-height: 72px;
 }
-header #addNewContent-icon, header #app-user-icon {
+.header-icon {
 	display: inline-block;
 	width: 25px;
 	cursor: pointer;
@@ -360,16 +360,16 @@ header #app-user-icon {
 	right: 25px;
 }
 
-header #addNewContent-icon svg, header #app-user-icon svg, header #addNewContent-icon img, header #app-user-icon img {
+.header-icon img, .header-icon svg {
 	vertical-align: middle;
 	width: 100%;
 	height: 100%;
 }
-header #addNewContent-icon path, header #app-user-icon path {
+.header-icon path {
 	fill: #797979;
 	fill-opacity: 1;
 }
-header #addNewContent-icon:hover path, header #app-user-icon:hover path {
+.header-icon:hover path {
 	fill:#464646;
 }
 .header-modal {
@@ -549,7 +549,7 @@ div#viewlabel div {
 div#viewlabel a {
 	cursor: pointer;
 }
-#media-breadcrumbs, #publisher-breadcrumbs {
+.breadcrumbs {
 	color: #a3ccb1;
 }
 #media-breadcrumbs-type {

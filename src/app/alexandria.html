@@ -174,14 +174,14 @@
 			<h2 class="sharing-ui">Share New Content</h2>
 			<h2 class="publisher-ui">Create New Publisher</h2>
 			<div id="header-menu">
-				<div id="addNewContent-icon" onclick="loadAddContentModal();"><img src="img/add-new-icon.svg" class="makesvg" /></div>
+				<div id="addNewContent-icon" onclick="loadAddContentModal();" class="header-icon"><img src="img/add-new-icon.svg" class="makesvg" /></div>
 				<div id="add-menu-modal" class="header-modal ">
 					<ul>
 						<li><a onclick="loadShareMod();"><img src="img/media-icon.svg" class="makesvg" /> Media</a></li>
 						<li><a onclick="loadCreatePublisherMod();" class="publisher-icon"><img src="img/publisher-icon.svg" class="makesvg" /> Publisher</a></li>
 					</ul>
 				</div>
-				<div id="app-user-icon" onclick="loadUserModal();"><img src="img/user-icon.svg" class="makesvg" /></div>
+				<div id="app-user-icon" onclick="loadUserModal();" class="header-icon"><img src="img/user-icon.svg" class="makesvg" /></div>
 				<div id="user-modal" class="header-modal">
 					<ul id="user-menu">
 						<li><a onclick="" id="user-menu-about"><img src="img/logo.svg" class="makesvg" /> About</a></li>
@@ -274,10 +274,10 @@
 
 		<div id="viewlabel">
 			<div class="view-media-ui">
-				<a onclick="filterMediaByType();" class="go-back">Media</a> > <span id="media-breadcrumbs-publisher"></span> > <span id="media-breadcrumbs-type"></span> > <span id="media-breadcrumbs"></span>
+				<a onclick="filterMediaByType();" class="go-back">Media</a> > <span id="media-breadcrumbs-publisher"></span> > <span id="media-breadcrumbs-type"></span> > <span id="media-breadcrumbs" class="breadcrumbs"></span>
 			</div>
 			<div class="view-publisher-ui">
-				<a onclick="getAllPublishers()" class="go-back">Publishers</a> > <span id="publisher-breadcrumbs"></span>
+				<a onclick="getAllPublishers()" class="go-back">Publishers</a> > <span id="publisher-breadcrumbs" class="breadcrumbs"></span>
 			</div>
 		</div>
 
