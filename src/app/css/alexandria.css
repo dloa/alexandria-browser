@@ -1030,8 +1030,13 @@ img.poster-frame {
 	width: 73%;
 }
 #info-modal-media .pull-right * {
-	text-align: left;
-	line-height: 1.4;
+  text-align: left;
+  line-height: 1.4;
+  clear: both;
+  margin-left: 0;
+}
+#info-modal-media .pull-right div {
+  width: 100%;
 }
 #info-modal-media .pull-right .entity-meta-content {
 	font-size: .9em;
