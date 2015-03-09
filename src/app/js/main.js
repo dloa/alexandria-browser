@@ -1107,83 +1107,70 @@ function populateSearchResults(results, module) {
 
 // DISPLAY MEDIA INFO MODAL
 function loadInfoModal(childObj) {
-    var testObj = childObj.parentNode;
-    var count = 1;
-    while ( !$(testObj).hasClass('media-entity') ) {
-        testObj = testObj.parentNode;
-        if (!testObj) {    	
+    var parentObj = childObj.parentNode;
+    console.info(parentObj.parentNode);
+    if ( $(parentObj).hasClass('media-entity') ) {
+	    // LOAD MEDIA ENTITY INFO MODAL
+		if ( ($('#info-modal-media').css('display') == 'block') && ($('#info-modal-media').css('opacity')==1) ) {
+			$('#info-modal-media').fadeOut(fadeTimer);
+			return false;
+		}
+		var objMeta = $(childObj).parents('.media-entity');
+		if ($(objMeta).find('#info-modal-media').length == 0) {
+			$(objMeta).append($('#info-modal-media'));
+		}
+		var mediaRuntime = $(objMeta).find('.media-runtime').html();
+		var mediaPubTime = $(objMeta).find('.media-pub-time').html();
+		var mediaTitle = $(objMeta).find('.media-title').html();
+		var mediaMeta = $(objMeta).find('.media-meta').html();
+		var mediaDesc = $(objMeta).find('.media-desc').html();
+		var mediaIcon = $(objMeta).find('.browse-icon').html();
+		$('#info-modal-media .entity-meta-header h2').html(mediaTitle);
+		$('#info-modal-media .entity-meta-header h3').html(mediaMeta);
+		$('#info-modal-media .entity-meta-header .entity-runtime').html(mediaRuntime);
+		$('#info-modal-media .media-image').html(mediaIcon);
+		$('#info-modal-media .entity-pub-time span').html(mediaPubTime);	
+		$('#info-modal-media .media-desc').html('<p>'+ mediaDesc +'</p>');
+		$(objMeta).find('#info-modal-media').fadeIn(fadeTimer);
+    } else {
+        if ($(parentObj.parentNode).hasClass('col')) {    	
 			if ( ($('#info-modal-small').css('display') == 'block') && ($('#info-modal-small').css('opacity')==1) ) {
 				$('#info-modal-small').fadeOut(fadeTimer);
 				return false;
 			} else {
-				// Info Modal for .Row
-			    var newTestObj = childObj.parentNode;
-			    var newCount = 1;
-			    while ( !$(newTestObj).hasClass('col') ) {
-					newTestObj = newTestObj.parentNode;
-			        if (!newTestObj) {
-						// Info Modal for LI
-						$('#info-modal-small').html('');
-						var objMeta = $(childObj).parents('li');
-						var localFile = $(objMeta).children('label').text().replace(/\s/g , "-").toLowerCase();
-						getInfoFile(localFile);
-						if ($(objMeta).find('#info-modal-media').length == 0) {
-							$(objMeta).append($('#info-modal-small'));
-						}
-						var infoInterval = setInterval(function() {
-						    if ($(objMeta).find('#info-modal-small').html()!='') {
-						        clearInterval(infoInterval);
-								$(objMeta).find('#info-modal-small').fadeIn(fadeTimer);
-						    }
-						}, 100);
-					}
-					newCount++;
-			    }
 				$('#info-modal-small').html('');
-				if(!objMeta){
-					var objMeta = $(childObj).parents('.col');
-					var localFile = $(objMeta).find('label').text().replace(/\s/g , "-").toLowerCase();
-				}
+				var localFile = $(childObj).siblings('label').text().replace(/\s/g , "-").toLowerCase();
 				getInfoFile(localFile);
-				if ($(objMeta).find('#info-modal-media').length == 0) {
+				if ($(parentObj).find('#info-modal-small').length == 0) {
 					if($(childObj).hasClass('inline-block')){
 						$(childObj).parent().append($('#info-modal-small'));
 					} else {
-						$(objMeta).append($('#info-modal-small'));
+						$(childObj).append($('#info-modal-small'));
 					}
 				}
 				var infoInterval = setInterval(function() {
-				    if ($(objMeta).find('#info-modal-small').html()!='') {
+				    if ($(childObj).find('#info-modal-small').html()!='') {
 				        clearInterval(infoInterval);
-						$(objMeta).find('#info-modal-small').fadeIn(fadeTimer);
+						$(childObj).find('#info-modal-small').fadeIn(fadeTimer);
 				    }
 				}, 100);
 			}
+        } else {
+			// INFO MODAL for LI
+			$('#info-modal-small').html('');
+			var localFile = $(childObj).siblings('label').text().replace(/\s/g , "-").toLowerCase();
+			getInfoFile(localFile);
+			if ($(childObj).find('#info-modal-small').length == 0) {
+				$(childObj).append($('#info-modal-small'));
+			}
+			var infoInterval = setInterval(function() {
+			    if ($(childObj).find('#info-modal-small').html()!='') {
+			        clearInterval(infoInterval);
+					$(childObj).find('#info-modal-small').fadeIn(fadeTimer);
+			    }
+			}, 100);
         }
-        count++;
     }
-    // LOAD MEDIA ENTITY INFO MODAL
-	if ( ($('#info-modal-media').css('display') == 'block') && ($('#info-modal-media').css('opacity')==1) ) {
-		$('#info-modal-media').fadeOut(fadeTimer);
-		return false;
-	}
-	var objMeta = $(childObj).parents('.media-entity');
-	if ($(objMeta).find('#info-modal-media').length == 0) {
-		$(objMeta).append($('#info-modal-media'));
-	}
-	var mediaRuntime = $(objMeta).find('.media-runtime').html();
-	var mediaPubTime = $(objMeta).find('.media-pub-time').html();
-	var mediaTitle = $(objMeta).find('.media-title').html();
-	var mediaMeta = $(objMeta).find('.media-meta').html();
-	var mediaDesc = $(objMeta).find('.media-desc').html();
-	var mediaIcon = $(objMeta).find('.browse-icon').html();
-	$('#info-modal-media .entity-meta-header h2').html(mediaTitle);
-	$('#info-modal-media .entity-meta-header h3').html(mediaMeta);
-	$('#info-modal-media .entity-meta-header .entity-runtime').html(mediaRuntime);
-	$('#info-modal-media .media-image').html(mediaIcon);
-	$('#info-modal-media .entity-pub-time span').html(mediaPubTime);	
-	$('#info-modal-media .media-desc').html('<p>'+ mediaDesc +'</p>');
-	$(objMeta).find('#info-modal-media').fadeIn(fadeTimer);
 }
 
 // LOAD LOCAL HTML FILES FOR INFO MODAL

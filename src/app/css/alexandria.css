@@ -1018,11 +1018,6 @@ img.poster-frame {
 	margin-left: -63px;
 	padding: 1.25em .8em;
 }
-#info-modal-small ul, #info-modal-small li {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
 #info-modal-media .left {
 	width: 25%;
 	text-align: center;
@@ -1195,7 +1190,7 @@ span#tip-flo-usd-output.selectable {
 #tip-modal .modal-tab .btnLightGray {
 	margin-bottom: 1em;
 }
-#tip-modal .modal-tab p, #share-title, .info-modal p, .entity-meta-content {
+#tip-modal .modal-tab p, #share-title, .info-modal p, .entity-meta-content, #info-modal-small {
 	line-height: 1.4;
 	color: #919191;
 	font-size: .9em;
