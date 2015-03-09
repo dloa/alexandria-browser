@@ -465,6 +465,7 @@ function getCryptos() {
 
 // GET ALL PUBLISHERS
 function getAllPublishers() {
+	$('video').trigger('pause');
 	currentView = 'publishers';
 	subView = '';
 	filterTypes = [];
@@ -497,6 +498,7 @@ function getAllPublishers() {
 
 // PUBLISHER SINGLE ENTITY VIEW
 function loadPublisherEntity(obj) {
+	$('video').trigger('pause');
 	document.getElementById('media-breadcrumbs-type').innerHTML = '';
 	document.getElementById('media-breadcrumbs-publisher').innerHTML = '';
 	document.getElementById('media-breadcrumbs').innerHTML = '';
@@ -739,7 +741,7 @@ function loadArtifactView(objMeta) {
 	$('#media-view-entity .media-Tid a').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
 	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
 		var videoHash = mediaTid.split('btih:')[1];
-		var videoEmbed = '<video controls> <source src="http://localhost:3000/stream/'+ videoHash +'/'+ mediaFilename +'" type="video/mp4" /> </video>';
+		var videoEmbed = '<video controls id="streamingVideo"> <source src="http://localhost:3000/stream/'+ videoHash +'/'+ mediaFilename +'" type="video/mp4" /> </video>';
 		$('.row.entity-footer.media-video').html(videoEmbed);
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
 		var audioHash = mediaTid.split('btih:')[1];
@@ -842,6 +844,7 @@ function selectSearchMediaType(obj){
 
 // EXECUTE ADVANCED SEARCH
 function buildSearch() {
+	$('video').trigger('pause');
 	$('#intro').fadeOut(fadeTimer);
 	$('main').not('#browse-media').fadeOut(fadeTimer);
 	$('#browse-media-wrap .row').remove();
@@ -892,6 +895,7 @@ function cancelSearch() {
 
 // SEARCH BY FIELD
 function searchByField(module, searchOn, searchFor) {
+	$('video').trigger('pause');
 	var AdvSearchResults = searchAPI(module, searchOn, searchFor);
 	subView = '';
 	$('main').not('#browse-media').fadeOut(fadeTimer);
@@ -950,6 +954,7 @@ function setMediaTypeFilter(obj) {
 }
 
 function filterMediaByType(obj) {
+	$('video').trigger('pause');
 	subView = '';
 	$('#intro').fadeOut(fadeTimer);
 	$('main').not('#browse-media').fadeOut(fadeTimer);
@@ -1963,6 +1968,7 @@ function showGoModal() {
 }
 
 function goToLocation() {
+	$('video').trigger('pause');
 	hideOverlay();
 	var stateObj = {}
 	var newTitle = '';
@@ -2002,6 +2008,7 @@ function resetInterface() {
 
 // RESET ALEXANDRIA
 function resetAlexandria() {
+	$('video').trigger('pause');
 	currentView = 'front';
 	document.title = 'ΛLΞXΛNDRIΛ';
 	subView = '';

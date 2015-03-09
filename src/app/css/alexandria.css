@@ -937,8 +937,8 @@ img.poster-frame {
 }
 .entity-view .entity-meta-header h2, .entity-view .entity-meta-header h3 {
 	text-align: left;
-	display: block;
-	margin-left:0;
+  	float: left;
+  	margin-left:0;
 }
 #media-artist-name {
 	cursor: pointer;
