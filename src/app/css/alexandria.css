@@ -1268,6 +1268,7 @@ div.close-modal:hover {
 	width: 460px;
 	left: 50%;
 	margin-left: -230px;
+	margin-top: 20%;
 }
 #go-to-input {
   width: 310px;
