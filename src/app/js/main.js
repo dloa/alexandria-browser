@@ -1814,62 +1814,103 @@ function selectMediaType(obj, mediaType) {
 	obj.className = 'active';
 	$('#newMedia-info fieldset').hide();
 	if (mediaType != '' ) {
-		$('fieldset .media-specific').hide();
 		$('#newMedia-info .left').fadeIn(fadeTimer);
 		$('#newMedia-info .pull-right').fadeIn(fadeTimer);
-		var movieMetaData = {
-			"www":"",
-			"runtime":"",
-			"":"",
-			"":"",
-			"":"",
-			"":"",
-			"":"",
-			"":"",
-		}
+		var mediaMetaData = {};
 		if (mediaType == 'movie') {
-			$('#media-meta-www').text('IMDB');
-			$('#media-meta-runtime').text('Runtime');
-			$('#media-meta-creators1').text('Director');
-			$('#media-meta-creators2').text('Screenwriter(s)');
-			$('#media-meta-creators3').text('Cast');
-			$('#media-meta-taxonomy').text('Genre');
-			$('#media-meta-collection').text('Series Title');
+			mediaMetaData = {
+				"www":"IMDB",
+				"runtime":"Runtime",
+				"creators1":"Director",
+				"creators2":"Screenwriter(s)",
+				"creators3":"Cast",
+				"taxonomy":"Genre",
+				"company":"Company",
+				"collection":"Series Title",
+				"ratings":"Rotten Tomatoes ID"
+			}
 		} else if (mediaType == 'music') {
-			$('#media-meta-runtime').text('Runtime');
-			$('#media-meta-creators1').text('Artist');
-			$('#media-meta-taxonomy').text('Genre');
-			$('#media-meta-collection').text('Album Title');
+			mediaMetaData = {
+				"www":"",
+				"runtime":"Runtime",
+				"creators1":"Artist",
+				"creators2":"Screenwriter(s)",
+				"creators3":"",
+				"taxonomy":"Genre",
+				"company":"Company",
+				"collection":"Album Title",
+				"ratings":""
+			}
 		} else if (mediaType == 'podcast') {
-			$('#media-meta-www').text('Soundcloud');
-			$('#media-meta-runtime').text('Runtime');
-			$('#media-meta-creators1').text('Host(s)');
-			$('#media-meta-creators2').text('Co-Host(s)');
-			$('#media-meta-creators3').text('Guest(s)');
-			$('#media-meta-taxonomy').text('Genre');
-			$('#media-meta-collection').text('Series Title');
+			mediaMetaData = {
+				"www":"Soundcloud",
+				"runtime":"Runtime",
+				"creators1":"Host(s)",
+				"creators2":"Co-Host(s)",
+				"creators3":"Guest(s)",
+				"taxonomy":"Genre",
+				"company":"Company",
+				"collection":"Series Title",
+				"ratings":""
+			}
 		} else if (mediaType == 'video') {
-			$('#media-meta-www').text('YouTube');
-			$('#media-meta-runtime').text('Runtime');
-			$('#media-meta-creators1').text('Creator');
-			$('#media-meta-taxonomy').text('Genre');
-			$('#media-meta-collection').text('Series Title');
+			mediaMetaData = {
+				"www":"YouTube",
+				"runtime":"Runtime",
+				"creators1":"Creator",
+				"creators2":"",
+				"creators3":"",
+				"taxonomy":"Genre",
+				"company":"Company",
+				"collection":"Series Title",
+				"ratings":""
+			}
 		} else if (mediaType == 'book') {
-			$('#media-meta-creators1').text('Author');
-			$('#media-meta-creators2').text('Editor(s)');
-			$('#media-meta-taxonomy').text('Genre');
-			$('#media-meta-collection').text('Series Title');
+			mediaMetaData = {
+				"www":"",
+				"runtime":"",
+				"creators1":"Author",
+				"creators2":"Editor(s)",
+				"creators3":"",
+				"taxonomy":"Genre",
+				"company":"Company",
+				"collection":"Series Title",
+				"ratings":""
+			}
 		} else if (mediaType == 'thing') {
-			$('#media-meta-creators1').text('Creator');
-			$('#media-meta-creators2').text('Contributors');
-			$('#media-meta-collection').text('Collection');
+			mediaMetaData = {
+				"www":"",
+				"runtime":"",
+				"creators1":"Creator",
+				"creators2":"Contributors",
+				"creators3":"",
+				"taxonomy":"Category",
+				"company":"Company",
+				"collection":"Collection",
+				"ratings":""
+			}
 		} else if (mediaType == 'recipe') {
-			$('#media-meta-creators1').text('Chef');
-			$('#media-meta-runtime').text('Number of Servings');
-			$('#media-meta-taxonomy').text('Cuisine');
-			$('#media-meta-collection').text('Collection');
+			mediaMetaData = {
+				"www":"",
+				"runtime":"Number of Servings",
+				"creators1":"Chef",
+				"creators2":"",
+				"creators3":"",
+				"taxonomy":"Cuisine",
+				"company":"",
+				"collection":"Collection",
+				"ratings":""
+			}
 		}
-		$('fieldset .media-specific.'+mediaType+'-meta').show();
+		for (var key in mediaMetaData) {
+			var obj = mediaMetaData[key];
+			if (obj == '') {
+				$(document.getElementById('media-meta-'+key)).parents('.toggle-wrapper').hide();
+			} else {
+				$(document.getElementById('media-meta-'+key)).parents('.toggle-wrapper').show();
+				document.getElementById('media-meta-'+key).innerHTML = obj;
+			}
+		}
 		$('fieldset#new-media-meta').show();
 		
 	} else {

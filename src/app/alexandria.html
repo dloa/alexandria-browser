@@ -654,7 +654,7 @@
 									<div class="tbl">
 										<!-- Media MetaData -->
 										<fieldset id="new-media-meta">
-											<div class="row full media-specific movie-meta podcast-meta video-meta">
+											<div class="row full toggle-wrapper">
 												<div class="col">
 													<div class="input-container">
 														<label><span id="media-meta-www">WWW</span> ID</label>
@@ -685,7 +685,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="row full media-specific movie-meta music-music-meta podcast-meta video-meta recipe-meta">
+											<div class="row full toggle-wrapper">
 												<div class="col">
 													<div class="input-container">
 														<label><span id="media-meta-runtime">Runtime</span></label>
@@ -701,7 +701,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="row full media-specific movie-meta podcast-meta book-meta thing-meta">
+											<div class="row full toggle-wrapper">
 												<div class="col">
 													<div class="input-container">
 														<label><span id="media-meta-creators2">Creators 2</span></label>
@@ -709,7 +709,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="row full media-specific movie-meta podcast-meta">
+											<div class="row full toggle-wrapper">
 												<div class="col">
 													<div class="input-container">
 														<label><span id="media-meta-creators3">Creators 3</span></label>
@@ -730,9 +730,9 @@
 														<input type="text" name="genre" id="addMedia-genres" />
 													</div>
 												</div>
-												<div class="col media-specific movie-meta music-music-meta podcast-meta video-meta book-meta thing-meta">
+												<div class="col toggle-wrapper">
 													<div class="input-container">
-														<label>Company</label>
+														<label><span id="media-meta-company">Company</span></label>
 														<input type="text" name="company" id="addMedia-company" />
 													</div>
 												</div>
@@ -761,10 +761,10 @@
 													</div>
 												</div>
 											</div>
-											<div class="row full media-specific movie-meta">
+											<div class="row full toggle-wrapper">
 												<div class="col">
 													<div class="input-container">
-														<label>Rotten Tomatoes ID</label><span class="posRelative"><a class="info-icon inline-block" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
+														<label><span id="media-meta-ratings">Rotten Tomatoes ID</span></label><span class="posRelative"><a class="info-icon inline-block" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
 <path d="M49.539,0C22.188-0.01,0.018,22.381,0,50.023c0.018,27.601,22.188,49.993,49.539,49.979  c27.344,0.014,49.518-22.378,49.541-49.979C99.057,22.381,76.883-0.01,49.539,0z M49.512,21.634c4.372,0,7.922,3.546,7.922,7.922  s-3.55,7.923-7.922,7.923c-4.38,0-7.927-3.547-7.927-7.923S45.132,21.634,49.512,21.634z M61.117,74.787H38.169v-3.922h3.342  c0.48,0,0.873-0.396,0.873-0.881V44.711c0-0.484-0.389-0.881-0.873-0.881h-3.342v-3.795h18.466v29.567  c0,0.696,0.396,1.263,0.881,1.263h3.602V74.787z"></path>
 </svg>info</a></span>
 														<input type="text" name="RottenTom" id="rotten-id" />
