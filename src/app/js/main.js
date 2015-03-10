@@ -81,8 +81,8 @@ jQuery(document).ready(function($){
 				$('#lightbox').fadeOut(fadeTimer);
 			}
 			if($('#wait').css('display') == 'block') {
-				$('#wait').hide();
-				$('#disabler').hide();
+				document.getElementById('wait').style.display = 'none';
+				document.getElementById('disabler').style.display = 'none';
 			}
 			if($('#user-modal.abs').css('display')=='block'){
 				$('#user-modal.abs').fadeOut(fadeTimer);
@@ -472,16 +472,16 @@ function getAllPublishers() {
 	currentView = 'publishers';
 	subView = '';
 	filterTypes = [];
-	$('#intro').hide();
+	document.getElementById('intro').style.display = 'none';
 	$('main').hide();
 	$('#browse-media .module-links a.active').removeClass('active');
 	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();
 	$('.sharing-ui').hide();
 	$('.publisher-ui').hide();
-	$('#search').show();
-	$('#share-modal').hide();
-	$('#tip-modal').hide();
+	document.getElementById('search').style.display = 'block';
+	document.getElementById('share-modal').style.display = 'none';
+	document.getElementById('tip-modal').style.display = 'none';
 	$('#user-modal').fadeOut(fadeTimer);
 	$('.view-media-ui').hide();
 	$('.view-publisher-ui').hide();
@@ -522,7 +522,7 @@ function loadPublisherEntity(obj) {
 function loadPublisherView(objMeta) {
 	currentView = 'publisher';
 	filterTypes = [];
-	$('#intro').hide();
+	document.getElementById('intro').style.display = 'none';
 	$('main').hide();
 	$('.view-media-ui').hide();
 	$('#share-modal').css({
@@ -660,7 +660,7 @@ function loadMediaEntity(obj) {
 function loadArtifactView(objMeta) {
 	currentView = 'artifact';
 	filterTypes = [];
-	$('#intro').hide();
+	document.getElementById('intro').style.display = 'none';
 	$('main').hide();
 	$('#share-modal').css({
 			left:'initial',
@@ -843,15 +843,15 @@ function customTipAmountInput(event) {
 // GENERAL SEARCH
 function fullSearch(searchFor) {
 	$('video').trigger('pause');
-	$('#intro').hide();
+	document.getElementById('intro').style.display = 'none';
 	$('main').not('#browse-media').hide();
 	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();
 	$('.sharing-ui').hide();
 	$('.publisher-ui').hide();
-	$('#search').show();
-	$('#share-modal').hide();
-	$('#tip-modal').hide();
+	document.getElementById('search').style.display = 'block';
+	document.getElementById('share-modal').style.display = 'none';
+	document.getElementById('tip-modal').style.display = 'none';
 	$('#user-modal').fadeOut(fadeTimer);
 	$('.view-media-ui').hide();
 	$('.view-publisher-ui').hide();
@@ -888,15 +888,15 @@ function selectSearchMediaType(obj){
 // EXECUTE ADVANCED SEARCH
 function buildSearch() {
 	$('video').trigger('pause');
-	$('#intro').hide();
+	document.getElementById('intro').style.display = 'none';
 	$('main').not('#browse-media').hide();
 	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();
 	$('.sharing-ui').hide();
 	$('.publisher-ui').hide();
-	$('#search').show();
-	$('#share-modal').hide();
-	$('#tip-modal').hide();
+	document.getElementById('search').style.display = 'block';
+	document.getElementById('share-modal').style.display = 'none';
+	document.getElementById('tip-modal').style.display = 'none';
 	$('#user-modal').fadeOut(fadeTimer);
 	$('.view-media-ui').hide();
 	$('.view-publisher-ui').hide();
@@ -946,8 +946,8 @@ function searchByField(module, searchOn, searchFor) {
 	subView = '';
 	$('main').not('#browse-media').hide();
 	$('#browse-media .module-links a').removeClass('active');
-	$('#share-modal').hide();
-	$('#tip-modal').hide();
+	document.getElementById('share-modal').style.display = 'none';
+	document.getElementById('tip-modal').style.display = 'none';
 	$('#user-modal').fadeOut(fadeTimer);
 	$('.view-media-ui').hide();
 	$('.view-publisher-ui').hide();
@@ -1007,15 +1007,15 @@ function setMediaTypeFilter(obj) {
 function filterMediaByType(obj) {
 	$('video').trigger('pause');
 	subView = '';
-	$('#intro').hide();
+	document.getElementById('intro').style.display = 'none';
 	$('main').not('#browse-media').hide();
 	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();
 	$('.sharing-ui').hide();
 	$('.publisher-ui').hide();
-	$('#search').show();
-	$('#share-modal').hide();
-	$('#tip-modal').hide();
+	document.getElementById('search').style.display = 'block';
+	document.getElementById('share-modal').style.display = 'none';
+	document.getElementById('tip-modal').style.display = 'none';
 	$('#user-modal').fadeOut(fadeTimer);
 	$('.view-media-ui').hide();
 	$('.view-publisher-ui').hide();
@@ -1362,11 +1362,11 @@ function loadShareMod() {
 	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Add Content', newURL);
 	document.title = 'ΛLΞXΛNDRIΛ > Add Content';
 */
-	$('#search').hide();
+	document.getElementById('search').style.display = 'none';
 	$('.header-modal').hide();
 	$('.view-media-ui').hide();
-	$('#intro').hide();
-	$('#viewlabel').hide();
+	document.getElementById('intro').style.display = 'none';
+	document.getElementById('viewlabel').style.display = 'none';
 	$('main').not('.sharing-ui').hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').show();
@@ -1408,10 +1408,10 @@ function loadCreatePublisherMod() {
 	history.pushState(stateObj, 'ΛLΞXΛNDRIΛ > Add Publisher', newURL);
 	document.title = 'ΛLΞXΛNDRIΛ > Add Publisher';
 */
-	$('#search').hide();
-	$('#intro').hide();
+	document.getElementById('search').style.display = 'none';
+	document.getElementById('intro').style.display = 'none';
 	$('main').not('.publisher-ui').hide();
-	$('#viewlabel').hide();
+	document.getElementById('viewlabel').style.display = 'none';
 	$('.sharing-ui').hide();
 	$('.publisher-ui').show();
 	resizeTabs();
@@ -2005,10 +2005,10 @@ function goToLocation() {
 function loadAboutView() {
 	resetInterface();
 	currentView = 'about';
-	$('#intro').hide();
+	$('#intro').fadeOut(fadeTimer);
 	$('#user-modal').fadeOut(fadeTimer);
 	$('#wait').fadeOut(fadeTimer);
-	$('#disabler').hide();
+	document.getElementById('disabler').style.display = 'none'
 	$('.search').attr('disabled',false);
 	$('video').trigger('pause');
 	document.title = 'ΛLΞXΛNDRIΛ';
@@ -2031,8 +2031,8 @@ function loadAboutView() {
 	$('.sharing-ui').hide();
 	$('.view-media-ui').hide();
 	$('.view-publisher-ui').hide();
-	$('#search').show();
-	$('#about').show();
+	document.getElementById('search').style.display = 'block';
+	document.getElementById('about').style.display = 'block';
 	buildHistory();
 }
 
@@ -2059,9 +2059,9 @@ function loadAlexandria() {
 // RESET INTERFACE
 function resetInterface() {
 	// Reset Interface
-	$('#intro').hide();
+	document.getElementById('viewlabel').style.display = 'none';
 	$('#wait').fadeOut(fadeTimer);
-	$('#disabler').hide();
+	document.getElementById('disabler').style.display = 'none';
 	$('.search').attr('disabled',false);
 }
 
@@ -2089,7 +2089,7 @@ function resetAlexandria() {
 	$('.sharing-ui').hide();
 	$('.view-media-ui').hide();
 	$('.view-publisher-ui').hide();
-	$('#search').show();
+	document.getElementById('search').style.display = 'block';
 	$('#app-shading').css('bottom','0');
 	$('#intro').fadeIn(fadeTimer);
 	buildHistory();
