@@ -695,6 +695,7 @@ function loadArtifactView(objMeta) {
 		}
 	}
 	subView = mediaID;
+	console.log(mediaID);
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
 	console.info(thisMediaData);
 	mediaID = thisMediaData[0]['txid'];
@@ -758,7 +759,10 @@ function loadArtifactView(objMeta) {
 	$('#media-view-entity .media-Tid a').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
 	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
 		var videoHash = mediaTid.split('btih:')[1];
-		var videoEmbed = '<video controls id="streamingVideo"> <source src="http://localhost:3000/stream/'+ videoHash +'/'+ mediaFilename +'" type="video/mp4" /> </video>';
+		if ( (videoHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
+			mediaFilename = 'SF Bitcoin Meetup @ Geekdom - November 18, 2014.mp4';
+		}
+		var videoEmbed = '<video controls id="streamingVideo"> <source src="http://localhost:3000/stream/'+ videoHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /> </video>';
 		$('.row.entity-footer.media-video').html(videoEmbed);
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
 		var audioHash = mediaTid.split('btih:')[1];
@@ -1813,6 +1817,16 @@ function selectMediaType(obj, mediaType) {
 		$('fieldset .media-specific').hide();
 		$('#newMedia-info .left').fadeIn(fadeTimer);
 		$('#newMedia-info .pull-right').fadeIn(fadeTimer);
+		var movieMetaData = {
+			"www":"",
+			"runtime":"",
+			"":"",
+			"":"",
+			"":"",
+			"":"",
+			"":"",
+			"":"",
+		}
 		if (mediaType == 'movie') {
 			$('#media-meta-www').text('IMDB');
 			$('#media-meta-runtime').text('Runtime');
