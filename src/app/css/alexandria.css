@@ -710,6 +710,7 @@ ul#media-type-select-list {
 	display: inline-block;
 	zoom: 1;*display:inline;
 	max-width: 880px;
+	padding-bottom: 2em;
 }
 .row.media-list {
 	width: 100%;
