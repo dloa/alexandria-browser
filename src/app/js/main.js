@@ -166,6 +166,8 @@ route('/publishers', 'publishers', function () {  });
 route('/add-media', 'add-media', function () {  });
 route('/add-publisher', 'add-publisher', function () {  });
 route('/search', 'search', function () {  });
+route('/about', 'about', function () {  });
+
 var el = null;  
 function router () {  
     // Current route url (getting rid of '#' in hash as well):
@@ -258,6 +260,8 @@ function router () {
 			loadCreatePublisherMod();
     	} else if (currentView == 'search') {
     		fullSearch(paths[2].toString().replace("-"," ").split('?')[0]);
+    	} else if (currentView == 'about') {
+    		loadAboutView();
     	}
     } else {
     	// ROUTE DOESN'T EXIST - IF ADDRESS LOAD PUBLISHER
@@ -301,7 +305,6 @@ function buildHistory() {
 	if ( (currentView != 'front') && (subView == '') ) {
 		document.title = 'ΛLΞXΛNDRIΛ > '+ currentView.charAt(0).toUpperCase() + currentView.slice(1);
 		newURL = newURL+'#/'+currentView;
-		console.log(newURL);
 		if ( ($('#browse-media .module-links a.active').length == 0) && (location.hash.slice(1).split('/')[2] != 'type') && (location.hash.slice(1).split('/')[2] != 'search') && (location.hash.slice(1).split('/')[1] != 'search') ) {
 			var locationInfo = location.hash.slice(1).split('/');
 			var urlHash = location.hash.slice(1).split('/');
@@ -1996,6 +1999,41 @@ function goToLocation() {
 	var newUrl = document.getElementById('go-to-input').value;
 	window.history.replaceState(stateObj, newTitle, newUrl);
 	router();	
+}
+
+// LOAD ABOUT VIEW
+function loadAboutView() {
+	resetInterface();
+	currentView = 'about';
+	$('#intro').hide();
+	$('#user-modal').fadeOut(fadeTimer);
+	$('#wait').fadeOut(fadeTimer);
+	$('#disabler').hide();
+	$('.search').attr('disabled',false);
+	$('video').trigger('pause');
+	document.title = 'ΛLΞXΛNDRIΛ';
+	subView = '';
+	filterTypes = [];
+	$('main').not('#about').hide();
+	hideOverlay();
+	$('body').append($('#info-modal-media'));
+	$('#browse-media-wrap .row').remove();
+	$('#search').show();
+	$('#share-modal').css({
+			left:'initial',
+			right:'initial'
+		}).hide();
+	$('#tip-modal').css({
+			'left':'initial',
+			'right':'initial'
+		}).hide();
+	$('.publisher-ui').hide();
+	$('.sharing-ui').hide();
+	$('.view-media-ui').hide();
+	$('.view-publisher-ui').hide();
+	$('#search').show();
+	$('#about').show();
+	buildHistory();
 }
 
 // LOAD ALEXANDRIA

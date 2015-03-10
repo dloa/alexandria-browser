@@ -705,7 +705,7 @@ ul#media-type-select-list {
 #browse-media {
 	padding-top: 10px;
 }
-#browse-media-wrap, #add-media > *, #view-media-wrap, #publisher-process, #view-publisher-wrap {
+.wrapper, #add-media > * {
 	width: 98%;
 	display: inline-block;
 	zoom: 1;*display:inline;
@@ -959,6 +959,13 @@ img.poster-frame {
 }
 .share-icon:hover svg path, .tip-icon:hover svg path, .media-Tid a:hover svg path, #publisher-bitmsg:hover svg path {
 	fill: #464646;
+}
+
+/* ABOUT VIEW */
+#about .wrapper {
+	margin-top: 40px;
+	line-height: 1.8;
+	text-align: left;
 }
 
 /* MODALS */

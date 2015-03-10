@@ -184,7 +184,7 @@
 				<div id="app-user-icon" onclick="loadUserModal();" class="header-icon"><img src="img/user-icon.svg" class="makesvg" /></div>
 				<div id="user-modal" class="header-modal">
 					<ul id="user-menu">
-						<li><a onclick="" id="user-menu-about"><img src="img/logo.svg" class="makesvg" /> About</a></li>
+						<li><a onclick="loadAboutView();" id="user-menu-about"><img src="img/logo.svg" class="makesvg" /> About</a></li>
 						<li><a onclick="setMediaTypeFilter();" id="user-menu-media"><img src="img/media-icon.svg" class="makesvg" /> Media</a></li>
 						<li><a onclick="getAllPublishers();" id="user-menu-icon" class="publisher-icon"><img src="img/publisher-icon.svg" class="makesvg" /> Publishers</a></li>
 						<li><a onclick="showGoModal();" id="user-menu-location"><img src="img/go-to-icon.svg" class="makesvg" /> Goto</a></li>
@@ -281,7 +281,7 @@
 
 		<!-- CREATE PUBLISHER -->
 		<main id="add-publisher" class="publisher-ui">
-			<ul id="publisher-process">
+			<ul id="publisher-process" class="wrapper">
 				<li>
 					<div class="sublistWrap">
 						<ul>
@@ -671,7 +671,7 @@
 					</li>
 				</ul>
 			</div>	
-			<div id="browse-media-wrap">
+			<div id="browse-media-wrap" class="wrapper">
 				<h2>Browse</h2>
 			</div>
 		</main>
@@ -679,7 +679,7 @@
 <!-- view-publisher -->
  
 		<main id="view-publisher">
-			<div id="view-publisher-wrap" class="view-publisher-ui">
+			<div id="view-publisher-wrap" class="view-publisher-ui wrapper">
 				<div id="publisher-view-entity" class="entity-view">
 					<img src="" id="publisher-avatar" />
 					<div class="row entity-meta-header">
@@ -706,7 +706,7 @@
 
 		<!-- view-media -->
 		<main id="view-media">
-			<div id="view-media-wrap">
+			<div id="view-media-wrap" class="wrapper">
 				<div id="media-view-entity" class="entity-view">
 <!--
 					<div class="left">
@@ -741,6 +741,15 @@
 				</div>				
 			</div>
 		</main>
+		
+		<main id="about">
+			<div class="wrapper">
+				<p>ΛLΞXΛNDRIΛ - a distributed library for sharing and preserving art, history and culture. You can think of it as essentially youtube or soundcloud, but by making use of various P2P networking technologies, the platform relies on *no servers*! Users can self-publish anything they'd like (videos, songs, books, 3d printables, recipes, etc) and they (and only they) have complete control of how their works are published.</p>
+				<p>By integrating bittorrent technology, certain media types can be streamed in HD right in the browser, and because the service has no server or bandwidth overhead, we don't need to make users watch ads. And with a blockchain at its heart, a cryptocurrency payments layer is built right in. So content creators will be able to monetize their work in a variety of ways - from free access with optional tipping, to microsubscription streaming to pay-per-play. Initially only tipping will be available, but we are working with partners in the industry to start implementing optional purchase-to-download mechanisms for our publishers.</p>
+				<p>For our blockchain, we're currently using a 1 year old fork of Litecoin called Florincoin. The reason we chose it is because it is designed to store information in addition to transaction records. Each transaction can store 528 bytes of extra data, which we've made use of as our permanent and unalterable publishing database. It also has a 40 second target block time, which makes our front end much more responsive in discovering new media submissions. We are designing the platform to be as blockchain agnostic as possible, so if sidechains or some other one-blockchain-solution turns out to be a good, workable idea, we can make use of them, but for now Flo is serving our needs best.</p>
+			</div>
+		</main>
+		
 		<div id="info-modal-small" class="info-modal">
 			
 		</div>
