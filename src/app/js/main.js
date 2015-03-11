@@ -549,7 +549,7 @@ function loadPublisherView(objMeta) {
 	resetInterface();
 	$('.view-media-ui').hide();
 	$('#view-publisher .entity-view').show();
-	document.getElementById('viewlabel').style.display = 'block';
+	document.getElementById('viewlabel').style.display = 'inline-block';
 	$('.view-publisher-ui').show();
 	document.getElementById('view-publisher').style.display = 'block';
 	if (location.hash.slice(1).split('/')[2]) {
@@ -741,7 +741,7 @@ function loadArtifactView(objMeta) {
 		getRotten();
 	}
 	$('.view-media-ui').show();
-	document.getElementById('viewlabel').style.display = 'block';
+	document.getElementById('viewlabel').style.display = 'inline-block';
 	$('#media-view-entity .media-Tid a').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
 	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
 		var videoHash = mediaTid.split('btih:')[1];

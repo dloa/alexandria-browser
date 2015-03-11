@@ -531,17 +531,6 @@ span.ui-slider-handle.ui-state-default.ui-corner-all {
 /* BREADCRUMBS */
 div#viewlabel {
 	display: none;
-	position: fixed;
-	top: 95px;
-	left: 32px;
-	z-index: 100;
-	color: #a8a8a8;
-	font-size: 16px;
-	font-size: 1rem;
-	line-height: 1;
-}
-div#viewlabel div {
-	margin: 0 0 .25em;
 }
 .view-media-ui {
 	display: none;
@@ -1615,6 +1604,28 @@ ul.distNetList li {
 }
 
 /* APPLICATION */
+footer#footer {
+	font-size: 0.875em;
+	width: 100%;
+	position: fixed;
+	z-index: 500;
+	bottom: 0;
+	left: 0;
+	padding: .5em 1em;
+	line-height: 1.4;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	background: #797979;
+}
+footer#footer, footer#footer a {
+	color: #eee;
+	text-decoration: none;	
+}
+footer#footer div {
+	display: inline-block;
+	vertical-align: bottom;
+}
 #app-shading {
 	position: fixed;
 	top: 70px;
