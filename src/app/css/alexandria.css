@@ -186,7 +186,7 @@ header input.search:focus{
 		box-shadow: 0 0 5px rgba(20, 20, 20, 0.2);	
 }
 #logo {
-	width: 362px;
+	width: 52px;
 	height:55px;
 	position: absolute;
 	top: 5px;
@@ -204,10 +204,6 @@ header input.search:focus{
 }
 div#logoImg {
 	width: 52px;
-}
-div#logoWord {
-	width: 300px;
-	margin-left: -10px;
 }
 #logo img, #logo svg {
 	width: 100%;
@@ -526,42 +522,6 @@ span.ui-slider-handle.ui-state-default.ui-corner-all {
 #adv-search .icongfx.go-btn {
 	background: url('../img/advanced-search-modal-go.png') center center no-repeat;
 	background-size: contain;
-}
-
-/* BREADCRUMBS */
-div#viewlabel {
-	display: none;
-}
-.view-media-ui {
-	display: none;
-}
-div#viewlabel a {
-	cursor: pointer;
-}
-.breadcrumbs {
-	color: #a3ccb1;
-}
-#media-breadcrumbs-type {
-	text-transform: capitalize;
-}
-.view-controls {
-	position: absolute;
-	line-height: 1;
-	top: 50%;
-	right: 1em;
-	margin-top: -.5em;
-}
-.view-controls {
-	display: none !important;
-}
-#view-controls-2 {
-	display: none;
-}
-.sort-link, .view-link {
-	cursor:pointer;
-	display: none;
-	float: right;
-	margin: 0 0 0 1em;
 }
 
 /* MAIN VIEWS */
@@ -1611,7 +1571,7 @@ footer#footer {
 	z-index: 500;
 	bottom: 0;
 	left: 0;
-	padding: .5em 1em;
+	padding: 5px 19px;
 	line-height: 1.4;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -1626,6 +1586,42 @@ footer#footer div {
 	display: inline-block;
 	vertical-align: bottom;
 }
+/* BREADCRUMBS */
+footer#footer div#viewlabel {
+	display: none;
+}
+.view-media-ui {
+	display: none;
+}
+div#viewlabel a {
+	cursor: pointer;
+}
+.breadcrumbs {
+	color: #a3ccb1;
+}
+#media-breadcrumbs-type {
+	text-transform: capitalize;
+}
+.view-controls {
+	position: absolute;
+	line-height: 1;
+	top: 50%;
+	right: 1em;
+	margin-top: -.5em;
+}
+.view-controls {
+	display: none !important;
+}
+#view-controls-2 {
+	display: none;
+}
+.sort-link, .view-link {
+	cursor:pointer;
+	display: none;
+	float: right;
+	margin: 0 0 0 1em;
+}
+/* MORE APPLICATION ELEMENTS */
 #app-shading {
 	position: fixed;
 	top: 70px;
@@ -1939,15 +1935,6 @@ div#lightbox #qrcode-lightbox {
 	.main aside {
 		float: right;
 		width: 28%;
-	}
-}
-
-@media only screen and (max-width: 1050px) {
-	#logo {
-		width: 62px;
-	}
-	#logoWord {
-		display: none !important;
 	}
 }
 
