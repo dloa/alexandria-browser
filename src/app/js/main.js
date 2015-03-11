@@ -307,7 +307,9 @@ function buildHistory() {
 		if ( ($('#browse-media .module-links a.active').length == 0) && (location.hash.slice(1).split('/')[2] != 'type') && (location.hash.slice(1).split('/')[2] != 'search') && (location.hash.slice(1).split('/')[1] != 'search') ) {
 			var locationInfo = location.hash.slice(1).split('/');
 			var urlHash = location.hash.slice(1).split('/');
-			if (location.hash.slice(1).split('/').length > 2) {
+			console.info(history.state);
+			/*
+			if ( (location.hash.slice(1).split('/').length > 2) || (history.state.searchResults == false)  ) {
 				var urlHash = location.hash.slice(1).split('/');
 				for (var i = 2; i < urlHash.length; i++) {
 					newURL = newURL+'/'+ urlHash[i];
@@ -318,6 +320,7 @@ function buildHistory() {
 					newURL = newURL+'/'+ searchUrl[i];
 				}
 			}
+			*/
 		}
 		if (filterTypes.length > 0) {
 			var searchUrl = location.hash.slice(1).split('/');
@@ -365,7 +368,7 @@ function buildHistory() {
 			filterTypes = [parseTypes];
 		}
 	}
-	if ( (location.hash.slice(1).split('/').length > 3) && (location.hash.slice(1).split('/')[2] != 'type') && (location.hash.slice(1).split('/')[2] != 'search') ) {
+	if ( ( (!history.state) || (history.state.searchResults == true)) && (location.hash.slice(1).split('/').length > 3) && (location.hash.slice(1).split('/')[2] != 'type') && (location.hash.slice(1).split('/')[2] != 'search') ) {
 		for (var i = 2; i < location.hash.slice(1).split('/').length; i++) {
 			newURL = newURL+'/'+location.hash.slice(1).split('/')[i];
 		}
@@ -398,12 +401,17 @@ function buildHistory() {
 	}
 	if (subView == '') {
 		var stateObj = {
-			currentView: currentView
+			currentView: currentView,
+			searchResults: false,
+			searchTerm: '',
+			subView: ''
 		};
 	} else {
 		var stateObj = {
 			currentView: currentView,
-			subView: subView
+			searchResults: false,
+			searchTerm: '',
+			subView : subView
 		};
 	}
 	history.pushState(stateObj, newTitle, newURL);
@@ -834,20 +842,12 @@ function customTipAmountInput(event) {
 
 // GENERAL SEARCH
 function fullSearch(searchFor) {
-	$('video').trigger('pause');
-	document.getElementById('intro').style.display = 'none';
 	$('main').not('#browse-media').hide();
-	$('body').append($('#info-modal-media'));
-	$('#browse-media-wrap .row').remove();
 	$('.sharing-ui').hide();
 	$('.publisher-ui').hide();
-	document.getElementById('search').style.display = 'block';
-	document.getElementById('share-modal').style.display = 'none';
-	document.getElementById('tip-modal').style.display = 'none';
-	$('#user-modal').fadeOut(fadeTimer);
 	$('.view-media-ui').hide();
 	$('.view-publisher-ui').hide();
-	document.getElementById('publisher-avatar').src = '';
+	resetInterface();
 	var publisherResults = searchAPI('publisher', 'name', searchFor);
 	console.info(publisherResults);
 	var mediaResults = searchAPI('media', '*', searchFor);
@@ -856,7 +856,8 @@ function fullSearch(searchFor) {
 	var stateObj = {
 		currentView: 'search',
 		searchResults: true,
-		searchTerm: document.getElementById('searchTermInput').value
+		searchTerm: document.getElementById('searchTermInput').value,
+		subView: ''
 	}
 	var newTitle = 'ΛLΞXΛNDRIΛ > Search';
 	var newUrl = document.location.origin + document.location.pathname +'#/search/'+ searchFor.replace(/\s/g , "-").toLowerCase();
@@ -893,7 +894,8 @@ function buildSearch() {
 		var stateObj = {
 			currentView: 'publishers',
 			searchResults: true,
-			searchTerm: document.getElementById('searchTermInput').value
+			searchTerm: document.getElementById('searchTermInput').value,
+			subView: ''
 		}
 		var newTitle = 'ΛLΞXΛNDRIΛ > Publisher Search';
 		var newUrl = document.location.origin + document.location.pathname +'#/publishers/'+document.getElementById('searchTermInput').value.replace(/\s/g , "-").toLowerCase();
@@ -902,7 +904,8 @@ function buildSearch() {
 		var stateObj = {
 			currentView: 'media',
 			searchResults: true,
-			searchTerm: document.getElementById('searchTermInput').value
+			searchTerm: document.getElementById('searchTermInput').value,
+			subView: ''
 		}
 		var newTitle = 'ΛLΞXΛNDRIΛ > Media Search';
 		var newUrl = document.location.origin + document.location.pathname +'#/media/search/'+document.getElementById('searchTermInput').value.replace(/\s/g , "-").toLowerCase();
@@ -925,7 +928,6 @@ function cancelSearch() {
 
 // SEARCH BY FIELD
 function searchByField(module, searchOn, searchFor) {
-	$('video').trigger('pause');
 	var AdvSearchResults = searchAPI(module, searchOn, searchFor);
 	subView = '';
 	$('main').not('#browse-media').hide();
@@ -933,13 +935,15 @@ function searchByField(module, searchOn, searchFor) {
 	$('#browse-media .module-links a').removeClass('active');
 	$('.view-media-ui').hide();
 	$('.view-publisher-ui').hide();
+	currentView = module;
 	var stateObj = {
-		currentView: 'media',
+		currentView: module,
 		searchResults: true,
-		searchTerm: document.getElementById('searchTermInput').value
+		searchTerm: document.getElementById('searchTermInput').value,
+		subView: ''
 	}
-	var newTitle = 'ΛLΞXΛNDRIΛ > Media Search';
-	var newUrl = document.location.origin + document.location.pathname + '#/media/search/' + searchFor.replace(/\s/g , "-").toLowerCase();
+	var newTitle = 'ΛLΞXΛNDRIΛ > '+module+' > '+searchFor;
+	var newUrl = document.location.origin + document.location.pathname + '#/'+module+'/'+ searchOn +'/' + searchFor.replace(/\s/g , "-").toLowerCase();
 	window.history.replaceState(stateObj, newTitle, newUrl);
 	populateSearchResults(AdvSearchResults, module);
 	buildHistory();
@@ -1102,7 +1106,7 @@ function populateSearchResults(results, module) {
 			}
 		}
 		$('#browse-media-wrap h2').text('Browse Media');
-		if (history.state.searchResults != true) {
+		if ((!history.state) || (history.state.searchResults != true)) {
 			currentView = 'media';
 		}
 	} else {
@@ -1122,7 +1126,7 @@ function populateSearchResults(results, module) {
 			}
 		}
 		$('#browse-media-wrap h2').text('Browse Publishers');
-		if (history.state.searchResults != true) {
+		if ( (!history.state) || (history.state.searchResults != true) ) {
 			currentView = 'publishers';
 		}
 	}
