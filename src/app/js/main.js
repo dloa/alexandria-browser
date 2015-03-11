@@ -1006,7 +1006,7 @@ function filterMediaByType(obj) {
 	$('.view-publisher-ui').hide();
 	document.getElementById('publisher-avatar').src = '';
 	var filteredMedia = [];
-	if (currentView != 'media') {
+	if ( (currentView != 'media') && (currentView != 'search') ) {
 		filteredMedia = [obj];
 		$('#browse-media .module-links a.active').removeClass('active');
 		$('#browse-media .module-links a[value="'+ obj +'"').addClass('active');
@@ -1017,7 +1017,9 @@ function filterMediaByType(obj) {
 			});
 		}
 	}
+	console.info(filterTypes);
 	filterTypes = filteredMedia;
+	console.info(filterTypes);
 	if (filteredMedia.length > 1) {
 		var filteredMediaStr = '';
 		for (var i = 0; i < filteredMedia.length; i++) {
