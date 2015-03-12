@@ -1060,11 +1060,11 @@ img.poster-frame {
 	display: block;
 	width: 0;
 }
-.view-publisher-ui .bubble-modal:before {
+.view-publishers-ui .bubble-modal:before {
 	left: initial;
 	right: 48px;
 }
-.view-publisher-ui .bubble-modal:after {
+.view-publishers-ui .bubble-modal:after {
 	left: initial;
 	right: 49px;
 }
@@ -1572,7 +1572,7 @@ footer#footer {
 	z-index: 500;
 	bottom: 0;
 	left: 0;
-	padding: 5px 19px;
+	padding: 5px 19px 0;
 	line-height: 1.4;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -1586,9 +1586,22 @@ footer#footer, footer#footer a {
 footer#footer div {
 	display: inline-block;
 	vertical-align: bottom;
+	line-height: 32px;
 }
 #footer-title {
 	cursor: pointer;
+}
+#footer #target {
+  position: relative !important;
+  left: initial !important;
+  top: initial !important;
+  margin: 0 0 0 .25em !important;
+  overflow: hidden;
+}
+#footer #target canvas {
+  position: absolute;
+  top: -3px;
+  left: 0;
 }
 /* BREADCRUMBS */
 footer#footer div#viewlabel {

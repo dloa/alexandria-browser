@@ -19,9 +19,21 @@
 			});
 		</script>
                 -->
+		<script type="text/javascript">
+	           var playerDomain = 'player.animatron.com';
+	           var amazonDomain = 'https://snapshots.animatron.com';
+	           var width = 30;
+	           var height = 30;
+	           var playerVersion = 'v1.3';
+	           var filename = 'ace423b77c8bfa69712da856763f36eb.json';
+	           var autostart = true;
+	           var loop = true;
+		</script>
+	    <script type="text/javascript" src="js/publish.js"></script>
+		<script type="text/javascript" async="" src="js/animatron.min.js?1426192178481"></script><style type="text/css"></style></head>
 	</head>
 	
-	<body>
+	<body onload="if(typeof start === 'function' ) { start(); }" class="no-iframe">
 		
 		<header style="-webkit-app-region: drag">
 
@@ -337,7 +349,7 @@
 								</g>
 							</g>
 							</svg> Settings</a></li>
-						<li><a onclick="" id="user-menu-logout"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="90px" height="78px" viewBox="0 0 90 78" version="1.1" class="replaced-svg">
+						<li><a onclick="closeWindow();" id="user-menu-logout"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="90px" height="78px" viewBox="0 0 90 78" version="1.1" class="replaced-svg">
     <title>Exit icon</title>
     <g id="g-header-user-settings-icon-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" type="MSPage">
         <path d="M89.855,39.997 C89.829,40.102 89.785,40.208 89.75,40.313 C89.662,40.524 89.548,40.735 89.416,40.928 C89.355,41.025 89.284,41.121 89.205,41.218 C89.135,41.306 89.056,41.394 88.968,41.481 L73.234,57.223 C72.549,57.908 71.645,58.25 70.749,58.25 C69.853,58.25 68.949,57.908 68.264,57.223 C66.894,55.853 66.894,53.623 68.264,52.253 L78.01,42.516 L33.574,42.516 C31.634,42.516 30.062,40.936 30.062,39.004 C30.062,37.064 31.634,35.492 33.574,35.492 L78.011,35.492 L68.265,25.746 C66.895,24.376 66.895,22.146 68.265,20.776 C69.635,19.406 71.865,19.406 73.235,20.776 L88.968,36.52 C89.214,36.766 89.416,37.038 89.574,37.337 C89.635,37.434 89.679,37.539 89.723,37.644 C89.749,37.688 89.767,37.741 89.776,37.785 C89.811,37.855 89.837,37.925 89.855,38.005 C90.048,38.653 90.048,39.347 89.855,39.997 Z M52.616,77.486 L3.512,77.486 C1.573,77.486 0,75.914 0,73.974 L0,4.026 C0,2.086 1.573,0.514 3.512,0.514 L52.615,0.514 C54.555,0.514 56.127,2.087 56.127,4.026 L56.127,20.2 C56.127,22.14 54.554,23.712 52.615,23.712 C50.676,23.712 49.103,22.139 49.103,20.2 L49.103,7.538 L7.024,7.538 L7.024,70.462 L49.103,70.462 L49.103,58.403 C49.103,56.463 50.676,54.891 52.615,54.891 C54.554,54.891 56.127,56.464 56.127,58.403 L56.127,73.974 C56.128,75.914 54.555,77.486 52.616,77.486 Z" id="path-header-user-settings-icon-1" fill="#000000" type="MSShapeGroup"></path>
@@ -1057,7 +1069,7 @@
 
 <!-- PUBLISHER VIEW -->
 		<main id="view-publisher">
-			<div id="view-publisher-wrap" class="view-publisher-ui wrapper">
+			<div id="view-publisher-wrap" class="view-publishers-ui wrapper">
 				<div id="publisher-view-entity" class="entity-view">
 					<img src="" id="publisher-avatar" />
 					<div class="row entity-meta-header">
@@ -1206,15 +1218,21 @@
 			<div class="left">
 				<div id="footer-title" onclick="resetAlexandria()">ΛLΞXΛNDRIΛ</div>
 		 		<div id="viewlabel">
-					<div class="view-media-ui">
-						/ <a onclick="filterMediaByType();" class="go-back">Media</a> / <span id="media-breadcrumbs-publisher"></span> / <span id="media-breadcrumbs-type"></span> / <span id="media-breadcrumbs" class="breadcrumbs"></span>
+					<div  id="media-breadcrumbs" class="view-media-ui">
+						/ <a onclick="filterMediaByType();" class="go-back currentView-breadcrumb"></a>
 					</div>
-					<div class="view-publisher-ui">
-						/ <a onclick="getAllPublishers()" class="go-back">Publishers</a> / <span id="publisher-breadcrumbs" class="breadcrumbs"></span>
+					<div  id="artifact-breadcrumbs" class="view-artifact-ui">
+						/ <a onclick="filterMediaByType();" class="go-back currentView-breadcrumb"></a> / <span id="media-breadcrumbs-publisher"></span> / <span id="media-breadcrumbs-type"></span> / <span id="media-breadcrumbs-artifact" class="breadcrumbs"></span>
+					</div>
+					<div id="publishers-breadcrumbs" class="view-publishers-ui">
+						/ <a onclick="getAllPublishers()" class="go-back currentView-breadcrumb"></a> / <span id="publisher-breadcrumbs" class="breadcrumbs"></span>
+					</div>
+					<div id="search-breadcrumbs">
+						/ <a onclick="" class="go-back currentView-breadcrumb"></a> / <span id="search-breadcrumbs" class="breadcrumbs"></span>
 					</div>
 				</div>
 			</div>
-<!--		<div class="pull-right">Connecting ...</div> -->
+		<div class="pull-right">Connecting ... <div id="target" style="width: 30px; height: 30px;"><canvas id="target-cvs" width="30" height="30"></canvas></canvas></div><div style="visibility: hidden; position: absolute; top: -10000px; left: -10000px;"><span></span></div></div>
 		</footer>
 
 		<div id="app-shading"></div>
