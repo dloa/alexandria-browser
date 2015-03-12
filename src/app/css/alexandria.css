@@ -183,7 +183,7 @@ header input.search#search-main {
 	padding-left: 40px;
 }
 header input.search:focus{
-		box-shadow: 0 0 5px rgba(20, 20, 20, 0.2);	
+	box-shadow: 0 0 5px rgba(20, 20, 20, 0.2);	
 }
 #logo {
 	width: 52px;
@@ -204,6 +204,7 @@ header input.search:focus{
 }
 div#logoImg {
 	width: 52px;
+	height: 52px;
 }
 #logo img, #logo svg {
 	width: 100%;
@@ -1580,11 +1581,14 @@ footer#footer {
 }
 footer#footer, footer#footer a {
 	color: #eee;
-	text-decoration: none;	
+	text-decoration: none;
 }
 footer#footer div {
 	display: inline-block;
 	vertical-align: bottom;
+}
+#footer-title {
+	cursor: pointer;
 }
 /* BREADCRUMBS */
 footer#footer div#viewlabel {
