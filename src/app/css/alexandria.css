@@ -1616,6 +1616,9 @@ div#viewlabel a {
 .breadcrumbs {
 	color: #a3ccb1;
 }
+.currentView-breadcrumb {
+	text-transform: capitalize;
+}
 #media-breadcrumbs-type {
 	text-transform: capitalize;
 }
