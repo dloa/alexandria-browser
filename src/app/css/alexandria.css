@@ -1586,7 +1586,7 @@ footer#footer, footer#footer a {
 footer#footer div {
 	display: inline-block;
 	vertical-align: bottom;
-	line-height: 32px;
+	line-height: 30px;
 }
 #footer-title {
 	cursor: pointer;
@@ -1600,7 +1600,7 @@ footer#footer div {
 }
 #footer #target canvas {
   position: absolute;
-  top: -3px;
+  top: -5px;
   left: 0;
 }
 /* BREADCRUMBS */

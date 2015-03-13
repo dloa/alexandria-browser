@@ -11,17 +11,18 @@
   "license": "GPL",
   "private": true,
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "js/vendor",
-    "test",
-    "tests"
+	"**/.*",
+	"node_modules",
+	"js/vendor",
+	"test",
+	"tests"
   ],
   "dependencies": {
-    "jquery-ui": "~1.11.2",
-    "svg-injector": "~1.1.2",
-    "spin.js": "~2.0.2",
-    "jquery-mousewheel": "~3.1.12",
-    "mousetrap": "~1.4.6"
+	"jquery-ui": "~1.11.2",
+	"svg-injector": "~1.1.2",
+	"spin.js": "~2.0.2",
+	"jquery-mousewheel": "~3.1.12",
+	"mousetrap": "~1.4.6",
+	"player" : "~1.3"
   }
 }

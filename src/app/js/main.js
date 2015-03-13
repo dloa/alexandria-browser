@@ -17,6 +17,7 @@ var LTCUSD;
 var FLOUSD;
 var BTCUSD;
 var cryptoTimerId = 0;
+var connectingTimerId = 0;
 
 jQuery(document).ready(function($){
 
@@ -151,7 +152,28 @@ jQuery(document).ready(function($){
 
 	// Get exchange rates
 	getCryptos();
-	
+	var connectingTimerId = setInterval(function() {
+		var connected = checkConnection();
+    	console.log(connected);
+	    if (connected == true) {
+	    	$('#target').remove();
+/*
+			var connectedGraphic = '<script id="connected-graphic" type="text/javascript" async="" src="js/animatron.min.js?1426211998079"></script>';
+			$('body').append(connectedGraphic);
+			playerDomain = 'player.animatron.com';
+			amazonDomain = 'https://snapshots.animatron.com';
+			width = 30;
+			height = 30;
+			playerVersion = 'v1.3';
+			filename = 'ba1301d4ec40418b0c51912d0294c0f6.json';
+			autostart = false;
+			loop = false;			
+	    	document.getElementById('connection-indicator').innerHTML = '<div id="target" style="width: 30px; height: 30px;"><canvas id="target-cvs" width="30" height="30"></canvas></canvas></div><div style="visibility: hidden; position: absolute; top: -10000px; left: -10000px;"><span></span></div>';
+			if(typeof start === 'function' ) { start(); }
+*/
+	        clearInterval(connectingTimerId);	
+	    }
+	}, 10000);
 }); // End Document.Ready
 
 // The route registering function:
@@ -2145,8 +2167,7 @@ function clearModal() {
 }
 
 function closeWindow() { 
-	window.open('','_parent',''); 
-	window.close(); 
+	gui.App.quit();
 } 
 
 // LIGHTBOX FUNCTION
@@ -2321,4 +2342,13 @@ function selectText(containerid) {
 	    range.selectNode(document.getElementById(containerid));
 	    window.getSelection().addRange(range);
 	}
+}
+
+// CHECK CONNECTION
+function checkConnection() {
+	var url = 'http://localhost:3000/stream/08D72B48F0799BBF62A2DC54CB66CB1ED14F9431/bitcoin.pdf';
+    var http = new XMLHttpRequest();
+    http.open('HEAD', url, false);
+    http.send();
+    return http.status!=404;
 }
