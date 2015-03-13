@@ -785,14 +785,20 @@ function buildSearch() {
 	console.info(AdvSearchResults);
 	$('#adv-search').fadeOut(fadeTimer);
 	$('#browse-media .module-links a').removeClass('active');
-	populateSearchResults(AdvSearchResults, searchProtocol);
+	var filterTypes = [];
+	$('#adv-search .module-links a.active').each(function(){
+		filterTypes.push($(this).attr('value'));
+		$('#browse-media .module-links a[value="'+$(this).attr('value')+'"]').addClass('active');
+	});
 	var stateObj = {
 		currentView: 'search',
 		searchResults: true,
-		module: searchProtocol
+		mediaTypes: filterTypes,
+		module: searchProtocol		
 	}
 	stateObj.searchTerm = document.getElementById('searchTermInput').value;
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ searchProtocol +' > Search > '+ stateObj.searchTerm);
+	populateSearchResults(AdvSearchResults, searchProtocol);
 }
 
 // CLEAR ADVANCED SEARCH
@@ -950,25 +956,13 @@ function populateSearchResults(results, module) {
 		$('#browse-media').show();
 		return false;
 	}
-/*
-	if ( (filterTypes.length > 0) && (filterTypes.length == 0) ) {
-		for (var i = 0; i < results.length; i++) {
-			$('#browse-media .module-links a[value="'+ filterTypes[i] +'"').addClass('active');
-		}
-	} else {
-		$('#browse-media .module-links a').removeClass('active');
-	}
-*/
 	if (module =='media') {		
 		for (var i = 0; i < results.length; i++) {
 			var mediaType = results[i]['media-data']['alexandria-media']['type'];
 			if (history.state.mediaTypes) {
-				console.info(results[i]);
-				/*
-				if ( (history.state.mediaTypes.length > 0) && (history.state.mediaTypes.indexOf(mediaType) == -1) ) {
+				if (history.state.mediaTypes.indexOf(mediaType) == -1) {
 					continue;
 				}
-				*/
 			}
 			var mediaID = results[i]['txid'];
 			var mediaPublisher = results[i]['publisher-name'];
