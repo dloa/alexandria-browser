@@ -152,12 +152,12 @@ jQuery(document).ready(function($){
 
 	// Get exchange rates
 	getCryptos();
+/*
 	var connectingTimerId = setInterval(function() {
 		var connected = checkConnection();
     	console.log(connected);
 	    if (connected == true) {
 	    	$('#target').remove();
-/*
 			var connectedGraphic = '<script id="connected-graphic" type="text/javascript" async="" src="js/animatron.min.js?1426211998079"></script>';
 			$('body').append(connectedGraphic);
 			playerDomain = 'player.animatron.com';
@@ -170,10 +170,11 @@ jQuery(document).ready(function($){
 			loop = false;			
 	    	document.getElementById('connection-indicator').innerHTML = '<div id="target" style="width: 30px; height: 30px;"><canvas id="target-cvs" width="30" height="30"></canvas></canvas></div><div style="visibility: hidden; position: absolute; top: -10000px; left: -10000px;"><span></span></div>';
 			if(typeof start === 'function' ) { start(); }
-*/
+
 	        clearInterval(connectingTimerId);	
 	    }
 	}, 10000);
+*/
 }); // End Document.Ready
 
 // The route registering function:
@@ -445,7 +446,7 @@ function buildHistory() {
 			subView : ''
 		}
 	}
-	if (currentView != 'front') {
+	if ( (currentView != 'front') && (currentView.slice(0,3) != 'add') ) {
 		$(document.getElementById(currentView+'-breadcrumbs')).find('.currentView-breadcrumb').text(currentView.charAt(0).toUpperCase() + currentView.slice(1));
 		console.info($(document.getElementById(currentView+'-breadcrumbs')).find('.currentView-breadcrumb'));
 		$('#viewlabel').children().not('#'+currentView+'-breadcrumbs').hide();
