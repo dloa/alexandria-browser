@@ -652,7 +652,7 @@ function loadArtifactView(objMeta) {
 	}
 	$('.view-media-ui').show();
 	document.getElementById('viewlabel').style.display = 'inline-block';
-	$('#media-view-entity .media-Tid a').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
+	$('#media-Tid').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
 	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
 		var videoHash = mediaTid.split('btih:')[1];
 		if ( (videoHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
@@ -692,7 +692,7 @@ function loadArtifactView(objMeta) {
 	$('#media-view-entity .entity-footer.media-'+mediaType).show();
 	$('#media-view-entity').show();
 	var stateObj = {
-		currentView: 'media',
+		currentView: 'artifact',
 		searchResults: false,
 		subView: mediaID,
 		artifactTitle: mediaTitle,
@@ -1182,8 +1182,8 @@ function loadShareModal(obj) {
 	if ($(obj).parents('.entity-market #share-modal').length == 0) {
 		$(obj).parents('.entity-market').append($('#share-modal'));
 	}
-	var modalPos = (history.state.currentView == 'artifact') ? ('left') : ('right');
-	var shareModalPos = $(obj).parent().width() - $(obj).position().left - 84;
+	var modalPos = 'right';
+	var shareModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 94) : ($(obj).parent().width() - $(obj).position().left - 89);
 	document.getElementById('share-url').innerHTML = location.href;
 	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2:visible').text();
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
@@ -1202,8 +1202,8 @@ function loadTipModal(obj) {
 	} else {
 		$('#tipAdd-FLO').text('No Address Available');
 	}
-	var modalPos = (history.state.currentView  == 'artifact') ? ('left') : ('right');
-	var tipModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left) : ($(obj).parent().width() - $(obj).position().left - 80);
+	var modalPos = 'right';
+	var tipModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 79) : ($(obj).parent().width() - $(obj).position().left - 89);
 	$(obj).parents('.entity-market').find('#tip-modal').css(modalPos,tipModalPos+'px').fadeToggle(fadeTimer);
 }
 
