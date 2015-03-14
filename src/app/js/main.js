@@ -920,7 +920,11 @@ function filterMediaByType(obj, resetSearch) {
 				searchResults: false,
 				mediaTypes: filterTypes
 			}
-			makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
+			var titleStr = '';
+			for (var i = 0; i < stateObj.mediaTypes.length; i++) {
+				titleStr = (titleStr == '') ? (stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's') : (titleStr + ' + ' + stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's');
+			}			
+			makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + titleStr);
 		} else {
 			var stateObj = {
 				currentView: 'search',
