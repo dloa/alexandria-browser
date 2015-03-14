@@ -694,11 +694,14 @@ function loadArtifactView(objMeta) {
 	var stateObj = {
 		currentView: 'media',
 		searchResults: false,
-		subView : mediaID,
-		artifactTitle: mediaTitle
+		subView: mediaID,
+		artifactTitle: mediaTitle,
+		mediaType: mediaType,
+		artifactPublisher: mediaPublisher,
+		publisherId: publisherID
 	}
 	console.info(stateObj);
-	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.artifactTitle);
+	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);
 }
 
 // CHANGE CUSTOM TIP AMOUNT
@@ -2209,12 +2212,12 @@ function makeHistory(stateObj, newTitle) {
 	if ( (stateObj.currentView != 'front') && (stateObj.currentView.slice(0,3) != 'add') ) {
 		if (stateObj.module) {
 			var callFunction = (stateObj.module == 'media') ? ('setMediaTypeFilter(&apos;&apos;,true)') : ('getAllPublishers()') ;
-			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="go-back currentView-breadcrumb">'+stateObj.module+'</a>';
+			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module+'</a>';
 			newUrl = newUrl + '/' + stateObj.module;
 		}
 		if (!stateObj.subView) {
 			if ( (stateObj.currentView == 'media') || (stateObj.currentView == 'search') ) {
-				newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="go-back currentView-breadcrumb">'+ stateObj.currentView +'</a>';
+				newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>';
 			} else {
 				newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
 			}
@@ -2237,9 +2240,9 @@ function makeHistory(stateObj, newTitle) {
 		newUrl = (!stateObj.searchOn) ? (newUrl + '/' + stateObj.searchTerm) : (newUrl + '/' + stateObj.searchOn + '/' + stateObj.searchTerm.toString().replace(" ","-").toLowerCase());
 	} else if (stateObj.subView) {
 		if (stateObj.artifactTitle) {
-			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="go-back currentView-breadcrumb">Media</a> / ' + stateObj.artifactTitle;
+			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">Media</a> / <a onclick="loadPublisherEntity(this)" id="publisher-'+ stateObj.publisherId +'">'+ stateObj.artifactPublisher +'</a> / <a onclick="filterMediaByType(&apos;'+stateObj.mediaType+'&apos;)">' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + '</a> / ' + stateObj.artifactTitle;
 		} else {
-			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="getAllPublishers()" class="go-back currentView-breadcrumb">Publishers</a> / ' + stateObj.subView;
+			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="getAllPublishers()" class="currentView-breadcrumb">Publishers</a> / ' + stateObj.subView;
 		}
 		newUrl = newUrl + '/' + stateObj.subView;
 	} else if (stateObj.currentView.slice(0,3) == 'add') {
