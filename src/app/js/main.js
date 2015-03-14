@@ -346,8 +346,9 @@ function getCryptos() {
 	    success: function(e) {
 			var el = $( '#sketchpad' );
 			el.html(e.responseText);
-			var data = $.parseJSON($('p', el).html());
+			var data = $.parseJSON($(el).html());
 			BTCUSD = parseFloat(data.return.markets.BTC.lasttradeprice);
+			console.info(BTCUSD);
 			$('.btc-usd .btc-usd-output').text(Math.round((1/BTCUSD)*100000000)/100000000);
 			var qrcode = new QRCode("qrcode", {
 				text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless",
@@ -366,16 +367,18 @@ function getCryptos() {
 	    success: function(e) {
 			var el = $( '#sketchpad' );
 			el.html(e.responseText);
-			var data = $.parseJSON($('p', el).html());
+			var data = $.parseJSON($(el).html());
 			$('#flo-ltc label').text(data.return.markets.FLO.label).next('span').text(data.return.markets.FLO.lasttradeprice);
-			FLOLTC = parseFloat($('#flo-ltc span').text());
+			console.info(data.return.markets.FLO.lasttradeprice);
+			FLOLTC = parseFloat(data.return.markets.FLO.lasttradeprice);
 			$.ajax({
 				url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=1',
 				type: 'GET',
 				success: function(e) {
 					var el = $( '#sketchpad' );
 					el.html(e.responseText);
-					var data = $.parseJSON($('p', el).html());
+					var data = $.parseJSON($(el).html());
+					console.info(data);
 					$('#ltc-usd label').text(data.return.markets.LTC.label).next('span').text(data.return.markets.LTC.lasttradeprice);
 					LTCUSD = parseFloat($('#ltc-usd span').text());
 					FLOUSD = FLOLTC*LTCUSD;
@@ -413,6 +416,7 @@ var bitMsgSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www
 
 // GET ALL PUBLISHERS
 function getAllPublishers() {
+	document.getElementById('publisher-avatar').src = '';
 	$('video').trigger('pause');
 	$('#browse-media .module-links a.active').removeClass('active');
 	document.getElementById('intro').style.display = 'none';
@@ -457,6 +461,7 @@ function loadPublisherEntity(obj) {
 
 // LOAD PUBLISHER ENTITY VIEW
 function loadPublisherView(objMeta) {
+	document.getElementById('publisher-avatar').src = '';
 	document.getElementById('intro').style.display = 'none';
 	$('main').hide();
 	resetInterface();
@@ -539,6 +544,7 @@ function loadPublisherView(objMeta) {
 
 // LOAD MEDIA ARTIFACT VIEW
 function loadMediaEntity(obj) {
+	$('#info-modal-media').fadeOut(fadeTimer);
 	var parentObj = $(obj).parents('.media-entity');
 	var mediaType = $(parentObj).attr('media-type');
 	// Check Movie for IMDB Verification

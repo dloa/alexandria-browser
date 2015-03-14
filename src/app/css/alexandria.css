@@ -1037,6 +1037,7 @@ img.poster-frame {
 	border: 1px solid #cdcdcd;
 	border-radius: 5px;
 	line-height: 2;
+	font-size: 1rem;
 }
 .bubble-modal.abs {
 	position: absolute;
