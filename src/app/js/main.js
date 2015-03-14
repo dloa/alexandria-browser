@@ -937,7 +937,6 @@ function filterMediaByType(obj, resetSearch) {
 
 // MEDIA + PUBLISHER SEARCH API
 function searchAPI(module, searchOn, searchFor) {
-	console.info(searchFor);
 	if ( (searchOn == 'type') && (searchFor.length > 1) ) {
 		searchFor = '['+searchFor+']';
 	} else {
@@ -1980,6 +1979,7 @@ function resetAlexandria() {
 	$('video').trigger('pause');
 	document.title = 'ΛLΞXΛNDRIΛ';
 	$('main').hide();
+	document.getElementById('search-main').value = '';
 	hideOverlay();
 	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();
@@ -2213,12 +2213,24 @@ function makeHistory(stateObj, newTitle) {
 			newUrl = newUrl + '/' + stateObj.module;
 		}
 		if (!stateObj.subView) {
+			if ( (stateObj.currentView == 'media') || (stateObj.currentView == 'search') ) {
+				newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="go-back currentView-breadcrumb">'+ stateObj.currentView +'</a>';
+			} else {
+				newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
+			}
 			newUrl = newUrl + '/' + stateObj.currentView;
-			newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
 		}
-		if (stateObj.mediaTypes) {
-			console.info(stateObj.mediaTypes);
+	}
+	if (stateObj.mediaTypes) {
+		console.info(stateObj.mediaTypes);
+		var breadString = '';
+		var urlString = '';
+		for (var i = 0; i < stateObj.mediaTypes.length; i++) {
+			breadString = (breadString == '') ? (stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's') : (breadString + ' + ' + stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's');
+			urlString = (urlString == '') ? ('type/'+stateObj.mediaTypes[i]) : (urlString + '-' + stateObj.mediaTypes[i]);
 		}
+		newBreadcrumbs = newBreadcrumbs + ' / ' + breadString;
+		newUrl = newUrl + '/' + urlString;
 	}
 	if (stateObj.searchTerm) {
 		newBreadcrumbs = (!stateObj.searchOn) ? (newBreadcrumbs + ' / ' + stateObj.searchTerm) : (newBreadcrumbs + ' / ' + stateObj.searchOn + ' / ' + stateObj.searchTerm);
