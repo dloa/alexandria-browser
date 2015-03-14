@@ -1231,12 +1231,11 @@ function loadShareMod() {
 	var stateObj = {
 		currentView: 'add-media'
 	}
-	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ');
+	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Add Media');
 	document.getElementById('search').style.display = 'none';
 	$('.header-modal').hide();
 	$('.view-media-ui').hide();
 	document.getElementById('intro').style.display = 'none';
-	document.getElementById('viewlabel').style.display = 'none';
 	$('main').not('.sharing-ui').hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').show();
@@ -1270,11 +1269,10 @@ function loadCreatePublisherMod() {
 	var stateObj = {
 		currentView: 'add-publisher'
 	}
-	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ');
+	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Add Publisher');
 	document.getElementById('search').style.display = 'none';
 	document.getElementById('intro').style.display = 'none';
 	$('main').not('.publisher-ui').hide();
-	document.getElementById('viewlabel').style.display = 'none';
 	$('.sharing-ui').hide();
 	$('.publisher-ui').show();
 	resizeTabs();
@@ -1918,7 +1916,6 @@ function goToLocation() {
 function loadAboutView() {
 	resetInterface();
 	$('main').not('#about').hide();
-	document.title = 'ΛLΞXΛNDRIΛ';
 	$('.publisher-ui').hide();
 	$('.sharing-ui').hide();
 	$('.view-media-ui').hide();
@@ -1980,7 +1977,6 @@ function resetInterface() {
 // RESET ALEXANDRIA
 function resetAlexandria() {
 	$('video').trigger('pause');
-	document.title = 'ΛLΞXΛNDRIΛ';
 	$('main').hide();
 	document.getElementById('search-main').value = '';
 	hideOverlay();
@@ -2237,7 +2233,7 @@ function makeHistory(stateObj, newTitle) {
 	}
 	if (stateObj.searchTerm) {
 		newBreadcrumbs = (!stateObj.searchOn) ? (newBreadcrumbs + ' / ' + stateObj.searchTerm) : (newBreadcrumbs + ' / ' + stateObj.searchOn + ' / ' + stateObj.searchTerm);
-		newUrl = (!stateObj.searchOn) ? (newUrl + '/' + stateObj.searchTerm) : (newUrl + '/' + stateObj.searchOn + '/' + stateObj.searchTerm.toString().replace(" ","-").toLowerCase());
+		newUrl = (!stateObj.searchOn) ? (newUrl + '/' + stateObj.searchTerm) : (newUrl + '/' + stateObj.searchOn + '/' + stateObj.searchTerm.toString().replace(" ","-"));
 	} else if (stateObj.subView) {
 		if (stateObj.artifactTitle) {
 			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">Media</a> / <a onclick="loadPublisherEntity(this)" id="publisher-'+ stateObj.publisherId +'">'+ stateObj.artifactPublisher +'</a> / <a onclick="filterMediaByType(&apos;'+stateObj.mediaType+'&apos;)">' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + '</a> / ' + stateObj.artifactTitle;
@@ -2245,12 +2241,19 @@ function makeHistory(stateObj, newTitle) {
 			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="getAllPublishers()" class="currentView-breadcrumb">Publishers</a> / ' + stateObj.subView;
 		}
 		newUrl = newUrl + '/' + stateObj.subView;
-	} else if (stateObj.currentView.slice(0,3) == 'add') {
-		
+	} else if (stateObj.currentView.slice(0,3) == 'add') {		
+		newBreadcrumbArray = stateObj.currentView.split('-');
+		var breadString = '';
+		for (var i = 0; i < newBreadcrumbArray.length; i++) {
+			breadString = (breadString == '') ? (newBreadcrumbArray[i].charAt(0).toUpperCase() + newBreadcrumbArray[i].slice(1)) : (breadString + ' ' + newBreadcrumbArray[i].charAt(0).toUpperCase() + newBreadcrumbArray[i].slice(1))
+		}
+		newBreadcrumbs = newBreadcrumbs + ' / ' + breadString;
+		newUrl = newUrl + '/' + stateObj.currentView;		
 	}
 	document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
 	document.getElementById('alexandria-breadcrumbs').style.display = 'inline-block';
 	document.getElementById('viewlabel').style.display = 'inline-block';
+	document.title = newTitle;
 	history.pushState(stateObj, newTitle, newUrl);
 }
 
