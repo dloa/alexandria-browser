@@ -797,6 +797,8 @@ function buildSearch() {
 		mediaTypes: filterTypes,
 		module: searchProtocol
 	}
+	document.getElementById('search-main').value = stateObj.searchTerm;
+	document.getElementById('searchTermInput').value = '';
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ searchProtocol +' > Search > '+ stateObj.searchTerm);
 	populateSearchResults(AdvSearchResults, searchProtocol);
 }
@@ -974,7 +976,7 @@ function populateSearchResults(results, module) {
 		for (var i = 0; i < results.length; i++) {
 			var mediaType = results[i]['media-data']['alexandria-media']['type'];
 			if (history.state.mediaTypes) {
-				if ( (history.state.searchResults == true) && (history.state.mediaTypes.indexOf(mediaType) == -1) ) {
+				if ( (history.state.mediaTypes.length > 0) && (history.state.searchResults == true) && (history.state.mediaTypes.indexOf(mediaType) == -1) ) {
 					continue;
 				}
 			}
