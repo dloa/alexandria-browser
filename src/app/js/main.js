@@ -802,7 +802,7 @@ function buildSearch() {
 	}
 	document.getElementById('search-main').value = stateObj.searchTerm;
 	document.getElementById('searchTermInput').value = '';
-	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ searchProtocol +' > Search > '+ stateObj.searchTerm);
+	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ searchProtocol.charAt(0).toUpperCase() + searchProtocol.slice(1) +' > Search > '+ stateObj.searchTerm);
 	populateSearchResults(AdvSearchResults, searchProtocol);
 }
 
@@ -2212,7 +2212,7 @@ function makeHistory(stateObj, newTitle) {
 	if ( (stateObj.currentView != 'front') && (stateObj.currentView.slice(0,3) != 'add') ) {
 		if (stateObj.module) {
 			var callFunction = (stateObj.module == 'media') ? ('setMediaTypeFilter(&apos;&apos;,true)') : ('getAllPublishers()') ;
-			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module+'</a>';
+			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>';
 			newUrl = newUrl + '/' + stateObj.module;
 		}
 		if (!stateObj.subView) {
@@ -2224,7 +2224,7 @@ function makeHistory(stateObj, newTitle) {
 			newUrl = newUrl + '/' + stateObj.currentView;
 		}
 	}
-	if (stateObj.mediaTypes.length > 0) {
+	if ( (stateObj.mediaTypes) && (stateObj.mediaTypes.length > 0) ) {
 		console.info(stateObj.mediaTypes);
 		var breadString = '';
 		var urlString = '';
