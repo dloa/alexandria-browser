@@ -1989,6 +1989,7 @@ function resetAlexandria() {
 	$('video').trigger('pause');
 	$('main').hide();
 	document.getElementById('search-main').value = '';
+	$('#browse-media .module-links a.active').removeClass('active');
 	hideOverlay();
 	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();
