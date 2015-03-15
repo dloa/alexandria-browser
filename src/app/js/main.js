@@ -850,7 +850,7 @@ function setMediaTypeFilter(obj, resetSearch) {
 			$('#browse-media .module-links a[value="'+ filterTypes +'"]').addClass('active');
 		}
 	}
-	filterMediaByType(filterTypes);
+	filterMediaByType(filterTypes, resetSearch);
 }
 
 function filterMediaByType(obj, resetSearch) {
