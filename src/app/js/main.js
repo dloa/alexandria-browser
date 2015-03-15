@@ -836,9 +836,9 @@ function searchByField(module, searchOn, searchFor) {
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) +' > Search > ' + searchOn + ' > ' + stateObj.searchTerm.charAt(0).toUpperCase() + stateObj.searchTerm.slice(1));
 	populateSearchResults(AdvSearchResults, module);
 }
-
+var resetSearch = 0;
 // MEDIA TYPE FILTER
-function setMediaTypeFilter(obj) {
+function setMediaTypeFilter(obj, resetSearch) {
 	var filterTypes = '';
 	if(!obj) {
 		$('#browse-media .module-links a.active').removeClass('active');
@@ -853,7 +853,7 @@ function setMediaTypeFilter(obj) {
 	filterMediaByType(filterTypes);
 }
 
-function filterMediaByType(obj) {
+function filterMediaByType(obj, resetSearch) {
 	$('video').trigger('pause');
 	document.getElementById('intro').style.display = 'none';
 	$('main').not('#browse-media').hide();
@@ -870,8 +870,10 @@ function filterMediaByType(obj) {
 	document.getElementById('publisher-avatar').src = '';
 	console.info(history.state);
 	console.info(obj);
-	if ( (obj == '') && (history.state.searchResults != true) ) {
+	console.log(resetSearch);
+	if ( ( (obj == '') && (history.state) && (history.state.searchResults != true) ) || (resetSearch) ) {
 		var filteredMedia = searchAPI('media', '*', '');
+		console.info(filteredMedia);
 		$('#browse-media .module-links a.active').removeClass('active');
 		var stateObj = {
 			currentView: 'media',
@@ -2028,15 +2030,7 @@ function resetAlexandria() {
 	$('.view-media-ui').show();
 	document.getElementById('search').style.display = 'block';
 	$('#app-shading').css('bottom','0');
-	filterMediaByType();
-
-//	$('#intro').fadeIn(fadeTimer);
-/*
-	var stateObj = {
-		currentView: 'front'
-	}
-	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ');
-*/
+	filterMediaByType('', true);
 }
 
 // CLEAR MODAL
@@ -2242,8 +2236,10 @@ function makeHistory(stateObj, newTitle) {
 	var newBreadcrumbs = '';
 	if ( (stateObj.currentView != 'front') && (stateObj.currentView.slice(0,3) != 'add') ) {
 		if (stateObj.module) {
-			var callFunction = (stateObj.module == 'media') ? ('setMediaTypeFilter(&apos;&apos;,true)') : ('getAllPublishers()') ;
-			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>';
+			console.info(stateObj.module);
+			var callFunction = (stateObj.module == 'media') ? ('filterMediaByType(&apos;&apos;, true)') : ('getAllPublishers()') ;
+			newBreadcrumbs = (stateObj.module == 'publisher') ? (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) + 's'+'</a>') : (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>');
+//			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>';
 			newUrl = newUrl + '/' + stateObj.module;
 		}
 		if (!stateObj.subView) {
