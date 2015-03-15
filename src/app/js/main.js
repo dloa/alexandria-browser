@@ -885,7 +885,7 @@ function filterMediaByType(obj, resetSearch) {
 		console.log(filteredMedia);
 		console.log(history.state);
 		var filterTypes = [obj];
-		if (history.state.mediaTypes) {
+		if ( (history.state) && (history.state.mediaTypes) ) {
 			for (var i = 0; i < history.state.mediaTypes.length; i++) {
 				filterTypes.push(history.state.mediaTypes[i]);
 			}
@@ -919,18 +919,24 @@ function filterMediaByType(obj, resetSearch) {
 			}
 		}
 		$('#browse-media .module-links a[value="'+ filterTypes +'"]').addClass('active');
-		if (history.state.searchResults != true) {
+		if ( (!history.state) || (history.state.searchResults != true) ) {
 			var filteredMedia = searchAPI('media', 'type', filterTypesStr);
 			var stateObj = {
 				currentView: 'media',
 				searchResults: false,
 				mediaTypes: filterTypes
 			}
+			if (filterTypes[0]) {
+				stateObj.mediaTypes = filterTypes;
+			}
 			var titleStr = '';
-			for (var i = 0; i < stateObj.mediaTypes.length; i++) {
-				titleStr = (titleStr == '') ? (stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's') : (titleStr + ' + ' + stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's');
-			}			
-			makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + titleStr);
+			if (stateObj.mediaTypes[0]) {
+				for (var i = 0; i < stateObj.mediaTypes.length; i++) {
+					titleStr = (titleStr == '') ? (stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's') : (titleStr + ' + ' + stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's');
+				}
+				titleStr = ' > ' + titleStr;	
+			}
+			makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media' + titleStr);
 		} else {
 			var stateObj = {
 				currentView: 'search',
@@ -1987,7 +1993,7 @@ function resetInterface() {
 // RESET ALEXANDRIA
 function resetAlexandria() {
 	$('video').trigger('pause');
-	$('main').hide();
+	$('main').not('#browse-media').hide();
 	document.getElementById('search-main').value = '';
 	$('#browse-media .module-links a.active').removeClass('active');
 	hideOverlay();
@@ -2004,15 +2010,19 @@ function resetAlexandria() {
 		}).hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').hide();
-	$('.view-media-ui').hide();
 	$('.view-publishers-ui').hide();
+	$('.view-media-ui').show();
 	document.getElementById('search').style.display = 'block';
 	$('#app-shading').css('bottom','0');
-	$('#intro').fadeIn(fadeTimer);
+	filterMediaByType();
+
+//	$('#intro').fadeIn(fadeTimer);
+/*
 	var stateObj = {
 		currentView: 'front'
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ');
+*/
 }
 
 // CLEAR MODAL
@@ -2231,7 +2241,7 @@ function makeHistory(stateObj, newTitle) {
 			newUrl = newUrl + '/' + stateObj.currentView;
 		}
 	}
-	if ( (stateObj.mediaTypes) && (stateObj.mediaTypes.length > 0) ) {
+	if ( (stateObj.mediaTypes) && (stateObj.mediaTypes[0]) && (stateObj.mediaTypes.length > 0) ) {
 		console.info(stateObj.mediaTypes);
 		var breadString = '';
 		var urlString = '';
