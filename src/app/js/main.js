@@ -838,8 +838,7 @@ function searchByField(module, searchOn, searchFor) {
 }
 
 // MEDIA TYPE FILTER
-var resetSearch = 0;
-function setMediaTypeFilter(obj, resetSearch) {
+function setMediaTypeFilter(obj) {
 	var filterTypes = '';
 	if(!obj) {
 		$('#browse-media .module-links a.active').removeClass('active');
@@ -851,10 +850,10 @@ function setMediaTypeFilter(obj, resetSearch) {
 			$('#browse-media .module-links a[value="'+ filterTypes +'"]').addClass('active');
 		}
 	}
-	filterMediaByType(filterTypes, resetSearch);
+	filterMediaByType(filterTypes);
 }
 
-function filterMediaByType(obj, resetSearch) {
+function filterMediaByType(obj) {
 	$('video').trigger('pause');
 	document.getElementById('intro').style.display = 'none';
 	$('main').not('#browse-media').hide();
@@ -871,7 +870,7 @@ function filterMediaByType(obj, resetSearch) {
 	document.getElementById('publisher-avatar').src = '';
 	console.info(history.state);
 	console.info(obj);
-	if ( ( (obj == '') && (history.state.searchResults != true) ) || (resetSearch) ) {
+	if ( (obj == '') && (history.state.searchResults != true) ) {
 		var filteredMedia = searchAPI('media', '*', '');
 		$('#browse-media .module-links a.active').removeClass('active');
 		var stateObj = {
@@ -894,6 +893,16 @@ function filterMediaByType(obj, resetSearch) {
 		    var r = new Array();  
 		    o:for(var i = 0, n = this.length; i < n; i++){  
 		        for(var x = 0, y = r.length; x < y; x++){  
+	            	console.info(r[x]);
+	            	if (!this[i]) {
+						Array.prototype.remove = function(from, to) {
+							var rest = this.slice((to || from) + 1 || this.length);
+							this.length = from < 0 ? this.length + from : from;
+							return this.push.apply(this, rest);
+						};				
+						this.remove(i);	
+						continue;
+	            	}
 		            if (r[x]==this[i]) {
 						Array.prototype.remove = function(from, to) {
 							var rest = this.slice((to || from) + 1 || this.length);
@@ -906,8 +915,13 @@ function filterMediaByType(obj, resetSearch) {
 	            }  
 		        r[r.length] = this[i];}  
 		    return r;  
-		} 
-		filterTypes = filterTypes.unique();
+		}
+		console.log(filterTypes[0]);
+		if (filterTypes[0]) {
+			filterTypes = filterTypes.unique();
+		} else {
+			filterTypes.length = 0;
+		}
 		var filterTypesStr = (filterTypes.length < 2) ? (filterTypes) : ('');
 		if (filterTypes.length > 1) {
 			for (var i = 0; i < filterTypes.length; i++) {
