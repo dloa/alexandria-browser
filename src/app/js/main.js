@@ -870,7 +870,6 @@ function filterMediaByType(obj, resetSearch) {
 	document.getElementById('publisher-avatar').src = '';
 	console.info(history.state);
 	console.info(obj);
-	console.log(resetSearch);
 	if ( ( (obj == '') && (history.state) && (history.state.searchResults != true) ) || (resetSearch) ) {
 		var filteredMedia = searchAPI('media', '*', '');
 		console.info(filteredMedia);
@@ -883,8 +882,6 @@ function filterMediaByType(obj, resetSearch) {
 		populateSearchResults(filteredMedia, 'media');
 		return false;
 	} else {
-		console.log(filteredMedia);
-		console.log(history.state);
 		var filterTypes = [obj];
 		if ( (history.state) && (history.state.mediaTypes) ) {
 			for (var i = 0; i < history.state.mediaTypes.length; i++) {
@@ -893,18 +890,9 @@ function filterMediaByType(obj, resetSearch) {
 		}
 		Array.prototype.unique = function (){  
 		    var r = new Array();  
-		    o:for(var i = 0, n = this.length; i < n; i++){  
+		    o:for(var i = 0, n = this.length; i < n; i++){
+		    	var z = 0;
 		        for(var x = 0, y = r.length; x < y; x++){  
-	            	console.info(r[x]);
-	            	if (!this[i]) {
-						Array.prototype.remove = function(from, to) {
-							var rest = this.slice((to || from) + 1 || this.length);
-							this.length = from < 0 ? this.length + from : from;
-							return this.push.apply(this, rest);
-						};				
-						this.remove(i);	
-						continue;
-	            	}
 		            if (r[x]==this[i]) {
 						Array.prototype.remove = function(from, to) {
 							var rest = this.slice((to || from) + 1 || this.length);
@@ -912,10 +900,23 @@ function filterMediaByType(obj, resetSearch) {
 							return this.push.apply(this, rest);
 						};				
 						r.remove(x);
-						this.remove(i);	
+						this.remove(i);
+						z++;
 		            }
-	            }  
-		        r[r.length] = this[i];}  
+	            } 
+		        r[r.length] = this[i];
+	        } 
+			Array.prototype.clean = function(deleteValue) {
+			  for (var i = 0; i < this.length; i++) {
+			    if (this[i] == deleteValue) {         
+			      this.splice(i, 1);
+			      i--;
+			    }
+			  }
+			  return this;
+			};
+			
+			r.clean(undefined);
 		    return r;  
 		}
 		console.log(filterTypes[0]);
@@ -1000,8 +1001,7 @@ function populateSearchResults(results, module) {
 	if (!results) {
 		var mediaEntity = '<div class="row media-entity"><div class="browse-icon">'+ mediaIconSVGs['media'] +'</div><h3 class="media-title">No Results Found</h3></div>';
 		$('#browse-media-wrap').append(mediaEntity);
-		var currentViewUpper = history.state.currentView.charAt(0).toUpperCase() + history.state.currentView.slice(1);
-		$('#browse-media-wrap h2').text('Browse '+ currentViewUpper);
+		$('#browse-media-wrap h2').text('Browse '+ history.state.currentView.charAt(0).toUpperCase() + history.state.currentView.slice(1));
 		$('#browse-media-wrap .row:first-of-type').addClass('first');
 		$('#browse-media').show();
 		return false;
@@ -1009,6 +1009,7 @@ function populateSearchResults(results, module) {
 	if (module =='media') {		
 		for (var i = 0; i < results.length; i++) {
 			var mediaType = results[i]['media-data']['alexandria-media']['type'];
+			console.info(history.state.mediaTypes);
 			if (history.state.mediaTypes) {
 				if ( (history.state.mediaTypes.length > 0) && (history.state.searchResults == true) && (history.state.mediaTypes.indexOf(mediaType) == -1) ) {
 					continue;
@@ -1064,6 +1065,11 @@ function populateSearchResults(results, module) {
 			}
 		}
 		$('#browse-media-wrap h2').text('Browse Publishers');
+	}
+	if ($('#browse-media-wrap .row').length < 1) {
+		var mediaEntity = '<div class="row media-entity"><div class="browse-icon">'+ mediaIconSVGs['media'] +'</div><h3 class="media-title">No Results Found</h3></div>';
+		$('#browse-media-wrap').append(mediaEntity);
+		$('#browse-media-wrap h2').text('Browse '+ history.state.currentView.charAt(0).toUpperCase() + history.state.currentView.slice(1));
 	}
 	$('#browse-media-wrap .row:first-of-type').addClass('first');
 	$('#browse-media').show();	
@@ -2290,7 +2296,8 @@ function makeHistory(stateObj, newTitle) {
 		var breadString = '';
 		var urlString = '';
 		for (var i = 0; i < stateObj.mediaTypes.length; i++) {
-			breadString = (breadString == '') ? (stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's') : (breadString + ' + ' + stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's');
+			var mediaTypeStr = (stateObj.mediaTypes[i] != 'music') ? (stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's') : (stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1));
+			breadString = (breadString == '') ? (mediaTypeStr) : (breadString + ' + ' + mediaTypeStr);
 			urlString = (urlString == '') ? ('type/'+stateObj.mediaTypes[i]) : (urlString + '-' + stateObj.mediaTypes[i]);
 		}
 		newBreadcrumbs = newBreadcrumbs + ' / ' + breadString;
