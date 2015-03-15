@@ -462,10 +462,10 @@ header #serverID {
 	-webkit-appearance: none;
 	cursor: pointer;
 	font-size: 1em;
-	line-height: 1.3em;
+	line-height: 1.6;
 	background: url('../img/down-arrow-icon.svg') no-repeat right 5px center transparent;
 	background-size: 1em;
-	padding: .5em;
+	padding: 0 .5em;
 }
 header .input-container select {
 	font-size: .8em;
@@ -639,8 +639,8 @@ ul#media-type-select-list {
 	fill: #fff;
 }
 .info-icon img, .info-icon svg, .playbtn-icon img, .playbtn-icon svg {
-	width: 100%;
-	height: 100%;
+	width: 98%;
+	height: 98%;
 }
 .info-icon svg path, .playbtn-icon svg path {
 	fill: #979797;

@@ -1318,21 +1318,29 @@ function parseMagnetURI() {
 	}
 	var magnetURI = document.getElementById('dht-hash').value;
 	var isMagnet = magnetURI.indexOf('magnet:?xt=urn:');
-	var hasWS = magnetURI.indexOf('&ws');
-	if (isMagnet == -1) {
-		errorCheck = 1;
-	} else {
-		var mediaBTIH = magnetURI.split('urn:')[1].split('&')[0];
-		document.getElementById('btih-hash').value = mediaBTIH;
-		if (hasWS > 0) {
-			var mediaWS = magnetURI.split('&ws=')[1].split('&')[0];
-			if (mediaWS) {
-				console.log(mediaWS);
+	var hasTR = magnetURI.indexOf('&tr=');
+	var hasWS = magnetURI.indexOf('&ws=');
+	var mediaBTIH = magnetURI.split('urn:')[1].split('&')[0];
+	document.getElementById('btih-hash').value = mediaBTIH;
+	if (hasTR > 0) {
+		var mediaTR = magnetURI.split('&tr=');
+		var thisTR = [magnetURI.split('&tr=')[1].split('&')[0]];
+		if (magnetURI.split('&tr=').length > 2) {
+			for (var i = 1; i < magnetURI.split('&tr=').length; i++) {
+				thisTR.push(magnetURI.split('&tr=')[i].split('&')[0]);
+			}	
+		}
+		console.log(thisTR);
+	}
+	if (hasWS > 0) {
+		var mediaWS = magnetURI.split('&ws=');
+		var thisWS = [magnetURI.split('&ws=')[1].split('&')[0]];
+		if (magnetURI.split('&ws=').length > 2) {
+			for (var i = 1; i < magnetURI.split('&ws=').length; i++) {
+				thisWS.push(magnetURI.split('&ws=')[i].split('&')[0]);
 			}
 		}
-	}
-	if (errorCheck = 1) {
-		console.error('Input a valid magnet link');
+		console.log(thisWS);
 	}
 }
 
@@ -1706,6 +1714,7 @@ function selectMediaType(obj, mediaType) {
 	if (mediaType != '' ) {
 		$('#newMedia-info .left').fadeIn(fadeTimer);
 		$('#newMedia-info .pull-right').fadeIn(fadeTimer);
+		// POPULATE MEDIA FIELD LABELS
 		var mediaMetaData = {};
 		if (mediaType == 'movie') {
 			mediaMetaData = {
@@ -1801,8 +1810,33 @@ function selectMediaType(obj, mediaType) {
 				document.getElementById('media-meta-'+key).innerHTML = obj;
 			}
 		}
+		// POPULATE MEDIA GENRES
+		var mediaGenres = [];
+		if (mediaType == 'movie') {
+			mediaGenres = ['action','comedy','drama', 'adventure', 'documentary', 'horror', 'musical', 'sci-fi', 'western', 'other'];
+		} else if (mediaType == 'music') {
+			mediaGenres = ['Rock','Jazz','Smooth Jazz','Country','Classical','Punk','Raggae','R &amp; B','Hip Hop','Rap','Alternative','Blues','Easy Listening','Pop','Reggae','Ska','Electronic','Country','A capella','Metal','Industrial', 'Orchestra','Blues','Brazilian Funk','Religious','Noise','Other'];
+		} else if (mediaType == 'podcast') {
+			mediaGenres = ['arts','comedy','education','games &amp; hobbies','health','music','news &amp; politics','religion &amp; spirituality','science','society &amp; culture','sports &amp; recreation','technology','business','tv &amp; film','other']
+		} else if (mediaType == 'video') {
+			mediaGenres = ['Comedy','Education','Entertainment','Film &amp; Animation','Gaming','Howto &amp; Style','Music','News &amp; Politics','Nonprofits &amp; Activism','People &amp; Blogs','Pets &amp; Animals','Science &amp; Technology','Sports','Travel &amp; Events','Other'];
+		} else if (mediaType == 'book') {
+			mediaGenres = ['classic','graphic novel','technology','whitepaper','crime','fable','fairy tale','fanfiction','fantasy','folklore','historical fiction','horror','humor','legend','magical realistm','metafiction','mystery','mythology','poetry','realistic fiction','science fiction','short story','suspense/Thriller','tall tale','western','other'];
+		} else if (mediaType == 'thing') {
+		} else if (mediaType == 'recipe') {
+			mediaGenres = ['African','Asian','Cajun','Canadian','Caribbean','Central American','Eastern European','European','French','German','Greek','Indian','Italian','Japanese','Jewish','Mediterranean','Mexican','Middle Eastern','North American','Oceania','Polish','Scandinavian','South American','Southern','Southwestern','Thai'];
+		}
+		if (mediaGenres.length > 0) {
+			$('#media-genre-select option').remove();
+			$('#media-genre-select').append('<option value=""></option>');
+			for (var i = 0; i < mediaGenres.length; i++) {
+				$('#media-genre-select').append('<option value="'+mediaGenres[i]+'">'+mediaGenres[i].charAt(0).toUpperCase() + mediaGenres[i].slice(1)+'</option>');
+			}
+			document.getElementById('media-genre-wrap').style.display = 'table-cell';
+		} else {
+			document.getElementById('media-genre-wrap').style.display = 'none';
+		}
 		$('fieldset#new-media-meta').show();
-		
 	} else {
 		$('#newMedia-info .left').fadeOut(fadeTimer);
 		$('#newMedia-info .pull-right').fadeOut(fadeTimer);
