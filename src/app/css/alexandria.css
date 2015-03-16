@@ -214,6 +214,11 @@ div#logoImg {
 	fill: #979797;
 	fill-opacity: 1;
 }
+#browser-nav {
+	float: left;
+	margin-left: 100px;
+	cursor: pointer;
+}
 #search {
 	position: relative;
 	margin-left: auto;

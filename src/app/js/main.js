@@ -2316,6 +2316,9 @@ function checkConnection() {
 
 // MAKE HISTORY AND LOCATION
 function makeHistory(stateObj, newTitle) {
+	if ( (history.state) && (!document.getElementById('browser-nav') ) ) {
+		$('#logo').after('<div id="browser-nav"><a onclick="window.history.back()">Back</a></div>');
+	}
 	$('#viewlabel').children().hide();
 	console.log('Make History!');
 	console.info(stateObj);
