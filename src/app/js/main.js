@@ -15,6 +15,7 @@ var FLOUSD;
 var BTCUSD;
 var cryptoTimerId = 0;
 var connectingTimerId = 0;
+var navCounter = 0;
 
 jQuery(document).ready(function($){
 
@@ -231,7 +232,8 @@ function router () {
 				var stateObj = {
 					currentView: 'media',
 					searchResults: false,
-					mediaTypes: filterTypes
+					mediaTypes: filterTypes,
+					isFront: true
 				}
 				var titleStr = '';
 				if (stateObj.mediaTypes[0]) {
@@ -259,13 +261,13 @@ function router () {
 							filterTypes.push(parseTypes[i]);
 						}
 					}
-					populateSearchResults(searchResults, route.templateId);
 					var stateObj = {
 						currentView: 'search',
 						searchResults: true,
 						searchOn: searchOn,
 						searchTerm: searchTerm,
-						module: 'media'
+						module: 'media',
+						isFront: true
 					}
 					if (searchOn) {
 						stateObj.searchOn = searchOn;
@@ -274,6 +276,7 @@ function router () {
 						var titleStr = 'ΛLΞXΛNDRIΛ > Media > Search > '+ searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1);
 					}
 					makeHistory(stateObj, titleStr);
+					populateSearchResults(searchResults, route.templateId);
 				} else {
 					var searchOn = paths[2].replace("-","_");
 					if (searchOn.length == 64) {
@@ -302,13 +305,14 @@ function router () {
 							var searchFor = '';
 						}
 						var searchResults = searchAPI(route.templateId, searchOn, searchFor);
-						populateSearchResults(searchResults, route.templateId);
 						var stateObj = {
 							currentView: 'media',
-							searchResults: false
+							searchResults: false,
+							isFront: true							
 						}
 						console.info(stateObj);
 						makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
+						populateSearchResults(searchResults, route.templateId);
 					}
 				}
 			}
@@ -917,7 +921,7 @@ function filterMediaByType(obj, resetSearch) {
 	document.getElementById('publisher-avatar').src = '';
 	console.info(history.state);
 	console.info(obj);
-	if ( ( (obj == '') && (history.state) && (history.state.searchResults != true) ) || (resetSearch) ) {
+	if ( ( (obj == '') && (history.state) && (history.state.searchResults != true) ) || (resetSearch) && ( (history.state) && (!history.state.isFront) ) ) {
 		var filteredMedia = searchAPI('media', '*', '');
 		console.info(filteredMedia);
 		$('#browse-media .module-links a.active').removeClass('active');
@@ -983,12 +987,17 @@ function filterMediaByType(obj, resetSearch) {
 			}
 		}
 		$('#browse-media .module-links a[value="'+ filterTypes +'"]').addClass('active');
+			console.info(history.state);
 		if ( (!history.state) || (history.state.searchResults != true) ) {
+			console.log(filterTypesStr);
 			var filteredMedia = searchAPI('media', 'type', filterTypesStr);
 			var stateObj = {
 				currentView: 'media',
 				searchResults: false,
 				mediaTypes: filterTypes
+			}
+			if (!history.state) {
+				stateObj.isFront = true;
 			}
 			if (filterTypes[0]) {
 				stateObj.mediaTypes = filterTypes;
@@ -1000,17 +1009,20 @@ function filterMediaByType(obj, resetSearch) {
 				}
 				titleStr = ' > ' + titleStr;	
 			}
+			console.info(stateObj);
 			makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media' + titleStr);
 		} else {
-			var stateObj = {
-				currentView: 'search',
-				searchResults: true,
-				module: 'media'
+			if ( (history.state) && (!history.state.isFront) ) {
+				var stateObj = {
+					currentView: 'search',
+					searchResults: true,
+					module: 'media'
+				}
+				stateObj.mediaTypes = (obj != '') ? (filterTypes) : ('');
+				stateObj.searchTerm = (history.state.searchTerm) ? (history.state.searchTerm) : ('');
+				var filteredMedia = searchAPI('media', '*', stateObj.searchTerm);
+				makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) +' > Search > '+ stateObj.searchTerm);
 			}
-			stateObj.mediaTypes = (obj != '') ? (filterTypes) : ('');
-			stateObj.searchTerm = (history.state.searchTerm) ? (history.state.searchTerm) : ('');
-			var filteredMedia = searchAPI('media', '*', stateObj.searchTerm);
-			makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) +' > Search > '+ stateObj.searchTerm);
 		}
 	}
 	console.log(filteredMedia);
@@ -2314,10 +2326,24 @@ function checkConnection() {
     return http.status!=404;
 }
 
+// GO BACK
+function goBack() {
+	navCounter--;
+	history.back();
+}
+
 // MAKE HISTORY AND LOCATION
 function makeHistory(stateObj, newTitle) {
-	if ( (history.state) && (!document.getElementById('browser-nav') ) ) {
-		$('#logo').after('<div id="browser-nav"><a onclick="window.history.back()">Back</a></div>');
+	console.log(stateObj);
+	console.info(history.state);
+	console.log(navCounter);
+	navCounter++;
+	if ( ( (document.getElementById('browser-nav')) && (history.state) && (history.state.isFront) ) || (navCounter == 1) ) {
+		$('#browser-nav').remove();
+	} else {
+		if (!document.getElementById('browser-nav')) {
+			$('#logo').after('<div id="browser-nav"><a onclick="goBack()">Back</a></div>');
+		}
 	}
 	$('#viewlabel').children().hide();
 	console.log('Make History!');
