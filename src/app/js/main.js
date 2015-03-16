@@ -247,8 +247,12 @@ function router () {
 				populateSearchResults(searchResults, 'media');
 			} else {
 				if (paths[2] == 'search') {
-					var searchTerm = paths[3].toString().replace("-"," ").split('?')[0];
-					var searchResults = searchAPI(route.templateId, '*', searchTerm);
+					console.info(paths);
+					var searchTerm = paths[paths.length-1].toString().replace("-"," ").split('?')[0];
+					if (paths[4]) {
+						var searchOn = paths[3];
+					}
+					var searchResults = (searchOn) ? (searchAPI(route.templateId, searchOn, searchTerm)) : (searchAPI(route.templateId, '*', searchTerm));
 					if (location.hash.indexOf('types') != -1) {
 						var parseTypes = location.hash.split('types=')[1].split('-');
 						for (var i = 0; i < parseTypes.length; i++) {
@@ -259,9 +263,17 @@ function router () {
 					var stateObj = {
 						currentView: 'search',
 						searchResults: true,
-						searchTerm: searchTerm
+						searchOn: searchOn,
+						searchTerm: searchTerm,
+						module: 'media'
 					}
-					makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > Search > '+ searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1));
+					if (searchOn) {
+						stateObj.searchOn = searchOn;
+						var titleStr = 'ΛLΞXΛNDRIΛ > Media > Search > ' + searchOn + ' > ' + searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1);
+					} else {
+						var titleStr = 'ΛLΞXΛNDRIΛ > Media > Search > '+ searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1);
+					}
+					makeHistory(stateObj, titleStr);
 				} else {
 					var searchOn = paths[2].replace("-","_");
 					if (searchOn.length == 64) {
@@ -2312,20 +2324,20 @@ function makeHistory(stateObj, newTitle) {
 	var newBreadcrumbs = '';
 	if ( (stateObj.currentView != 'front') && (stateObj.currentView.slice(0,3) != 'add') ) {
 		if (stateObj.module) {
-			console.info(stateObj.module);
 			var callFunction = (stateObj.module == 'media') ? ('filterMediaByType(&apos;&apos;, true)') : ('getAllPublishers()') ;
 			newBreadcrumbs = (stateObj.module == 'publisher') ? (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) + 's'+'</a>') : (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>');
 //			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>';
-			newUrl = (stateObj.module == 'publisher') ? (newUrl + '/'+stateObj.module + 's') : (newUrl + stateObj.module);
+			newUrl = (stateObj.module == 'publisher') ? (newUrl + '/'+stateObj.module + 's') : (newUrl + '/' + stateObj.module);
 		}
 		if (!stateObj.subView) {
-			if ( (stateObj.currentView == 'media') || (stateObj.currentView == 'search') ) {
+			if (stateObj.currentView == 'media') {
 				newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>';
-			} else {
-				newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
+			} else if (stateObj.currentView == 'search') {
+				newBreadcrumbs = (stateObj.searchOn) ? (newBreadcrumbs + ' / <a onclick="searchByField(&apos;media&apos;, &apos;*&apos;,&apos;'+stateObj.searchTerm+'&apos;);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>') : (newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">'+ stateObj.currentView +'</a>');
 			}
 			newUrl = newUrl + '/' + stateObj.currentView;
 		}
+		console.info(newBreadcrumbs);
 	}
 	if ( (stateObj.mediaTypes) && (stateObj.mediaTypes[0]) && (stateObj.mediaTypes.length > 0) ) {
 		console.info(stateObj.mediaTypes);
@@ -2340,10 +2352,8 @@ function makeHistory(stateObj, newTitle) {
 		newUrl = newUrl + '/' + urlString;
 	}
 	if (stateObj.searchTerm) {
-		console.info(newUrl);
-		console.info(stateObj);
-		newBreadcrumbs = (!stateObj.searchOn) ? (newBreadcrumbs + ' / ' + stateObj.searchTerm) : (newBreadcrumbs + ' / ' + stateObj.searchOn + ' / ' + stateObj.searchTerm);
-		newUrl = (!stateObj.searchOn) ? (newUrl + '/' + stateObj.searchTerm.toString().toLowerCase().replace(" ","-")) : (newUrl + '/' + stateObj.searchOn + '/' + stateObj.searchTerm.toString().toLowerCase().replace(" ","-"));
+		newBreadcrumbs = ((!stateObj.searchOn) || (stateObj.searchOn == '*')) ? (newBreadcrumbs + ' / ' + stateObj.searchTerm) : (newBreadcrumbs + ' / <span id="breadcrumbs-searchOn">' + stateObj.searchOn + '</span> / ' + stateObj.searchTerm);
+		newUrl = ((!stateObj.searchOn) || (stateObj.searchOn == '*')) ? (newUrl + '/' + stateObj.searchTerm.toString().toLowerCase().replace(" ","-")) : (newUrl + '/' + stateObj.searchOn + '/' + stateObj.searchTerm.toString().toLowerCase().replace(" ","-"));
 	} else if (stateObj.subView) {
 		if (stateObj.artifactTitle) {
 			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">Media</a> / <a onclick="loadPublisherEntity(this)" id="publisher-'+ stateObj.publisherId +'">'+ stateObj.artifactPublisher +'</a> / <a onclick="filterMediaByType(&apos;'+stateObj.mediaType+'&apos;)">' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + '</a> / ' + stateObj.artifactTitle;
