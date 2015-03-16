@@ -177,11 +177,11 @@ jQuery(document).ready(function($){
 // The route registering function:
 function route (path, templateId, controller) {  
   routes[path] = {templateId: templateId, controller: controller};
-  console.info(routes);
 }
 route('/', 'front', function () {  });  
 route('/media', 'media', function () {  });
 route('/publishers', 'publishers', function () {  });
+route('/publisher', 'publisher', function () {  });
 route('/add-media', 'add-media', function () {  });
 route('/add-publisher', 'add-publisher', function () {  });
 route('/search', 'search', function () {  });
@@ -210,6 +210,41 @@ function router () {
     	if (route.templateId == 'media') {
 			if (!paths[2]) {
 				filterMediaByType();
+			} else if (paths[2] == 'type') {
+				var parseTypes = location.hash.split('type/')[1].split('-');
+				console.info(parseTypes);
+				var filterTypes = [];
+				for (var i = 0; i < parseTypes.length; i++) {
+					filterTypes.push(parseTypes[i]);
+				}
+				var filterTypesStr = (filterTypes.length < 2) ? (filterTypes) : ('');
+				if (filterTypes.length > 1) {
+					for (var i = 0; i < filterTypes.length; i++) {
+						if (filterTypesStr == '') {
+							filterTypesStr = '"'+ filterTypes[i]+'"';
+						} else {
+							filterTypesStr = filterTypesStr+',"'+ filterTypes[i]+'"';
+						}
+					}
+				}
+				var searchResults = searchAPI('media', 'type', filterTypesStr);
+				var stateObj = {
+					currentView: 'media',
+					searchResults: false,
+					mediaTypes: filterTypes
+				}
+				var titleStr = '';
+				if (stateObj.mediaTypes[0]) {
+					for (var i = 0; i < stateObj.mediaTypes.length; i++) {
+						titleStr = (titleStr == '') ? (stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's') : (titleStr + ' + ' + stateObj.mediaTypes[i].charAt(0).toUpperCase() + stateObj.mediaTypes[i].slice(1) + 's');
+					}
+					titleStr = ' > ' + titleStr;	
+				}
+				makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media' + titleStr);
+				for (var i = 0; i < filterTypes.length; i++) {
+					$('#browse-media .module-links a[value="'+ filterTypes[i] +'"]').addClass('active');
+				}
+				populateSearchResults(searchResults, 'media');
 			} else {
 				if (paths[2] == 'search') {
 					var searchTerm = paths[3].toString().replace("-"," ").split('?')[0];
@@ -217,7 +252,7 @@ function router () {
 					if (location.hash.indexOf('types') != -1) {
 						var parseTypes = location.hash.split('types=')[1].split('-');
 						for (var i = 0; i < parseTypes.length; i++) {
-//							filterTypes.push(parseTypes[i]);
+							filterTypes.push(parseTypes[i]);
 						}
 					}
 					populateSearchResults(searchResults, route.templateId);
@@ -265,7 +300,7 @@ function router () {
 					}
 				}
 			}
-    	} else if (route.templateId == 'publishers') {
+    	} else if ( (route.templateId == 'publishers') || (route.templateId == 'publisher') ) {
 			if (!paths[2]) {
 				getAllPublishers();
 			} else {
@@ -277,14 +312,15 @@ function router () {
 					searchResults = searchAPI('publisher', 'txid', paths[2]);
 					loadPublisherView();
 				} else {
-					var publisherName = paths[2].replace("-"," ");
-					searchResults = searchAPI('publisher', 'name', publisherName);
+					var searchTerm = paths[paths.length - 1].replace('-',' ');
+					searchResults = searchAPI('publisher', 'name', searchTerm);
 					populateSearchResults(searchResults, route.templateId);
 					var stateObj = {
 						currentView: 'publishers',
-						searchResults: false
+						searchResults: true,
+						searchTerm: searchTerm
 					}
-					makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Publishers');
+					makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Publishers > Search > ' + searchTerm.charAt(0).toUpperCase() + searchTerm.slice(1));
 				}
 			}
     	} else if (route.templateId == 'add-media') {
@@ -292,6 +328,7 @@ function router () {
     	} else if (route.templateId == 'add-publisher') {
 			loadCreatePublisherMod();
     	} else if (route.templateId == 'search') {
+    		console.info(paths[2]);
 			var stateObj = {
 				currentView: 'search',
 				searchResults: true
@@ -806,8 +843,6 @@ function buildSearch() {
 		mediaTypes: filterTypes,
 		module: searchProtocol
 	}
-	document.getElementById('search-main').value = stateObj.searchTerm;
-	document.getElementById('searchTermInput').value = '';
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ searchProtocol.charAt(0).toUpperCase() + searchProtocol.slice(1) +' > Search > '+ stateObj.searchTerm);
 	populateSearchResults(AdvSearchResults, searchProtocol);
 }
@@ -1006,11 +1041,12 @@ function populateSearchResults(results, module) {
 		$('#browse-media').show();
 		return false;
 	}
-	if (module =='media') {		
+	if (module =='media') {
+		console.info(results);
 		for (var i = 0; i < results.length; i++) {
+			console.info(results[i]);
 			var mediaType = results[i]['media-data']['alexandria-media']['type'];
-			console.info(history.state.mediaTypes);
-			if (history.state.mediaTypes) {
+			if ( (history.state) && (history.state.mediaTypes) ) {
 				if ( (history.state.mediaTypes.length > 0) && (history.state.searchResults == true) && (history.state.mediaTypes.indexOf(mediaType) == -1) ) {
 					continue;
 				}
@@ -2280,7 +2316,7 @@ function makeHistory(stateObj, newTitle) {
 			var callFunction = (stateObj.module == 'media') ? ('filterMediaByType(&apos;&apos;, true)') : ('getAllPublishers()') ;
 			newBreadcrumbs = (stateObj.module == 'publisher') ? (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) + 's'+'</a>') : (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>');
 //			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>';
-			newUrl = newUrl + '/' + stateObj.module;
+			newUrl = (stateObj.module == 'publisher') ? (newUrl + '/'+stateObj.module + 's') : (newUrl + stateObj.module);
 		}
 		if (!stateObj.subView) {
 			if ( (stateObj.currentView == 'media') || (stateObj.currentView == 'search') ) {
@@ -2304,8 +2340,10 @@ function makeHistory(stateObj, newTitle) {
 		newUrl = newUrl + '/' + urlString;
 	}
 	if (stateObj.searchTerm) {
+		console.info(newUrl);
+		console.info(stateObj);
 		newBreadcrumbs = (!stateObj.searchOn) ? (newBreadcrumbs + ' / ' + stateObj.searchTerm) : (newBreadcrumbs + ' / ' + stateObj.searchOn + ' / ' + stateObj.searchTerm);
-		newUrl = (!stateObj.searchOn) ? (newUrl + '/' + stateObj.searchTerm) : (newUrl + '/' + stateObj.searchOn + '/' + stateObj.searchTerm.toString().replace(" ","-"));
+		newUrl = (!stateObj.searchOn) ? (newUrl + '/' + stateObj.searchTerm.toString().toLowerCase().replace(" ","-")) : (newUrl + '/' + stateObj.searchOn + '/' + stateObj.searchTerm.toString().toLowerCase().replace(" ","-"));
 	} else if (stateObj.subView) {
 		if (stateObj.artifactTitle) {
 			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">Media</a> / <a onclick="loadPublisherEntity(this)" id="publisher-'+ stateObj.publisherId +'">'+ stateObj.artifactPublisher +'</a> / <a onclick="filterMediaByType(&apos;'+stateObj.mediaType+'&apos;)">' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + '</a> / ' + stateObj.artifactTitle;

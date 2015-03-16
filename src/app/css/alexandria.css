@@ -289,7 +289,7 @@ header #search, header #header-menu {
 }
 #adv-search:after {
 	top: -15px;
-	left: 35px;
+	left: 36px;
 	border-width: 0 15px 15px;
 	content: "";
 	position:absolute;
