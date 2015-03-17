@@ -189,15 +189,21 @@ route('/search', 'search', function () {  });
 route('/about', 'about', function () {  });
 
 var el = null;  
-function router () {  
+function router (event, goUrl) {  
     // Current route url (getting rid of '#' in hash as well):
     var url = location.hash.slice(1) || '/';
+  	console.info(event);
+  	console.info(goUrl);
+  	if (goUrl) {
+		url = goUrl.split('#')[1];
+  	}
 	var paths = url.split('/');
 	if (paths[1]) {
 		var module = '/'+paths[1];
 	} else {
 		var module = url;
 	}
+	console.info(paths);
     // Get route by url:
     var route = routes[module];
     // Route the URL
@@ -356,13 +362,14 @@ function router () {
     	}
     } else {
     	// ROUTE DOESN'T EXIST - IF ADDRESS LOAD PUBLISHER
+    	console.info(paths[1]);
     	if (paths[1].length == 34) {
 			var searchResults = searchAPI('publisher', 'address', paths[1]);
 			loadPublisherView();
     	} else if (paths[1].length == 64) {
 			var searchResults = searchAPI('publisher', 'txid', paths[1]);
 			if (!searchResults) {
-				loadArtifactView();
+				loadArtifactView(paths[1]);
 			} else {
 				loadPublisherView();
 			}
@@ -640,18 +647,22 @@ function loadArtifactView(objMeta) {
 	document.getElementById('intro').style.display = 'none';
 	$('main').hide();
 	resetInterface();
+	$('.publisher-ui').hide();
+	$('.sharing-ui').hide();
 	$('.view-publishers-ui').hide();
 	$('#view-media .entity-view').hide();
 	document.getElementById('view-media').style.display = 'block';
 	var mediaID = '';
-	if (objMeta) {
+	if ( (objMeta) && (objMeta.length == 1) ) {
 		mediaID = $(objMeta).attr('id').split('-')[1];
-	} else {
+	} else if (!objMeta) {
 		if (location.hash.slice(1).split('/')[2]) {
 			mediaID = location.hash.slice(1).split('/')[2];
 		} else {
 			mediaID = location.hash.slice(1).split('/')[1];
 		}
+	} else {
+		mediaID = objMeta;
 	}
 	console.log(mediaID);
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
@@ -1278,7 +1289,7 @@ function loadShareModal(obj) {
 	}
 	var modalPos = 'right';
 	var shareModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 94) : ($(obj).parent().width() - $(obj).position().left - 89);
-	document.getElementById('share-url').innerHTML = location.href;
+	document.getElementById('share-url').innerHTML = location.hash.slice(1);
 	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2:visible').text();
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
 }
@@ -2035,13 +2046,12 @@ function showGoModal() {
 }
 
 function goToLocation() {
-	$('video').trigger('pause');
-	hideOverlay();
-	var stateObj = {}
-	var newTitle = '';
-	var newUrl = document.getElementById('go-to-input').value;
-	window.history.replaceState(stateObj, newTitle, newUrl);
-	router();	
+	var goLocation = document.getElementById('go-to-input').value;
+	if (goLocation.split('#').length > 1) {
+		goLocation = goLocation.split('#')[1];
+	}
+	var newUrl = location.href.slice(0,location.hash.length*-1) + '#' + goLocation;
+	router(event, newUrl);
 }
 
 // LOAD ABOUT VIEW
@@ -2341,6 +2351,7 @@ function makeHistory(stateObj, newTitle) {
 	if ( ( (document.getElementById('browser-nav')) && (history.state) && (history.state.isFront) ) || (navCounter == 1) ) {
 		$('#browser-nav').remove();
 	} else {
+		resetInterface();
 		if (!document.getElementById('browser-nav')) {
 			$('#logo').after('<div id="browser-nav"><a onclick="goBack()">Back</a></div>');
 		}
