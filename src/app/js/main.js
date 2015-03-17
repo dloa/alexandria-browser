@@ -6,7 +6,7 @@ var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
 var prevTipAmount = '';
 var fadeTimer = 200;
 
-var routes = {};  
+var routes = {};
 
 var FLOCost;
 var FLOLTC;
@@ -664,7 +664,6 @@ function loadArtifactView(objMeta) {
 	} else {
 		mediaID = objMeta;
 	}
-	console.log(mediaID);
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
 	console.info(thisMediaData);
 	mediaID = thisMediaData[0]['txid'];
@@ -723,17 +722,22 @@ function loadArtifactView(objMeta) {
 	$('.view-media-ui').show();
 	document.getElementById('viewlabel').style.display = 'inline-block';
 	$('#media-Tid').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
+	var fileHash = mediaTid.split('btih:')[1];
 	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
-		var videoHash = mediaTid.split('btih:')[1];
-		if ( (videoHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
+		if ( (fileHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
 			mediaFilename = 'SF Bitcoin Meetup @ Geekdom - November 18, 2014.mp4';
 		}
-		var videoEmbed = '<video controls id="streamingVideo"> <source src="http://localhost:3000/stream/'+ videoHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /> </video>';
-		$('.row.entity-footer.media-video').html(videoEmbed);
+		var fileEmbed = '<video controls id="streamingVideo"> <source src="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /> </video>';
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
-		var audioHash = mediaTid.split('btih:')[1];
-		var audioEmbed = '<audio controls> <source src="http://localhost:3000/stream/'+ videoHash +'/'+ mediaFilename +'" type="audio/mpeg" /> </audio>';
-		$('.row.entity-footer.media-video').html(videoEmbed);
+		var fileEmbed = '<audio controls> <source src="http://localhost:3000/stream/'+ fileHash +'/'+ mediaFilename +'" type="audio/mpeg" /> </audio>';
+	} else if (mediaType == 'book') {
+		if ( (fileHash == '08D72B48F0799BBF62A2DC54CB66CB1ED14F9431') && (mediaFilename == '') ) {
+			mediaFilename = 'bitcoin.pdf';
+		}
+		var fileEmbed = '<object data="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf"></object>';
+	}
+	if (fileEmbed) {
+		$('.row.media-embed').html(fileEmbed);
 	}
 	$('#media-txnID').html(mediaID);	
 	$('main:visible .FLO-address').html(mediaFLO);
@@ -749,7 +753,7 @@ function loadArtifactView(objMeta) {
 	$('#media-view-entity .entity-pub-time span').html(mediaPubTime);
 	if (mediaInfo['extra-info']) {
 		if (mediaInfo['extra-info']['poster']) {
-			mediaDesc = '<img src="http://localhost:3000/stream/'+ videoHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;
+			mediaDesc = '<img src="http://localhost:3000/stream/'+ fileHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;
 		}
 	}
 	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
@@ -770,7 +774,6 @@ function loadArtifactView(objMeta) {
 		artifactPublisher: mediaPublisher,
 		publisherId: publisherID
 	}
-	console.info(stateObj);
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);
 }
 
@@ -1077,7 +1080,6 @@ function populateSearchResults(results, module) {
 		return false;
 	}
 	if (module =='media') {
-		console.info(results);
 		for (var i = 0; i < results.length; i++) {
 			console.info(results[i]);
 			var mediaType = results[i]['media-data']['alexandria-media']['type'];
@@ -1791,8 +1793,10 @@ function selectMediaType(obj, mediaType) {
 	if (mediaType != '' ) {
 		$('#newMedia-info .left').fadeIn(fadeTimer);
 		$('#newMedia-info .pull-right').fadeIn(fadeTimer);
-		// POPULATE MEDIA FIELD LABELS
+		// POPULATE MEDIA FIELD LABELS and GENRES and FILES
 		var mediaMetaData = {};
+		var mediaGenres = [];
+		var mediaFiles = [];
 		if (mediaType == 'movie') {
 			mediaMetaData = {
 				"www":"IMDB",
@@ -1805,6 +1809,8 @@ function selectMediaType(obj, mediaType) {
 				"collection":"Series Title",
 				"ratings":"Rotten Tomatoes ID"
 			}
+			mediaGenres = ['action','comedy','drama', 'adventure', 'documentary', 'horror', 'musical', 'sci-fi', 'western', 'other'];
+			mediaFiles = ['poster', 'poster Frame', 'trailer'];
 		} else if (mediaType == 'music') {
 			mediaMetaData = {
 				"www":"",
@@ -1817,6 +1823,8 @@ function selectMediaType(obj, mediaType) {
 				"collection":"Album Title",
 				"ratings":""
 			}
+			mediaGenres = ['Rock','Jazz','Smooth Jazz','Country','Classical','Punk','Raggae','R &amp; B','Hip Hop','Rap','Alternative','Blues','Easy Listening','Pop','Reggae','Ska','Electronic','Country','A capella','Metal','Industrial', 'Orchestra','Blues','Brazilian Funk','Religious','Noise','Other'];
+			mediaFiles = ['cover Art'];
 		} else if (mediaType == 'podcast') {
 			mediaMetaData = {
 				"www":"Soundcloud",
@@ -1829,6 +1837,8 @@ function selectMediaType(obj, mediaType) {
 				"collection":"Series Title",
 				"ratings":""
 			}
+			mediaGenres = ['arts','comedy','education','games &amp; hobbies','health','music','news &amp; politics','religion &amp; spirituality','science','society &amp; culture','sports &amp; recreation','technology','business','tv &amp; film','other'];
+			mediaFiles = ['cover Art'];
 		} else if (mediaType == 'video') {
 			mediaMetaData = {
 				"www":"YouTube",
@@ -1841,6 +1851,8 @@ function selectMediaType(obj, mediaType) {
 				"collection":"Series Title",
 				"ratings":""
 			}
+			mediaGenres = ['Comedy','Education','Entertainment','Film &amp; Animation','Gaming','Howto &amp; Style','Music','News &amp; Politics','Nonprofits &amp; Activism','People &amp; Blogs','Pets &amp; Animals','Science &amp; Technology','Sports','Travel &amp; Events','Other'];
+			mediaFiles = ['poster Frame'];
 		} else if (mediaType == 'book') {
 			mediaMetaData = {
 				"www":"",
@@ -1853,6 +1865,8 @@ function selectMediaType(obj, mediaType) {
 				"collection":"Series Title",
 				"ratings":""
 			}
+			mediaGenres = ['classic','graphic novel','technology','whitepaper','crime','fable','fairy tale','fanfiction','fantasy','folklore','historical fiction','horror','humor','legend','magical realistm','metafiction','mystery','mythology','poetry','realistic fiction','science fiction','short story','suspense/Thriller','tall tale','western','other'];
+			mediaFiles = ['cover Art'];
 		} else if (mediaType == 'thing') {
 			mediaMetaData = {
 				"www":"",
@@ -1865,6 +1879,7 @@ function selectMediaType(obj, mediaType) {
 				"collection":"Collection",
 				"ratings":""
 			}
+			mediaFiles = ['cover Art'];
 		} else if (mediaType == 'recipe') {
 			mediaMetaData = {
 				"www":"",
@@ -1877,6 +1892,8 @@ function selectMediaType(obj, mediaType) {
 				"collection":"Collection",
 				"ratings":""
 			}
+			mediaGenres = ['African','Asian','Cajun','Canadian','Caribbean','Central American','Eastern European','European','French','German','Greek','Indian','Italian','Japanese','Jewish','Mediterranean','Mexican','Middle Eastern','North American','Oceania','Polish','Scandinavian','South American','Southern','Southwestern','Thai'];
+			mediaFiles = ['cover Art'];
 		}
 		for (var key in mediaMetaData) {
 			var obj = mediaMetaData[key];
@@ -1886,22 +1903,11 @@ function selectMediaType(obj, mediaType) {
 				$(document.getElementById('media-meta-'+key)).parents('.toggle-wrapper').show();
 				document.getElementById('media-meta-'+key).innerHTML = obj;
 			}
-		}
-		// POPULATE MEDIA GENRES
-		var mediaGenres = [];
-		if (mediaType == 'movie') {
-			mediaGenres = ['action','comedy','drama', 'adventure', 'documentary', 'horror', 'musical', 'sci-fi', 'western', 'other'];
-		} else if (mediaType == 'music') {
-			mediaGenres = ['Rock','Jazz','Smooth Jazz','Country','Classical','Punk','Raggae','R &amp; B','Hip Hop','Rap','Alternative','Blues','Easy Listening','Pop','Reggae','Ska','Electronic','Country','A capella','Metal','Industrial', 'Orchestra','Blues','Brazilian Funk','Religious','Noise','Other'];
-		} else if (mediaType == 'podcast') {
-			mediaGenres = ['arts','comedy','education','games &amp; hobbies','health','music','news &amp; politics','religion &amp; spirituality','science','society &amp; culture','sports &amp; recreation','technology','business','tv &amp; film','other']
-		} else if (mediaType == 'video') {
-			mediaGenres = ['Comedy','Education','Entertainment','Film &amp; Animation','Gaming','Howto &amp; Style','Music','News &amp; Politics','Nonprofits &amp; Activism','People &amp; Blogs','Pets &amp; Animals','Science &amp; Technology','Sports','Travel &amp; Events','Other'];
-		} else if (mediaType == 'book') {
-			mediaGenres = ['classic','graphic novel','technology','whitepaper','crime','fable','fairy tale','fanfiction','fantasy','folklore','historical fiction','horror','humor','legend','magical realistm','metafiction','mystery','mythology','poetry','realistic fiction','science fiction','short story','suspense/Thriller','tall tale','western','other'];
-		} else if (mediaType == 'thing') {
-		} else if (mediaType == 'recipe') {
-			mediaGenres = ['African','Asian','Cajun','Canadian','Caribbean','Central American','Eastern European','European','French','German','Greek','Indian','Italian','Japanese','Jewish','Mediterranean','Mexican','Middle Eastern','North American','Oceania','Polish','Scandinavian','South American','Southern','Southwestern','Thai'];
+			if (mediaMetaData['www'] == '') {
+				$(document.getElementById('autofill-wrapper')).hide();
+			} else {
+				$(document.getElementById('autofill-wrapper')).show();
+			}
 		}
 		if (mediaGenres.length > 0) {
 			$('#media-genre-select option').remove();
@@ -1913,6 +1919,12 @@ function selectMediaType(obj, mediaType) {
 		} else {
 			document.getElementById('media-genre-wrap').style.display = 'none';
 		}
+		if (mediaFiles.length > 0) {
+			$('#extra-files .row').remove();
+			for (var i = 0; i < mediaFiles.length; i++) {
+				$('#extra-files').append('<div class="row full"><div class="col"><div class="input-container"><label><span id="media-meta-'+mediaFiles[i]+'">'+mediaFiles[i].charAt(0).toUpperCase()+mediaFiles[i].slice(1)+' Filename</span></label><input type="text" name="'+mediaFiles[i].replace(' ','')+'" id="addMedia-'+mediaFiles[i].replace(' ','')+'" /></div></div></div>');
+			}
+		}		
 		$('fieldset#new-media-meta').show();
 	} else {
 		$('#newMedia-info .left').fadeOut(fadeTimer);
@@ -2344,9 +2356,6 @@ function goBack() {
 
 // MAKE HISTORY AND LOCATION
 function makeHistory(stateObj, newTitle) {
-	console.log(stateObj);
-	console.info(history.state);
-	console.log(navCounter);
 	navCounter++;
 	if ( ( (document.getElementById('browser-nav')) && (history.state) && (history.state.isFront) ) || (navCounter == 1) ) {
 		$('#browser-nav').remove();
@@ -2358,8 +2367,6 @@ function makeHistory(stateObj, newTitle) {
 	}
 	$('#viewlabel').children().hide();
 	console.log('Make History!');
-	console.info(stateObj);
-	console.log(newTitle);
 	var newUrl = (stateObj.currentView != 'front') ? (document.location.origin + document.location.pathname+'#') : (document.location.origin + document.location.pathname);
 	var newBreadcrumbs = '';
 	if ( (stateObj.currentView != 'front') && (stateObj.currentView.slice(0,3) != 'add') ) {

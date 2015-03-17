@@ -850,6 +850,12 @@ label#movie-rotten {
 	width: 60%;
 	margin: 0 0 0 .5em;
 }
+.media-embed object {
+	min-width: 100%;
+	height: 800px;
+	min-height: 101%;
+	border: 1px solid #979797;
+}
 .entity-view .left {
 	width: 31%;
 	text-align: center;
@@ -1474,6 +1480,9 @@ div.newMedia-media.wrap .row.choosefile {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	padding: 1em;	
+}
+#extra-files .row label {
+	text-transform: capitalize;
 }
 #add-media .container .tbl {
 	margin: 0;
