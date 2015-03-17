@@ -661,7 +661,7 @@ ul#media-type-select-list {
 	padding-top: 10px;
 }
 .wrapper, #add-media > * {
-	width: 98%;
+	width: 95.5%;
 	display: inline-block;
 	zoom: 1;*display:inline;
 	max-width: 1200px;
@@ -976,6 +976,9 @@ img.poster-frame {
 	min-width: 37.5%;
 	vertical-align: top;
 }
+#wallet-balance-wrap .row .col {
+	text-align: left;
+}
 #buyMoreBtn {
 	margin-top: -7px;
 	font-size: .825em;
@@ -991,6 +994,7 @@ img.poster-frame {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
+	padding: .25em .5em;
 }
 #wallet-view .input-container.twoCol input[type="text"] {
 	width: 47%;
@@ -2053,10 +2057,6 @@ div#lightbox #qrcode-lightbox {
 	=============== */
 	#add-media nav, #add-media .pagination {
 		font-size: 1.4em;
-	}
-	.wrapper {
-		width: 9999999px; /* 1140px - 10% for margins */
-		margin: 0 auto;
 	}
 }
 
