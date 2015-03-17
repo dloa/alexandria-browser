@@ -664,7 +664,7 @@ ul#media-type-select-list {
 	width: 98%;
 	display: inline-block;
 	zoom: 1;*display:inline;
-	max-width: 880px;
+	max-width: 1200px;
 	padding-bottom: 2em;
 }
 .row.media-list {
@@ -949,11 +949,57 @@ img.poster-frame {
 }
 
 /* ABOUT VIEW */
-#about .wrapper {
+#about .wrapper, #wallet-view .wrapper {
 	margin-top: 40px;
+}
+#about .wrapper {
 	line-height: 1.8;
 	text-align: left;
 	width: 81%;
+}
+
+/* WALLET VIEW */
+#wallet-view {
+	padding-top: 30px;
+}
+#wallet-view h3 {
+	float: left;
+}
+#wallet-view .container {
+  clear: both;
+  border-top: 1px solid #979797;
+}
+#wallet-view .wrapper > * {
+	width: 360px;
+	display: inline-block;
+	margin: 0 70px 70px;
+	min-width: 37.5%;
+	vertical-align: top;
+}
+#buyMoreBtn {
+	margin-top: -7px;
+	font-size: .825em;
+}
+#wallet-request-method, #wallet-send-camera {
+	margin-top: 3px;
+}
+#wallet-view .row {
+  margin-top: 1em;
+}
+#wallet-view .input-container input[type="text"], #wallet-view .input-container textarea {
+	width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+#wallet-view .input-container.twoCol input[type="text"] {
+	width: 47%;
+}
+#wallet-view #wallet-send-wrap .col:first-of-type {
+  width: 6em;
+  padding-right: 1em;
+  text-align: right;
+  vertical-align: middle;
 }
 
 /* MODALS */
@@ -1524,10 +1570,6 @@ div.newMedia-media.wrap .row.choosefile {
 input[type="file"] {
 	cursor: pointer;
 }
-.btnLightGray:hover {
-	color: #f4f4f4;
-	background-color: #464646;
-}
 #newMedia-tabs .tblwrap {
 	display: inline-block;
 	zoom:1;*display:inline;
@@ -1825,6 +1867,7 @@ div#lightbox #qrcode-lightbox {
 /* TABLE LAYOUT */
 .tbl {
 	display: table;
+	width: 100%;
 }
 .tbl.centered {
 	text-align: center !important;
@@ -1856,6 +1899,10 @@ div#lightbox #qrcode-lightbox {
 	color: #464646;
 	text-decoration: none;
 	cursor: pointer;
+}
+.btnLightGray:hover {
+	color: #f4f4f4;
+	background-color: #464646;
 }
 .apply-container {
 	text-align: center;

@@ -187,6 +187,7 @@ route('/add-media', 'add-media', function () {  });
 route('/add-publisher', 'add-publisher', function () {  });
 route('/search', 'search', function () {  });
 route('/about', 'about', function () {  });
+route('/wallet', 'wallet', function () { });
 
 var el = null;  
 function router (event, goUrl) {  
@@ -359,6 +360,8 @@ function router (event, goUrl) {
     		fullSearch(stateObj.searchTerm);
     	} else if (route.templateId == 'about') {
     		loadAboutView();
+    	} else if (route.templateId == 'wallet') {
+    		loadWalletView();
     	}
     } else {
     	// ROUTE DOESN'T EXIST - IF ADDRESS LOAD PUBLISHER
@@ -481,6 +484,7 @@ function getAllPublishers() {
 	$('#browse-media .module-links a.active').removeClass('active');
 	document.getElementById('intro').style.display = 'none';
 	$('.sharing-ui').hide();
+	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('main').hide();
 	resetInterface();
@@ -647,6 +651,7 @@ function loadArtifactView(objMeta) {
 	document.getElementById('intro').style.display = 'none';
 	$('main').hide();
 	resetInterface();
+	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').hide();
 	$('.view-publishers-ui').hide();
@@ -734,7 +739,7 @@ function loadArtifactView(objMeta) {
 		if ( (fileHash == '08D72B48F0799BBF62A2DC54CB66CB1ED14F9431') && (mediaFilename == '') ) {
 			mediaFilename = 'bitcoin.pdf';
 		}
-		var fileEmbed = '<object data="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf"></object>';
+		var fileEmbed = '<object data="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px"></object>';
 	}
 	if (fileEmbed) {
 		$('.row.media-embed').html(fileEmbed);
@@ -822,6 +827,7 @@ function customTipAmountInput(event) {
 function fullSearch(searchFor) {
 	$('main').not('#browse-media').hide();
 	$('.sharing-ui').hide();
+	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('.view-media-ui').hide();
 	$('.view-publishers-ui').hide();
@@ -852,6 +858,7 @@ function buildSearch() {
 	$('main').not('#browse-media').hide();
 	resetInterface();
 	$('.sharing-ui').hide();
+	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('.view-media-ui').hide();
 	$('.view-publishers-ui').hide();
@@ -925,6 +932,7 @@ function filterMediaByType(obj, resetSearch) {
 	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();
 	$('.sharing-ui').hide();
+	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	document.getElementById('search').style.display = 'block';
 	document.getElementById('share-modal').style.display = 'none';
@@ -1348,6 +1356,7 @@ function loadShareMod() {
 	$('.view-media-ui').hide();
 	document.getElementById('intro').style.display = 'none';
 	$('main').not('.sharing-ui').hide();
+	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').show();
 	resizeTabs();
@@ -1384,6 +1393,7 @@ function loadCreatePublisherMod() {
 	document.getElementById('search').style.display = 'none';
 	document.getElementById('intro').style.display = 'none';
 	$('main').not('.publisher-ui').hide();
+	$('.wallet-ui').hide();
 	$('.sharing-ui').hide();
 	$('.publisher-ui').show();
 	resizeTabs();
@@ -2070,6 +2080,7 @@ function goToLocation() {
 function loadAboutView() {
 	resetInterface();
 	$('main').not('#about').hide();
+	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').hide();
 	$('.view-media-ui').hide();
@@ -2080,6 +2091,23 @@ function loadAboutView() {
 		currentView: 'about'
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ');
+}
+
+// LOAD WALLET VIEW
+function loadWalletView() {
+	$('main').not('#wallet').hide();
+	$('.publisher-ui').hide();
+	$('.sharing-ui').hide();
+	$('.view-media-ui').hide();
+	$('.view-publishers-ui').hide();
+	resetInterface();
+	document.getElementById('search').style.display = 'none';
+	$('.wallet-ui').show();
+	document.getElementById('wallet-view').style.display = 'block';
+	var stateObj = {
+		currentView: 'wallet'
+	}
+	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ Wallet');
 }
 
 // LOAD ALEXANDRIA
@@ -2146,6 +2174,7 @@ function resetAlexandria() {
 			'left':'initial',
 			'right':'initial'
 		}).hide();
+	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').hide();
 	$('.view-publishers-ui').hide();
@@ -2340,6 +2369,7 @@ function selectText(containerid) {
 }
 
 // CHECK CONNECTION
+/*
 function checkConnection() {
 	var url = 'http://localhost:3000/stream/08D72B48F0799BBF62A2DC54CB66CB1ED14F9431/bitcoin.pdf';
     var http = new XMLHttpRequest();
@@ -2347,7 +2377,7 @@ function checkConnection() {
     http.send();
     return http.status!=404;
 }
-
+*/
 // GO BACK
 function goBack() {
 	navCounter--;
@@ -2356,6 +2386,7 @@ function goBack() {
 
 // MAKE HISTORY AND LOCATION
 function makeHistory(stateObj, newTitle) {
+	console.info(stateObj);
 	navCounter++;
 	if ( ( (document.getElementById('browser-nav')) && (history.state) && (history.state.isFront) ) || (navCounter == 1) ) {
 		$('#browser-nav').remove();
@@ -2373,7 +2404,6 @@ function makeHistory(stateObj, newTitle) {
 		if (stateObj.module) {
 			var callFunction = (stateObj.module == 'media') ? ('filterMediaByType(&apos;&apos;, true)') : ('getAllPublishers()') ;
 			newBreadcrumbs = (stateObj.module == 'publisher') ? (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) + 's'+'</a>') : (newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>');
-//			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="'+ callFunction +';" class="currentView-breadcrumb">'+stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1)+'</a>';
 			newUrl = (stateObj.module == 'publisher') ? (newUrl + '/'+stateObj.module + 's') : (newUrl + '/' + stateObj.module);
 		}
 		if (!stateObj.subView) {
@@ -2416,6 +2446,10 @@ function makeHistory(stateObj, newTitle) {
 		}
 		newBreadcrumbs = newBreadcrumbs + ' / ' + breadString;
 		newUrl = newUrl + '/' + stateObj.currentView;		
+	}
+	if ( (newBreadcrumbs == '') && (stateObj.currentView != 'front') ) {
+		newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
+		
 	}
 	document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
 	document.getElementById('alexandria-breadcrumbs').style.display = 'inline-block';
