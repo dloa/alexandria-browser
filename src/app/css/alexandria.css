@@ -146,7 +146,7 @@ header {
 	-webkit-user-select: none;
 }
 
-header #search, header #header-menu {
+header #search, header #header-menu, #logo, #browser-nav {
 	-webkit-app-region: no-drag
 }
 img.makesvg {

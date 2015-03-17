@@ -15,7 +15,8 @@ var WebTorrent = require('webtorrent'),
 
 var mediaAPIUrl = "http://54.172.28.195:41289/alexandria/v1/media"
 var blacklist = {'btih:CW35T7WXXRC5RSS4IGDFIZ7CJN4MAUDC': true}
-var p = path.join(process.env['HOME'], '.blocktech/')
+var usrHome = (process.env['HOME']) ? (process.env['HOME']) : (process.env['HOMEDRIVE']+process.env['HOMEPATH']);
+var p = path.join(usrHome, '.blocktech/')
 
 var DLOpts = {
     tmp: path.join(p, '/DL/tmp'),
