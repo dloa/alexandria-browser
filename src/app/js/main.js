@@ -29,6 +29,20 @@ jQuery(document).ready(function($){
 		}
 	});
 
+	$('#searchTermInput').on("keyup", function(e) {
+		var code = e.keyCode || e.which;
+		if (code == 13) {
+			buildSearch();
+		}
+	});
+
+	$('#go-to-input').on("keyup", function(e) {
+		var code = e.keyCode || e.which;
+		if (code == 13) {
+			goToLocation();
+		}
+	});
+	
 	// CLEAR SEARCH
 	$('.clearSearch').click(function(){
 		$(this).siblings('input[type="text"]').val('');
@@ -37,6 +51,7 @@ jQuery(document).ready(function($){
 	// Advanced Search toggle
 	$('#adv-search-toggle').click(function(){
 		$('#adv-search .module-links a').removeClass('active');
+		$('#go-modal').fadeOut(fadeTimer);
 		$('#adv-search').fadeToggle(fadeTimer);
 	});
 
@@ -872,9 +887,9 @@ function buildSearch() {
 	$('.view-publishers-ui').hide();
 	var searchProtocol = document.getElementById('searchModule').value;
 	var searchOn = (searchProtocol == 'media') ? (searchOn = '*') : (searchOn = 'name') ;
-	var AdvSearchResults = searchAPI(searchProtocol, searchOn, document.getElementById('searchTermInput').value);
-	console.info(AdvSearchResults);
+	var AdvSearchResults = searchAPI(searchProtocol, searchOn, document.getElementById('searchTermInput').value);	
 	$('#adv-search').fadeOut(fadeTimer);
+	document.getElementById('search-main').value = document.getElementById('searchTermInput').value;
 	$('#browse-media .module-links a').removeClass('active');
 	var filterTypes = [];
 	$('#adv-search .module-links a.active').each(function(){
@@ -890,6 +905,7 @@ function buildSearch() {
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ searchProtocol.charAt(0).toUpperCase() + searchProtocol.slice(1) +' > Search > '+ stateObj.searchTerm);
 	populateSearchResults(AdvSearchResults, searchProtocol);
+	document.getElementById('searchTermInput').value = '';
 }
 
 // CLEAR ADVANCED SEARCH
@@ -2074,6 +2090,7 @@ function showGoModal() {
 	} else {
 		hideOverlay();
 	}
+	document.getElementById('go-to-input').focus();
 }
 
 function goToLocation() {
@@ -2084,6 +2101,7 @@ function goToLocation() {
 		goLocation = '/'+goLocation;
 	}
 	var newUrl = location.href.slice(0,location.hash.length*-1) + '#' + goLocation;
+	document.getElementById('go-to-input').value = '';
 	router(event, newUrl);
 }
 

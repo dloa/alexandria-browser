@@ -278,12 +278,12 @@ header #search, header #header-menu {
 #adv-search.abs {
 	position: absolute;
 	top: 100%;
-	left: -8%;
+	left: 0;
 	display: none;
 }
 #adv-search:before {
 	top: -16px;
-	left: 34px;
+	left: 35px;
 	border-width: 0 16px 16px;
 	content: "";
 	position:absolute;
@@ -681,9 +681,6 @@ ul#media-type-select-list {
 	margin-top: 1em;
 	clear: both;
 }
-div#browse-media-wrap {
-	margin-top: 10px;
-}
 #browse-media-wrap > * {
 	text-align: left;
 }
@@ -754,7 +751,7 @@ div#browse-media-wrap {
 	display: none !important;
 }
 #view-media, #view-publisher {
-	padding: 62px 0;
+	padding: 50px 0;
 }
 .entity-view {
 	display: none;
@@ -1336,8 +1333,9 @@ div.close-modal:hover {
 	margin-top: 20%;
 }
 #go-to-input {
-  width: 310px;
-  text-indent: .4em;
+	width: 299px;
+	text-indent: .4em;
+	padding: .25em .5em;
 }
 #tip-alexandria-modal {
 	width: 80%;
@@ -1378,7 +1376,6 @@ div.close-modal:hover {
 span#share-url.selectable {
   word-wrap: break-word;
   white-space: normal;
-  padding: 0 1em 1em;
   display: block;
 }
 .autofill-button {
