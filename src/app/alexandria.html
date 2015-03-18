@@ -1193,7 +1193,7 @@
 				<div id="wallet-balance-wrap">
 					<h3>Balance</h3>
 					<div id="buyMoreBtn" class="pull-right">
-						<a onclick="" class="btnLightGray">Buy More</a>
+						<a onclick="">Buy More</a>
 					</div>
 					<div class="container">
 						<div class="tbl">
@@ -1212,8 +1212,8 @@
 				<div id="wallet-request-wrap">
 					<h3>Request Tokens</h3>
 					<div id="wallet-request-method" class="pull-right">
-						<a onclick="">Address/QR</a>
-						<a onclick="">Email</a>
+						<a onclick="toggleBtn(this);" name="address" class="toggleBtn active">Address/QR</a>
+						<a onclick="toggleBtn(this)" name="email" class="toggleBtn">Email</a>
 					</div>
 					<div class="container">
 						<div class="tbl">
@@ -1244,7 +1244,10 @@
 				<div id="wallet-send-wrap">
 					<h3>Send Tokens</h3>
 					<div id="wallet-send-camera" class="pull-right">
-						<a onclick="">[Camera]</a>
+						<a onclick=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="73.782px" height="55.337px" viewBox="12.048 6.778 73.782 55.337" enable-background="new 12.048 6.778 73.782 55.337" xml:space="preserve" class="makesvg replaced-svg">
+<path d="M18.197,12.926h3.689c2.459,0,2.459-6.148,4.919-6.148h2.459h0.006h0.018h0.03h0.022h0.02h0.053h0.027h0.037h0.062h0.014  h0.083h0.001h0.094h0.001h0.093h0.012h0.08h0.034h0.058h0.065h0.024h0.087h0.02h0.066h0.074h0.01h0.082h0.056h0.024h0.078h0.053  h0.023h0.073h0.065h0.006h0.069h0.067h0.027h0.037h0.062h0.06h0.017h0.04h0.054h0.052h0.035h0.014h0.046h0.044h0.041h0.038h0.005  h0.029h0.032h0.029h0.025h0.022h0.02h0.016h0.012h0.009l0,0h0.005h0.001h8.608c2.459,0,2.459,6.148,4.918,6.148h23.365  c0-1.358,1.102-2.459,2.459-2.459h2.459c1.358,0,2.46,1.102,2.46,2.459h3.688c3.396,0,6.148,2.753,6.148,6.148v36.892  c0,3.395-2.753,6.148-6.148,6.148H18.197c-3.395,0-6.148-2.753-6.148-6.148V19.075C12.048,15.68,14.802,12.926,18.197,12.926  L18.197,12.926z M61.237,19.075c-10.186,0-18.446,8.26-18.446,18.446s8.259,18.445,18.446,18.445  c10.186,0,18.446-8.26,18.446-18.445C79.683,27.335,71.422,19.075,61.237,19.075L61.237,19.075z M26.805,25.224h7.378  c1.358,0,2.459-1.102,2.459-2.459v-1.229c0-1.358-1.101-2.459-2.459-2.459h-7.378c-1.358,0-2.459,1.102-2.459,2.459v1.229  C24.345,24.122,25.447,25.224,26.805,25.224z"></path>
+<path d="M61.237,23.994c-7.47,0-13.526,6.058-13.526,13.527s6.057,13.528,13.526,13.528s13.526-6.059,13.526-13.528  S68.707,23.994,61.237,23.994L61.237,23.994z"></path>
+</svg></a>
 					</div>
 					<div class="container">
 						<div class="tbl">

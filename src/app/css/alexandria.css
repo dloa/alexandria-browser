@@ -215,8 +215,8 @@ div#logoImg {
 	fill-opacity: 1;
 }
 #browser-nav {
-	float: left;
-	margin-left: 100px;
+	position: absolute;
+	left: 100px;
 	cursor: pointer;
 }
 #search {
@@ -964,10 +964,11 @@ img.poster-frame {
 }
 #wallet-view h3 {
 	float: left;
+	font-size: 1.25em;
 }
 #wallet-view .container {
-  clear: both;
-  border-top: 1px solid #979797;
+	clear: both;
+	border-top: 1px solid #979797;
 }
 #wallet-view .wrapper > * {
 	width: 360px;
@@ -980,11 +981,34 @@ img.poster-frame {
 	text-align: left;
 }
 #buyMoreBtn {
-	margin-top: -7px;
-	font-size: .825em;
+	margin-top: 5px;
+	font-size: .875em;
 }
-#wallet-request-method, #wallet-send-camera {
-	margin-top: 3px;
+#buyMoreBtn a {
+	cursor: pointer;
+}
+#wallet-request-method {
+	overflow: hidden;
+	margin-top: -2px;
+	line-height: 24px;
+	border: 1px solid #979797;
+	border-bottom: 0 transparent;
+}
+#wallet-send-camera {
+	height: 27px;
+	margin-top: -3px;
+	width: 27px;
+}
+#wallet-send-camera a {
+	cursor: pointer;
+}
+#wallet-send-camera svg {
+  max-height: 100%;
+  max-width: 100%;
+}
+#wallet-send-camera svg path {
+	fill: #979797;
+	fill-opacity: 1;
 }
 #wallet-view .row {
   margin-top: 1em;
@@ -1000,10 +1024,11 @@ img.poster-frame {
 	width: 47%;
 }
 #wallet-view #wallet-send-wrap .col:first-of-type {
-  width: 6em;
-  padding-right: 1em;
-  text-align: right;
-  vertical-align: middle;
+	width: 6em;
+	padding-right: 1em;
+	text-align: right;
+	vertical-align: top;
+	padding-top: .35em;
 }
 
 /* MODALS */
@@ -1908,6 +1933,16 @@ div#lightbox #qrcode-lightbox {
 	color: #f4f4f4;
 	background-color: #464646;
 }
+.toggleBtn {
+	display: inline-block;
+	padding: .25em .5em;
+	cursor: pointer;
+	font-size: .875em;
+}
+.toggleBtn.active {
+	background-color: #979797;
+	color: #fff;
+}
 .apply-container {
 	text-align: center;
 }
@@ -2123,6 +2158,7 @@ div#lightbox #qrcode-lightbox {
 	min-width: 100% !important;
 	width: 100% !important;
 	display: block !important;
+	margin: 0 !important;
 }
 .inline-block {
 	float: none !important;
