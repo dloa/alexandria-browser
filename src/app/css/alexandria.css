@@ -2,7 +2,6 @@
 	http://sandbox.dev/css/alexandria.css */
 
 /*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
-
 html,
 button,
 input,
@@ -10,7 +9,6 @@ select,
 textarea {
 	color: #222;
 }
-
 html {
 	font-size: 1em;
 	line-height: 1.4;
@@ -19,12 +17,10 @@ html {
 	background: #b3d4fc;
 	text-shadow: none;
 }
-
 ::selection {
 	background: #b3d4fc;
 	text-shadow: none;
 }
-
 hr {
 	display: block;
 	height: 1px;
@@ -33,32 +29,26 @@ hr {
 	margin: 1em 0;
 	padding: 0;
 }
-
 audio,
 canvas,
 img,
 video {
 	vertical-align: middle;
 }
-
 fieldset {
 	border: 0;
 	margin: 0;
 	padding: 0;
 }
-
 textarea {
 	resize: vertical;
 }
-
 .browsehappy {
 	margin: 0.2em 0;
 	background: #ccc;
 	color: #000;
 	padding: 0.2em 0;
 }
-
-
 /* ==========================================================================
 	Codachrome
 	========================================================================== */
@@ -68,14 +58,9 @@ h1, h2, h3, h4, h5, h6 {
 	padding: 0;
 	
 }
-h2 {
-//	margin-bottom:50px;
-}
-
 h3{
 	clear:both;
 }
-
 /* Disable Overhang / Bounce */
 html,
 body,
@@ -84,15 +69,9 @@ html*body {
   width: 100%;
   overflow: hidden;
 }
-
-ul {
-  
-}
-
 /* ==========================================================================
 	Author's custom styles
 	========================================================================== */
-
 body, html { margin: 0; padding: 0;}
 body { 
 	color: #464646;
@@ -124,7 +103,6 @@ h1 {
 	letter-spacing: 7px;
 	line-height: 1.65;
 }
-
 /* HEADER */
 header {
 	position: fixed;
@@ -144,7 +122,6 @@ header {
 	-webkit-app-region: drag;
 	-webkit-user-select: none;
 }
-
 .nodrag {
 	-webkit-app-region: no-drag
 }
@@ -192,7 +169,6 @@ header .input-container select {
 	font-size: .8em;
 	line-height: 2;
 }
-
 #search-main, #searchTermInput {
 	font-size: 22px;
 	font-size: 1.375rem;
@@ -249,7 +225,7 @@ div#logoImg {
 	text-transform: capitalize;
 	color: #979797;
 	margin-left: .25em;
-	vertical-align: top;
+	vertical-align: middle;
 }
 #adv-search-toggle:hover {
 	color:#464646;
@@ -472,7 +448,6 @@ header #app-user-icon {
 	height: 32px;
 	background-size: contain;
 }
-
 /* MAIN VIEWS */
 main {
 	display: none;
@@ -483,7 +458,6 @@ main {
 	text-align: center;
 	-webkit-overflow-scrolling: touch;
 }
-
 /* FRONT VIEW */
 div#intro {
 	display: none;
@@ -838,12 +812,6 @@ img.poster-frame {
   	margin-left:0;
 }
 #media-artist-name {
-	cursor: pointer;
-}
-.copy-icon {
-	display: inline-block;
-	width: 32px;
-	height: 32px;
 	cursor: pointer;
 }
 
@@ -1594,25 +1562,6 @@ div#viewlabel a {
 #media-breadcrumbs-type {
 	text-transform: capitalize;
 }
-.view-controls {
-	position: absolute;
-	line-height: 1;
-	top: 50%;
-	right: 1em;
-	margin-top: -.5em;
-}
-.view-controls {
-	display: none !important;
-}
-#view-controls-2 {
-	display: none;
-}
-.sort-link, .view-link {
-	cursor:pointer;
-	display: none;
-	float: right;
-	margin: 0 0 0 1em;
-}
 /* MORE APPLICATION ELEMENTS */
 #app-shading {
 	position: fixed;
@@ -1637,7 +1586,6 @@ div#viewlabel a {
 	height: 100%;
 	width: 100%;
 }
-
 #wait, .loader, #wait span.text {
 	width: 30px;
 	height: 30px;
@@ -1677,38 +1625,6 @@ div#viewlabel a {
 }
 .loader {
 	position:absolute;
-}
-
-.slider,
-.dateSlider{
-	width:100%;
-	margin:20px auto;
-	padding-top:20px;
-}
-
-.tick{
-	border-left:1px solid black;
-	position:absolute;
-	top:0;
-	height:20px;
-	text-align:right;
-}
-.sliderZone dl input{
-	text-align:right;
-	margin-left:5px;
-	margin-right:0;
-	width:200px;	
-}
-.sliderZone img{
-	vertical-align:middle;
-}
-
-.sliderZone dl{
-	margin-bottom:60px;
-}
-
-.sliderZone{
-	height:40px;
 }
 .overlay {
 	display: none;
@@ -1752,7 +1668,6 @@ div#lightbox #qrcode-lightbox {
 	font-size: .9em;
 	color: #919191;
 }
-
 /* TABLE LAYOUT */
 .tbl {
 	display: table;
@@ -1869,84 +1784,27 @@ div#lightbox #qrcode-lightbox {
 /* ==========================================================================
 	Media Queries
 	========================================================================== */
-
-@media only screen and (min-width: 480px) {
-
-/* ====================
-	INTERMEDIATE: Menu
-	==================== */
-
-	nav a {
-		float: left;
-		width: 27%;
-		margin: 0 1.7%;
-		padding: 25px 2%;
-		margin-bottom: 0;
-	}
-
-	nav li:first-child a {
-		margin-left: 0;
-	}
-
-	nav li:last-child a {
-		margin-right: 0;
-	}
-
-/* ========================
-	INTERMEDIATE: IE Fixes
-	======================== */
-
-	nav ul li {
-		display: inline;
-	}
-
-	.oldie nav a {
-		margin: 0 0.7%;
-	}
-}
-
 @media only screen and (min-width: 768px) {
-
 /* ====================
 	WIDE: CSS3 Effects
 	==================== */
-
 	.header-container,
 	.main aside {
 		-webkit-box-shadow: 0 5px 10px #aaa;
 			-moz-box-shadow: 0 5px 10px #aaa;
 				box-shadow: 0 5px 10px #aaa;
 	}
-
 /* ============
 	WIDE: Menu
 	============ */
-
 	.title {
 		float: left;
 	}
-
 	#add-media nav, #add-media .pagination {
 		font-size: 1.2em;
 	}
-
-/* ============
-	WIDE: Main
-	============ */
-
-	.main article {
-		float: left;
-		width: 57%;
-	}
-
-	.main aside {
-		float: right;
-		width: 28%;
-	}
 }
-
 @media only screen and (min-width: 1140px) {
-
 /* ===============
 	Maximal Width
 	=============== */
@@ -1954,7 +1812,6 @@ div#lightbox #qrcode-lightbox {
 		font-size: 1.4em;
 	}
 }
-
 /* ==========================================================================
 	Helper classes
 	========================================================================== */
@@ -1973,19 +1830,16 @@ div#lightbox #qrcode-lightbox {
 	overflow: hidden;
 
 }
-
 .ir:before {
 	content: "";
 	display: block;
 	width: 0;
 	height: 150%;
 }
-
 .hidden {
 	display: none !important;
 	visibility: hidden;
 }
-
 .visuallyhidden {
 	border: 0;
 	clip: rect(0 0 0 0);
@@ -1996,7 +1850,6 @@ div#lightbox #qrcode-lightbox {
 	position: absolute;
 	width: 1px;
 }
-
 .visuallyhidden.focusable:active,
 .visuallyhidden.focusable:focus {
 	clip: auto;
@@ -2006,11 +1859,9 @@ div#lightbox #qrcode-lightbox {
 	position: static;
 	width: auto;
 }
-
 .invisible {
 	visibility: hidden;
 }
-
 .clearfix {
 	clear: both;
 	zoom: 1;
@@ -2046,56 +1897,45 @@ div#lightbox #qrcode-lightbox {
 		box-shadow: none !important;
 		text-shadow: none !important;
 	}
-
 	a,
 	a:visited {
 		text-decoration: underline;
 	}
-
 	a[href]:after {
 		content: " (" attr(href) ")";
 	}
-
 	abbr[title]:after {
 		content: " (" attr(title) ")";
 	}
-
 	.ir a:after,
 	a[href^="javascript:"]:after,
 	a[href^="#"]:after {
 		content: "";
 	}
-
 	pre,
 	blockquote {
 		border: 1px solid #999;
 		page-break-inside: avoid;
 	}
-
 	thead {
 		display: table-header-group;
 	}
-
 	tr,
 	img {
 		page-break-inside: avoid;
 	}
-
 	img {
 		max-width: 100% !important;
 	}
-
 	@page {
 		margin: 0.5cm;
 	}
-
 	p,
 	h2,
 	h3 {
 		orphans: 3;
 		widows: 3;
 	}
-
 	h2,
 	h3 {
 		page-break-after: avoid;
