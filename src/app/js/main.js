@@ -1308,7 +1308,7 @@ function loadShareModal(obj) {
 	}
 	var modalPos = 'right';
 	var shareModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 94) : ($(obj).parent().width() - $(obj).position().left - 89);
-	document.getElementById('share-url').innerHTML = location.hash.slice(1);
+	document.getElementById('share-url').innerHTML = location.hash.slice(2);
 	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2:visible').text();
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
 }
@@ -2080,6 +2080,8 @@ function goToLocation() {
 	var goLocation = document.getElementById('go-to-input').value;
 	if (goLocation.split('#').length > 1) {
 		goLocation = goLocation.split('#')[1];
+	} else if (goLocation.slice(0,1) != '/') {
+		goLocation = '/'+goLocation;
 	}
 	var newUrl = location.href.slice(0,location.hash.length*-1) + '#' + goLocation;
 	router(event, newUrl);
