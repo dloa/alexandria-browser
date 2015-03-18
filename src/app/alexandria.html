@@ -34,7 +34,7 @@
 	<body onload="if(typeof start === 'function' ) { start(); }" class="no-iframe">
 		
 		<header style="-webkit-app-region: drag">
-			<div id="logo" onclick="resetAlexandria()">
+			<div id="logo" onclick="resetAlexandria()" class="nodrag">
 				<div id="logoImg">
 					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 18 18" version="1.1" class="replaced-svg">
 					    <title>aicon</title>
@@ -47,8 +47,8 @@
 				</div>
 			</div>
 
-			<div id="search">
-				<div class="input-container">
+			<div id="search" class="nodrag">
+				<div class="input-container search-container">
 					<input type="text" class="search" value="" placeholder="Search" id="search-main" />
 					<div class="clearSearch">x</div>
 				</div>
@@ -187,40 +187,11 @@
 						</ul>
 					</div>	
 					<div class="row">
-						<label>Search Term</label>
 						<div class="input-container">
-							<input type="text" class="search" id="searchTermInput" />			
+							<input type="text" class="search" id="searchTermInput" placeholder="Search Term" />			
 							<div class="clearSearch">x</div>
 						</div>
 					</div>
-<!--
-					<div class="row">
-						<label>Refine Results</label>
-						<div class="input-container first">
-							<select>
-								<option value="inc">includes</option>
-								<option value="exc">excludes</option>
-								<option value="starts">starts with</option>
-							</select>
-						</div>
-						<div class="input-container second">
-							<input type="text" class="search" />
-							<div class="clearSearch">x</div>
-						</div>						
-					</div>
-					<div class="row">
-						<label>Results</label>
-						<div class="input-container slider-container">
-							<div class="alex-ui-slider"></div>
-						</div>
-					</div>
-					<div class="row">
-						<label>Date range</label>
-						<div class="input-container">
-							<input type="text" class="alex-ui-datepicker search"> - <input type="text" class="alex-ui-datepicker search">
-						</div>
-					</div>
--->
 					<div class="row">
 						<div class="input-container buttons">
 							<span class="cancel-btn icongfx" onclick="cancelSearch();">Cancel</span> <span class="go-btn icongfx" onclick="buildSearch();">Go</span>
@@ -232,7 +203,7 @@
 			<h2 class="sharing-ui">Share New Content</h2>
 			<h2 class="publisher-ui">Create New Publisher</h2>
 			<h2 class="wallet-ui">Wallet</h2>
-			<div id="header-menu">
+			<div id="header-menu" class="nodrag">
 				<div id="addNewContent-icon" onclick="loadAddContentModal();" class="header-icon">
 					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25px" height="25px" viewBox="0 0 25 25" version="1.1" class="replaced-svg">
 					    <title>add new content icon</title>
@@ -510,17 +481,17 @@
 			<ul id="publisher-process" class="wrapper">
 				<li>
 					<div class="sublistWrap">
-						<ul>
+						<ul class="hasInfo">
 							<li><label>Publisher Name</label><input type="text" size="36" id="newPublisher-name" /></li>
-							<li><label>Florincoin Address</label><input type="text" size="36" id="newPublisher-floAdd" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
+							<li><label>Florincoin Address</label><input type="text" size="36" id="newPublisher-floAdd" /> <span class="posRelative"><a class="info-icon" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
 <path d="M49.539,0C22.188-0.01,0.018,22.381,0,50.023c0.018,27.601,22.188,49.993,49.539,49.979  c27.344,0.014,49.518-22.378,49.541-49.979C99.057,22.381,76.883-0.01,49.539,0z M49.512,21.634c4.372,0,7.922,3.546,7.922,7.922  s-3.55,7.923-7.922,7.923c-4.38,0-7.927-3.547-7.927-7.923S45.132,21.634,49.512,21.634z M61.117,74.787H38.169v-3.922h3.342  c0.48,0,0.873-0.396,0.873-0.881V44.711c0-0.484-0.389-0.881-0.873-0.881h-3.342v-3.795h18.466v29.567  c0,0.696,0.396,1.263,0.881,1.263h3.602V74.787z"></path>
-</svg>info</a></li>
-							<li><label>Email Address</label><input type="text" id="newPublisher-emailmd5" placeholder="optional" size="36" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
+</svg>info</a></span></li>
+							<li><label>Email Address</label><input type="text" id="newPublisher-emailmd5" placeholder="optional" size="36" /> <span class="posRelative"><a class="info-icon" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
 <path d="M49.539,0C22.188-0.01,0.018,22.381,0,50.023c0.018,27.601,22.188,49.993,49.539,49.979  c27.344,0.014,49.518-22.378,49.541-49.979C99.057,22.381,76.883-0.01,49.539,0z M49.512,21.634c4.372,0,7.922,3.546,7.922,7.922  s-3.55,7.923-7.922,7.923c-4.38,0-7.927-3.547-7.927-7.923S45.132,21.634,49.512,21.634z M61.117,74.787H38.169v-3.922h3.342  c0.48,0,0.873-0.396,0.873-0.881V44.711c0-0.484-0.389-0.881-0.873-0.881h-3.342v-3.795h18.466v29.567  c0,0.696,0.396,1.263,0.881,1.263h3.602V74.787z"></path>
-</svg>info</a></li>
-							<li><label>BitMessage Address</label><input type="text" id="newPublisher-bitmsg" placeholder="optional" size="36" /> <a class="info-icon inline-block" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
+</svg>info</a></span></li>
+							<li><label>BitMessage Address</label><input type="text" id="newPublisher-bitmsg" placeholder="optional" size="36" /> <span class="posRelative"><a class="info-icon inline-block" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
 <path d="M49.539,0C22.188-0.01,0.018,22.381,0,50.023c0.018,27.601,22.188,49.993,49.539,49.979  c27.344,0.014,49.518-22.378,49.541-49.979C99.057,22.381,76.883-0.01,49.539,0z M49.512,21.634c4.372,0,7.922,3.546,7.922,7.922  s-3.55,7.923-7.922,7.923c-4.38,0-7.927-3.547-7.927-7.923S45.132,21.634,49.512,21.634z M61.117,74.787H38.169v-3.922h3.342  c0.48,0,0.873-0.396,0.873-0.881V44.711c0-0.484-0.389-0.881-0.873-0.881h-3.342v-3.795h18.466v29.567  c0,0.696,0.396,1.263,0.881,1.263h3.602V74.787z"></path>
-</svg>info</a></li>
+</svg>info</a></span></li>
 						</ul>
 					</div>
 				</li>
@@ -765,22 +736,22 @@
 						<div class="tblwrap">
 							<div class="tbl centered">
 								<ul class="distNetList">
-									<li><input type="checkbox" name="dNetwork" value="DHT" id="dNetDHT" checked disabled /> <label for="dNetDHT">Mainline DHT</label> <a class="info-icon" onclick="loadInfoModal(this)"><<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
+									<li><div class="hasInfo"><input type="checkbox" name="dNetwork" value="DHT" id="dNetDHT" checked disabled /> <label for="dNetDHT">Mainline DHT</label> <a class="info-icon" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
 <path d="M49.539,0C22.188-0.01,0.018,22.381,0,50.023c0.018,27.601,22.188,49.993,49.539,49.979  c27.344,0.014,49.518-22.378,49.541-49.979C99.057,22.381,76.883-0.01,49.539,0z M49.512,21.634c4.372,0,7.922,3.546,7.922,7.922  s-3.55,7.923-7.922,7.923c-4.38,0-7.927-3.547-7.927-7.923S45.132,21.634,49.512,21.634z M61.117,74.787H38.169v-3.922h3.342  c0.48,0,0.873-0.396,0.873-0.881V44.711c0-0.484-0.389-0.881-0.873-0.881h-3.342v-3.795h18.466v29.567  c0,0.696,0.396,1.263,0.881,1.263h3.602V74.787z"></path>
-</svg>info</a>
+</svg>info</a></div>
 										<div class="input-container required" style="display:block">
 											<label>Torrent Magnet URI</label>
 											<input type="text" id="dht-hash" name="DHT Hash" onblur="parseMagnetURI();" />
 											<input type="hidden" id="btih-hash" name="btih Hash Value" />
 										</div>
 									</li>
-									<li class="disabled"><input type="checkbox" name="dNetwork" value="MaidSafe" id="dNetSafe" disabled /> <label for="dNetSafe">MaidSafe</label> <a class="info-icon" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
+									<li class="disabled hasInfo"><input type="checkbox" name="dNetwork" value="MaidSafe" id="dNetSafe" disabled /> <label for="dNetSafe">MaidSafe</label> <a class="info-icon" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
 <path d="M49.539,0C22.188-0.01,0.018,22.381,0,50.023c0.018,27.601,22.188,49.993,49.539,49.979  c27.344,0.014,49.518-22.378,49.541-49.979C99.057,22.381,76.883-0.01,49.539,0z M49.512,21.634c4.372,0,7.922,3.546,7.922,7.922  s-3.55,7.923-7.922,7.923c-4.38,0-7.927-3.547-7.927-7.923S45.132,21.634,49.512,21.634z M61.117,74.787H38.169v-3.922h3.342  c0.48,0,0.873-0.396,0.873-0.881V44.711c0-0.484-0.389-0.881-0.873-0.881h-3.342v-3.795h18.466v29.567  c0,0.696,0.396,1.263,0.881,1.263h3.602V74.787z"></path>
 </svg>info</a></li>
-									<li class="disabled"><input type="checkbox" name="dNetwork" value="Storj" id="dNetStorj" disabled /> <label for="dNetStorj">Storj.io</label> <a class="info-icon" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
+									<li class="disabled hasInfo"><input type="checkbox" name="dNetwork" value="Storj" id="dNetStorj" disabled /> <label for="dNetStorj">Storj.io</label> <a class="info-icon" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
 <path d="M49.539,0C22.188-0.01,0.018,22.381,0,50.023c0.018,27.601,22.188,49.993,49.539,49.979  c27.344,0.014,49.518-22.378,49.541-49.979C99.057,22.381,76.883-0.01,49.539,0z M49.512,21.634c4.372,0,7.922,3.546,7.922,7.922  s-3.55,7.923-7.922,7.923c-4.38,0-7.927-3.547-7.927-7.923S45.132,21.634,49.512,21.634z M61.117,74.787H38.169v-3.922h3.342  c0.48,0,0.873-0.396,0.873-0.881V44.711c0-0.484-0.389-0.881-0.873-0.881h-3.342v-3.795h18.466v29.567  c0,0.696,0.396,1.263,0.881,1.263h3.602V74.787z"></path>
 </svg>info</a></li>
-									<li class="disabled"><input type="checkbox" name="dNetwork" value="Filecoin" id="dNetFilecoin" disabled /> <label for="dNetFilecoin">Filecoin</label> <a class="info-icon" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
+									<li class="disabled hasInfo"><input type="checkbox" name="dNetwork" value="Filecoin" id="dNetFilecoin" disabled /> <label for="dNetFilecoin">Filecoin</label> <a class="info-icon" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
 <path d="M49.539,0C22.188-0.01,0.018,22.381,0,50.023c0.018,27.601,22.188,49.993,49.539,49.979  c27.344,0.014,49.518-22.378,49.541-49.979C99.057,22.381,76.883-0.01,49.539,0z M49.512,21.634c4.372,0,7.922,3.546,7.922,7.922  s-3.55,7.923-7.922,7.923c-4.38,0-7.927-3.547-7.927-7.923S45.132,21.634,49.512,21.634z M61.117,74.787H38.169v-3.922h3.342  c0.48,0,0.873-0.396,0.873-0.881V44.711c0-0.484-0.389-0.881-0.873-0.881h-3.342v-3.795h18.466v29.567  c0,0.696,0.396,1.263,0.881,1.263h3.602V74.787z"></path>
 </svg>info</a></li>
 								</ul>
@@ -831,7 +802,7 @@
 					<div id="newMedia-notary" class="modal-tab">
 						<h2>select publishing network:</h2>
 						<div class="tblwrap">
-							<div class="tbl">
+							<div class="tbl hasInfo">
 								<div class="row strong">
 									<div class="col">
 										Choose Blockchain(s)
@@ -857,18 +828,6 @@
 										<div id="flo-ltc" class="exchange-wrap"><label></label><span></span></div>
 										<div id="ltc-usd" class="exchange-wrap"><label></label><span></span></div>
 										<div id="flo-usd" class="exchange-wrap"><label></label><span></span></div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col">
-										<div class="input-container disabled">
-											<input disabled type="checkbox" name="digital-notary-Factom" id="digital-notary-Factom" /> <label for="digital-notary-Factom">Factom</label> <a class="info-icon" onclick="loadInfoModal(this)"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" width="99.08px" height="100.002px" viewBox="0 0 99.08 100.002" enable-background="new 0 0 99.08 100.002" xml:space="preserve" class="replaced-svg">
-<path d="M49.539,0C22.188-0.01,0.018,22.381,0,50.023c0.018,27.601,22.188,49.993,49.539,49.979  c27.344,0.014,49.518-22.378,49.541-49.979C99.057,22.381,76.883-0.01,49.539,0z M49.512,21.634c4.372,0,7.922,3.546,7.922,7.922  s-3.55,7.923-7.922,7.923c-4.38,0-7.927-3.547-7.927-7.923S45.132,21.634,49.512,21.634z M61.117,74.787H38.169v-3.922h3.342  c0.48,0,0.873-0.396,0.873-0.881V44.711c0-0.484-0.389-0.881-0.873-0.881h-3.342v-3.795h18.466v29.567  c0,0.696,0.396,1.263,0.881,1.263h3.602V74.787z"></path>
-</svg>info</a>
-										</div>
-									</div>
-									<div class="col">
-										&nbsp;
 									</div>
 								</div>
 							</div>

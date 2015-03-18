@@ -1215,7 +1215,8 @@ function loadInfoModal(childObj) {
         }
 		// INFO MODAL for LI
 		$('#info-modal-small').html('');
-		var localFile = $(childObj).siblings('label').text().replace(/\s/g , "-").toLowerCase();
+		var localFile = ($(childObj).siblings('label').length != 0) ? ($(childObj).siblings('label').text()) : ($(childObj).parent().siblings('label').text());
+		localFile = localFile.replace(/\s/g , "-").toLowerCase();
 		getInfoFile(localFile);
 		if ($(childObj).find('#info-modal-small').length == 0) {
 			$(childObj).append($('#info-modal-small'));
@@ -2427,7 +2428,7 @@ function makeHistory(stateObj, newTitle) {
 	} else {
 		resetInterface();
 		if (!document.getElementById('browser-nav')) {
-			$('#logo').after('<div id="browser-nav"><a onclick="goBack()">Back</a></div>');
+			$('#logo').after('<div id="browser-nav" class="nodrag"><a onclick="goBack()">Back</a></div>');
 		}
 	}
 	$('#viewlabel').children().hide();
