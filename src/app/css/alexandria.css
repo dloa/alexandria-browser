@@ -43,6 +43,9 @@ fieldset {
 textarea {
 	resize: vertical;
 }
+a {
+	cursor: pointer;
+}
 .browsehappy {
 	margin: 0.2em 0;
 	background: #ccc;
@@ -206,7 +209,6 @@ div#logoImg {
 #browser-nav {
 	position: absolute;
 	left: 100px;
-	cursor: pointer;
 }
 #search {
 	position: relative;
@@ -404,9 +406,6 @@ header #app-user-icon {
 .header-modal ul li:first-child {
 	margin-top: 0;
 }
-.header-modal ul li a {
-	cursor: pointer;
-}
 .header-modal ul li img, .header-modal ul li svg {
 	display: inline;
 	width: 24px;
@@ -488,7 +487,6 @@ div#intro {
 }
 .module-links a {
 	color: #979797;
-	cursor: pointer;
 	display: inline-block;
 	margin: 1em .75em;
 	font-size: 16px;
@@ -850,12 +848,11 @@ img.poster-frame {
 #wallet-balance-wrap .row .col {
 	text-align: left;
 }
-#buyMoreBtn {
-	margin-top: 5px;
+#buyMoreBtn, #deactivate-media-button {
 	font-size: .875em;
 }
-#buyMoreBtn a {
-	cursor: pointer;
+#buyMoreBtn {
+	margin-top: 5px;
 }
 #wallet-request-method {
 	overflow: hidden;
@@ -868,9 +865,6 @@ img.poster-frame {
 	height: 27px;
 	margin-top: -3px;
 	width: 27px;
-}
-#wallet-send-camera a {
-	cursor: pointer;
 }
 #wallet-send-camera svg {
   max-height: 100%;
@@ -902,6 +896,11 @@ img.poster-frame {
 	text-align: left;
 	margin: 0;
 	padding: 0;
+}
+#deactivate-media-button {
+	position: absolute;
+	top: 2px;
+	right: 1em;
 }
 #publisher-process {
 	max-width:660px;
@@ -1433,20 +1432,6 @@ ul.distNetList li {
 	border: 1px solid #222;
 	border: 1px solid rgba(20,20,20,.1);
 }
-/* OVERLAY MODAL */
-.overlay-modal {
-	display: none;
-	position: absolute;
-	top: 100px;
-	z-index: 500;
-	background: none #fff;
-	padding: 2.25em;
-	box-sizing: border-box;
-	border: 1px solid #979797;
-	box-shadow: 2px 2px 2px rgba(20,20,20,.2);
-	-moz-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
-	-webkit-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
-}
 /* GO TO LOCATION MODAL */
 #go-modal {
 	width: 460px;
@@ -1459,32 +1444,50 @@ ul.distNetList li {
 	text-indent: .4em;
 	padding: .25em .5em;
 }
-/* TIP ALEXANDRIA TEAM MODAL */
-#tip-alexandria-modal {
-	width: 80%;
-	left: 10%;
+/* OVERLAY MODAL */
+.overlay-modal {
+	display: none;
+	position: absolute;
+	width: 60%;
+	top: 100px;
+	left: 20%;
+	z-index: 500;
+	background: none #fff;
+	padding: 2.25em;
+	box-sizing: border-box;
+	border: 1px solid #979797;
+	box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+	-moz-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+	-webkit-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
 }
-#tip-alexandria-modal * {
-	text-align: center;
+.overlay-modal * {
 	vertical-align: middle;
 }
-#tip-alexandria-modal .input-container {
+.overlay-modal .input-container {
 	margin: 1em 0;
 }
 #tip-alexandria-modal .input-container input {
 	width: 5em;
 }
-#tip-alexandria-modal .input-container label {
+#tip-alexandria-modal * {
+	text-align: center;
+}
+.overlay-modal .col {
+	padding-bottom: .5em;
+}
+.overlay-modal .col:first-of-type {
+	text-align: right;
+	padding-right: 1em;
+	max-width: 55px;
+}
+.overlay-modal label {
 	display: inline;
 	vertical-align: middle;
 }
-#tip-alexandria-modal .row {
+.overlay-modal .row {
 	width: 80%;
 	float: none;
 	margin: 0 auto;
-}
-#tip-alexandria-modal .row a {
-	cursor: pointer;
 }
 /* SHARE MODAL */
 #share-modal {
@@ -1555,9 +1558,6 @@ footer#footer div#viewlabel {
 }
 .view-media-ui {
 	display: none;
-}
-div#viewlabel a {
-	cursor: pointer;
 }
 .breadcrumbs {
 	color: #a3ccb1;

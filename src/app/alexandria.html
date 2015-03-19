@@ -597,6 +597,7 @@
 									</div><div>Thing</div></a></li>
 								</ul>
 							</div>
+							<div id="deactivate-media-button"><a onclick="loadDeactivateModal();">Deactivate Media</a></div>
 							<div class="left">
 								<h2>Information</h2>
 								<div class="container">
@@ -1220,6 +1221,31 @@
 				</div>
 			</div>
 		</main>
+		
+		<div id="deactivate-media-modal" class="overlay-modal">
+			<h3>Deactivate Media</h3>
+			<div class="tbl input-container">
+				<div class="row">
+					<div class="col">
+						<label for="deactivate-txid">Media Transaction ID</label>
+					</div>
+					<div class="col">
+						<input type="text" name="TxId" id="deactivate-txid" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<label for="deactivate-address">Publisher FLO Address</label>
+					</div>
+					<div class="col">
+						<input type="text" name="Address" id="deactivate-address" />
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<a onclick="hideOverlay();" class="left btnLightGray">Cancel</a><a onclick="deactivateMedia();" class="pull-right btnLightGray">Sign and Deactivate</a>
+			</div>
+		</div>
 		
 		<div id="tip-alexandria-modal" class="overlay-modal">
 			<h3>Would you like to include a tip to support ΛLΞXΛNDRIΛ development?</h3>

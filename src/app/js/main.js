@@ -1814,17 +1814,52 @@ function mediaReqCheck() {
 		}
 }
 
+// LOAD DEACTIVATE MEDIA MODAL
+function loadDeactivateModal() {
+	$('#deactivate-media-modal').fadeIn(fadeTimer);
+	document.getElementById('app-overlay').style.display = 'block';
+}
+
+// DEACTIVATE MEDIA
+function deactivateMedia() {
+	var TxId = document.getElementById('deactivate-txid').value;
+	var FLOadd = document.getElementById('deactivate-address').value;
+	var pubTime = Date.parse(new Date()).toString();
+	var mediaSig = generateSignature(TxId, FLOadd, pubTime);
+	if (mediaSig == false) {
+		return false;
+	}
+	var queryString = '{ "alexandria-deactivation": { "address": "'+ FLOadd +'", "txid": "'+ TxId +'" }, "signature":"'+ mediaSig +'" }';
+	console.log(queryString);
+/*
+	$.ajax({
+	    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
+	    type: 'POST',
+		data: queryString.toString(),
+	    success: function(e) {
+			hideOverlay();
+	    	resetAlexandria();
+	    	alert('Media Deactivated!');
+	    },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+		}
+	});
+*/
+}
+
 // LOAD TIP-TO-ALEXANDRIA MODAL
 function showTipAlexandriaModal() {
 	getCryptos();
 	$('#tip-alexandria-modal').fadeIn(fadeTimer);
-	$('#app-overlay').fadeIn(fadeTimer);
 	document.getElementById('app-overlay').style.display = 'block';
 }
 
 // HIDE OVERLAY AND MODAL
 function hideOverlay() {
 	$('.overlay-modal').fadeOut(fadeTimer);
+	$('.overlay-modal input[type="text"]').val('');
 	document.getElementById('disabler').style.display = 'none';	
 	document.getElementById('app-overlay').style.display = 'none';
 }
