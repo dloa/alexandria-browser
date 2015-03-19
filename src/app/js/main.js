@@ -1104,17 +1104,13 @@ function searchAPI(module, searchOn, searchFor) {
 // POPULATE SEARCH RESULTS
 function populateSearchResults(results, module) {
 	artifact = '';
-	if (!results) {
-		var mediaEntity = '<div class="row media-entity"><div class="browse-icon">'+ mediaIconSVGs['media'] +'</div><h3 class="media-title">No Results Found</h3></div>';
-		$('#browse-media-wrap').append(mediaEntity);
-		$('#browse-media-wrap h2').text('Browse '+ history.state.currentView.charAt(0).toUpperCase() + history.state.currentView.slice(1));
-		$('#browse-media-wrap .row:first-of-type').addClass('first');
-		$('#browse-media').show();
-		return false;
-	}
-	if (module =='media') {
+	if (module == 'publishers') {
+		module = 'publisher';
+	};
+	console.info(results);
+	$('#'+module+'-results-title').remove();
+	if ( (module =='media') && (results) ) {
 		for (var i = 0; i < results.length; i++) {
-			console.info(results[i]);
 			var mediaType = results[i]['media-data']['alexandria-media']['type'];
 			if ( (history.state) && (history.state.mediaTypes) ) {
 				if ( (history.state.mediaTypes.length > 0) && (history.state.searchResults == true) && (history.state.mediaTypes.indexOf(mediaType) == -1) ) {
@@ -1147,14 +1143,15 @@ function populateSearchResults(results, module) {
 				mediaRuntime = '';
 			}
 			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+mediaIconSVGs[mediaType]+'</div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '</div> '+ mediaRuntime +' <a class="info-icon" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div>';
-			if ($('#browse-media-wrap .row').length < 1){
-				$('#browse-media-wrap').append(mediaEntity);
+			console.info(mediaEntity);
+			if ($('#browse-media-wrap #'+module+'-results-wrap .row').length < 1){
+				$('#browse-media-wrap #'+module+'-results-wrap').append(mediaEntity);
 			} else {
-				$('#browse-media-wrap .row:first-of-type').before(mediaEntity);
+				$('#browse-media-wrap #'+module+'-results-wrap .row:first-of-type').before(mediaEntity);
 			}
 		}
-		$('#browse-media-wrap h2').text('Browse Media');
-	} else {
+		$('#browse-media-wrap #'+module+'-results-wrap .row.'+module+'-entity:first-of-type').addClass('first');
+	} else if ( (module =='publisher') && (results) ) {
 		for (var i = 0; i < results.length; i++) {
 			var publisherID = results[i]['txid'];
 			var publisherName = results[i]['publisher-data']['alexandria-publisher']['name'];
@@ -1164,20 +1161,24 @@ function populateSearchResults(results, module) {
 				publisherDate = parseInt(publisherDate)*1000;
 			}
 			var publisherEntity = '<div id="publisher-' + publisherID + '" class="row publisher-entity"><div class="browse-icon publisher-icon" onclick="loadPublisherEntity(this);">'+ publisherIconSVG +'</div><h3 class="publisher-title" onclick="loadPublisherEntity(this);">' + publisherName + '</h3> <div class="publisher-date">' + new Date(parseInt(publisherDate)) + '</div>';
-			if ($('#browse-media-wrap .row').length < 1){
-				$('#browse-media-wrap').append(publisherEntity);
+			if ($('#browse-media-wrap #'+module+'-results-wrap .row').length < 1){
+				$('#browse-media-wrap #'+module+'-results-wrap').append(publisherEntity);
 			} else {
-				$('#browse-media-wrap .row:first-of-type').before(publisherEntity);
+				$('#browse-media-wrap #'+module+'-results-wrap .row:first-of-type').before(mediaEntity);
 			}
 		}
-		$('#browse-media-wrap h2').text('Browse Publishers');
+		$('#browse-media-wrap #'+module+'-results-wrap .row.'+module+'-entity:first-of-type').addClass('first');
 	}
-	if ($('#browse-media-wrap .row').length < 1) {
-		var mediaEntity = '<div class="row media-entity"><div class="browse-icon">'+ mediaIconSVGs['media'] +'</div><h3 class="media-title">No Results Found</h3></div>';
-		$('#browse-media-wrap').append(mediaEntity);
-		$('#browse-media-wrap h2').text('Browse '+ history.state.currentView.charAt(0).toUpperCase() + history.state.currentView.slice(1));
+	if (!results) {
+		var mediaIcon = (module == 'media') ? (mediaIconSVGs['media']) : (publisherIconSVG);
+		var mediaEntity = '<div class="row '+module+'-entity"><div class="'+module+'-icon browse-icon">'+ mediaIcon +'</div><h3 class="'+module+'-title">No Results Found</h3></div>';
+		$('#browse-media-wrap #'+module+'-results-wrap').append(mediaEntity);
+		$('#browse-media-wrap .row.'+module+'-entity:first-of-type').addClass('first');
 	}
-	$('#browse-media-wrap .row:first-of-type').addClass('first');
+	$('#browse-media .row.'+module+'-entity.first').each(function(){
+		var resultsTitle = (module == 'publisher') ? ('Publishers') : ('Media');
+		$(this).before('<h2 id="'+module+'-results-title">'+resultsTitle+'</h2>');
+	});
 	$('#browse-media').show();	
 }
 
@@ -2166,7 +2167,7 @@ function resetInterface() {
 	if (document.getElementById('intro').style.display == 'block') {
 		$('#intro').fadeOut(fadeTimer);
 	}
-//	document.getElementById('search').style.display = 'block';
+	$('#browse-media h2').remove();
 	$('.search').attr('disabled',false);
 	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();

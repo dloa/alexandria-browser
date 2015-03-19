@@ -582,10 +582,10 @@ ul#media-type-select-list {
 	margin-top: 1em;
 	clear: both;
 }
-#browse-media-wrap > * {
+#browse-media-wrap > .container > * {
 	text-align: left;
 }
-#browse-media-wrap > .row {
+#browse-media-wrap > .container > .row {
 	padding: .25em 0;
 	position: relative;
 }
@@ -604,7 +604,7 @@ ul#media-type-select-list {
 	border-top: 1px solid #979797;
 	position: relative;
 }
-#browse-media-wrap > .row > *, #publisher-media-list li > * {
+#browse-media-wrap > .container > .row > *, #publisher-media-list li > * {
 	margin: 0 0 0 .5em;
 	display: inline-block;
 	vertical-align: middle;
@@ -1104,6 +1104,9 @@ input[type="file"] {
 	padding: 0 0 1em 36px;
 	position: relative;
 	line-height: 1.65;
+}
+#newMedia-tabs .tbl .heading .col {
+	padding-bottom: .5em;
 }
 #newMedia-tabs .tbl #autofill-wrapper .col { 
 	padding-bottom: 0;
