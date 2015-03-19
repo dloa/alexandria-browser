@@ -1478,7 +1478,7 @@ ul.distNetList li {
 .overlay-modal .col:first-of-type {
 	text-align: right;
 	padding-right: 1em;
-	max-width: 55px;
+	width: 170px;
 }
 .overlay-modal label {
 	display: inline;
