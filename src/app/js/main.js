@@ -1831,7 +1831,6 @@ function deactivateMedia() {
 	}
 	var queryString = '{ "alexandria-deactivation": { "address": "'+ FLOadd +'", "txid": "'+ TxId +'" }, "signature":"'+ mediaSig +'" }';
 	console.log(queryString);
-/*
 	$.ajax({
 	    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
 	    type: 'POST',
@@ -1846,7 +1845,6 @@ function deactivateMedia() {
 			console.error(thrownError);
 		}
 	});
-*/
 }
 
 // LOAD TIP-TO-ALEXANDRIA MODAL
