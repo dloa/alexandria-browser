@@ -568,6 +568,9 @@ ul#media-type-select-list {
 	max-width: 1200px;
 	padding-bottom: 2em;
 }
+#browse-media .container:first-of-type {
+  margin-bottom: 1.5em;
+}
 .row.media-list {
 	width: 100%;
 	clear: both;

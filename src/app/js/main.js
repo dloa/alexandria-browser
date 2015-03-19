@@ -1179,6 +1179,13 @@ function populateSearchResults(results, module) {
 		var resultsTitle = (module == 'publisher') ? ('Publishers') : ('Media');
 		$(this).before('<h2 id="'+module+'-results-title">'+resultsTitle+'</h2>');
 	});
+	$('#browse-media .container').each(function(){
+		if ($(this).children().length == 0) {
+			$(this).hide();
+		} else {
+			$(this).show();
+		}
+	});
 	$('#browse-media').show();	
 }
 
