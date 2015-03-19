@@ -167,6 +167,8 @@ select {
 	background-size: 1em;
 	padding: 0 .5em;
 	margin: .25em 0;
+	border-radius: 5px;
+	border: 1px solid #979797;
 }
 header .input-container select {
 	font-size: .8em;
