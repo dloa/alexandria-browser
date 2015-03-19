@@ -1164,7 +1164,7 @@ function populateSearchResults(results, module) {
 			if ($('#browse-media-wrap #'+module+'-results-wrap .row').length < 1){
 				$('#browse-media-wrap #'+module+'-results-wrap').append(publisherEntity);
 			} else {
-				$('#browse-media-wrap #'+module+'-results-wrap .row:first-of-type').before(mediaEntity);
+				$('#browse-media-wrap #'+module+'-results-wrap .row:first-of-type').before(publisherEntity);
 			}
 		}
 		$('#browse-media-wrap #'+module+'-results-wrap .row.'+module+'-entity:first-of-type').addClass('first');
