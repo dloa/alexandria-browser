@@ -214,7 +214,7 @@ function router (event, goUrl) {
 		url = goUrl.split('#')[1];
   	}
 	var paths = url.split('/');
-	if (paths[1]) {
+	if (paths[1] != '') {
 		var module = '/'+paths[1];
 	} else {
 		var module = url;
@@ -339,6 +339,7 @@ function router (event, goUrl) {
 				}
 			}
     	} else if ( (route.templateId == 'publishers') || (route.templateId == 'publisher') ) {
+			console.info(paths[2]);
 			if (!paths[2]) {
 				getAllPublishers();
 			} else {
@@ -382,14 +383,14 @@ function router (event, goUrl) {
     	// ROUTE DOESN'T EXIST - IF ADDRESS LOAD PUBLISHER
     	console.info(paths[1]);
     	if (paths[1].length == 34) {
-			var searchResults = searchAPI('publisher', 'address', paths[1]);
-			loadPublisherView();
+//			var searchResults = searchAPI('publisher', 'address', paths[1]);
+			loadPublisherView(paths[1]);
     	} else if (paths[1].length == 64) {
 			var searchResults = searchAPI('publisher', 'txid', paths[1]);
 			if (!searchResults) {
 				loadArtifactView(paths[1]);
 			} else {
-				loadPublisherView();
+				loadPublisherView(paths[1]);
 			}
     	}
     }
@@ -553,14 +554,19 @@ function loadPublisherView(objMeta) {
 	document.getElementById('viewlabel').style.display = 'inline-block';
 	$('.view-publishers-ui').show();
 	document.getElementById('view-publisher').style.display = 'block';
-	if (location.hash.slice(1).split('/')[2]) {
-		var publisherID = (objMeta) ? ($(objMeta).attr('id').split('-')[1]) : (location.hash.slice(1).split('/')[2]) ;
+	console.info(objMeta);
+	var publisherID = '';
+	if ( (objMeta.length == 34) || (objMeta.length == 64) ) {
+		publisherID = objMeta;
+	} else if (location.hash.slice(1).split('/')[2]) {
+		publisherID = (objMeta) ? ($(objMeta).attr('id').split('-')[1]) : (location.hash.slice(1).split('/')[2]) ;
 	} else if (location.hash.slice(1).split('/')[1]) {
-		var publisherID = (objMeta) ? ($(objMeta).attr('id').split('-')[1]) : (location.hash.slice(1).split('/')[1]) ;
+		publisherID = (objMeta) ? ($(objMeta).attr('id').split('-')[1]) : (location.hash.slice(1).split('/')[1]) ;
 	} else {
-		var publisherID = $(objMeta).attr('id').split('-')[1];
+		publisherID = $(objMeta).attr('id').split('-')[1];
 	}
-	var thisPublisher = (publisherID.length == 34) ? (searchAPI('publisher', 'address', publisherID)) : searchAPI('publisher', 'txid', publisherID);
+	console.info(publisherID);
+	var thisPublisher = (publisherID.length == 34) ? (searchAPI('publisher', 'address', publisherID)) : (searchAPI('publisher', 'txid', publisherID));
 	console.info(thisPublisher);
 	publisherID = thisPublisher[0]['txid'];
 	thisPublisher = thisPublisher[0]['publisher-data']['alexandria-publisher'];
@@ -613,7 +619,6 @@ function loadPublisherView(objMeta) {
 				mediaRuntime = '';
 			}
 			var mediaEntity = '<li id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+mediaIconSVGs[mediaType]+'</div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> '+ mediaRuntime +' <a class="info-icon" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div></li>';
-			console.log(mediaEntity);
 			$('#publisher-media-list').prepend(mediaEntity);
 		}
 	}
@@ -1571,7 +1576,7 @@ function changeAddMediaTab(obj) {
 	var firstTab = $('#add-media-menu li:first-child').attr('name');
 	var lastTab = $('#add-media-menu li:last-child').attr('name');
 	if (activeTabName == lastTab) {
-		$('#add-media .pagination ul li:last-child').removeClass('next').addClass('submit').text('Submit');
+		$('#add-media .pagination ul li:last-child').removeClass('next').addClass('submit').text('Publish');
 	} else {
 		$('#add-media .pagination ul li:last-child').removeClass('submit').addClass('next').text('Next');
 	}
@@ -1892,7 +1897,7 @@ function selectMediaType(obj, mediaType) {
 				"www":"",
 				"runtime":"Runtime",
 				"creators1":"Artist",
-				"creators2":"Screenwriter(s)",
+				"creators2":"",
 				"creators3":"",
 				"taxonomy":"Genre",
 				"company":"Company",
