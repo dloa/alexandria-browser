@@ -675,7 +675,13 @@ ul#media-type-select-list {
 	margin: 0 auto 40px;
 	display: block;
 }
-.media-embed object {
+.row.media-embed {
+  text-align: center;
+}
+.media-embed embed {
+  display: inline-block;
+}
+.media-embed object.book-embed {
 	min-width: 100%;
 	height: 800px;
 	min-height: 101%;
