@@ -1143,7 +1143,6 @@ function populateSearchResults(results, module) {
 				mediaRuntime = '';
 			}
 			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+mediaIconSVGs[mediaType]+'</div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '</div> '+ mediaRuntime +' <a class="info-icon" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div>';
-			console.info(mediaEntity);
 			if ($('#browse-media-wrap #'+module+'-results-wrap .row').length < 1){
 				$('#browse-media-wrap #'+module+'-results-wrap').append(mediaEntity);
 			} else {
@@ -1686,7 +1685,7 @@ function getYouTubeinfo() {
 	    success: function(e) {
 			var el = $( '#sketchpad' );
 			el.html(e.responseText);
-			var data = $.parseJSON($('p', el).html());
+			var data = $.parseJSON($(el).html());
 			var mediaData = data['items'][0]['snippet'];
 			document.getElementById('addMedia-title').value = mediaData['title'];
 			document.getElementById('addMedia-creators1').value = mediaData['channelTitle'];

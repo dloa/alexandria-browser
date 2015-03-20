@@ -1138,19 +1138,12 @@ ul.distNetList, ul.distNetList li {
 }
 ul.distNetList {
 	margin:0;
-	width: 230px;
+	width: 100%;
 	display: inline-block;
 }
 ul.distNetList li {
-	margin: 0 0 0.8em;
+	margin: 0 0 0.5em;
 	position: relative;
-}
-#add-media .distNetList li .input-container {
-	width: 150%;
-	margin: .5em 0 1em -25%;
-}
-#newMedia-notary .input-container .input-container {
-	padding: 10px 10px 0;
 }
 #newMediaPublisherFLO {
 	margin: .25em 0 1em 0;
@@ -1407,6 +1400,10 @@ ul.distNetList li {
 	padding: 1em;
 	border-radius: 100%;
 	cursor: pointer;
+	display: block;
+}
+#qrcode span {
+	display: inline-block;
 }
 #qrcode img {
 	width: 100%;
