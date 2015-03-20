@@ -758,9 +758,9 @@ function loadArtifactView(objMeta) {
 		if ( (fileHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
 			mediaFilename = 'SF Bitcoin Meetup @ Geekdom - November 18, 2014.mp4';
 		}
-		var fileEmbed = '<video controls id="streamingVideo"> <source src="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /> </video>';
+		var fileEmbed = '<object type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="360px" height="240px"><param name="autostart" value="false" /></object>';
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
-		var fileEmbed = '<audio controls> <source src="http://localhost:3000/stream/'+ fileHash +'/'+ mediaFilename +'" type="audio/mpeg" /> </audio>';
+		var fileEmbed = '<object type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="360px" height="60px"><param name="autostart" value="false" /></object>';
 	} else if (mediaType == 'book') {
 		if ( (fileHash == '08D72B48F0799BBF62A2DC54CB66CB1ED14F9431') && (mediaFilename == '') ) {
 			mediaFilename = 'bitcoin.pdf';
