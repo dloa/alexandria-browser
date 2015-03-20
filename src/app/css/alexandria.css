@@ -1100,9 +1100,11 @@ input[type="file"] {
 #newMedia-tabs .tbl {
 	display: table;
 	width: 100%;
-	margin-top: 1em;
 	margin-bottom: 1em;
 	text-align: left;
+}
+#newMedia-pay .tblwrap {
+	margin-top: 1em;
 }
 #newMedia-tabs .tbl .col { 
 	padding: 0 0 1em 36px;
