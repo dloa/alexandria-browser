@@ -827,7 +827,15 @@ img.poster-frame {
 	text-align: left;
 	width: 81%;
 }
-
+p.container {
+  padding: 1em 2em;
+  border: 1px solid #979797;
+  background: #efefef;
+  margin: 2em auto;
+  float: none;
+  width: 335px;
+  font-size: .875em;
+}
 /* WALLET VIEW */
 #wallet-view {
 	padding-top: 30px;
@@ -1670,8 +1678,10 @@ div#lightbox #qrcode-lightbox {
 	padding: .5em 0 0;
 	white-space: nowrap;
 	border-bottom: 1px dotted #92b4c6;
-	margin: 0 1.25em;
 	cursor: pointer;
+}
+.bubble-modal .selectable {
+	margin: 0 1.25em;
 	font-size: .9em;
 	color: #919191;
 }
