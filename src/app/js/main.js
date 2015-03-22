@@ -1364,7 +1364,7 @@ function loadTipModal(obj) {
 function loadQR() {
 	$('#lightbox').html('<div id="qrcode-lightbox"></div>');
 	var qrcode = new QRCode("qrcode-lightbox", {
-		text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless",
+		text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless&amount=1",
 		width: 400,
 		height: 400,
 		colorDark : "#000000",
@@ -2177,6 +2177,16 @@ function loadWalletView() {
 	$('.view-publishers-ui').hide();
 	resetInterface();
 	document.getElementById('search').style.display = 'none';
+	var floBalance = '';
+	$.ajax({
+	    url: 'http://'+ serverAddress +':41289/alexandria/v1/wallet/getbalance',
+	    type: 'GET',
+	    success: function(e) {
+			var data = $.parseJSON(e);
+			console.log(data.response);
+			document.getElementById('wallet-balance-flo').innerHTML = data.response + ' FLO';
+		}
+	});
 	$('.wallet-ui').show();
 	document.getElementById('wallet-view').style.display = 'block';
 	var stateObj = {
