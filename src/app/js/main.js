@@ -3,6 +3,19 @@ var serverAddress = '54.172.28.195'; // Dev
 // var serverAddress = 'blue.a.blocktech.com'; // Demo
 var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
 
+var rpc = require('bitcoin');
+var client = new rpc.bitcoin.Client({
+  host: 'localhost',
+  port: 18322,
+  user: 'copernicusmogley',
+  pass: 'SLtupktrKPvvxrSiGMGyoE',
+  timeout: 30000
+});
+client.getBalance('*', 6, function(err, balance, resHeaders) {
+  if (err) return console.log(err);
+  console.log('Balance:', balance);
+});
+
 var prevTipAmount = '';
 var fadeTimer = 200;
 
