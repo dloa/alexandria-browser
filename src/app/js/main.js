@@ -3,18 +3,7 @@ var serverAddress = '54.172.28.195'; // Dev
 // var serverAddress = 'blue.a.blocktech.com'; // Demo
 var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
 
-var rpc = require('bitcoin');
-var client = new rpc.bitcoin.Client({
-  host: 'localhost',
-  port: 18322,
-  user: 'copernicusmogley',
-  pass: 'SLtupktrKPvvxrSiGMGyoE',
-  timeout: 30000
-});
-client.getBalance('*', 6, function(err, balance, resHeaders) {
-  if (err) return console.log(err);
-  console.log('Balance:', balance);
-});
+var bitcoin = require('bitcoin');
 
 var prevTipAmount = '';
 var fadeTimer = 200;
@@ -2182,6 +2171,7 @@ function loadAboutView() {
 }
 
 // LOAD WALLET VIEW
+var auth = [];
 function loadWalletView() {
 	$('main').not('#wallet').hide();
 	$('.publisher-ui').hide();
@@ -2190,16 +2180,6 @@ function loadWalletView() {
 	$('.view-publishers-ui').hide();
 	resetInterface();
 	document.getElementById('search').style.display = 'none';
-	var floBalance = '';
-	$.ajax({
-	    url: 'http://'+ serverAddress +':41289/alexandria/v1/wallet/getbalance',
-	    type: 'GET',
-	    success: function(e) {
-			var data = $.parseJSON(e);
-			console.log(data.response);
-			document.getElementById('wallet-balance-flo').innerHTML = data.response + ' FLO';
-		}
-	});
 	$('.wallet-ui').show();
 	document.getElementById('wallet-view').style.display = 'block';
 	var stateObj = {
@@ -2207,6 +2187,48 @@ function loadWalletView() {
 	}
 	console.log(document.getElementById('search').style.display);
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ Wallet');
+	if (auth.length == 0) {
+		$('#wallet-auth-modal').fadeIn(fadeTimer);
+		document.getElementById('app-overlay').style.display = 'block';
+	}
+}
+
+// CONNECT TO FLORINCOIN WALLET
+var client = {};
+function connectWallet() {
+	$('#wallet-auth-modal').fadeOut(fadeTimer);
+	document.getElementById('app-overlay').style.display = 'none';
+	auth.length = 0;
+	auth.push(document.getElementById('flo-wallet-user').value);
+	auth.push(document.getElementById('flo-wallet-token').value);
+	client = new bitcoin.Client({
+	  host: 'localhost',
+	  port: 18322,
+	  user: auth[0],
+	  pass: auth[1],
+	  timeout: 30000
+	});
+	console.info(client);
+	client.cmd('getbalance', '*', 6, function(err, balance, resHeaders){
+		if (err) return console.log(err);
+		document.getElementById('wallet-balance-flo').innerHTML = balance + ' FLO';
+	});
+	var walletAccts = [];
+	client.cmd('listaccounts', function(err, accounts, resHeaders){
+		if (err) return console.log(err);
+		for (var account in accounts) {
+			walletAccts.push(account);
+		}
+		document.getElementById('wallet-address-select').innerHTML = '<option value=""></option>';
+		for (var i = 0; i < walletAccts.length; i++) {
+			if (walletAccts[i] != '') {
+				console.log(walletAccts[i]);
+				client.cmd('getaddressesbyaccount', walletAccts[i], function(err, address, resHeaders){
+					document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address+'">' + address +'</option>';
+				});
+			}
+		}
+	});
 }
 
 // LOAD ALEXANDRIA

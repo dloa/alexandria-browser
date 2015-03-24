@@ -1131,7 +1131,7 @@
 							<div class="row full">
 								<div class="col">
 									<div id="wallet-request-address">
-										[FLO Address]
+										<select id="wallet-address-select"></select>
 									</div>
 								</div>
 							</div>
@@ -1191,6 +1191,15 @@
 				</div>
 			</div>
 		</main>
+
+		<div id="wallet-auth-modal" class="overlay-modal">
+			<h3>Login to Florincoin Wallet</h3>
+			<input type="text" placeholder="Username" name="flo-wallet-user" id="flo-wallet-user" />
+			<input type="password" placeholder="Password" name="flo-wallet-token" id="flo-wallet-token" />
+			<div class="row">
+				<a onclick="" class="left btnLightGray">Download Wallet</a><a onclick="connectWallet();" class="pull-right btnLightGray">Connect</a>
+			</div>
+		</div>
 		
 		<div id="deactivate-media-modal" class="overlay-modal">
 			<h3>Deactivate Media</h3>
