@@ -2175,7 +2175,6 @@ function loadAboutView() {
 }
 
 // LOAD WALLET VIEW
-var auth = [];
 function loadWalletView() {
 	$('main').not('#wallet').hide();
 	$('.publisher-ui').hide();
@@ -2190,7 +2189,7 @@ function loadWalletView() {
 		currentView: 'wallet'
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ Wallet');
-	if (auth.length == 0) {
+	if (FLOauth.length == 0) {
 		document.getElementById('flo-wallet-user').value = '';
 		document.getElementById('flo-wallet-token').value = '';		
 		$('#wallet-auth-modal').fadeIn(fadeTimer);
@@ -2199,27 +2198,64 @@ function loadWalletView() {
 }
 
 // CONNECT TO FLORINCOIN WALLET
-var client = {};
+var FLOclient = {};
+var FLOauth = [];
 function connectWallet(obj) {
 	if ($(obj).hasClass('disabled')) {
 		return false;
 	}
 	$(obj).addClass('disabled');
-	auth.length = 0;
-	auth.push(document.getElementById('flo-wallet-user').value);
-	auth.push(document.getElementById('flo-wallet-token').value);
-	client = new bitcoin.Client({
+	FLOauth.length = 0;
+	FLOauth.push(document.getElementById('flo-wallet-user').value);
+	FLOauth.push(document.getElementById('flo-wallet-token').value);
+	FLOclient = new bitcoin.Client({
 	  host: 'localhost',
 	  port: 18322,
-	  user: auth[0],
-	  pass: auth[1],
+	  user: FLOauth[0],
+	  pass: FLOauth[1],
 	  timeout: 30000
 	});
-	getBalance(obj);
+	getBalance(obj, FLOclient);
+}
+
+// CONNECT TO BITCOIN WALLET
+var BTCclient = {};
+var BTCauth = [];
+function connectBTCWallet(obj) {
+	if ($(obj).hasClass('disabled')) {
+		return false;
+	}
+	$(obj).addClass('disabled');
+	BTCauth.length = 0;
+	BTCauth.push('username');
+	BTCauth.push('strongpassword');
+	BTCclient = new bitcoin.Client({
+	  host: 'localhost',
+	  port: 18222,
+	  user: BTCauth[0],
+	  pass: BTCauth[1],
+	  timeout: 30000
+	});
+	BTCclient.cmd('getbalance', '*', 6, function(err, balance, resHeaders){
+		if (err) {
+			if (err.code == '-32602') {
+				alert('Incorrect Username or Password');
+			}
+			console.log(err);
+			BTCauth.length = [];
+			if (obj) {
+				$(obj).removeClass('disabled');
+			}
+		} else {
+			console.info(BTCauth);
+			console.info(balance);
+		}
+	});
+	getBalance(obj, BTCclient);
 }
 
 // GET WALLET BALANCE
-function getBalance(obj) {
+function getBalance(obj, client) {
 	document.getElementById('wallet-balance-flo').innerHTML = '';
 	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
 	client.cmd('getbalance', '*', 6, function(err, balance, resHeaders){
@@ -2228,7 +2264,7 @@ function getBalance(obj) {
 				alert('Incorrect Username or Password');
 			}
 			console.log(err);
-			auth.length = [];
+			FLOauth.length = [];
 			if (obj) {
 				$(obj).removeClass('disabled');
 			}
@@ -2237,7 +2273,7 @@ function getBalance(obj) {
 			document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((balance*FLOUSD)*100000)/100000;
 			hideOverlay();
 			if (document.getElementById('wallet-address-select').options.length < 1) {
-				getWalletAddresses();
+				getWalletAddresses(client);
 			}
 			if (obj) {
 				$(obj).removeClass('disabled');
@@ -2247,7 +2283,7 @@ function getBalance(obj) {
 }
 
 // GET WALLET ADDRESSES
-function getWalletAddresses() {
+function getWalletAddresses(client) {
 	var walletAccts = [];
 	$('#newAddressBtn').addClass('disabled');
 	client.cmd('listaccounts', function(err, accounts, resHeaders){
