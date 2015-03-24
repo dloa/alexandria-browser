@@ -1495,11 +1495,8 @@ ul.distNetList li {
 .overlay-modal .input-container {
 	margin: 1em 0;
 }
-#wallet-auth-modal input {
-	margin: 1em;
-}
-#wallet-auth-modal input:first-of-type {
-	margin-bottom: 0;
+.overlay-modal input {
+	margin: 1em 0 0;
 }
 #tip-alexandria-modal .input-container input {
 	width: 5em;
@@ -1520,9 +1517,9 @@ ul.distNetList li {
 	vertical-align: middle;
 }
 .overlay-modal .row {
-	width: 80%;
+	width: 100%;
 	float: none;
-	margin: 0 auto;
+	margin: 1em 0 ;
 }
 /* SHARE MODAL */
 #share-modal {

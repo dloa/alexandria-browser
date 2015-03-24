@@ -2311,6 +2311,7 @@ function newFloAddress(obj) {
 			document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address+'">' + address +'</option>';
 			hideOverlay();
 			document.getElementById('wallet-address-select').selectedIndex = document.getElementById('wallet-address-select').options.length -1;
+			receiveQR(address)
 			$(obj).removeClass('disabled');
 		}
 	});	
