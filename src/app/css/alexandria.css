@@ -864,7 +864,7 @@ p.largeImg {
 #wallet-view .wrapper > * {
 	width: 360px;
 	display: inline-block;
-	margin: 0 70px 70px;
+	margin: 0 70px 50px;
 	min-width: 37.5%;
 	vertical-align: top;
 }

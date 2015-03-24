@@ -1087,12 +1087,14 @@
 				<div class="row">
 					<div class="crypto-price strong btc-usd">$<span class="tip-value">1.00</span> USD = <span class="btc-usd-output"></span> BTC</div>
 				</div>
+<!--
 				<div class="row">
 					<a class="btnLightGray">Use Online Bitcoin Wallet</a>
 					<p>Or manually send BTC to:<br />
 					[insert BTC address]</p>
 					<div id="qrcode" onclick="loadQR();"></div>
 				</div>
+-->
 			</div>
 		</div>
 		
@@ -1123,13 +1125,6 @@
 						<div class="tbl">
 							<div class="row full">
 								<div class="col">
-									<div id="wallet-request-qr">
-										<a id="wallet-receive-qrcode" onclick="loadQR();"></a>
-									</div>
-								</div>
-							</div>
-							<div class="row full">
-								<div class="col">
 									<div id="wallet-request-address">
 										<select id="wallet-address-select" disabled="disabled" onChange="receiveQR(this)"></select>
 									</div>
@@ -1139,6 +1134,13 @@
 								<div class="col">
 									<div id="wallet-request-newAddress">
 										<a onclick="">+ Create New Address</a>
+									</div>
+								</div>
+							</div>
+							<div class="row full">
+								<div class="col">
+									<div id="wallet-request-qr">
+										<a id="wallet-receive-qrcode" onclick="loadQR();"></a>
 									</div>
 								</div>
 							</div>

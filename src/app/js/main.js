@@ -1367,10 +1367,10 @@ function loadTipModal(obj) {
 }
 
 // DISPLAY QR CODE FOR BTC
-function loadQR() {
+function loadQR(obj) {
 	$('#lightbox').html('<div id="qrcode-lightbox"></div>');
 	var qrcode = new QRCode("qrcode-lightbox", {
-		text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless&amount=1",
+		text: obj,
 		width: 400,
 		height: 400,
 		colorDark : "#000000",
@@ -2219,6 +2219,7 @@ function connectWallet() {
 			return false;
 		} else {
 			document.getElementById('wallet-balance-flo').innerHTML = balance + ' FLO';
+			document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((balance*FLOUSD)*100000)/100000;
 			hideOverlay();
 			getWalletAddresses();
 		}
@@ -2251,7 +2252,9 @@ function getWalletAddresses() {
 
 // WALLET RECEIVE QR CODE
 function receiveQR(address) {
-	document.getElementById('wallet-receive-qrcode').innerHTML = '';
+	var qrWrap = document.getElementById('wallet-receive-qrcode');
+	qrWrap.innerHTML = '';
+	qrWrap.setAttribute('onclick','loadQR("florincoin:'+address.value+'")');
 	var qrcode = new QRCode("wallet-receive-qrcode", {
 		text: "florincoin:"+address.value,
 		width: 64,
