@@ -131,7 +131,7 @@ header {
 header h2 {
 	display: none;
 }
-input[type="text"], textarea {
+input[type="text"], input[type="password"], textarea {
 	display: inline-block;
 	zoom: 1;*display:inline;
 	border-radius: 5px;
@@ -169,6 +169,9 @@ select {
 	margin: .25em 0;
 	border-radius: 5px;
 	border: 1px solid #979797;
+}
+select[disabled="disabled"] {
+	opacity: .5;
 }
 header .input-container select {
 	font-size: .8em;
@@ -1412,6 +1415,12 @@ ul.distNetList li {
 	padding: 0 10px;
 }
 /* QR CODES */
+#wallet-request-qr {
+	text-align: center;
+}
+#wallet-request-qr a {
+	display: inline-block;
+}
 #qrcode {
 	background: #d8d8d8;
 	width: 64px;
@@ -1484,6 +1493,12 @@ ul.distNetList li {
 }
 .overlay-modal .input-container {
 	margin: 1em 0;
+}
+#wallet-auth-modal input {
+	margin: 1em;
+}
+#wallet-auth-modal input:first-of-type {
+	margin-bottom: 0;
 }
 #tip-alexandria-modal .input-container input {
 	width: 5em;

@@ -3,7 +3,11 @@ var serverAddress = '54.172.28.195'; // Dev
 // var serverAddress = 'blue.a.blocktech.com'; // Demo
 var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
 
-var bitcoin = require('bitcoin');
+if (location.protocol == 'app:') {
+	var bitcoin = require('bitcoin');
+} else {
+	$('.appOnly').remove();
+}
 
 var prevTipAmount = '';
 var fadeTimer = 200;
@@ -2196,8 +2200,6 @@ function loadWalletView() {
 // CONNECT TO FLORINCOIN WALLET
 var client = {};
 function connectWallet() {
-	$('#wallet-auth-modal').fadeOut(fadeTimer);
-	document.getElementById('app-overlay').style.display = 'none';
 	auth.length = 0;
 	auth.push(document.getElementById('flo-wallet-user').value);
 	auth.push(document.getElementById('flo-wallet-token').value);
@@ -2208,26 +2210,55 @@ function connectWallet() {
 	  pass: auth[1],
 	  timeout: 30000
 	});
-	console.info(client);
 	client.cmd('getbalance', '*', 6, function(err, balance, resHeaders){
-		if (err) return console.log(err);
-		document.getElementById('wallet-balance-flo').innerHTML = balance + ' FLO';
+		if (err) {
+			if (err.code == '-32602') {
+				alert('Incorrect Username or Password');
+			}
+			console.log(err);
+			return false;
+		} else {
+			document.getElementById('wallet-balance-flo').innerHTML = balance + ' FLO';
+			hideOverlay();
+			getWalletAddresses();
+		}
 	});
+}
+
+function getWalletAddresses() {
 	var walletAccts = [];
 	client.cmd('listaccounts', function(err, accounts, resHeaders){
-		if (err) return console.log(err);
-		for (var account in accounts) {
-			walletAccts.push(account);
-		}
-		document.getElementById('wallet-address-select').innerHTML = '<option value=""></option>';
-		for (var i = 0; i < walletAccts.length; i++) {
-			if (walletAccts[i] != '') {
-				console.log(walletAccts[i]);
-				client.cmd('getaddressesbyaccount', walletAccts[i], function(err, address, resHeaders){
-					document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address+'">' + address +'</option>';
-				});
+		if (err) {
+			console.log(err);
+			return false;
+		} else {
+			for (var account in accounts) {
+				walletAccts.push(account);
 			}
+			document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
+			for (var i = 0; i < walletAccts.length; i++) {
+				if (walletAccts[i] != '') {
+					console.log(walletAccts[i]);
+					client.cmd('getaddressesbyaccount', walletAccts[i], function(err, address, resHeaders){
+						document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address+'">' + address +'</option>';
+					});
+				}
+			}
+			document.getElementById('wallet-address-select').removeAttribute('disabled');
 		}
+	});
+}
+
+// WALLET RECEIVE QR CODE
+function receiveQR(address) {
+	document.getElementById('wallet-receive-qrcode').innerHTML = '';
+	var qrcode = new QRCode("wallet-receive-qrcode", {
+		text: "florincoin:"+address.value,
+		width: 64,
+		height: 64,
+		colorDark : "#000000",
+		colorLight : "#FFFFFF",
+		correctLevel : QRCode.CorrectLevel.H
 	});
 }
 
