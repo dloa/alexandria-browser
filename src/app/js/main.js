@@ -2215,6 +2215,13 @@ function connectWallet(obj) {
 	  pass: auth[1],
 	  timeout: 30000
 	});
+	getBalance(obj);
+}
+
+// GET WALLET BALANCE
+function getBalance(obj) {
+	document.getElementById('wallet-balance-flo').innerHTML = '';
+	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
 	client.cmd('getbalance', '*', 6, function(err, balance, resHeaders){
 		if (err) {
 			if (err.code == '-32602') {
@@ -2222,13 +2229,19 @@ function connectWallet(obj) {
 			}
 			console.log(err);
 			auth.length = [];
-			$(obj).removeClass('disabled');
+			if (obj) {
+				$(obj).removeClass('disabled');
+			}
 		} else {
 			document.getElementById('wallet-balance-flo').innerHTML = balance + ' FLO';
 			document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((balance*FLOUSD)*100000)/100000;
 			hideOverlay();
-			getWalletAddresses();
-			$(obj).removeClass('disabled');
+			if (document.getElementById('wallet-address-select').options.length < 1) {
+				getWalletAddresses();
+			}
+			if (obj) {
+				$(obj).removeClass('disabled');
+			}
 		}
 	});
 }
@@ -2236,6 +2249,7 @@ function connectWallet(obj) {
 // GET WALLET ADDRESSES
 function getWalletAddresses() {
 	var walletAccts = [];
+	$('#newAddressBtn').addClass('disabled');
 	client.cmd('listaccounts', function(err, accounts, resHeaders){
 		if (err) {
 			console.log(err);
@@ -2256,6 +2270,7 @@ function getWalletAddresses() {
 			    if (document.getElementById('wallet-address-select').length > 1) {
 			        clearInterval(selectInterval);
 					document.getElementById('wallet-address-select').removeAttribute('disabled');
+					$('#newAddressBtn').removeClass('disabled');
 			    }
 			}, 100);
 		}
@@ -2319,6 +2334,7 @@ function sendFLO(obj) {
 			document.getElementById('wallet-send-address').value = '';
 			document.getElementById('wallet-send-amount').value = '';
 			document.getElementById('wallet-send-message').value = '';
+			getBalance();
 		}
 	});	
 }

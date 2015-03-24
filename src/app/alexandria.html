@@ -19,6 +19,8 @@
 			});
 		</script>
                 -->
+                
+<!--                
 		<script type="text/javascript">
 	           var playerDomain = 'player.animatron.com';
 	           var amazonDomain = 'https://snapshots.animatron.com';
@@ -29,6 +31,7 @@
 	           var autostart = true;
 	           var loop = true;
 		</script>
+-->
 	</head>
 	
 	<body onload="if(typeof start === 'function' ) { start(); }" class="no-iframe">
@@ -1113,6 +1116,7 @@
 								</div>
 								<div class="col" style="text-align:right">
 									<div id="wallet-balance-flo">0.00000000 FLO</div>
+									<a id="refreshBalance" onclick="getBalance(this);" style="font-size:.875em">Refresh</a>
 								</div>
 							</div>
 						</div>
@@ -1133,7 +1137,7 @@
 							<div class="row full">
 								<div class="col">
 									<div id="wallet-request-newAddress">
-										<a onclick="displayNewAddModal()">+ Create New Address</a>
+										<a onclick="displayNewAddModal()" id="newAddressBtn">+ Create New Address</a>
 									</div>
 								</div>
 							</div>
@@ -1188,7 +1192,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="row">
+							<div class="row full">
 								<a onclick="sendFLO(this)" class="pull-right btnLightGray">Send FLO</a>
 							</div>
 						</div>
