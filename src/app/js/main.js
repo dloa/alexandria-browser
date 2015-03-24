@@ -2189,9 +2189,10 @@ function loadWalletView() {
 	var stateObj = {
 		currentView: 'wallet'
 	}
-	console.log(document.getElementById('search').style.display);
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ Wallet');
 	if (auth.length == 0) {
+		document.getElementById('flo-wallet-user').value = '';
+		document.getElementById('flo-wallet-token').value = '';		
 		$('#wallet-auth-modal').fadeIn(fadeTimer);
 		document.getElementById('app-overlay').style.display = 'block';
 	}
@@ -2199,7 +2200,11 @@ function loadWalletView() {
 
 // CONNECT TO FLORINCOIN WALLET
 var client = {};
-function connectWallet() {
+function connectWallet(obj) {
+	if ($(obj).hasClass('disabled')) {
+		return false;
+	}
+	$(obj).addClass('disabled');
 	auth.length = 0;
 	auth.push(document.getElementById('flo-wallet-user').value);
 	auth.push(document.getElementById('flo-wallet-token').value);
@@ -2216,22 +2221,24 @@ function connectWallet() {
 				alert('Incorrect Username or Password');
 			}
 			console.log(err);
-			return false;
+			auth.length = [];
+			$(obj).removeClass('disabled');
 		} else {
 			document.getElementById('wallet-balance-flo').innerHTML = balance + ' FLO';
 			document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((balance*FLOUSD)*100000)/100000;
 			hideOverlay();
 			getWalletAddresses();
+			$(obj).removeClass('disabled');
 		}
 	});
 }
 
+// GET WALLET ADDRESSES
 function getWalletAddresses() {
 	var walletAccts = [];
 	client.cmd('listaccounts', function(err, accounts, resHeaders){
 		if (err) {
 			console.log(err);
-			return false;
 		} else {
 			for (var account in accounts) {
 				walletAccts.push(account);
@@ -2245,7 +2252,12 @@ function getWalletAddresses() {
 					});
 				}
 			}
-			document.getElementById('wallet-address-select').removeAttribute('disabled');
+			var selectInterval = setInterval(function() {
+			    if (document.getElementById('wallet-address-select').length > 1) {
+			        clearInterval(selectInterval);
+					document.getElementById('wallet-address-select').removeAttribute('disabled');
+			    }
+			}, 100);
 		}
 	});
 }
@@ -2265,6 +2277,52 @@ function receiveQR(address) {
 	});
 }
 
+function displayNewAddModal() {
+	$('#new-address-modal').fadeIn(fadeTimer);
+	document.getElementById('app-overlay').style.display = 'block';
+}
+
+// GENERATE NEW FLORINCOIN ADDRESS
+function newFloAddress(obj) {
+	if ($(obj).hasClass('disabled')) {
+		return false;
+	}
+	$(obj).addClass('disabled');
+	client.cmd('getnewaddress', document.getElementById('flo-address-label').value, function(err, address, resHeaders){
+		if (err) {
+			console.log(err);
+			$(obj).removeClass('disabled');
+		} else {
+			document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address+'">' + address +'</option>';
+			hideOverlay();
+			document.getElementById('wallet-address-select').selectedIndex = document.getElementById('wallet-address-select').options.length -1;
+			$(obj).removeClass('disabled');
+		}
+	});	
+}
+
+// SEND FLO
+function sendFLO(obj) {
+	if ($(obj).hasClass('disabled')) {
+		return false;
+	}
+	$(obj).addClass('disabled');
+	var sendAmt = parseFloat(document.getElementById('wallet-send-amount').value);
+	console.log(sendAmt);
+	client.cmd('sendtoaddress', document.getElementById('wallet-send-address').value, sendAmt, document.getElementById('wallet-send-message').value, function(err, txid, resHeaders){
+		if (err) {
+			console.log(err);
+			$(obj).removeClass('disabled');
+		} else {
+			alert(parseFloat(document.getElementById('wallet-send-amount').value) + ' FLO Sent: TxId ' + txid);
+			$(obj).removeClass('disabled');
+			document.getElementById('wallet-send-address').value = '';
+			document.getElementById('wallet-send-amount').value = '';
+			document.getElementById('wallet-send-message').value = '';
+		}
+	});	
+}
+
 // LOAD ALEXANDRIA
 function loadAlexandria() {
 	if (window.location.search.indexOf("view") == -1) {
@@ -2276,8 +2334,6 @@ function loadAlexandria() {
 	$('#tip-modal').addClass('abs');
 	$('#share-modal').addClass('abs');
 	$('#bitmsg-modal').addClass('abs');
-	$('.alex-ui-slider').slider();
-	$('.alex-ui-datepicker').datepicker();
 }
 
 // RESET INTERFACE

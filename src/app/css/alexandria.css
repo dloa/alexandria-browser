@@ -170,8 +170,9 @@ select {
 	border-radius: 5px;
 	border: 1px solid #979797;
 }
-select[disabled="disabled"] {
+select[disabled="disabled"], a.disabled {
 	opacity: .5;
+	cursor: wait;
 }
 header .input-container select {
 	font-size: .8em;

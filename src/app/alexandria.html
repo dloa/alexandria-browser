@@ -1133,7 +1133,7 @@
 							<div class="row full">
 								<div class="col">
 									<div id="wallet-request-newAddress">
-										<a onclick="">+ Create New Address</a>
+										<a onclick="displayNewAddModal()">+ Create New Address</a>
 									</div>
 								</div>
 							</div>
@@ -1188,6 +1188,9 @@
 									</div>
 								</div>
 							</div>
+							<div class="row">
+								<a onclick="sendFLO(this)" class="pull-right btnLightGray">Send FLO</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -1199,7 +1202,15 @@
 			<input type="text" placeholder="Username" name="flo-wallet-user" id="flo-wallet-user" />
 			<input type="password" placeholder="Password" name="flo-wallet-token" id="flo-wallet-token" />
 			<div class="row">
-				<a onclick="" class="left btnLightGray">Download Wallet</a><a onclick="connectWallet();" class="pull-right btnLightGray">Connect</a>
+				<a href="http://florincoin.org" target="_blank" class="left btnLightGray">Download Wallet</a><a onclick="connectWallet(this);" class="pull-right btnLightGray">Connect</a>
+			</div>
+		</div>
+		
+		<div id="new-address-modal" class="overlay-modal">
+			<h3>New Address</h3>
+			<input type="text" placeholder="Address Label" name="flo-address-label" id="flo-address-label" />
+			<div class="row">
+				<a onclick="newFloAddress(this);" class="pull-right btnLightGray">Create</a>
 			</div>
 		</div>
 		
@@ -1277,7 +1288,7 @@
 <!--	these are not ported to bower yet -->
 
 
-<!--
+<!-- SVG ANIMATION PLAYER
         <script type="text/javascript" src="js/vendor/player.js"></script>
 	    <script type="text/javascript">
 	        var width = 30;
