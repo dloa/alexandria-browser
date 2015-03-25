@@ -1441,6 +1441,12 @@ function loadCreatePublisherMod() {
 	$('.sharing-ui').hide();
 	$('.publisher-ui').show();
 	resizeTabs();
+	if (FLOauth.length == 0) {
+		document.getElementById('flo-wallet-user').value = '';
+		document.getElementById('flo-wallet-token').value = '';		
+		$('#wallet-auth-modal').fadeIn(fadeTimer);
+		document.getElementById('app-overlay').style.display = 'block';
+	}	
 }
 
 // PARSE MAGNET URI
@@ -1504,7 +1510,8 @@ function checkTipAmounts() {
 }
 
 // SUBMIT PUBLISHER TO BLOCKCHAIN
-function postPublisher() {
+function postPublisher(obj, client) {
+	$(obj).addClass('disabled');
 	var pubName = document.getElementById('newPublisher-name').value;
 	var pubAdd = document.getElementById('newPublisher-floAdd').value;
 	var pubEmailMD5 = '';
@@ -1513,12 +1520,20 @@ function postPublisher() {
 	}
 	var pubBitMsg = document.getElementById('newPublisher-bitmsg').value;
 	var pubTime = Date.parse(new Date()).toString();
-	var pubSig = generateSignature(pubName, pubAdd, pubTime);
-	if (pubSig == false) {
-		return false;
-	}
-	var queryString = '{ "alexandria-publisher": { "name": "'+ pubName +'", "address": "'+ pubAdd +'", "timestamp":'+ pubTime +', "bitmessage": "'+ pubBitMsg +'", "emailmd5":"'+ pubEmailMD5 +'"}, "signature":"'+ pubSig +'"}';
-	console.log(queryString);
+//	var pubSig = generateSignature(pubName, pubAdd, pubTime, FLOclient);
+	var sigString = pubName + '-' + pubAdd + '-' + pubTime;
+	console.log(sigString);
+	client.cmd('signmessage', pubAdd, sigString, function(err, sig, resHeaders){
+		if (err) {
+			console.log(err);
+			$(obj).removeClass('disabled');
+		} else {
+			console.log(sig);
+			var queryString = '{ "alexandria-publisher": { "name": "'+ pubName +'", "address": "'+ pubAdd +'", "timestamp":'+ pubTime +', "bitmessage": "'+ pubBitMsg +'", "emailmd5":"'+ pubEmailMD5 +'"}, "signature":"'+ sig +'"}';
+			sendPublisherTxn(obj, client, pubAdd, queryString);
+		}
+	});
+/*
 	$.ajax({
 	    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
 	    type: 'POST',
@@ -1534,18 +1549,45 @@ function postPublisher() {
 			console.error(thrownError);
 		}
 	});
+*/
+}
+
+// SEND PUBLISHER TXN
+function sendPublisherTxn(obj, client, pubAdd, queryString) {
+	client.cmd('sendtoaddress', pubAdd, 1, '', '', queryString, function(err, txid, resHeaders){
+		if (err) {
+			console.log(err);
+			$(obj).removeClass('disabled');
+		} else {
+	    	$('.publisher-ui').hide();
+	    	resetAlexandria();
+	    	$('#publisher-process input[type="text"]').val('');
+	    	alert('Publisher Announced! TxId: ' + txid);
+			$(obj).removeClass('disabled');
+			getBalance();
+		}
+	});	
 }
 
 // GENERATE SIGNATURE FOR PUBLISHING
-function generateSignature(pubName, pubAdd, pubTime) {
+function generateSignature(pubName, pubAdd, pubTime, client) {
 	if ( (!pubName) || (!pubAdd) || (!pubTime) ) {
 		alert('Incomplete input');
-		return false;
+	} else {
+		var queryString = '{ "address":"'+ pubAdd +'", "text":"'+ pubName + '-' + pubAdd + '-' + pubTime +'" }';
+		console.log(queryString);
+		var signature;
+		client.cmd('signmessage', pubAdd, queryString.toString(), function(err, sig, resHeaders){
+			if (err) {
+				console.log(err);
+				$(obj).removeClass('disabled');
+			} else {
+				console.log(sig);
+				return sig;
+			}
+		});
 	}
-	var queryString = '{ "address":"'+ pubAdd +'", "text":"'+ pubName + '-' + pubAdd + '-' + pubTime +'" }';
-	console.log(queryString);
-	var signature;
-	var stopError;
+/*
 	$.ajax({
 	    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign/',
 	    type: 'POST',
@@ -1565,11 +1607,7 @@ function generateSignature(pubName, pubAdd, pubTime) {
 		},
 		async:   false
 	});
-	if (stopError == 1) {
-		return false;
-	} else {
-		return signature;
-	}
+*/
 }
 
 // ADD MEDIA TABS
@@ -2265,6 +2303,7 @@ function getBalance(obj, client) {
 			}
 			console.log(err);
 			FLOauth.length = [];
+			BTCauth.length = [];
 			if (obj) {
 				$(obj).removeClass('disabled');
 			}
@@ -2294,11 +2333,13 @@ function getWalletAddresses(client) {
 				walletAccts.push(account);
 			}
 			document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
+			document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
 			for (var i = 0; i < walletAccts.length; i++) {
 				if (walletAccts[i] != '') {
 					console.log(walletAccts[i]);
 					client.cmd('getaddressesbyaccount', walletAccts[i], function(err, address, resHeaders){
 						document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address+'">' + address +'</option>';
+						document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address+'">' + address +'</option>';
 					});
 				}
 			}
@@ -2306,6 +2347,7 @@ function getWalletAddresses(client) {
 			    if (document.getElementById('wallet-address-select').length > 1) {
 			        clearInterval(selectInterval);
 					document.getElementById('wallet-address-select').removeAttribute('disabled');
+					document.getElementById('newPublisher-floAdd').removeAttribute('disabled');
 					$('#newAddressBtn').removeClass('disabled');
 			    }
 			}, 100);
@@ -2371,7 +2413,7 @@ function sendFLO(obj) {
 			document.getElementById('wallet-send-address').value = '';
 			document.getElementById('wallet-send-amount').value = '';
 			document.getElementById('wallet-send-message').value = '';
-			getBalance();
+			getBalance(obj, FLOclient);
 		}
 	});	
 }

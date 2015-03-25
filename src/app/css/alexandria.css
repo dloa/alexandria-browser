@@ -596,7 +596,7 @@ ul#media-type-select-list {
 	padding: .25em 0;
 	position: relative;
 }
-.hasInfo input[type="text"] {
+.hasInfo input[type="text"], .hasInfo select {
 	margin: 0 0 1em;
 	width: -moz-calc(100% - 36px);
 	width: -webkit-calc(100% - 36px);
