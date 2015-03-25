@@ -572,6 +572,9 @@ ul#media-type-select-list {
 	max-width: 1200px;
 	padding-bottom: 2em;
 }
+.wrapper {
+	margin: 0 auto;
+}
 #browse-media .container:first-of-type {
   margin-bottom: 1.5em;
 }
@@ -694,14 +697,10 @@ ul#media-type-select-list {
 .entity-view .row.entity-meta-header {
 	margin-top: .75em;
 }
-.entity-view .entity-meta-header > *, .row.entity-footer > *, .row.entity-market > *, .entity-market > * {
+.row.entity-footer > *, .row.entity-market > *, .entity-market > * {
 	margin: 0 0 0 .75em;
 	display: inline-block;
 	vertical-align: middle;
-}
-#publisher-view-entity.entity-view .entity-meta-header > * {
-	display: block;
-	margin: 0;
 }
 .entity-view .entity-meta-header .media-header {
 	margin: .5em 0 0;
@@ -711,12 +710,29 @@ ul#media-type-select-list {
 	margin-right: 1em;
 }
 #publisher-view-entity .entity-meta-header {
-	width: -moz-calc(100% - 230px);
-	width: -webkit-calc(100% - 230px);
-	width: -o-calc(100% - 230px);
-	width: calc(100% - 230px);
-	float: left;
 	margin-top: 0;
+}
+#publisher-view-entity .entity-meta-header .container {
+	width: -moz-calc(100% - 96px);
+	width: -webkit-calc(100% - 96px);
+	width: -o-calc(100% - 96px);
+	width: calc(100% - 96px);
+	float: left;
+}
+#publisher-view-entity.entity-view .entity-meta-header .container > * {
+	margin: 0 0 3px;
+	float: left;
+	clear: left;
+}
+#publisher-view-entity.entity-view .entity-meta-header .container .entity-market {
+	clear: none;
+	margin-left: 1.25em;
+}
+#publisher-view-entity.entity-view .entity-meta-header #publisher-QR {
+	float: right;
+	margin: 0;
+	clear: right;
+	cursor: pointer;
 }
 #publisher-view-entity .entity-meta-content {
 	float: right;
@@ -752,10 +768,6 @@ n#rotten-wrap a, #rotten-wrap img, #rotten-wrap svg {
 .entity-view .entity-meta-header .entity-meta-content, .entity-view .entity-meta-header .entity-meta-content div {
 	display: block;
 	margin-left:0;
-}
-.entity-view .entity-meta-header .entity-meta-content {
-	width: 100%;
-	clear: both;
 }
 .entity-view .left {
 	width: 31%;
@@ -1320,6 +1332,14 @@ ul.distNetList li {
 	display: block;
 	width: 0;
 }
+#view-publisher .bubble-modal:before {
+	right: initial;
+	left: 50px;
+}
+#view-publisher .bubble-modal:after {
+	right: initial;
+	left: 51px;
+}
 .entity-market {
 	position: relative;
 }
@@ -1410,6 +1430,9 @@ ul.distNetList li {
 }
 .info-modal .entity-meta-content, .info-modal .media-desc {
 	margin-top: 1em;
+}
+.entity-view .entity-meta-content {
+	clear: left;
 }
 #tip-modal .modal-tab p {
 	margin: 0;

@@ -1515,6 +1515,11 @@ function postPublisher(obj, client) {
 	var pubName = document.getElementById('newPublisher-name').value;
 	var pubAdd = document.getElementById('newPublisher-floAdd').value;
 	var pubEmailMD5 = '';
+	if ( (pubName == '') || (pubAdd == '') ) {
+		alert('Incomplete input');
+		$(obj).removeClass('disabled');
+		return false;
+	}	
 	if (document.getElementById('newPublisher-emailmd5').value != '') {
 		pubEmailMD5 = MD5(trim11(document.getElementById('newPublisher-emailmd5').value).toLowerCase());
 	}
@@ -1533,23 +1538,6 @@ function postPublisher(obj, client) {
 			sendPublisherTxn(obj, client, pubAdd, queryString);
 		}
 	});
-/*
-	$.ajax({
-	    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
-	    type: 'POST',
-		data: queryString.toString(),
-	    success: function(e) {
-	    	$('.publisher-ui').hide();
-	    	resetAlexandria();
-	    	$('#publisher-process input[type="text"]').val('');
-	    	alert('Publisher Announced!');
-	    },
-		error: function (xhr, ajaxOptions, thrownError) {
-			console.error(xhr.status);
-			console.error(thrownError);
-		}
-	});
-*/
 }
 
 // SEND PUBLISHER TXN
