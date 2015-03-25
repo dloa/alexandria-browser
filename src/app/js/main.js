@@ -435,15 +435,6 @@ function getCryptos() {
 			BTCUSD = parseFloat(data.return.markets.BTC.lasttradeprice);
 			console.info(BTCUSD);
 			$('.btc-usd .btc-usd-output').text(Math.round((1/BTCUSD)*100000000)/100000000);
-			var qrcode = new QRCode("qrcode", {
-				text: "bitcoin:3CHHe6DwYFmx5c8LLm1RQBcGiexCJJrMqT?label=hoodiethehomeless",
-				width: 64,
-				height: 64,
-				colorDark : "#000000",
-				colorLight : "#d8d8d8",
-				correctLevel : QRCode.CorrectLevel.H
-			});
-
 		}
 	});
 	$.ajax({
@@ -582,9 +573,10 @@ function loadPublisherView(objMeta) {
 	var publisherName = thisPublisher['name'];
 	var publisherTime = thisPublisher['timestamp'];
 	var publisherMD5;
-	if ( (thisPublisher['emailmd5'] != '') && (thisPublisher['emailmd5'] != 'd41d8cd98f00b204e9800998ecf8427e') ) {
+	if (thisPublisher['emailmd5'] != '') {
 		publisherMD5 = thisPublisher['emailmd5'];
 		document.getElementById('publisher-avatar').src = 'http://www.gravatar.com/avatar/'+publisherMD5;
+		document.getElementById('publisher-avatar').style.display = 'block';
 	} else {
 		document.getElementById('publisher-avatar').style.display = 'none';
 	}
@@ -597,6 +589,7 @@ function loadPublisherView(objMeta) {
 	publisherTime = new Date(parseInt(publisherTime));
 	document.getElementById('view-publisher-name').innerHTML = publisherName;
 	document.getElementById('publisher-FLO-address').innerHTML = publisherAddress;
+	FloQR(publisherAddress, 'publisher-QR', 80, 80);
 	if (thisPublisherMedia) {
 		for (var i = 0; i < thisPublisherMedia.length; i++) {
 			var mediaID = thisPublisherMedia[i]['txid'];
@@ -706,6 +699,8 @@ function loadArtifactView(objMeta) {
 	mediaID = thisMediaData[0]['txid'];
 	var mediaPublisher = thisMediaData[0]['publisher-name'];
 	var publisherID = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
+	FloQR(publisherID, 'tip-QR', 100, 100);
+	document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherID + '")');
 	var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
 	var mediaInfo = thisMediaData[0]['media-data']['alexandria-media']['info'];
 	var mediaPubTime = thisMediaData[0]['media-data']['alexandria-media']['timestamp'];
@@ -723,9 +718,12 @@ function loadArtifactView(objMeta) {
 	var mediaTid = thisMediaData[0]['media-data']['alexandria-media']['torrent'];
 	var mediaFLO = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
 	if(thisMediaData[0]['media-data']['alexandria-media']['payment']) {
-		var mediaPymnt = thisMediaData[0]['media-data']['alexandria-media']['payment']['type'];
+		var mediaPymnt = thisMediaData[0]['media-data']['alexandria-media']['payment'];
 	}
-	if ((mediaPymnt) && (mediaPymnt == 'tip')) {
+	if ( (!mediaPymnt) || (mediaPymnt == 'none') ) {
+		$('#view-media .tip-icon').hide();
+	} else if ((mediaPymnt) && (mediaPymnt['type'] == 'tip')) {
+		$('#view-media .tip-icon').show();
 		$('.tip-amounts li').remove();
 		var tipAmounts = thisMediaData[0]['media-data']['alexandria-media']['payment']['amount'].split(',');
 		for (var i = 0; i < tipAmounts.length; i++) {
@@ -782,8 +780,8 @@ function loadArtifactView(objMeta) {
 	if (mediaArtist) {
 		document.getElementById('media-artist-name').outerHTML = '<h3 id="media-artist-name" onclick="searchByField(&apos;media&apos;, &apos;info_extra&apos;, &apos;'+ mediaArtist +'&apos;)">'+ mediaArtist +'</h3>';
 	}
-	$('#media-view-entity .entity-meta-header .entity-runtime').css('display',$(objMeta).find('.media-runtime').css('display'));
-	$('#media-view-entity .entity-meta-header .entity-runtime').html(mediaRuntime);
+//	$('#media-view-entity .entity-meta-header .entity-runtime').css('display',$(objMeta).find('.media-runtime').css('display'));
+	document.getElementById('entity-runtime').innerHTML = mediaRuntime;
 	$('#media-view-entity .entity-meta-header .media-header').hide();
 	$('#media-view-entity .entity-meta-header .media-header.media-'+mediaType).show();
 	// $('#media-view-entity .media-image').html(mediaIcon);
@@ -794,11 +792,6 @@ function loadArtifactView(objMeta) {
 		}
 	}
 	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
-	if (mediaPymnt == 'none') {
-		$('#media-view-entity .tip-icon').hide();
-	} else {
-		$('#media-view-entity .tip-icon').show();
-	}
 	$('#media-view-entity .entity-footer').hide();
 	$('#media-view-entity .entity-footer.media-'+mediaType).show();
 	$('#media-view-entity').show();
@@ -1341,8 +1334,8 @@ function loadShareModal(obj) {
 	if ($(obj).parents('.entity-market #share-modal').length == 0) {
 		$(obj).parents('.entity-market').append($('#share-modal'));
 	}
-	var modalPos = 'right';
-	var shareModalPos = $(obj).parent().width() - $(obj).position().left - 94;
+	var modalPos = (history.state.currentView == 'artifact') ? ('right') : ('left');
+	var shareModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 94) : ($(obj).position().left - 40);
 	document.getElementById('share-url').innerHTML = location.hash.slice(2);
 	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2:visible').text();
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
@@ -1361,9 +1354,38 @@ function loadTipModal(obj) {
 	} else {
 		$('#tipAdd-FLO').text('No Address Available');
 	}
-	var modalPos = 'right';
-	var tipModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 79) : ($(obj).parent().width() - $(obj).position().left - 89);
+	var modalPos = (history.state.currentView == 'artifact') ? ('right') : ('left');
+	var tipModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 79) : ($(obj).position().left - 50);
 	$(obj).parents('.entity-market').find('#tip-modal').css(modalPos,tipModalPos+'px').fadeToggle(fadeTimer);
+}
+
+// SEND TIP WITH FLORINCOIN-QT WALLET
+function sendTip(obj, client, pubAdd) {
+	$(obj).addClass('disabled');
+	console.info(obj);
+	console.info(client);
+	console.info(pubAdd);
+	if (FLOauth.length == 0) {
+		document.getElementById('flo-wallet-user').value = '';
+		document.getElementById('flo-wallet-token').value = '';		
+		$('#wallet-auth-modal').fadeIn(fadeTimer);
+		document.getElementById('app-overlay').style.display = 'block';
+		$(obj).removeClass('disabled');
+	} else {
+		var tipAmount = $('input[name="tip-amount"]:checked').val()/FLOUSD;
+		console.log(tipAmount);
+		client.cmd('sendtoaddress', pubAdd, tipAmount, '', '', '', function(err, txid, resHeaders){
+			if (err) {
+				console.log(err);
+				$(obj).removeClass('disabled');
+			} else {
+				$('#tip-modal').fadeOut(fadeTimer);
+		    	alert('Tip Sent! TxId: ' + txid);
+				$(obj).removeClass('disabled');
+				getBalance('', client);
+			}
+		});
+	}
 }
 
 // DISPLAY QR CODE FOR BTC
@@ -1486,7 +1508,7 @@ function parseMagnetURI() {
 // CHECK TIP AMOUNTS ARE USD VALUES
 function checkTipAmounts() {
 	var tipError = 0;
-	var TipInputs = document.getElementsByClassName(' set-tip-amount');
+	var TipInputs = document.getElementsByClassName('set-tip-amount');
 	for (i = 0; i < TipInputs.length; i++) {
 		var tipValue = $(TipInputs[i]).val();
 		if (tipValue != '') {
@@ -1552,7 +1574,7 @@ function sendPublisherTxn(obj, client, pubAdd, queryString) {
 	    	$('#publisher-process input[type="text"]').val('');
 	    	alert('Publisher Announced! TxId: ' + txid);
 			$(obj).removeClass('disabled');
-			getBalance();
+			getBalance(obj, client);
 		}
 	});	
 }
@@ -2344,14 +2366,14 @@ function getWalletAddresses(client) {
 }
 
 // WALLET RECEIVE QR CODE
-function receiveQR(address) {
-	var qrWrap = document.getElementById('wallet-receive-qrcode');
+function FloQR(address, wrapper, qrw, qrh) {
+	var qrWrap = document.getElementById(wrapper);
 	qrWrap.innerHTML = '';
-	qrWrap.setAttribute('onclick','loadQR("florincoin:'+address.value+'")');
-	var qrcode = new QRCode("wallet-receive-qrcode", {
-		text: "florincoin:"+address.value,
-		width: 64,
-		height: 64,
+	qrWrap.setAttribute('onclick','loadQR("florincoin:'+address+'")');
+	var qrcode = new QRCode(wrapper, {
+		text: 'florincoin:'+address,
+		width: qrw,
+		height: qrh,
 		colorDark : "#000000",
 		colorLight : "#FFFFFF",
 		correctLevel : QRCode.CorrectLevel.H
@@ -2377,7 +2399,7 @@ function newFloAddress(obj) {
 			document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address+'">' + address +'</option>';
 			hideOverlay();
 			document.getElementById('wallet-address-select').selectedIndex = document.getElementById('wallet-address-select').options.length -1;
-			receiveQR(address)
+			FloQR(address, 'wallet-receive-qrcode', 64, 64)
 			$(obj).removeClass('disabled');
 		}
 	});	

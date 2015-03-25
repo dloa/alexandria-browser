@@ -644,9 +644,6 @@ ul#media-type-select-list {
 	display: none ;
 }
 /* ARTIFACT AND PUBLISHER UI */
-.entity-view .entity-meta-header #publisher-FLO-address {
-	margin: 0;
-}
 .icon {
 	color: transparent;
 	cursor: pointer;
@@ -664,8 +661,15 @@ ul#media-type-select-list {
 .icon:hover svg path {
 	fill: #464646;
 }
+.tip-icon svg {
+  height: 30px;
+}
 #publisher-bitmsg {
 	width: 64px;
+	overflow: hidden;
+}
+#publisher-bitmsg svg {
+  height: 49px;
 }
 #media-txnID {
 	display: none !important;
@@ -713,16 +717,13 @@ ul#media-type-select-list {
 	margin-top: 0;
 }
 #publisher-view-entity .entity-meta-header .container {
-	width: -moz-calc(100% - 96px);
-	width: -webkit-calc(100% - 96px);
-	width: -o-calc(100% - 96px);
-	width: calc(100% - 96px);
 	float: left;
 }
 #publisher-view-entity.entity-view .entity-meta-header .container > * {
-	margin: 0 0 3px;
+	margin: 0 0 6px;
 	float: left;
 	clear: left;
+	padding: 0;
 }
 #publisher-view-entity.entity-view .entity-meta-header .container .entity-market {
 	clear: none;
@@ -1308,7 +1309,7 @@ ul.distNetList li {
 	top: 160%;
 }
 #bitmsg-modal {
-	right: -1em;
+	left: 60px;
 }
 .bubble-modal:before {
 	bottom: 100%;
@@ -1352,8 +1353,10 @@ ul.distNetList li {
 .tip-amounts label, .bubble-modal h3, .crypto-price, .credebit-price, .bubble-modal .btnLightGray {
 	color: #919191;
 }
-.bubble-modal .btnLightGray:hover {
-	color: #464646;
+#tip-QR {
+	display: inline-block;
+	margin: 1em auto 0;
+	cursor: pointer;
 }
 .bubble-modal h3 {
 	font-weight: bold;
@@ -1364,12 +1367,17 @@ ul.distNetList li {
 	padding: 0;
 	white-space: nowrap;
 }
+#tip-modal ul {
+  padding: 0 .75em;
+}
 #tip-modal ul li {
 	display: inline-block;
 	margin: 0 .5em;
 }
 #tip-modal li input[type="radio"] {
-	margin: 0 5px 0 0;
+	margin: 0 4px 0 0;
+	top: -2px;
+	position: relative;
 }
 #tip-modal ul.modal-tabs {
 	margin: .5em auto 1em;
@@ -1384,7 +1392,7 @@ ul.distNetList li {
 }
 .modal-tabs li.active {
 	background-color: #c5d7e2;
-	color: #FFFFFF;
+	color: #464646;
 }
 #tip-modal ul.modal-tabs {
 	display: table-row;
@@ -1726,11 +1734,14 @@ div#lightbox #qrcode-lightbox {
 	border-bottom: 1px dotted #92b4c6;
 	cursor: pointer;
 }
-.bubble-modal .selectable {
-	margin: 0 1.25em;
+.bubble-modal .selectable, #publisher-FLO-address {
 	font-size: .9em;
 	color: #919191;
 }
+.bubble-modal .selectable {
+	margin: 0 1.25em;
+}
+
 /* TABLE LAYOUT */
 .tbl {
 	display: table;
