@@ -1388,7 +1388,7 @@ function sendTip(obj, client, pubAdd) {
 					$('#tip-modal').fadeOut(fadeTimer);
 			    	alert('Tip Sent! TxId: ' + txid);
 					$(obj).removeClass('disabled');
-					getBalance('', client);
+//					getBalance('', client);
 				}
 			});
 		}
@@ -1556,7 +1556,6 @@ function postPublisher(obj, client) {
 	var pubTime = Date.parse(new Date()).toString();
 //	var pubSig = generateSignature(pubName, pubAdd, pubTime, FLOclient);
 	var sigString = pubName + '-' + pubAdd + '-' + pubTime;
-	console.log(sigString);
 	client.cmd('signmessage', pubAdd, sigString, function(err, sig, resHeaders){
 		if (err) {
 			console.log(err);
@@ -1608,27 +1607,6 @@ function generateSignature(pubName, pubAdd, pubTime, client) {
 			}
 		});
 	}
-/*
-	$.ajax({
-	    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign/',
-	    type: 'POST',
-		data: queryString.toString(),
-	    success: function(e) {
-			var res = $.parseJSON(e);
-			if (res['status'] == 'failure') {
-				alert(res['response'][0]);
-				stopError = 1;
-			} else {
-				signature = res['response'][0];
-			}
-	    }, 
-		error: function (xhr, ajaxOptions, thrownError) {
-			console.error(xhr.status);
-			console.error(thrownError);
-		},
-		async:   false
-	});
-*/
 }
 
 // ADD MEDIA TABS
@@ -1850,37 +1828,37 @@ function getRotten() {
 
 // CHECK REQUIRED FIELDS FOR MEDIA SUBMISSION
 function mediaReqCheck() {
-		var reqCheck = 0;
-		$('#add-media .required').each(function(){
-			var inputValue = $(this).find('input');
-			if ( !inputValue[0] ) {
-				var inputValue = $(this).find('textarea');
-			}
-			if ( (!$(inputValue).val()) || ($(inputValue).val() == '') ) {
-				var inputName = $(inputValue).siblings('label').text();
-				$('#add-media nav ul li:first-child').click();
-				alert('Please input a '+ inputName);
-				reqCheck = 1;
-			}
-		});
-		if (document.getElementById('payment-tips').checked) {
-			checkTipAmounts();
+	var reqCheck = 0;
+	$('#add-media .required').each(function(){
+		var inputValue = $(this).find('input');
+		if ( !inputValue[0] ) {
+			var inputValue = $(this).find('textarea');
 		}
-		if ( (document.getElementById('newMediaPublisherFLO').value.length != 34) && (document.getElementById('newMediaPublisherFLO').value != '') ) {
-			alert('Please input a valid Florincoin Address');
+		if ( (!$(inputValue).val()) || ($(inputValue).val() == '') ) {
+			var inputName = $(inputValue).siblings('label').text();
+			$('#add-media nav ul li:first-child').click();
+			alert('Please input a '+ inputName);
+			reqCheck = 1;
 		}
-		if (reqCheck == 1) {
-			reqCheck = 0;
-			hideOverlay();
+	});
+	if (document.getElementById('payment-tips').checked) {
+		checkTipAmounts();
+	}
+	if ( (document.getElementById('newMediaPublisherFLO').value.length != 34) && (document.getElementById('newMediaPublisherFLO').value != '') ) {
+		alert('Please input a valid Florincoin Address');
+	}
+	if (reqCheck == 1) {
+		reqCheck = 0;
+		hideOverlay();
+		return false;
+	} else {
+		if ( $('input[type="checkbox"][name="dNetwork"]:checked').length < 1 ) {
+			$('#newMedia-net').click();
+			alert('Please select a Distribution Network');
 			return false;
-		} else {
-			if ( $('input[type="checkbox"][name="dNetwork"]:checked').length < 1 ) {
-				$('#newMedia-net').click();
-				alert('Please select a Distribution Network');
-				return false;
-			}
-			return true;
 		}
+		return true;
+	}
 }
 
 // LOAD DEACTIVATE MEDIA MODAL
@@ -1890,30 +1868,42 @@ function loadDeactivateModal() {
 }
 
 // DEACTIVATE MEDIA
-function deactivateMedia() {
+function deactivateMedia(obj) {
+	$(obj).addClass('disabled');
 	var TxId = document.getElementById('deactivate-txid').value;
 	var FLOadd = document.getElementById('deactivate-address').value;
 	var pubTime = Date.parse(new Date()).toString();
-	var mediaSig = generateSignature(TxId, FLOadd, pubTime);
-	if (mediaSig == false) {
-		return false;
-	}
-	var queryString = '{ "alexandria-deactivation": { "address": "'+ FLOadd +'", "txid": "'+ TxId +'" }, "signature":"'+ mediaSig +'" }';
-	console.log(queryString);
-	$.ajax({
-	    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
-	    type: 'POST',
-		data: queryString.toString(),
-	    success: function(e) {
-			hideOverlay();
-	    	resetAlexandria();
-	    	alert('Media Deactivated!');
-	    },
-		error: function (xhr, ajaxOptions, thrownError) {
-			console.error(xhr.status);
-			console.error(thrownError);
+	var sigString = pubName + '-' + pubAdd + '-' + pubTime;
+	client.cmd('signmessage', FLOadd, sigString, function(err, sig, resHeaders){
+		if (err) {
+			console.log(err);
+			$(obj).removeClass('disabled');
+		} else {
+			console.log(sig);
+			var queryString = '{ "alexandria-deactivation": { "address": "'+ FLOadd +'", "txid": "'+ TxId +'" }, "signature":"'+ mediaSig +'" }';
+			sendMediaTxn(obj, client, TxId, queryString);
 		}
 	});
+}
+
+// SEND MEDIA TXN TO BLOCKCHAIN
+function sendMediaTxn(obj, client, txid, queryString) {
+	if (window.confirm('Publish Media with TxId: ' + txid + '?')) { 
+		client.cmd('sendtoaddress', pubAdd, 1, '', '', queryString, function(err, txid, resHeaders){
+			if (err) {
+				console.log(err);
+				$(obj).removeClass('disabled');
+			} else {
+				hideOverlay();
+		    	resetAlexandria();
+		    	alert('Media Deactivated! TxId: ' + txid');
+				$(obj).removeClass('disabled');
+				getBalance(obj, client);
+			}
+		});	
+	} else {
+		$(obj).removeClass('disabled');
+	}
 }
 
 // LOAD TIP-TO-ALEXANDRIA MODAL
