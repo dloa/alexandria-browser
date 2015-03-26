@@ -1896,11 +1896,11 @@ function sendMediaTxn(obj, client, txid, queryString) {
 			} else {
 				hideOverlay();
 		    	resetAlexandria();
-		    	alert('Media Deactivated! TxId: ' + txid');
+		    	alert('Media Deactivated! TxId: ' + txid);
 				$(obj).removeClass('disabled');
 				getBalance(obj, client);
 			}
-		});	
+		});
 	} else {
 		$(obj).removeClass('disabled');
 	}
