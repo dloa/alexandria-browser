@@ -1361,7 +1361,9 @@ function loadTipModal(obj) {
 
 // SEND TIP WITH FLORINCOIN-QT WALLET
 function sendTip(obj, client, pubAdd) {
-	$(obj).addClass('disabled');
+	if ($(obj).hasClass('disabled')) {
+		return false;
+	}	
 	console.info(obj);
 	console.info(client);
 	console.info(pubAdd);
@@ -1374,17 +1376,20 @@ function sendTip(obj, client, pubAdd) {
 	} else {
 		var tipAmount = $('input[name="tip-amount"]:checked').val()/FLOUSD;
 		console.log(tipAmount);
-		client.cmd('sendtoaddress', pubAdd, tipAmount, '', '', '', function(err, txid, resHeaders){
-			if (err) {
-				console.log(err);
-				$(obj).removeClass('disabled');
-			} else {
-				$('#tip-modal').fadeOut(fadeTimer);
-		    	alert('Tip Sent! TxId: ' + txid);
-				$(obj).removeClass('disabled');
-				getBalance('', client);
-			}
-		});
+		if (window.confirm('Send '+ tipAmount + ' FLO tip to ' + pubAdd + '?')) { 
+			$(obj).addClass('disabled');
+			client.cmd('sendtoaddress', pubAdd, tipAmount, '', '', '', function(err, txid, resHeaders){
+				if (err) {
+					console.log(err);
+					$(obj).removeClass('disabled');
+				} else {
+					$('#tip-modal').fadeOut(fadeTimer);
+			    	alert('Tip Sent! TxId: ' + txid);
+					$(obj).removeClass('disabled');
+					getBalance('', client);
+				}
+			});
+		}
 	}
 }
 
@@ -1564,19 +1569,23 @@ function postPublisher(obj, client) {
 
 // SEND PUBLISHER TXN
 function sendPublisherTxn(obj, client, pubAdd, queryString) {
-	client.cmd('sendtoaddress', pubAdd, 1, '', '', queryString, function(err, txid, resHeaders){
-		if (err) {
-			console.log(err);
-			$(obj).removeClass('disabled');
-		} else {
-	    	$('.publisher-ui').hide();
-	    	resetAlexandria();
-	    	$('#publisher-process input[type="text"]').val('');
-	    	alert('Publisher Announced! TxId: ' + txid);
-			$(obj).removeClass('disabled');
-			getBalance(obj, client);
-		}
-	});	
+	if (window.confirm('Create new Publisher for ' + pubAdd + '?')) { 
+		client.cmd('sendtoaddress', pubAdd, 1, '', '', queryString, function(err, txid, resHeaders){
+			if (err) {
+				console.log(err);
+				$(obj).removeClass('disabled');
+			} else {
+		    	$('.publisher-ui').hide();
+		    	resetAlexandria();
+		    	$('#publisher-process input[type="text"]').val('');
+		    	alert('Publisher Announced! TxId: ' + txid);
+				$(obj).removeClass('disabled');
+				getBalance(obj, client);
+			}
+		});	
+	} else {
+		$(obj).removeClass('disabled');
+	}
 }
 
 // GENERATE SIGNATURE FOR PUBLISHING
@@ -2410,22 +2419,35 @@ function sendFLO(obj) {
 	if ($(obj).hasClass('disabled')) {
 		return false;
 	}
-	$(obj).addClass('disabled');
+	if (document.getElementById('wallet-send-address').value == '') {
+		alert('Input a receiving FLO address');
+		return false;
+	}
 	var sendAmt = parseFloat(document.getElementById('wallet-send-amount').value);
+	console.info(sendAmt);
+	if ( (!sendAmt) || ( (sendAmt) && (isNan(sendAmt) == true) ) ) {
+		alert('Input a valid send amount');
+		return false;
+	}
+	$(obj).addClass('disabled');
 	console.log(sendAmt);
-	client.cmd('sendtoaddress', document.getElementById('wallet-send-address').value, sendAmt, document.getElementById('wallet-send-message').value, function(err, txid, resHeaders){
-		if (err) {
-			console.log(err);
-			$(obj).removeClass('disabled');
-		} else {
-			alert(parseFloat(document.getElementById('wallet-send-amount').value) + ' FLO Sent: TxId ' + txid);
-			$(obj).removeClass('disabled');
-			document.getElementById('wallet-send-address').value = '';
-			document.getElementById('wallet-send-amount').value = '';
-			document.getElementById('wallet-send-message').value = '';
-			getBalance(obj, FLOclient);
-		}
-	});	
+	if (window.confirm('Send '+ sendAmt + ' FLO to ' + document.getElementById('wallet-send-address').value + '?')) { 
+		client.cmd('sendtoaddress', document.getElementById('wallet-send-address').value, sendAmt, document.getElementById('wallet-send-message').value, function(err, txid, resHeaders){
+			if (err) {
+				console.log(err);
+				$(obj).removeClass('disabled');
+			} else {
+				alert(parseFloat(document.getElementById('wallet-send-amount').value) + ' FLO Sent: TxId ' + txid);
+				$(obj).removeClass('disabled');
+				document.getElementById('wallet-send-address').value = '';
+				document.getElementById('wallet-send-amount').value = '';
+				document.getElementById('wallet-send-message').value = '';
+				getBalance(obj, FLOclient);
+			}
+		});	
+	} else {
+		$(obj).removeClass('disabled');
+	}
 }
 
 // LOAD ALEXANDRIA
