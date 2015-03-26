@@ -829,22 +829,24 @@ function prevTipAmountSet() {
 }
 
 function customTipAmountInput(event) {
-	var charCode = event.charCode;
-	var tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
-	if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186) || (isNaN(tipAmount) == true) ) {
+	var charCode = event.keyCode;
+	var tipAmount = document.getElementById('CustomTipAmount').value;
+	if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186)  && (charCode != 190) ) {
+		tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
 		document.getElementById('CustomTipAmount').value = prevTipAmount;
 		$('.tip-value').text(prevTipAmount);
 		$('#tip-modal .flo-usd-output').text(Math.round((prevTipAmount/FLOUSD)*100000000)/100000000);
-		return false;
-	}
-	if (tipAmount != prevTipAmount) {
-		var decValue = document.getElementById('CustomTipAmount').value.split('.')[1];
+		alert('Input a valid tip amount.');
+	} else if ( (tipAmount != prevTipAmount) && (tipAmount != '') ) {
+		var decValue = tipAmount.split('.')[1];
 		if(decValue) {
 			if (decValue.length > 2){
-				document.getElementById('CustomTipAmount').value = tipAmount.toFixed(2);
+				console.log(decValue[0]);
+				decValue = decValue[0].toString() + decValue[1].toString();
+				tipAmount = tipAmount.split('.')[0]+'.'+decValue;
 			}
 		}
-		tipAmount = document.getElementById('CustomTipAmount').value;
+		document.getElementById('CustomTipAmount').value = tipAmount;
 		document.getElementById('tip-option-custom').value = tipAmount;
 		$('.tip-value').text(tipAmount);
 		$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
