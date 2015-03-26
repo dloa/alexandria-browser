@@ -2425,14 +2425,14 @@ function sendFLO(obj) {
 	}
 	var sendAmt = parseFloat(document.getElementById('wallet-send-amount').value);
 	console.info(sendAmt);
-	if ( (!sendAmt) || ( (sendAmt) && (isNan(sendAmt) == true) ) ) {
+	if ( (!sendAmt) || ( (sendAmt) && (isNaN(sendAmt) == true) ) ) {
 		alert('Input a valid send amount');
 		return false;
 	}
 	$(obj).addClass('disabled');
 	console.log(sendAmt);
 	if (window.confirm('Send '+ sendAmt + ' FLO to ' + document.getElementById('wallet-send-address').value + '?')) { 
-		client.cmd('sendtoaddress', document.getElementById('wallet-send-address').value, sendAmt, document.getElementById('wallet-send-message').value, function(err, txid, resHeaders){
+		FLOclient.cmd('sendtoaddress', document.getElementById('wallet-send-address').value, sendAmt, document.getElementById('wallet-send-message').value, function(err, txid, resHeaders){
 			if (err) {
 				console.log(err);
 				$(obj).removeClass('disabled');
