@@ -147,7 +147,7 @@ input[type="text"], input[type="password"], textarea {
 	font-size: 1rem;
 	line-height: 1.6;
 }
-input[type="text"]:focus, textarea:focus {
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	box-shadow: 0 0 5px rgba(20, 20, 20, 0.2);
 	border-color: #92b4c6;
 }
@@ -429,6 +429,7 @@ header #app-user-icon {
 #search .module-links {
 	text-align: center;
 	margin: .25em 0 .75em;
+	width: 100%;
 }
 #adv-search .row .buttons {
 	text-align: center;
@@ -1106,6 +1107,9 @@ div.newMedia-media.wrap .row.choosefile {
 #add-media .input-container {
 	text-align: left;
 }
+#add-media .input-container.module-links {
+  margin-bottom: 20px;
+}
 .exchange-wrap {
 	display: none;
 	margin: .25em 0 0;
@@ -1167,6 +1171,9 @@ input[type="file"] {
 input[type="text"].intInput, #add-media #newMedia-pay .col input[type="text"] {
 	width: 6.5em;
 	margin: 0 .25em;
+}
+textarea#addMedia-desc {
+  min-height: 10em;
 }
 ul.distNetList, ul.distNetList li {
 	list-style: none;
@@ -1738,7 +1745,8 @@ div#lightbox #qrcode-lightbox {
 	font-size: .9em;
 	color: #919191;
 }
-.bubble-modal .selectable {
+.entity-view .entity-meta-header .bubble-modal .selectable {
+	padding: 0;
 	margin: 0 1.25em;
 }
 

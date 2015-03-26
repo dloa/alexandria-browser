@@ -584,6 +584,7 @@ function loadPublisherView(objMeta) {
 	}
 	if (thisPublisher['bitmessage'] != '') {
 		var publisherBitmsg = thisPublisher['bitmessage'];
+		document.getElementById('publisher-bitmsg').style.display = 'inline-block';
 		document.getElementById('bitmsg-address').innerHTML = publisherBitmsg;
 	} else {
 		document.getElementById('publisher-bitmsg').style.display = 'none';
@@ -2346,13 +2347,12 @@ function getWalletAddresses(client) {
 			document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
 			document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
 			for (var i = 0; i < walletAccts.length; i++) {
-				if (walletAccts[i] != '') {
-					console.log(walletAccts[i]);
-					client.cmd('getaddressesbyaccount', walletAccts[i], function(err, address, resHeaders){
-						document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address+'">' + address +'</option>';
-						document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address+'">' + address +'</option>';
-					});
-				}
+				client.cmd('getaddressesbyaccount', walletAccts[i], function(err, address, resHeaders){
+					for (var i = 0; i < address.length; i++) {
+						document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[i]+'">' + address[i] +'</option>';
+						document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[i]+'">' + address[i] +'</option>';
+					}
+				});
 			}
 			var selectInterval = setInterval(function() {
 			    if (document.getElementById('wallet-address-select').length > 1) {
