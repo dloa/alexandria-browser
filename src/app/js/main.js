@@ -831,7 +831,7 @@ function prevTipAmountSet() {
 function customTipAmountInput(event) {
 	var charCode = event.keyCode;
 	var tipAmount = document.getElementById('CustomTipAmount').value;
-	if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 186)  && (charCode != 190) ) {
+	if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 185)  && (charCode != 190) ) {
 		tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
 		document.getElementById('CustomTipAmount').value = prevTipAmount;
 		$('.tip-value').text(prevTipAmount);
@@ -844,9 +844,9 @@ function customTipAmountInput(event) {
 				console.log(decValue[0]);
 				decValue = decValue[0].toString() + decValue[1].toString();
 				tipAmount = tipAmount.split('.')[0]+'.'+decValue;
+				document.getElementById('CustomTipAmount').value = tipAmount;
 			}
 		}
-		document.getElementById('CustomTipAmount').value = tipAmount;
 		document.getElementById('tip-option-custom').value = tipAmount;
 		$('.tip-value').text(tipAmount);
 		$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
@@ -1380,7 +1380,7 @@ function sendTip(obj, client, pubAdd) {
 		$(obj).removeClass('disabled');
 	} else {
 		var tipAmount = $('input[name="tip-amount"]:checked').val()/FLOUSD;
-		console.log(tipAmount);
+		tipAmount = Math.round(tipAmount*100000000)/100000000;
 		if (window.confirm('Send '+ tipAmount + ' FLO tip to ' + pubAdd + '?')) { 
 			$(obj).addClass('disabled');
 			client.cmd('sendtoaddress', pubAdd, tipAmount, '', '', '', function(err, txid, resHeaders){
@@ -2323,7 +2323,7 @@ function getBalance(obj, client) {
 			}
 		} else {
 			document.getElementById('wallet-balance-flo').innerHTML = balance + ' FLO';
-			document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((balance*FLOUSD)*100000)/100000;
+			document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((balance*FLOUSD)*100)/100;
 			hideOverlay();
 			if (document.getElementById('wallet-address-select').options.length < 1) {
 				getWalletAddresses(client);
@@ -2418,7 +2418,7 @@ function sendFLO(obj) {
 		return false;
 	}
 	var sendAmt = parseFloat(document.getElementById('wallet-send-amount').value);
-	console.info(sendAmt);
+	sendAmt = Math.round(sendAmt*100000000)/100000000;
 	if ( (!sendAmt) || ( (sendAmt) && (isNaN(sendAmt) == true) ) ) {
 		alert('Input a valid send amount');
 		return false;
