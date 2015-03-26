@@ -568,6 +568,8 @@ function loadPublisherView(objMeta) {
 	publisherID = thisPublisher[0]['txid'];
 	thisPublisher = thisPublisher[0]['publisher-data']['alexandria-publisher'];
 	var publisherAddress = thisPublisher['address'];
+	FloQR(publisherAddress, 'tip-QR', 100, 100);
+	document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherAddress + '")');
 	var thisPublisherMedia = searchAPI('media', 'publisher', publisherAddress);
 	console.info(thisPublisherMedia);
 	var publisherName = thisPublisher['name'];
