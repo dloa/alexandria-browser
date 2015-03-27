@@ -415,7 +415,7 @@ header #app-user-icon {
 .header-modal ul li img, .header-modal ul li svg {
 	display: inline;
 	width: 24px;
-	height: 24px;
+	height: 25px;
 	margin: -5px 5px 0 0;
 	vertical-align: middle;
 }
