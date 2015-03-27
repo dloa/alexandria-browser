@@ -5,7 +5,7 @@ var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
 
 if (location.protocol == 'app:') {
 	var bitcoin = require('bitcoin');
-	$('.appOnly').show();
+	$('.appOnly').css('display','inline-block');
 } else {
 	$('.appOnly').remove();
 }
@@ -26,6 +26,8 @@ var navCounter = 0;
 
 jQuery(document).ready(function($){
 
+	replaceSVG();
+	
 	loadAlexandria();
 	
 	// RUN SEARCH
@@ -739,7 +741,7 @@ function loadArtifactView(objMeta) {
 			var tipOption = '<li><input type="radio" name="tip-amount" id="tip-option-'+i+'" value="'+ thisTipAmount +'" onclick="changeTipAmount(this);"><label for="tip-option-'+i+'">$'+ thisTipAmount +'</label></li>';
 			$('.tip-amounts').append(tipOption);
 		}
-		$('.tip-amounts').append('<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet();" onKeyUp="customTipAmountInput(event);" /></li>');
+		$('.tip-amounts').append('<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event);" /></li>');
 	}
 	if(mediaInfo['extra-info']){
 		if(mediaInfo['extra-info']['runtime']){
@@ -829,19 +831,21 @@ function changeTipAmount(opt) {
 }
 
 // SET CUSTOM TIP AMOUNT BY INPUT
-function prevTipAmountSet() {
-	prevTipAmount = document.getElementById('CustomTipAmount').value;
+function prevTipAmountSet(obj) {
+	prevTipAmount = obj.value;
 }
 
-function customTipAmountInput(event) {
+function customTipAmountInput(event, obj) {
 	var charCode = event.keyCode;
-	var tipAmount = document.getElementById('CustomTipAmount').value;
+	var tipAmount = obj.value;
 	if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 185)  && (charCode != 190) ) {
-		tipAmount = parseFloat(document.getElementById('CustomTipAmount').value);
-		document.getElementById('CustomTipAmount').value = prevTipAmount;
-		$('.tip-value').text(prevTipAmount);
-		$('#tip-modal .flo-usd-output').text(Math.round((prevTipAmount/FLOUSD)*100000000)/100000000);
-		alert('Input a valid tip amount.');
+		tipAmount = parseFloat(obj.value);
+		obj.value = prevTipAmount;
+		if (obj == document.getElementById('CustomTipAmount')) {
+			$('.tip-value').text(prevTipAmount);
+			$('#tip-modal .flo-usd-output').text(Math.round((prevTipAmount/FLOUSD)*100000000)/100000000);
+		}
+		alert('Input a valid amount.');
 	} else if ( (tipAmount != prevTipAmount) && (tipAmount != '') ) {
 		var decValue = tipAmount.split('.')[1];
 		if(decValue) {
@@ -849,12 +853,14 @@ function customTipAmountInput(event) {
 				console.log(decValue[0]);
 				decValue = decValue[0].toString() + decValue[1].toString();
 				tipAmount = tipAmount.split('.')[0]+'.'+decValue;
-				document.getElementById('CustomTipAmount').value = tipAmount;
+				obj.value = tipAmount;
 			}
 		}
-		document.getElementById('tip-option-custom').value = tipAmount;
-		$('.tip-value').text(tipAmount);
-		$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
+		if (obj == document.getElementById('CustomTipAmount')) {
+			document.getElementById('tip-option-custom').value = tipAmount;
+			$('.tip-value').text(tipAmount);
+			$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
+		}
 	}
 }
 
@@ -1345,7 +1351,7 @@ function loadShareModal(obj) {
 		$(obj).parents('.entity-market').append($('#share-modal'));
 	}
 	var modalPos = (history.state.currentView == 'artifact') ? ('right') : ('left');
-	var shareModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 94) : ($(obj).position().left - 40);
+	var shareModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 91) : ($(obj).position().left - 40);
 	document.getElementById('share-url').innerHTML = location.hash.slice(2);
 	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2:visible').text();
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
@@ -1365,7 +1371,7 @@ function loadTipModal(obj) {
 		$('#tipAdd-FLO').text('No Address Available');
 	}
 	var modalPos = (history.state.currentView == 'artifact') ? ('right') : ('left');
-	var tipModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 79) : ($(obj).position().left - 50);
+	var tipModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 76) : ($(obj).position().left - 50);
 	$(obj).parents('.entity-market').find('#tip-modal').css(modalPos,tipModalPos+'px').fadeToggle(fadeTimer);
 }
 
@@ -2632,7 +2638,6 @@ function toggleBtn(obj) {
 }
 
 // REPLACE .SVG WITH WEB SVG
-/*
 function replaceSVG() {
 	jQuery('img.makesvg').each(function(){
 		var $img = jQuery(this);
@@ -2661,7 +2666,6 @@ function replaceSVG() {
 		}, 'xml');
 	});
 }
-*/
 // SPINNER
 var largeSpinConfig = {
 	lines: 17, // The number of lines to draw

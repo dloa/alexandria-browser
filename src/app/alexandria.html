@@ -39,14 +39,7 @@
 		<header style="-webkit-app-region: drag">
 			<div id="logo" onclick="resetAlexandria()" class="nodrag">
 				<div id="logoImg">
-					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 18 18" version="1.1" class="replaced-svg">
-					    <title>aicon</title>
-					    <desc></desc>
-					    <defs></defs>
-					    <g id="g-logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" type="MSPage">
-					        <path d="M8.86169636,15.8251361 C5.01675331,15.8251361 1.89920625,12.7085386 1.89920625,8.86264596 C1.89920625,6.28637268 3.30271967,4.0424605 5.38140091,2.83836374 L5.38140091,12.3467398 L8.86169636,8.86549477 L12.343891,12.3467398 L12.343891,2.83836374 C14.4225723,4.0424605 15.8251361,6.28637268 15.8251361,8.86264596 C15.8251361,12.7085386 12.7085386,15.8251361 8.86169636,15.8251361 M0,8.86264596 C0,13.748354 3.97503868,17.7243423 8.86169636,17.7243423 C12.8138382,17.7243423 16.1703153,15.1236659 17.3095508,11.5443922 C17.5789322,10.698044 17.7243423,9.79698016 17.7243423,8.86264596 C17.7243423,3.97503868 13.748354,0 8.86169636,0 C3.97503868,0 0,3.97503868 0,8.86264596 Z" id="aicon" fill-opacity="0.390794837" fill="#010101" type="MSShapeGroup"></path>
-					    </g>
-					</svg>
+					<img src="img/alexandria_logo.svg" class="makesvg" width="52px" height="52px" />
 				</div>
 			</div>
 
@@ -777,9 +770,9 @@
 										<input type="checkbox" id="payment-tips" name="payment-tips" /> <label for="payment-tips">Optional Tips</label>
 									</div>
 									<div class="col" id="tipInputs">
-										<label>$</label><input type="text" name="tip-value-1" class="tip-amount-value set-tip-amount" />
-										<label>$</label><input type="text" name="tip-value-2" class="tip-amount-value set-tip-amount" />
-										<label>$</label><input type="text" name="tip-value-3" class="tip-amount-value set-tip-amount" />
+										<label>$</label><input type="text" name="tip-value-1" class="tip-amount-value set-tip-amount" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event, this);" />
+										<label>$</label><input type="text" name="tip-value-2" class="tip-amount-value set-tip-amount" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event, this);" />
+										<label>$</label><input type="text" name="tip-value-3" class="tip-amount-value set-tip-amount" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event, this);" />
 									</div>
 								</div>
 								<div class="row disabled">
@@ -1076,7 +1069,7 @@
 				<li><input type="radio" name="tip-amount" id="tip-option-0" value="0.25" onclick="changeTipAmount(this);" /><label for="tip-option-0">25&cent;</label></li>
 				<li><input type="radio" name="tip-amount" id="tip-option-1" value="0.50" onclick="changeTipAmount(this);" /><label for="tip-option-1">50&cent;</label></li>
 				<li><input type="radio" name="tip-amount" id="tip-option-2" value="1" onclick="changeTipAmount(this);" /><label for="tip-option-2">$1.00</label></li>
-				<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet();" onKeyUp="customTipAmountInput(event);" /></li>
+				<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet();" onKeyUp="customTipAmountInput(event, this);" /></li>
 			</ul>
 			<div class="tbl">
 				<ul class="modal-tabs">
@@ -1189,7 +1182,7 @@
 								</div>
 								<div class="col">
 									<div class="input-container twoCol">
-										<input type="text" name="sendAmnt" id="wallet-send-amount" placeholder="Amount" class="left" />
+										<input type="text" name="sendAmnt" id="wallet-send-amount" placeholder="Amount" class="left" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event, this);" />
 										<input type="text" name="" id="wallet-send-amount-flo" disabled class="pull-right" />
 									</div>
 								</div>

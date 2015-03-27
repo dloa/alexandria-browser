@@ -204,7 +204,7 @@ div#logoImg {
 	width: 52px;
 	height: 52px;
 }
-#logo svg {
+#logo img, #logo svg {
 	width: 100%;
 	height: 100%;
 }
@@ -592,6 +592,9 @@ ul#media-type-select-list {
 #publisher-media-list {
 	margin-top: 1em;
 	clear: both;
+}
+#publisher-media-list li {
+  position: relative;
 }
 #browse-media-wrap > .container > * {
 	text-align: left;
@@ -1314,6 +1317,7 @@ ul.distNetList li {
 }
 #view-media .bubble-modal {
 	top: 160%;
+	margin: 0;
 }
 #bitmsg-modal {
 	left: 60px;
