@@ -5,6 +5,7 @@ var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
 
 if (location.protocol == 'app:') {
 	var bitcoin = require('bitcoin');
+	$('.appOnly').show();
 } else {
 	$('.appOnly').remove();
 }
@@ -569,7 +570,9 @@ function loadPublisherView(objMeta) {
 	thisPublisher = thisPublisher[0]['publisher-data']['alexandria-publisher'];
 	var publisherAddress = thisPublisher['address'];
 	FloQR(publisherAddress, 'tip-QR', 100, 100);
-	document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherAddress + '")');
+	if (document.getElementById('sendTipBtn')) {
+		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherAddress + '")');
+	}
 	var thisPublisherMedia = searchAPI('media', 'publisher', publisherAddress);
 	console.info(thisPublisherMedia);
 	var publisherName = thisPublisher['name'];
@@ -703,7 +706,9 @@ function loadArtifactView(objMeta) {
 	var mediaPublisher = thisMediaData[0]['publisher-name'];
 	var publisherID = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
 	FloQR(publisherID, 'tip-QR', 100, 100);
-	document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherID + '")');
+	if (document.getElementById('sendTipBtn')) {
+		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherID + '")');
+	}
 	var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
 	var mediaInfo = thisMediaData[0]['media-data']['alexandria-media']['info'];
 	var mediaPubTime = thisMediaData[0]['media-data']['alexandria-media']['timestamp'];
@@ -2310,6 +2315,33 @@ function connectBTCWallet(obj) {
 function getBalance(obj, client) {
 	document.getElementById('wallet-balance-flo').innerHTML = '';
 	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
+	$.ajax({
+		url: 'http://'+serverAddress+':41289/alexandria/v1/wallet/getbalance',
+		success: function (e) {
+			var data = $.parseJSON(e);
+			console.info(data);
+			document.getElementById('wallet-balance-flo').innerHTML = data + ' FLO';
+			document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((data*FLOUSD)*100)/100;
+			hideOverlay();
+			if (document.getElementById('wallet-address-select').options.length < 1) {
+//				getWalletAddresses(client);
+			}
+			if (obj) {
+				$(obj).removeClass('disabled');
+			}
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+			FLOauth.length = [];
+			BTCauth.length = [];
+			if (obj) {
+				$(obj).removeClass('disabled');
+			}
+		}
+	});
+	
+/*
 	client.cmd('getbalance', '*', 6, function(err, balance, resHeaders){
 		if (err) {
 			if (err.code == '-32602') {
@@ -2333,6 +2365,7 @@ function getBalance(obj, client) {
 			}
 		}
 	});
+*/
 }
 
 // GET WALLET ADDRESSES

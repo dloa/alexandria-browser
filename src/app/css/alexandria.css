@@ -1562,7 +1562,6 @@ ul.distNetList li {
 /* SHARE MODAL */
 #share-modal {
 	min-width: 180px;
-	max-width: 360px;
 }
 #view-media .bubble-modal#share-modal {
 	margin-left: -1px;
@@ -1584,6 +1583,9 @@ ul.distNetList li {
   display: block;
 }
 /* APPLICATION */
+.appOnly {
+	display: none;
+}
 footer#footer {
 	font-size: 0.875em;
 	width: 100%;
