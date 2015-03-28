@@ -359,7 +359,7 @@ header #app-user-icon {
 	-webkit-box-sizing: border-box;
 	float: none;
 	margin: 6px auto 0;
-	padding: .5em 0 1em;
+	padding: .8em 0;
 	background: none #fff;
 	border: 1px solid #cdcdcd;
 	border-radius: 5px;
@@ -402,15 +402,12 @@ header #app-user-icon {
 }
 .header-modal ul {
 	margin: 0;
-	padding: 5px 0 0;
+	padding: 0;
 }
 .header-modal ul li {
 	margin: .5em 0 0;
 	padding: 0 36px 0 24px;
 	white-space: nowrap;
-}
-.header-modal ul li:first-child {
-	margin-top: 0;
 }
 .header-modal ul li img, .header-modal ul li svg {
 	display: inline;
@@ -499,9 +496,6 @@ div#intro {
 	font-size: 16px;
 	font-size: 1rem;
 }
-.module-links a:hover {
-	color: #9da2cf;
-}
 .module-links li .imgwrap {
 	border-color: #979797;
 	margin-bottom: 1em;
@@ -546,6 +540,9 @@ ul#media-type-select-list {
 }
 .module-links li:hover .imgwrap svg path {
 	fill: #797979;
+}
+.module-links li:hover a {
+	color: #797979; 
 }
 .module-links li .active .imgwrap svg path {
 	fill: #fff;

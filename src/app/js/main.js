@@ -2787,10 +2787,8 @@ function makeHistory(stateObj, newTitle) {
 			}
 			newUrl = newUrl + '/' + stateObj.currentView;
 		}
-		console.info(newBreadcrumbs);
 	}
 	if ( (stateObj.mediaTypes) && (stateObj.mediaTypes[0]) && (stateObj.mediaTypes.length > 0) ) {
-		console.info(stateObj.mediaTypes);
 		var breadString = '';
 		var urlString = '';
 		for (var i = 0; i < stateObj.mediaTypes.length; i++) {
