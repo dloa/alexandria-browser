@@ -1,7 +1,7 @@
 /* Taken from PopcornTime.io */
 /* Licence: GPLv2 */
 
-var projectName = "Alexandria UX"
+var projectName = "Alexandria"
 var projectNameNS = projectName.replace(/\s/, '-')
 var config = {
         mac : {

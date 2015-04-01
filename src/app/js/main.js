@@ -2321,6 +2321,7 @@ function connectBTCWallet(obj) {
 function getBalance(obj, client) {
 	document.getElementById('wallet-balance-flo').innerHTML = '';
 	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
+/*
 	$.ajax({
 		url: 'http://'+serverAddress+':41289/alexandria/v1/wallet/getbalance',
 		success: function (e) {
@@ -2346,8 +2347,7 @@ function getBalance(obj, client) {
 			}
 		}
 	});
-	
-/*
+*/	
 	client.cmd('getbalance', '*', 6, function(err, balance, resHeaders){
 		if (err) {
 			if (err.code == '-32602') {
@@ -2371,7 +2371,6 @@ function getBalance(obj, client) {
 			}
 		}
 	});
-*/
 }
 
 // GET WALLET ADDRESSES
