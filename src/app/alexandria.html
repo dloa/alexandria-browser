@@ -533,8 +533,7 @@
 										<div class="col">
 											<div class="input-container">
 												<div class="input-container required" style="display:block">
-													<label>Publisher Florincoin Address</label>
-													<input type="text" id="newMediaPublisherFLO" name="New Media Publisher FLO Address" />
+												<label>Publisher Florincoin Address</label><select id="newMediaPublisherFLO" disabled="disabled" name="New Media Publisher FLO Address"></select>
 												</div>
 											</div>
 										</div>
@@ -792,6 +791,16 @@
 										<label>$</label><input type="text" name="tip-value-3" class="tip-amount-value set-tip-amount" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event, this);" />
 									</div>
 								</div>
+								<div class="row">
+									<div class="col">
+										<input type="checkbox" id="payment-pwyw" name="payment-pwyw" /> <label for="payment-pwyw">Pay-What-You-Want</label>
+									</div>
+									<div class="col" id="pwywInputs">
+										<label>$</label><input type="text" name="pwyw-value-sugg" class="pwyw-amount-value set-pwyw-amount" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event, this);" placeholder="Suggested" />
+										<label>$</label><input type="text" name="pwyw-value-min" class="pwyw-amount-value set-pwyw-amount" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event, this);" placeholder="Minimum" />
+									</div>
+								</div>
+<!--
 								<div class="row disabled">
 									<div class="col">
 										<input type="checkbox" id="payment-stream" name="payment-stream" disabled /> <label for="payment-stream">Pay to Stream</label>
@@ -816,6 +825,7 @@
 										<label>$</label><input type="text" name="annual-value" disabled /> <label>/year</label>
 									</div>
 								</div>
+-->
 							</div>
 						</div>
 					</div>

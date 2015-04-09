@@ -137,7 +137,7 @@ input[type="text"], input[type="password"], textarea {
 	border-radius: 5px;
 	border: 1px solid #979797;
 	margin: .25em 0;
-	padding: 3px 1.2em;
+	padding: 3px .5em;
 	outline: none;
 	width: 100%;
 	box-sizing: border-box;
@@ -1040,11 +1040,13 @@ p.largeImg {
 }
 #add-media .modal-tab label, #add-media .modal-tab .posRelative {
 	height: 24px;
-	margin-right: .5em;
 	font-size: 18px;
 	line-height: 24px;
 	display: inline-block;
 	vertical-align: middle;
+}
+#add-media .modal-tab .posRelative {
+	margin-right: .5em;
 }
 #add-media .modal-tab input[type="checkbox"], #add-media .modal-tab input[type="radio"] {
 	margin-right: .5em;
@@ -1171,6 +1173,9 @@ input[type="file"] {
 input[type="text"].intInput, #add-media #newMedia-pay .col input[type="text"] {
 	width: 6.5em;
 	margin: 0 .25em;
+}
+#add-media #newMedia-pay .col input[type="text"] {
+	margin-right: 1em;
 }
 textarea#addMedia-desc {
   min-height: 10em;
@@ -1511,6 +1516,7 @@ ul.distNetList li {
 	width: 295px;
 	text-indent: .4em;
 	padding: .25em .5em;
+	margin-top: 0;
 }
 /* OVERLAY MODAL */
 .overlay-modal {

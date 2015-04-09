@@ -732,7 +732,8 @@ function loadArtifactView(objMeta) {
 	}
 	if ( (!mediaPymnt) || (mediaPymnt == 'none') ) {
 		$('#view-media .tip-icon').hide();
-	} else if ((mediaPymnt) && (mediaPymnt['type'] == 'tip')) {
+	}
+	if ((mediaPymnt) && (mediaPymnt['type'] == 'tip')) {
 		$('#view-media .tip-icon').show();
 		$('.tip-amounts li').remove();
 		var tipAmounts = thisMediaData[0]['media-data']['alexandria-media']['payment']['amount'].split(',');
@@ -781,8 +782,12 @@ function loadArtifactView(objMeta) {
 		}
 		var fileEmbed = '<object data="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px" class="book-embed"></object>';
 	}
-	if (fileEmbed) {
-		$('.row.media-embed').html(fileEmbed);
+	if ((mediaPymnt) && (mediaPymnt['type'] == 'pwyw')) {
+		
+	} else {
+		if (fileEmbed) {
+			$('.row.media-embed').html(fileEmbed);
+		}
 	}
 	$('#media-txnID').html(mediaID);	
 	$('main:visible .FLO-address').html(mediaFLO);
@@ -1557,6 +1562,7 @@ function postPublisher(obj, client) {
 	$(obj).addClass('disabled');
 	var pubName = document.getElementById('newPublisher-name').value;
 	var pubAdd = document.getElementById('newPublisher-floAdd').value;
+	var pubAdd = document.getElementById('newMediaPublisherFLO').value;
 	var pubEmailMD5 = '';
 	if ( (pubName == '') || (pubAdd == '') ) {
 		alert('Incomplete input');
@@ -2157,6 +2163,7 @@ function postMedia(tipAlexandria) {
 			var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
 		}
 		console.log(queryString);
+		/*
 		$.ajax({
 		    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
 		    type: 'POST',
@@ -2173,6 +2180,7 @@ function postMedia(tipAlexandria) {
 				console.error(thrownError);
 			}
 		});
+		*/
 	}
 }
 
@@ -2386,11 +2394,19 @@ function getWalletAddresses(client) {
 			}
 			document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
 			document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
+			document.getElementById('newMediaPublisherFLO').innerHTML = '<option value="">Select Address</option>';
 			for (var i = 0; i < walletAccts.length; i++) {
 				client.cmd('getaddressesbyaccount', walletAccts[i], function(err, address, resHeaders){
 					for (var i = 0; i < address.length; i++) {
-						document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[i]+'">' + address[i] +'</option>';
-						document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[i]+'">' + address[i] +'</option>';
+						var acctAddress = '';
+						if (walletAccts[i] == '') {
+							acctAddress = address[i];
+						} else {
+							acctAddress = walletAccts[i];
+						}
+						document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[i]+'">' + acctAddress +'</option>';
+						document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[i]+'">' + acctAddress +'</option>';
+						document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+address[i]+'">' + acctAddress +'</option>';
 					}
 				});
 			}
@@ -2399,6 +2415,7 @@ function getWalletAddresses(client) {
 			        clearInterval(selectInterval);
 					document.getElementById('wallet-address-select').removeAttribute('disabled');
 					document.getElementById('newPublisher-floAdd').removeAttribute('disabled');
+					document.getElementById('newMediaPublisherFLO').removeAttribute('disabled');
 					$('#newAddressBtn').removeClass('disabled');
 			    }
 			}, 100);
