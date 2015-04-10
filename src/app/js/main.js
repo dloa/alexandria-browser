@@ -1581,6 +1581,7 @@ function postPublisher(obj, client) {
 	var pubBitMsg = document.getElementById('newPublisher-bitmsg').value;
 	var pubTime = Date.parse(new Date()).toString();
 	var sigString = pubName + '-' + pubAdd + '-' + pubTime;
+	console.info(sigString);
 	client.cmd('signmessage', pubAdd, sigString, function(err, sig, resHeaders){
 		if (err) {
 			console.log(err);
@@ -2391,32 +2392,39 @@ function getBalance(obj, client) {
 }
 
 // GET WALLET ADDRESSES
+var walletAccts = {};
 function getWalletAddresses(client) {
-	var walletAccts = [];
 	$('#newAddressBtn').addClass('disabled');
 	client.cmd('listaccounts', function(err, accounts, resHeaders){
 		if (err) {
 			console.log(err);
 		} else {
+			console.info(accounts);
 			for (var account in accounts) {
-				walletAccts.push(account);
+				walletAccts[account] = '';
 			}
+			console.info(walletAccts);
+			console.info(Object.keys(walletAccts).length);
 			document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
 			document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
 			document.getElementById('newMediaPublisherFLO').innerHTML = '<option value="">Select Address</option>';
-			for (var i = 0; i < walletAccts.length; i++) {
-				client.cmd('getaddressesbyaccount', walletAccts[i], function(err, address, resHeaders){
-					for (var i = 0; i < address.length; i++) {
+			var addressCount = 0;
+			for (var i = 0; i < Object.keys(walletAccts).length; i++) {
+				client.cmd('getaddressesbyaccount', Object.keys(walletAccts)[i], function(err, address, resHeaders){
+					console.info(Object.keys(walletAccts)[addressCount]);
+					console.info(address);
+					for (var a = 0; a < address.length; a++) {
 						var acctAddress = '';
-						if (walletAccts[i] == '') {
-							acctAddress = address[i];
+						if (Object.keys(walletAccts)[addressCount] == '') {
+							acctAddress = address[a];
 						} else {
-							acctAddress = walletAccts[i];
+							acctAddress = Object.keys(walletAccts)[addressCount];
 						}
 						document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[i]+'">' + acctAddress +'</option>';
 						document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[i]+'">' + acctAddress +'</option>';
 						document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+address[i]+'">' + acctAddress +'</option>';
 					}
+					addressCount++;
 				});
 			}
 			var selectInterval = setInterval(function() {
