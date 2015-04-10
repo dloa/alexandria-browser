@@ -1439,10 +1439,6 @@ function bitMsgModal() {
 
 // NEW MEDIA MODULE
 function loadShareMod() {
-	var stateObj = {
-		currentView: 'add-media'
-	}
-	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Add Media');
 	document.getElementById('search').style.display = 'none';
 	$('.header-modal').hide();
 	$('.view-media-ui').hide();
@@ -1452,6 +1448,16 @@ function loadShareMod() {
 	$('.publisher-ui').hide();
 	$('.sharing-ui').show();
 	resizeTabs();
+	var stateObj = {
+		currentView: 'add-media'
+	}
+	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Add Media');
+	if (FLOauth.length == 0) {
+		document.getElementById('flo-wallet-user').value = '';
+		document.getElementById('flo-wallet-token').value = '';		
+		$('#wallet-auth-modal').fadeIn(fadeTimer);
+		document.getElementById('app-overlay').style.display = 'block';
+	}
 }
 
 // ADD MEDIA TAB PAGINATION
@@ -1562,7 +1568,7 @@ function postPublisher(obj, client) {
 	$(obj).addClass('disabled');
 	var pubName = document.getElementById('newPublisher-name').value;
 	var pubAdd = document.getElementById('newPublisher-floAdd').value;
-	var pubAdd = document.getElementById('newMediaPublisherFLO').value;
+	var pubBTC = document.getElementById('newPublisher-btcAdd').value;
 	var pubEmailMD5 = '';
 	if ( (pubName == '') || (pubAdd == '') ) {
 		alert('Incomplete input');
@@ -1574,7 +1580,6 @@ function postPublisher(obj, client) {
 	}
 	var pubBitMsg = document.getElementById('newPublisher-bitmsg').value;
 	var pubTime = Date.parse(new Date()).toString();
-//	var pubSig = generateSignature(pubName, pubAdd, pubTime, FLOclient);
 	var sigString = pubName + '-' + pubAdd + '-' + pubTime;
 	client.cmd('signmessage', pubAdd, sigString, function(err, sig, resHeaders){
 		if (err) {
@@ -1582,7 +1587,7 @@ function postPublisher(obj, client) {
 			$(obj).removeClass('disabled');
 		} else {
 			console.log(sig);
-			var queryString = '{ "alexandria-publisher": { "name": "'+ pubName +'", "address": "'+ pubAdd +'", "timestamp":'+ pubTime +', "bitmessage": "'+ pubBitMsg +'", "emailmd5":"'+ pubEmailMD5 +'"}, "signature":"'+ sig +'"}';
+			var queryString = '{ "alexandria-publisher": { "name": "'+ pubName +'", "address": "'+ pubAdd +'", "timestamp":'+ pubTime +', "bitcoin": "'+pubBTC+'", "bitmessage": "'+ pubBitMsg +'", "emailmd5":"'+ pubEmailMD5 +'"}, "signature":"'+ sig +'"}';
 			sendPublisherTxn(obj, client, pubAdd, queryString);
 		}
 	});
@@ -2202,6 +2207,10 @@ function resizeTabs(t) {
 	});
 	$('.media-info-container').css('overflow','initial');
 	$('#newMedia-tabs').css('height',tabHeight+'px');
+	var tabsTimeout = setTimeout(function() {
+		window.scrollTo(0, $('#newMedia-info .left').position().top);
+	}, fadeTimer);
+	
 }
 
 // GO MODAL
