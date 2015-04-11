@@ -1622,7 +1622,36 @@ function generateSignature(pubName, pubAdd, pubTime, client) {
 	} else {
 		var queryString = '{ "address":"'+ pubAdd +'", "text":"'+ pubName + '-' + pubAdd + '-' + pubTime +'" }';
 		console.log(queryString);
+		console.info(client);
 		var signature;
+		var stopError = 0;
+		$.ajax({
+		    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign/',
+		    type: 'POST',
+			data: queryString.toString(),
+		    success: function(e) {
+				var res = $.parseJSON(e);
+				if (res['status'] == 'failure') {
+					alert(res['response'][0]);
+					stopError = 1;
+				} else {
+					signature = res['response'][0];
+				}
+		    }, 
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.error(xhr.status);
+				console.error(thrownError);
+				$(obj).removeClass('disabled');
+			},
+			async:   false
+		});
+		if (stopError == 1) {
+			$(obj).removeClass('disabled');
+			return false;
+		} else {
+			return signature;
+		}		
+		/*
 		client.cmd('signmessage', pubAdd, queryString.toString(), function(err, sig, resHeaders){
 			if (err) {
 				console.log(err);
@@ -1632,6 +1661,7 @@ function generateSignature(pubName, pubAdd, pubTime, client) {
 				return sig;
 			}
 		});
+		*/
 	}
 }
 
@@ -1855,6 +1885,10 @@ function getRotten() {
 // CHECK REQUIRED FIELDS FOR MEDIA SUBMISSION
 function mediaReqCheck() {
 	var reqCheck = 0;
+	if (document.getElementById('newMediaPublisherFLO').value == '') {
+		alert('Please select a Publisher address');
+		reqCheck = 1;
+	}
 	$('#add-media .required').each(function(){
 		var inputValue = $(this).find('input');
 		if ( !inputValue[0] ) {
@@ -1878,11 +1912,6 @@ function mediaReqCheck() {
 		hideOverlay();
 		return false;
 	} else {
-		if ( $('input[type="checkbox"][name="dNetwork"]:checked').length < 1 ) {
-			$('#newMedia-net').click();
-			alert('Please select a Distribution Network');
-			return false;
-		}
 		return true;
 	}
 }
@@ -2106,6 +2135,7 @@ function postMedia(tipAlexandria) {
 		var FLOadd = document.getElementById('newMediaPublisherFLO').value;
 		var pubTime = Date.parse(new Date()).toString();
 		var mediaSig = generateSignature(Tid, FLOadd, pubTime);
+		console.info(mediaSig);
 		if (mediaSig == false) {
 			return false;
 		}
@@ -2169,7 +2199,6 @@ function postMedia(tipAlexandria) {
 			var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
 		}
 		console.log(queryString);
-		/*
 		$.ajax({
 		    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
 		    type: 'POST',
@@ -2179,6 +2208,7 @@ function postMedia(tipAlexandria) {
 		    	resetAlexandria();
 		    	$('#add-media input[type="text"]').val('');
 		    	$('#add-media textarea').val('');
+				hideOverlay();		    	
 		    	alert('Media Published!');
 		    },
 			error: function (xhr, ajaxOptions, thrownError) {
@@ -2186,7 +2216,6 @@ function postMedia(tipAlexandria) {
 				console.error(thrownError);
 			}
 		});
-		*/
 	}
 }
 
@@ -2212,6 +2241,18 @@ function resizeTabs(t) {
 		window.scrollTo(0, $('#newMedia-info .left').position().top);
 	}, fadeTimer);
 	
+}
+
+// ALERT MODAL
+
+function alertModal(alertText) {
+	document.getElementById('alert-modal').innerHTML = alertText;
+	if ( (document.getElementById('alert-modal').style.display == 'none') || (document.getElementById('alert-modal').style.display == '') ) {
+		document.getElementById('alert-modal').style.display = 'block';
+		document.getElementById('app-overlay').style.display = 'block';
+	} else {
+		hideOverlay();
+	}
 }
 
 // GO MODAL
@@ -2414,15 +2455,12 @@ function getWalletAddresses(client) {
 					console.info(Object.keys(walletAccts)[addressCount]);
 					console.info(address);
 					for (var a = 0; a < address.length; a++) {
-						var acctAddress = '';
-						if (Object.keys(walletAccts)[addressCount] == '') {
-							acctAddress = address[a];
-						} else {
-							acctAddress = Object.keys(walletAccts)[addressCount];
+						if (Object.keys(walletAccts)[addressCount] != '') {
+							var acctAddress = Object.keys(walletAccts)[addressCount];
+							document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[a]+'">' + acctAddress +'</option>';
+							document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[a]+'">' + acctAddress +'</option>';
+							document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+address[a]+'">' + acctAddress +'</option>';
 						}
-						document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[i]+'">' + acctAddress +'</option>';
-						document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[i]+'">' + acctAddress +'</option>';
-						document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+address[i]+'">' + acctAddress +'</option>';
 					}
 					addressCount++;
 				});
