@@ -1502,19 +1502,6 @@ ul.distNetList li {
 	border: 1px solid #222;
 	border: 1px solid rgba(20,20,20,.1);
 }
-/* GO TO LOCATION MODAL */
-#go-modal {
-	width: 460px;
-	left: 50%;
-	margin-left: -230px;
-	margin-top: 20%;
-}
-#go-to-input {
-	width: 295px;
-	text-indent: .4em;
-	padding: .25em .5em;
-	margin-top: 0;
-}
 /* OVERLAY MODAL */
 .overlay-modal {
 	display: none;
@@ -1562,6 +1549,26 @@ ul.distNetList li {
 	width: 100%;
 	float: none;
 	margin: 1em 0 ;
+}
+/* ALERT MODAL */
+#alert-modal {
+	text-align: center;
+}
+#alert-modal p {
+	margin: 0 0 1em;
+}
+/* GO TO LOCATION MODAL */
+#go-modal {
+	width: 460px;
+	left: 50%;
+	margin-left: -230px;
+	margin-top: 20%;
+}
+#go-to-input {
+	width: 295px;
+	text-indent: .4em;
+	padding: .25em .5em;
+	margin-top: 0;
 }
 /* SHARE MODAL */
 #share-modal {

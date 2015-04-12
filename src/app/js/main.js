@@ -1605,63 +1605,13 @@ function sendPublisherTxn(obj, client, pubAdd, queryString) {
 		    	$('.publisher-ui').hide();
 		    	resetAlexandria();
 		    	$('#publisher-process input[type="text"]').val('');
-		    	alert('Publisher Announced! TxId: ' + txid);
+		    	alertModal('Publisher Announced!');
 				$(obj).removeClass('disabled');
 				getBalance(obj, client);
 			}
 		});	
 	} else {
 		$(obj).removeClass('disabled');
-	}
-}
-
-// GENERATE SIGNATURE FOR PUBLISHING
-function generateSignature(pubName, pubAdd, pubTime, client) {
-	if ( (!pubName) || (!pubAdd) || (!pubTime) ) {
-		alert('Incomplete input');
-	} else {
-		var queryString = '{ "address":"'+ pubAdd +'", "text":"'+ pubName + '-' + pubAdd + '-' + pubTime +'" }';
-		console.log(queryString);
-		console.info(client);
-		var signature;
-		var stopError = 0;
-		$.ajax({
-		    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign/',
-		    type: 'POST',
-			data: queryString.toString(),
-		    success: function(e) {
-				var res = $.parseJSON(e);
-				if (res['status'] == 'failure') {
-					alert(res['response'][0]);
-					stopError = 1;
-				} else {
-					signature = res['response'][0];
-				}
-		    }, 
-			error: function (xhr, ajaxOptions, thrownError) {
-				console.error(xhr.status);
-				console.error(thrownError);
-				$(obj).removeClass('disabled');
-			},
-			async:   false
-		});
-		if (stopError == 1) {
-			$(obj).removeClass('disabled');
-			return false;
-		} else {
-			return signature;
-		}		
-		/*
-		client.cmd('signmessage', pubAdd, queryString.toString(), function(err, sig, resHeaders){
-			if (err) {
-				console.log(err);
-				$(obj).removeClass('disabled');
-			} else {
-				console.log(sig);
-				return sig;
-			}
-		});
-		*/
 	}
 }
 
@@ -1928,15 +1878,15 @@ function deactivateMedia(obj) {
 	var TxId = document.getElementById('deactivate-txid').value;
 	var FLOadd = document.getElementById('deactivate-address').value;
 	var pubTime = Date.parse(new Date()).toString();
-	var sigString = pubName + '-' + pubAdd + '-' + pubTime;
-	client.cmd('signmessage', FLOadd, sigString, function(err, sig, resHeaders){
+	var sigString = TxId + '-' + FLOadd + '-' + pubTime;
+	FLOclient.cmd('signmessage', FLOadd, sigString, function(err, sig, resHeaders){
 		if (err) {
 			console.log(err);
 			$(obj).removeClass('disabled');
 		} else {
 			console.log(sig);
-			var queryString = '{ "alexandria-deactivation": { "address": "'+ FLOadd +'", "txid": "'+ TxId +'" }, "signature":"'+ mediaSig +'" }';
-			sendMediaTxn(obj, client, TxId, queryString);
+			var queryString = '{ "alexandria-deactivation": { "address": "'+ FLOadd +'", "txid": "'+ TxId +'" }, "signature":"'+ sig +'" }';
+			sendMediaTxn(obj, FLOclient, TxId, queryString);
 		}
 	});
 }
@@ -1944,7 +1894,8 @@ function deactivateMedia(obj) {
 // SEND MEDIA TXN TO BLOCKCHAIN
 function sendMediaTxn(obj, client, txid, queryString) {
 	if (window.confirm('Publish Media with TxId: ' + txid + '?')) { 
-		client.cmd('sendtoaddress', pubAdd, 1, '', '', queryString, function(err, txid, resHeaders){
+		var FLOadd = document.getElementById('newMediaPublisherFLO').value;
+		client.cmd('sendtoaddress', FLOadd, 1, '', '', queryString, function(err, txid, resHeaders){
 			if (err) {
 				console.log(err);
 				$(obj).removeClass('disabled');
@@ -2134,9 +2085,37 @@ function postMedia(tipAlexandria) {
 		var Tid = document.getElementById('btih-hash').value;
 		var FLOadd = document.getElementById('newMediaPublisherFLO').value;
 		var pubTime = Date.parse(new Date()).toString();
-		var mediaSig = generateSignature(Tid, FLOadd, pubTime);
-		console.info(mediaSig);
-		if (mediaSig == false) {
+		var sigQueryString = '{ "address":"'+ FLOadd +'", "text":"'+ Tid + '-' + FLOadd + '-' + pubTime +'" }';
+		console.log(sigQueryString);
+		var signature;
+		var stopError = 0;
+		$.ajax({
+		    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign/',
+		    type: 'POST',
+			data: sigQueryString.toString(),
+		    success: function(e) {
+				var res = $.parseJSON(e);
+				if (res['status'] == 'failure') {
+					alert(res['response'][0]);
+					stopError = 1;
+				} else {
+					signature = res['response'][0];
+				}
+		    }, 
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.error(xhr.status);
+				console.error(thrownError);
+//				$(obj).removeClass('disabled');
+			},
+			async:   false
+		});
+		if (stopError == 1) {
+//			$(obj).removeClass('disabled');
+			signature = false;
+		}		
+
+		console.info(signature);
+		if (signature == false) {
 			return false;
 		}
 		var mediaType = $('#media-type-select-list a.active').attr('value');
@@ -2194,28 +2173,30 @@ function postMedia(tipAlexandria) {
 				var tipAmount = $(this).val()*100;
 				payAmount.push(tipAmount);
 			});
-			var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "payment": { "currency":"'+ payCurrency +'", "type": "'+ payType +'", "amount": "'+ payAmount +'"}, "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
+			var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "payment": { "currency":"'+ payCurrency +'", "type": "'+ payType +'", "amount": "'+ payAmount +'"}, "info": {'+mediaInfo+'} }, "signature":"'+ signature +'" }';
 		} else {
-			var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ mediaSig +'" }';
+			var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ signature +'" }';
 		}
 		console.log(queryString);
-		$.ajax({
-		    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
-		    type: 'POST',
-			data: queryString.toString(),
-		    success: function(e) {
-		    	$('.sharing-ui').hide();
-		    	resetAlexandria();
-		    	$('#add-media input[type="text"]').val('');
-		    	$('#add-media textarea').val('');
-				hideOverlay();		    	
-		    	alert('Media Published!');
-		    },
-			error: function (xhr, ajaxOptions, thrownError) {
-				console.error(xhr.status);
-				console.error(thrownError);
-			}
-		});
+		if (window.confirm('Publish Artifact?')) { 
+			$.ajax({
+			    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
+			    type: 'POST',
+				data: queryString.toString(),
+			    success: function(e) {
+					hideOverlay();		    	
+			    	$('.sharing-ui').hide();
+			    	resetAlexandria();
+			    	$('#add-media input[type="text"]').val('');
+			    	$('#add-media textarea').val('');
+			    	alertModal('Artifact Published!');
+			    },
+				error: function (xhr, ajaxOptions, thrownError) {
+					console.error(xhr.status);
+					console.error(thrownError);
+				}
+			});
+		}
 	}
 }
 
@@ -2246,7 +2227,9 @@ function resizeTabs(t) {
 // ALERT MODAL
 
 function alertModal(alertText) {
-	document.getElementById('alert-modal').innerHTML = alertText;
+	var modalHTML = '<p>' + alertText + '</p><div><a onclick="hideOverlay()" class="btnLightGray">OK</a></div>';
+	
+	document.getElementById('alert-modal').innerHTML = modalHTML;
 	if ( (document.getElementById('alert-modal').style.display == 'none') || (document.getElementById('alert-modal').style.display == '') ) {
 		document.getElementById('alert-modal').style.display = 'block';
 		document.getElementById('app-overlay').style.display = 'block';
@@ -2390,7 +2373,7 @@ function getBalance(obj, client) {
 			document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((data*FLOUSD)*100)/100;
 			hideOverlay();
 			if (document.getElementById('wallet-address-select').options.length < 1) {
-//				getWalletAddresses(client);
+//				getWalletAccts(client);
 			}
 			if (obj) {
 				$(obj).removeClass('disabled');
@@ -2423,7 +2406,7 @@ function getBalance(obj, client) {
 			document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((balance*FLOUSD)*100)/100;
 			hideOverlay();
 			if (document.getElementById('wallet-address-select').options.length < 1) {
-				getWalletAddresses(client);
+				getWalletAccts(client);
 			}
 			if (obj) {
 				$(obj).removeClass('disabled');
@@ -2432,9 +2415,10 @@ function getBalance(obj, client) {
 	});
 }
 
-// GET WALLET ADDRESSES
-var walletAccts = {};
-function getWalletAddresses(client) {
+// GET WALLET ACCOUNTS
+var walletAccts = [];
+function getWalletAccts(client) {
+	walletAccts = [];
 	$('#newAddressBtn').addClass('disabled');
 	client.cmd('listaccounts', function(err, accounts, resHeaders){
 		if (err) {
@@ -2442,40 +2426,47 @@ function getWalletAddresses(client) {
 		} else {
 			console.info(accounts);
 			for (var account in accounts) {
-				walletAccts[account] = '';
+				if (account != '') {
+					walletAccts.push(account);
+				}
 			}
 			console.info(walletAccts);
-			console.info(Object.keys(walletAccts).length);
+			console.info(walletAccts.length);
 			document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
 			document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
 			document.getElementById('newMediaPublisherFLO').innerHTML = '<option value="">Select Address</option>';
-			var addressCount = 0;
-			for (var i = 0; i < Object.keys(walletAccts).length; i++) {
-				client.cmd('getaddressesbyaccount', Object.keys(walletAccts)[i], function(err, address, resHeaders){
-					console.info(Object.keys(walletAccts)[addressCount]);
-					console.info(address);
-					for (var a = 0; a < address.length; a++) {
-						if (Object.keys(walletAccts)[addressCount] != '') {
-							var acctAddress = Object.keys(walletAccts)[addressCount];
-							document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[a]+'">' + acctAddress +'</option>';
-							document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[a]+'">' + acctAddress +'</option>';
-							document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+address[a]+'">' + acctAddress +'</option>';
-						}
-					}
-					addressCount++;
-				});
-			}
-			var selectInterval = setInterval(function() {
-			    if (document.getElementById('wallet-address-select').length > 1) {
-			        clearInterval(selectInterval);
-					document.getElementById('wallet-address-select').removeAttribute('disabled');
-					document.getElementById('newPublisher-floAdd').removeAttribute('disabled');
-					document.getElementById('newMediaPublisherFLO').removeAttribute('disabled');
-					$('#newAddressBtn').removeClass('disabled');
-			    }
-			}, 100);
+			getWalletAddresses(client);
 		}
 	});
+}
+
+// GET WALLET ADDRESSES
+var addressCount = 0;
+function getWalletAddresses(client) {
+	console.info(walletAccts);
+	for (var i = 0; i < walletAccts.length; i++) {
+		client.cmd('getaddressesbyaccount', walletAccts[i], function(err, address, resHeaders){
+			console.info(walletAccts[i]);
+			console.info(address);
+			for (var a = 0; a < address.length; a++) {
+				var acctLabel = walletAccts[addressCount];
+				document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[a]+'">' + acctLabel +'</option>';
+				document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[a]+'">' + acctLabel +'</option>';
+				document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+address[a]+'">' + acctLabel +'</option>';
+			}
+			addressCount++;
+		});
+	}
+	var selectInterval = setInterval(function() {
+	    if (document.getElementById('wallet-address-select').length > 1) {
+	        clearInterval(selectInterval);
+			document.getElementById('wallet-address-select').removeAttribute('disabled');
+			document.getElementById('newPublisher-floAdd').removeAttribute('disabled');
+			document.getElementById('newMediaPublisherFLO').removeAttribute('disabled');
+			$('#newAddressBtn').removeClass('disabled');
+	    }
+	}, 100);
+
 }
 
 // WALLET RECEIVE QR CODE
