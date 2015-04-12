@@ -1557,6 +1557,9 @@ ul.distNetList li {
 #alert-modal p {
 	margin: 0 0 1em;
 }
+#announcePubSVG, #blockchainSVG {
+  margin-bottom: 1.5em;
+}
 /* GO TO LOCATION MODAL */
 #go-modal {
 	width: 460px;
