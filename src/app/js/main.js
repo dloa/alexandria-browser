@@ -748,6 +748,8 @@ function loadArtifactView(objMeta) {
 		}
 		$('.tip-amounts').append('<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event);" /></li>');
 	}
+	$('#media-Tid').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
+	var fileHash = mediaTid.split('btih:')[1];
 	if(mediaInfo['extra-info']){
 		if(mediaInfo['extra-info']['runtime']){
 			mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
@@ -761,6 +763,13 @@ function loadArtifactView(objMeta) {
 		if(mediaInfo['extra-info']['wwwId']) {
 			wwwId = mediaInfo['extra-info']['wwwId'];
 		}
+		if(mediaInfo['extra-info']['pwyw']) {
+			var PWYW = mediaInfo['extra-info']['pwyw'];
+			console.info(PWYW);
+		} else {
+			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
+			$('.row.media-embed').html(fileEmbed);
+		}
 	}
 	if ( (mediaType == 'video') && (wwwId != '') ) {
 		var youtubePoster = getYouTubePic(wwwId);
@@ -771,15 +780,6 @@ function loadArtifactView(objMeta) {
 	}
 	$('.view-media-ui').show();
 	document.getElementById('viewlabel').style.display = 'inline-block';
-	$('#media-Tid').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
-	var fileHash = mediaTid.split('btih:')[1];
-	var PWYW = 
-	if ((mediaPymnt) && (mediaPymnt['type'] == 'pwyw')) {
-
-	} else {
-		var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
-		$('.row.media-embed').html(fileEmbed);
-	}
 	$('#media-txnID').html(mediaID);	
 	$('main:visible .FLO-address').html(mediaFLO);
 	$('#media-view-entity .entity-meta-header h2').html(mediaTitle);
@@ -2546,7 +2546,13 @@ function getWalletAddresses(client) {
 
 }
 
-// WALLET RECEIVE QR CODE
+// WALLET ADDRESS RECEIVE QR CODE
+function receiveQR(obj) {
+	var publisherAddress = $(obj).find('option:selected').val();
+	FloQR(publisherAddress, 'wallet-receive-qrcode', 100, 100);
+}
+
+// FLO QR CODE
 function FloQR(address, wrapper, qrw, qrh) {
 	var qrWrap = document.getElementById(wrapper);
 	qrWrap.innerHTML = '';
