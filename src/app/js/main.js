@@ -466,6 +466,7 @@ function getCryptos() {
 					$('#tip-modal .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
 					$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);
 					$('#tip-alexandria-modal .flo-usd-output').text(Math.round((document.getElementById('alexandria-tip-amount').value*FLOUSD)*100000)/100000);
+					$('#pwyw-modal .flo-usd-output').text(Math.round((document.getElementById('pwyw-wall-amount').value/FLOUSD)*100000)/100000);
 				}
 			});
 		}
@@ -508,6 +509,7 @@ function getAllPublishers() {
 	$('.publisher-ui').hide();
 	$('main').hide();
 	document.getElementById('search').style.display = 'block';
+	hideOverlay();
 	resetInterface();
 	$('.view-media-ui').hide();
 	$('.view-publishers-ui').hide();
@@ -550,6 +552,7 @@ function loadPublisherView(objMeta) {
 	$('#publisher-media-list li').remove();
 	document.getElementById('intro').style.display = 'none';
 	$('main').hide();
+	hideOverlay();
 	resetInterface();
 	$('.wallet-ui').hide();
 	$('.view-media-ui').hide();
@@ -686,6 +689,7 @@ function loadMediaEntity(obj) {
 function loadArtifactView(objMeta) {
 	document.getElementById('intro').style.display = 'none';
 	$('main').hide();
+	hideOverlay();
 	resetInterface();
 	document.getElementById('search').style.display = 'block';
 	$('.wallet-ui').hide();
@@ -694,6 +698,8 @@ function loadArtifactView(objMeta) {
 	$('.view-publishers-ui').hide();
 	$('#view-media .entity-view').hide();
 	document.getElementById('view-media').style.display = 'block';
+	$('.row.media-embed').html('');
+	$('#media-Tid').attr('href','').hide();
 	var mediaID = '';
 	if ( (objMeta) && (objMeta.length == 1) ) {
 		mediaID = $(objMeta).attr('id').split('-')[1];
@@ -748,7 +754,6 @@ function loadArtifactView(objMeta) {
 		}
 		$('.tip-amounts').append('<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event);" /></li>');
 	}
-	$('#media-Tid').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
 	var fileHash = mediaTid.split('btih:')[1];
 	if(mediaInfo['extra-info']){
 		if(mediaInfo['extra-info']['runtime']){
@@ -765,10 +770,13 @@ function loadArtifactView(objMeta) {
 		}
 		if(mediaInfo['extra-info']['pwyw']) {
 			var PWYW = mediaInfo['extra-info']['pwyw'];
+			document.getElementById('pwyw-wall-amount').value = PWYW[0];
+			showPWYWModal(mediaFLO, mediaType, fileHash, mediaFilename);
 			console.info(PWYW);
 		} else {
 			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
 			$('.row.media-embed').html(fileEmbed);
+			$('#media-Tid').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle)).show();
 		}
 	}
 	if ( (mediaType == 'video') && (wwwId != '') ) {
@@ -886,6 +894,7 @@ function fullSearch(searchFor) {
 	$('.publisher-ui').hide();
 	$('.view-media-ui').hide();
 	$('.view-publishers-ui').hide();
+	hideOverlay();
 	resetInterface();
 	document.getElementById('search').style.display = 'block';
 	var publisherResults = searchAPI('publisher', 'name', searchFor);
@@ -912,6 +921,7 @@ function selectSearchMediaType(obj){
 // EXECUTE ADVANCED SEARCH
 function buildSearch() {
 	$('main').not('#browse-media').hide();
+	hideOverlay();
 	resetInterface();
 	document.getElementById('search').style.display = 'block';
 	$('.sharing-ui').hide();
@@ -951,6 +961,7 @@ function cancelSearch() {
 function searchByField(module, searchOn, searchFor) {
 	var AdvSearchResults = searchAPI(module, searchOn, searchFor);
 	$('main').not('#browse-media').hide();
+	hideOverlay();
 	resetInterface();
 	document.getElementById('search').style.display = 'block';
 	$('#browse-media .module-links a').removeClass('active');
@@ -1979,6 +1990,41 @@ function showTipAlexandriaModal() {
 	document.getElementById('app-overlay').style.display = 'block';
 }
 
+// LOAD PAY-WHAT-YOU-WANT MODAL
+function showPWYWModal(FLOadd, mediaType, fileHash, mediaFilename) {
+	getCryptos();
+	$('#pwyw-modal .btnLightGray').attr('data-address', FLOadd);
+	$('#pwyw-modal .btnLightGray').attr('data-type', mediaType);
+	$('#pwyw-modal .btnLightGray').attr('data-hash', fileHash);
+	$('#pwyw-modal .btnLightGray').attr('data-file', mediaFilename);
+	$('#pwyw-modal').fadeIn(fadeTimer);
+	document.getElementById('app-overlay').style.display = 'block';
+}
+
+function unlockPWYW(obj) {
+	console.info(obj);
+	$(obj).addClass('disabled');
+	var FLOadd = $(obj).attr('data-address');
+	var FLOamount = Math.round((document.getElementById('pwyw-wall-amount').value/FLOUSD)*100000)/100000;
+	FLOclient.cmd('sendtoaddress', FLOadd, FLOamount, '', '', '', function(err, txid, resHeaders){
+		if (err) {
+			console.log(err);
+			$(obj).removeClass('disabled');
+		} else {
+			var mediaType = $('#pwyw-modal .btnLightGray').attr('data-type');
+			var fileHash = $('#pwyw-modal .btnLightGray').attr('data-hash');
+			var mediaFilename = $('#pwyw-modal .btnLightGray').attr('data-file');
+			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
+			$('.row.media-embed').html(fileEmbed);
+			var mediaTitle = $('.entity-meta-header h2').text();
+			$('#media-Tid').attr('href','magnet:?xt=urn:'+fileHash+'&dn='+escape(mediaTitle)).show();
+			hideOverlay();
+			$(obj).removeClass('disabled');
+//			getBalance(obj, client);
+		}
+	});
+}
+
 // HIDE OVERLAY AND MODAL
 function hideOverlay() {
 	$('.overlay-modal').fadeOut(fadeTimer);
@@ -2339,6 +2385,7 @@ function goToLocation() {
 
 // LOAD ABOUT VIEW
 function loadAboutView() {
+	hideOverlay();
 	resetInterface();
 	$('main').not('#about').hide();
 	$('.wallet-ui').hide();
@@ -2361,6 +2408,7 @@ function loadWalletView() {
 	$('.sharing-ui').hide();
 	$('.view-media-ui').hide();
 	$('.view-publishers-ui').hide();
+	hideOverlay();
 	resetInterface();
 	document.getElementById('search').style.display = 'none';
 	$('.wallet-ui').show();
@@ -2647,7 +2695,7 @@ function resetInterface() {
 	$('video').trigger('pause');
 	document.getElementById('viewlabel').style.display = 'none';
 	document.getElementById('disabler').style.display = 'none';
-	hideOverlay();
+//	hideOverlay();
 	if (document.getElementById('intro').style.display == 'block') {
 		$('#intro').fadeOut(fadeTimer);
 	}

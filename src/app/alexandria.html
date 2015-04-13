@@ -1109,11 +1109,7 @@
 			<div class="tbl">
 				<ul class="modal-tabs">
 					<li name="tip-flo">Florincoin</li>
-<!--
 					<li name="tip-bitcoin">Bitcoin</li>
-					<li name="tip-paypal">PayPal</li>
-					<li name="tip-credebit">Credit/Debit</li>
--->
 				</ul>
 			</div>
 			<div id="tip-flo" class="modal-tab">
@@ -1130,14 +1126,12 @@
 				<div class="row">
 					<div class="crypto-price strong btc-usd">$<span class="tip-value">1.00</span> USD = <span class="btc-usd-output"></span> BTC</div>
 				</div>
-<!--
 				<div class="row">
 					<a class="btnLightGray">Use Online Bitcoin Wallet</a>
 					<p>Or manually send BTC to:<br />
 					[insert BTC address]</p>
 					<div id="qrcode" onclick="loadQR();"></div>
 				</div>
--->
 			</div>
 		</div>
 		
@@ -1286,12 +1280,23 @@
 		</div>
 		
 		<div id="tip-alexandria-modal" class="overlay-modal">
-			<h3>Would you like to include a tip to support ΛLΞXΛNDRIΛ development?</h3>
+			<h3>Would you like to include a tip to support Alexandria development?</h3>
 			<div class="input-container">
 				<input type="text" name="Tip Amount" id="alexandria-tip-amount" value="5" onkeyup="changeCryptoRates();" /> <label>FLO</label> ($<span class="flo-usd-output"></span>)
 			</div>
 			<div class="row">
 				<a onclick="postMedia(0);" class="left btnLightGray">No</a><a onclick="postMedia(1);" class="pull-right btnLightGray">Yes</a>
+			</div>
+		</div>
+
+		<!-- PAY-WHAT-YOU-WANT -->
+		<div id="pwyw-modal" class="overlay-modal">
+			<h3>Pay What You Want</h3>
+			<div class="input-container">
+				<label>$</label><input type="text" name="PWYW Amount" id="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> (<span class="flo-usd-output"></span> FLO)
+			</div>
+			<div class="row">
+				<a onclick="unlockPWYW(this);" class="btnLightGray">Send Payment</a>
 			</div>
 		</div>
 
@@ -1382,4 +1387,4 @@
 		
 		<script src="js/main.js"></script>
 	</body>
-</html>
+</html></html>

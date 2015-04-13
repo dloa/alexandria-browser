@@ -1116,7 +1116,7 @@ div.newMedia-media.wrap .row.choosefile {
 	display: none;
 	margin: .25em 0 0;
 }
-.exchange-wrap label {
+.exchange-wrap label, #pwyw-modal label {
 	margin-right: .5em;
 }
 #add-media #newMedia-tabs ul.newMedia-links {
@@ -1527,10 +1527,11 @@ ul.distNetList li {
 .overlay-modal input {
 	margin: 1em 0 0;
 }
-#tip-alexandria-modal .input-container input {
+#tip-alexandria-modal .input-container input, #pwyw-modal .input-container input {
 	width: 5em;
+	margin-top: 0;
 }
-#tip-alexandria-modal * {
+#tip-alexandria-modal *, #pwyw-modal * {
 	text-align: center;
 }
 .overlay-modal .col {
