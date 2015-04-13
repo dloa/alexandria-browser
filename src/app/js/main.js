@@ -773,25 +773,12 @@ function loadArtifactView(objMeta) {
 	document.getElementById('viewlabel').style.display = 'inline-block';
 	$('#media-Tid').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle));
 	var fileHash = mediaTid.split('btih:')[1];
-	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
-		if ( (fileHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
-			mediaFilename = 'SF Bitcoin Meetup @ Geekdom - November 18, 2014.mp4';
-		}
-		var fileEmbed = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
-	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
-		var fileEmbed = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
-	} else if (mediaType == 'book') {
-		if ( (fileHash == '08D72B48F0799BBF62A2DC54CB66CB1ED14F9431') && (mediaFilename == '') ) {
-			mediaFilename = 'bitcoin.pdf';
-		}
-		var fileEmbed = '<object data="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px" class="book-embed"></object>';
-	}
+	var PWYW = 
 	if ((mediaPymnt) && (mediaPymnt['type'] == 'pwyw')) {
-		
+
 	} else {
-		if (fileEmbed) {
-			$('.row.media-embed').html(fileEmbed);
-		}
+		var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
+		$('.row.media-embed').html(fileEmbed);
 	}
 	$('#media-txnID').html(mediaID);	
 	$('main:visible .FLO-address').html(mediaFLO);
@@ -824,6 +811,24 @@ function loadArtifactView(objMeta) {
 		publisherId: publisherID
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);
+}
+
+function embedArtifact(mediaType, fileHash, mediaFilename) {
+	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
+		// FIX FOR SF BITCOIN MEETUP WITHOUT FILENAME
+		if ( (fileHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
+			mediaFilename = 'SF Bitcoin Meetup @ Geekdom - November 18, 2014.mp4';
+		}
+		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
+		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+	} else if (mediaType == 'book') {
+		if ( (fileHash == '08D72B48F0799BBF62A2DC54CB66CB1ED14F9431') && (mediaFilename == '') ) {
+			mediaFilename = 'bitcoin.pdf';
+		}
+		var embedCode = '<object data="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px" class="book-embed"></object>'
+	}
+	return embedCode;
 }
 
 // CHANGE CUSTOM TIP AMOUNT
@@ -1881,18 +1886,69 @@ function deactivateMedia(obj) {
 	$(obj).addClass('disabled');
 	var TxId = document.getElementById('deactivate-txid').value;
 	var FLOadd = document.getElementById('deactivate-address').value;
-	var pubTime = Date.parse(new Date()).toString();
-	var sigString = TxId + '-' + FLOadd + '-' + pubTime;
+	var sigQueryString = '{ "address":"'+ FLOadd +'", "text":"'+ FLOadd + '-' + TxId +'" }';
+	console.log(sigQueryString);
+	var signature;
+	var stopError = 0;
+	$.ajax({
+	    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign/',
+	    type: 'POST',
+		data: sigQueryString.toString(),
+	    success: function(e) {
+			var res = $.parseJSON(e);
+			if (res['status'] == 'failure') {
+				alert(res['response'][0]);
+				stopError = 1;
+			} else {
+				signature = res['response'][0];
+			}
+	    }, 
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+//				$(obj).removeClass('disabled');
+		},
+		async:   false
+	});
+	if (stopError == 1) {
+//			$(obj).removeClass('disabled');
+		signature = false;
+	}		
+
+	console.info(signature);
+	if (signature == false) {
+		return false;
+	}
+/*		
 	FLOclient.cmd('signmessage', FLOadd, sigString, function(err, sig, resHeaders){
 		if (err) {
 			console.log(err);
 			$(obj).removeClass('disabled');
 		} else {
 			console.log(sig);
-			var queryString = '{ "alexandria-deactivation": { "address": "'+ FLOadd +'", "txid": "'+ TxId +'" }, "signature":"'+ sig +'" }';
 			sendMediaTxn(obj, FLOclient, TxId, queryString);
 		}
 	});
+*/
+	var queryString = '{ "alexandria-deactivation": { "address": "'+ FLOadd +'", "txid": "'+ TxId +'" }, "signature":"'+ signature +'" }';
+	console.info(queryString);
+	if (window.confirm('Deactivate Artifact?')) { 
+		$.ajax({
+		    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
+		    type: 'POST',
+			data: queryString.toString(),
+		    success: function(e) {
+				hideOverlay();		    	
+		    	$('.sharing-ui').hide();
+		    	resetAlexandria();
+		    	alertModal('Media Deactivated!');
+		    },
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.error(xhr.status);
+				console.error(thrownError);
+			}
+		});
+	}
 }
 
 // SEND MEDIA TXN TO BLOCKCHAIN
@@ -2165,11 +2221,25 @@ function postMedia(tipAlexandria) {
 				}
 			}
 		});
+
+		if ($('#payment-pwyw:checked').length != 0) {
+			var payAmount = [];
+			$('.pwyw-amount-value').each(function(){
+				var pwywAmount = $(this).val()*100;
+				payAmount.push(pwywAmount);
+			});
+			if (mediaExtraInfo == '') {
+				mediaExtraInfo = '"pwyw":"'+ payAmount +'"';
+			} else {
+				mediaExtraInfo = mediaExtraInfo + ',' + '"pwyw":"'+ payAmount +'"';
+			}
+		}
+
 		if (mediaExtraInfo != '') {
 			mediaInfo = mediaInfo+', "extra-info": {'+mediaExtraInfo+'}';
 		}
 		
-		if ($('#newMedia-pay input[type="checkbox"]:checked').length != 0) {
+		if ($('#payment-tips:checked').length != 0) {
 			var payCurrency = 'USD';
 			var payType = 'tip';
 			var payAmount = [];
@@ -2182,7 +2252,8 @@ function postMedia(tipAlexandria) {
 			var queryString = '{ "alexandria-media": { "torrent": "'+ Tid +'", "publisher": "'+ FLOadd +'", "timestamp":'+ pubTime +', "type": "'+ mediaType +'", "info": {'+mediaInfo+'} }, "signature":"'+ signature +'" }';
 		}
 		console.log(queryString);
-		if (window.confirm('Publish Artifact?')) { 
+		var FLOAccount = $('#newMediaPublisherFLO option:selected').html();
+		if (window.confirm('Publish Artifact using '+ FLOAccount +' : '+ FLOadd +'?')) { 
 			$.ajax({
 			    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
 			    type: 'POST',
@@ -2421,6 +2492,7 @@ function getBalance(obj, client) {
 
 // GET WALLET ACCOUNTS
 var walletAccts = [];
+var addressCount = 0;
 function getWalletAccts(client) {
 	walletAccts = [];
 	$('#newAddressBtn').addClass('disabled');
@@ -2445,15 +2517,16 @@ function getWalletAccts(client) {
 }
 
 // GET WALLET ADDRESSES
-var addressCount = 0;
 function getWalletAddresses(client) {
 	console.info(walletAccts);
 	for (var i = 0; i < walletAccts.length; i++) {
+		console.log(i);
 		client.cmd('getaddressesbyaccount', walletAccts[i], function(err, address, resHeaders){
-			console.info(walletAccts[i]);
+			console.log(addressCount);
+			console.info(walletAccts[addressCount]);
 			console.info(address);
+			var acctLabel = walletAccts[addressCount];
 			for (var a = 0; a < address.length; a++) {
-				var acctLabel = walletAccts[addressCount];
 				document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[a]+'">' + acctLabel +'</option>';
 				document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[a]+'">' + acctLabel +'</option>';
 				document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+address[a]+'">' + acctLabel +'</option>';
