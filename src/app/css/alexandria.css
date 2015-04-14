@@ -1116,7 +1116,7 @@ div.newMedia-media.wrap .row.choosefile {
 	display: none;
 	margin: .25em 0 0;
 }
-.exchange-wrap label, #pwyw-modal label {
+.exchange-wrap label, #pwyw-modal label, #pwyw-wall-amount {
 	margin-right: .5em;
 }
 #add-media #newMedia-tabs ul.newMedia-links {
@@ -1357,7 +1357,7 @@ ul.distNetList li {
 .entity-market .bubble-modal * {
 	text-align: center;
 }
-#tip-modal #tip-flo .row:first-of-type {
+#tip-modal .modal-tab .row:first-of-type {
 	display: none;
 }
 .tip-amounts label, .bubble-modal h3, .crypto-price, .credebit-price, .bubble-modal .btnLightGray {
@@ -1413,6 +1413,7 @@ ul.distNetList li {
 	padding: 0 .8em;
 	border-left: 2px solid #FFF;
 	cursor: pointer;
+	width: 50%;
 }
 #tip-modal ul.modal-tabs li:first-child {
 	border: 0 none transparent;
@@ -1435,7 +1436,7 @@ ul.distNetList li {
 	margin-left: .2em;
 	color: #444444;
 }
-#tip-flo-usd-output.selectable {
+.entity-view .entity-meta-header .bubble-modal#tip-modal .selectable {
   margin: 0;
 }
 #tip-modal .modal-tab .btnLightGray {
@@ -1520,6 +1521,9 @@ ul.distNetList li {
 }
 .overlay-modal * {
 	vertical-align: middle;
+}
+#wallet-connect-currency {
+	vertical-align: baseline;
 }
 .overlay-modal .input-container {
 	margin: 1em 0;

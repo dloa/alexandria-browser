@@ -1,6 +1,8 @@
 /* some global variables to make mistakes only once */
-var serverAddress = '54.172.28.195'; // Dev
+// var serverAddress = '54.172.28.195'; // Dev
 // var serverAddress = 'blue.a.blocktech.com'; // Demo
+var serverAddress = 'localhost';
+
 var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
 
 if (location.protocol == 'app:') {
@@ -580,7 +582,7 @@ function loadPublisherView(objMeta) {
 	var publisherAddress = thisPublisher['address'];
 	FloQR(publisherAddress, 'tip-QR', 100, 100);
 	if (document.getElementById('sendTipBtn')) {
-		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherAddress + '")');
+		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherAddress + '", FLO")');
 	}
 	var thisPublisherMedia = searchAPI('media', 'publisher', publisherAddress);
 	console.info(thisPublisherMedia);
@@ -719,7 +721,7 @@ function loadArtifactView(objMeta) {
 	var publisherID = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
 	FloQR(publisherID, 'tip-QR', 100, 100);
 	if (document.getElementById('sendTipBtn')) {
-		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherID + '")');
+		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherID + '", "FLO")');
 	}
 	var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
 	var mediaInfo = thisMediaData[0]['media-data']['alexandria-media']['info'];
@@ -768,11 +770,13 @@ function loadArtifactView(objMeta) {
 		if(mediaInfo['extra-info']['wwwId']) {
 			wwwId = mediaInfo['extra-info']['wwwId'];
 		}
+		if(mediaInfo['extra-info']['Bitcoin Address']) {
+			var mediaBTC = mediaInfo['extra-info']['Bitcoin Address'];
+		}
 		if(mediaInfo['extra-info']['pwyw']) {
 			var PWYW = mediaInfo['extra-info']['pwyw'];
-			document.getElementById('pwyw-wall-amount').value = PWYW[0];
+			document.getElementById('pwyw-wall-amount').value = PWYW[0]/100;
 			showPWYWModal(mediaFLO, mediaType, fileHash, mediaFilename);
-			console.info(PWYW);
 		} else {
 			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
 			$('.row.media-embed').html(fileEmbed);
@@ -790,6 +794,12 @@ function loadArtifactView(objMeta) {
 	document.getElementById('viewlabel').style.display = 'inline-block';
 	$('#media-txnID').html(mediaID);	
 	$('main:visible .FLO-address').html(mediaFLO);
+	if (mediaBTC) {
+		$('main:visible .BTC-address').html(mediaBTC);
+		if (document.getElementById('sendBTCTipBtn')) {
+			document.getElementById('sendBTCTipBtn').setAttribute('onclick','sendTip(this, BTCclient, "' + mediaBTC + '", "BTC")');
+		}
+	}
 	$('#media-view-entity .entity-meta-header h2').html(mediaTitle);
 	if (mediaArtist) {
 		document.getElementById('media-artist-name').outerHTML = '<h3 id="media-artist-name" onclick="searchByField(&apos;media&apos;, &apos;info_extra&apos;, &apos;'+ mediaArtist +'&apos;)">'+ mediaArtist +'</h3>';
@@ -849,7 +859,7 @@ function changeTipAmount(opt) {
 	var tipAmount = ($(opt).attr('id')=='tip-option-custom') ? (parseFloat($(opt).siblings('.tip-input').val())) : parseFloat($(opt).val()) ;
 	$('.tip-value').text(tipAmount);
 	$('#tip-modal .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
-	$('.btc-usd .btc-usd-output').text(Math.round((tipAmount/BTCUSD)*100000000)/100000000);
+	$('#tip-modal .btc-usd-output').text(Math.round((tipAmount/BTCUSD)*100000000)/100000000);
 }
 
 // SET CUSTOM TIP AMOUNT BY INPUT
@@ -1390,10 +1400,18 @@ function loadTipModal(obj) {
 	$('#tip-modal .modal-tabs li:first-child').click();
 	$('input[name="tip-amount"]:eq(2)').click();
 	var mediaFLO = $('main:visible .FLO-address').html();
+	var mediaBTC = $('main:visible .BTC-address').html();
 	if (mediaFLO != '') {
 		$('#tipAdd-FLO').html(mediaFLO);
 	} else {
 		$('#tipAdd-FLO').text('No Address Available');
+	}
+	if (mediaBTC != '') {
+		$('#tipAdd-BTC').html(mediaBTC);
+		$('.modal-tabs li[name="tip-bitcoin"]').show();
+	} else {
+		$('#tipAdd-BTC').text('No Address Available');
+		$('.modal-tabs li[name="tip-bitcoin"]').hide();
 	}
 	var modalPos = (history.state.currentView == 'artifact') ? ('right') : ('left');
 	var tipModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 76) : ($(obj).position().left - 50);
@@ -1401,33 +1419,64 @@ function loadTipModal(obj) {
 }
 
 // SEND TIP WITH FLORINCOIN-QT WALLET
-function sendTip(obj, client, pubAdd) {
+function sendTip(obj, client, pubAdd, currency) {
 	if ($(obj).hasClass('disabled')) {
 		return false;
 	}	
 	console.info(obj);
 	console.info(client);
 	console.info(pubAdd);
-	if (FLOauth.length == 0) {
-		document.getElementById('flo-wallet-user').value = '';
-		document.getElementById('flo-wallet-token').value = '';		
-		$('#wallet-auth-modal').fadeIn(fadeTimer);
-		document.getElementById('app-overlay').style.display = 'block';
-		$(obj).removeClass('disabled');
-	} else {
+	if (currency == 'FLO') {
+		if (FLOauth.length == 0) {
+			document.getElementById('wallet-user').value = '';
+			document.getElementById('wallet-token').value = '';		
+			document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
+			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "'+currency+'")');
+			$('#wallet-auth-modal').fadeIn(fadeTimer);
+			document.getElementById('app-overlay').style.display = 'block';
+			$(obj).removeClass('disabled');
+			return false;
+		}
 		var tipAmount = $('input[name="tip-amount"]:checked').val()/FLOUSD;
 		tipAmount = Math.round(tipAmount*100000000)/100000000;
-		if (window.confirm('Send '+ tipAmount + ' FLO tip to ' + pubAdd + '?')) { 
-			$(obj).addClass('disabled');
+	} else if (currency == 'BTC') {
+		if (BTCauth.length == 0) {
+			document.getElementById('wallet-user').value = '';
+			document.getElementById('wallet-token').value = '';		
+			document.getElementById('wallet-connect-currency').innerHTML = 'Bitcoin';
+			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "'+currency+'")');
+			$('#wallet-auth-modal').fadeIn(fadeTimer);
+			document.getElementById('app-overlay').style.display = 'block';
+			$(obj).removeClass('disabled');
+			return false;
+		}
+		var tipAmount = $('input[name="tip-amount"]:checked').val()/BTCUSD;
+		tipAmount = Math.round(tipAmount*100000000)/100000000;
+	}
+	if (window.confirm('Send '+ tipAmount + ' '+currency+' tip to ' + pubAdd + '?')) { 
+		$(obj).addClass('disabled');
+		if (currency == 'FLO') {
 			client.cmd('sendtoaddress', pubAdd, tipAmount, '', '', '', function(err, txid, resHeaders){
 				if (err) {
 					console.log(err);
 					$(obj).removeClass('disabled');
 				} else {
 					$('#tip-modal').fadeOut(fadeTimer);
-			    	alert('Tip Sent! TxId: ' + txid);
+			    	alertModal('Tip Sent! TxId: ' + txid);
 					$(obj).removeClass('disabled');
-//					getBalance('', client);
+	//					getBalance('', client);
+				}
+			});
+		} else if (currency == 'BTC') {
+			client.cmd('sendtoaddress', pubAdd, tipAmount, function(err, txid, resHeaders){
+				if (err) {
+					console.log(err);
+					$(obj).removeClass('disabled');
+				} else {
+					$('#tip-modal').fadeOut(fadeTimer);
+			    	alertModal('Tip Sent! TxId: ' + txid);
+					$(obj).removeClass('disabled');
+	//					getBalance('', client);
 				}
 			});
 		}
@@ -1473,8 +1522,8 @@ function loadShareMod() {
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Add Media');
 	if (FLOauth.length == 0) {
-		document.getElementById('flo-wallet-user').value = '';
-		document.getElementById('flo-wallet-token').value = '';		
+		document.getElementById('wallet-user').value = '';
+		document.getElementById('wallet-token').value = '';		
 		$('#wallet-auth-modal').fadeIn(fadeTimer);
 		document.getElementById('app-overlay').style.display = 'block';
 	}
@@ -1516,8 +1565,8 @@ function loadCreatePublisherMod() {
 	$('.publisher-ui').show();
 	resizeTabs();
 	if (FLOauth.length == 0) {
-		document.getElementById('flo-wallet-user').value = '';
-		document.getElementById('flo-wallet-token').value = '';		
+		document.getElementById('wallet-user').value = '';
+		document.getElementById('wallet-token').value = '';		
 		$('#wallet-auth-modal').fadeIn(fadeTimer);
 		document.getElementById('app-overlay').style.display = 'block';
 	}	
@@ -2418,8 +2467,8 @@ function loadWalletView() {
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ Wallet');
 	if (FLOauth.length == 0) {
-		document.getElementById('flo-wallet-user').value = '';
-		document.getElementById('flo-wallet-token').value = '';		
+		document.getElementById('wallet-user').value = '';
+		document.getElementById('wallet-token').value = '';		
 		$('#wallet-auth-modal').fadeIn(fadeTimer);
 		document.getElementById('app-overlay').style.display = 'block';
 	}
@@ -2428,22 +2477,37 @@ function loadWalletView() {
 // CONNECT TO FLORINCOIN WALLET
 var FLOclient = {};
 var FLOauth = [];
-function connectWallet(obj) {
+function connectWallet(obj, wallet) {
 	if ($(obj).hasClass('disabled')) {
 		return false;
 	}
 	$(obj).addClass('disabled');
-	FLOauth.length = 0;
-	FLOauth.push(document.getElementById('flo-wallet-user').value);
-	FLOauth.push(document.getElementById('flo-wallet-token').value);
-	FLOclient = new bitcoin.Client({
-	  host: 'localhost',
-	  port: 18322,
-	  user: FLOauth[0],
-	  pass: FLOauth[1],
-	  timeout: 30000
-	});
-	getBalance(obj, FLOclient);
+	if (wallet == 'FLO') {
+		FLOauth.length = 0;
+		FLOauth.push(document.getElementById('wallet-user').value);
+		FLOauth.push(document.getElementById('wallet-token').value);
+		FLOclient = new bitcoin.Client({
+		  host: 'localhost',
+		  port: 18322,
+		  user: FLOauth[0],
+		  pass: FLOauth[1],
+		  timeout: 30000
+		});
+		hideOverlay();
+		getBalance(obj, FLOclient);
+	} else if (wallet == 'BTC') {
+		BTCauth.length = 0;
+		BTCauth.push(document.getElementById('wallet-user').value);
+		BTCauth.push(document.getElementById('wallet-token').value);
+		BTCclient = new bitcoin.Client({
+		  host: 'localhost',
+		  port: 18222,
+		  user: BTCauth[0],
+		  pass: BTCauth[1],
+		  timeout: 30000
+		});
+		hideOverlay();
+	}
 }
 
 // CONNECT TO BITCOIN WALLET
@@ -2479,7 +2543,7 @@ function connectBTCWallet(obj) {
 			console.info(balance);
 		}
 	});
-	getBalance(obj, BTCclient);
+//	getBalance(obj, BTCclient);
 }
 
 // GET WALLET BALANCE

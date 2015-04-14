@@ -12,8 +12,7 @@ var WebTorrent = require('webtorrent'),
     express = require('express'),
     server = express()
 ;
-
-var mediaAPIUrl = "http://54.172.28.195:41289/alexandria/v1/media"
+var mediaAPIUrl = "http://"+ serverAddress +":41289/alexandria/v1/media"
 var blacklist = {'btih:CW35T7WXXRC5RSS4IGDFIZ7CJN4MAUDC': true}
 var usrHome = (process.env['HOME']) ? (process.env['HOME']) : (process.env['HOMEDRIVE']+process.env['HOMEPATH']);
 var p = path.join(usrHome, '.blocktech/')

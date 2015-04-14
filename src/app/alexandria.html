@@ -1050,6 +1050,7 @@
 						</div>
 						<div class="row media-desc"></div>
 						<div class="row FLO-address visuallyhidden"></div>
+						<div class="row BTC-address visuallyhidden"></div>
 						<div class="row entity-footer media-movie">
 							<a class="wsite-button lightboxVideo" data-source="http://localhost:3000/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label>
 						</div>
@@ -1108,9 +1109,19 @@
 			</ul>
 			<div class="tbl">
 				<ul class="modal-tabs">
-					<li name="tip-flo">Florincoin</li>
 					<li name="tip-bitcoin">Bitcoin</li>
+					<li name="tip-flo">Florincoin</li>
 				</ul>
+			</div>
+			<div id="tip-bitcoin" class="modal-tab">
+				<div class="row">
+					<div class="crypto-price strong btc-usd">$<span class="tip-value">1.00</span> USD = <span class="btc-usd-output"></span> BTC</div>
+				</div>
+				<div class="row">
+					<a id="sendBTCTipBtn" class="btnLightGray appOnly">Send Tip</a>
+					<p>Send <span id="tip-btc-usd-output" class="btc-usd-output selectable" onclick="selectText('tip-btc-usd-output');" class="selectable"></span> BTC to:<br />
+					<span id="tipAdd-BTC" onclick="selectText('tipAdd-BTC');" class="selectable">[insert BTC address]</span><br /><div id="BTC-tip-QR"></div></p>
+				</div>
 			</div>
 			<div id="tip-flo" class="modal-tab">
 				<div class="row">
@@ -1120,17 +1131,6 @@
 					<a id="sendTipBtn" class="btnLightGray appOnly">Send Tip</a>
 					<p>Send <span id="tip-flo-usd-output" class="flo-usd-output selectable" onclick="selectText('tip-flo-usd-output');" class="selectable"></span> FLO to:<br />
 					<span id="tipAdd-FLO" onclick="selectText('tipAdd-FLO');" class="selectable">[insert FLO address]</span><br /><div id="tip-QR"></div></p>
-				</div>
-			</div>
-			<div id="tip-bitcoin" class="modal-tab">
-				<div class="row">
-					<div class="crypto-price strong btc-usd">$<span class="tip-value">1.00</span> USD = <span class="btc-usd-output"></span> BTC</div>
-				</div>
-				<div class="row">
-					<a class="btnLightGray">Use Online Bitcoin Wallet</a>
-					<p>Or manually send BTC to:<br />
-					[insert BTC address]</p>
-					<div id="qrcode" onclick="loadQR();"></div>
 				</div>
 			</div>
 		</div>
@@ -1236,11 +1236,11 @@
 		</main>
 
 		<div id="wallet-auth-modal" class="overlay-modal">
-			<h3>Login to Florincoin Wallet</h3>
-			<input type="text" placeholder="Username" name="flo-wallet-user" id="flo-wallet-user" />
-			<input type="password" placeholder="Password" name="flo-wallet-token" id="flo-wallet-token" />
+			<h3>Login to <span id="wallet-connect-currency"></span> Wallet</h3>
+			<input type="text" placeholder="Username" name="wallet-user" id="wallet-user" />
+			<input type="password" placeholder="Password" name="wallet-token" id="wallet-token" />
 			<div class="row">
-				<a href="http://florincoin.org" target="_blank" class="left btnLightGray">Download Wallet</a><a onclick="connectWallet(this);" class="pull-right btnLightGray">Connect</a>
+				<!-- <a href="http://florincoin.org" target="_blank" class="left btnLightGray">Download Wallet</a> --><a onclick="" id="wallet-connect-btn" class="btnLightGray">Connect</a>
 			</div>
 		</div>
 		
@@ -1293,7 +1293,7 @@
 		<div id="pwyw-modal" class="overlay-modal">
 			<h3>Pay What You Want</h3>
 			<div class="input-container">
-				<label>$</label><input type="text" name="PWYW Amount" id="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> (<span class="flo-usd-output"></span> FLO)
+				<label>$</label><input type="text" name="PWYW Amount" id="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="flo-usd-output"></span> FLO
 			</div>
 			<div class="row">
 				<a onclick="unlockPWYW(this);" class="btnLightGray">Send Payment</a>
@@ -1383,8 +1383,8 @@
 <!-- 	App Initialization 	-->
 		<script src="js/vendor/jquery.jsonrpcclient.js"></script>
 		<script src="app.js"></script>
+		<script src="js/main.js"></script>
 		<script src="streamer.js"></script>
 		
-		<script src="js/main.js"></script>
 	</body>
 </html></html>
