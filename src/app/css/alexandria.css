@@ -891,6 +891,7 @@ p.largeImg {
 }
 #buyMoreBtn {
 	margin-top: 5px;
+	position: relative;
 }
 #wallet-request-method {
 	overflow: hidden;
@@ -1320,6 +1321,13 @@ ul.distNetList li {
 }
 #bitmsg-modal {
 	left: 60px;
+}
+#trade-modal {
+	position: absolute;
+	right: -30px;
+	left: initial;
+	top: 60%;
+	padding: .25em 1em .5em;
 }
 .bubble-modal:before {
 	bottom: 100%;

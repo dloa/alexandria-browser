@@ -1467,7 +1467,7 @@ function sendTip(obj, client, pubAdd, currency) {
 					$(obj).removeClass('disabled');
 				} else {
 					$('#tip-modal').fadeOut(fadeTimer);
-			    	alertModal('Tip Sent! TxId: ' + txid);
+			    	alertModal('Tip Sent!');
 					$(obj).removeClass('disabled');
 	//					getBalance('', client);
 				}
@@ -1479,7 +1479,7 @@ function sendTip(obj, client, pubAdd, currency) {
 					$(obj).removeClass('disabled');
 				} else {
 					$('#tip-modal').fadeOut(fadeTimer);
-			    	alertModal('Tip Sent! TxId: ' + txid);
+			    	alertModal('Tip Sent!');
 					$(obj).removeClass('disabled');
 	//					getBalance('', client);
 				}
@@ -1508,6 +1508,15 @@ function bitMsgModal() {
 		document.getElementById('bitmsg-modal').style.display = 'block';
 	} else {
 		document.getElementById('bitmsg-modal').style.display = 'none';
+	}
+}
+
+// DISPLAY TRADE MODAL
+function tradeModal() {
+	if ( (document.getElementById('trade-modal').style.display == 'none') || (document.getElementById('trade-modal').style.display == '') ) {
+		document.getElementById('trade-modal').style.display = 'block';
+	} else {
+		document.getElementById('trade-modal').style.display = 'none';
 	}
 }
 
