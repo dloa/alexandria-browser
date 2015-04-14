@@ -1521,11 +1521,12 @@ function loadShareMod() {
 		currentView: 'add-media'
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Add Media');
+	console.info(FLOauth);
 	if (FLOauth.length == 0) {
 			document.getElementById('wallet-user').value = '';
 			document.getElementById('wallet-token').value = '';		
 			document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
-			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "'+currency+'")');
+			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FLO")');
 			$('#wallet-auth-modal').fadeIn(fadeTimer);
 			document.getElementById('app-overlay').style.display = 'block';
 	}
@@ -1570,7 +1571,7 @@ function loadCreatePublisherMod() {
 			document.getElementById('wallet-user').value = '';
 			document.getElementById('wallet-token').value = '';		
 			document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
-			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "'+currency+'")');
+			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FLO")');
 			$('#wallet-auth-modal').fadeIn(fadeTimer);
 			document.getElementById('app-overlay').style.display = 'block';
 	}	
@@ -2474,7 +2475,7 @@ function loadWalletView() {
 			document.getElementById('wallet-user').value = '';
 			document.getElementById('wallet-token').value = '';		
 			document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
-			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "'+currency+'")');
+			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FLO")');
 			$('#wallet-auth-modal').fadeIn(fadeTimer);
 			document.getElementById('app-overlay').style.display = 'block';
 	}
