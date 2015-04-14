@@ -150,7 +150,7 @@ jQuery(document).ready(function($){
 	// Tip Modal Tabs
 	$('.modal-tabs li').click(function(){
 		$(this).addClass('active').siblings().removeClass('active');
-		$('#tip-modal').find('.modal-tab#'+$(this).attr("name")).show().siblings('.modal-tab').hide();
+		$('.modal-tab#'+$(this).attr("name")).show().siblings('.modal-tab').hide();
 	});
 
 	// API Server ID and Control
@@ -466,9 +466,12 @@ function getCryptos() {
 					$('#flo-usd label').text('FLO/USD').next('span').text(FLOUSD);
 					FLOCost = parseFloat($('#flo-cost').text());
 					$('#tip-modal .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
-					$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);
+					$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);					
 					$('#tip-alexandria-modal .flo-usd-output').text(Math.round((document.getElementById('alexandria-tip-amount').value*FLOUSD)*100000)/100000);
-					$('#pwyw-modal .flo-usd-output').text(Math.round((document.getElementById('pwyw-wall-amount').value/FLOUSD)*100000)/100000);
+					var pwywAmount = $('.pwyw-wall-amount:visible').val();
+					$('.pwyw-wall-amount:hidden').val(pwywAmount);
+					$('#pwyw-modal .flo-usd-output').text(Math.round((pwywAmount/FLOUSD)*100000)/100000);
+					$('#pwyw-modal .btc-usd-output').text(Math.round((pwywAmount/BTCUSD)*100000)/100000);
 				}
 			});
 		}
@@ -775,8 +778,10 @@ function loadArtifactView(objMeta) {
 		}
 		if(mediaInfo['extra-info']['pwyw']) {
 			var PWYW = mediaInfo['extra-info']['pwyw'];
-			document.getElementById('pwyw-wall-amount').value = PWYW[0]/100;
-			showPWYWModal(mediaFLO, mediaType, fileHash, mediaFilename);
+			var pwywSuggUSD = PWYW[0]/100;
+			console.info(pwywSuggUSD);
+			$('.pwyw-wall-amount').val(pwywSuggUSD);
+			showPWYWModal(mediaType, fileHash, mediaFilename);
 		} else {
 			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
 			$('.row.media-embed').html(fileEmbed);
@@ -2045,38 +2050,60 @@ function showTipAlexandriaModal() {
 }
 
 // LOAD PAY-WHAT-YOU-WANT MODAL
-function showPWYWModal(FLOadd, mediaType, fileHash, mediaFilename) {
+function showPWYWModal(mediaType, fileHash, mediaFilename) {
 	getCryptos();
-	$('#pwyw-modal .btnLightGray').attr('data-address', FLOadd);
 	$('#pwyw-modal .btnLightGray').attr('data-type', mediaType);
 	$('#pwyw-modal .btnLightGray').attr('data-hash', fileHash);
 	$('#pwyw-modal .btnLightGray').attr('data-file', mediaFilename);
 	$('#pwyw-modal').fadeIn(fadeTimer);
+	$('#pwyw-modal .modal-tabs li:first-child').click();
 	document.getElementById('app-overlay').style.display = 'block';
 }
 
-function unlockPWYW(obj) {
-	console.info(obj);
+function unlockPWYW(obj, currency) {
 	$(obj).addClass('disabled');
-	var FLOadd = $(obj).attr('data-address');
-	var FLOamount = Math.round((document.getElementById('pwyw-wall-amount').value/FLOUSD)*100000)/100000;
-	FLOclient.cmd('sendtoaddress', FLOadd, FLOamount, '', '', '', function(err, txid, resHeaders){
-		if (err) {
-			console.log(err);
-			$(obj).removeClass('disabled');
-		} else {
-			var mediaType = $('#pwyw-modal .btnLightGray').attr('data-type');
-			var fileHash = $('#pwyw-modal .btnLightGray').attr('data-hash');
-			var mediaFilename = $('#pwyw-modal .btnLightGray').attr('data-file');
-			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
-			$('.row.media-embed').html(fileEmbed);
-			var mediaTitle = $('.entity-meta-header h2').text();
-			$('#media-Tid').attr('href','magnet:?xt=urn:'+fileHash+'&dn='+escape(mediaTitle)).show();
-			hideOverlay();
-			$(obj).removeClass('disabled');
-//			getBalance(obj, client);
-		}
-	});
+	var pwywAmount = $('.pwyw-wall-amount:visible').val();
+	var FLOadd = $('main:visible .FLO-address').html();
+	var BTCadd = $('main:visible .BTC-address').html();
+	if (currency == 'FLO') {
+		var FLOamount = Math.round((pwywAmount/FLOUSD)*100000)/100000;
+		FLOclient.cmd('sendtoaddress', FLOadd, FLOamount, '', '', '', function(err, txid, resHeaders){
+			if (err) {
+				console.log(err);
+				$(obj).removeClass('disabled');
+			} else {
+				var mediaType = $('#pwyw-modal .btnLightGray').attr('data-type');
+				var fileHash = $('#pwyw-modal .btnLightGray').attr('data-hash');
+				var mediaFilename = $('#pwyw-modal .btnLightGray').attr('data-file');
+				var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
+				$('.row.media-embed').html(fileEmbed);
+				var mediaTitle = $('.entity-meta-header h2').text();
+				$('#media-Tid').attr('href','magnet:?xt=urn:'+fileHash+'&dn='+escape(mediaTitle)).show();
+				hideOverlay();
+				$(obj).removeClass('disabled');
+	//			getBalance(obj, client);
+			}
+		});
+	} else if (currency == 'BTC') {
+		var BTCamount = Math.round((pwywAmount/BTCUSD)*100000)/100000;
+		BTCclient.cmd('sendtoaddress', BTCadd, BTCamount, function(err, txid, resHeaders){
+			if (err) {
+				console.log(err);
+				$(obj).removeClass('disabled');
+			} else {
+				var mediaType = $('#pwyw-modal .btnLightGray').attr('data-type');
+				var fileHash = $('#pwyw-modal .btnLightGray').attr('data-hash');
+				var mediaFilename = $('#pwyw-modal .btnLightGray').attr('data-file');
+				var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
+				$('.row.media-embed').html(fileEmbed);
+				var mediaTitle = $('.entity-meta-header h2').text();
+				$('#media-Tid').attr('href','magnet:?xt=urn:'+fileHash+'&dn='+escape(mediaTitle)).show();
+				hideOverlay();
+				$(obj).removeClass('disabled');
+	//			getBalance(obj, client);
+			}
+		});
+	}
 }
 
 // HIDE OVERLAY AND MODAL

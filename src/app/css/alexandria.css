@@ -1389,10 +1389,7 @@ ul.distNetList li {
 	top: -2px;
 	position: relative;
 }
-#tip-modal ul.modal-tabs {
-	margin: .5em auto 1em;
-}
-#tip-modal .tbl {
+#tip-modal .tbl, #pwyw-modal .tbl {
 	width: 100%;
 	margin: .5em 0;
 }
@@ -1404,10 +1401,11 @@ ul.distNetList li {
 	background-color: #c5d7e2;
 	color: #464646;
 }
-#tip-modal ul.modal-tabs {
+#tip-modal ul.modal-tabs, #pwyw-modal ul.modal-tabs {
+	margin: .5em auto 1em;
 	display: table-row;
 }
-#tip-modal ul.modal-tabs li {
+#tip-modal ul.modal-tabs li, #pwyw-modal ul.modal-tabs li {
 	margin: 0;
 	display: table-cell;
 	padding: 0 .8em;
@@ -1415,19 +1413,19 @@ ul.distNetList li {
 	cursor: pointer;
 	width: 50%;
 }
-#tip-modal ul.modal-tabs li:first-child {
+#tip-modal ul.modal-tabs li:first-child, #pwyw-modal ul.modal-tabs li:first-child {
 	border: 0 none transparent;
 }
-#tip-modal .modal-tab {
+#tip-modal .modal-tab, #pwyw-modal .modal-tab {
 	text-align: center;
 	display: none;	
 }
-#tip-modal .modal-tab > *, #share-title {
+#tip-modal .modal-tab > *, #share-title, #pwyw-modal .modal-tab > * {
 	background-color: #edeff9;
 	margin: 0;
 	padding: 1em 0;
 }
-#tip-modal .modal-tab > :first-child {
+#tip-modal .modal-tab > :first-child, #pwyw-modal .modal-tab > :first-child {
 	background-color: transparent;
 	margin: 0 0 .3em;
 	padding: 0;
@@ -1442,7 +1440,7 @@ ul.distNetList li {
 #tip-modal .modal-tab .btnLightGray {
 	margin-bottom: 1em;
 }
-#tip-modal .modal-tab p, #share-title, .info-modal p, .entity-meta-content, #info-modal-small {
+#tip-modal .modal-tab p, #pwyw-modal .modal-tab p, #share-title, .info-modal p, .entity-meta-content, #info-modal-small {
 	line-height: 1.4;
 	color: #919191;
 	font-size: .9em;
@@ -1453,7 +1451,7 @@ ul.distNetList li {
 .entity-view .entity-meta-content {
 	clear: left;
 }
-#tip-modal .modal-tab p {
+#tip-modal .modal-tab p, #pwyw-modal .modal-tab p {
 	margin: 0;
 	padding: 0 10px;
 }
