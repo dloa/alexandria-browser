@@ -1522,10 +1522,12 @@ function loadShareMod() {
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Add Media');
 	if (FLOauth.length == 0) {
-		document.getElementById('wallet-user').value = '';
-		document.getElementById('wallet-token').value = '';		
-		$('#wallet-auth-modal').fadeIn(fadeTimer);
-		document.getElementById('app-overlay').style.display = 'block';
+			document.getElementById('wallet-user').value = '';
+			document.getElementById('wallet-token').value = '';		
+			document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
+			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "'+currency+'")');
+			$('#wallet-auth-modal').fadeIn(fadeTimer);
+			document.getElementById('app-overlay').style.display = 'block';
 	}
 }
 
@@ -1565,10 +1567,12 @@ function loadCreatePublisherMod() {
 	$('.publisher-ui').show();
 	resizeTabs();
 	if (FLOauth.length == 0) {
-		document.getElementById('wallet-user').value = '';
-		document.getElementById('wallet-token').value = '';		
-		$('#wallet-auth-modal').fadeIn(fadeTimer);
-		document.getElementById('app-overlay').style.display = 'block';
+			document.getElementById('wallet-user').value = '';
+			document.getElementById('wallet-token').value = '';		
+			document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
+			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "'+currency+'")');
+			$('#wallet-auth-modal').fadeIn(fadeTimer);
+			document.getElementById('app-overlay').style.display = 'block';
 	}	
 }
 
@@ -2467,10 +2471,12 @@ function loadWalletView() {
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ Wallet');
 	if (FLOauth.length == 0) {
-		document.getElementById('wallet-user').value = '';
-		document.getElementById('wallet-token').value = '';		
-		$('#wallet-auth-modal').fadeIn(fadeTimer);
-		document.getElementById('app-overlay').style.display = 'block';
+			document.getElementById('wallet-user').value = '';
+			document.getElementById('wallet-token').value = '';		
+			document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
+			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "'+currency+'")');
+			$('#wallet-auth-modal').fadeIn(fadeTimer);
+			document.getElementById('app-overlay').style.display = 'block';
 	}
 }
 
