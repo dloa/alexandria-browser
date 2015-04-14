@@ -1368,6 +1368,11 @@ ul.distNetList li {
 #tip-modal .modal-tab .row:first-of-type {
 	display: none;
 }
+#tip-comment {
+	width: 80%;
+	margin-bottom: 1em;
+	text-align: left;
+}
 .tip-amounts label, .bubble-modal h3, .crypto-price, .credebit-price, .bubble-modal .btnLightGray {
 	color: #919191;
 }

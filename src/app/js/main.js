@@ -1402,7 +1402,6 @@ function loadTipModal(obj) {
 	if ($(obj).parents('.entity-market #tip-modal').length == 0) {
 		$(obj).parents('.entity-market').append($('#tip-modal'));
 	}
-	$('#tip-modal .modal-tabs li:first-child').click();
 	$('input[name="tip-amount"]:eq(2)').click();
 	var mediaFLO = $('main:visible .FLO-address').html();
 	var mediaBTC = $('main:visible .BTC-address').html();
@@ -1413,11 +1412,12 @@ function loadTipModal(obj) {
 	}
 	if (mediaBTC != '') {
 		$('#tipAdd-BTC').html(mediaBTC);
-		$('.modal-tabs li[name="tip-bitcoin"]').show();
+		$('.modal-tabs li[name="tip-bitcoin"]').removeClass('hidden');
 	} else {
 		$('#tipAdd-BTC').text('No Address Available');
-		$('.modal-tabs li[name="tip-bitcoin"]').hide();
+		$('.modal-tabs li[name="tip-bitcoin"]').addClass('hidden');
 	}
+	$('#tip-modal .modal-tabs li').not('.hidden').first().click();
 	var modalPos = (history.state.currentView == 'artifact') ? ('right') : ('left');
 	var tipModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 76) : ($(obj).position().left - 50);
 	$(obj).parents('.entity-market').find('#tip-modal').css(modalPos,tipModalPos+'px').fadeToggle(fadeTimer);
@@ -1458,15 +1458,18 @@ function sendTip(obj, client, pubAdd, currency) {
 		var tipAmount = $('input[name="tip-amount"]:checked').val()/BTCUSD;
 		tipAmount = Math.round(tipAmount*100000000)/100000000;
 	}
+	var txComment = document.getElementById('tip-comment').value;
+	console.log(txComment);
 	if (window.confirm('Send '+ tipAmount + ' '+currency+' tip to ' + pubAdd + '?')) { 
 		$(obj).addClass('disabled');
 		if (currency == 'FLO') {
-			client.cmd('sendtoaddress', pubAdd, tipAmount, '', '', '', function(err, txid, resHeaders){
+			client.cmd('sendtoaddress', pubAdd, tipAmount, '', '', txComment, function(err, txid, resHeaders){
 				if (err) {
 					console.log(err);
 					$(obj).removeClass('disabled');
 				} else {
 					$('#tip-modal').fadeOut(fadeTimer);
+					document.getElementById('tip-comment').value = '';
 			    	alertModal('Tip Sent!');
 					$(obj).removeClass('disabled');
 	//					getBalance('', client);
@@ -2800,6 +2803,7 @@ function loadAlexandria() {
 function resetInterface() {
 	// Reset Interface
 	$('video').trigger('pause');
+	document.getElementById('tip-comment').value = '';
 	document.getElementById('viewlabel').style.display = 'none';
 	document.getElementById('disabler').style.display = 'none';
 //	hideOverlay();
