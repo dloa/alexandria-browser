@@ -583,7 +583,7 @@ function loadPublisherView(objMeta) {
 	publisherID = thisPublisher[0]['txid'];
 	thisPublisher = thisPublisher[0]['publisher-data']['alexandria-publisher'];
 	var publisherAddress = thisPublisher['address'];
-	FloQR(publisherAddress, 'tip-QR', 100, 100);
+	generateQR(publisherAddress, 'tip-QR', 100, 100, 'florincoin');
 	if (document.getElementById('sendTipBtn')) {
 		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherAddress + '", FLO")');
 	}
@@ -609,7 +609,7 @@ function loadPublisherView(objMeta) {
 	publisherTime = new Date(parseInt(publisherTime));
 	document.getElementById('view-publisher-name').innerHTML = publisherName;
 	document.getElementById('publisher-FLO-address').innerHTML = publisherAddress;
-	FloQR(publisherAddress, 'publisher-QR', 80, 80);
+	generateQR(publisherAddress, 'publisher-QR', 80, 80, 'florincoin');
 	if (thisPublisherMedia) {
 		for (var i = 0; i < thisPublisherMedia.length; i++) {
 			var mediaID = thisPublisherMedia[i]['txid'];
@@ -722,7 +722,7 @@ function loadArtifactView(objMeta) {
 	mediaID = thisMediaData[0]['txid'];
 	var mediaPublisher = thisMediaData[0]['publisher-name'];
 	var publisherID = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
-	FloQR(publisherID, 'tip-QR', 100, 100);
+	generateQR(publisherID, 'tip-QR', 100, 100, 'florincoin');
 	if (document.getElementById('sendTipBtn')) {
 		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherID + '", "FLO")');
 	}
@@ -802,6 +802,7 @@ function loadArtifactView(objMeta) {
 	if (mediaBTC) {
 		$('main:visible .BTC-address').html(mediaBTC);
 		if (document.getElementById('sendBTCTipBtn')) {
+			generateQR(mediaBTC, 'BTC-tip-QR', 100, 100, 'bitcoin');
 			document.getElementById('sendBTCTipBtn').setAttribute('onclick','sendTip(this, BTCclient, "' + mediaBTC + '", "BTC")');
 		}
 	}
@@ -2707,16 +2708,16 @@ function getWalletAddresses(client) {
 // WALLET ADDRESS RECEIVE QR CODE
 function receiveQR(obj) {
 	var publisherAddress = $(obj).find('option:selected').val();
-	FloQR(publisherAddress, 'wallet-receive-qrcode', 100, 100);
+	generateQR(publisherAddress, 'wallet-receive-qrcode', 100, 100, 'florincoin');
 }
 
 // FLO QR CODE
-function FloQR(address, wrapper, qrw, qrh) {
+function generateQR(address, wrapper, qrw, qrh, wallet) {
 	var qrWrap = document.getElementById(wrapper);
 	qrWrap.innerHTML = '';
-	qrWrap.setAttribute('onclick','loadQR("florincoin:'+address+'")');
+	qrWrap.setAttribute('onclick','loadQR('+wallet+':'+address+')');
 	var qrcode = new QRCode(wrapper, {
-		text: 'florincoin:'+address,
+		text: wallet+':'+address,
 		width: qrw,
 		height: qrh,
 		colorDark : "#000000",
@@ -2744,7 +2745,7 @@ function newFloAddress(obj) {
 			document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address+'">' + address +'</option>';
 			hideOverlay();
 			document.getElementById('wallet-address-select').selectedIndex = document.getElementById('wallet-address-select').options.length -1;
-			FloQR(address, 'wallet-receive-qrcode', 64, 64)
+			generateQR(address, 'wallet-receive-qrcode', 64, 64, 'florincoin')
 			$(obj).removeClass('disabled');
 		}
 	});	
@@ -2794,9 +2795,7 @@ function loadAlexandria() {
 	$('#adv-search').addClass('abs');
 	$('.header-modal').addClass('abs');
 	$('.info-modal').addClass('abs');
-	$('#tip-modal').addClass('abs');
-	$('#share-modal').addClass('abs');
-	$('#bitmsg-modal').addClass('abs');
+	$('.bubble-modal').addClass('abs');
 }
 
 // RESET INTERFACE
