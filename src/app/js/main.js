@@ -1518,7 +1518,18 @@ function bitMsgModal() {
 // DISPLAY TRADE MODAL
 function tradeModal() {
 	if ( (document.getElementById('trade-modal').style.display == 'none') || (document.getElementById('trade-modal').style.display == '') ) {
-		document.getElementById('trade-modal').style.display = 'block';
+		var floAddress = document.getElementById('wallet-address-select').value;
+		if (floAddress == '') {
+			alert('Please select a Florincoin address');
+		} else {
+			$.ajax({
+				url: 'http://trade.blocktech.com:5000/depositaddress?floaddress='+floAddress,
+				success: function(e) {
+					document.getElementById('trade-address').innerHTML = e;
+					document.getElementById('trade-modal').style.display = 'block';
+				}
+			});
+		}
 	} else {
 		document.getElementById('trade-modal').style.display = 'none';
 	}
