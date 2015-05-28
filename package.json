@@ -1,11 +1,11 @@
 {
   "name": "Alexandria",
   "homepage": "https://blocktech.com",
-  "bugs": "https://github.com/blocktech/alexandriaux/issues",
+  "bugs": "https://github.com/blocktech/alexandria-web/issues",
   "single-instance": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/blocktech/alexandriaux"
+    "url": "https://github.com/blocktech/alexandria-web"
   },
   "license": "GPL-3.0",
   "main": "app://host/src/app/alexandria.html",
@@ -17,8 +17,8 @@
   "window": {
     "title": "Alexandria",
     "icon": "src/app/img/logo.png",
-    "toolbar": true,
-    "frame": true,
+    "toolbar": false,
+    "frame": false,
     "min_width": 960,
     "min_height": 520,
     "resizable": true,
@@ -28,9 +28,7 @@
   "dependencies": {
     "express": "^4.12.2",
     "json-rpc2": "^0.8.1",
-    "range-parser": "^1.0.2",
     "underscore": "^1.8.2",
-    "webtorrent": "^0.29.0",
     "bitcoin": "~2.3.0"
   },
   "devDependencies": {

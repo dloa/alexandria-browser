@@ -759,7 +759,8 @@ function loadArtifactView(objMeta) {
 		}
 		$('.tip-amounts').append('<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event);" /></li>');
 	}
-	var fileHash = mediaTid.split('btih:')[1];
+//	var fileHash = mediaTid.split('btih:')[1];
+	var fileHash = mediaTid;
 	if(mediaInfo['extra-info']){
 		if(mediaInfo['extra-info']['runtime']){
 			mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
@@ -818,8 +819,8 @@ function loadArtifactView(objMeta) {
 	$('#media-view-entity .entity-pub-time span').html(mediaPubTime);
 	if (mediaInfo['extra-info']) {
 		if (mediaInfo['extra-info']['poster']) {
-			mediaDesc = '<img src="http://localhost:3000/stream/'+ fileHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;
-		}
+//			mediaDesc = '<img src="http://localhost:8080/stream/'+ fileHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;
+			mediaDesc = '<img src="http://localhost:8080/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;		}
 	}
 	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
 	$('#media-view-entity .entity-footer').hide();
@@ -838,19 +839,25 @@ function loadArtifactView(objMeta) {
 }
 
 function embedArtifact(mediaType, fileHash, mediaFilename) {
+	if (mediaFilename == 'none') {
+		mediaFilename = '';
+	}
 	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
 		// FIX FOR SF BITCOIN MEETUP WITHOUT FILENAME
 		if ( (fileHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
 			mediaFilename = 'SF Bitcoin Meetup @ Geekdom - November 18, 2014.mp4';
 		}
-		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+//		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:8080/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
-		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+//		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:8080/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 	} else if (mediaType == 'book') {
 		if ( (fileHash == '08D72B48F0799BBF62A2DC54CB66CB1ED14F9431') && (mediaFilename == '') ) {
 			mediaFilename = 'bitcoin.pdf';
 		}
-		var embedCode = '<object data="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px" class="book-embed"></object>'
+//		var embedCode = '<object data="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px" class="book-embed"></object>'
+		var embedCode = '<object data="http://localhost:8080/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px" class="book-embed"></object>'
 	}
 	return embedCode;
 }
@@ -1523,6 +1530,12 @@ function tradeModal() {
 			alert('Please select a Florincoin address');
 		} else {
 			$.ajax({
+				url: 'http://trade.blocktech.com:5000/flobalance',
+				success: function(e) {
+					document.getElementById('trade-balance').innerHTML = Math.round((.5*e*(Math.round((FLOUSD/BTCUSD)*100000000)/100000000))*100000000)/100000000;
+				}
+			});
+			$.ajax({
 				url: 'http://trade.blocktech.com:5000/depositaddress?floaddress='+floAddress,
 				success: function(e) {
 					document.getElementById('trade-address').innerHTML = e;
@@ -1614,29 +1627,34 @@ function parseMagnetURI() {
 	}
 	var magnetURI = document.getElementById('dht-hash').value;
 	var isMagnet = magnetURI.indexOf('magnet:?xt=urn:');
-	var hasTR = magnetURI.indexOf('&tr=');
-	var hasWS = magnetURI.indexOf('&ws=');
-	var mediaBTIH = magnetURI.split('urn:')[1].split('&')[0];
-	document.getElementById('btih-hash').value = mediaBTIH;
-	if (hasTR > 0) {
-		var mediaTR = magnetURI.split('&tr=');
-		var thisTR = [magnetURI.split('&tr=')[1].split('&')[0]];
-		if (magnetURI.split('&tr=').length > 2) {
-			for (var i = 1; i < magnetURI.split('&tr=').length; i++) {
-				thisTR.push(magnetURI.split('&tr=')[i].split('&')[0]);
-			}	
-		}
-		console.log(thisTR);
-	}
-	if (hasWS > 0) {
-		var mediaWS = magnetURI.split('&ws=');
-		var thisWS = [magnetURI.split('&ws=')[1].split('&')[0]];
-		if (magnetURI.split('&ws=').length > 2) {
-			for (var i = 1; i < magnetURI.split('&ws=').length; i++) {
-				thisWS.push(magnetURI.split('&ws=')[i].split('&')[0]);
+	console.log(isMagnet);
+	if (isMagnet > -1) {
+		var hasTR = magnetURI.indexOf('&tr=');
+		var hasWS = magnetURI.indexOf('&ws=');
+		var mediaBTIH = magnetURI.split('urn:')[1].split('&')[0];
+		document.getElementById('btih-hash').value = mediaBTIH;
+		if (hasTR > 0) {
+			var mediaTR = magnetURI.split('&tr=');
+			var thisTR = [magnetURI.split('&tr=')[1].split('&')[0]];
+			if (magnetURI.split('&tr=').length > 2) {
+				for (var i = 1; i < magnetURI.split('&tr=').length; i++) {
+					thisTR.push(magnetURI.split('&tr=')[i].split('&')[0]);
+				}	
 			}
+			console.log(thisTR);
 		}
-		console.log(thisWS);
+		if (hasWS > 0) {
+			var mediaWS = magnetURI.split('&ws=');
+			var thisWS = [magnetURI.split('&ws=')[1].split('&')[0]];
+			if (magnetURI.split('&ws=').length > 2) {
+				for (var i = 1; i < magnetURI.split('&ws=').length; i++) {
+					thisWS.push(magnetURI.split('&ws=')[i].split('&')[0]);
+				}
+			}
+			console.log(thisWS);
+		}
+	} else {
+		document.getElementById('btih-hash').value = magnetURI;
 	}
 }
 
@@ -1985,7 +2003,7 @@ function deactivateMedia(obj) {
 	var signature;
 	var stopError = 0;
 	$.ajax({
-	    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign/',
+	    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign',
 	    type: 'POST',
 		data: sigQueryString.toString(),
 	    success: function(e) {
@@ -2028,7 +2046,7 @@ function deactivateMedia(obj) {
 	console.info(queryString);
 	if (window.confirm('Deactivate Artifact?')) { 
 		$.ajax({
-		    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
+		    url: 'http://'+ serverAddress +':41289/alexandria/v1/send',
 		    type: 'POST',
 			data: queryString.toString(),
 		    success: function(e) {
@@ -2301,7 +2319,7 @@ function postMedia(tipAlexandria) {
 		var signature;
 		var stopError = 0;
 		$.ajax({
-		    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign/',
+		    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign',
 		    type: 'POST',
 			data: sigQueryString.toString(),
 		    success: function(e) {
@@ -2406,7 +2424,7 @@ function postMedia(tipAlexandria) {
 		var FLOAccount = $('#newMediaPublisherFLO option:selected').html();
 		if (window.confirm('Publish Artifact using '+ FLOAccount +' : '+ FLOadd +'?')) { 
 			$.ajax({
-			    url: 'http://'+ serverAddress +':41289/alexandria/v1/send/',
+			    url: 'http://'+ serverAddress +':41289/alexandria/v1/send',
 			    type: 'POST',
 				data: queryString.toString(),
 			    success: function(e) {
@@ -2697,9 +2715,9 @@ function getWalletAddresses(client) {
 			console.info(address);
 			var acctLabel = walletAccts[addressCount];
 			for (var a = 0; a < address.length; a++) {
-				document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[a]+'">' + acctLabel +'</option>';
-				document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[a]+'">' + acctLabel +'</option>';
-				document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+address[a]+'">' + acctLabel +'</option>';
+				document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[a]+'">' + address[a] +'</option>';
+				document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[a]+'">' + address[a] +'</option>';
+				document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+address[a]+'">' + address[a] +'</option>';
 			}
 			addressCount++;
 		});

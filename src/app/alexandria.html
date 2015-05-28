@@ -39,7 +39,7 @@
 		<header style="-webkit-app-region: drag">
 			<div id="logo" onclick="resetAlexandria()" class="nodrag">
 				<div id="logoImg">
-					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" width="52px" height="52px" viewBox="0 0 52 52" version="1.1" class="makesvg replaced-svg">
+					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="52px" height="52px" viewBox="0 0 52 52" version="1.1" class="makesvg replaced-svg">
 					    <title>alexandria logo small</title>
 					    <defs>
 					        <radialGradient cx="0%" cy="0%" fx="0%" fy="0%" r="141.421356%" id="radialGradient-1">
@@ -548,7 +548,7 @@
 									<ul class="distNetList">
 										<li>
 											<div class="input-container required" style="display:block">
-												<label>Torrent Magnet URI</label>
+												<label>IPFS Hash</label>
 												<input type="text" id="dht-hash" name="DHT Hash" onblur="parseMagnetURI();" />
 												<input type="hidden" id="btih-hash" name="btih Hash Value" />
 											</div>
@@ -1143,7 +1143,9 @@
 					<div id="buyMoreBtn" class="pull-right">
 						<a onclick="tradeModal();">Buy More</a>
 						<div id="trade-modal" class="bubble-modal">
-							<span id="trade-address" onclick="selectText('trade-address');" class="selectable"></span>
+							<p>Send BTC to: <span id="trade-address" onclick="selectText('trade-address');" class="selectable"></span><br />
+							Max <span id="trade-balance"></span> BTC
+							</p>
 						</div>
 					</div>
 					<div class="container">
@@ -1405,10 +1407,10 @@
 			change to https://code.google.com/p/ocupload/
 		-->
 <!-- 	App Initialization 	-->
-		<script src="js/vendor/jquery.jsonrpcclient.js"></script>
+<!--	<script src="js/vendor/jquery.jsonrpcclient.js"></script> -->
 		<script src="app.js"></script>
 		<script src="js/main.js"></script>
-		<script src="streamer.js"></script>
+<!--		<script src="streamer.js"></script> -->
 		
 	</body>
 </html></html>
