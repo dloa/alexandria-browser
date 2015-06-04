@@ -43,7 +43,8 @@
     "grunt-shell": "^1.1.1",
     "load-grunt-tasks": "0.4.0",
     "nw-gyp": "^0.12.2",
-    "tmp": "0.0.23"
+    "tmp": "0.0.23",
+    "fs-extra": "0.18.4"
   },
   "webkit": {
     "plugin": true

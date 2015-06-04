@@ -5,6 +5,8 @@ var serverAddress = 'localhost';
 
 var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
 
+var fs = require('fs-extra');
+
 if (location.protocol == 'app:') {
 	var bitcoin = require('bitcoin');
 	$('.appOnly').css('display','inline-block');
@@ -757,7 +759,7 @@ function loadArtifactView(objMeta) {
 			var tipOption = '<li><input type="radio" name="tip-amount" id="tip-option-'+i+'" value="'+ thisTipAmount +'" onclick="changeTipAmount(this);"><label for="tip-option-'+i+'">$'+ thisTipAmount +'</label></li>';
 			$('.tip-amounts').append(tipOption);
 		}
-		$('.tip-amounts').append('<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event);" /></li>');
+		$('.tip-amounts').append('<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event, this);" /></li>');
 	}
 //	var fileHash = mediaTid.split('btih:')[1];
 	var fileHash = mediaTid;
@@ -771,6 +773,9 @@ function loadArtifactView(objMeta) {
 		if(mediaInfo['extra-info']['filename']){
 			mediaFilename = mediaInfo['extra-info']['filename'];
 		}
+		if(mediaInfo['extra-info']['posterFrame']) {
+			var posterFrame = 'http://localhost:8080/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['posterFrame'];
+		}		
 		if(mediaInfo['extra-info']['wwwId']) {
 			wwwId = mediaInfo['extra-info']['wwwId'];
 		}
@@ -784,14 +789,22 @@ function loadArtifactView(objMeta) {
 			$('.pwyw-wall-amount').val(pwywSuggUSD);
 			showPWYWModal(mediaType, fileHash, mediaFilename);
 		} else {
+			if (mediaType == 'thing') {
+				if(mediaInfo['extra-info']) {
+					if(mediaInfo['extra-info']['coverArt']) {
+						fileHash = mediaInfo['extra-info']['coverArt'];
+					}
+				}
+			}
 			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
 			$('.row.media-embed').html(fileEmbed);
-			$('#media-Tid').attr('href','magnet:?xt=urn:'+mediaTid+'&dn='+escape(mediaTitle)).show();
+			$('#media-Tid').attr('onclick', 'copyArtifact("http://localhost:8080/ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
 		}
 	}
 	if ( (mediaType == 'video') && (wwwId != '') ) {
-		var youtubePoster = getYouTubePic(wwwId);
-		console.log(youtubePoster);
+		if (!posterFrame) {
+			var posterFrame = getYouTubePic(wwwId);
+		}
 	}
 	if (mediaType == 'movie') {
 		getRotten();
@@ -817,10 +830,9 @@ function loadArtifactView(objMeta) {
 	$('#media-view-entity .entity-meta-header .media-header.media-'+mediaType).show();
 	// $('#media-view-entity .media-image').html(mediaIcon);
 	$('#media-view-entity .entity-pub-time span').html(mediaPubTime);
-	if (mediaInfo['extra-info']) {
-		if (mediaInfo['extra-info']['poster']) {
-//			mediaDesc = '<img src="http://localhost:8080/stream/'+ fileHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;
-			mediaDesc = '<img src="http://localhost:8080/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;		}
+	if (posterFrame) {
+//		mediaDesc = '<img src="http://localhost:8080/stream/'+ fileHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;
+		mediaDesc = '<img src="'+posterFrame+'" class="media-poster" />'+ mediaDesc;
 	}
 	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
 	$('#media-view-entity .entity-footer').hide();
@@ -847,17 +859,18 @@ function embedArtifact(mediaType, fileHash, mediaFilename) {
 		if ( (fileHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
 			mediaFilename = 'SF Bitcoin Meetup @ Geekdom - November 18, 2014.mp4';
 		}
-//		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:8080/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
-//		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:8080/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 	} else if (mediaType == 'book') {
 		if ( (fileHash == '08D72B48F0799BBF62A2DC54CB66CB1ED14F9431') && (mediaFilename == '') ) {
 			mediaFilename = 'bitcoin.pdf';
 		}
-//		var embedCode = '<object data="http://localhost:3000/stream/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px" class="book-embed"></object>'
 		var embedCode = '<object data="http://localhost:8080/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px" class="book-embed"></object>'
+	} else if (mediaType == 'recipe') {
+		var embedCode = '<object data="http://localhost:8080/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
+	} else if (mediaType == 'thing') {
+		var embedCode = '<img src="http://localhost:8080/ipfs/'+fileHash+'" class="large-poster" />';
 	}
 	return embedCode;
 }
@@ -2789,7 +2802,7 @@ function sendFLO(obj) {
 		alert('Input a receiving FLO address');
 		return false;
 	}
-	var sendAmt = parseFloat(document.getElementById('wallet-send-amount').value);
+	var sendAmt = parseFloat(document.getElementById('wallet-send-amount-flo').value);
 	sendAmt = Math.round(sendAmt*100000000)/100000000;
 	if ( (!sendAmt) || ( (sendAmt) && (isNaN(sendAmt) == true) ) ) {
 		alert('Input a valid send amount');
@@ -2803,10 +2816,11 @@ function sendFLO(obj) {
 				console.log(err);
 				$(obj).removeClass('disabled');
 			} else {
-				alert(parseFloat(document.getElementById('wallet-send-amount').value) + ' FLO Sent: TxId ' + txid);
+				alert(parseFloat(document.getElementById('wallet-send-amount-flo').value) + ' FLO Sent: TxId ' + txid);
 				$(obj).removeClass('disabled');
 				document.getElementById('wallet-send-address').value = '';
 				document.getElementById('wallet-send-amount').value = '';
+				document.getElementById('wallet-send-amount-flo').value = '';
 				document.getElementById('wallet-send-message').value = '';
 				getBalance(obj, FLOclient);
 			}
@@ -3071,6 +3085,17 @@ function selectText(containerid) {
 	    range.selectNode(document.getElementById(containerid));
 	    window.getSelection().addRange(range);
 	}
+}
+
+// COPY FOLDER and FILES
+function copyArtifact(source, target) {
+	fs.copy(source, target, function (err) {
+	  if (err) {
+	    console.error(err);
+	  } else {
+	    console.log("success!");
+	  }
+	}); //copies directory, even if it has subdirectories or files}
 }
 
 // CHECK CONNECTION

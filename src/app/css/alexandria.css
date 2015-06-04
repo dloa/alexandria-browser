@@ -1524,7 +1524,7 @@ ul.distNetList li {
 /* OVERLAY MODAL */
 .overlay-modal {
 	display: none;
-	position: absolute;
+	position: fixed;
 	width: 60%;
 	top: 100px;
 	left: 20%;
