@@ -1,9 +1,14 @@
 /* some global variables to make mistakes only once */
-// var serverAddress = '54.172.28.195'; // Dev
-// var serverAddress = 'blue.a.blocktech.com'; // Demo
-var serverAddress = 'localhost';
+
+var serverAddress = '54.172.28.195'; // Dev
+// var serverAddress = 'localhost';
+
+var IPFSserver = 'gateway.ipfs.io';
+// var IPFSserver = 'localhost:8080';
 
 var apiURL = "http://"+ serverAddress +":3000/alexandria/v1";
+
+var IPFSapi = "http://" + IPFSserver;
 
 var fs = require('fs-extra');
 
@@ -157,18 +162,21 @@ jQuery(document).ready(function($){
 
 	// API Server ID and Control
 	if(serverAddress == '54.172.28.195'){
-		$('#serverID').text('Dev');
+		$('#serverID').text('Gateway');
 	} else {
-		$('#serverID').text('Localhost');
+		$('#serverID').text('Local');
 	}
 	$('#serverID').click(function(){
 		if(serverAddress == '54.172.28.195'){
-			serverAddress = 'localhost'
-			$('#serverID').text('Localhost');
+			serverAddress = 'localhost';
+			IPFSserver = 'localhost:8080';
+			$('#serverID').text('Local');
 		} else {
 			serverAddress = '54.172.28.195'
-			$('#serverID').text('Dev');
-		}		
+			IPFSserver = 'gateway.ipfs.io';
+			$('#serverID').text('Gateway');
+		}
+		setMediaTypeFilter();
 	});
 	
 	// SET LOADED VALUE
@@ -774,7 +782,7 @@ function loadArtifactView(objMeta) {
 			mediaFilename = mediaInfo['extra-info']['filename'];
 		}
 		if(mediaInfo['extra-info']['posterFrame']) {
-			var posterFrame = 'http://localhost:8080/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['posterFrame'];
+			var posterFrame = IPFSapi + '/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['posterFrame'];
 		}		
 		if(mediaInfo['extra-info']['wwwId']) {
 			wwwId = mediaInfo['extra-info']['wwwId'];
@@ -798,7 +806,7 @@ function loadArtifactView(objMeta) {
 			}
 			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
 			$('.row.media-embed').html(fileEmbed);
-			$('#media-Tid').attr('onclick', 'copyArtifact("http://localhost:8080/ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
+			$('#media-Tid').attr('onclick', 'copyArtifact("' + IPFSapi + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
 		}
 	}
 	if ( (mediaType == 'video') && (wwwId != '') ) {
@@ -859,18 +867,18 @@ function embedArtifact(mediaType, fileHash, mediaFilename) {
 		if ( (fileHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
 			mediaFilename = 'SF Bitcoin Meetup @ Geekdom - November 18, 2014.mp4';
 		}
-		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:8080/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="'+ IPFSapi +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
-		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://localhost:8080/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="'+ IPFSapi +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 	} else if (mediaType == 'book') {
 		if ( (fileHash == '08D72B48F0799BBF62A2DC54CB66CB1ED14F9431') && (mediaFilename == '') ) {
 			mediaFilename = 'bitcoin.pdf';
 		}
-		var embedCode = '<object data="http://localhost:8080/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px" class="book-embed"></object>'
+		var embedCode = '<object data="'+ IPFSapi +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px" class="book-embed"></object>'
 	} else if (mediaType == 'recipe') {
-		var embedCode = '<object data="http://localhost:8080/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
+		var embedCode = '<object data="'+ IPFSapi +'/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
 	} else if (mediaType == 'thing') {
-		var embedCode = '<img src="http://localhost:8080/ipfs/'+fileHash+'" class="large-poster" />';
+		var embedCode = '<img src="'+ IPFSapi +'/ipfs/'+fileHash+'" class="large-poster" />';
 	}
 	return embedCode;
 }
