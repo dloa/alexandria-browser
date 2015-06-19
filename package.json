@@ -9,7 +9,7 @@
   },
   "license": "GPL-3.0",
   "main": "app://host/src/app/alexandria.html",
-  "version": "0.0.0",
+  "version": "0.4.2",
   "releaseName": "",
   "scripts": {
     "test": "grunt --verbose"
@@ -17,8 +17,8 @@
   "window": {
     "title": "Alexandria",
     "icon": "src/app/img/logo.png",
-    "toolbar": true,
-    "frame": true,
+    "toolbar": false,
+    "frame": false,
     "min_width": 960,
     "min_height": 520,
     "resizable": true,

@@ -869,10 +869,7 @@ function embedArtifact(mediaType, fileHash, mediaFilename) {
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
 		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 	} else if (mediaType == 'book') {
-		if ( (fileHash == '08D72B48F0799BBF62A2DC54CB66CB1ED14F9431') && (mediaFilename == '') ) {
-			mediaFilename = 'bitcoin.pdf';
-		}
-		var embedCode = '<object data="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="application/pdf" width="100%" height="800px" class="book-embed"></object>'
+		var embedCode = '<object data="http://' + IPFSserver +'/ipfs/'+ fileHash + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="http://' + IPFSserver +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
 	} else if (mediaType == 'recipe') {
 		var embedCode = '<object data="http://' + IPFSserver +'/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
 	} else if (mediaType == 'thing') {
