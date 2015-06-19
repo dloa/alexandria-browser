@@ -2706,9 +2706,9 @@ function getWalletAccts(client) {
 		} else {
 			console.info(accounts);
 			for (var account in accounts) {
-				if (account != '') {
+//				if (account != '') {
 					walletAccts.push(account);
-				}
+//				}
 			}
 			console.info(walletAccts);
 			console.info(walletAccts.length);
@@ -2777,12 +2777,13 @@ function displayNewAddModal() {
 }
 
 // GENERATE NEW FLORINCOIN ADDRESS
-function newFloAddress(obj) {
+function newFloAddress(obj, client) {
+	console.info(client);
 	if ($(obj).hasClass('disabled')) {
 		return false;
 	}
 	$(obj).addClass('disabled');
-	client.cmd('getnewaddress', document.getElementById('flo-address-label').value, function(err, address, resHeaders){
+	FLOclient.cmd('getnewaddress', document.getElementById('flo-address-label').value, function(err, address, resHeaders){
 		if (err) {
 			console.log(err);
 			$(obj).removeClass('disabled');
