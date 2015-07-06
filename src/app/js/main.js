@@ -437,7 +437,41 @@ function changeCryptoRates() {
 function getCryptos() {
 	clearTimeout ( cryptoTimerId );
 	cryptoTimerRunning = 0;
+// Alexandria Crytpo Price
+	$.ajax({
+		url: 'http://colorcoin.org:41290/flo-market-data/v1/getAll',
+		success: function(e) {
+			console.info(e);
+			var data = $.parseJSON(e);
+			FLOUSD = data.USD;
+			console.info(FLOUSD);
+			$('#flo-usd label').text('FLO/USD').next('span').text(FLOUSD);
+			FLOCost = parseFloat($('#flo-cost').text());
+			$('#tip-modal .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
+			$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);					
+			$('#tip-alexandria-modal .flo-usd-output').text(Math.round((document.getElementById('alexandria-tip-amount').value*FLOUSD)*100000)/100000);
+			var pwywAmount = $('.pwyw-wall-amount:visible').val();
+			$('.pwyw-wall-amount:hidden').val(pwywAmount);
+			$('#pwyw-modal .flo-usd-output').text(Math.round((pwywAmount/FLOUSD)*100000)/100000);
+			$('#pwyw-modal .btc-usd-output').text(Math.round((pwywAmount/BTCUSD)*100000)/100000);
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+		}
+		
+	});
 // Bitcoin
+	$.ajax({
+	    url: 'https://api.bitcoinaverage.com/ticker/global/USD/',
+	    success: function(e) {
+			console.info(e);
+			BTCUSD = parseFloat(e.last);
+			console.info(BTCUSD);
+			$('.btc-usd .btc-usd-output').text(Math.round((1/BTCUSD)*100000000)/100000000);
+		}
+	});
+/*
 	$.ajax({
 	    url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=2',
 	    type: 'GET',
@@ -484,6 +518,7 @@ function getCryptos() {
 			});
 		}
 	});
+*/
 }
 
 // SVG GRAPHICS FOR APPEND
@@ -665,6 +700,9 @@ function loadMediaEntity(obj) {
 	var mediaType = $(parentObj).attr('media-type');
 	// Check Movie for IMDB Verification
 	if (mediaType == 'movie') {
+		// VERIFICATION DISABLED
+			loadArtifactView(parentObj);
+/*
 		var mediaTxnID = $(parentObj).attr('id').split('-')[1];
 		var IMDBid = $(parentObj).find('.media-www-id').text();
 		var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid;
@@ -693,6 +731,7 @@ function loadMediaEntity(obj) {
 				console.error(thrownError);
 			}
 	    });
+  */
 	} else {
 		// Load Media Entity View
 		loadArtifactView(parentObj);
@@ -1793,15 +1832,14 @@ function showAutoFill(obj){
 
 // GET IMDB INFO FOR AUTOFILL
 function getIMDBinfo() {
-	var IMDBid = document.getElementById('www-id').value;
+//	var IMDBid = document.getElementById('www-id').value;
+	var IMDBid = 'tt1273193';
 	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ mediaWwwID +'&actors=S&uniqueName=1';
 	$.ajax({
 	    url: IMDBapi,
-	    type: 'GET',
+//	    type: 'GET',
 	    success: function(e) {
-			var el = $( '#sketchpad' );
-			el.html(e.responseText);
-			var data = $.parseJSON($('p', el).html());
+			var data = e;
 			console.info(data);
 			var errorCode = data['code'];
 			if (errorCode) {
@@ -1811,10 +1849,13 @@ function getIMDBinfo() {
 			} else {
 				for (var key in data) {
 					var obj = data[key];
-					var inputObj = document.getElementById('addMovie-'+key);
+					console.info(key);
+					console.info(obj);
+					var inputObj = document.getElementById('addMedia-'+key);
 					if (key == 'urlPoster') {
 						$('.thumbnail-wrapper:visible').html('<p><a href="'+ obj +'" target="_blank" class="btnLightGray">Download from IMDB</a></p>');
 					} else if (inputObj) {
+						console.info(inputObj);
 						var length = 0;
 						var newObj = [];
 						if(typeof obj == 'object'){
