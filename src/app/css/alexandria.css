@@ -315,7 +315,7 @@ div#logoImg {
 	right: 25px;
 	line-height: 72px;
 }
-.header-icon, header #serverID {
+.header-icon, header #serverID, header #IPFS-switch {
 	line-height: 72px;
 }
 .header-icon {
@@ -323,7 +323,7 @@ div#logoImg {
 	width: 25px;
 	cursor: pointer;
 }
-header #serverID {
+header #serverID, header #IPFS-switch {
   display: block;
   right: 105px;
   cursor: default;
@@ -690,7 +690,7 @@ ul#media-type-select-list {
 .row.media-embed {
   text-align: center;
 }
-.media-embed embed {
+.media-embed embed, .media-embed video {
   display: inline-block;
 }
 .media-embed object.book-embed {

@@ -6,12 +6,14 @@ var serverAddress = '54.172.28.195'; // Dev
 var IPFSserver = 'gateway.ipfs.io';
 // var IPFSserver = 'localhost:8080';
 
-var fs = require('fs-extra');
 
 if (location.protocol == 'app:') {
 	var bitcoin = require('bitcoin');
-	$('.appOnly').css('display','inline-block');
+	$('.webOnly').remove();
+	$('.appOnly').css('display','inline-block');	
+	var fs = require('fs-extra');
 } else {
+	$('.webOnly').css('display','inline-block');
 	$('.appOnly').remove();
 }
 
@@ -162,20 +164,38 @@ jQuery(document).ready(function($){
 	} else {
 		$('#serverID').text('Local');
 	}
-	$('#serverID').click(function(){
-		if(serverAddress == '54.172.28.195'){
-			serverAddress = 'localhost';
-			IPFSserver = 'localhost:8080';
-			$('#serverID').text('Local');
+	if (location.protocol == 'app:') {
+		$('#serverID').click(function(){
+			if(serverAddress == '54.172.28.195'){
+				serverAddress = 'localhost';
+				IPFSserver = 'localhost:8080';
+				$('#serverID').text('Local');
+			} else {
+				serverAddress = '54.172.28.195'
+				IPFSserver = 'gateway.ipfs.io';
+				$('#serverID').text('Gateway');
+			}
+			setMediaTypeFilter();
+			console.log(serverAddress);
+			console.log(IPFSserver);
+		});
+	} else {
+		if (IPFSserver == 'gateway.ipfs.io') {
+			$('#IPFS-switch').text('Gateway');
 		} else {
-			serverAddress = '54.172.28.195'
-			IPFSserver = 'gateway.ipfs.io';
-			$('#serverID').text('Gateway');
+			$('#IPFS-switch').text('Local');
 		}
-		setMediaTypeFilter();
-		console.log(serverAddress);
-		console.log(IPFSserver);
-	});
+		$('#IPFS-switch').click(function(){
+			if(serverAddress == '54.172.28.195'){
+				IPFSserver = 'localhost:8080';
+				$('#IPFS-switch').text('Local');
+			} else {
+				IPFSserver = 'gateway.ipfs.io';
+				$('#IPFS-switch').text('Gateway');
+			}
+			setMediaTypeFilter();
+		});
+	}
 	
 	// SET LOADED VALUE
 	var loadedTimer = setTimeout(function(){
@@ -843,7 +863,9 @@ function loadArtifactView(objMeta) {
 			}
 			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
 			$('.row.media-embed').html(fileEmbed);
-			$('#media-Tid').attr('onclick', 'copyArtifact("http://' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
+			if (location.protocol == 'app:') {
+				$('#media-Tid').attr('onclick', 'copyArtifact("http://' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
+			}
 		}
 	}
 	if ( (mediaType == 'video') && (wwwId != '') ) {
@@ -904,9 +926,17 @@ function embedArtifact(mediaType, fileHash, mediaFilename) {
 		if ( (fileHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
 			mediaFilename = 'SF Bitcoin Meetup @ Geekdom - November 18, 2014.mp4';
 		}
-		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+		if (location.protocol == 'app:') {
+			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+		} else {
+			var embedCode = '<video controls="controls"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /><param name="autoplay" value="true" /></video>';	
+		}
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
-		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="100px" />';
+  		if (location.protocol == 'app:') {
+			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="100px" />';
+		} else {
+			var embedCode = '<audio controls="controls"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="audio/mp3" /></audio>';
+		}
 	} else if (mediaType == 'book') {
 		var embedCode = '<object data="http://' + IPFSserver +'/ipfs/'+ fileHash + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="http://' + IPFSserver +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
 	} else if (mediaType == 'recipe') {
@@ -2919,6 +2949,7 @@ function resetInterface() {
 // RESET ALEXANDRIA
 function resetAlexandria() {
 	$('video').trigger('pause');
+	$('audio').trigger('pause');
 	$('main').not('#browse-media').hide();
 	document.getElementById('search-main').value = '';
 	$('#browse-media .module-links a.active').removeClass('active');
@@ -3155,6 +3186,8 @@ function checkConnection() {
 */
 // GO BACK
 function goBack() {
+	$('video').trigger('pause');
+	$('audio').trigger('pause');
 	navCounter--;
 	history.back();
 }
