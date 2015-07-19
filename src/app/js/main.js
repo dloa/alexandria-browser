@@ -826,7 +826,7 @@ function loadArtifactView(objMeta) {
 		}
 		$('.tip-amounts').append('<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event, this);" /></li>');
 	}
-//	var fileHash = mediaTid.split('btih:')[1];
+
 	var fileHash = mediaTid;
 	if(mediaInfo['extra-info']){
 		if(mediaInfo['extra-info']['runtime']){
@@ -837,6 +837,9 @@ function loadArtifactView(objMeta) {
 		}						
 		if(mediaInfo['extra-info']['filename']){
 			mediaFilename = mediaInfo['extra-info']['filename'];
+		}
+		if(mediaInfo['extra-info']['poster']) {
+			var poster = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['poster'];
 		}
 		if(mediaInfo['extra-info']['posterFrame']) {
 			var posterFrame = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['posterFrame'];
@@ -861,16 +864,32 @@ function loadArtifactView(objMeta) {
 					}
 				}
 			}
-			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
+			if ( (mediaType == 'video') && (wwwId != '') ) {
+				if (!posterFrame) {
+					var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBH_FceJKLSmo0hk9y2zBdZ8ZTmUiNJr8o&part=snippet&id='+ wwwId;
+					$.ajax({
+						url: url,
+						type: 'GET',
+						success: function(e) {
+							var el = $( '#sketchpad' );
+							el.html(e.responseText);
+							var data = $.parseJSON($(el).html());
+							var posterFrame = data['items'][0]['snippet']['thumbnails']['high']['url'];
+							$('.media-embed video').attr('poster',posterFrame);
+						},
+						error: function (xhr, ajaxOptions, thrownError) {
+							console.error(xhr.status);
+							console.error(thrownError);
+						},
+						async:   false
+					});
+				}
+			}
+			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename, posterFrame);
 			$('.row.media-embed').html(fileEmbed);
 			if (location.protocol == 'app:') {
 				$('#media-Tid').attr('onclick', 'copyArtifact("http://' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
 			}
-		}
-	}
-	if ( (mediaType == 'video') && (wwwId != '') ) {
-		if (!posterFrame) {
-			var posterFrame = getYouTubePic(wwwId);
 		}
 	}
 	if (mediaType == 'movie') {
@@ -897,9 +916,9 @@ function loadArtifactView(objMeta) {
 	$('#media-view-entity .entity-meta-header .media-header.media-'+mediaType).show();
 	// $('#media-view-entity .media-image').html(mediaIcon);
 	$('#media-view-entity .entity-pub-time span').html(mediaPubTime);
-	if (posterFrame) {
+	if (poster) {
 //		mediaDesc = '<img src="http://localhost:8080/stream/'+ fileHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;
-		mediaDesc = '<img src="'+posterFrame+'" class="media-poster" />'+ mediaDesc;
+		mediaDesc = '<img src="'+poster+'" class="media-poster" />'+ mediaDesc;
 	}
 	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
 	$('#media-view-entity .entity-footer').hide();
@@ -917,15 +936,18 @@ function loadArtifactView(objMeta) {
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);
 }
 
-function embedArtifact(mediaType, fileHash, mediaFilename) {
+function embedArtifact(mediaType, fileHash, mediaFilename, posterFrame) {
 	if (mediaFilename == 'none') {
 		mediaFilename = '';
 	}
 	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
+		if (!posterFrame) {
+			var posterFrame = '';
+		}
 //		if (location.protocol == 'app:') {
 //			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 //		} else {
-			var embedCode = '<video controls="controls"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /><param name="autoplay" value="true" /></video>';	
+			var embedCode = '<video controls="controls" poster="'+ posterFrame +'"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /><param name="autoplay" value="true" /></video>';	
 //		}
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
 // 		if (location.protocol == 'app:') {
@@ -1986,26 +2008,6 @@ function getSoundcloudInfo() {
 	$('.modal-tab:visible .autofill-button').slideUp(fadeTimer);
 	$('fieldset:visible input').removeAttr('disabled');
 	$('fieldset:visible textarea').removeAttr('disabled');	
-}
-
-// GET YOUTUBE SCREENGRAB FOR VIDEO VIEW
-function getYouTubePic(YouTubeId) {
-	var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBH_FceJKLSmo0hk9y2zBdZ8ZTmUiNJr8o&part=snippet&id='+ YouTubeId;
-	$.ajax({
-	    url: url,
-	    type: 'GET',
-	    success: function(e) {
-			var el = $( '#sketchpad' );
-			el.html(e.responseText);
-			var data = $.parseJSON($(el).html());
-			var mediaData = data['items'][0]['snippet']['thumbnails']['medium']['url'];
-			$('#media-view-entity .row.media-desc').prepend('<img src="'+mediaData+'" class="poster-frame" />');
-	    },
-		error: function (xhr, ajaxOptions, thrownError) {
-			console.error(xhr.status);
-			console.error(thrownError);
-	    }
-    });
 }
 
 // GET ROTTEN TOMATOES RATING
