@@ -922,21 +922,17 @@ function embedArtifact(mediaType, fileHash, mediaFilename) {
 		mediaFilename = '';
 	}
 	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
-		// FIX FOR SF BITCOIN MEETUP WITHOUT FILENAME
-		if ( (fileHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
-			mediaFilename = 'SF Bitcoin Meetup @ Geekdom - November 18, 2014.mp4';
-		}
-		if (location.protocol == 'app:') {
-			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
-		} else {
+//		if (location.protocol == 'app:') {
+//			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+//		} else {
 			var embedCode = '<video controls="controls"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /><param name="autoplay" value="true" /></video>';	
-		}
+//		}
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
-  		if (location.protocol == 'app:') {
-			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="100px" />';
-		} else {
+// 		if (location.protocol == 'app:') {
+//			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="100px" />';
+//		} else {
 			var embedCode = '<audio controls="controls"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="audio/mp3" /></audio>';
-		}
+//		}
 	} else if (mediaType == 'book') {
 		var embedCode = '<object data="http://' + IPFSserver +'/ipfs/'+ fileHash + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="http://' + IPFSserver +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
 	} else if (mediaType == 'recipe') {
