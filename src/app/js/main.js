@@ -181,17 +181,17 @@ jQuery(document).ready(function($){
 		});
 	} else {
 		if (IPFSserver == 'gateway.ipfs.io') {
-			$('#IPFS-switch').text('Gateway');
+			$('#IPFS-switch').text('IPFS: Gateway');
 		} else {
-			$('#IPFS-switch').text('Local');
+			$('#IPFS-switch').text('IPFS: Local');
 		}
 		$('#IPFS-switch').click(function(){
-			if(serverAddress == '54.172.28.195'){
+			if(IPFSserver == 'gateway.ipfs.io'){
 				IPFSserver = 'localhost:8080';
-				$('#IPFS-switch').text('Local');
+				$('#IPFS-switch').text('IPFS: Local');
 			} else {
 				IPFSserver = 'gateway.ipfs.io';
-				$('#IPFS-switch').text('Gateway');
+				$('#IPFS-switch').text('IPFS: Gateway');
 			}
 			setMediaTypeFilter();
 		});
