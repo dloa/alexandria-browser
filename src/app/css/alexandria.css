@@ -869,6 +869,9 @@ p.largeImg {
     clear: both;
     margin: 2.5em 0px;
 }
+#video-embed video {
+	max-width: 100%;
+}
 /* WALLET VIEW */
 #wallet-view {
 	padding-top: 30px;

@@ -2563,6 +2563,8 @@ function loadAboutView() {
 	$('.view-publishers-ui').hide();
 	document.getElementById('search').style.display = 'block';
 	document.getElementById('about').style.display = 'block';
+	$('#about #video-embed video').remove();
+	$('#about #video-embed').append('<video controls="controls" poster="https://i.ytimg.com/vi/z_u-ndscZjY/hqdefault.jpg"><source src="http://' + IPFSserver +'/ipfs/QmUbsjbjkRu41JqiyAhq61inUpDSB8uMHsTkdtbHg2jYmv/" type="video/mp4"></video>');
 	var stateObj = {
 		currentView: 'about'
 	}
