@@ -468,7 +468,6 @@ function getCryptos() {
 			var pwywAmount = $('.pwyw-wall-amount:visible').val();
 			$('.pwyw-wall-amount:hidden').val(pwywAmount);
 			$('#pwyw-modal .flo-usd-output').text(Math.round((pwywAmount/FLOUSD)*100000)/100000);
-			$('#pwyw-modal .btc-usd-output').text(Math.round((pwywAmount/BTCUSD)*100000)/100000);
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.error(xhr.status);
@@ -483,7 +482,9 @@ function getCryptos() {
 			console.info(e);
 			BTCUSD = parseFloat(e.last);
 			console.info(BTCUSD);
+			var pwywAmount = $('.pwyw-wall-amount:visible').val();
 			$('.btc-usd .btc-usd-output').text(Math.round((1/BTCUSD)*100000000)/100000000);
+			$('#pwyw-modal .btc-usd-output').text(Math.round((pwywAmount/BTCUSD)*100000)/100000);
 		}
 	});
 }
