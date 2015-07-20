@@ -136,6 +136,14 @@ jQuery(document).ready(function($){
 			});
 		}
 	});
+	
+	$('#lightbox').click(function(e){
+		console.info($(e.target).attr('id'));
+		if ($(e.target).attr('id') == 'lightbox') {
+			$('#lightbox video').trigger('pause');
+			$(this).fadeOut(fadeTimer);
+		}
+	});
 
 	$('input[name="dNetwork"]').click(function(){
 		if ($(this)[0]['checked']) {
@@ -204,29 +212,7 @@ jQuery(document).ready(function($){
 
 	// Get exchange rates
 	getCryptos();
-/*
-	var connectingTimerId = setInterval(function() {
-		var connected = checkConnection();
-    	console.log(connected);
-	    if (connected == true) {
-	    	$('#target').remove();
-			var connectedGraphic = '<script id="connected-graphic" type="text/javascript" async="" src="js/animatron.min.js?1426211998079"></script>';
-			$('body').append(connectedGraphic);
-			playerDomain = 'player.animatron.com';
-			amazonDomain = 'https://snapshots.animatron.com';
-			width = 30;
-			height = 30;
-			playerVersion = 'v1.3';
-			filename = 'ba1301d4ec40418b0c51912d0294c0f6.json';
-			autostart = false;
-			loop = false;			
-	    	document.getElementById('connection-indicator').innerHTML = '<div id="target" style="width: 30px; height: 30px;"><canvas id="target-cvs" width="30" height="30"></canvas></canvas></div><div style="visibility: hidden; position: absolute; top: -10000px; left: -10000px;"><span></span></div>';
-			if(typeof start === 'function' ) { start(); }
 
-	        clearInterval(connectingTimerId);	
-	    }
-	}, 10000);
-*/
 }); // End Document.Ready
 
 // The route registering function:
@@ -844,6 +830,9 @@ function loadArtifactView(objMeta) {
 		if(mediaInfo['extra-info']['posterFrame']) {
 			var posterFrame = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['posterFrame'];
 		}		
+		if(mediaInfo['extra-info']['trailer']) {
+			var trailer = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['trailer'];
+		}
 		if(mediaInfo['extra-info']['wwwId']) {
 			wwwId = mediaInfo['extra-info']['wwwId'];
 		}
@@ -887,6 +876,9 @@ function loadArtifactView(objMeta) {
 			}
 			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename, posterFrame);
 			$('.row.media-embed').html(fileEmbed);
+			if (trailer) {
+				$('#trailer-link').attr('data-source',trailer);
+			}
 			if (location.protocol == 'app:') {
 				$('#media-Tid').attr('onclick', 'copyArtifact("http://' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
 			}
@@ -3006,6 +2998,35 @@ function lightbox(obj){
 		'top': (window.innerHeight-imgContentHeight)/2+'px',
 		'left': (window.innerWidth-imgContentWidth)/2+'px'
 	});
+}
+
+function lightboxVideo(obj) {
+	var videoURL = $(obj).attr('data-source');
+	var videoContent = '<video controls="controls" poster=""><source src="'+videoURL+'" type="video/mp4" /><param name="autoplay" value="true" /></video>'
+	$('#lightbox').children().remove();
+	$('#lightbox').append(videoContent);
+	var lightboxTimer = setTimeout(function(){
+		$('#lightbox').show();
+		var videoContentWidth = $('#lightbox video').width();
+		console.info(videoContentWidth);
+		var maxWH = .95; // Max width and height for lightboxed image
+		if (videoContentWidth > window.innerWidth*maxWH) {
+			$('#lightbox video').css('width',window.innerWidth*maxWH+'px');
+			videoContentWidth = $('#lightbox video').width();
+		}
+		var videoContentHeight = $('#lightbox video').height();
+		console.info(videoContentHeight);
+		if (videoContentHeight > window.innerHeight*maxWH) {
+			$('#lightbox video').css('width','auto');
+			$('#lightbox video').css('height',window.innerHeight*maxWH+'px');
+			videoContentHeight = $('#lightbox video').height();
+			videoContentWidth = $('#lightbox video').width();
+		}
+		$('#lightbox video').css({
+			'top': (window.innerHeight-videoContentHeight)/2+'px',
+			'left': (window.innerWidth-videoContentWidth)/2+'px'
+		});
+	}, 1000);
 }
 
 // INT SORT

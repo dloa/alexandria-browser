@@ -1044,7 +1044,7 @@
 						<div class="row FLO-address visuallyhidden"></div>
 						<div class="row BTC-address visuallyhidden"></div>
 						<div class="row entity-footer media-movie">
-							<a class="wsite-button lightboxVideo" data-source="http://localhost:3000/">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label>
+							<a class="wsite-button lightboxVideo" id="trailer-link" data-source="#" onclick="lightboxVideo(this)">trailer</a> <a class="wsite-button">watch</a> <label>720</label><a class="alex-switch"></a><label>1080</label>
 						</div>
 					</div>
 				</div>				
@@ -1336,7 +1336,7 @@
 
 		<div id="disabler"></div>
 		
-		<div id="lightbox" onclick="$(this).fadeOut(fadeTimer);"></div>
+		<div id="lightbox"></div>
 		
 		<div id="alert-modal" class="overlay-modal"></div>
 
