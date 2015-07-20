@@ -143,7 +143,6 @@ jQuery(document).ready(function($){
 	});
 	
 	$('#lightbox').click(function(e){
-		console.info($(e.target).attr('id'));
 		if ($(e.target).attr('id') == 'lightbox') {
 			$('#lightbox video').trigger('pause');
 			$(this).fadeOut(fadeTimer);
@@ -848,6 +847,9 @@ function loadArtifactView(objMeta) {
 		if(mediaInfo['extra-info']['Bitcoin Address']) {
 			var mediaBTC = mediaInfo['extra-info']['Bitcoin Address'];
 		}
+		if (trailer) {
+			$('#trailer-link').attr('data-source',trailer);
+		}
 		if(mediaInfo['extra-info']['pwyw']) {
 			var PWYW = mediaInfo['extra-info']['pwyw'];
 			var pwywSuggUSD = PWYW[0]/100;
@@ -885,9 +887,6 @@ function loadArtifactView(objMeta) {
 			}
 			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename, posterFrame);
 			$('.row.media-embed').html(fileEmbed);
-			if (trailer) {
-				$('#trailer-link').attr('data-source',trailer);
-			}
 			if (location.protocol == 'app:') {
 				$('#media-Tid').attr('onclick', 'copyArtifact("http://' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
 			}
