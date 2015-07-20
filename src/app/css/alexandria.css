@@ -329,7 +329,8 @@ header #serverID, header #IPFS-switch {
   cursor: default;
   color: #979797;
   position: absolute;
-  top: 0;
+  top: 2px;
+	font-size: 0.9375rem;
 }
 header #addNewContent-icon {
 	margin-right: 10px;
@@ -854,7 +855,7 @@ img.poster-frame {
 p.container {
 	padding: 1.25em 2em;
 	background: #efefef;
-	margin: 45px auto 0;
+	margin: 20px auto 0;
 	float: none;
 	width: 355px;
 	font-size: .875em;
@@ -863,6 +864,10 @@ p.container {
 }
 p.largeImg {
 	margin-top: 0;
+}
+.sectionSep {
+    clear: both;
+    margin: 2.5em 0px;
 }
 /* WALLET VIEW */
 #wallet-view {

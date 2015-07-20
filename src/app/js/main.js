@@ -806,6 +806,7 @@ function loadArtifactView(objMeta) {
 		} else {
 			$('#trailer-link').attr('data-source',trailer).hide();
 		}
+		// PAY WHAT YOU WANT WALL + MEDIA EMBED
 		if(mediaInfo['extra-info']['pwyw']) {
 			var PWYW = mediaInfo['extra-info']['pwyw'];
 			var pwywSuggUSD = PWYW[0]/100;
@@ -2336,7 +2337,10 @@ function selectMediaType(obj, mediaType) {
 			for (var i = 0; i < mediaFiles.length; i++) {
 				$('#extra-files').append('<div class="row full"><div class="col"><div class="input-container"><label><span id="media-meta-'+mediaFiles[i]+'">'+mediaFiles[i].charAt(0).toUpperCase()+mediaFiles[i].slice(1)+' Filename</span></label><input type="text" name="'+mediaFiles[i].replace(' ','')+'" id="addMedia-'+mediaFiles[i].replace(' ','')+'" /></div></div></div>');
 			}
-		}		
+		}
+		if (mediaType == 'music') {
+			$('#extra-files').append('<div class="row full repeater"><div class="col"><div class="input-container"><label><span id="media-meta-track01">Track 01 Filename</span></label><input type="text" name="track01" id="addMedia-track01" /></div></div></div>');
+		}
 		$('fieldset#new-media-meta').show();
 	} else {
 		$('#newMedia-info .left').fadeOut(fadeTimer);
