@@ -107,7 +107,12 @@ jQuery(document).ready(function($){
 		if (code == 27) {
 			// esc pressed
 			if ($('#lightbox').css('display') == 'block') {
+				$('#lightbox video').trigger('pause');
 				$('#lightbox').fadeOut(fadeTimer);
+				$('#lightbox video').css({
+					'top': '100%',
+					'left': '100%'
+				});
 			}
 			if($('#wait').css('display') == 'block') {
 				document.getElementById('wait').style.display = 'none';
