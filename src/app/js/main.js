@@ -142,6 +142,10 @@ jQuery(document).ready(function($){
 		if ($(e.target).attr('id') == 'lightbox') {
 			$('#lightbox video').trigger('pause');
 			$(this).fadeOut(fadeTimer);
+			$('#lightbox video').css({
+				'top': '100%',
+				'left': '100%'
+			});
 		}
 	});
 
@@ -3005,8 +3009,12 @@ function lightboxVideo(obj) {
 	var videoContent = '<video controls="controls" poster=""><source src="'+videoURL+'" type="video/mp4" /><param name="autoplay" value="true" /></video>'
 	$('#lightbox').children().remove();
 	$('#lightbox').append(videoContent);
+	$('#lightbox video').css({
+		'top': '100%',
+		'left': '100%'
+	});
+	$('#lightbox').show();
 	var lightboxTimer = setTimeout(function(){
-		$('#lightbox').show();
 		var videoContentWidth = $('#lightbox video').width();
 		console.info(videoContentWidth);
 		var maxWH = .95; // Max width and height for lightboxed image

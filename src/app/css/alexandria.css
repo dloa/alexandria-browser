@@ -1766,6 +1766,8 @@ div#lightbox > * {
 }
 div#lightbox video {
 	background-color:#000;
+	top: 100%;
+	left: 100%;
 }
 div#lightbox #qrcode-lightbox {
 	margin-left: -220px;
