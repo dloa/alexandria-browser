@@ -848,7 +848,9 @@ function loadArtifactView(objMeta) {
 			var mediaBTC = mediaInfo['extra-info']['Bitcoin Address'];
 		}
 		if (trailer) {
-			$('#trailer-link').attr('data-source',trailer);
+			$('#trailer-link').attr('data-source',trailer).show();
+		} else {
+			$('#trailer-link').attr('data-source',trailer).hide();
 		}
 		if(mediaInfo['extra-info']['pwyw']) {
 			var PWYW = mediaInfo['extra-info']['pwyw'];
@@ -3018,27 +3020,29 @@ function lightboxVideo(obj) {
 		'left': '100%'
 	});
 	$('#lightbox').show();
-	var lightboxTimer = setTimeout(function(){
-		var videoContentWidth = $('#lightbox video').width();
-		console.info(videoContentWidth);
-		var maxWH = .95; // Max width and height for lightboxed image
-		if (videoContentWidth > window.innerWidth*maxWH) {
-			$('#lightbox video').css('width',window.innerWidth*maxWH+'px');
-			videoContentWidth = $('#lightbox video').width();
+	var lightboxInterval = setInterval(function() {
+		if ($('#lightbox video').width() > 200) {
+			var videoContentWidth = $('#lightbox video').width();
+			console.info(videoContentWidth);
+			var maxWH = .95; // Max width and height for lightboxed image
+			if (videoContentWidth > window.innerWidth*maxWH) {
+				$('#lightbox video').css('width',window.innerWidth*maxWH+'px');
+				videoContentWidth = $('#lightbox video').width();
+			}
+			var videoContentHeight = $('#lightbox video').height();
+			console.info(videoContentHeight);
+			if (videoContentHeight > window.innerHeight*maxWH) {
+				$('#lightbox video').css('width','auto');
+				$('#lightbox video').css('height',window.innerHeight*maxWH+'px');
+				videoContentHeight = $('#lightbox video').height();
+				videoContentWidth = $('#lightbox video').width();
+			}
+			$('#lightbox video').css({
+				'top': (window.innerHeight-videoContentHeight)/2+'px',
+				'left': (window.innerWidth-videoContentWidth)/2+'px'
+			});
 		}
-		var videoContentHeight = $('#lightbox video').height();
-		console.info(videoContentHeight);
-		if (videoContentHeight > window.innerHeight*maxWH) {
-			$('#lightbox video').css('width','auto');
-			$('#lightbox video').css('height',window.innerHeight*maxWH+'px');
-			videoContentHeight = $('#lightbox video').height();
-			videoContentWidth = $('#lightbox video').width();
-		}
-		$('#lightbox video').css({
-			'top': (window.innerHeight-videoContentHeight)/2+'px',
-			'left': (window.innerWidth-videoContentWidth)/2+'px'
-		});
-	}, 1000);
+	}, 500);
 }
 
 // INT SORT
