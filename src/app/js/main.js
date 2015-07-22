@@ -878,6 +878,9 @@ function loadArtifactView(objMeta) {
 		mediaDesc = '<img src="'+poster+'" class="media-poster" />'+ mediaDesc;
 	}
 	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
+	if (mediaType == 'music') {
+		getTracks(mediaInfo, 2);
+	}
 	$('#media-view-entity .entity-footer').hide();
 	$('#media-view-entity .entity-footer.media-'+mediaType).show();
 	$('#media-view-entity').show();
@@ -891,6 +894,29 @@ function loadArtifactView(objMeta) {
 		publisherId: publisherID
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);
+}
+
+function getTracks(mediaInfo, trackCount) {
+	if (trackCount < 10) {
+		var trackNo = '0'+ trackCount;
+	} else {
+		var trackNo = trackCount;
+	}
+	if (mediaInfo['extra-info']['track'+ trackNo]) {
+		var trackFile = mediaInfo['extra-info']['track'+ trackNo];
+		console.info(trackFile);
+		if ($('#media-view-entity .media-desc #track-list').length < 1) {
+			if(mediaInfo['extra-info']['filename']){
+				mediaFilename = mediaInfo['extra-info']['filename'];
+			}
+			$('#media-view-entity .media-desc').append('<ol id="track-list"><li>'+ mediaFilename +'</li></ol>');
+		}
+		$('#media-view-entity .media-desc #track-list').append('<li>'+trackFile+'</li>');
+		trackCount++;
+		getTracks(mediaInfo, trackCount);
+	} else {
+		return false;
+	}
 }
 
 function embedArtifact(mediaType, fileHash, mediaFilename, posterFrame) {
@@ -1200,7 +1226,7 @@ function filterMediaByType(obj, resetSearch) {
 			}
 		}
 	}
-	console.log(filteredMedia);
+//	console.log(filteredMedia);
 	console.log(history.state);
 	populateSearchResults(filteredMedia, 'media');
 }
@@ -1235,7 +1261,7 @@ function populateSearchResults(results, module) {
 	if (module == 'publishers') {
 		module = 'publisher';
 	};
-	console.info(results);
+//	console.info(results);
 	$('#'+module+'-results-title').remove();
 	if ( (module =='media') && (results) ) {
 		for (var i = 0; i < results.length; i++) {
