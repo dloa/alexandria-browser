@@ -1218,6 +1218,15 @@ ul.distNetList li {
 #add-media .pagination ul li {
 	margin-top: .5em;
 }
+.repeater .input-container input {
+	width: calc(100% - 36px);
+	position: relative;
+}
+.repeater .input-container .add-remove {
+	position: absolute;
+	bottom: 10px;
+	right: 0;
+}
 /* MODALS */
 .info-modal {
 	position: fixed;

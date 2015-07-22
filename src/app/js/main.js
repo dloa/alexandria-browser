@@ -156,10 +156,10 @@ jQuery(document).ready(function($){
 	$('input[name="dNetwork"]').click(function(){
 		if ($(this)[0]['checked']) {
 			$(this).siblings('.input-container').slideDown(fadeTimer);
-			resizeTabs(fadeTimer);
+			resizeTabs(true, fadeTimer);
 		} else {
 			$(this).siblings('.input-container').slideUp(fadeTimer);
-			resizeTabs(fadeTimer);
+			resizeTabs(true, fadeTimer);
 		}
 	});
 
@@ -453,8 +453,8 @@ function getCryptos() {
 	cryptoTimerRunning = 0;
 // Alexandria Crytpo Price
 	$.ajax({
-//		url: 'http://colorcoin.org:41290/flo-market-data/v1/getAll',
-		url: 'http://localhost:41290/flo-market-data/v1/getAll',
+		url: 'http://colorcoin.org:41290/flo-market-data/v1/getAll',
+//		url: 'http://localhost:41290/flo-market-data/v1/getAll',
 		success: function(e) {
 			console.info(e);
 			var data = $.parseJSON(e);
@@ -1618,7 +1618,7 @@ function loadShareMod() {
 	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').show();
-	resizeTabs();
+	resizeTabs(true);
 	var stateObj = {
 		currentView: 'add-media'
 	}
@@ -1668,7 +1668,7 @@ function loadCreatePublisherMod() {
 	$('.wallet-ui').hide();
 	$('.sharing-ui').hide();
 	$('.publisher-ui').show();
-	resizeTabs();
+	resizeTabs(true);
 	if (FLOauth.length == 0) {
 			document.getElementById('wallet-user').value = '';
 			document.getElementById('wallet-token').value = '';		
@@ -1802,7 +1802,7 @@ function changeAddMediaTab(obj) {
 	$('#newMedia-tabs').find('.modal-tab#'+$(obj).attr("name")).show().siblings().hide();
 	var activeTabName = $('#add-media-menu li.active').attr('name');
 	$('#add-media .pagination ul li').show();
-	resizeTabs();
+	resizeTabs(true);
 	var firstTab = $('#add-media-menu li:first-child').attr('name');
 	var lastTab = $('#add-media-menu li:last-child').attr('name');
 	if (activeTabName == lastTab) {
@@ -2213,6 +2213,7 @@ function selectMediaType(obj, mediaType) {
 		if (mediaType == 'movie') {
 			mediaMetaData = {
 				"www":"IMDB",
+				"filename":"Filename",
 				"runtime":"Runtime",
 				"creators1":"Director",
 				"creators2":"Screenwriter(s)",
@@ -2227,6 +2228,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'music') {
 			mediaMetaData = {
 				"www":"",
+				"filename":"Track 1 Filename",
 				"runtime":"Runtime",
 				"creators1":"Artist",
 				"creators2":"",
@@ -2241,6 +2243,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'podcast') {
 			mediaMetaData = {
 				"www":"Soundcloud",
+				"filename":"Filename",
 				"runtime":"Runtime",
 				"creators1":"Host(s)",
 				"creators2":"Co-Host(s)",
@@ -2255,6 +2258,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'video') {
 			mediaMetaData = {
 				"www":"YouTube",
+				"filename":"Filename",
 				"runtime":"Runtime",
 				"creators1":"Creator",
 				"creators2":"",
@@ -2269,6 +2273,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'book') {
 			mediaMetaData = {
 				"www":"",
+				"filename":"Filename",
 				"runtime":"",
 				"creators1":"Author",
 				"creators2":"Editor(s)",
@@ -2283,6 +2288,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'thing') {
 			mediaMetaData = {
 				"www":"",
+				"filename":"Filename",
 				"runtime":"",
 				"creators1":"Creator",
 				"creators2":"Contributors",
@@ -2296,6 +2302,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'recipe') {
 			mediaMetaData = {
 				"www":"",
+				"filename":"Filename",
 				"runtime":"Number of Servings",
 				"creators1":"Chef",
 				"creators2":"",
@@ -2339,15 +2346,36 @@ function selectMediaType(obj, mediaType) {
 			}
 		}
 		if (mediaType == 'music') {
-			$('#extra-files').append('<div class="row full repeater"><div class="col"><div class="input-container"><label><span id="media-meta-track01">Track 01 Filename</span></label><input type="text" name="track01" id="addMedia-track01" /></div></div></div>');
+			$('#extra-files').append('<div class="row full repeater"><div class="col"><div class="input-container"><label><span id="media-meta-track02">Track 02 Filename</span></label><input type="text" name="track02" id="addMedia-track02" /><a class="add-remove" onclick="repeaterFields(this);">+</span></div></div></div>');
 		}
 		$('fieldset#new-media-meta').show();
 	} else {
 		$('#newMedia-info .left').fadeOut(fadeTimer);
 		$('#newMedia-info .pull-right').fadeOut(fadeTimer);
 	}
-	resizeTabs();
+	resizeTabs(true);
 }
+
+// REPEATER FIELDS
+function repeaterFields(obj) {
+	if ($(obj).text() == '+') {
+		$(obj).text('');
+		var rowCount = $(obj).closest('.repeater').index() + 2;
+		if (rowCount < 10) {
+			rowCount = '0'+rowCount;
+		}
+		var newRow = '<div class="row full repeater"><div class="col"><div class="input-container"><label><span id="media-meta-track'+rowCount+'">Track '+rowCount+' Filename</span></label><input type="text" name="track'+rowCount+'" id="addMedia-track'+rowCount+'" /><a class="add-remove" onclick="repeaterFields(this);">+</span></div></div></div>';
+		$(obj).closest('.repeater').after(newRow);
+		resizeTabs(false);
+	} else {
+		
+	}
+/*
+	if($(obj).closest('.repeater').index() > $(obj).closest('.repeater').siblings('.repeater').length) {		
+	}
+*/
+}
+
 // SUBMIT MEDIA TO BLOCKCHAIN
 function postMedia(tipAlexandria) {
 	var reqCheck = mediaReqCheck();
@@ -2490,7 +2518,7 @@ function postMedia(tipAlexandria) {
 }
 
 /* ADD NEW CONTENT INTERFACE */
-function resizeTabs(t) {
+function resizeTabs(scroll, t) {
 	if (t) {		
 		var tabsTimeout = setTimeout(function() {
 			resizeTabs();
@@ -2507,10 +2535,11 @@ function resizeTabs(t) {
 	});
 	$('.media-info-container').css('overflow','initial');
 	$('#newMedia-tabs').css('height',tabHeight+'px');
-	var tabsTimeout = setTimeout(function() {
-		window.scrollTo(0, $('#newMedia-info .left').position().top);
-	}, fadeTimer);
-	
+	if (scroll) {
+		var tabsTimeout = setTimeout(function() {
+			window.scrollTo(0, $('#newMedia-info .left').position().top);
+		}, fadeTimer);
+	}	
 }
 
 // ALERT MODAL
