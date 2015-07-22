@@ -782,6 +782,11 @@ n#rotten-wrap a, #rotten-wrap img, #rotten-wrap svg {
 .entity-view .row.media-desc {
 	margin-bottom: 2em;
 }
+.entity-view .row.media-desc #track-list li {
+	cursor: pointer;
+	float: left;
+	clear: both;
+}
 img.poster-frame {
 	float: left;
 	margin-right: 1em;

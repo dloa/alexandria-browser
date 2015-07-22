@@ -879,7 +879,7 @@ function loadArtifactView(objMeta) {
 	}
 	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
 	if (mediaType == 'music') {
-		getTracks(mediaInfo, 2);
+		getTracks(mediaTid, mediaInfo, 2);
 	}
 	$('#media-view-entity .entity-footer').hide();
 	$('#media-view-entity .entity-footer.media-'+mediaType).show();
@@ -896,7 +896,7 @@ function loadArtifactView(objMeta) {
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);
 }
 
-function getTracks(mediaInfo, trackCount) {
+function getTracks(fileHash, mediaInfo, trackCount) {
 	if (trackCount < 10) {
 		var trackNo = '0'+ trackCount;
 	} else {
@@ -909,11 +909,11 @@ function getTracks(mediaInfo, trackCount) {
 			if(mediaInfo['extra-info']['filename']){
 				mediaFilename = mediaInfo['extra-info']['filename'];
 			}
-			$('#media-view-entity .media-desc').append('<ol id="track-list"><li>'+ mediaFilename +'</li></ol>');
+			$('#media-view-entity .media-desc').append('<ol id="track-list"><li onclick="changeAudioTrack(this)">'+ mediaFilename +'</li></ol>');
 		}
-		$('#media-view-entity .media-desc #track-list').append('<li>'+trackFile+'</li>');
+		$('#media-view-entity .media-desc #track-list').append('<li onclick="changeAudioTrack(this)">'+trackFile+'</li>');
 		trackCount++;
-		getTracks(mediaInfo, trackCount);
+		getTracks(fileHash, mediaInfo, trackCount);
 	} else {
 		return false;
 	}
@@ -946,6 +946,14 @@ function embedArtifact(mediaType, fileHash, mediaFilename, posterFrame) {
 		var embedCode = '<img src="http://' + IPFSserver +'/ipfs/'+fileHash+'" class="large-poster" />';
 	}
 	return embedCode;
+}
+
+function changeAudioTrack(obj) {
+	var audioPlayer = $('audio:visible');
+	var fileHash = $('audio:visible source').attr('src').split('/')[4];
+	var trackFile = $(obj).text();
+	$('audio:visible source').attr('src', 'http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(trackFile));
+	audioPlayer.load();
 }
 
 // CHANGE CUSTOM TIP AMOUNT
