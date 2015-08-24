@@ -1,6 +1,8 @@
 /* Taken from PopcornTime.io */
 /* Licence: GPLv2 */
 
+var fs = require ('fs')
+
 var projectName = "Alexandria"
 var projectNameNS = projectName.replace(/\s/, '-')
 var config = {
@@ -103,7 +105,6 @@ module.exports = function (grunt) {
 				currCommit = grunt.file.read('.git/' + gitRef).trim();
 
 			} catch (e) {
-				var fs = require('fs');
 				currCommit = gitRef.trim();
 				var items = fs.readdirSync('.git/refs/heads');
 				gitBranch = items[0];
