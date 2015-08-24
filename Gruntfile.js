@@ -53,6 +53,7 @@ module.exports = function (grunt) {
 		'injectgit',
 		'bower_clean',
 		'nodewebkit',
+		'shell:goget',
 		'shell:setexecutable'
 	]);
 
@@ -133,9 +134,10 @@ module.exports = function (grunt) {
 				download_url: 'http://get.popcorntime.io/nw/'
 			},
 			src: ['./src/**',
-				'./node_modules/**', './plugins/**', '!./node_modules/bower/**', '!./node_modules/*grunt*/**',
-				'!./**/test*/**', '!./**/doc*/**', '!./**/example*/**', '!./**/demo*/**', '!./**/bin/**', '!./**/build/**', '!./**/.*/**',
-				'./package.json', './README.md', './LICENSE.txt', './.git.json'
+			      './node_modules/**', './plugins/**', '!./node_modules/bower/**', '!./node_modules/*grunt*/**',
+			      '!./**/test*/**', '!./**/doc*/**', '!./**/example*/**', '!./**/demo*/**', '!./**/bin/**', '!./**/build/**', '!./**/.*/**',
+			      './package.json', './README.md', './LICENSE.txt', './.git.json',
+			      'gocode/bin/**'
 			]
 		},
 
@@ -175,6 +177,19 @@ module.exports = function (grunt) {
 
 
 		shell: {
+			goget: {
+				command: function () {
+					try {
+						fs.lstatSync(process.cwd() + '/gocode/bin/ipfs')
+					} catch (e) {
+						return ['GOPATH=' + process.cwd() + '/gocode',
+							'go get -u github.com/ipfs/go-ipfs/cmd/ipfs']
+							.join (' ');
+					}
+					console.log ('ipfs already exists, not gogetting anything')
+					return '';
+				}
+			},
 			setexecutable: {
 				command: function () {
 					if (process.platform === "win32") {
