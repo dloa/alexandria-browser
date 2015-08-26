@@ -11,6 +11,13 @@ var config = {
         }
 }
 
+var platformToGoArch = {
+	'mac': 'amd64',
+	'win': '386',
+	'linux32': '386',
+	'linux64': 'amd64'
+}
+
 var parsePlatforms = function (arg) {
 	// this will make it build no platform when the platform option is specified
 	// without a value which makes argumentPlatform into a boolean
@@ -22,8 +29,6 @@ var parsePlatforms = function (arg) {
 
 	return inputPlatforms
 }
-
-var goBuildPath = './build/cache/' + parsePlatforms() +  '/gocode/'
 
 var parseBuildPlatforms = function (argumentPlatform) {
 	var inputPlatforms = parsePlatforms (argumentPlatform)
@@ -144,8 +149,7 @@ module.exports = function (grunt) {
 			src: ['./src/**',
 			      './node_modules/**', './plugins/**', '!./node_modules/bower/**', '!./node_modules/*grunt*/**',
 			      '!./**/test*/**', '!./**/doc*/**', '!./**/example*/**', '!./**/demo*/**', '!./**/bin/**', '!./**/build/**', '!./**/.*/**',
-			      './package.json', './README.md', './LICENSE.txt', './.git.json',
-			      goBuildPath + '/bin/**'
+			      './package.json', './README.md', './LICENSE.txt', './.git.json'
 			]
 		},
 
@@ -187,16 +191,33 @@ module.exports = function (grunt) {
 		shell: {
 			goget: {
 				command: function () {
-					try {
-						fs.lstatSync(process.cwd() + goBuildPath + '/bin/ipfs')
-					} catch (e) {
-						console.log ('gogeting to', goBuildPath)
-						return ['GOPATH=' + process.cwd() + goBuildPath,
-							'go get -u github.com/ipfs/go-ipfs/cmd/ipfs']
-							.join (' ');
-					}
-					console.log (goBuildPath, ': ipfs already exists, not gogetting anything')
-					return '';
+					var ret = []
+					Object.keys(buildPlatforms).forEach (function (platform) {
+						if (! buildPlatforms[platform])
+							return;
+
+						var goGetPath = '/build/cache/' + platform +  '/gocode/'
+						try { // ugly js construct…
+							var files = fs.readdirSync (process.cwd() + goGetPath + '/bin/')
+						} catch (e) {
+
+						}
+
+						if (files && files.indexOf('ipfs')) {
+							console.log (goGetPath, files, ': ipfs already exists, not gogetting anything');
+							return;
+						}
+
+						console.log ('gogeting to', goGetPath)
+						ret.push([
+							'env',
+							'GOPATH=' + process.cwd() + goGetPath,
+							'GOARCH=' + platformToGoArch[platform],
+							'go get -u github.com/ipfs/go-ipfs/cmd/ipfs'
+						].join (' '))
+					})
+
+					return ret.join ('&&');
 				}
 			},
 			setexecutable: {
