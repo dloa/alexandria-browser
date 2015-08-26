@@ -65,8 +65,9 @@ module.exports = function (grunt) {
 	grunt.registerTask('build', [
 		'injectgit',
 		'bower_clean',
-		'nodewebkit',
 		'shell:goget',
+		'shell:goinstall',
+		'nodewebkit',
 		'shell:setexecutable'
 	]);
 
@@ -218,6 +219,31 @@ module.exports = function (grunt) {
 							'GOPATH=' + process.cwd() + goGetPath,
 							'GOARCH=' + platformToGoArch[platform],
 							'go get -u github.com/ipfs/go-ipfs/cmd/ipfs'
+						].join (' '))
+					})
+
+					return ret.join ('&&');
+				}
+			},
+			goinstall: {
+				command: function () {
+					var ret = []
+					Object.keys(buildPlatforms).forEach (function (platform) {
+						if (! buildPlatforms[platform])
+							return;
+
+						var goGetPath     = process.cwd()
+						    + '/build/cache/' + platform +  '/gocode/'
+						var goInstallPath = process.cwd()
+						    + '/build/releases/'
+						    + projectNameNS + '/'
+						    + platform      + '/'
+						    + projectNameNS + '/'
+
+						console.log ('installing to', goInstallPath)
+						ret.push([
+							'cp', goGetPath + '/bin/ipfs',
+							goInstallPath
 						].join (' '))
 					})
 
