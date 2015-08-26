@@ -197,9 +197,9 @@ module.exports = function (grunt) {
 						if (! buildPlatforms[platform])
 							return;
 
-						var goGetPath = '/build/cache/' + platform +  '/gocode/'
+						var goGetPath = process.cwd() + '/build/cache/' + platform +  '/gocode/'
 						try { // ugly js construct…
-							var files = fs.readdirSync (process.cwd() + goGetPath + '/bin/')
+							var files = fs.readdirSync (goGetPath + '/bin/')
 						} catch (e) {}
 
 						/* this is a bit counterintuive:
@@ -216,7 +216,7 @@ module.exports = function (grunt) {
 						console.log ('gogeting to', goGetPath)
 						ret.push([
 							'env',
-							'GOPATH=' + process.cwd() + goGetPath,
+							'GOPATH=' + goGetPath,
 							'GOARCH=' + platformToGoArch[platform],
 							'go get -u github.com/ipfs/go-ipfs/cmd/ipfs'
 						].join (' '))
