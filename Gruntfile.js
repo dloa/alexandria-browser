@@ -199,10 +199,14 @@ module.exports = function (grunt) {
 						var goGetPath = '/build/cache/' + platform +  '/gocode/'
 						try { // ugly js construct…
 							var files = fs.readdirSync (process.cwd() + goGetPath + '/bin/')
-						} catch (e) {
+						} catch (e) {}
 
-						}
-
+						/* this is a bit counterintuive:
+						 * fs.lstat[Sync] was returning a valid object
+						 * on non-existent files (joys of JS)…
+						 * so I hacked this around to be more
+						 * deterministic (xaiki)
+						 */
 						if (files && files.indexOf('ipfs')) {
 							console.log (goGetPath, files, ': ipfs already exists, not gogetting anything');
 							return;
