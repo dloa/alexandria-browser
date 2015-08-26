@@ -11,14 +11,20 @@ var config = {
         }
 }
 
-var parseBuildPlatforms = function (argumentPlatform) {
+var parsePlatforms = function (arg) {
 	// this will make it build no platform when the platform option is specified
 	// without a value which makes argumentPlatform into a boolean
-	var inputPlatforms = argumentPlatform || process.platform + ";" + process.arch;
+	var inputPlatforms = arg || process.platform + ";" + process.arch;
 
 	// Do some scrubbing to make it easier to match in the regexes bellow
 	inputPlatforms = inputPlatforms.replace("darwin", "mac");
 	inputPlatforms = inputPlatforms.replace(/;ia|;x|;arm/, "");
+
+	return inputPlatforms
+}
+
+var parseBuildPlatforms = function (argumentPlatform) {
+	var inputPlatforms = parsePlatforms (argumentPlatform)
 
 	var buildAll = /^all$/.test(inputPlatforms);
 	var buildPlatforms = {
