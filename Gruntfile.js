@@ -23,6 +23,8 @@ var parsePlatforms = function (arg) {
 	return inputPlatforms
 }
 
+var goBuildPath = './build/cache/' + parsePlatforms() +  '/gocode/'
+
 var parseBuildPlatforms = function (argumentPlatform) {
 	var inputPlatforms = parsePlatforms (argumentPlatform)
 
@@ -143,7 +145,7 @@ module.exports = function (grunt) {
 			      './node_modules/**', './plugins/**', '!./node_modules/bower/**', '!./node_modules/*grunt*/**',
 			      '!./**/test*/**', '!./**/doc*/**', '!./**/example*/**', '!./**/demo*/**', '!./**/bin/**', '!./**/build/**', '!./**/.*/**',
 			      './package.json', './README.md', './LICENSE.txt', './.git.json',
-			      'gocode/bin/**'
+			      goBuildPath + '/bin/**'
 			]
 		},
 
@@ -186,13 +188,14 @@ module.exports = function (grunt) {
 			goget: {
 				command: function () {
 					try {
-						fs.lstatSync(process.cwd() + '/gocode/bin/ipfs')
+						fs.lstatSync(process.cwd() + goBuildPath + '/bin/ipfs')
 					} catch (e) {
-						return ['GOPATH=' + process.cwd() + '/gocode',
+						console.log ('gogeting to', goBuildPath)
+						return ['GOPATH=' + process.cwd() + goBuildPath,
 							'go get -u github.com/ipfs/go-ipfs/cmd/ipfs']
 							.join (' ');
 					}
-					console.log ('ipfs already exists, not gogetting anything')
+					console.log (goBuildPath, ': ipfs already exists, not gogetting anything')
 					return '';
 				}
 			},
