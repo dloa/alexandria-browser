@@ -146,3 +146,48 @@ if (location.protocol == 'app:') {
 		window.console.error(err, err.stack || false);
 	});
 }
+
+function connectionHandler(className) {
+	var App = require("nw.gui").App;
+	var connected = false;
+
+	window['toggle' + className.toUpperCase()] =  function (e) {
+		var next = (connected)?"disconnect":"connect";
+		var emit = className + ":" + next;
+		var cs = $('#cs-' + className)
+		cs.removeClass('connected', 'connecting', 'disconnected', 'disconnecting')
+		cs.addClass(next + 'ing')
+
+		console.error ("TOGGLE", className, emit)
+	}
+
+	App.on (className + ":connect", function() {
+		debugger;
+	})
+
+	App.on (className + ":disconnect", function() {
+		debugger;
+	})
+
+	App.on (className + ":connected", function() {
+		console.log (className + " connect")
+	})
+
+	App.on (className + ":disconnected", function() {
+		console.log (className + " disconnect")
+	})
+
+	var spawn = require('child_process').spawn,
+	    CWD = process.cwd();
+
+	return console.log ('+++++++', CWD)
+
+	spawn(process.execPath, argv, {
+		cwd: CWD,
+		detached: true,
+		stdio: ['ignore', 'ignore', 'ignore']
+	}).unref();
+}
+
+connectionHandler ('ipfs')
+connectionHandler ('libraryd')
