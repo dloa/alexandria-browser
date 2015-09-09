@@ -155,7 +155,7 @@ function connectionHandler(className) {
 		var next = (connected)?"disconnect":"connect";
 		var emit = className + ":" + next;
 		var cs = $('#cs-' + className)
-		cs.removeClass('connected', 'connecting', 'disconnected', 'disconnecting')
+		cs.removeClass('connected connecting disconnected disconnecting')
 		cs.addClass(next + 'ing')
 
 		console.error ("TOGGLE", className, emit)
