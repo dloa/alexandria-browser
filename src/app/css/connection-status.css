@@ -1,8 +1,10 @@
 .connection-status {
     display: inline-block;
-    width: 15px;
-    height: 15px;
+    width: 10px;
+    height: 10px;
+    margin-left: 10px;
     border-radius: 25px;
+    border: 1px solid darkgray;
     background-color: gray;
 }
 
@@ -11,6 +13,15 @@
     background-color: green;
 }
 
+
+.connection-status.connecting {
+    background-color: orange;
+}
+
 .connection-status.disconnected {
     background-color: red;
+}
+
+.connection-status.disconnecting {
+    background-color: yellow;
 }
