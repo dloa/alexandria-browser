@@ -191,5 +191,119 @@ function connectionHandler(className) {
 	}).unref();
 }
 
+function findInCommonPath (binary){
+	return new Promise (function (accept, reject) {
+		var fs = require('fs'),
+		    path = require('path'),
+		    App  = require("nw.gui").App;
+
+		var commonPath = [
+			App.dataPath,
+			'/usr/bin/',
+			'/usr/local/bin',
+			'~/.local/bin/',
+			'~/bin/',
+		];
+
+		var promises = commonPath.map(function (p) {
+			var f = path.join (p, binary)
+			console.log ('looking for', binary, '@', f)
+			return new Promise (function (accept, reject) {
+				fs.access(f, fs.X_OK, function (err) {
+					console.log(f, err ? 'no access!' : 'can exec');
+					// HACK:xaiki, the native promise's all only
+					// supports agregating accepts, so here we
+					// allways accept and will look at the value
+					// later (in the all function).
+					return err ? accept (false) : accept (f);
+				})
+			})
+		})
+
+		Promise.all(promises)
+			.catch (function (e, v) {
+				/* error */
+				return reject (e);
+			}).then(function (res){
+					/* no error,
+					   false: not found,
+					   url: found something executable
+					*/
+				var bins = _.filter(res, function (v) {
+					return v;
+				})
+
+				console.log (bins)
+				bins.length ? accept (bins.pop()) : reject (false)
+			});
+	})
+}
+
+/* XXX:xaiki this is a really stupid simple lambda */
+function lambda (func, args) {
+	return function () {
+		args = (args instanceof Array)?args:[args]
+		return func.apply(this, args);
+	}
+}
+
+function FindAndStart (bin, args) {
+	return findInCommonPath (bin)
+		.then (function (path) {
+			var CP = require('child_process')
+
+			console.log ('found binary', bin , path);
+			var h = CP.spawn(path, args);
+			h.on ('error', function () {
+				console.log ('error')
+			})
+
+			h.on ('exit', function () {
+				console.log ('exit')
+			})
+
+			h.on ('close', function () {
+				console.log ('close')
+			})
+
+			h.on ('disconnect', function () {
+				console.log ('disconnect')
+			})
+
+			h.on ('message', function () {
+				console.log ('message')
+			})
+
+		}).catch (function () {
+			console.log ('error starting', bin, args);
+		})
+}
+
+function IPFSHandler() {
+	var host = 'http://localhost:4001';
+
+	Promise.resolve($.get(host))
+		.then(function (e) {
+			console.log ('got IPFS runing, do nothing');
+		})
+		.catch (lambda (FindAndStart, ['ipfs', ['daemon']]))
+		.catch (function () {
+			console.log ('no local ipfs binary found, using the default');
+			host = 'http://ipfs.alexandria.media'
+		});
+
+	return host
+}
+
+function LibraryDHandler() {
+	findInCommonPath ('libraryd')
+		.catch (function (e) {
+			console.log ('couldn\'t find libraryd');
+		})
+}
+
 connectionHandler ('ipfs')
 connectionHandler ('libraryd')
+
+IPFSHandler()
+//LibraryDHandler()
