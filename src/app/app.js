@@ -1,3 +1,5 @@
+var _ = require('underscore')
+
 if (location.protocol == 'app:') {
 	var MIN_PERCENTAGE_LOADED = 0.5,
 		MIN_SIZE_LOADED = 10 * 1024 * 1024,
