@@ -255,23 +255,23 @@ function FindAndStart (bin, args) {
 			console.log ('found binary', bin , path);
 			var h = CP.spawn(path, args);
 			h.on ('error', function () {
-				console.log ('error')
+				console.error ('error')
 			})
 
 			h.on ('exit', function () {
-				console.log ('exit')
+				console.error ('exit')
 			})
 
 			h.on ('close', function () {
-				console.log ('close')
+				console.error ('close')
 			})
 
 			h.on ('disconnect', function () {
-				console.log ('disconnect')
+				console.error ('disconnect')
 			})
 
 			h.on ('message', function () {
-				console.log ('message')
+				console.error ('message')
 			})
 
 		}).catch (function () {
