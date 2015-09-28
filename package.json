@@ -29,11 +29,9 @@
     "object-assign": "^2.0.0",
     "osx-release": "^1.1.0",
     "react": "^0.13.1",
-    "react-bootstrap": "^0.20.3",
     "react-retina-image": "^1.1.2",
     "react-router": "^0.13.3",
-    "request": "^2.55.0",
-    "validator": "^3.39.0"
+    "request": "^2.55.0"
   },
   "devDependencies": {
     "babel": "^5.1.10",
