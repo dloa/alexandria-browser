@@ -210,7 +210,7 @@ function findInCommonPath (binary){
 			console.log ('looking for', binary, '@', f)
 			return new Promise (function (accept, reject) {
 				fs.access(f, fs.X_OK, function (err) {
-					console.log(f, err ? 'no access!' : 'can exec');
+					console.log(f, err ? 'no access!' : 'looks good');
 					// HACK:xaiki, the native promise's all only
 					// supports agregating accepts, so here we
 					// allways accept and will look at the value
@@ -274,25 +274,76 @@ function FindAndStart (bin, args) {
 				console.error ('message')
 			})
 
-		}).catch (function () {
-			console.log ('error starting', bin, args);
+		}).catch (function (e) {
+			console.log ('error starting', bin, args, e);
+			throw (e);
 		})
 }
 
 function IPFSHandler() {
+	getIPFSfromIPFS();
+}
+
+function getIPFSfromIPFS() {
+	var App  = require('nw.gui').App,
+	    path = require ('path');
+	var hash = "QmVwmB7kVhGLkasSJmgNxisv5fwtH3bGA3UepiGvG5XTWM/ipfs"
+
+	getIPFShost()
+		.then(function (host) {
+			return getFromIPFS (host, hash, path.join (App.dataPath, "/ipfs"))
+		})
+}
+
+function getIPFShost() {
 	var host = 'http://localhost:4001';
 
-	Promise.resolve($.get(host))
+	return Promise.resolve($.get(host))
 		.then(function (e) {
 			console.log ('got IPFS runing, do nothing');
+			return host;
 		})
-		.catch (lambda (FindAndStart, ['ipfs', ['daemon']]))
+		.catch (function () {
+			return Promise.resolve (FindAndStart ('ipfs', ['daemon']))
+				.then(function () {
+					return host;
+				})
+		})
 		.catch (function () {
 			console.log ('no local ipfs binary found, using the default');
-			host = 'http://ipfs.alexandria.media'
+			return 'http://ipfs.alexandria.media'
 		});
+}
 
-	return host
+function getFromIPFS(host, path, dest) {
+	var progress = require ('request-progress'),
+	    request  = require ('request'),
+	    fs       = require ('fs');
+
+	// Note that the options argument is optional 
+	progress(request(host + '/' + path), {
+		throttle: 2000,  // Throttle the progress event to 2000ms, defaults to 1000ms 
+		delay: 1000      // Only start to emit after 1000ms delay, defaults to 0ms 
+	})
+	.on('progress', function (state) {
+		console.log('received size in bytes', state.received);
+		// The properties bellow can be null if response does not contain 
+		// the content-length header 
+		console.log('total size in bytes', state.total);
+		console.log('percent', state.percent);
+	})
+	.on('error', function (err) {
+		console.error ('err', err)
+		// Do something with err 
+	})
+        .pipe(fs.createWriteStream(dest))
+		.on('error', function (err) {
+			console.error ('err', err)
+		// Do something with err 
+	})
+	.on('close', function (err) {
+		// Saved to doogle.png! 
+	})
 }
 
 function LibraryDHandler() {
