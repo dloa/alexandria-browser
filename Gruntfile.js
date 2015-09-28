@@ -124,12 +124,12 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'images/',
                     src: ['**/*'],
-                    dest: 'build/'
+                    dest: 'build/images/'
                 }, {
                     expand: true,
                     cwd: 'fonts/',
                     src: ['**/*'],
-                    dest: 'build/'
+                    dest: 'build/fonts/'
                 }, {
                     cwd: 'node_modules/',
                     src: Object.keys(packagejson.dependencies).map(function(dep) {
@@ -164,7 +164,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'build/main.css': 'styles/main.less'
+                    'build/css/main.css': 'styles/main.less'
                 }
             }
         },
@@ -180,18 +180,19 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'src/',
                     src: ['**/*.js'],
-                    dest: 'build/',
+                    dest: 'build/js',
                 }]
             }
         },
 
         shell: {
             electron: {
-                command: electron + ' build',
+                command: electron + ' .',
                 options: {
                     async: true,
                     execOptions: {
-                        env: env
+                        env: env,
+                        cwd: 'build'
                     }
                 }
             },

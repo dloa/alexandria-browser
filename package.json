@@ -4,7 +4,7 @@
   "author": "dloa",
   "description": "ΛLΞXΛNDRIΛ Librarian!",
   "homepage": "TBA",
-  "main": "browser.js",
+  "main": "js/browser.js",
   "repository": {
     "type": "git",
     "url": ""
