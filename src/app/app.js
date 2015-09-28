@@ -247,52 +247,56 @@ function lambda (func, args) {
 	}
 }
 
+function runAndMonitor (bin, args) {
+	var CP = require('child_process')
+
+	var h = CP.spawn(bin, args);
+	h.on ('error', function () {
+		console.error ('error')
+	})
+
+	h.on ('exit', function () {
+		console.error ('exit')
+	})
+
+	h.on ('close', function () {
+		console.error ('close')
+	})
+
+	h.on ('disconnect', function () {
+		console.error ('disconnect')
+	})
+
+	h.on ('message', function () {
+		console.error ('message')
+	})
+}
+
 function FindAndStart (bin, args) {
+	// currified version
+	var runAndMonitor0 = function (bin) {
+		return runAndMonitor(bin, args);
+	}
+
 	return findInCommonPath (bin)
-		.then (function (path) {
-			var CP = require('child_process')
-
-			console.log ('found binary', bin , path);
-			var h = CP.spawn(path, args);
-			h.on ('error', function () {
-				console.error ('error')
-			})
-
-			h.on ('exit', function () {
-				console.error ('exit')
-			})
-
-			h.on ('close', function () {
-				console.error ('close')
-			})
-
-			h.on ('disconnect', function () {
-				console.error ('disconnect')
-			})
-
-			h.on ('message', function () {
-				console.error ('message')
-			})
-
-		}).catch (function (e) {
+		.then (runAndMonitor0).catch (function (e) {
 			console.log ('error starting', bin, args, e);
 			throw (e);
-		})
+		});
 }
 
 function IPFSHandler() {
-	getIPFSfromIPFS();
+	var App  = require('nw.gui').App;
+	getFromIPFS("QmVwmB7kVhGLkasSJmgNxisv5fwtH3bGA3UepiGvG5XTWM/ipfs",
+		    path.join (App.dataPath, "/ipfs"))
+		.then(function (path) {
+			console.log ('got from IPFS at', path)
+		})
 }
 
-function getIPFSfromIPFS() {
-	var App  = require('nw.gui').App,
-	    path = require ('path');
-	var hash = "QmVwmB7kVhGLkasSJmgNxisv5fwtH3bGA3UepiGvG5XTWM/ipfs"
-
-	getIPFShost()
-		.then(function (host) {
-			return getFromIPFS (host, hash, path.join (App.dataPath, "/ipfs"))
-		})
+function getFromIPFS(hash, dest) {
+	return getIPFShost()
+		.then(function (host) {return getFromIPFSHost (host, hash, dest)})
 }
 
 function getIPFShost() {
@@ -311,46 +315,39 @@ function getIPFShost() {
 		})
 		.catch (function () {
 			console.log ('no local ipfs binary found, using the default');
-			return 'http://ipfs.alexandria.media'
+			return 'http://ipfs.alexandria.media/ipfs'
 		});
 }
 
-function getFromIPFS(host, path, dest) {
+function getFromIPFSHost (host, path, dest) {
 	var progress = require ('request-progress'),
 	    request  = require ('request'),
 	    fs       = require ('fs');
 
-	// Note that the options argument is optional 
-	progress(request(host + '/' + path), {
-		throttle: 2000,  // Throttle the progress event to 2000ms, defaults to 1000ms 
-		delay: 1000      // Only start to emit after 1000ms delay, defaults to 0ms 
-	})
-	.on('progress', function (state) {
-		console.log('received size in bytes', state.received);
-		// The properties bellow can be null if response does not contain 
-		// the content-length header 
-		console.log('total size in bytes', state.total);
-		console.log('percent', state.percent);
-	})
-	.on('error', function (err) {
-		console.error ('err', err)
-		// Do something with err 
-	})
-        .pipe(fs.createWriteStream(dest))
-		.on('error', function (err) {
-			console.error ('err', err)
-		// Do something with err 
-	})
-	.on('close', function (err) {
-		// Saved to doogle.png! 
+	return new Promise( function (accept, reject) {
+		progress(request(host + '/' + path))
+			.on('progress', function (state) {
+				console.log('received size in bytes', state.received);
+				console.log('total size in bytes', state.total);
+				console.log('percent', state.percent);
+			})
+			.on('error', function (err) {
+				reject (err);
+			})
+			.pipe(fs.createWriteStream(dest))
+			.on('error', function (err) {
+				reject (err);
+			})
+			.on('close', function (err) {
+				accept(dest)
+			})
 	})
 }
 
 function LibraryDHandler() {
-	findInCommonPath ('libraryd')
-		.catch (function (e) {
-			console.log ('couldn\'t find libraryd');
-		})
+	getFromIPFS("QmVwmB7kVhGLkasSJmgNxisv5fwtH3bGA3UepiGvG5XTWM/libraryd",
+		    path.join (App.dataPath, "/libraryd"))
+	.then(lamda ());
 }
 
 connectionHandler ('ipfs')
