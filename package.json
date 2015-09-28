@@ -1,8 +1,8 @@
 {
-  "name": "Alexandria_Librarian",
+  "name": "Alexandria",
   "version": "0.0.1",
   "author": "dloa",
-  "description": "ΛLΞXΛNDRIΛ Librarian!",
+  "description": "ΛLΞXΛNDRIΛ",
   "homepage": "TBA",
   "main": "js/browser.js",
   "repository": {
@@ -15,6 +15,11 @@
     "release": "grunt release"
   },
   "license": "GPL-3.0",
+  "wcjs_prebuilt":{ //this is not parsed for now but will be later.
+    "arch": "ia32",
+    "runtime": "electron",
+    "version": "latest"
+  },
   "electron-version": "0.33.1",
   "dependencies": {
     "alt": "^0.16.2",
@@ -31,7 +36,8 @@
     "react": "^0.13.1",
     "react-retina-image": "^1.1.2",
     "react-router": "^0.13.3",
-    "request": "^2.55.0"
+    "request": "^2.55.0",
+    "wcjs-prebuilt": "^2.0.0"
   },
   "devDependencies": {
     "babel": "^5.1.10",

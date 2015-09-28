@@ -17,7 +17,7 @@ module.exports = function(grunt) {
         return match ? match[1] : null;
     };
 
-    var BASENAME = 'ΛLΞXΛNDRIΛ Librarian';
+    var BASENAME = 'ΛLΞXΛNDRIΛ';
     var APPNAME = BASENAME;
 
     if (alpha) {
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
                     platform: 'darwin',
                     arch: 'x64',
                     asar: true,
-                    'app-bundle-id': 'io.ΛLΞXΛNDRIΛ.Librarian',
+                    'app-bundle-id': 'io.ΛLΞXΛNDRIΛ.Desktop',
                     'app-version': packagejson.version
                 }
             }
