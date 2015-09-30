@@ -235,7 +235,7 @@ function findInCommonPath (binary){
 				})
 
 				console.log (bins)
-				bins.length ? accept (bins.pop()) : reject (false)
+				bins.length ? accept (bins) : reject (false)
 			});
 	})
 }
@@ -271,19 +271,24 @@ function runAndMonitor (bin, args) {
 	h.on ('message', function () {
 		console.error ('message')
 	})
+
+	return h;
 }
 
 function FindAndStart (bin, args) {
-	// currified version
-	var runAndMonitor0 = function (bin) {
-		return runAndMonitor(bin, args);
-	}
-
 	return findInCommonPath (bin)
-		.then (runAndMonitor0).catch (function (e) {
-			console.log ('error starting', bin, args, e);
-			throw (e);
-		});
+		.then(function (bins)  {
+			var bin;
+			while (bins.length) {
+				bin = bins.pop()
+				try {
+					return runAndMonitor(bin, args);
+				} catch (e) {
+					console.log ('error starting', bin, args, e);
+				}
+			}
+			return bin;
+		})
 }
 
 function IPFSHandler() {
