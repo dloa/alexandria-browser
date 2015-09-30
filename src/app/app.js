@@ -342,13 +342,16 @@ function getFromIPFSHost (host, path, dest) {
 				console.log('percent', state.percent);
 			})
 			.on('error', function (err) {
+				console.log ('error', err)
 				reject (err);
 			})
 			.pipe(fs.createWriteStream(dest))
 			.on('error', function (err) {
+				console.log ('error', err)
 				reject (err);
 			})
 			.on('close', function (err) {
+				console.log ('done', err)
 				accept(dest)
 			})
 	})
