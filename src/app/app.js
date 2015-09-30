@@ -195,6 +195,7 @@ function findInCommonPath (binary){
 	return new Promise (function (accept, reject) {
 		var fs = require('fs'),
 		    path = require('path'),
+		    expand = require('expand-home-dir')
 		    App  = require("nw.gui").App;
 
 		var commonPath = [
@@ -206,7 +207,7 @@ function findInCommonPath (binary){
 		];
 
 		var promises = commonPath.map(function (p) {
-			var f = path.join (p, binary)
+			var f = expand(path.join (p, binary))
 			console.log ('looking for', binary, '@', f)
 			return new Promise (function (accept, reject) {
 				fs.access(f, fs.X_OK, function (err) {
@@ -286,10 +287,14 @@ function FindAndStart (bin, args) {
 }
 
 function IPFSHandler() {
-	var App  = require('nw.gui').App;
+	var App  = require('nw.gui').App,
+	    expand = require('expand-home-dir'),
+	    fs = require ('fs');
+
 	getFromIPFS("QmVwmB7kVhGLkasSJmgNxisv5fwtH3bGA3UepiGvG5XTWM/ipfs",
-		    path.join (App.dataPath, "/ipfs"))
+		    expand (path.join ("~/bin/", "ipfs")))
 		.then(function (path) {
+			fs.chmodSync (path, 0770)
 			console.log ('got from IPFS at', path)
 		})
 }
