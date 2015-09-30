@@ -258,16 +258,16 @@ function runAndMonitor (bin, args) {
 		})
 	})
 
-	h.on ('error', function () {
-		console.error ('error')
+	h.on ('error', function (err) {
+		console.error ('error', err)
 	})
 
-	h.on ('exit', function () {
-		console.error ('exit')
+	h.on ('exit', function (code, signal) {
+		console.error ('exit', code, signal)
 	})
 
-	h.on ('close', function () {
-		console.error ('close')
+	h.on ('close', function (code, signal) {
+		console.error ('close', code, signal)
 	})
 
 	h.on ('disconnect', function () {
