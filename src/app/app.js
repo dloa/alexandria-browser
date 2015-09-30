@@ -316,21 +316,24 @@ function getFromIPFS(hash, dest) {
 }
 
 function getIPFShost() {
-	var host = 'http://localhost:4001';
+	var request = require ('request'),
+	    api  = 'http://localhost:5001/api/v0/version',
+	    host = 'http://localhost:8080/ipfs';
 
-	return Promise.resolve($.get(host))
-		.then(function (e) {
-			console.log ('got IPFS runing, do nothing');
+	return Promise.resolve(request({url: api, json: true}))
+		.then(function (data) {
+			console.log ('got IPFS runing, do nothing', data);
 			return host;
 		})
 		.catch (function () {
 			return Promise.resolve (FindAndStart ('ipfs', ['daemon']))
 				.then(function () {
-					return host;
+					return api;
 				})
 		})
 		.catch (function () {
-			console.log ('no local ipfs binary found, using the default');
+			console.log ('no local ipfs binary found,',
+				     'using the web gateway.');
 			return 'http://ipfs.alexandria.media/ipfs'
 		});
 }
