@@ -252,6 +252,12 @@ function runAndMonitor (bin, args) {
 	var CP = require('child_process')
 
 	var h = CP.spawn(bin, args);
+	['stdout', 'stderr'].map (function (channel) {
+		h[channel].on('data', function (data) {
+			console.log (channel, data)
+		})
+	})
+
 	h.on ('error', function () {
 		console.error ('error')
 	})
