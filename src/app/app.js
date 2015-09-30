@@ -344,6 +344,7 @@ function getFromIPFSHost (host, path, dest) {
 	    fs       = require ('fs');
 
 	return new Promise( function (accept, reject) {
+		var ws = fs.createWriteStream(dest);
 		progress(request(host + '/' + path))
 			.on('progress', function (state) {
 				console.log('received size in bytes', state.received);
@@ -354,14 +355,16 @@ function getFromIPFSHost (host, path, dest) {
 				console.log ('error', err)
 				reject (err);
 			})
-			.pipe(fs.createWriteStream(dest))
+			.pipe(ws)
 			.on('error', function (err) {
 				console.log ('error', err)
 				reject (err);
 			})
 			.on('close', function (err) {
-				console.log ('done', err)
-				accept(dest)
+				ws.end(function (err) {
+					console.log ('done', dest)
+					accept(dest)
+				})
 			})
 	})
 }
