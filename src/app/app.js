@@ -254,7 +254,7 @@ function runAndMonitor (bin, args) {
 	var h = CP.spawn(bin, args);
 	['stdout', 'stderr'].map (function (channel) {
 		h[channel].on('data', function (data) {
-			console.log (channel, data)
+			console.log (channel, data.toString())
 		})
 	})
 
