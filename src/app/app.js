@@ -358,6 +358,7 @@ function getFromIPFSHost (host, path, dest) {
 }
 
 function LibraryDHandler() {
+	var App = require ('nw.gui').App;
 	getFromIPFS("QmVwmB7kVhGLkasSJmgNxisv5fwtH3bGA3UepiGvG5XTWM/libraryd",
 		    path.join (App.dataPath, "/libraryd"))
 	.then(lamda ());
