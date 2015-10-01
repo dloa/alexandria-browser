@@ -321,12 +321,23 @@ function getFromIPFS(hash, dest) {
 		.then(function (host) {return getFromIPFSHost (host, hash, dest)})
 }
 
+function requestPromise (confObj) {
+	var request = require ('request');
+
+	return new Promise (function (accept, reject) {
+		request (confObj, function (err, res, data) {
+			if (err)
+				return reject (err)
+			return accept (data)
+		})
+	})
+}
+
 function getIPFShost() {
-	var request = require ('request'),
-	    api  = 'http://localhost:5001/api/v0/version',
+	var api  = 'http://localhost:5001/api/v0/version',
 	    host = 'http://localhost:8080/ipfs';
 
-	return Promise.resolve(request({url: api, json: true}))
+	return requestPromise({url: api, json: true})
 		.then(function (data) {
 			console.log ('got IPFS runing, do nothing', data);
 			return host;
