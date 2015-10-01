@@ -297,12 +297,18 @@ function FindAndStart (bin, args) {
 		})
 }
 
+var IPFSRoot = 'QmekGPX9VMZR8UJ7qKYm8Q9u5kaL2sYTCnDZWRA2xNg3oi';
+
+function unifyArch() {
+	return process.platform + process.arch.replace(/^x/, '');
+}
+
 function IPFSHandler() {
 	var App  = require('nw.gui').App,
 	    expand = require('expand-home-dir'),
 	    fs = require ('fs');
 
-	getFromIPFS("QmVwmB7kVhGLkasSJmgNxisv5fwtH3bGA3UepiGvG5XTWM/ipfs",
+	getFromIPFS([IPFSRoot, unifyArch(), 'ipfs']
 		    expand (path.join ("~/bin/", "ipfs")))
 		.then(function (path) {
 			fs.chmodSync (path, 0770)
