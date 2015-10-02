@@ -178,17 +178,6 @@ function connectionHandler(className) {
 	App.on (className + ":disconnected", function() {
 		console.log (className + " disconnect")
 	})
-
-	var spawn = require('child_process').spawn,
-	    CWD = process.cwd();
-
-	return console.log ('+++++++', CWD)
-
-	spawn(process.execPath, argv, {
-		cwd: CWD,
-		detached: true,
-		stdio: ['ignore', 'ignore', 'ignore']
-	}).unref();
 }
 
 var ADH = require('alexandria-daemon-handler');
