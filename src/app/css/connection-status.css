@@ -4,24 +4,23 @@
     height: 10px;
     margin-left: 10px;
     border-radius: 25px;
-    border: 1px solid darkgray;
-    background-color: gray;
+    border: 1px solid #919191;
+    background-color: #464646
 }
 
 
 .connection-status.connected {
-    background-color: green;
+    background-color: #329345;
 }
 
-
 .connection-status.connecting {
-    background-color: orange;
+    background-color: #e44d26;
 }
 
 .connection-status.disconnected {
-    background-color: red;
+    background-color: #e42226;
 }
 
 .connection-status.disconnecting {
-    background-color: yellow;
+    background-color: #3293ba
 }
