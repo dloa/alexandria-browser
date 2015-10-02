@@ -166,12 +166,6 @@ function checkServiceIsRunning(service, url){
 	});
 }
 
-setInterval (function () {
-	checkServiceIsRunning('ipfs', 'http://localhost:5001/api/v0/version')
-	checkServiceIsRunning('libraryd', 'http://localhost:41289/alexandria/v1/publisher/get/all')
-	checkServiceIsRunning('florincoind', 'http://localhost:41289/alexandria/v1/publisher/get/all')
-}, 1000)
-
 function connectionHandler(className) {
 	var App = require("nw.gui").App;
 	var connected = false;
@@ -212,6 +206,11 @@ function connectionHandler(className) {
 ['ipfs', 'libraryd', 'florincoind'].map (function (service) {
 	connectionHandler (service)
 })
+setInterval (function () {
+	checkServiceIsRunning('ipfs', 'http://localhost:5001/api/v0/version')
+	checkServiceIsRunning('libraryd', 'http://localhost:41289/alexandria/v1/publisher/get/all')
+	checkServiceIsRunning('florincoind', 'http://localhost:41289/alexandria/v1/publisher/get/all')
+}, 1000)
 
 /* 
 var ADH = require('alexandria-daemon-handler');
