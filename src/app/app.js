@@ -170,7 +170,7 @@ setInterval (function () {
 			App.emit('ipfs:disconnected');
 		});
 
-	checkServiceIsRunning('http://localhost:5001/api/v0/version')
+	checkServiceIsRunning('http://localhost:41289/alexandria/v1/publisher/get/all')
 		.then(function () {
 			App.emit('libraryd:connected');
 		}).catch (function () {
@@ -218,7 +218,7 @@ function connectionHandler(className) {
 connectionHandler ('ipfs')
 connectionHandler ('libraryd')
 
-/*
+/* 
 var ADH = require('alexandria-daemon-handler');
 var IPFSHandler     = new ADH('ipfs');
 var LibrarydHandler = new ADH('libraryd');
