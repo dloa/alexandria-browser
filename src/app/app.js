@@ -149,8 +149,9 @@ if (location.protocol == 'app:') {
 	});
 }
 
-function checkServiceIsRunning(url){
-	var request = require ('request');
+function checkServiceIsRunning(service, url){
+	var request = require ('request'),
+	    App = require("nw.gui").App;
 
 	return new Promise (function (accept, reject) {
 		request (url, function (err, res, data) {
@@ -158,24 +159,17 @@ function checkServiceIsRunning(url){
 				return reject (err)
 			return accept (data)
 		})
-	})
+	}).then(function (data) {
+		App.emit(service + ':connected');
+	}).catch (function () {
+		App.emit(service + ':disconnected');
+	});
 }
 
 setInterval (function () {
-	var App = require("nw.gui").App;
-	checkServiceIsRunning('http://localhost:5001/api/v0/version')
-		.then(function (data) {
-			App.emit('ipfs:connected');
-		}).catch (function () {
-			App.emit('ipfs:disconnected');
-		});
-
-	checkServiceIsRunning('http://localhost:41289/alexandria/v1/publisher/get/all')
-		.then(function () {
-			App.emit('libraryd:connected');
-		}).catch (function () {
-			App.emit('libraryd:disconnected');
-		})
+	checkServiceIsRunning('ipfs', 'http://localhost:5001/api/v0/version')
+	checkServiceIsRunning('libraryd', 'http://localhost:41289/alexandria/v1/publisher/get/all')
+	checkServiceIsRunning('florincoind', 'http://localhost:41289/alexandria/v1/publisher/get/all')
 }, 1000)
 
 function connectionHandler(className) {
