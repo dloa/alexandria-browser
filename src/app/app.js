@@ -215,8 +215,9 @@ function connectionHandler(className) {
 	})
 }
 
-connectionHandler ('ipfs')
-connectionHandler ('libraryd')
+['ipfs', 'libraryd', 'florincoind'].map (function (service) {
+	connectionHandler (service)
+})
 
 /* 
 var ADH = require('alexandria-daemon-handler');
