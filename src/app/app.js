@@ -149,17 +149,50 @@ if (location.protocol == 'app:') {
 	});
 }
 
+function checkServiceIsRunning(url){
+	var request = require ('request');
+
+	return new Promise (function (accept, reject) {
+		request (url, function (err, res, data) {
+			if (err)
+				return reject (err)
+			return accept (data)
+		})
+	})
+}
+
+setInterval (function () {
+	var App = require("nw.gui").App;
+	checkServiceIsRunning('http://localhost:5001/api/v0/version')
+		.then(function (data) {
+			App.emit('ipfs:connected');
+		}).catch (function () {
+			App.emit('ipfs:disconnected');
+		});
+
+	checkServiceIsRunning('http://localhost:5001/api/v0/version')
+		.then(function () {
+			App.emit('libraryd:connected');
+		}).catch (function () {
+			App.emit('libraryd:disconnected');
+		})
+}, 1000)
+
 function connectionHandler(className) {
 	var App = require("nw.gui").App;
 	var connected = false;
 
+	function setClassToState(className, state) {
+		var cs = $('#cs-' + className)
+		cs.removeClass('connected connecting disconnected disconnecting')
+		cs.addClass(state)
+	}
+
 	window['toggle' + className.toUpperCase()] =  function (e) {
 		var next = (connected)?"disconnect":"connect";
 		var emit = className + ":" + next;
-		var cs = $('#cs-' + className)
-		cs.removeClass('connected connecting disconnected disconnecting')
-		cs.addClass(next + 'ing')
 
+		setClassToState (className, next + 'ing')
 		console.error ("TOGGLE", className, emit)
 	}
 
@@ -173,19 +206,22 @@ function connectionHandler(className) {
 
 	App.on (className + ":connected", function() {
 		console.log (className + " connect")
+		setClassToState (className, 'connected')
 	})
 
 	App.on (className + ":disconnected", function() {
 		console.log (className + " disconnect")
+		setClassToState (className, 'disconnected')
 	})
 }
 
+connectionHandler ('ipfs')
+connectionHandler ('libraryd')
+
+/*
 var ADH = require('alexandria-daemon-handler');
 var IPFSHandler     = new ADH('ipfs');
 var LibrarydHandler = new ADH('libraryd');
-
-connectionHandler ('ipfs')
-connectionHandler ('libraryd')
 
 IPFSHandler()
 	.then(LibrarydHandler)
@@ -193,3 +229,4 @@ IPFSHandler()
 		console.error('there was a fatal1 issue launching daemons');
 	})
 
+*/
