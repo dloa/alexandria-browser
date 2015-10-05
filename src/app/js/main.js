@@ -848,10 +848,13 @@ function loadArtifactView(objMeta) {
 			$.ajax({
 				url: 'http://localhost:5001/api/v0/version',
 				type: 'GET',
+				dataType: 'JSON',
 				success: function(e) {
+					console.error ("ipfs runing, no paywall")
 					showMedia(mediaType);
 				},
 				error: function (e) {
+					console.error ("ipfs NOT runing, paywall")
 					/* ipfs not running locally */
 					var PWYW = xinfo.pwyw;
 					var pwywSuggUSD = PWYW[0]/100;
