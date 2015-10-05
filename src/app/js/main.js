@@ -876,6 +876,9 @@ function loadArtifactView(objMeta) {
 				})
 				.then (function(pinned) {
 					/* look for file in pinned */
+					if (! pinned.keys[fileHash])
+						throw new Error ('hash not pinned');
+
 					showMedia(mediaType);
 				})
 				.catch (function (e) {
