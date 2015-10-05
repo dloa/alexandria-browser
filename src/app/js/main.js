@@ -776,32 +776,33 @@ function loadArtifactView(objMeta) {
 	if (document.getElementById('sendTipBtn')) {
 		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherID + '", "FLO")');
 	}
-	var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
-	var mediaInfo = thisMediaData[0]['media-data']['alexandria-media']['info'];
-	var mediaPubTime = thisMediaData[0]['media-data']['alexandria-media']['timestamp'];
-	var mediaPubTimeLen = thisMediaData[0]['media-data']['alexandria-media']['timestamp'].toString().length;
+	var media = thisMediaData[0]['media-data']['alexandria-media'];
+	var mediaType = media.type;
+	var mediaInfo = media.info;
+	var mediaPubTime = media.timestamp;
+	var mediaPubTimeLen = mediaPubTime.toString().length;
 	if (mediaPubTimeLen == 10) {
 		mediaPubTime = parseInt(mediaPubTime)*1000;
 	}
 	mediaPubTime  = new Date(parseInt(mediaPubTime));
-	var mediaTitle = mediaInfo['title'];
-	var mediaDesc = mediaInfo['description'];
+	var mediaTitle = mediaInfo.title;
+	var mediaDesc = mediaInfo.description;
 	var mediaRuntime = 0;
 	var mediaArtist = '';
 	var mediaFilename = '';
 	var wwwId = '';
-	var mediaTid = thisMediaData[0]['media-data']['alexandria-media']['torrent'];
-	var mediaFLO = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
-	if(thisMediaData[0]['media-data']['alexandria-media']['payment']) {
-		var mediaPymnt = thisMediaData[0]['media-data']['alexandria-media']['payment'];
+	var mediaTid = media['torrent'];
+	var mediaFLO = media['publisher'];
+	if(media['payment']) {
+		var mediaPymnt = media['payment'];
 	}
 	if ( (!mediaPymnt) || (mediaPymnt == 'none') ) {
 		$('#view-media .tip-icon').hide();
 	}
-	if ((mediaPymnt) && (mediaPymnt['type'] == 'tip')) {
+	if ((mediaPymnt) && (mediaPymnt.type == 'tip')) {
 		$('#view-media .tip-icon').show();
 		$('.tip-amounts li').remove();
-		var tipAmounts = thisMediaData[0]['media-data']['alexandria-media']['payment']['amount'].split(',');
+		var tipAmounts = media.payment.amount.split(',');
 		for (var i = 0; i < tipAmounts.length; i++) {
 			var thisTipAmount = tipAmounts[i]/100;
 			var tipOption = '<li><input type="radio" name="tip-amount" id="tip-option-'+i+'" value="'+ thisTipAmount +'" onclick="changeTipAmount(this);"><label for="tip-option-'+i+'">$'+ thisTipAmount +'</label></li>';
@@ -812,29 +813,30 @@ function loadArtifactView(objMeta) {
 
 	var fileHash = mediaTid;
 	if(mediaInfo['extra-info']){
-		if(mediaInfo['extra-info']['runtime']){
-			mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
+		var xinfo = mediaInfo['extra-info'];
+		if(xinfo.runtime){
+			mediaRuntime = calcRuntime(xinfo.runtime);
 		}
-		if(mediaInfo['extra-info']['artist']){
-			mediaArtist = mediaInfo['extra-info']['artist'];
+		if(xinfo.artist){
+			mediaArtist = xinfo.artist;
 		}						
-		if(mediaInfo['extra-info']['filename']){
-			mediaFilename = mediaInfo['extra-info']['filename'];
+		if(xinfo.filename){
+			mediaFilename = xinfo.filename;
 		}
-		if(mediaInfo['extra-info']['poster']) {
-			var poster = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['poster'];
+		if(xinfo.poster) {
+			var poster = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.poster;
 		}
-		if(mediaInfo['extra-info']['posterFrame']) {
-			var posterFrame = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['posterFrame'];
+		if(xinfo.posterFrame) {
+			var posterFrame = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.posterFrame;
 		}		
-		if(mediaInfo['extra-info']['trailer']) {
-			var trailer = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['trailer'];
+		if(xinfo.trailer) {
+			var trailer = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.trailer;
 		}
-		if(mediaInfo['extra-info']['wwwId']) {
-			wwwId = mediaInfo['extra-info']['wwwId'];
+		if(xinfo.wwwId) {
+			wwwId = xinfo.wwwId;
 		}
-		if(mediaInfo['extra-info']['Bitcoin Address']) {
-			var mediaBTC = mediaInfo['extra-info']['Bitcoin Address'];
+		if(xinfo['Bitcoin Address']) {
+			var mediaBTC = xinfo['Bitcoin Address'];
 		}
 		if (trailer) {
 			$('#trailer-link').attr('data-source',trailer).show();
@@ -842,8 +844,9 @@ function loadArtifactView(objMeta) {
 			$('#trailer-link').attr('data-source',trailer).hide();
 		}
 		// PAY WHAT YOU WANT WALL + MEDIA EMBED
-		if(mediaInfo['extra-info']['pwyw']) {
-			var PWYW = mediaInfo['extra-info']['pwyw'];
+		if(xinfo.pwyw) {
+			debugger;
+			var PWYW = xinfo.pwyw;
 			var pwywSuggUSD = PWYW[0]/100;
 			console.info(pwywSuggUSD);
 			$('.pwyw-wall-amount').val(pwywSuggUSD);
