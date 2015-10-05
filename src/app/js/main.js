@@ -862,7 +862,7 @@ function loadArtifactView(objMeta) {
 			var pwywSuggUSD = PWYW[0]/100;
 			console.info(pwywSuggUSD);
 			$('.pwyw-wall-amount').val(pwywSuggUSD);
-			$('.pwyw-wall-pin').hide();
+//			$('.pwyw-wall-pin').hide();
 
 			IPFS('version')
 				.catch (function (e) {
@@ -871,7 +871,7 @@ function loadArtifactView(objMeta) {
 					showPWYWModal(mediaType, fileHash, mediaFilename);
 				})
 				.then (function () {
-					$('.pwyw-wall-pin').show();
+//					$('.pwyw-wall-pin').show();
 					return IPFS('pin/ls', {type: 'all'})
 				})
 				.then (function(pinned) {
