@@ -845,14 +845,22 @@ function loadArtifactView(objMeta) {
 		}
 		// PAY WHAT YOU WANT WALL + MEDIA EMBED
 		if(xinfo.pwyw) {
-			debugger;
-			var PWYW = xinfo.pwyw;
-			var pwywSuggUSD = PWYW[0]/100;
-			console.info(pwywSuggUSD);
-			$('.pwyw-wall-amount').val(pwywSuggUSD);
-			showPWYWModal(mediaType, fileHash, mediaFilename);
+			$.ajax({
+				url: 'http://localhost:5001/api/v0/version',
+				type: 'GET',
+				success: function(e) {
+					showMedia(mediaType);
+				},
+				error: function (e) {
+					/* ipfs not running locally */
+					var PWYW = xinfo.pwyw;
+					var pwywSuggUSD = PWYW[0]/100;
+					console.info(pwywSuggUSD);
+					$('.pwyw-wall-amount').val(pwywSuggUSD);
+					showPWYWModal(mediaType, fileHash, mediaFilename);
+				}
 		} else {
-			showMedia(mediaType)
+			showMedia(mediaType);
 		}
 	}
 	if (mediaType == 'movie') {
