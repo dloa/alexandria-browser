@@ -858,23 +858,29 @@ function loadArtifactView(objMeta) {
 		}
 		// PAY WHAT YOU WANT WALL + MEDIA EMBED
 		if(xinfo.pwyw) {
-			$.ajax({
-				url: 'http://localhost:5001/api/v0/version',
-				type: 'GET',
-				dataType: 'JSON',
-				success: function(e) {
-					console.error ("ipfs runing, no paywall")
-					showMedia(mediaType);
-				},
-				error: function (e) {
+			var PWYW = xinfo.pwyw;
+			var pwywSuggUSD = PWYW[0]/100;
+			console.info(pwywSuggUSD);
+			$('.pwyw-wall-amount').val(pwywSuggUSD);
+			$('.pwyw-wall-pin').hide();
+
+			IPFS('version')
+				.catch (function (e) {
 					console.error ("ipfs NOT runing, paywall")
 					/* ipfs not running locally */
-					var PWYW = xinfo.pwyw;
-					var pwywSuggUSD = PWYW[0]/100;
-					console.info(pwywSuggUSD);
-					$('.pwyw-wall-amount').val(pwywSuggUSD);
 					showPWYWModal(mediaType, fileHash, mediaFilename);
-				}
+				})
+				.then (function () {
+					$('.pwyw-wall-pin').show();
+					return IPFS('pin/ls', {type: 'all'})
+				})
+				.then (function(pinned) {
+					/* look for file in pinned */
+					showMedia(mediaType);
+				})
+				.catch (function (e) {
+					showPWYWModal(mediaType, fileHash, mediaFilename);
+				})
 		} else {
 			showMedia(mediaType);
 		}
