@@ -707,6 +707,19 @@ function loadMediaEntity(obj) {
 }
 
 function loadArtifactView(objMeta) {
+	function IPFS (cmd, args) {
+		args = args?('?' + args.map(args.keys(), function (k) { return k + '=' args[k]}).join('&')):'';
+		return getJSON('http://localhost:5001/api/v0/' + cmd + args)
+	}
+
+	function getJSON (url) {
+		return Promise.resolve($.ajax({
+			url: url,
+			type: 'GET',
+			dataType: 'JSON'
+		}));
+	}
+
 	function showMedia (mediaType){
 		if (mediaType == 'thing') {
 			if(mediaInfo['extra-info']) {
