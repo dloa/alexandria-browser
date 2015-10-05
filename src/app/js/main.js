@@ -707,6 +707,41 @@ function loadMediaEntity(obj) {
 }
 
 function loadArtifactView(objMeta) {
+	function showMedia (mediaType){
+		if (mediaType == 'thing') {
+			if(mediaInfo['extra-info']) {
+				if(mediaInfo['extra-info']['coverArt']) {
+					fileHash = mediaInfo['extra-info']['coverArt'];
+				}
+			}
+		}
+		if ( (mediaType == 'video') && (wwwId != '') ) {
+			if (!posterFrame) {
+				var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBH_FceJKLSmo0hk9y2zBdZ8ZTmUiNJr8o&part=snippet&id='+ wwwId;
+				$.ajax({
+					url: url,
+					type: 'GET',
+					success: function(e) {
+						var el = $( '#sketchpad' );
+						el.html(e.responseText);
+						var data = $.parseJSON($(el).html());
+						var posterFrame = data['items'][0]['snippet']['thumbnails']['high']['url'];
+						$('.media-embed video').attr('poster',posterFrame);
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						console.error(xhr.status);
+						console.error(thrownError);
+					},
+					async:   false
+				});
+			}
+		}
+		var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename, posterFrame);
+		$('.row.media-embed').html(fileEmbed);
+		if (location.protocol == 'app:') {
+			$('#media-Tid').attr('onclick', 'copyArtifact("http://' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
+		}
+	}
 	document.getElementById('intro').style.display = 'none';
 	$('main').hide();
 	hideOverlay();
@@ -814,39 +849,7 @@ function loadArtifactView(objMeta) {
 			$('.pwyw-wall-amount').val(pwywSuggUSD);
 			showPWYWModal(mediaType, fileHash, mediaFilename);
 		} else {
-			if (mediaType == 'thing') {
-				if(mediaInfo['extra-info']) {
-					if(mediaInfo['extra-info']['coverArt']) {
-						fileHash = mediaInfo['extra-info']['coverArt'];
-					}
-				}
-			}
-			if ( (mediaType == 'video') && (wwwId != '') ) {
-				if (!posterFrame) {
-					var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBH_FceJKLSmo0hk9y2zBdZ8ZTmUiNJr8o&part=snippet&id='+ wwwId;
-					$.ajax({
-						url: url,
-						type: 'GET',
-						success: function(e) {
-							var el = $( '#sketchpad' );
-							el.html(e.responseText);
-							var data = $.parseJSON($(el).html());
-							var posterFrame = data['items'][0]['snippet']['thumbnails']['high']['url'];
-							$('.media-embed video').attr('poster',posterFrame);
-						},
-						error: function (xhr, ajaxOptions, thrownError) {
-							console.error(xhr.status);
-							console.error(thrownError);
-						},
-						async:   false
-					});
-				}
-			}
-			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename, posterFrame);
-			$('.row.media-embed').html(fileEmbed);
-			if (location.protocol == 'app:') {
-				$('#media-Tid').attr('onclick', 'copyArtifact("http://' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
-			}
+			showMedia(mediaType)
 		}
 	}
 	if (mediaType == 'movie') {
