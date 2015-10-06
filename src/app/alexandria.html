@@ -1391,8 +1391,9 @@
 			<h3>Pay What You Want</h3>
 			<div class="tbl">
 				<ul class="modal-tabs">
-					<li name="pwyw-bitcoin">Bitcoin</li>
-					<li name="pwyw-flo">Florincoin</li>
+				    <li name="pwyw-bitcoin">Bitcoin</li>
+				    <li name="pwyw-pin">pin</li>
+				    <li name="pwyw-flo">Florincoin</li>
 				</ul>
 			</div>			
 			<div id="pwyw-bitcoin" class="modal-tab">
@@ -1404,6 +1405,20 @@
 				<div class="row">
 					<a onclick="unlockPWYW(this, 'BTC');" class="btnLightGray">Send Payment</a>
 				</div>
+			</div>
+			<div id="pwyw-pin" class="modal-tab">
+			    <div class="row">
+				<div class="input-container">
+				    <label>$</label>
+				    <span class="pin-usd-output">FREE !</span>
+				</div>
+			    </div>
+			    <div class="row ipfs-running">
+				<a onclick="unlockPWYW(this, 'PIN');" class="btnLightGray">Pin this file on your IPFS install to access for free !</a>
+			    </div>
+			    <div class="row ipfs-not-running">
+				<a onclick="unlockPWYW(this, 'PIN');" class="btnLightGray">Install IPFS and PIN this file to access for free !</a>
+			    </div>
 			</div>
 			<div id="pwyw-flo" class="modal-tab">
 				<div class="row">

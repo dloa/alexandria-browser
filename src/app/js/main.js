@@ -868,9 +868,13 @@ function loadArtifactView(objMeta) {
 				.catch (function (e) {
 					console.error ("ipfs NOT runing, paywall")
 					/* ipfs not running locally */
+					$('.ipfs-running').hide()
+					$('.ipfs-not-running').show()
 					showPWYWModal(mediaType, fileHash, mediaFilename);
 				})
 				.then (function () {
+					$('.ipfs-running').show()
+					$('.ipfs-not-running').hide()
 //					$('.pwyw-wall-pin').show();
 					return IPFS('pin/ls', {type: 'all'})
 				})
