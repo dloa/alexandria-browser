@@ -65,8 +65,8 @@ module.exports = function (grunt) {
 	grunt.registerTask('build', [
 		'injectgit',
 		'bower_clean',
-		'shell:goget',
-		'shell:goinstall',
+//		'shell:goget',
+//		'shell:goinstall',
 		'nodewebkit',
 		'shell:setexecutable'
 	]);
