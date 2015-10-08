@@ -67,6 +67,7 @@
              left: -9999px;
          }
          .tabs label {
+             background-repeat: none;
              height: 100px;
              width: 100px;
              display: block;
@@ -83,8 +84,21 @@
              cursor: pointer;
              position: relative;
          }
+
+         .tabs label[for^="tab-pin"] {
+             background: url("svg/paywall-pin.svg");
+         }
+
+         .tabs label[for^="tab-btc"] {
+             background: url("svg/paywall-btc.svg");
+         }
+
+         .tabs label[for^="tab-flo"] {
+             background: url("svg/paywall-flo.svg");
+         }
+
          .tabs label:hover {
-             background: lightblue;
+             background-color: lightblue;
          }
          .tabs .tab-content {
              z-index: 2;

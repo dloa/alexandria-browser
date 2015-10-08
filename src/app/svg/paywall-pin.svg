@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="66px" height="66px" viewBox="0 0 66 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12081) - http://www.bohemiancoding.com/sketch -->
+    <title>icons/paywall-pin</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Desktop-HD-Copy" sketch:type="MSArtboardGroup" transform="translate(-461.000000, -291.000000)">
+            <g id="icons/paywall-pin" sketch:type="MSLayerGroup" transform="translate(461.000000, 291.000000)">
+                <path d="M33,66 C14.8,66 0,51.2 0,33 C0,14.8 14.8,0 33,0 C51.2,0 66,14.8 66,33 C66,51.2 51.2,66 33,66 L33,66 Z M33,2 C15.9,2 2,15.9 2,33 C2,50.1 15.9,64 33,64 C50.1,64 64,50.1 64,33 C64,15.9 50.1,2 33,2 L33,2 Z" id="stream-copy" fill="#000000" sketch:type="MSShapeGroup"></path>
+                <path d="M28.6746507,38.1903954 C27.6242067,36.0443744 29.3457432,32.6664931 29.3457432,32.6664931 L23.7971143,24.9503093 C23.7971143,24.9503093 20.1132808,24.5735604 18.9802407,24.129902 C21.7740502,21.1508414 24.6598954,18.2649963 27.638661,15.4711867 C28.0616704,16.5803329 28.4593633,20.2140189 28.4593633,20.2140189 L36.1015057,25.8369842 C36.1015057,25.8369842 39.5168501,24.088604 41.6994493,25.1658917 C40.2377952,26.9113221 36.4398543,30.5735696 36.4398543,30.5735696 C36.4398543,30.5735696 43.2483671,38.5000782 47.0197593,43.5107053 C42.134502,39.6637977 34.15637,32.9310953 34.15637,32.9310953 C34.15637,32.9310953 30.4566593,36.7411306 28.6746507,38.1903954 Z" id="Shape" stroke="#000000" stroke-width="2" sketch:type="MSShapeGroup" transform="translate(33.000000, 29.490946) scale(-1, 1) rotate(45.000000) translate(-33.000000, -29.490946) "></path>
+            </g>
+        </g>
+    </g>
+</svg>
