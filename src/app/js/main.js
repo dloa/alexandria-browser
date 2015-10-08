@@ -1,10 +1,12 @@
 /* some global variables to make mistakes only once */
 
-var libraryDHost = '54.172.28.195'; // Dev
-// var libraryDHost = 'localhost';
+if (! librarydHost)
+	librarydHost = 'libraryd.alexandria.media'; // Dev
+// var librarydHost = 'localhost';
 
-var IPFSserver = 'ipfs.alexandria.media';
-// var IPFSserver = 'localhost:8080';
+if (! ipfsHost)
+	ipfsHost = 'ipfs.alexandria.media';
+// var ipfsHost = 'localhost:8080';
 
 
 if (location.protocol == 'app:') {
@@ -175,38 +177,38 @@ jQuery(document).ready(function($){
 	});
 
 	// API Server ID and Control
-	if(libraryDHost == '54.172.28.195'){
+	if(librarydHost == '54.172.28.195'){
 		$('#serverID').text('Gateway');
 	} else {
 		$('#serverID').text('Local');
 	}
 	if (location.protocol == 'app:') {
 		$('#serverID').click(function(){
-			if(libraryDHost == '54.172.28.195'){
-				libraryDHost = 'localhost';
-				IPFSserver = 'localhost:8080';
+			if(librarydHost == '54.172.28.195'){
+				librarydHost = 'localhost';
+				ipfsHost = 'localhost:8080';
 				$('#serverID').text('Local');
 			} else {
-				libraryDHost = '54.172.28.195'
-				IPFSserver = 'ipfs.alexandria.media';
+				librarydHost = '54.172.28.195'
+				ipfsHost = 'ipfs.alexandria.media';
 				$('#serverID').text('Gateway');
 			}
 			setMediaTypeFilter();
-			console.log(libraryDHost);
-			console.log(IPFSserver);
+			console.log(librarydHost);
+			console.log(ipfsHost);
 		});
 	} else {
-		if (IPFSserver == 'ipfs.alexandria.media') {
+		if (ipfsHost == 'ipfs.alexandria.media') {
 			$('#IPFS-switch').text('IPFS: Gateway');
 		} else {
 			$('#IPFS-switch').text('IPFS: Local');
 		}
 		$('#IPFS-switch').click(function(){
-			if(IPFSserver == 'ipfs.alexandria.media'){
-				IPFSserver = 'localhost:8080';
+			if(ipfsHost == 'ipfs.alexandria.media'){
+				ipfsHost = 'localhost:8080';
 				$('#IPFS-switch').text('IPFS: Local');
 			} else {
-				IPFSserver = 'ipfs.alexandria.media';
+				ipfsHost = 'ipfs.alexandria.media';
 				$('#IPFS-switch').text('IPFS: Gateway');
 			}
 			setMediaTypeFilter();
@@ -531,7 +533,7 @@ function getAllPublishers() {
 	$('.view-publishers-ui').hide();
 	console.log('loadRecentMedia() publisher/get/all ...');
 	$.ajax({
-		url: 'http://'+libraryDHost+':41289/alexandria/v1/publisher/get/all',
+		url: 'http://'+librarydHost+':41289/alexandria/v1/publisher/get/all',
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
@@ -752,7 +754,7 @@ function loadArtifactView(objMeta) {
 		var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename, posterFrame);
 		$('.row.media-embed').html(fileEmbed);
 		if (location.protocol == 'app:') {
-			$('#media-Tid').attr('onclick', 'copyArtifact("http://' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
+			$('#media-Tid').attr('onclick', 'copyArtifact("http://' + ipfsHost + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
 		}
 	}
 	document.getElementById('intro').style.display = 'none';
@@ -837,13 +839,13 @@ function loadArtifactView(objMeta) {
 			mediaFilename = xinfo.filename;
 		}
 		if(xinfo.poster) {
-			var poster = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.poster;
+			var poster = 'http://' + ipfsHost + '/ipfs/'+ fileHash +'/'+ xinfo.poster;
 		}
 		if(xinfo.posterFrame) {
-			var posterFrame = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.posterFrame;
+			var posterFrame = 'http://' + ipfsHost + '/ipfs/'+ fileHash +'/'+ xinfo.posterFrame;
 		}		
 		if(xinfo.trailer) {
-			var trailer = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.trailer;
+			var trailer = 'http://' + ipfsHost + '/ipfs/'+ fileHash +'/'+ xinfo.trailer;
 		}
 		if(xinfo.wwwId) {
 			wwwId = xinfo.wwwId;
@@ -971,22 +973,22 @@ function embedArtifact(mediaType, fileHash, mediaFilename, posterFrame) {
 			var posterFrame = '';
 		}
 //		if (location.protocol == 'app:') {
-//			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+//			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + ipfsHost +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 //		} else {
-			var embedCode = '<video controls="controls" poster="'+ posterFrame +'"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /><param name="autoplay" value="true" /></video>';	
+			var embedCode = '<video controls="controls" poster="'+ posterFrame +'"><source src="http://' + ipfsHost +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /><param name="autoplay" value="true" /></video>';
 //		}
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
 // 		if (location.protocol == 'app:') {
-//			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="100px" />';
+//			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + ipfsHost +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="100px" />';
 //		} else {
-			var embedCode = '<audio controls="controls"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="audio/mp3" /></audio>';
+			var embedCode = '<audio controls="controls"><source src="http://' + ipfsHost +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="audio/mp3" /></audio>';
 //		}
 	} else if (mediaType == 'book') {
-		var embedCode = '<object data="http://' + IPFSserver +'/ipfs/'+ fileHash + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="http://' + IPFSserver +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
+		var embedCode = '<object data="http://' + ipfsHost +'/ipfs/'+ fileHash + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="http://' + ipfsHost +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
 	} else if (mediaType == 'recipe') {
-		var embedCode = '<object data="http://' + IPFSserver +'/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
+		var embedCode = '<object data="http://' + ipfsHost +'/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
 	} else if (mediaType == 'thing') {
-		var embedCode = '<img src="http://' + IPFSserver +'/ipfs/'+fileHash+'" class="large-poster" />';
+		var embedCode = '<img src="http://' + ipfsHost +'/ipfs/'+fileHash+'" class="large-poster" />';
 	}
 	return embedCode;
 }
@@ -995,7 +997,7 @@ function changeAudioTrack(obj) {
 	var audioPlayer = $('audio:visible');
 	var fileHash = $('audio:visible source').attr('src').split('/')[4];
 	var trackFile = $(obj).text();
-	$('audio:visible source').attr('src', 'http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(trackFile));
+	$('audio:visible source').attr('src', 'http://' + ipfsHost +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(trackFile));
 	audioPlayer.load();
 }
 
@@ -1296,7 +1298,7 @@ function searchAPI(module, searchOn, searchFor) {
 	$('#browse-media-wrap .row').remove();
 	$.ajax({
 		type: "POST",
-		url: 'http://'+ libraryDHost +':41289/alexandria/v1/search',
+		url: 'http://'+ librarydHost +':41289/alexandria/v1/search',
 		data: queryString.toString(),
 		success: function (e) {
 			mediaData = $.parseJSON(e).response;
@@ -2122,7 +2124,7 @@ function deactivateMedia(obj) {
 	var signature;
 	var stopError = 0;
 	$.ajax({
-	    url: 'http://'+ libraryDHost +':41289/alexandria/v1/sign',
+	    url: 'http://'+ librarydHost +':41289/alexandria/v1/sign',
 	    type: 'POST',
 		data: sigQueryString.toString(),
 	    success: function(e) {
@@ -2165,7 +2167,7 @@ function deactivateMedia(obj) {
 	console.info(queryString);
 	if (window.confirm('Deactivate Artifact?')) { 
 		$.ajax({
-		    url: 'http://'+ libraryDHost +':41289/alexandria/v1/send',
+		    url: 'http://'+ librarydHost +':41289/alexandria/v1/send',
 		    type: 'POST',
 			data: queryString.toString(),
 		    success: function(e) {
@@ -2469,7 +2471,7 @@ function postMedia(tipAlexandria) {
 		var signature;
 		var stopError = 0;
 		$.ajax({
-		    url: 'http://'+ libraryDHost +':41289/alexandria/v1/sign',
+		    url: 'http://'+ librarydHost +':41289/alexandria/v1/sign',
 		    type: 'POST',
 			data: sigQueryString.toString(),
 		    success: function(e) {
@@ -2574,7 +2576,7 @@ function postMedia(tipAlexandria) {
 		var FLOAccount = $('#newMediaPublisherFLO option:selected').html();
 		if (window.confirm('Publish Artifact using '+ FLOAccount +' : '+ FLOadd +'?')) { 
 			$.ajax({
-			    url: 'http://'+ libraryDHost +':41289/alexandria/v1/send',
+			    url: 'http://'+ librarydHost +':41289/alexandria/v1/send',
 			    type: 'POST',
 				data: queryString.toString(),
 			    success: function(e) {
@@ -2670,7 +2672,7 @@ function loadAboutView() {
 	document.getElementById('search').style.display = 'block';
 	document.getElementById('about').style.display = 'block';
 	$('#about #video-embed video').remove();
-	$('#about #video-embed').append('<video controls="controls" poster="https://i.ytimg.com/vi/z_u-ndscZjY/hqdefault.jpg"><source src="http://' + IPFSserver +'/ipfs/QmUbsjbjkRu41JqiyAhq61inUpDSB8uMHsTkdtbHg2jYmv/" type="video/mp4"></video>');
+	$('#about #video-embed').append('<video controls="controls" poster="https://i.ytimg.com/vi/z_u-ndscZjY/hqdefault.jpg"><source src="http://' + ipfsHost +'/ipfs/QmUbsjbjkRu41JqiyAhq61inUpDSB8uMHsTkdtbHg2jYmv/" type="video/mp4"></video>');
 	var stateObj = {
 		currentView: 'about'
 	}
@@ -2781,7 +2783,7 @@ function getBalance(obj, client) {
 	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
 /*
 	$.ajax({
-		url: 'http://'+libraryDHost+':41289/alexandria/v1/wallet/getbalance',
+		url: 'http://'+librarydHost+':41289/alexandria/v1/wallet/getbalance',
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
