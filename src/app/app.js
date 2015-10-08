@@ -203,14 +203,18 @@ function connectionHandler(className) {
 	})
 }
 
-['ipfs', 'libraryd', 'florincoind'].map (function (service) {
+var deamons = {
+	'ipfs': 'http://localhost:5001/api/v0/version',
+	'libraryd': 'http://localhost:41289/alexandria/v1/publisher/get/all',
+	'florincoin': 'http://localhost:41289/alexandria/v1/publisher/get/all'
+};
+
+Object.keys(deamons).map (function (service) {
 	connectionHandler (service)
+	setInterval (function () {
+		checkServiceIsRunning(service, deamons[service])
+	}, 1000)
 })
-setInterval (function () {
-	checkServiceIsRunning('ipfs', 'http://localhost:5001/api/v0/version')
-	checkServiceIsRunning('libraryd', 'http://localhost:41289/alexandria/v1/publisher/get/all')
-	checkServiceIsRunning('florincoind', 'http://localhost:41289/alexandria/v1/publisher/get/all')
-}, 1000)
 
 /* 
 var ADH = require('alexandria-daemon-handler');
