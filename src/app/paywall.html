@@ -108,6 +108,15 @@
          .tabs [id^="tab"]:checked + label {
              background: lightcyan;
          }
+         .tabs [id^="tab"]:checked + label:before {
+             content: ".";
+             border: 20px solid;
+             border-color: transparent transparent #612e76 transparent;
+             position: absolute;
+             bottom: -22px;
+             right: 34px;
+
+         }
          .tabs [id^="tab"]:checked ~ [id^="tab-content"] {
              display: block;
          }
