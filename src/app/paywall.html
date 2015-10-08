@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="utf-8" />
+        <script type="javascript">
+         (setq httpd-port 8001)
+        </script>
+
+        <style>
+
+         .overlay-modal {
+             //	display: none;
+             background-color: rgba(220, 220, 220, .9);
+             border-radius: 10px;
+	     position: fixed;
+	     width: 60%;
+	     top: 100px;
+	     left: 20%;
+	     z-index: 500;
+	     padding: 2.25em;
+	     box-sizing: border-box;
+	     border: 1px solid #979797;
+	     box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+	     -moz-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+	     -webkit-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+         }
+
+         ul.modal-tabs {
+             padding: 0px;
+             display: flex;
+             flex-pack: center;
+             flex-wrap: nowrap;
+             justify-content: space-around;
+         }
+
+         .modal-tabs li {
+             height: 100px;
+             width: 100px;
+             display: block;
+             border: 2px solid black;
+             border-radius: 100px;
+             padding: 5px;
+             margin: 20px;
+             transition: all 1s;
+         }
+
+         .modal-tabs li:hover {
+             background-color: lightblue;
+         }
+        </style>
+    </head>
+    <body>
+        <div id="pwyw-modal" class="overlay-modal">
+            <h3>Pay What You Want</h3>
+            <div class="tbl">
+	        <ul class="modal-tabs">
+	            <li name="pwyw-bitcoin">Bitcoin</li>
+	            <li name="pwyw-pin">pin</li>
+	            <li name="pwyw-flo">Florincoin</li>
+	        </ul>
+            </div>			
+            <div id="pwyw-bitcoin" class="modal-tab">
+	        <div class="row">
+	            <div class="input-container">
+		        <label>$</label><input type="text" name="PWYW Amount" id="pwyw-btc-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="btc-usd-output"></span> BTC
+	            </div>
+	        </div>
+	        <div class="row">
+	            <a onclick="unlockPWYW(this, 'BTC');" class="btnLightGray">Send Payment</a>
+	        </div>
+            </div>
+            <div id="pwyw-pin" class="modal-tab">
+	        <div class="row">
+	            <div class="input-container">
+		        <label>$</label>
+		        <span class="pin-usd-output">FREE !</span>
+	            </div>
+	        </div>
+	        <div class="row ipfs-running">
+	            <a onclick="unlockPWYW(this, 'PIN');" class="btnLightGray">Pin this file on your IPFS install to access for free !</a>
+	        </div>
+	        <div class="row ipfs-not-running">
+	            <a onclick="unlockPWYW(this, 'PIN');" class="btnLightGray">Install IPFS and PIN this file to acc</a>
+	        </div>
+            </div>
+            <div id="pwyw-flo" class="modal-tab">
+	        <div class="row">
+	            <div class="input-container">
+		        <label>$</label><input type="text" name="PWYW Amount" id="pwyw-flo-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="flo-usd-output"></span> FLO
+	            </div>
+	        </div>
+	        <div class="row">
+	            <a onclick="unlockPWYW(this, 'FLO');" class="btnLightGray">Send Payment</a>
+	        </div>
+            </div>
+        </div>
+        <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
+</p>
+        <p>
+        Vivamus fermentum semper porta. Nunc diam velit, adipiscing ut tristique vitae, sagittis vel odio. Maecenas convallis ullamcorper ultricies. Curabitur ornare, ligula semper consectetur sagittis, nisi diam iaculis velit, id fringilla sem nunc vel mi. Nam dictum, odio nec pretium volutpat, arcu ante placerat erat, non tristique elit urna et turpis. Quisque mi metus, ornare sit amet fermentum et, tincidunt et orci. Fusce eget orci a orci congue vestibulum. Ut dolor diam, elementum et vestibulum eu, porttitor vel elit. Curabitur venenatis pulvinar tellus gravida ornare. Sed et erat faucibus nunc euismod ultricies ut id justo. Nullam cursus suscipit nisi, et ultrices justo sodales nec. Fusce venenatis facilisis lectus ac semper. Aliquam at massa ipsum. Quisque bibendum purus convallis nulla ultrices ultricies. Nullam aliquam, mi eu aliquam tincidunt, purus velit laoreet tortor, viverra pretium nisi quam vitae mi. Fusce vel volutpat elit. Nam sagittis nisi dui.
+</p>
+        <p>
+        Suspendisse lectus leo, consectetur in tempor sit amet, placerat quis neque. Etiam luctus porttitor lorem, sed suscipit est rutrum non. Curabitur lobortis nisl a enim congue semper. Aenean commodo ultrices imperdiet. Vestibulum ut justo vel sapien venenatis tincidunt. Phasellus eget dolor sit amet ipsum dapibus condimentum vitae quis lectus. Aliquam ut massa in turpis dapibus convallis. Praesent elit lacus, vestibulum at malesuada et, ornare et est. Ut augue nunc, sodales ut euismod non, adipiscing vitae orci. Mauris ut placerat justo. Mauris in ultricies enim. Quisque nec est eleifend nulla ultrices egestas quis ut quam. Donec sollicitudin lectus a mauris pulvinar id aliquam urna cursus. Cras quis ligula sem, vel elementum mi. Phasellus non ullamcorper urna.
+        </p>
+        <p>
+            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In euismod ultrices facilisis. Vestibulum porta sapien adipiscing augue congue id pretium lectus molestie. Proin quis dictum nisl. Morbi id quam sapien, sed vestibulum sem. Duis elementum rutrum mauris sed convallis. Proin vestibulum magna mi. Aenean tristique hendrerit magna, ac facilisis nulla hendrerit ut. Sed non tortor sodales quam auctor elementum. Donec hendrerit nunc eget elit pharetra pulvinar. Suspendisse id tempus tortor. Aenean luctus, elit commodo laoreet commodo, justo nisi consequat massa, sed vulputate quam urna quis eros. Donec vel.
+        </p>
+    </body>
+</html>
+
+

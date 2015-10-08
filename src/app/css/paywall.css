@@ -1,0 +1,178 @@
+body {
+    background-image: linear-gradient(-180deg, #BCF496 0%, #94CA77 100%);
+    border: 1px solid #518D3B;
+    box-shadow: inset 2px 0px 0px 0px rgba(255,255,255,0.20), inset -2px 0px 0px 0px rgba(255,255,255,0.20), inset 0px -2px 0px 0px rgba(255,255,255,0.35), inset 0px 2px 0px 0px rgba(255,255,255,0.35);
+    border-radius: 1px;
+}
+
+.exchange-wrap label, #pwyw-modal label, #pwyw-wall-amount {
+	margin-right: .5em;
+}
+
+#tip-modal .modal-tab .row:first-of-type {
+	display: none;
+}
+#tip-comment {
+	width: 80%;
+	margin-bottom: 1em;
+	text-align: left;
+}
+.tip-amounts label, .bubble-modal h3, .crypto-price, .credebit-price, .bubble-modal .btnLightGray {
+	color: #919191;
+}
+#tip-QR, #BTC-tip-QR {
+	display: inline-block;
+	margin: 1em auto 0;
+	cursor: pointer;
+	width: 100px;
+	height: 100px;
+}
+.bubble-modal h3 {
+	font-weight: bold;
+}
+#tip-modal ul, #tip-modal ul li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	white-space: nowrap;
+}
+#tip-modal ul {
+  padding: 0 .75em;
+}
+#tip-modal ul li {
+	display: inline-block;
+	margin: 0 .5em;
+}
+#tip-modal li input[type="radio"] {
+	margin: 0 4px 0 0;
+	top: -2px;
+	position: relative;
+}
+#tip-modal .tbl, #pwyw-modal .tbl {
+	width: 100%;
+	margin: .5em 0;
+}
+
+.tip-input {
+	margin-left: .2em;
+	color: #444444;
+}
+.entity-view .entity-meta-header .bubble-modal#tip-modal .selectable {
+  margin: 0;
+}
+#tip-modal .modal-tab .btnLightGray {
+	margin-bottom: 1em;
+}
+#tip-modal .modal-tab p, #pwyw-modal .modal-tab p, #share-title, .info-modal p, .entity-meta-content, #info-modal-small {
+	line-height: 1.4;
+	color: #919191;
+	font-size: .9em;
+}
+.info-modal .entity-meta-content, .info-modal .media-desc {
+	margin-top: 1em;
+}
+.entity-view .entity-meta-content {
+	clear: left;
+}
+#tip-modal .modal-tab p, #pwyw-modal .modal-tab p {
+	margin: 0;
+	padding: 0 10px;
+}
+/* QR CODES */
+#wallet-request-qr {
+	text-align: center;
+}
+#wallet-request-qr a {
+	display: inline-block;
+}
+#qrcode {
+	background: #d8d8d8;
+	width: 64px;
+	height: 64px;
+	margin: 1em auto 0;
+	padding: 1em;
+	border-radius: 100%;
+	cursor: pointer;
+	display: block;
+}
+#qrcode span {
+	display: inline-block;
+}
+#qrcode img {
+	width: 100%;
+	height: auto;
+}
+/* CLOSE MODAL */
+.close-modal {
+	color: #fff;
+	position: absolute;
+	top: 1em;
+	right: 1em;
+	cursor: pointer;
+	font-weight: bold;
+	background-color: #222;
+	background-color: rgba(20,20,20,.1);
+	border: 1px solid transparent;
+	line-height: .5;
+	padding: .5em;
+	border-radius: 100%;
+	font-size: 1.25em;
+}
+.close-modal:hover {
+	background-color: #111;
+	background-color: rgba(0,0,0,.2);
+	border: 1px solid #222;
+	border: 1px solid rgba(20,20,20,.1);
+}
+/* OVERLAY MODAL */
+.overlay-modal {
+//	display: none;
+	position: fixed;
+	width: 60%;
+	top: 100px;
+	left: 20%;
+	z-index: 500;
+	background: none #fff;
+	padding: 2.25em;
+	box-sizing: border-box;
+	border: 1px solid #979797;
+	box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+	-moz-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+	-webkit-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+}
+.overlay-modal * {
+	vertical-align: middle;
+}
+#wallet-connect-currency {
+	vertical-align: baseline;
+}
+.overlay-modal .input-container {
+	margin: 1em 0;
+}
+.overlay-modal input {
+	margin: 1em 0 0;
+}
+#tip-alexandria-modal .input-container input, #pwyw-modal .input-container input {
+	width: 5em;
+	margin-top: 0;
+}
+#tip-alexandria-modal *, #pwyw-modal * {
+	text-align: center;
+}
+.overlay-modal .col {
+	padding-bottom: .5em;
+}
+.overlay-modal .col:first-of-type {
+	text-align: right;
+	padding-right: 1em;
+	width: 170px;
+}
+.overlay-modal label {
+	display: inline;
+	vertical-align: middle;
+}
+.overlay-modal .row {
+	width: 100%;
+	float: none;
+	margin: 1em 0 ;
+}
