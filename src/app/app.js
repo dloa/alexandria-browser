@@ -166,9 +166,22 @@ function checkServiceIsRunning(service, url){
 	});
 }
 
-function connectionHandler(className) {
+function connectionHandler(service, config) {
 	var App = require("nw.gui").App;
 	var connected = false;
+
+	if (! App.services) {
+		App.services = {}
+	} else {
+		if (App.services[service]) {
+			clearInterval (App.services[service])
+		}
+
+	}
+
+	App.services[service] = setInterval (function () {
+		checkServiceIsRunning(service, config.testUrl)
+	}, 1000)
 
 	function setClassToState(className, state) {
 		var cs = $('#cs-' + className)
@@ -176,44 +189,57 @@ function connectionHandler(className) {
 		cs.addClass(state)
 	}
 
-	window['toggle' + className.toUpperCase()] =  function (e) {
+	window['toggle' + service.toUpperCase()] =  function (e) {
 		var next = (connected)?"disconnect":"connect";
-		var emit = className + ":" + next;
+		var emit = service + ":" + next;
 
-		setClassToState (className, next + 'ing')
-		console.error ("TOGGLE", className, emit)
+		setClassToState (service, next + 'ing')
+		console.error ("TOGGLE", service, emit)
 	}
 
-	App.on (className + ":connect", function() {
+	App.on (service + ":connect", function() {
 		debugger;
 	})
 
-	App.on (className + ":disconnect", function() {
+	App.on (service + ":disconnect", function() {
 		debugger;
 	})
 
-	App.on (className + ":connected", function() {
-		console.log (className + " connect")
-		setClassToState (className, 'connected')
+	App.on (service + ":connected", function() {
+		console.log (service + " connect")
+		setClassToState (service, 'connected')
+		if (config.upHost) {
+			window[service + 'Host'] = config.upHost;
+		}
 	})
 
-	App.on (className + ":disconnected", function() {
-		console.log (className + " disconnect")
-		setClassToState (className, 'disconnected')
+	App.on (service + ":disconnected", function() {
+		console.log (service + " disconnect")
+		setClassToState (service, 'disconnected')
+		if (config.downHost) {
+			window[service + 'Host'] = config.downHost;
+		}
 	})
 }
 
 var deamons = {
-	'ipfs': 'http://localhost:5001/api/v0/version',
-	'libraryd': 'http://localhost:41289/alexandria/v1/publisher/get/all',
-	'florincoin': 'http://localhost:41289/alexandria/v1/publisher/get/all'
+	'ipfs': {
+		testUrl: 'http://localhost:5001/api/v0/version',
+		upHost: 'localhost:5001',
+		downHost: 'ipfs.alexandria.media'
+	},
+	'libraryd':  {
+		testUrl: 'http://localhost:41289/alexandria/v1/publisher/get/all',
+		upHost: 'localhost',
+		downHost: 'libraryd.alexandria.media'
+	},
+	'florincoin': {
+		testUrl: 'http://localhost:41289/alexandria/v1/publisher/get/all'
+	}
 };
 
 Object.keys(deamons).map (function (service) {
-	connectionHandler (service)
-	setInterval (function () {
-		checkServiceIsRunning(service, deamons[service])
-	}, 1000)
+	connectionHandler (service, daemons[service])
 })
 
 /* 
