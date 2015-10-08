@@ -1,7 +1,7 @@
 /* some global variables to make mistakes only once */
 
-var serverAddress = '54.172.28.195'; // Dev
-// var serverAddress = 'localhost';
+var libraryDHost = '54.172.28.195'; // Dev
+// var libraryDHost = 'localhost';
 
 var IPFSserver = 'ipfs.alexandria.media';
 // var IPFSserver = 'localhost:8080';
@@ -175,24 +175,24 @@ jQuery(document).ready(function($){
 	});
 
 	// API Server ID and Control
-	if(serverAddress == '54.172.28.195'){
+	if(libraryDHost == '54.172.28.195'){
 		$('#serverID').text('Gateway');
 	} else {
 		$('#serverID').text('Local');
 	}
 	if (location.protocol == 'app:') {
 		$('#serverID').click(function(){
-			if(serverAddress == '54.172.28.195'){
-				serverAddress = 'localhost';
+			if(libraryDHost == '54.172.28.195'){
+				libraryDHost = 'localhost';
 				IPFSserver = 'localhost:8080';
 				$('#serverID').text('Local');
 			} else {
-				serverAddress = '54.172.28.195'
+				libraryDHost = '54.172.28.195'
 				IPFSserver = 'ipfs.alexandria.media';
 				$('#serverID').text('Gateway');
 			}
 			setMediaTypeFilter();
-			console.log(serverAddress);
+			console.log(libraryDHost);
 			console.log(IPFSserver);
 		});
 	} else {
@@ -531,7 +531,7 @@ function getAllPublishers() {
 	$('.view-publishers-ui').hide();
 	console.log('loadRecentMedia() publisher/get/all ...');
 	$.ajax({
-		url: 'http://'+serverAddress+':41289/alexandria/v1/publisher/get/all',
+		url: 'http://'+libraryDHost+':41289/alexandria/v1/publisher/get/all',
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
@@ -889,7 +889,7 @@ function loadArtifactView(objMeta) {
 					showPWYWModal(mediaType, fileHash, mediaFilename);
 				})
 		} else {
-			showMedia(mediaType);
+			showMedia(mediaType)
 		}
 	}
 	if (mediaType == 'movie') {
@@ -1296,7 +1296,7 @@ function searchAPI(module, searchOn, searchFor) {
 	$('#browse-media-wrap .row').remove();
 	$.ajax({
 		type: "POST",
-		url: 'http://'+ serverAddress +':41289/alexandria/v1/search',
+		url: 'http://'+ libraryDHost +':41289/alexandria/v1/search',
 		data: queryString.toString(),
 		success: function (e) {
 			mediaData = $.parseJSON(e).response;
@@ -2122,7 +2122,7 @@ function deactivateMedia(obj) {
 	var signature;
 	var stopError = 0;
 	$.ajax({
-	    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign',
+	    url: 'http://'+ libraryDHost +':41289/alexandria/v1/sign',
 	    type: 'POST',
 		data: sigQueryString.toString(),
 	    success: function(e) {
@@ -2165,7 +2165,7 @@ function deactivateMedia(obj) {
 	console.info(queryString);
 	if (window.confirm('Deactivate Artifact?')) { 
 		$.ajax({
-		    url: 'http://'+ serverAddress +':41289/alexandria/v1/send',
+		    url: 'http://'+ libraryDHost +':41289/alexandria/v1/send',
 		    type: 'POST',
 			data: queryString.toString(),
 		    success: function(e) {
@@ -2469,7 +2469,7 @@ function postMedia(tipAlexandria) {
 		var signature;
 		var stopError = 0;
 		$.ajax({
-		    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign',
+		    url: 'http://'+ libraryDHost +':41289/alexandria/v1/sign',
 		    type: 'POST',
 			data: sigQueryString.toString(),
 		    success: function(e) {
@@ -2574,7 +2574,7 @@ function postMedia(tipAlexandria) {
 		var FLOAccount = $('#newMediaPublisherFLO option:selected').html();
 		if (window.confirm('Publish Artifact using '+ FLOAccount +' : '+ FLOadd +'?')) { 
 			$.ajax({
-			    url: 'http://'+ serverAddress +':41289/alexandria/v1/send',
+			    url: 'http://'+ libraryDHost +':41289/alexandria/v1/send',
 			    type: 'POST',
 				data: queryString.toString(),
 			    success: function(e) {
@@ -2781,7 +2781,7 @@ function getBalance(obj, client) {
 	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
 /*
 	$.ajax({
-		url: 'http://'+serverAddress+':41289/alexandria/v1/wallet/getbalance',
+		url: 'http://'+libraryDHost+':41289/alexandria/v1/wallet/getbalance',
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
