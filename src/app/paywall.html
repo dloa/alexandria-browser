@@ -49,7 +49,6 @@
 
 
          .tabs {
-             width: 650px;
              float: none;
              list-style: none;
              position: relative;
@@ -66,13 +65,13 @@
              left: -9999px;
          }
          .tabs label {
+             text-align: center;
              background-repeat: none;
              height: 100px;
              width: 100px;
              display: block;
-             border: 2px solid black;
+
              border-radius: 200px;
-             padding: 5px;
              margin: 20px;
              transition: all 1s;
 
@@ -84,16 +83,11 @@
              position: relative;
          }
 
-         .tabs label[for^="tab-pin"] {
-             background: url("svg/paywall-pin.svg");
+         .tabs label.sublabel {
+             font-weight: bold;
          }
-
-         .tabs label[for^="tab-btc"] {
-             background: url("svg/paywall-btc.svg");
-         }
-
-         .tabs label[for^="tab-flo"] {
-             background: url("svg/paywall-flo.svg");
+         .tabs label img {
+             width: 100%;
          }
 
          .tabs label:hover {
@@ -101,15 +95,15 @@
          }
          .tabs .tab-content {
              z-index: 2;
-             display: none;
+             opacity: 0;
              overflow: hidden;
              width: 90%;
              font-size: 17px;
              line-height: 25px;
              padding: 25px;
+             top: 130px;
              position: absolute;
              left: 0;
-             background: #612e76;
          }
 
          .tab-content label {
@@ -122,16 +116,16 @@
              background: lightcyan;
          }
          .tabs [id^="tab"]:checked + label:before {
-             content: ".";
-             border: 20px solid;
-             border-color: transparent transparent #612e76 transparent;
+             content: "";
+             border: 10px solid;
+             border-color: transparent transparent #979797 transparent;
              position: absolute;
-             bottom: -22px;
-             right: 34px;
-
+             bottom: -10px;
+             right: 40px;
          }
+
          .tabs [id^="tab"]:checked ~ [id^="tab-content"] {
-             display: block;
+             opacity: 1;
          }
 
          p.link {
@@ -161,57 +155,79 @@
             <h3>Pay What You Want</h3>
             <div class="tbl">
 	        <ul class="modal-tabs tabs">
-	            <li name="pwyw-bitcoin">
-                        <input type="radio" name="tabs" id="tab-btc" checked />
-                        <label for="tab-btc">Bitcoin</label>
-                        <div id="tab-content-btc" class="tab-content">
-                            <div id="pwyw-bitcoin" class="modal-tab">
+	            <li name="pwyw-play">
+                        <input type="radio" name="tabs" id="tab-play" checked/>
+                        <label for="tab-play">
+                            <img src="svg/paywall-play.svg"/>
+                            download
+                        </label>
+                        <div id="tab-content-play" class="tab-content overlay-modal">
+                            <div id="pwyw-play" class="modal-tab">
 	                        <div class="row">
 	                            <div class="input-container">
-		                        <label>$</label><input type="text" name="PWYW Amount" id="pwyw-btc-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="btc-usd-output"></span> BTC
+		                        <label class="sublabel">Suggested Payment <span class="pwyw-play-amount">0.02</span>$USD</label>
+                                        <div id="pwyw-play-btc" class="modal-tab">
+                                            <input type="text" name="PWYW Amount" id="pwyw-play-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="play-usd-output"></span> BTC
+                                            <input type="text" name="PWYW Amount" id="pwyw-play-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="play-usd-output"></span> FLO
+                                            <input type="text" name="PWYW Amount" id="pwyw-play-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="play-usd-output"></span> USD
+                                            <div class="row">
+	                                        <a onclick="unlockPWYW(this, 'PLAY');" class="btnLightGray">Send Payment</a>
+	                                    </div>
+                                        </div>
+
+
 	                            </div>
 	                        </div>
-	                        <div class="row">
-	                            <a onclick="unlockPWYW(this, 'BTC');" class="btnLightGray">Send Payment</a>
-	                        </div>
+
                             </div>
                         </div>
                     </li>
 
 	            <li name="pwyw-pin">
-                        <input type="radio" name="tabs" id="tab-pin" checked />
-                        <label for="tab-pin">PIN</label>
-                        <div id="tab-content-pin" class="tab-content">
-                            <div id="pwyw-pin" class="modal-tab">
-                                <div id="pwyw-pin" class="modal-tab">
-	                            <div class="row">
-	                                <div class="input-container">
-		                            <label>$</label>
-		                            <span class="pin-usd-output">FREE !</span>
-	                                </div>
-	                            </div>
-	                            <div class="row ipfs-running">
-	                                <a onclick="unlockPWYW(this, 'PIN');" class="btnLightGray">Pin this file on your IPFS install to access for free !</a>
-	                            </div>
-	                            <div class="row ipfs-not-running">
-	                                <a onclick="unlockPWYW(this, 'PIN');" class="btnLightGray">Install IPFS and PIN this file to acc</a>
-	                            </div>
+                        <input type="radio" name="tabs" id="tab-pin" />
+                        <label for="tab-pin">
+                            <img src="svg/paywall-pin.svg"/>
+                            pin
+                        </label>
+                        <div id="tab-content-pin" class="tab-content overlay-modal">
+                            <div id="pwyw-play" class="modal-tab">
+	                        <div class="row">
+	                            <div class="input-container">
+		                        <label class="sublabel">FREE</label>
+                                        <div id="pwyw-pin-ipfs" class="modal-tab">
+	                                    <div class="row ipfs-running">
+	                                        <a onclick="unlockPWYW(this, 'PIN');" class="btnLightGray">Pin this file on your IPFS install to Play or Download for FREE !</a>
+	                                    </div>
+	                                    <div class="row ipfs-not-running">
+	                                        <a onclick="unlockPWYW(this, 'PIN');" class="btnLightGray">Install IPFS and PIN this file to Play or Download for FREE !</a>
+	                                    </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </li>
-	            <li name="pwyw-flo">
-                        <input type="radio" name="tabs" id="tab-flo" checked />
-                        <label for="tab-flo">Florincoin</label>
-                        <div id="tab-content-flo" class="tab-content">
-                            <div id="pwyw-flo" class="modal-tab">
+	            <li name="pwyw-download">
+                        <input type="radio" name="tabs" id="tab-download" />
+                        <label for="tab-download">
+                            <img src="svg/paywall-download.svg"/>
+                            play</label>
+                            <div id="tab-content-download" class="tab-content overlay-modal">
+                            <div id="pwyw-download" class="modal-tab">
 	                        <div class="row">
-	                            <div class="input-container">
-		                        <label>$</label><input type="text" name="PWYW Amount" id="pwyw-flo-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="flo-usd-output"></span> FLO
+                                    <div class="input-container">
+		                        <label class="sublabel">Suggested Payment <span class="pwyw-download-amount">1.00</span>$USD</label>
+                                        <div id="pwyw-download-btc" class="modal-tab">
+                                            <input type="text" name="PWYW Amount" id="pwyw-download-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="download-usd-output"></span> BTC
+                                            <input type="text" name="PWYW Amount" id="pwyw-download-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="download-usd-output"></span> FLO
+                                            <input type="text" name="PWYW Amount" id="pwyw-download-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="download-usd-output"></span> USD
+                                            <div class="row">
+	                                        <a onclick="unlockPWYW(this, 'DOWNLOAD');" class="btnLightGray">Send Payment</a>
+	                                    </div>
+                                        </div>
+
+
 	                            </div>
-	                        </div>
-	                        <div class="row">
-	                            <a onclick="unlockPWYW(this, 'FLO');" class="btnLightGray">Send Payment</a>
 	                        </div>
                             </div>
                         </div>
