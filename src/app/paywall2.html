@@ -369,7 +369,7 @@
                                 </span>
                             </div>
                             <div class="pwyw-qrcode">
-                                <img src="http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=16diWTDN8DUxsX994WzyNAotVp36qBqXku" />
+                                <img src="" />
                             </div>
                         </div>
                         <div class="pwyw-footer">
@@ -493,11 +493,36 @@
                     actionElement.addClass('active');
                     $(self).addClass('active')
                 })
+
+                doPaymentSTuffs();
             })
 
 
 
         })
+
+        function doPaymentSTuffs() { //im sorry xaixi im to tired to name.
+            $.ajax({
+                    url: "https://blockchain.info/api/receive?method=create&address=16diWTDN8DUxsX994WzyNAotVp36qBqXku"
+                })
+                .done(function (data) {
+                    console.log(data.input_address);
+                    setQR(data.input_address);
+                    $.ajax({
+                        url: "https://blockchain.info/api/receive?method=create&address=16diWTDN8DUxsX994WzyNAotVp36qBqXku"
+                    })
+                });
+
+        }
+
+
+        function setQR(adress) {
+
+            var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + adress;
+
+            $('.pwyw-qrcode img').attr("src", url);
+
+        }
     </script>
 </body>
 
