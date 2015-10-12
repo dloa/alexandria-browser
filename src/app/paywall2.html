@@ -43,23 +43,28 @@
         .format-selector {}
         
         .format-selector button {
+            text-transform: uppercase;
             background-color: #cbcbcb;
             color: black;
             padding-left: 25px;
             padding-right: 25px;
+            float: left;
             outline: none;
             border: 0;
+            border-color: #838383;
+            border-width: 1px;
+            border-style: solid;
             border-radius: 5px;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
         }
         
         .format-selector .active {
             background-color: #838383;
             color: white;
-            border-top-left-radius: 0px;
-            border-bottom-left-radius: 0px;
         }
         
-        .format-selector .active:first-child.active {
+        .format-selector button:first-of-type {
             border-radius: 5px;
             border-top-right-radius: 0px;
             border-bottom-right-radius: 0px;
@@ -150,6 +155,7 @@
         
         .release-info {
             list-style: none;
+            margin:
         }
         
         .tipbox {
