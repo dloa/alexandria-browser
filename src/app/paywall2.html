@@ -471,10 +471,12 @@
             </div>
         </div>
     </div>
+    <iframe id="my_iframe" style="display:none;"></iframe>
     <script src="js/vendor/jquery-2.1.1.min.js"></script>
 
 
     <script type="text/javascript">
+        var checker;
         $(document).ready(function () {
             $('.pwyw-item').on('click', function (e) {
                 var self = this;
@@ -508,20 +510,31 @@
                 .done(function (data) {
                     console.log(data.input_address);
                     setQR(data.input_address);
-                    $.ajax({
-                        url: "https://blockchain.info/api/receive?method=create&address=16diWTDN8DUxsX994WzyNAotVp36qBqXku"
-                    })
+                    watchForpayment(data.input_address);
+
                 });
 
         }
 
+        function watchForpayment(adress) {
+            $.ajax({
+                    url: "https://blockchain.info/q/getreceivedbyaddress/" + adress
+                })
+                .done(function (data) {
+                    if (parseInt(data) > 0) {
+                        console.log('payed.');
+                        var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.mp3';
+                        document.getElementById('my_iframe').src = url;
+                    } else {
+                        console.log('not paid checking again.');
+                        watchForpayment(adress);
+                    }
+                });
+        }
 
         function setQR(adress) {
-
             var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + adress;
-
             $('.pwyw-qrcode img').attr("src", url);
-
         }
     </script>
 </body>
