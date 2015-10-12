@@ -1,226 +1,268 @@
 <!doctype html>
 <html>
-    <head>
-        <title></title>
-        <meta charset="utf-8" />
-        <script type="emacs-lisp">
-         (progn
-             (setq httpd-port 8001)
-                 (httpd-start)
-                 (impatient-mode))
 
-        </script>
-        <script src="vendor/jquery/dist/jquery.min.js"></script>
-	<link rel="stylesheet" href="css/fonts.css">
-	<link rel="stylesheet" href="css/normalize.min.css">
-        <!--		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"> -->
-	<link rel="stylesheet" href="css/alexandria.css">
-        <style>
-         .container {
-             width: 60%;
-             margin: 0px auto;
-         }
-         .top {
-             display: flex;
-         }
-         .media-info {
-             display: flex;
-             flex-direction: column;
-             justify-content: space-around;
-         }
-         .media-info, .media-cover {
-             flex: 1;
-         }
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script type="emacs-lisp">
+        (progn (setq httpd-port 8001) (httpd-start) (impatient-mode))
 
-         .media-info h1, .media-info h2, .media-info h3 {
-             text-align: left;
-         }
+    </script>
+    <script src="vendor/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <!--		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"> -->
+    <link rel="stylesheet" href="css/alexandria.css">
+    <style>
+        .container {
+            width: 60%;
+            margin: 0px auto;
+        }
+        
+        .top {
+            display: flex;
+        }
+        
+        .media-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+        
+        .media-info,
+        .media-cover {
+            flex: 1;
+        }
+        
+        .media-info h1,
+        .media-info h2,
+        .media-info h3 {
+            text-align: left;
+        }
+        
+        .format-selector {}
+        
+        .cover img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .bottom {
+            width: 100%;
+        }
+        
+        .pwyw-container {
+            max-height: 0px;
+            overflow: hidden;
+            padding: 0px 10px;
+            display: flex;
+            flex-direction: column;
+            margin: 0px auto;
+            background-color: lightcyan;
+            //             transition: all 1s;
+        }
+        
+        .pwyw-container.active {
+            max-height: 100%;
+            padding: 25px;
+            margin: 20px;
+        }
+        
+        .pwyw-paybox {
+            display: flex;
+        }
+        
+        .pwyw-suggest {
+            display: inline-block;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            margin: 0px auto;
+        }
+        
+        .pwyw-btc-price-input {
+            display: inline-block;
+        }
+        
+        .pwyw-payinfo,
+        .pwyw-qrcode {
+            flex: 1;
+        }
+        
+        .pwyw-list {
+            display: flex;
+            margin: 0;
+            padding: 0;
+            justify-content: space-around;
+        }
+        
+        .pwyw-item {
+            display: flex;
+            flex-direction: column;
+            list-style: none;
+            flex: auto 0;
+        }
+        
+        .pwyw-item img {
+            border-radius: 200px;
+            max-width: 100%;
+            width: 100px;
+        }
+        
+        .pwyw-item img:hover {
+            background-color: lightblue;
+        }
+        
+        .pwyw-item.active img {
+            background-color: lightcyan;
+        }
+        
+        .pwyw-item.active:before {
+            border: 20px solid;
+            border-color: lightcyan transparent transparent transparent;
+            margin: -20px 30px;
+            position: absolute;
+            content: ""
+        }
+        
+        .release-info {
+            list-style: none;
+        }
+        
+        .tipbox {
+            float: right;
+            padding: 0 20px;
+        }
+        
+        .playlist {
+            padding: 25px 0;
+        }
+        
+        .playlist-table {
+            width: 100%;
+        }
+        
+        .playlist-table tr:first-of-type {
+            color: #cbcbcb;
+            border-width: 1px;
+            height: 30px;
+            line-height: 30px;
+            border-color: #cbcbcb;
+            border-bottom-style: solid;
+            border-top-style: solid;
+        }
+        
+        .playlist-table td,
+        .playlist-table th {
+            text-align: left;
+            padding: 0 20px;
+        }
+        
+        .playlist-table th:first-child + th + th + th + th,
+        /* fifth column: Price/Play */
+        
+        .playlist-table th:first-child + th + th + th + th + th
+        /* sixth column: Price/Buy */
+        
+        {
+            text-align: center;
+        }
+        
+        .playlist-table td:first-child {
+            /* first column: # */
+        }
+        
+        .playlist-table td:first-child + td {
+            /* second column: Name */
+            width: 60%;
+        }
+        
+        .playlist-table td:first-child + td + td {
+            /* third column: Artist */
+            width: 60%;
+        }
+        
+        .playlist-table td:first-child + td + td + td {
+            /* forth column: Time */
+        }
+        
+        .playlist-table td:first-child + td + td + td + td span,
+        /* fifth column: Price/Play */
+        
+        .playlist-table td:first-child + td + td + td + td + td span
+        /* sixth column: Price/Buy */
+        
+        {
+            padding: 0 20px;
+            border-radius: 4px;
+            background: lightgrey;
+            font-weight: bold;
+        }
+        
+        .media-meta .artist {
+            color: grey;
+        }
+        
+        .media-info .media-meta {
+            position: relative;
+            top: -15px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.pwyw-item').on('click', function (e) {
+                var self = this;
+                $('.pwyw-item').removeClass('active');
+                this.classList.forEach(function (className) {
+                    if (!className.match(/pwyw-action/))
+                        return
 
-         .format-selector {
+                    var action = className.replace(/^pwyw-action-/, '');
+                    var actionElement = $('.pwyw-activate-' + action);
+                    if (actionElement.hasClass('active')) {
+                        return $('.pwyw-container').removeClass('active');
+                    }
 
-         }
+                    $('.pwyw-container').removeClass('active');
+                    actionElement.addClass('active');
+                    $(self).addClass('active')
+                })
+            })
+        })
+    </script>
+</head>
 
-         .cover img {
-             width: 100%;
-             height: 100%;
-         }
-         .bottom {
-             width: 100%;
-         }
-         .pwyw-container {
-             max-height: 0px;
-             overflow: hidden;
-             padding: 0px 10px;
-             display: flex;
-             flex-direction: column;
-             margin: 0px auto;
-             background-color: lightcyan;
-//             transition: all 1s;
-         }
-
-         .pwyw-container.active {
-             max-height: 100%;
-             padding: 25px;
-             margin: 20px;
-         }
-         .pwyw-paybox {
-             display: flex;
-         }
-
-         .pwyw-suggest {
-             display: inline-block;
-             font-size: 30px;
-             font-weight: bold;
-             text-align: center;
-             margin: 0px auto;
-         }
-
-         .pwyw-btc-price-input {
-             display: inline-block;
-         }
-
-         .pwyw-payinfo, .pwyw-qrcode {
-             flex: 1;
-         }
-         .pwyw-list {
-             display: flex;
-             margin: 0;
-             padding: 0;
-             justify-content: space-around;
-         }
-         .pwyw-item {
-             display: flex;
-             flex-direction: column;
-             list-style: none;
-             flex: auto 0;
-         }
-
-         .pwyw-item img {
-             border-radius: 200px;
-             max-width: 100%;
-             width: 100px;
-         }
-
-         .pwyw-item img:hover {
-             background-color: lightblue;
-         }
-
-         .pwyw-item.active img {
-             background-color: lightcyan;
-         }
-
-         .pwyw-item.active:before {
-             border: 20px solid;
-             border-color: lightcyan transparent transparent transparent;
-             margin: -20px 30px;
-             position: absolute;
-             content: ""
-         }
-         .release-info {
-             list-style: none;
-         }
-         .tipbox {
-             float: right;
-             padding: 0 20px;
-         }
-         .playlist {
-             padding: 25px 0;
-         }
-         .playlist-table {
-             width: 100%;
-         }
-
-         .playlist-table td, .playlist-table th {
-             text-align: left;
-             padding: 0 20px;
-         }
-         .playlist-table th:first-child + th + th + th + th, /* fifth column: Price/Play */
-         .playlist-table th:first-child + th + th + th + th + th/* sixth column: Price/Buy */
-         {
-             text-align: center;
-         }
-
-         .playlist-table td:first-child { /* first column: # */ }
-         .playlist-table td:first-child + td { /* second column: Name */
-             width: 60%;
-         }
-
-         .playlist-table td:first-child + td + td{ /* third column: Artist */
-             width: 60%;
-         }
-         .playlist-table td:first-child + td + td + td { /* forth column: Time */ }
-         .playlist-table td:first-child + td + td + td + td span, /* fifth column: Price/Play */
-         .playlist-table td:first-child + td + td + td + td + td span/* sixth column: Price/Buy */
-         {
-             padding: 0 20px ;
-             border-radius: 4px;
-             background: lightgrey;
-             font-weight: bold;
-         }
-
-         .media-meta .artist {
-             color: grey;
-         }
-
-         .media-info .media-meta {
-             position: relative;
-             top: -15px;
-         }
-        </style>
-        <script type="text/javascript">
-         $(document).ready(function() {
-             $('.pwyw-item').on('click', function (e) {
-                 var self = this;
-                 $('.pwyw-item').removeClass('active');
-                 this.classList.forEach (function (className) {
-                     if (! className.match(/pwyw-action/))
-                         return
-
-                     var action = className.replace(/^pwyw-action-/, '');
-                     var actionElement = $('.pwyw-activate-' + action);
-                     if (actionElement.hasClass('active')) {
-                         return $('.pwyw-container').removeClass('active');
-                     }
-
-                     $('.pwyw-container').removeClass('active');
-                     actionElement.addClass('active');
-                     $(self).addClass('active')
-                 })
-             })
-         })
-        </script>
-    </head>
-    <body>
-        <div class="container">
-            <div class="top">
-                <div class="media-info">
-                    <h1>Tiny Humans</h1>
-                    <div class="row">
-                        <h2 class="media-meta">
+<body>
+    <div class="container">
+        <div class="top">
+            <div class="media-info">
+                <h1>Tiny Humans</h1>
+                <div class="row">
+                    <h2 class="media-meta">
                             <span class="artist">Imogen Heap</span>
                             <div class="tipbox">
                                 <span class="tip">Tip</span>
                                 <span class="share"><img src="./svg/share.svg"</span>
                             </div>
                         </h2>
-                    </div>
-                    <div class="row format-selector">
-                        <button>mp3</button><button>flac</button>
-                    </div>
+                </div>
+                <div class="row format-selector">
+                    <button>mp3</button>
+                    <button>flac</button>
+                </div>
 
-                    <ul class="release-info">
-                        <li>Released October 10, 2015</li>
-                        <li>1 Audio Track</li>
-                        <li>3 minutes 43 seconds</li>
-                        <li>2 extra files</li>
-                    </ul>
+                <ul class="release-info">
+                    <li>Released October 10, 2015</li>
+                    <li>1 Audio Track</li>
+                    <li>3 minutes 43 seconds</li>
+                    <li>2 extra files</li>
+                </ul>
 
-                    <div class="pwwy-stuff">
-                        <div class="pwyw-container pwyw-activate-pin">
-                            <p>currently there are</p>
-                            <div class="pwyw-pining-info pwyw-suggest">
-                            <span class="pwyw-currently-pining">497</span>
-                            users pining this file
+                <div class="pwwy-stuff">
+                    <div class="pwyw-container pwyw-activate-pin">
+                        <p>currently there are</p>
+                        <div class="pwyw-pining-info pwyw-suggest">
+                            <span class="pwyw-currently-pining">497</span> users pining this file
                         </div>
                         <div class="pwyw-pining-suggestion">
                             if you pin it, you can play the song for free!
@@ -243,10 +285,10 @@
                                     $
                                     <input >
                                 </span>
-                            </span>
+                                </span>
                             </div>
                             <div class="pwyw-qrcode">
-                                <img src="http://www.wired.com/images_blogs/magazine/2013/04/qrcode_f.jpg"/>
+                                <img src="http://www.wired.com/images_blogs/magazine/2013/04/qrcode_f.jpg" />
                             </div>
                         </div>
                         <div class="pwyw-footer">
@@ -268,10 +310,10 @@
                                     $
                                     <input >
                                 </span>
-                            </span>
+                                </span>
                             </div>
                             <div class="pwyw-qrcode">
-                                <img src="http://www.wired.com/images_blogs/magazine/2013/04/qrcode_f.jpg"/>
+                                <img src="http://www.wired.com/images_blogs/magazine/2013/04/qrcode_f.jpg" />
                             </div>
                         </div>
                         <div class="pwyw-footer">
@@ -280,61 +322,60 @@
                             </span>
                         </div>
                     </div>
-                    </div>
-                    <div class="buybox">
-                        <ul class="pwyw-list">
-                            <li class="pwyw-item pwyw-action-play">
-                                <img src="svg/paywall-play.svg"/>
-                                <span class="price price-play">
+                </div>
+                <div class="buybox">
+                    <ul class="pwyw-list">
+                        <li class="pwyw-item pwyw-action-play">
+                            <img src="svg/paywall-play.svg" />
+                            <span class="price price-play">
                                     $0.0125 to Play
                                 </span>
-                            </li>
-                            <li class="pwyw-item pwyw-action-download">
-                                <img src="svg/paywall-download.svg"/>
-                                <span class="price price-download">
+                        </li>
+                        <li class="pwyw-item pwyw-action-download">
+                            <img src="svg/paywall-download.svg" />
+                            <span class="price price-download">
                                     $0.06 to Buy
                                 </span>
-                            </li>
-                            <li class="pwyw-item pwyw-action-pin">
-                                <img src="svg/paywall-pin.svg"/>
-                                <span class="price price-pin">
+                        </li>
+                        <li class="pwyw-item pwyw-action-pin">
+                            <img src="svg/paywall-pin.svg" />
+                            <span class="price price-pin">
                                     Pin Album
                                 </span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="playbar">
-                        HERE GOES PLAYBAR THAT WILL APPEAR AND DISAPPEAR AT PLEASURE
-                    </div>
+                        </li>
+                    </ul>
                 </div>
-                <div class="media-cover">
-                    <img src="http://i.ytimg.com/vi/QKiZJCFYAbg/maxresdefault.jpg"/>
+                <div class="playbar">
+                    HERE GOES PLAYBAR THAT WILL APPEAR AND DISAPPEAR AT PLEASURE
                 </div>
             </div>
-            <div class="bottom">
-                <div class="playlist">
-                    <table class="playlist-table">
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Artist</th>
-                            <th>Time</th>
-                            <th>Price/Play</th>
-                            <th>Price/Buy</th>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Tiny Human</td>
-                            <td>Imogen Heap</td>
-                            <td>3:39</td>
-                            <td><span>$0.0125</span></td>
-                            <td><span>$0.060</span></td>
-                        </tr>
-                    </table>
-                </div>
+            <div class="media-cover">
+                <img src="http://i.ytimg.com/vi/QKiZJCFYAbg/maxresdefault.jpg" />
             </div>
         </div>
-    </body>
+        <div class="bottom">
+            <div class="playlist">
+                <table class="playlist-table">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Artist</th>
+                        <th>Time</th>
+                        <th>Price/Play</th>
+                        <th>Price/Buy</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Tiny Human</td>
+                        <td>Imogen Heap</td>
+                        <td>3:39</td>
+                        <td><span>$0.0125</span></td>
+                        <td><span>$0.060</span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>
-
-
