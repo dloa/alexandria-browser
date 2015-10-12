@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch Beta 3.3 (11472) - http://www.bohemiancoding.com/sketch -->
+    <title>send tip</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="Advanced-Search-v1.1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="movie-title" sketch:type="MSArtboardGroup" transform="translate(-1454.000000, -1016.000000)">
+            <g id="Movie-" sketch:type="MSLayerGroup" transform="translate(191.000000, 387.000000)">
+                <g id="Buttons" transform="translate(553.000000, 630.000000)">
+                    <g id="share-icon--2-+-send-tip-2" transform="translate(648.000000, 1.000000)">
+                        <g id="send-tip" transform="translate(64.000000, 0.000000)">
+                            <text id="tip" sketch:type="MSTextLayer" font-family="Avenir" font-size="25.6097561" font-weight="normal" sketch:alignment="middle" fill="#919191">
+                                <tspan x="15.8518293" y="38.5">tip</tspan>
+                            </text>
+                            <circle id="Oval-133" stroke="#979797" stroke-width="4" sketch:type="MSShapeGroup" cx="30" cy="30" r="30"></circle>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
