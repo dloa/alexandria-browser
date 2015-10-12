@@ -50,16 +50,18 @@
          .pwyw-container {
              max-height: 0px;
              overflow: hidden;
-             padding: 0px;
+             padding: 0px 10px;
              display: flex;
              flex-direction: column;
              margin: 0px auto;
+             background-color: lightcyan;
 //             transition: all 1s;
          }
 
          .pwyw-container.active {
              max-height: 100%;
              padding: 25px;
+             margin: 20px;
          }
          .pwyw-paybox {
              display: flex;
@@ -93,12 +95,26 @@
              flex: auto 0;
          }
 
-         .pwyw-item:hover {
+         .pwyw-item img {
+             border-radius: 200px;
+             max-width: 100%;
+             width: 100px;
+         }
+
+         .pwyw-item img:hover {
              background-color: lightblue;
          }
 
-         .pwyw-item.active {
+         .pwyw-item.active img {
              background-color: lightcyan;
+         }
+
+         .pwyw-item.active:before {
+             border: 20px solid;
+             border-color: lightcyan transparent transparent transparent;
+             margin: -20px 30px;
+             position: absolute;
+             content: ""
          }
          .release-info {
              list-style: none;
