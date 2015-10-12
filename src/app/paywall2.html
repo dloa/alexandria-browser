@@ -476,7 +476,7 @@
 
 
     <script type="text/javascript">
-        var checker;
+        var filetype = 'mp3';
         $(document).ready(function () {
             $('.pwyw-item').on('click', function (e) {
                 var self = this;
@@ -497,6 +497,12 @@
                 })
 
                 doPaymentSTuffs();
+            })
+
+            $('.format-selector button').on('click', function (e) {
+                filetype = $(e.target).html();
+                $('.format-selector button').removeClass('active');
+                $(this).addClass('active')
             })
 
 
@@ -523,7 +529,10 @@
                 .done(function (data) {
                     if (parseInt(data) > 0) {
                         console.log('payed.');
-                        var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.mp3';
+                        if (filetype === 'mp3')
+                            var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.mp3';
+                        else
+                            var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.flac';
                         document.getElementById('my_iframe').src = url;
                     } else {
                         console.log('not paid checking again.');
