@@ -24,12 +24,11 @@
              display: flex;
          }
          .info {
-             flex: 1;
              display: flex;
              flex-direction: column;
              justify-content: space-around;
          }
-         .cover {
+         .info, .cover {
              flex: 1;
          }
          .cover img {
@@ -38,6 +37,39 @@
          }
          .bottom {
              width: 100%;
+         }
+         .pwyw-container {
+             max-height: 0px;
+             overflow: hidden;
+             padding: 0px;
+             display: flex;
+             flex-direction: column;
+             margin: 0px auto;
+//             transition: all 1s;
+         }
+
+         .pwyw-container.active {
+             max-height: 100%;
+             padding: 25px;
+         }
+         .pwyw-paybox {
+             display: flex;
+         }
+
+         .pwyw-suggest {
+             display: inline-block;
+             font-size: 30px;
+             font-weight: bold;
+             text-align: center;
+             margin: 0px auto;
+         }
+
+         .pwyw-btc-price-input {
+             display: inline-block;
+         }
+
+         .pwyw-payinfo, .pwyw-qrcode {
+             flex: 1;
          }
          .pwyw-list {
              display: flex;
@@ -51,13 +83,46 @@
              list-style: none;
              flex: auto 0;
          }
+
+         .pwyw-item:hover {
+             background-color: lightblue;
+         }
+
+         .pwyw-item.active {
+             background-color: lightcyan;
+         }
          .release-info {
              list-style: none;
          }
          .tipbox {
              float: right;
+             padding: 0 20px;
+         }
+         .playlist-table {
+             width: 100%;
+         }
+         .playlist-table th {
+             text-align: left;
          }
         </style>
+        <script type="text/javascript">
+         $(document).ready(function() {
+             $('.pwyw-item').on('click', function (e) {
+                 var self = this;
+                 $('.pwyw-item').removeClass('active');
+                 this.classList.forEach (function (className) {
+                     if (! className.match(/pwyw-action/))
+                         return
+
+                     var action = className.replace(/^pwyw-action-/, '');
+                     $('.pwyw-container').removeClass('active');
+                     $('.pwyw-activate-' + action).addClass('active');
+
+                     $(self).addClass('active')
+                 })
+             })
+         })
+        </script>
     </head>
     <body>
         <div class="container">
@@ -83,21 +148,61 @@
                         <li>3 minutes 43 seconds</li>
                         <li>2 extra files</li>
                     </ul>
-                    <div class="pwyw-container">
+
+                    <div class="pwyw-container pwyw-activate-download pwyw-activate-play">
+                        <p>currently there are</p>
+                        <div class="pwyw-pining-info pwyw-suggest">
+                            <span class="pwyw-currently-pining">497</span>
+                            users pining this file
+                        </div>
+                        <div class="pwyw-pining-suggestion">
+                            if you pin it, you can play the song for free!
+                        </div>
+                        <span class="pwyw-suggest">
+                            $0.00 per play
+                        </span>
+                        <button>Pin It!</button>
+                    </div>
+                    <div class="pwyw-container pwyw-activate-pin">
+                        <div class="pwyw-paybox">
+                            <div class="pwyw-payinfo">
+                                <p>
+                                    The suggested price to buy this song is
+                                </p>
+                                <span class="pwyw-suggest">
+                                    $<span class="pwyw-download-price">0.60</span> to buy
+                                </span>
+                                <span class="pwyw-btc-price-input">
+                                    $
+                                    <input >
+                                </span>
+                                </span>
+                            </div>
+                            <div class="pwyw-qrcode">
+                                <img src="http://www.wired.com/images_blogs/magazine/2013/04/qrcode_f.jpg"/>
+                            </div>
+                        </div>
+                        <div class="pwyw-footer">
+                            <span class="pwyw-btc-price">2.478</span> uBTC to
+                            <span class="pwyw-btc-address">1CvDLWNzX4PEkzMU7t2pVGsT858pMiNorQ
+                            </span>
+                        </div>
+                    </div>
+                    <div class="buybox">
                         <ul class="pwyw-list">
-                            <li class="pwyw-item">
+                            <li class="pwyw-item pwyw-action-play">
                                 <img src="svg/paywall-play.svg"/>
                                 <span class="price price-play">
                                     $0.0125 to Play
                                 </span>
                             </li>
-                            <li class="pwyw-item">
+                            <li class="pwyw-item pwyw-action-download">
                                 <img src="svg/paywall-download.svg"/>
-                                <span class="price price-buy">
+                                <span class="price price-download">
                                     $0.06 to Buy
                                 </span>
                             </li>
-                            <li class="pwyw-item">
+                            <li class="pwyw-item pwyw-action-pin">
                                 <img src="svg/paywall-pin.svg"/>
                                 <span class="price price-pin">
                                     Pin Album
@@ -106,7 +211,7 @@
                         </ul>
                     </div>
                     <div class="playbar">
-                        
+
                     </div>
                 </div>
                 <div class="cover">
@@ -115,7 +220,7 @@
             </div>
             <div class="bottom">
                 <div class="playlist">
-                    <table>
+                    <table class="playlist-table">
                         <tr>
                             <th>#</th>
                             <th>Name</th>
