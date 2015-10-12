@@ -23,14 +23,23 @@
          .top {
              display: flex;
          }
-         .info {
+         .media-info {
              display: flex;
              flex-direction: column;
              justify-content: space-around;
          }
-         .info, .cover {
+         .media-info, .media-cover {
              flex: 1;
          }
+
+         .media-info h1, .media-info h2, .media-info h3 {
+             text-align: left;
+         }
+
+         .format-selector {
+
+         }
+
          .cover img {
              width: 100%;
              height: 100%;
@@ -104,6 +113,7 @@
          .playlist-table th {
              text-align: left;
          }
+
         </style>
         <script type="text/javascript">
          $(document).ready(function() {
@@ -115,9 +125,13 @@
                          return
 
                      var action = className.replace(/^pwyw-action-/, '');
-                     $('.pwyw-container').removeClass('active');
-                     $('.pwyw-activate-' + action).addClass('active');
+                     var actionElement = $('.pwyw-activate-' + action);
+                     if (actionElement.hasClass('active')) {
+                         return $('.pwyw-container').removeClass('active');
+                     }
 
+                     $('.pwyw-container').removeClass('active');
+                     actionElement.addClass('active');
                      $(self).addClass('active')
                  })
              })
@@ -127,7 +141,7 @@
     <body>
         <div class="container">
             <div class="top">
-                <div class="info">
+                <div class="media-info">
                     <h1>Tiny Humans</h1>
                     <div class="row">
                         <h2 class="media-meta">
@@ -138,7 +152,7 @@
                             </div>
                         </h2>
                     </div>
-                    <div class="row">
+                    <div class="row format-selector">
                         <button>mp3</button><button>flac</button>
                     </div>
 
@@ -149,9 +163,10 @@
                         <li>2 extra files</li>
                     </ul>
 
-                    <div class="pwyw-container pwyw-activate-download pwyw-activate-play">
-                        <p>currently there are</p>
-                        <div class="pwyw-pining-info pwyw-suggest">
+                    <div class="pwwy-stuff">
+                        <div class="pwyw-container pwyw-activate-pin">
+                            <p>currently there are</p>
+                            <div class="pwyw-pining-info pwyw-suggest">
                             <span class="pwyw-currently-pining">497</span>
                             users pining this file
                         </div>
@@ -163,20 +178,20 @@
                         </span>
                         <button>Pin It!</button>
                     </div>
-                    <div class="pwyw-container pwyw-activate-pin">
+                    <div class="pwyw-container pwyw-activate-download">
                         <div class="pwyw-paybox">
                             <div class="pwyw-payinfo">
                                 <p>
                                     The suggested price to buy this song is
                                 </p>
                                 <span class="pwyw-suggest">
-                                    $<span class="pwyw-download-price">0.60</span> to buy
+                                    $<span class="pwyw-download-price">0.06</span> to buy
                                 </span>
                                 <span class="pwyw-btc-price-input">
                                     $
                                     <input >
                                 </span>
-                                </span>
+                            </span>
                             </div>
                             <div class="pwyw-qrcode">
                                 <img src="http://www.wired.com/images_blogs/magazine/2013/04/qrcode_f.jpg"/>
@@ -187,6 +202,32 @@
                             <span class="pwyw-btc-address">1CvDLWNzX4PEkzMU7t2pVGsT858pMiNorQ
                             </span>
                         </div>
+                    </div>
+                    <div class="pwyw-container pwyw-activate-play">
+                        <div class="pwyw-paybox">
+                            <div class="pwyw-payinfo">
+                                <p>
+                                    The suggested price to play this song is
+                                </p>
+                                <span class="pwyw-suggest">
+                                    $<span class="pwyw-download-price">0.0125</span> to play
+                                </span>
+                                <span class="pwyw-btc-price-input">
+                                    $
+                                    <input >
+                                </span>
+                            </span>
+                            </div>
+                            <div class="pwyw-qrcode">
+                                <img src="http://www.wired.com/images_blogs/magazine/2013/04/qrcode_f.jpg"/>
+                            </div>
+                        </div>
+                        <div class="pwyw-footer">
+                            <span class="pwyw-btc-price">2.478</span> uBTC to
+                            <span class="pwyw-btc-address">1CvDLWNzX4PEkzMU7t2pVGsT858pMiNorQ
+                            </span>
+                        </div>
+                    </div>
                     </div>
                     <div class="buybox">
                         <ul class="pwyw-list">
@@ -211,10 +252,10 @@
                         </ul>
                     </div>
                     <div class="playbar">
-
+                        HERE GOES PLAYBAR THAT WILL APPEAR AND DISAPPEAR AT PLEASURE
                     </div>
                 </div>
-                <div class="cover">
+                <div class="media-cover">
                     <img src="http://i.ytimg.com/vi/QKiZJCFYAbg/maxresdefault.jpg"/>
                 </div>
             </div>
