@@ -123,13 +123,40 @@
              float: right;
              padding: 0 20px;
          }
+         .playlist {
+             padding: 25px 0;
+         }
          .playlist-table {
              width: 100%;
          }
-         .playlist-table th {
+
+         .playlist-table td, .playlist-table th {
              text-align: left;
+             padding: 0 20px;
+         }
+         .playlist-table th:first-child + th + th + th + th, /* fifth column: Price/Play */
+         .playlist-table th:first-child + th + th + th + th + th/* sixth column: Price/Buy */
+         {
+             text-align: center;
          }
 
+         .playlist-table td:first-child { /* first column: # */ }
+         .playlist-table td:first-child + td { /* second column: Name */
+             width: 60%;
+         }
+
+         .playlist-table td:first-child + td + td{ /* third column: Artist */
+             width: 60%;
+         }
+         .playlist-table td:first-child + td + td + td { /* forth column: Time */ }
+         .playlist-table td:first-child + td + td + td + td span, /* fifth column: Price/Play */
+         .playlist-table td:first-child + td + td + td + td + td span/* sixth column: Price/Buy */
+         {
+             padding: 0 20px ;
+             border-radius: 4px;
+             background: lightgrey;
+             font-weight: bold;
+         }
         </style>
         <script type="text/javascript">
          $(document).ready(function() {
