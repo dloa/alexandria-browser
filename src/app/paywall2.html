@@ -42,6 +42,29 @@
         
         .format-selector {}
         
+        .format-selector button {
+            background-color: #cbcbcb;
+            color: black;
+            padding-left: 25px;
+            padding-right: 25px;
+            outline: none;
+            border: 0;
+            border-radius: 5px;
+        }
+        
+        .format-selector .active {
+            background-color: #838383;
+            color: white;
+            border-top-left-radius: 0px;
+            border-bottom-left-radius: 0px;
+        }
+        
+        .format-selector .active:first-child.active {
+            border-radius: 5px;
+            border-top-right-radius: 0px;
+            border-bottom-right-radius: 0px;
+        }
+        
         .cover img {
             width: 100%;
             height: 100%;
@@ -247,7 +270,7 @@
                         </h2>
                 </div>
                 <div class="row format-selector">
-                    <button>mp3</button>
+                    <button class="active">mp3</button>
                     <button>flac</button>
                 </div>
 
