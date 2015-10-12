@@ -374,8 +374,7 @@
                         </div>
                         <div class="pwyw-footer">
                             <span class="pwyw-btc-price">2.478</span> uBTC to
-                            <span class="pwyw-btc-address">1CvDLWNzX4PEkzMU7t2pVGsT858pMiNorQ
-                            </span>
+                            <span class="pwyw-btc-address">                            </span>
                         </div>
                     </div>
                     <div class="pwyw-container pwyw-activate-play">
@@ -554,6 +553,7 @@
                         else
                             var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.flac';
                         document.getElementById('my_iframe').src = url;
+                        resetQR();
                     } else {
                         console.log('not paid checking again.');
                         setTimeout(function () {
@@ -564,9 +564,18 @@
                 });
         }
 
+        function resetQR() {
+            $('.pwyw-qrcode img').attr("src", 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==');
+
+            $('.pwyw-btc-address').text('');
+
+        }
+
         function setQR(adress) {
             var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + adress;
             $('.pwyw-qrcode img').attr("src", url);
+
+            $('.pwyw-btc-address').text(adress);
         }
     </script>
 </body>
