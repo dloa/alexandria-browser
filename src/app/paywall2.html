@@ -505,6 +505,7 @@
     <script type="text/javascript">
         var filetype = 'mp3';
         var day_avg = false;
+        var delay = 10000;
         $(document).ready(function () {
             $('.pwyw-item').on('click', function (e) {
                 var self = this;
@@ -577,7 +578,7 @@
                   }
                   paymentTimeout = setTimeout(function () {
                       watchForpayment(address, amount, done);
-                  }, 500);
+                  }, delay);
                   return false;
               }
               var amountpaid = (parseInt(data) / 100000000) * day_avg;
@@ -590,7 +591,7 @@
                   }
                   paymentTimeout = setTimeout(function () {
                       watchForpayment(address, amount, done);
-                  }, 500);
+                  }, delay);
                   return true;
               }
 
