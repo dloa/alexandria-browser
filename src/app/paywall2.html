@@ -252,27 +252,41 @@
             background: lightgrey;
             font-weight: bold;
         }
-        
+
         .media-meta .artist {
             color: grey;
         }
-        
+
         .media-info .media-meta {
             position: relative;
             top: -15px;
         }
-        
+
         .playbar {
             width: 100%;
             height: 50px;
         }
-        
+
+     .playbar-container {
+         position: relative;
+     }
+     .playbar-shadow {
+         border-radius: 20px;
+         background: rgba(200,200,200,0.8);
+         height: 70px;
+         position: absolute;
+         top: -2px;
+         margin: 10px 10px;
+     }
+     .playbar-shadow h2 {
+         padding: 5px 25px;
+     }
         .playbar .play-toggle {
             float: left;
             width: 50px;
             height: 100%;
         }
-        
+
         .playbar .current_time {
             float: left;
             width: 40px;
@@ -426,14 +440,21 @@
                         </li>
                     </ul>
                 </div>
-                <div class="playbar">
-                    <div class="play-toggle play"></div>
-                    <div class="current_time">0:00</div>
-                    <div class="scrobble-bar">
-                        <div></div>
-                        <p>Song Title</p>
+                <div class="playbar-container">
+                    <div class="playbar">
+                        <div class="play-toggle play"></div>
+                        <div class="current_time">0:00</div>
+                        <div class="scrobble-bar">
+                            <div></div>
+                            <p>Song Title</p>
+                        </div>
+                        <div class="total_length">3:21</div>
                     </div>
-                    <div class="total_length">3:21</div>
+                    <div class="playbar-shadow">
+                        <h2>
+                            You need to pay the artist or pin the file/album in order to play this track !
+                        </h2>
+                    </div>
                 </div>
             </div>
             <div class="media-cover">
