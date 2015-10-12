@@ -544,8 +544,10 @@
                         }, 500);
                         return false;
                     }
-
-                    if (parseInt(data) > 0) {
+                    var amountpaid = (parseInt(data) / 100000000) * day_avg;
+                    console.log(amountpaid);
+                    var amountRequired = 0.57;
+                    if (amountpaid >= amountRequired) {
                         console.log('payed.');
                         if (filetype === 'mp3')
                             var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.mp3';
