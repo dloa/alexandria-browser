@@ -477,6 +477,7 @@
 
     <script type="text/javascript">
         var filetype = 'mp3';
+        var day_avg = false;
         $(document).ready(function () {
             $('.pwyw-item').on('click', function (e) {
                 var self = this;
@@ -519,7 +520,16 @@
                     watchForpayment(data.input_address);
 
                 });
+        }
 
+        function getUSDdayAvg() {
+            $.ajax({
+                url: "https://api.bitcoinaverage.com/ticker/global/USD/"
+            }).done(function (usddata) {
+                day_avg = usddata['24h_avg'];
+                console.log(day_avg)
+
+            });
         }
 
         function watchForpayment(adress) {
@@ -527,6 +537,14 @@
                     url: "https://blockchain.info/q/getreceivedbyaddress/" + adress
                 })
                 .done(function (data) {
+                    if (!day_avg) {
+                        getUSDdayAvg();
+                        setTimeout(function () {
+                            watchForpayment(adress);
+                        }, 500);
+                        return false;
+                    }
+
                     if (parseInt(data) > 0) {
                         console.log('payed.');
                         if (filetype === 'mp3')
@@ -536,7 +554,10 @@
                         document.getElementById('my_iframe').src = url;
                     } else {
                         console.log('not paid checking again.');
-                        watchForpayment(adress);
+                        setTimeout(function () {
+                            watchForpayment(adress);
+                        }, 500);
+                        return true;
                     }
                 });
         }
