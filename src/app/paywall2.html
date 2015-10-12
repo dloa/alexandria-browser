@@ -365,7 +365,7 @@
                             if you pin it, you can play the song for free!
                         </div>
                         <span class="pwyw-suggest">
-                            $0.00 per play
+                            $<span class="pwyw-pin-price pwyw-suggested-price">0.00</span> per play
                         </span>
                         <button>Pin It!</button>
                     </div>
@@ -376,7 +376,7 @@
                                     The suggested price is:
                                 </p>
                                 <span class="pwyw-suggest">
-                                    $<span class="pwyw-download-price">0.06</span> to buy
+                                    $<span class="pwyw-download-price pwyw-suggested-price">0.06</span> to buy
                                 </span>
                                 <span class="pwyw-btc-price-input">
                                     $
@@ -400,7 +400,7 @@
                                     The suggested price is:
                                 </p>
                                 <span class="pwyw-suggest">
-                                    $<span class="pwyw-download-price">0.0125</span> to play
+                                    $<span class="pwyw-play-price pwyw-suggested-price">0.0125</span> to play
                                 </span>
                                 <span class="pwyw-btc-price-input">
                                     $
@@ -510,16 +510,17 @@
 
                     var action = className.replace(/^pwyw-action-/, '');
                     var actionElement = $('.pwyw-activate-' + action);
+                    var price = $('.pwyw-suggested-price', actionElement).text();
+
                     if (actionElement.hasClass('active')) {
                         return $('.pwyw-container').removeClass('active');
                     }
 
+                    makePaymentToAddress('16diWTDN8DUxsX994WzyNAotVp36qBqXku', price);
                     $('.pwyw-container').removeClass('active');
                     actionElement.addClass('active');
                     $(self).addClass('active')
                 })
-
-                doPaymentSTuffs();
             })
 
             $('.format-selector button').on('click', function (e) {
@@ -527,20 +528,19 @@
                 $('.format-selector button').removeClass('active');
                 $(this).addClass('active')
             })
-
-
-
         })
 
-        function doPaymentSTuffs() { //im sorry xaixi im to tired to name.
+         function makePaymentToAddress(address, amount) { //im sorry xaixi im to tired to name.
+            resetQR();
             $.ajax({
-                    url: "https://blockchain.info/api/receive?method=create&address=16diWTDN8DUxsX994WzyNAotVp36qBqXku"
+                    url: "https://blockchain.info/api/receive?method=create&address=" + address
                 })
                 .done(function (data) {
                     console.log(data.input_address);
                     setQR(data.input_address);
-                    watchForpayment(data.input_address);
-
+                    watchForpayment(data.input_address, amount, function () {
+                        resetQR()
+                    });
                 });
         }
 
@@ -554,44 +554,50 @@
         }
 
      var paymentTimeout;
-        function watchForpayment(adress) {
-            $.ajax({
-                    url: "https://blockchain.info/q/getreceivedbyaddress/" + adress
-                })
-                .done(function (data) {
-                    if (!day_avg) {
-                        getUSDdayAvg();
-                        if (paymentTimeout) {
-                            clearTimeout (paymentTimeout)
-                        }
-                        paymentTimeout = setTimeout(function () {
-                            watchForpayment(adress);
-                        }, 500);
-                        return false;
-                    }
-                    var amountpaid = (parseInt(data) / 100000000) * day_avg;
-                    console.log(amountpaid);
-                    var amountRequired = 0.57;
-                    if (amountpaid >= amountRequired) {
-                        console.log('payed.');
-                        if (filetype === 'mp3')
-                            var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.mp3';
-                        else
-                            var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.flac';
-                        document.getElementById('my_iframe').src = url;
-                        resetQR();
-                    } else {
-                        console.log('not paid checking again.');
-                        if (paymentTimeout) {
-                            clearTimeout (paymentTimeout)
-                        }
-                        paymentTimeout = setTimeout(function () {
-                            watchForpayment(adress);
-                        }, 500);
-                        return true;
-                    }
-                });
-        }
+     function watchForpayment(address, amount, done) {
+         done = done || function () {};
+         if (amount <= 0) {
+             return done(amount);
+         }
+
+         $.ajax({
+             url: "https://blockchain.info/q/getreceivedbyaddress/" + address
+         })
+          .done(function (data) {
+              if (!day_avg) {
+                  getUSDdayAvg();
+                  if (paymentTimeout) {
+                      clearTimeout (paymentTimeout)
+                  }
+                  paymentTimeout = setTimeout(function () {
+                      watchForpayment(address, );
+                  }, 500);
+                  return false;
+              }
+              var amountpaid = (parseInt(data) / 100000000) * day_avg;
+              console.log(amountpaid);
+              var amountRequired = amount;
+              if (amountpaid < amountRequired) {
+                  console.log('not paid checking again.');
+                  if (paymentTimeout) {
+                      clearTimeout (paymentTimeout)
+                  }
+                  paymentTimeout = setTimeout(function () {
+                      watchForpayment(address);
+                  }, 500);
+                  return true;
+              }
+
+              console.log('payed.');
+/*              if (filetype === 'mp3')
+                  var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.mp3';
+              else
+                  var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.flac';
+              document.getElementById('my_iframe').src = url;
+              */
+              done(amountpaid)
+          });
+     }
 
         function resetQR() {
             $('.pwyw-qrcode img').attr("src", 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==');
@@ -600,11 +606,11 @@
 
         }
 
-        function setQR(adress) {
-            var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + adress;
+        function setQR(address) {
+            var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + address;
             $('.pwyw-qrcode img').attr("src", url);
 
-            $('.pwyw-btc-address').text(adress);
+            $('.pwyw-btc-address').text(address);
         }
     </script>
 </body>
