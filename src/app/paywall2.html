@@ -278,6 +278,11 @@
          position: absolute;
          top: -2px;
          margin: 10px 10px;
+         overflow: hide;
+         transition: all 0.2s;
+     }
+     .playbar-shadow.hide {
+         transform: translate(0%, -5000%)
      }
      .playbar-shadow h2 {
          padding: 5px 25px;
@@ -530,12 +535,13 @@
             })
         })
 
-         function makePaymentToAddress(address, amount) { //im sorry xaixi im to tired to name.
-            resetQR();
-            $.ajax({
-                    url: "https://blockchain.info/api/receive?method=create&address=" + address
-                })
-                .done(function (data) {
+         function makePaymentToAddress(address, amount) {
+             resetQR();
+             $('.playbar-shadow').removeClass('hide');
+             $.ajax({
+                 url: "https://blockchain.info/api/receive?method=create&address=" + address
+             })
+              .done(function (data) {
                     console.log(data.input_address);
                     setQR(data.input_address);
                     watchForpayment(data.input_address, amount, function () {
@@ -570,7 +576,7 @@
                       clearTimeout (paymentTimeout)
                   }
                   paymentTimeout = setTimeout(function () {
-                      watchForpayment(address, );
+                      watchForpayment(address, amount, done);
                   }, 500);
                   return false;
               }
@@ -583,12 +589,13 @@
                       clearTimeout (paymentTimeout)
                   }
                   paymentTimeout = setTimeout(function () {
-                      watchForpayment(address);
+                      watchForpayment(address, amount, done);
                   }, 500);
                   return true;
               }
 
               console.log('payed.');
+              $('.playbar-shadow').addClass('hide')
 /*              if (filetype === 'mp3')
                   var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.mp3';
               else
