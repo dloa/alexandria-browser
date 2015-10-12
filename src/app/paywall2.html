@@ -260,6 +260,55 @@
             position: relative;
             top: -15px;
         }
+        
+        .playbar {
+            width: 100%;
+            height: 50px;
+        }
+        
+        .playbar .play-toggle {
+            float: left;
+            width: 50px;
+            height: 100%;
+        }
+        
+        .playbar .current_time {
+            float: left;
+            width: 40px;
+            text-align: center;
+            line-height: 50px;
+            height: 100%;
+        }
+        
+        .playbar .scrobble-bar {
+            height: 3px;
+            float: left;
+            margin-top: 23px;
+            margin-left: 5px;
+            width: calc( 100% - 50px - 50px - 50px - 10px);
+            background-color: lightgrey;
+        }
+        
+        .playbar .scrobble-bar div {
+            width: 10px;
+            top: -4px;
+            position: relative;
+            border-radius: 100%;
+            background-color: #868686;
+            height: 10px;
+        }
+        
+        .playbar .scrobble-bar p {
+            line-height: 0px;
+            /* hack to make it sit higher -- its 2:12 am ill fix this up later */
+        }
+        
+        .playbar .total_length {
+            float: right;
+            line-height: 50px;
+            padding-right: 20px;
+            height: 100%;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function () {
@@ -399,7 +448,13 @@
                     </ul>
                 </div>
                 <div class="playbar">
-                    HERE GOES PLAYBAR THAT WILL APPEAR AND DISAPPEAR AT PLEASURE
+                    <div class="play-toggle play"></div>
+                    <div class="current_time">0:00</div>
+                    <div class="scrobble-bar">
+                        <div></div>
+                        <p>Song Title</p>
+                    </div>
+                    <div class="total_length">3:21</div>
                 </div>
             </div>
             <div class="media-cover">
