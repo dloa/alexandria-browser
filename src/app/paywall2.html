@@ -549,10 +549,10 @@
             }).done(function (usddata) {
                 day_avg = usddata['24h_avg'];
                 console.log(day_avg)
-
             });
         }
 
+     var paymentTimeout;
         function watchForpayment(adress) {
             $.ajax({
                     url: "https://blockchain.info/q/getreceivedbyaddress/" + adress
@@ -560,7 +560,10 @@
                 .done(function (data) {
                     if (!day_avg) {
                         getUSDdayAvg();
-                        setTimeout(function () {
+                        if (paymentTimeout) {
+                            clearTimeout (paymentTimeout)
+                        }
+                        paymentTimeout = setTimeout(function () {
                             watchForpayment(adress);
                         }, 500);
                         return false;
@@ -578,7 +581,10 @@
                         resetQR();
                     } else {
                         console.log('not paid checking again.');
-                        setTimeout(function () {
+                        if (paymentTimeout) {
+                            clearTimeout (paymentTimeout)
+                        }
+                        paymentTimeout = setTimeout(function () {
                             watchForpayment(adress);
                         }, 500);
                         return true;
