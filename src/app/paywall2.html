@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="utf-8" />
+        <script type="emacs-lisp">
+         (progn
+             (setq httpd-port 8001)
+                 (httpd-start)
+                 (impatient-mode))
+
+        </script>
+	<link rel="stylesheet" href="css/fonts.css">
+	<link rel="stylesheet" href="css/normalize.min.css">
+        <!--		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"> -->
+	<link rel="stylesheet" href="css/alexandria.css">
+        <style>
+         .container {
+             width: 60%;
+             margin: 0px auto;
+         }
+         .top {
+             display: flex;
+         }
+         .info {
+             flex: 1;
+             display: flex;
+             flex-direction: column;
+             justify-content: space-around;
+         }
+         .cover {
+             flex: 1;
+         }
+         .cover img {
+             width: 100%;
+             height: 100%;
+         }
+         .bottom {
+             width: 100%;
+         }
+         .pwyw-list {
+             display: flex;
+             margin: 0;
+             padding: 0;
+             justify-content: space-around;
+         }
+         .pwyw-item {
+             display: flex;
+             flex-direction: column;
+             list-style: none;
+             flex: auto 0;
+         }
+         .release-info {
+             list-style: none;
+         }
+         .tipbox {
+             float: right;
+         }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="top">
+                <div class="info">
+                    <h1>Tiny Humans</h1>
+                    <div class="row">
+                        <h2 class="media-meta">
+                            <span class="artist">Imogen Heap</span>
+                            <div class="tipbox">
+                                <span class="tip">Tip</span>
+                                <span class="share">share</span>
+                            </div>
+                        </h2>
+                    </div>
+                    <div class="row">
+                        <button>mp3</button><button>flac</button>
+                    </div>
+
+                    <ul class="release-info">
+                        <li>Released October 10, 2015</li>
+                        <li>1 Audio Track</li>
+                        <li>3 minutes 43 seconds</li>
+                        <li>2 extra files</li>
+                    </ul>
+                    <div class="pwyw-container">
+                        <ul class="pwyw-list">
+                            <li class="pwyw-item">
+                                <img src="svg/paywall-play.svg"/>
+                                <span class="price price-play">
+                                    $0.0125 to Play
+                                </span>
+                            </li>
+                            <li class="pwyw-item">
+                                <img src="svg/paywall-download.svg"/>
+                                <span class="price price-buy">
+                                    $0.06 to Buy
+                                </span>
+                            </li>
+                            <li class="pwyw-item">
+                                <img src="svg/paywall-pin.svg"/>
+                                <span class="price price-pin">
+                                    Pin Album
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="playbar">
+                        
+                    </div>
+                </div>
+                <div class="cover">
+                    <img src="http://i.ytimg.com/vi/QKiZJCFYAbg/maxresdefault.jpg"/>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="playlist">
+                    <table>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Artist</th>
+                            <th>Time</th>
+                            <th>Price/Play</th>
+                            <th>Price/Buy</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Tiny Human</td>
+                            <td>Imogen Heap</td>
+                            <td>3:39</td>
+                            <td><span>$0.0125</span></td>
+                            <td><span>$0.060</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+
