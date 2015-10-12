@@ -309,30 +309,11 @@
             padding-right: 20px;
             height: 100%;
         }
-        
-        .popup-clickblock {
-            display: none;
-            position: fixed;
-            z-index: 10;
-            background-color: rgba(106, 106, 106, 0.53);
-            filter: blur(5px);
-            height: 100vh;
-            width: 100vw;
-        }
-        
-        .popup-clickblock .QR-code {
-            width: 300px;
-            display: block;
-            margin: calc(50vh - 300px) auto;
-        }
     </style>
 
 </head>
 
 <body>
-    <div class="popup-clickblock">
-        <img src="http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=16diWTDN8DUxsX994WzyNAotVp36qBqXku" class="QR-code" />
-    </div>
     <div class="container">
         <div class="top">
             <div class="media-info">
@@ -388,7 +369,7 @@
                                 </span>
                             </div>
                             <div class="pwyw-qrcode">
-                                <img src="http://www.wired.com/images_blogs/magazine/2013/04/qrcode_f.jpg" />
+                                <img src="http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=16diWTDN8DUxsX994WzyNAotVp36qBqXku" />
                             </div>
                         </div>
                         <div class="pwyw-footer">
