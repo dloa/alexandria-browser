@@ -1,0 +1,327 @@
+.hidden {
+    display: none;
+}
+.container {
+    width: 60%;
+    margin: 0px auto;
+}
+
+.top {
+    display: flex;
+}
+
+.media-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.media-info,
+.media-cover {
+    flex: 1;
+}
+
+.media-cover img {
+    border-radius: 5px;
+}
+
+.media-info h1,
+.media-info h2,
+.media-info h3 {
+    text-align: left;
+}
+
+.format-selector {}
+
+.format-selector button {
+    text-transform: uppercase;
+    background-color: #cbcbcb;
+    color: black;
+    padding-left: 25px;
+    padding-right: 25px;
+    float: left;
+    outline: none;
+    border: 0;
+    border-color: #838383;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.format-selector .active {
+    background-color: #838383;
+    color: white;
+}
+
+.format-selector button:first-of-type {
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.cover img {
+    width: 100%;
+    height: 100%;
+}
+
+.bottom {
+    width: 100%;
+}
+
+.pwyw-container {
+    max-height: 0px;
+    overflow: hidden;
+    padding: 0px 10px;
+    display: flex;
+    flex-direction: column;
+    margin: 0px auto;
+    background-color: lightcyan;
+    //             transition: all 1s;
+}
+
+.pwyw-container.active {
+    max-height: 100%;
+    padding: 25px;
+    margin: 20px;
+}
+
+.pwyw-paybox {
+    display: flex;
+    text-align: center;
+}
+
+.pwyw-paybox input {
+    width: 40%;
+    padding: 10px;
+}
+
+.pwyw-suggest {
+    display: inline-block;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0px auto;
+}
+
+.pwyw-btc-price-input {
+    display: inline-block;
+}
+
+.pwyw-payinfo,
+.pwyw-qrcode {
+    flex: 1;
+    margin: 0px 5px;
+}
+
+.pwyw-payinfo {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+.pwyw-list {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    justify-content: space-around;
+}
+
+.pwyw-item {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    flex: auto 0;
+}
+
+.pwyw-item img {
+    border-radius: 100%;
+    height: 60px;
+    width: 60px;;
+    margin: auto;
+}
+
+.pwyw-item img:hover {
+    background-color: lightblue;
+}
+
+.pwyw-item.active img {
+    background-color: lightcyan;
+}
+
+.pwyw-item.active:before {
+    border: 20px solid;
+    border-color: lightcyan transparent transparent transparent;
+    margin: -20px 30px;
+    position: relative;
+    content: ""
+}
+
+.release-info {
+    list-style: none;
+    padding: 0;
+}
+
+.release-info li {}
+
+.tipbox {
+    float: right;
+    padding: 0 20px;
+}
+
+.tipbox .tip {
+    font-size: 20px;
+    font-weight: 600;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.tipbox .share {
+    cursor: pointer;
+}
+
+.playlist {
+    padding: 25px 0;
+}
+
+.playlist-table {
+    width: 100%;
+}
+
+.playlist-table td,
+.playlist-table th {
+    text-align: left;
+    padding: 0 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.playlist-table tr {
+    cursor: pointer;
+}
+
+.playlist-table thead {
+    color: #a5a5a5;
+    border-width: 2px;
+    line-height: 25px;
+    cursor: default;
+    border-color: #cccbcb;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    margin-bottom: 5px;
+}
+
+.playlist-table th:first-child + th + th + th + th,
+/* fifth column: Price/Play */
+
+.playlist-table th:first-child + th + th + th + th + th
+                               /* sixth column: Price/Buy */
+                               
+                               {
+                                   text-align: center;
+                               }
+
+.playlist-table td:first-child {
+    /* first column: # */
+}
+
+.playlist-table td:first-child + td {
+    /* second column: Name */
+    width: 60%;
+}
+
+.playlist-table td:first-child + td + td {
+    /* third column: Artist */
+    width: 60%;
+}
+
+.playlist-table td:first-child + td + td + td {
+    /* forth column: Time */
+}
+
+.playlist-table span.price
+/* fifth column: Price/Play */
+{
+    padding: 0 20px;
+    border-radius: 4px;
+    background: lightgrey;
+    font-weight: bold;
+}
+
+.media-meta .artist {
+    color: grey;
+}
+
+.media-info .media-meta {
+    position: relative;
+    top: -15px;
+}
+
+.playbar {
+    width: 100%;
+    height: 50px;
+}
+
+.playbar-container {
+    position: relative;
+}
+.playbar-shadow {
+    border-radius: 20px;
+    background: rgba(200,200,200,0.8);
+    height: 70px;
+    position: absolute;
+    top: -2px;
+    margin: 10px 10px;
+    overflow: hide;
+    transition: all 0.2s;
+}
+.playbar-shadow.hide {
+    transform: translate(0%, -5000%)
+}
+.playbar-shadow h2 {
+    padding: 5px 25px;
+}
+.playbar .play-toggle {
+    float: left;
+    width: 50px;
+    height: 100%;
+}
+
+.playbar .current_time {
+    float: left;
+    width: 40px;
+    text-align: center;
+    line-height: 50px;
+    height: 100%;
+}
+
+.playbar .scrobble-bar {
+    height: 3px;
+    float: left;
+    margin-top: 23px;
+    margin-left: 5px;
+    width: calc( 100% - 50px - 50px - 50px - 10px);
+    background-color: lightgrey;
+}
+
+.playbar .scrobble-bar div {
+    width: 10px;
+    top: -4px;
+    position: relative;
+    border-radius: 100%;
+    background-color: #868686;
+    height: 10px;
+}
+
+.playbar .scrobble-bar p {
+    line-height: 0px;
+    /* hack to make it sit higher -- its 2:12 am ill fix this up later */
+}
+
+.playbar .total_length {
+    float: right;
+    line-height: 50px;
+    padding-right: 20px;
+    height: 100%;
+}
