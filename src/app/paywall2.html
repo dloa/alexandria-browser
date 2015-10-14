@@ -111,8 +111,14 @@
         
         .pwyw-paybox {
             display: flex;
+            text-align: center;
         }
-        
+
+        .pwyw-paybox input {
+            width: 60%;
+            padding: 10px;
+        }
+
         .pwyw-suggest {
             display: inline-block;
             font-size: 30px;
@@ -120,15 +126,21 @@
             text-align: center;
             margin: 0px auto;
         }
-        
+
         .pwyw-btc-price-input {
             display: inline-block;
         }
-        
+
         .pwyw-payinfo,
         .pwyw-qrcode {
             flex: 1;
             margin: 0px 5px;
+        }
+
+        .pwyw-payinfo {
+            display: flex;
+            justify-content: space-around;
+            flex-direction: column;
         }
 
         .pwyw-list {
