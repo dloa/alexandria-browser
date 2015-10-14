@@ -47,7 +47,7 @@ function renderPlaylistTracksHTML (tracks, xinfo, el) {
                   "<td>" + xinfo.artist +"</td>" +
                   "<td>" + secondsToPrettyString(xinfo.runtime, true) + "</td>" +
                   "<td><span class=\"price\">$<span class=\"price price-play\">0.0125</span></span></td>" +
-                  "<td><span class=\"price\">$<span class=\"price price-download\"><span>0.060</span></span></td>" +
+                  "<td><span class=\"price\">$<span class=\"price price-download\"><span>1.00</span></span></td>" +
                   "</tr>")
     });
 
@@ -72,6 +72,23 @@ function applyMediaData(data) {
     var mediaInfoSel = $('.media-info');
     var releaseInfoSel = $('.release-info');
     var tracks = fixDataMess(xinfo);
+    var pricesArray = xinfo.pwyw.split(',')
+
+    var prices = {
+        play: {
+            suggested: pricesArray[0]/100,
+            min: pricesArray[1]/100
+        },
+        download: {
+            suggested: pricesArray[0],
+            min: pricesArray[1]
+        }
+    }
+
+    $('.pwyw-price-play').text (prices.play.min)
+    $('.pwyw-price-suggest-play').text (prices.play.suggested)
+    $('.pwyw-price-download').text (prices.download.min)
+    $('.pwyw-price-suggest-download').text (prices.download.suggested)
 
     $('.media-artist', mediaInfoSel).text(xinfo.artist);
     $('.media-title', mediaInfoSel).text(info.title)
@@ -87,6 +104,15 @@ function applyMediaData(data) {
 function mountMediaBrowser(el, data) {
     $(el).html($('#media-template').html())
     applyMediaData(data)
+    getUSDdayAvg();
+
+    $('.pwyw-usd-price-input').on('keyup', function (e) {
+        var action = this.classList[1]
+            .replace(/^pwyw-usd-/, '')
+            .replace(/-price-input$/, '')
+
+        $('.pwyw-btc-' + action + '-price').text (Number(this.value)*1000/day_avg)
+    })
 
     $('.pwyw-item').on('click', function (e) {
         var self = this;
@@ -99,14 +125,19 @@ function mountMediaBrowser(el, data) {
             var actionElement = $('.pwyw-activate-' + action);
             var price = $('.pwyw-suggested-price', actionElement).text();
 
+            $('.pwyw-' + action + '-price').text(price);
             if (actionElement.hasClass('active')) {
                 return $('.pwyw-container').removeClass('active');
             }
 
-            makePaymentToAddress('16diWTDN8DUxsX994WzyNAotVp36qBqXku', price);
+            var btcprice = makePaymentToAddress('16diWTDN8DUxsX994WzyNAotVp36qBqXku', price);
+            $('.pwyw-btc-' + action + '-price').text(btcprice);
+            $('.pwyw-usd-' + action + '-price-input').val(price);
             $('.pwyw-container').removeClass('active');
             actionElement.addClass('active');
             $(self).addClass('active')
+
+            console.log ('btc', btcprice, 'pwyw-btc-' + action + '-price')
         })
     })
 
@@ -130,6 +161,8 @@ function makePaymentToAddress(address, amount) {
                 resetQR()
             });
         });
+
+    return (1000*amount/day_avg).toString().substring(0, 6)
 }
 
 function getUSDdayAvg() {
@@ -153,7 +186,6 @@ function watchForpayment(address, amount, done) {
     })
         .done(function (data) {
             if (!day_avg) {
-                getUSDdayAvg();
                 if (paymentTimeout) {
                     clearTimeout (paymentTimeout)
                 }
@@ -192,7 +224,6 @@ function resetQR() {
     $('.pwyw-qrcode img').attr("src", 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==');
 
     $('.pwyw-btc-address').text('');
-
 }
 
 function setQR(address) {
