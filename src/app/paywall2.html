@@ -250,12 +250,8 @@
             /* forth column: Time */
         }
         
-        .playlist-table td:first-child + td + td + td + td span,
+        .playlist-table span.price
         /* fifth column: Price/Play */
-        
-        .playlist-table td:first-child + td + td + td + td + td span
-        /* sixth column: Price/Buy */
-        
         {
             padding: 0 20px;
             border-radius: 4px;
@@ -437,15 +433,14 @@
                     <ul class="pwyw-list">
                         <li class="pwyw-item pwyw-action-play">
                             <img class="button-svg" src="svg/paywall-play.svg" />
-                            <span class="price price-play">
-                                    $0.0125 to Play
-                                </span>
+                            <span class="price">
+                                $<span class="price-play">0.0125</span> to Play
+                            </span>
                         </li>
                         <li class="pwyw-item pwyw-action-download">
                             <img class="button-svg" src="svg/paywall-download.svg" />
-                            <span class="price price-download">
-                                    $0.06 to Buy
-                                </span>
+                            <span class="price">
+                                $<span class="price-download">0.06</span> to Buy</span>
                         </li>
                         <li class="pwyw-item pwyw-action-pin">
                             <img class="button-svg" src="svg/paywall-pin.svg" />
@@ -495,8 +490,8 @@
                             <td>Tiny Human</td>
                             <td>Imogen Heap</td>
                             <td>3:39</td>
-                            <td><span>$0.0125</span></td>
-                            <td><span>$0.060</span></td>
+                            <td>$<span class="price-play">0.0125</span></td>
+                            <td>$<span class="price-download">0.060</span></td>
                         </tr>
                         <tr>
                             <td>2</td>
@@ -665,7 +660,7 @@
              return track
      .replace (xinfo.artist, '')
      .replace (' - ', '')
-     .replace (/\.(mp3|flac)$/, '')
+     .replace (/\.(mp3|flac)$/, '');
          }
 
          function renderPlaylistTracksHTML (tracks, xinfo, el) {
@@ -677,8 +672,8 @@
                            "<td>" + track + "</td>" +
                            "<td>" + xinfo.artist +"</td>" +
                            "<td>" + secondsToPrettyString(xinfo.runtime, true) + "</td>" +
-                           "<td><span>$0.0125</span></td>" +
-                           "<td><span>$0.060</span></td>" +
+                           "<td><span class=\"price\">$<span class=\"price price-play\">0.0125</span></span></td>" +
+                           "<td><span class=\"price\">$<span class=\"price price-download\"><span>0.060</span></span></td>" +
                            "</tr>")
              });
 
@@ -712,10 +707,10 @@
              $('.media-cover img').attr('src', IPFSHost + ipfsAddr + '/' + xinfo.coverArt);
              renderPlaylistTracksHTML(tracks, xinfo, $('.playlist-tracks'))
              console.log (media, tracks);
-         //        debugger;
+//             debugger;
          }
 
-                 applyData(data)
+         applyData(data)
      })
 
     </script>
