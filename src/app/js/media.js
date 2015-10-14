@@ -111,7 +111,7 @@ function mountMediaBrowser(el, data) {
             .replace(/^pwyw-usd-/, '')
             .replace(/-price-input$/, '')
 
-        $('.pwyw-btc-' + action + '-price').text (Number(this.value)*1000/day_avg)
+        $('.pwyw-btc-' + action + '-price').text (USDTouBTC(this.value))
     })
 
     $('.pwyw-item').on('click', function (e) {
@@ -148,6 +148,10 @@ function mountMediaBrowser(el, data) {
     })
 }
 
+function USDTouBTC (amount) {
+    return (1000000*Number(amount)/day_avg).toString().substring(0, 16)
+}
+
 function makePaymentToAddress(address, amount) {
     resetQR();
     $('.playbar-shadow').removeClass('hide');
@@ -162,7 +166,7 @@ function makePaymentToAddress(address, amount) {
             });
         });
 
-    return (1000*amount/day_avg).toString().substring(0, 6)
+    return USDTouBTC(amount)
 }
 
 function getUSDdayAvg() {
@@ -194,7 +198,7 @@ function watchForpayment(address, amount, done) {
                 }, delay);
                 return false;
             }
-            var amountpaid = (parseInt(data) / 100000000) * day_avg;
+            var amountpaid = USDTouBTC(data)
             console.log(amountpaid);
             var amountRequired = amount;
             if (amountpaid < amountRequired) {
