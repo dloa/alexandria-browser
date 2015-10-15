@@ -19,10 +19,109 @@
     <!--		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"> -->
     <link rel="stylesheet" href="css/alexandria.css">
     <link rel="stylesheet" href="css/media.css">
+
+    <style>
+     .playbar {
+         width: 100%;
+         height: 50px;
+     }
+
+     .playbar-container {
+         position: relative;
+     }
+     .playbar-shadow {
+         border-radius: 20px;
+         background: rgba(200,200,200,0.8);
+         height: 70px;
+         position: absolute;
+         top: -2px;
+         margin: 10px 10px;
+         overflow: hide;
+         transition: all 0.2s;
+     }
+     .playbar-shadow.hide {
+         transform: translate(0%, -5000%)
+     }
+     .playbar-shadow h2 {
+         padding: 5px 25px;
+     }
+     .playbar .jp-play, .playbar .jp-stop {
+         float: left;
+         width: 67px;
+         height: 67px;
+         background: url("svg/play.svg");
+         background-repeat: none;
+         border: none;
+     }
+
+     .playbar .jp-stop{
+         display: none;
+         background: url("svg/stop.svg");
+     }
+
+     .playbar.jp-state-playing .jp-play{
+         background: url("svg/pause.svg");
+     }
+
+     .playbar.jp-state-playing .jp-stop{
+//         display: inherit;
+     }
+
+     .playbar .jp-current_time {
+         float: left;
+         width: 40px;
+         text-align: center;
+         line-height: 50px;
+         height: 100%;
+     }
+
+     .playbar .jp-progress {
+         height: 3px;
+         float: left;
+         margin-top: 23px;
+         margin-left: 5px;
+         width: calc( 100% - 50px - 50px - 50px - 10px);
+         background-color: lightgrey;
+     }
+
+     .playbar .jp-seek-bar {
+         height: 40px;
+         margin-top: -20px;
+         padding-top: 20px;
+     }
+
+     .playbar .jp-play-bar {
+         background-color: #868686;
+         height: 3px;
+     }
+
+     .playbar .jp-play-button {
+         content: "";
+         width: 10px;
+         top: -8px;
+         position: relative;
+         border-radius: 100%;
+         background-color: #868686;
+         height: 10px;
+     }
+
+     .playbar .scrobble-bar p {
+         line-height: 0px;
+         /* hack to make it sit higher -- its 2:12 am ill fix this up later */
+     }
+
+     .playbar .jp-duration {
+         float: right;
+         line-height: 50px;
+         padding-right: 20px;
+         height: 100%;
+     }
+
+    </style>
 </head>
 
 <body>
-    <script type="html/template" id="media-template">
+    <script type="text/html" id="media-template">
      <div class="container">
         <div class="top">
             <div class="media-info">
@@ -133,17 +232,38 @@
                         </li>
                     </ul>
                 </div>
-                <div class="playbar-container">
-                    <div class="playbar">
-                        <div class="play-toggle play"></div>
-                        <div class="current_time">0:00</div>
-                        <div class="scrobble-bar">
-                            <div></div>
-                            <p>Song Title</p>
+                <div id="audio-player" class="jp-player"></div>
+                <div id="playbar-container" class="jp-audio playbar" role="application" aria-label="media player">
+                    <div class="jp-type-single">
+                        <div class="jp-gui jp-interface">
+                            <div class="jp-controls-holder">
+                                <div class="jp-controls">
+                                    <button class="jp-play" role="button" tabindex="0">play</button>
+                                    <button class="jp-stop" role="button" tabindex="0">stop</button>
+                                </div>
+                                <div class="jp-progress">
+                                    <div class="jp-seek-bar">
+                                        <div class="jp-play-bar">
+                                            <div class="jp-play-button"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
+                                <div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+                                <div class="jp-toggles" style="display: none">
+                                    <button class="jp-repeat" role="button" tabindex="0">repeat</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="total_length">3:21</div>
+                        <div class="jp-details">
+                            <div class="jp-title" aria-label="title">&nbsp;</div>
+                        </div>
+                        <div class="jp-no-solution">
+                            <span>Update Required</span>
+                            To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                        </div>
                     </div>
-                    <div class="playbar-shadow">
+                    <div class="playbar-shadow" style="display:none;">
                         <h2>
                             You need to pay the artist or pin the file/album in order to play this track !
                         </h2>
@@ -193,12 +313,32 @@
     <div id="media-browser"></div>
     <iframe id="my_iframe" style="display:none;"></iframe>
     <script src="js/vendor/jquery-2.1.1.min.js"></script>
+    <script src="vendor/jplayer/dist/jplayer/jquery.jplayer.min.js "></script>
     <script src="js/media.js"></script>
 
     <script type="text/javascript">
      $('document').ready(function () {
          var data = {"status":"success","response":[{"media-data":{"alexandria-media":{"torrent":"QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b","publisher":"FAiWWyUEuXkxo7oQLWfD3oTWkHM6eu5JJH","timestamp":1443939079000,"type":"music","info":{"title":"Tiny Human","description":"Tiny Human ISRCGBJPX1500151 Tiny Human (instrumental) ISRCGBJPX1500152 Published by Megaphonic Publishing Record label - Megaphonic Records copyright 2015 for information on use of sync please contact Info@imogenheap.com","year":2015,"extra-info":{"Bitcoin Address":"16diWTDN8DUxsX994WzyNAotVp36qBqXku","DHT Hash":"QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b","artist":"Imogen Heap","collection":"Tiny Human","company":"Megaphonic Records","coverArt":"Imogen Heap - Tiny Human cover.jpg","filename":"Imogen Heap - Tiny Human.mp3","pwyw":"2,1","runtime":260,"tags":"Mycelia, Sennheiser","track02":"Imogen Heap - Tiny Human.flac"}},"payment":{"amount":"2,25,100","currency":"USD","type":"tip"},"extras":""},"signature":"H98wuBM8i6ZEvh4XMtA2YHBg6z3ndV9pPBGeprKe7T1HSLjAIJQh5hAEbuAbd5wxL3+eSBAebEB9T1EUnzlkNJY="},"txid":"048bff9ec5ab073e63779685fb5c0ee0fa37d709e488e3d380b949d9dd856a12","block":1398174,"publisher-name":"Imogen Heap"}]};
          window.doMountMediaBrowser('#media-browser', data);
+
+         $('#audio-player').jPlayer({
+             ready: function () {
+                 $(this).jPlayer("setMedia", {
+                     title: "Bubble",
+                     m4a: "http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a",
+                     oga: "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"
+                 });
+             },
+             cssSelectorAncestor: "#playbar-container",
+             swfPath: "/js",
+             supplied: "m4a, oga",
+             useStateClassSkin: true,
+             autoBlur: false,
+             smoothPlayBar: true,
+             keyEnabled: true,
+             remainingDuration: true,
+             toggleDuration: true
+         })
      })
 
     </script>
