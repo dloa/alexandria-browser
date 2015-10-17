@@ -95,6 +95,7 @@ function applyMediaData(data) {
     $('.ri-runtime', releaseInfoSel).text (secondsToPrettyString(xinfo.runtime))
     $('.ri-audio-count', releaseInfoSel).text (tracks.length);
     $('.ri-publisher', releaseInfoSel).text (media.publisher);
+    $('.ri-btc-address', releaseInfoSel).text (xinfo['Bitcoin Address']);
 
     $('.media-cover img').attr('src', IPFSHost + ipfsAddr + '/' + xinfo.coverArt);
     renderPlaylistTracksHTML(tracks, xinfo, $('.playlist-tracks'))
@@ -133,8 +134,8 @@ function mountMediaBrowser(el, data) {
                 return $('.pwyw-container').removeClass('active');
             }
 
-            var publisher = $('.ri-publisher').text();
-            var btcprice = makePaymentToAddress(publisher, price, function () {
+            var btcAddress = $('.ri-btc-address').text();
+            var btcprice = makePaymentToAddress(btcAddress, price, function () {
                 return onPaymentDone(mediaData);
             });
             $('.pwyw-btc-' + action + '-price').text(btcprice);
