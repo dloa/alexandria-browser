@@ -201,6 +201,14 @@
     cursor: pointer;
 }
 
+.playlist-tracks tr:nth-child(odd) {
+    background-color: rgba(230, 230, 230, 0.8) ;
+}
+
+.playlist-tracks tr:hover {
+    background-color: rgba(210, 210, 210, 0.8);
+}
+
 .playlist-table thead {
     color: #a5a5a5;
     border-width: 2px;
