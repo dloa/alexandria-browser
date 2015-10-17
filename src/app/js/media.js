@@ -94,6 +94,7 @@ function applyMediaData(data) {
     $('.media-title', mediaInfoSel).text(info.title)
     $('.ri-runtime', releaseInfoSel).text (secondsToPrettyString(xinfo.runtime))
     $('.ri-audio-count', releaseInfoSel).text (tracks.length);
+    $('.ri-publisher', releaseInfoSel).text (media.publisher);
 
     $('.media-cover img').attr('src', IPFSHost + ipfsAddr + '/' + xinfo.coverArt);
     renderPlaylistTracksHTML(tracks, xinfo, $('.playlist-tracks'))

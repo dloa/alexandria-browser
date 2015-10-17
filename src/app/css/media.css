@@ -165,6 +165,10 @@
 
 .release-info li {}
 
+.release-info .ri-publisher {
+    display: none;
+}
+
 .tipbox {
     float: right;
     padding: 0 20px;
