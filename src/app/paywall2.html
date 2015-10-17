@@ -141,6 +141,7 @@
                 </div>
 
                 <ul class="release-info">
+                    <li class="ri-publisher">publisher</li>
                     <li>Released <span class="ri-date">October 10, 2015</span></li>
                     <li><span class="ri-audio-count">0</span> Audio Track</li>
                     <li class="ri-runtime">runtime</li>
@@ -322,13 +323,6 @@
          window.doMountMediaBrowser('#media-browser', data);
 
          $('#audio-player').jPlayer({
-             ready: function () {
-                 $(this).jPlayer("setMedia", {
-                     title: "Bubble",
-                     m4a: "http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a",
-                     oga: "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"
-                 });
-             },
              cssSelectorAncestor: "#playbar-container",
              swfPath: "/js",
              supplied: "m4a, oga",

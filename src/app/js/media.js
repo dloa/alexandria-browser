@@ -100,11 +100,13 @@ function applyMediaData(data) {
     renderPlaylistTracksHTML(tracks, xinfo, $('.playlist-tracks'))
     console.log (media, tracks);
     //             debugger;
+
+    return media;
 }
 
 function mountMediaBrowser(el, data) {
     $(el).html($('#media-template').html())
-    applyMediaData(data)
+    var mediaData = applyMediaData(data)
     getUSDdayAvg();
 
     $('.pwyw-usd-price-input').on('keyup', function (e) {
@@ -131,7 +133,10 @@ function mountMediaBrowser(el, data) {
                 return $('.pwyw-container').removeClass('active');
             }
 
-            var btcprice = makePaymentToAddress('16diWTDN8DUxsX994WzyNAotVp36qBqXku', price);
+            var publisher = $('.ri-publisher').text();
+            var btcprice = makePaymentToAddress(publisher, price, function () {
+                return onPaymentDone(mediaData);
+            });
             $('.pwyw-btc-' + action + '-price').text(btcprice);
             $('.pwyw-usd-' + action + '-price-input').val(price);
             $('.pwyw-container').removeClass('active');
@@ -153,7 +158,17 @@ function USDTouBTC (amount) {
     return (1000000*Number(amount)/day_avg).toString().substring(0, 16)
 }
 
-function makePaymentToAddress(address, amount) {
+function onPaymentDone (media) {
+    resetQR();
+
+    $('#audio-player').jPlayer("setMedia", {
+        title: "Bubble",
+        m4a: "http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a",
+        oga: "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"
+    })
+}
+
+function makePaymentToAddress(address, amount, done) {
     resetQR();
     $('.playbar-shadow').removeClass('hide');
     $.ajax({
@@ -162,9 +177,7 @@ function makePaymentToAddress(address, amount) {
         .done(function (data) {
             console.log(data.input_address);
             setQR(data.input_address);
-            watchForpayment(data.input_address, amount, function () {
-                resetQR()
-            });
+            watchForpayment(data.input_address, amount, done);
         });
 
     return USDTouBTC(amount)
