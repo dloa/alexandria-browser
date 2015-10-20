@@ -225,14 +225,18 @@ function USDTouBTC (amount) {
     return (1000000*Number(amount)/day_avg).toString().substring(0, 16)
 }
 
+function loadTrack (name, url) {
+    $('#audio-player').jPlayer("setMedia", {
+        title: name,
+        mp3: url
+    })
+}
+
 function onPaymentDone (media) {
     var xinfo = media.info['extra-info'];
     resetQR();
 
-    var res = $('#audio-player').jPlayer("setMedia", {
-        title: xinfo.filename,
-        mp3: IPFSUrl ([xinfo['DHT Hash'], xinfo.filename])
-    })
+    var res = loadTrack (xinfo.filename, IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]))
 
     console.log ('player', res, IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]))
 }
