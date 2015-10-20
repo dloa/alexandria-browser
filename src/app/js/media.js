@@ -112,6 +112,13 @@ function getPrices (pwyw) {
 
 }
 
+function togglePlaybarShadow (bool) {
+    $('.playbar-shadow').toggleClass('hidden', bool);
+    if (bool) {
+        $('#audio-player').jPlayer("play");
+    }
+}
+
 function applyMediaData(data) {
     var media = data['alexandria-media'];
     var info = media.info;
@@ -127,7 +134,7 @@ function applyMediaData(data) {
     var prices = getPrices (xinfo.pwyw)
 
     if (!xinfo.pwyw) {
-        $('.playbar-shadow').addClass('hidden');
+        togglePlaybarShadow(false);
     }
 
     mediaDataSel.data(media)
@@ -218,7 +225,7 @@ function mountMediaBrowser(el, data) {
     $('.pwyw-item').on('click', showPaymentOption)
     $('.pwyw-pin-it').on('click', function (e) {
         window.isPinned = !!!window.isPinned;
-        $('.playbar-shadow').toggleClass('hidden', window.isPinned);
+        togglePlaybarShadow(window.isPinned);
         console.log ('pinned', window.isPinned)
     })
 
@@ -263,7 +270,7 @@ function onPaymentDone (action, media) {
 
 function makePaymentToAddress(address, amount, done) {
     resetQR();
-    $('.playbar-shadow').removeClass('hide');
+    togglePlaybarShadow(false);
     $.ajax({
         url: "https://blockchain.info/api/receive?method=create&address=" + address
     })
@@ -320,7 +327,7 @@ function watchForpayment(address, amount, done) {
             }
 
             console.log('payed.');
-            $('.playbar-shadow').addClass('hide')
+            togglePlaybarShadow(true);
             done(amountpaid)
         });
 }
