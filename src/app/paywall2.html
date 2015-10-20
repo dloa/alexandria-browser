@@ -332,22 +332,8 @@
          var data = window.searchAPI('media', 'txid', txid.replace(/^#/, ''));
 
          console.log (txid, data);
-          window.doMountMediaBrowser('#media-browser', data[0]['media-data']);
+         window.doMountMediaBrowser('#media-browser', data[0]['media-data']);
 
-         $('#audio-player').jPlayer({
-             cssSelectorAncestor: "#playbar-container",
-             swfPath: "/js",
-             supplied: "m4a, oga",
-             useStateClassSkin: true,
-             autoBlur: false,
-             smoothPlayBar: true,
-             keyEnabled: true,
-             remainingDuration: true,
-             toggleDuration: true,
-             error: function (e) {
-                 console.error('got jplayer error', e)
-             }
-         })
      })
 
     </script>

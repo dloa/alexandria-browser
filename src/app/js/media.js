@@ -157,6 +157,21 @@ function mountMediaBrowser(el, data) {
     var mediaData = applyMediaData(data)
     getUSDdayAvg();
 
+    $('#audio-player').jPlayer({
+        cssSelectorAncestor: "#playbar-container",
+        swfPath: "/js",
+        supplied: "m4a, oga",
+        useStateClassSkin: true,
+        autoBlur: false,
+        smoothPlayBar: true,
+        keyEnabled: true,
+        remainingDuration: true,
+        toggleDuration: true,
+        error: function (e) {
+            console.error('got jplayer error', e)
+        }
+    })
+
     $('.pwyw-usd-price-input').on('keyup', function (e) {
         var action = this.classList[1]
             .replace(/^pwyw-usd-/, '')
