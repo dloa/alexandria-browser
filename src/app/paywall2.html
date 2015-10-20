@@ -162,7 +162,7 @@
                         <span class="pwyw-suggest">
                             $<span class="pwyw-pin-price pwyw-suggested-price">0.00</span> per play
                         </span>
-                        <button>Pin It!</button>
+                        <button class="pwyw-pin-it">Pin It!</button>
                     </div>
                     <div class="pwyw-container pwyw-activate-download">
                         <div class="pwyw-paybox">
@@ -233,6 +233,12 @@
                                     Pin Album
                                 </span>
                         </li>
+                    </ul>
+                </div>
+                <div class="media-data" style="display: none">
+                    <ul>
+                        <li class="md-title">title</li>
+                        <li class="md-tracks">title</li>
                     </ul>
                 </div>
                 <div id="audio-player" class="jp-player"></div>
@@ -333,7 +339,10 @@
              smoothPlayBar: true,
              keyEnabled: true,
              remainingDuration: true,
-             toggleDuration: true
+             toggleDuration: true,
+             error: function (e) {
+                 console.error('got jplayer error', e)
+             }
          })
      })
 

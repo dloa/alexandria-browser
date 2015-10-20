@@ -107,28 +107,20 @@ function applyMediaData(data) {
     $('.ri-publisher', releaseInfoSel).text (media.publisher);
     $('.ri-btc-address', releaseInfoSel).text (xinfo['Bitcoin Address']);
 
-    $('.media-cover img').attr('src', IPFSHost + ipfsAddr + '/' + xinfo.coverArt);
+    $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  xinfo.coverArt]));
     renderPlaylistTracksHTML(tracks, xinfo, $('.playlist-tracks'))
+
     console.log (media, tracks);
     //             debugger;
 
     return media;
 }
 
-function mountMediaBrowser(el, data) {
-    $(el).html($('#media-template').html())
-    var mediaData = applyMediaData(data)
-    getUSDdayAvg();
+function IPFSUrl (components) {
+    return encodeURI (IPFSHost + '/' + components.join ('/'));
+}
 
-    $('.pwyw-usd-price-input').on('keyup', function (e) {
-        var action = this.classList[1]
-            .replace(/^pwyw-usd-/, '')
-            .replace(/-price-input$/, '')
-
-        $('.pwyw-btc-' + action + '-price').text (USDTouBTC(this.value))
-    })
-
-    $('.pwyw-item').on('click', function (e) {
+function showPaymentOption(e) {
         var self = this;
         $('.pwyw-item').removeClass('active');
         this.classList.forEach(function (className) {
@@ -146,7 +138,7 @@ function mountMediaBrowser(el, data) {
 
             var btcAddress = $('.ri-btc-address').text();
             var btcprice = makePaymentToAddress(btcAddress, price, function () {
-                return onPaymentDone(mediaData);
+                return onPaymentDone($('.media-data').data());
             });
             $('.pwyw-btc-' + action + '-price').text(btcprice);
             $('.pwyw-usd-' + action + '-price-input').val(price);
@@ -156,6 +148,26 @@ function mountMediaBrowser(el, data) {
 
             console.log ('btc', btcprice, 'pwyw-btc-' + action + '-price')
         })
+}
+
+function mountMediaBrowser(el, data) {
+    $(el).html($('#media-template').html())
+    var mediaData = applyMediaData(data)
+    getUSDdayAvg();
+
+    $('.pwyw-usd-price-input').on('keyup', function (e) {
+        var action = this.classList[1]
+            .replace(/^pwyw-usd-/, '')
+            .replace(/-price-input$/, '')
+
+        $('.pwyw-btc-' + action + '-price').text (USDTouBTC(this.value))
+    })
+
+    $('.pwyw-item').on('click', showPaymentOption)
+    $('.pwyw-pin-it').on('click', function (e) {
+        window.isPinned = !!!window.isPinned;
+        $('.playbar-shadow').toggleClass('hidden', window.isPinned);
+        console.log ('pinned', window.isPinned)
     })
 
     $('.format-selector button').on('click', function (e) {
@@ -170,13 +182,15 @@ function USDTouBTC (amount) {
 }
 
 function onPaymentDone (media) {
+    var xinfo = media.info['extra-info'];
     resetQR();
 
-    $('#audio-player').jPlayer("setMedia", {
-        title: "Bubble",
-        m4a: "http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a",
-        oga: "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"
+    var res = $('#audio-player').jPlayer("setMedia", {
+        title: xinfo.filename,
+        mp3: IPFSUrl ([xinfo['DHT Hash'], xinfo.filename])
     })
+
+    console.log ('player', res, IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]))
 }
 
 function makePaymentToAddress(address, amount, done) {
