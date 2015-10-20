@@ -72,6 +72,35 @@ function secondsToPrettyString (s, short){
     return duration.minutes() + ' minutes ' + duration.seconds() + ' seconds';
 }
 
+function getPrices (pwyw) {
+    if (! pwyw) {
+        return  {
+            play: {
+                suggested: 0.0125,
+                min: 0
+            },
+            download: {
+                suggested: 1,
+                min: 0
+            }
+        }
+    }
+
+    var pricesArray = pwyw.split(',')
+
+    return {
+        play: {
+            suggested: pricesArray[0]/100,
+            min: pricesArray[1]/100
+        },
+        download: {
+            suggested: pricesArray[0],
+            min: pricesArray[1]
+        }
+    }
+
+}
+
 function applyMediaData(data) {
     var media = data['alexandria-media'];
     var info = media.info;
@@ -84,19 +113,10 @@ function applyMediaData(data) {
     var mediaDataSel = $('.media-data');
     var tracks = fixDataMess(xinfo);
 
+    var prices = getPrices (xinfo.pwyw)
 
-    xinfo.pwyw = xinfo.pwyw || "0,0"
-    var pricesArray = xinfo.pwyw.split(',')
-
-    var prices = {
-        play: {
-            suggested: pricesArray[0]/100,
-            min: pricesArray[1]/100
-        },
-        download: {
-            suggested: pricesArray[0],
-            min: pricesArray[1]
-        }
+    if (!xinfo.pwyw) {
+        $('.playbar-shadow').addClass('hidden');
     }
 
     mediaDataSel.data(media)
