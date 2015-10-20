@@ -65,6 +65,11 @@ function renderPlaylistTracksHTML (tracks, prices, xinfo, el) {
     $('.tb-price-download', el).on ('click', function () {
         $('.pwyw-action-download').click();
     })
+
+    $('.playlist-tracks tr').on ('click', function (e) {
+        var trackData = $(this).data();
+        loadTrack (trackData.name, trackData.url)
+    })
     console.log (el, tracks);
 }
 
