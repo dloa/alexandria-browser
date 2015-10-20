@@ -1282,30 +1282,6 @@ function filterMediaByType(obj, resetSearch) {
 	populateSearchResults(filteredMedia, 'media');
 }
 
-// MEDIA + PUBLISHER SEARCH API
-function searchAPI(module, searchOn, searchFor) {
-	if ( (searchOn == 'type') && (searchFor.length > 1) ) {
-		searchFor = '['+searchFor+']';
-	} else {
-		searchFor = '"'+searchFor+'"';
-	}
-	queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":'+searchFor+',"search-like": true}';
-	console.log(queryString);
-	var mediaData;
-	$('body').append($('#info-modal-media'));
-	$('#browse-media-wrap .row').remove();
-	$.ajax({
-		type: "POST",
-		url: 'http://'+ serverAddress +':41289/alexandria/v1/search',
-		data: queryString.toString(),
-		success: function (e) {
-			mediaData = $.parseJSON(e).response;
-		},
-		async:   false
-	});
-	return mediaData;
-}
-
 // POPULATE SEARCH RESULTS
 function populateSearchResults(results, module) {
 	artifact = '';
