@@ -40,14 +40,18 @@ function prettifyTrack (track, xinfo) {
 function renderPlaylistTracksHTML (tracks, prices, xinfo, el) {
     el.empty();
     var i = 1;
+    var price = {
+        play: prices.play.min?prices.play.min:"FREE!",
+        download: prices.download.min?prices.download.min:"FREE!"
+    }
     tracks.forEach (function (track) {
         track = prettifyTrack(track, xinfo)
         el.append("<tr><td>" + i++ + "</td>" +
                   "<td>" + track + "</td>" +
                   "<td>" + xinfo.artist +"</td>" +
                   "<td>" + secondsToPrettyString(xinfo.runtime, true) + "</td>" +
-                  "<td><span class=\"price\">$<span class=\"price tb-price-play\">" + prices.play.min + "</span></span></td>" +
-                  "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + prices.download.min + "</span></span></td>" +
+                  "<td><span class=\"price\">$<span class=\"price tb-price-play\">" + price.play + "</span></span></td>" +
+                  "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + price.download + "</span></span></td>" +
                   "</tr>")
     });
 
