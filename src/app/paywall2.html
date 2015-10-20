@@ -323,12 +323,16 @@
     <iframe id="my_iframe" style="display:none;"></iframe>
     <script src="js/vendor/jquery-2.1.1.min.js"></script>
     <script src="vendor/jplayer/dist/jplayer/jquery.jplayer.min.js "></script>
+    <script src="js/search.js"></script>
     <script src="js/media.js"></script>
 
     <script type="text/javascript">
      $('document').ready(function () {
-         var data = {"status":"success","response":[{"media-data":{"alexandria-media":{"torrent":"QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b","publisher":"FAiWWyUEuXkxo7oQLWfD3oTWkHM6eu5JJH","timestamp":1443939079000,"type":"music","info":{"title":"Tiny Human","description":"Tiny Human ISRCGBJPX1500151 Tiny Human (instrumental) ISRCGBJPX1500152 Published by Megaphonic Publishing Record label - Megaphonic Records copyright 2015 for information on use of sync please contact Info@imogenheap.com","year":2015,"extra-info":{"Bitcoin Address":"16diWTDN8DUxsX994WzyNAotVp36qBqXku","DHT Hash":"QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b","artist":"Imogen Heap","collection":"Tiny Human","company":"Megaphonic Records","coverArt":"Imogen Heap - Tiny Human cover.jpg","filename":"Imogen Heap - Tiny Human.mp3","pwyw":"2,1","runtime":260,"tags":"Mycelia, Sennheiser","track02":"Imogen Heap - Tiny Human.flac"}},"payment":{"amount":"2,25,100","currency":"USD","type":"tip"},"extras":""},"signature":"H98wuBM8i6ZEvh4XMtA2YHBg6z3ndV9pPBGeprKe7T1HSLjAIJQh5hAEbuAbd5wxL3+eSBAebEB9T1EUnzlkNJY="},"txid":"048bff9ec5ab073e63779685fb5c0ee0fa37d709e488e3d380b949d9dd856a12","block":1398174,"publisher-name":"Imogen Heap"}]};
-         window.doMountMediaBrowser('#media-browser', data);
+         var txid = location.hash || "048bff9ec5ab073e63779685fb5c0ee0fa37d709e488e3d380b949d9dd856a12";
+         var data = window.searchAPI('media', 'txid', txid.replace(/^#/, ''));
+
+         console.log (txid, data);
+          window.doMountMediaBrowser('#media-browser', data[0]['media-data']);
 
          $('#audio-player').jPlayer({
              cssSelectorAncestor: "#playbar-container",

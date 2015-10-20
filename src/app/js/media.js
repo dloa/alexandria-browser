@@ -69,8 +69,7 @@ function secondsToPrettyString (s, short){
 }
 
 function applyMediaData(data) {
-    var res = data.response;
-    var media = res[0]['media-data']['alexandria-media'];
+    var media = data['alexandria-media'];
     var info = media.info;
     var xinfo = info['extra-info'];
     var payment = media.payment;
