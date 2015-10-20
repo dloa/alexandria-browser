@@ -192,7 +192,7 @@ function mountMediaBrowser(el, data) {
     $('#audio-player').jPlayer({
         cssSelectorAncestor: "#playbar-container",
         swfPath: "/js",
-        supplied: "m4a, oga",
+        supplied: "mp3",
         useStateClassSkin: true,
         autoBlur: false,
         smoothPlayBar: true,
