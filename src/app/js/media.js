@@ -34,7 +34,8 @@ function prettifyTrack (track, xinfo) {
     return track
         .replace (xinfo.artist, '')
         .replace (' - ', '')
-        .replace (/\.(mp3|flac)$/, '');
+        .replace (/\.(mp3|flac)$/, '')
+        .replace (/^[0-9]+ +/, '');
 }
 
 function renderPlaylistTracksHTML (tracks, prices, xinfo, el) {
