@@ -78,6 +78,7 @@ function applyMediaData(data) {
 
     var mediaInfoSel = $('.media-info');
     var releaseInfoSel = $('.release-info');
+    var mediaDataSel = $('.media-data');
     var tracks = fixDataMess(xinfo);
     var pricesArray = xinfo.pwyw.split(',')
 
@@ -91,6 +92,8 @@ function applyMediaData(data) {
             min: pricesArray[1]
         }
     }
+
+    mediaDataSel.data(media)
 
     $('.pwyw-price-play').text (prices.play.min)
     $('.pwyw-price-suggest-play').text (prices.play.suggested)
