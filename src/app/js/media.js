@@ -67,8 +67,11 @@ function renderPlaylistTracksHTML (tracks, prices, xinfo, el) {
     })
 
     $('.playlist-tracks tr').on ('click', function (e) {
-        var trackData = $(this).data();
+        var el = $(this)
+        var trackData = el.data();
         loadTrack (trackData.name, trackData.url)
+        $('.playlist-tracks tr').removeClass ('selected');
+        el.addClass('selected');
     })
     console.log (el, tracks);
 }

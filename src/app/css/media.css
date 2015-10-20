@@ -213,6 +213,10 @@
     background-color: rgba(210, 210, 210, 0.8);
 }
 
+.playlist-tracks tr.selected {
+    background-color: rgba(190, 190, 210, 0.8);
+}
+
 .playlist-table thead {
     color: #a5a5a5;
     border-width: 2px;
