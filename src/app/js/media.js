@@ -172,7 +172,7 @@ function showPaymentOption(e) {
 
             var btcAddress = $('.ri-btc-address').text();
             var btcprice = makePaymentToAddress(btcAddress, price, function () {
-                return onPaymentDone($('.media-data').data());
+                return onPaymentDone(action, $('.media-data').data());
             });
             $('.pwyw-btc-' + action + '-price').text(btcprice);
             $('.pwyw-usd-' + action + '-price-input').val(price);
@@ -237,11 +237,16 @@ function loadTrack (name, url) {
     })
 }
 
-function onPaymentDone (media) {
+function onPaymentDone (action, media) {
     var xinfo = media.info['extra-info'];
+    var url = IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]);
     resetQR();
 
-    var res = loadTrack (xinfo.filename, IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]))
+    var res = loadTrack (xinfo.filename, url)
+
+    if (action === 'download') {
+        document.getElementById('my_iframe').src = url;
+    }
 
     console.log ('player', res, IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]))
 }
@@ -306,12 +311,6 @@ function watchForpayment(address, amount, done) {
 
             console.log('payed.');
             $('.playbar-shadow').addClass('hide')
-            /*              if (filetype === 'mp3')
-                            var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.mp3';
-                            else
-                            var url = 'http://ipfs.alexandria.media/ipfs/QmZVxewtGhtXG28fSBx7vUYCJiKdJWF2vW6rrEAuTUSP7b/Imogen%20Heap%20-%20Tiny%20Human.flac';
-                            document.getElementById('my_iframe').src = url;
-            */
             done(amountpaid)
         });
 }
