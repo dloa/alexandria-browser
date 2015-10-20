@@ -46,11 +46,18 @@ function renderPlaylistTracksHTML (tracks, xinfo, el) {
                   "<td>" + track + "</td>" +
                   "<td>" + xinfo.artist +"</td>" +
                   "<td>" + secondsToPrettyString(xinfo.runtime, true) + "</td>" +
-                  "<td><span class=\"price\">$<span class=\"price price-play\">0.0125</span></span></td>" +
-                  "<td><span class=\"price\">$<span class=\"price price-download\"><span>1.00</span></span></td>" +
+                  "<td><span class=\"price\">$<span class=\"price tb-price-play\">0.0125</span></span></td>" +
+                  "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>1.00</span></span></td>" +
                   "</tr>")
     });
 
+    $('.tb-price-play', el).on ('click', function () {
+        $('.pwyw-action-play').click();
+    })
+
+    $('.tb-price-download', el).on ('click', function () {
+        $('.pwyw-action-download').click();
+    })
     console.log (el, tracks);
 }
 
