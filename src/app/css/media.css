@@ -240,12 +240,10 @@
 .playlist-table th:first-child + th + th + th + th,
 /* fifth column: Price/Play */
 
-.playlist-table th:first-child + th + th + th + th + th
-                               /* sixth column: Price/Buy */
-                               
-                               {
-                                   text-align: center;
-                               }
+.playlist-table th:first-child + th + th + th + th + th {
+    /* sixth column: Price/Buy */
+    text-align: center;
+}
 
 .playlist-table td:first-child {
     /* first column: # */
