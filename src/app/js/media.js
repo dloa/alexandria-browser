@@ -46,14 +46,16 @@ function renderPlaylistTracksHTML (tracks, prices, xinfo, el) {
         download: prices.download.min?prices.download.min:"FREE!"
     }
     tracks.forEach (function (track) {
-        track = prettifyTrack(track, xinfo)
+        var name = prettifyTrack(track, xinfo)
         el.append("<tr><td>" + i++ + "</td>" +
-                  "<td>" + track + "</td>" +
+                  "<td>" + name + "</td>" +
                   "<td>" + xinfo.artist +"</td>" +
                   "<td>" + secondsToPrettyString(xinfo.runtime, true) + "</td>" +
                   "<td><span class=\"price\">$<span class=\"price tb-price-play\">" + price.play + "</span></span></td>" +
                   "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + price.download + "</span></span></td>" +
-                  "</tr>")
+                  "</tr>");
+        var trackEl = el.children().last();
+        trackEl.data({track: track, name: name, url: IPFSUrl([xinfo['DHT Hash'], track])});
     });
 
     $('.tb-price-play', el).on ('click', function () {
