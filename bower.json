@@ -23,6 +23,7 @@
     "spin.js": "~2.0.2",
     "jquery-mousewheel": "~3.1.12",
     "mousetrap": "~1.4.6",
-    "jplayer": "~2.9.2"
+    "jplayer": "~2.9.2",
+    "moment": "~2.10.6"
   }
 }
