@@ -37,7 +37,7 @@ function prettifyTrack (track, xinfo) {
         .replace (/\.(mp3|flac)$/, '');
 }
 
-function renderPlaylistTracksHTML (tracks, xinfo, el) {
+function renderPlaylistTracksHTML (tracks, prices, xinfo, el) {
     el.empty();
     var i = 1;
     tracks.forEach (function (track) {
@@ -46,8 +46,8 @@ function renderPlaylistTracksHTML (tracks, xinfo, el) {
                   "<td>" + track + "</td>" +
                   "<td>" + xinfo.artist +"</td>" +
                   "<td>" + secondsToPrettyString(xinfo.runtime, true) + "</td>" +
-                  "<td><span class=\"price\">$<span class=\"price tb-price-play\">0.0125</span></span></td>" +
-                  "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>1.00</span></span></td>" +
+                  "<td><span class=\"price\">$<span class=\"price tb-price-play\">" + prices.play.min + "</span></span></td>" +
+                  "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + prices.download.min + "</span></span></td>" +
                   "</tr>")
     });
 
@@ -79,6 +79,9 @@ function applyMediaData(data) {
     var releaseInfoSel = $('.release-info');
     var mediaDataSel = $('.media-data');
     var tracks = fixDataMess(xinfo);
+
+
+    xinfo.pwyw = xinfo.pwyw || "0,0"
     var pricesArray = xinfo.pwyw.split(',')
 
     var prices = {
@@ -107,7 +110,7 @@ function applyMediaData(data) {
     $('.ri-btc-address', releaseInfoSel).text (xinfo['Bitcoin Address']);
 
     $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  xinfo.coverArt]));
-    renderPlaylistTracksHTML(tracks, xinfo, $('.playlist-tracks'))
+    renderPlaylistTracksHTML(tracks, prices, xinfo, $('.playlist-tracks'))
 
     console.log (media, tracks);
     //             debugger;
