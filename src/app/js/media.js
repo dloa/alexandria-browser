@@ -242,7 +242,10 @@ function loadTrack (name, url) {
 
 function onPaymentDone (action, media) {
     var xinfo = media.info['extra-info'];
-    var url = IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]);
+    var selectedTrackData = $('.playlist-tracks tr.selected').data();
+    var url = selectedTrackData?
+        selectedTrackData.url:
+        IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]);
     resetQR();
 
     var res = loadTrack (xinfo.filename, url)
