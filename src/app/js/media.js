@@ -212,7 +212,7 @@ function mountMediaBrowser(el, data) {
             .replace(/^pwyw-usd-/, '')
             .replace(/-price-input$/, '')
 
-        $('.pwyw-btc-' + action + '-price').text (USDTouBTC(this.value))
+        $('.pwyw-btc-' + action + '-price').text (USDToBTC(this.value))
     })
 
     $('.pwyw-item').on('click', showPaymentOption)
@@ -231,6 +231,10 @@ function mountMediaBrowser(el, data) {
 
 function USDTouBTC (amount) {
     return (1000000*Number(amount)/day_avg).toString().substring(0, 16)
+}
+
+function USDToBTC (amount) {
+    return (Number(amount)/day_avg).toString().substring(0, 16)
 }
 
 function loadTrack (name, url) {
@@ -269,7 +273,7 @@ function makePaymentToAddress(address, amount, done) {
             watchForpayment(data.input_address, amount, done);
         });
 
-    return USDTouBTC(amount)
+    return USDToBTC(amount)
 }
 
 function getUSDdayAvg() {
@@ -301,7 +305,7 @@ function watchForpayment(address, amount, done) {
                 }, delay);
                 return false;
             }
-            var amountpaid = USDTouBTC(data)
+            var amountpaid = USDToBTC(data)
             console.log(amountpaid);
             var amountRequired = amount;
             if (amountpaid < amountRequired) {
