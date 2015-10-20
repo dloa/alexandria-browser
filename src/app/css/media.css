@@ -217,6 +217,15 @@
     background-color: rgba(190, 190, 210, 0.8);
 }
 
+.playlist-tracks tr.selected td:first-child:before {
+    content: '';
+    border: 10px solid;
+    border-color: transparent transparent transparent grey;
+    position: absolute;
+    margin: 0px 0px 0px -20px;
+}
+
+
 .playlist-table thead {
     color: #a5a5a5;
     border-width: 2px;
