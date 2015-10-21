@@ -276,7 +276,7 @@ function onPaymentDone (action, media) {
         selectedTrackData.url:
         IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]);
     resetQR();
-    if ($('.pwyw-item.active').length > 0) {
+    if ($('.pwyw-item.active').length > 0 && action != 'pin') {
         $('.pwyw-item.active').trigger('click');
         $('.pwyw-close').hide();
         $('.pwyw-overlay').hide();
@@ -367,10 +367,10 @@ function resetQR() {
 
 function setQR(address, amount) {
     amount = Math.round(amount*100000000)/100000000;
-console.log('amount='+amount);
-    var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=bitcoin:" + address + "?amount=" + amount;
-    console.log(url);
-    $('.pwyw-qrcode img').attr("src", url);
-
-    $('.pwyw-btc-address').text(address);
+	if (amount) {
+		var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=bitcoin:" + address + "?amount=" + amount;
+		$('.pwyw-qrcode img').attr("src", url);
+	
+		$('.pwyw-btc-address').text(address);
+	}
 }
