@@ -249,13 +249,12 @@ function mountMediaBrowser(el, data) {
             url: "http://localhost:8079/api/ipfs/pin/add/" + keepHash
         })
         .done(function (data) {
-            libData = JSON.parse(data);
-            console.log(libData);
-            if (libData.status == "ok") {
+//            console.log(data);
+            if (data.status == "ok") {
                 togglePlaybarShadow(true);
                 $('.pwyw-close').trigger('click');
-            } else if (libData.status == "error") {
-                if (libData.error.indexOf('already pinned recursively') > -1) {
+            } else if (data.status == "error") {
+                if (data.error.indexOf('already pinned recursively') > -1) {
                     togglePlaybarShadow(true);
                     $('.pwyw-close').trigger('click');
                 } else {
