@@ -155,6 +155,8 @@ function applyMediaData(data) {
     renderPlaylistTracksHTML(tracks, prices, xinfo, $('.playlist-tracks'))
 
     console.log (media, tracks);
+	
+    $('.ri-date').text(moment(media.timestamp).format('MMMM Do YYYY'));
     //             debugger;
 
     return media;
