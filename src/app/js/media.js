@@ -155,7 +155,7 @@ function applyMediaData(data) {
     renderPlaylistTracksHTML(tracks, prices, xinfo, $('.playlist-tracks'))
 
     console.log (media, tracks);
-	
+    
     $('.ri-date').text(moment(media.timestamp).format('MMMM Do YYYY'));
     //             debugger;
 
@@ -224,6 +224,10 @@ function mountMediaBrowser(el, data) {
             .replace(/-price-input$/, '')
 
         $('.pwyw-btc-' + action + '-price').text (USDToBTC(this.value))
+        if (lastAddress) {
+            setQR(lastAddress, USDToBTC(this.value));
+        }
+
     })
 
     $('.pwyw-item').on('click', showPaymentOption)
@@ -272,6 +276,11 @@ function onPaymentDone (action, media) {
         selectedTrackData.url:
         IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]);
     resetQR();
+    if ($('.pwyw-item.active').length > 0) {
+        $('.pwyw-item.active').trigger('click');
+        $('.pwyw-close').hide();
+        $('.pwyw-overlay').hide();
+    }
 
     var res = loadTrack (xinfo.filename, url)
 
@@ -282,6 +291,8 @@ function onPaymentDone (action, media) {
     console.log ('player', res, IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]))
 }
 
+var lastAddress;
+
 function makePaymentToAddress(address, amount, done) {
     resetQR();
     togglePlaybarShadow(false);
@@ -290,11 +301,12 @@ function makePaymentToAddress(address, amount, done) {
     })
         .done(function (data) {
             console.log(data.input_address);
-            setQR(data.input_address);
+            lastAddress = data.input_address;
+            setQR(data.input_address, USDToBTC(amount));
             watchForpayment(data.input_address, amount, done);
         });
 
-    return USDToBTC(amount)
+    return Math.round(USDToBTC(amount)*100000000)/100000000;
 }
 
 function getUSDdayAvg() {
@@ -350,10 +362,14 @@ function resetQR() {
     $('.pwyw-qrcode img').attr("src", 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==');
 
     $('.pwyw-btc-address').text('');
+    
 }
 
-function setQR(address) {
-    var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + address;
+function setQR(address, amount) {
+    amount = Math.round(amount*100000000)/100000000;
+console.log('amount='+amount);
+    var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=bitcoin:" + address + "?amount=" + amount;
+    console.log(url);
     $('.pwyw-qrcode img').attr("src", url);
 
     $('.pwyw-btc-address').text(address);
