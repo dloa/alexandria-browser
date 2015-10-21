@@ -7,17 +7,22 @@
 }
 
 .top {
+	display: -webkit-flex;
     display: flex;
 }
 
 .media-info {
+	display: -webkit-flex;
     display: flex;
+	-webkit-flex-direction: column;
     flex-direction: column;
+	-webkit-justify-content: space-around;
     justify-content: space-around;
 }
 
 .media-info,
 .media-cover {
+	-webkit-flex: 1;
     flex: 1;
 }
 
@@ -74,7 +79,9 @@
     max-height: 0px;
     overflow: hidden;
     padding: 0px 10px;
+	display: -webkit-flex;
     display: flex;
+	-webkit-flex-direction: column;
     flex-direction: column;
     margin: 0px auto;
     background-color: lightcyan;
@@ -88,6 +95,7 @@
 }
 
 .pwyw-paybox {
+	display: -webkit-flex;
     display: flex;
     text-align: center;
 }
@@ -111,27 +119,36 @@
 
 .pwyw-payinfo,
 .pwyw-qrcode {
+	-webkit-flex: 1;
     flex: 1;
     margin: 0px 5px;
 }
 
 .pwyw-payinfo {
+	display: -webkit-flex;
     display: flex;
+	-webkit-justify-content: space-around;
     justify-content: space-around;
+	-webkit-flex-direction: column;
     flex-direction: column;
 }
 
 .pwyw-list {
+	display: -webkit-flex;
     display: flex;
     margin: 0;
     padding: 0;
+	-webkit-justify-content: space-around;
     justify-content: space-around;
 }
 
 .pwyw-item {
+	display: -webkit-flex;
     display: flex;
+	-webkit-flex-direction: column;
     flex-direction: column;
     list-style: none;
+	-webkit-flex: auto 0;
     flex: auto 0;
 }
 
