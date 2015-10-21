@@ -42,8 +42,8 @@ function renderPlaylistTracksHTML (tracks, prices, xinfo, el) {
     el.empty();
     var i = 1;
     var price = {
-        play: prices.play.min?prices.play.min:"FREE!",
-        download: prices.download.min?prices.download.min:"FREE!"
+        play: prices.play.suggested?prices.play.suggested:"FREE!",
+        download: prices.download.suggested?prices.download.suggested:"FREE!"
     }
     tracks.forEach (function (track) {
         var name = prettifyTrack(track, xinfo)
