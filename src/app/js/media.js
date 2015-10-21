@@ -139,9 +139,9 @@ function applyMediaData(data) {
 
     mediaDataSel.data(media)
 
-    $('.pwyw-price-play').text (prices.play.min)
+    $('.pwyw-price-play').text (prices.play.suggested)
     $('.pwyw-price-suggest-play').text (prices.play.suggested)
-    $('.pwyw-price-download').text (prices.download.min)
+    $('.pwyw-price-download').text (prices.download.suggested)
     $('.pwyw-price-suggest-download').text (prices.download.suggested)
 
     $('.media-artist', mediaInfoSel).text(xinfo.artist);
