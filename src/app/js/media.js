@@ -283,7 +283,7 @@ function USDTouBTC (amount) {
 }
 
 function USDToBTC (amount) {
-    return (Number(amount)/day_avg).toString().substring(0, 16)
+    return Math.round((Number(amount)/day_avg).toString().substring(0, 16)*100000000)/100000000
 }
 
 function loadTrack (name, url) {
@@ -334,7 +334,7 @@ function makePaymentToAddress(address, amount, done) {
             watchForpayment(data.input_address, amount, done);
         });
 
-    return Math.round(USDToBTC(amount)*100000000)/100000000;
+    return USDToBTC(amount);
 }
 
 function getUSDdayAvg() {
@@ -394,7 +394,6 @@ function resetQR() {
 }
 
 function setQR(address, amount) {
-    amount = Math.round(amount*100000000)/100000000;
     if (amount) {
         var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=bitcoin:" + address + "?amount=" + amount;
         $('.pwyw-qrcode img').attr("src", url);
