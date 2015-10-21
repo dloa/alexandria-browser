@@ -172,7 +172,6 @@ function IPFSUrl (components) {
 function showPaymentOption(e) {
         var self = this;
         $('.pwyw-item').removeClass('active');
-        this.classList = toArray(this.classList);
 
         for (i = 0; this.classList[i]; i++) {
             className = this.classList[i];
