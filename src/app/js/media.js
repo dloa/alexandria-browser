@@ -1,6 +1,7 @@
 var filetype = 'mp3';
 var day_avg = false;
 var delay = 5000;
+var keepHash;
 
 window.doMountMediaBrowser = function (el, data) {
     console.log (el, data)
@@ -154,6 +155,8 @@ function applyMediaData(data) {
     $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  xinfo.coverArt]));
     renderPlaylistTracksHTML(tracks, prices, xinfo, $('.playlist-tracks'))
 
+    keepHash = media.torrent;
+
     console.log (media, tracks);
     
     $('.ri-date').text(moment(media.timestamp).format('MMMM Do YYYY'));
@@ -242,9 +245,29 @@ function mountMediaBrowser(el, data) {
         $('.pwyw-overlay').hide();
     });
     $('.pwyw-pin-it').on('click', function (e) {
-        window.isPinned = !!!window.isPinned;
-        togglePlaybarShadow(window.isPinned);
-        console.log ('pinned', window.isPinned)
+        $.ajax({
+            url: "http://localhost:8079/api/ipfs/pin/add/" + keepHash
+        })
+        .done(function (data) {
+            libData = JSON.parse(data);
+            console.log(libData);
+            if (libData.status == "ok") {
+                togglePlaybarShadow(true);
+                $('.pwyw-close').trigger('click');
+            } else if (libData.status == "error") {
+                if (libData.error.indexOf('already pinned recursively') > -1) {
+                    togglePlaybarShadow(true);
+                    $('.pwyw-close').trigger('click');
+                } else {
+                    $('.pwyw-pining-error').text('An unknown error has occured, please make sure you have Librarian installed and running.').show();
+                }
+            } else {
+                $('.pwyw-pining-error').text('An unknown error has occured, please make sure you have Librarian installed and running.').show();
+            }
+        })
+        .fail(function() {
+            $('.pwyw-pining-error').text('You must have Librarian installed and running in order to use this feature.').show();
+        });
     })
 
     $('.format-selector button').on('click', function (e) {
@@ -276,10 +299,14 @@ function onPaymentDone (action, media) {
         selectedTrackData.url:
         IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]);
     resetQR();
+
+    if (action == 'pin') $('.pwyw-pining-error').hide();
+
     if ($('.pwyw-item.active').length > 0 && action != 'pin') {
         $('.pwyw-item.active').trigger('click');
         $('.pwyw-close').hide();
         $('.pwyw-overlay').hide();
+        togglePlaybarShadow(true);
     }
 
     var res = loadTrack (xinfo.filename, url)
@@ -367,10 +394,10 @@ function resetQR() {
 
 function setQR(address, amount) {
     amount = Math.round(amount*100000000)/100000000;
-	if (amount) {
-		var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=bitcoin:" + address + "?amount=" + amount;
-		$('.pwyw-qrcode img').attr("src", url);
-	
-		$('.pwyw-btc-address').text(address);
-	}
+    if (amount) {
+        var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=bitcoin:" + address + "?amount=" + amount;
+        $('.pwyw-qrcode img').attr("src", url);
+    
+        $('.pwyw-btc-address').text(address);
+    }
 }
