@@ -190,8 +190,10 @@ function showPaymentOption(e) {
             actionElement.addClass('active');
             $(self).addClass('active')
 
-            console.log ('btc', btcprice, 'pwyw-btc-' + action + '-price')
-        })
+            console.log ('btc', btcprice, 'pwyw-btc-' + action + '-price');
+        });
+        $('.pwyw-overlay').show();
+        $('.pwyw-close').show();
 }
 
 function mountMediaBrowser(el, data) {
@@ -223,6 +225,16 @@ function mountMediaBrowser(el, data) {
     })
 
     $('.pwyw-item').on('click', showPaymentOption)
+    $('.pwyw-overlay').on('click',function() {
+        $('.pwyw-item.active').trigger('click');
+        $('.pwyw-close').hide();
+        $('.pwyw-overlay').hide();
+    });
+    $('.pwyw-close').on('click',function() {
+        $('.pwyw-item.active').trigger('click');
+        $('.pwyw-close').hide();
+        $('.pwyw-overlay').hide();
+    });
     $('.pwyw-pin-it').on('click', function (e) {
         window.isPinned = !!!window.isPinned;
         togglePlaybarShadow(window.isPinned);

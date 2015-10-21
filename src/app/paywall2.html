@@ -16,11 +16,23 @@
     <script src="vendor/moment/min/moment.min.js"></script>
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/normalize.min.css">
-    <!--		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"> -->
+    <!--        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"> -->
     <link rel="stylesheet" href="css/alexandria.css">
     <link rel="stylesheet" href="css/media.css">
 
     <style>
+    
+@font-face {
+  font-family: 'mediaicns';
+  src: url('icons/media.eot?75606605');
+  src: url('icons/media.eot?75606605#iefix') format('embedded-opentype'),
+       url('icons/media.woff?75606605') format('woff'),
+       url('icons/media.ttf?75606605') format('truetype'),
+       url('icons/media.svg?75606605#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
      .playbar {
          width: 100%;
          height: 50px;
@@ -32,11 +44,11 @@
 
      .playbar-shadow {
          border-radius: 20px;
-         background: rgba(200,200,200,0.8);
+         background: rgba(255,255,255,1);
          height: 70px;
          position: absolute;
-         top: -2px;
-         margin: 10px 10px;
+         top: -15px;
+         margin: 10px 0px;
          overflow: hide;
          transition: all 0.2s;
      }
@@ -44,46 +56,58 @@
          transform: translate(0%, -5000%)
      }
      .playbar-shadow h2 {
-         padding: 5px 25px;
+         padding: 0;
+         text-align: center;
      }
      .playbar .jp-play, .playbar .jp-stop {
          float: left;
-         width: 66px;
-         height: 66px;
-         background: url("svg/play.svg");
-         background-repeat: none;
-         border: none;
-     }
-
-     .playbar .jp-stop{
-         display: none;
-         background: url("svg/stop.svg");
-     }
-
-     .playbar.jp-state-playing .jp-play{
-         background: url("svg/pause.svg");
-     }
-
-     .playbar.jp-state-playing .jp-stop{
-//         display: inherit;
-     }
-
-     .playbar .jp-current_time {
-         float: left;
          width: 40px;
-         text-align: center;
-         line-height: 50px;
-         height: 100%;
+         height: 40px;
+         font-family: 'mediaicns';
+         border: none;
+         font-size: 34px;
+         position: relative;
+         top: 4px;
+         background-color: #fff
+     }
+     
+     .playbar .jp-play:before {
+         content: '\e800'
      }
 
-     .playbar .jp-progress {
+     .playback .jp-stop {
+         display: none;
+     }
+
+     .playbar .jp-stop:before{
+         content: '\e801';
+     }
+
+     .playbar.jp-state-playing .jp-play:before{
+         content: '\e802';
+     }
+
+     .playbar .jp-stop {
+         display: none !important; /* no need for stop atm */
+     }
+
+      .playbar .jp-current-time {
+         position: relative;
+         top: 13px;
+         left: 5px;
+         z-index: -1
+      }
+
+      .playbar .jp-progress {
          height: 3px;
          float: left;
-         margin-top: 23px;
-         margin-left: 5px;
+         margin-top: 1px;
+         margin-left: 10px;
          width: calc( 100% - 50px - 50px - 50px - 10px);
          background-color: lightgrey;
-     }
+         position: relative;
+         left: 46px;
+      }
 
      .playbar .jp-seek-bar {
          height: 40px;
@@ -99,11 +123,12 @@
      .playbar .jp-play-button {
          content: "";
          width: 10px;
-         top: -8px;
+         top: -4px;
          position: relative;
          border-radius: 100%;
          background-color: #868686;
          height: 10px;
+         float: right;
      }
 
      .playbar .scrobble-bar p {
@@ -114,9 +139,183 @@
      .playbar .jp-duration {
          float: right;
          line-height: 50px;
-         padding-right: 20px;
+         padding-right: 7px;
+         height: 100%;
+         position: relative;
+         top: -23px;
+     }
+     
+     html {
          height: 100%;
      }
+     
+    body {
+        background-color: #fff !important;
+        padding-top: 44px;
+        min-height: calc(100% - 44px);
+        box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.75);
+        -webkit-box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.5);
+        -moz-box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.5);
+        box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.5);
+    }
+    
+    .media-info h1, .media-info h2, .media-info h3 {
+        margin-bottom: 14px;
+        text-align: left;
+    }
+    
+    .ri-publisher {
+        display: none
+    }
+    
+    .ri-btc-address {
+        display: none
+    }
+    
+    .ri-runtime {
+        display: none
+    }
+    
+    .ri-track-count {
+        display: none
+    }
+    
+    .ri-xfile-container {
+        display: none
+    }
+    
+    .release-info {
+        font-size: 1.05em;
+    }
+    
+    .price {
+        margin-top: 7px;
+    }
+    
+    .playlist-table thead {
+        color: #7c7c7c !important;
+    }
+    
+    .playlist-table {
+        margin-top: 15px
+    }
+    
+    .pwyw-item .button-svg {
+        cursor: pointer
+    }
+    
+    .tipbox {
+        display: none
+    }
+    
+    .media-info h1, .media-info h2, .media-info h3 {
+        margin-bottom: 0
+    }
+    
+    .jp-details {
+        margin-top: 12px;
+        position: relative;
+        left: 5px;
+    }
+    
+    .playbar-shadow h2 {
+        text-align: center
+    }
+    
+    .pwwy-stuff {
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        z-index: 1050;
+        margin-left: -169px;
+    }
+    
+    .pwyw-item.active:before {
+        display: none !important;
+    }
+    
+    .pwyw-container {
+        background-color: #f7f6f5;
+    }
+    
+    .pwyw-overlay {
+        display: none;
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        background-color:rgba(230, 230, 230, 0.85);
+        background: url(data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuNUmK/OAAAAATSURBVBhXY2RgYNgHxGAAYuwDAA78AjwwRoQYAAAAAElFTkSuQmCC) repeat scroll transparent\9; /* ie fallback png background image */
+        z-index:1000;
+    }
+    
+    .pwyw-container {
+        border-radius: 5px;
+        -webkit-box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.41);
+        -moz-box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.41);
+        box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.41);
+    }
+    
+    .pwyw-close {
+        font-family: 'mediaicns';
+        position: absolute;
+        right: 32px;
+        top: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        display: none
+    }
+    
+    .pwyw-close:before {
+        content: '\e803';
+    }
+    
+    .pwyw-suggest {
+        margin-bottom: 13px;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+    
+    .pwyw-pin-pretext {
+        margin-bottom: 5px;
+    }
+    
+    .pwyw-payinfo {
+        display: block;
+        justify-content: inherit;
+        flex-direction: inherit;
+    }
+    
+    .pwyw-paybox input {
+        width: 36px;
+        text-align: center;
+        padding: 0 10px;
+    }
+    
+    .pwyw-footer {
+        text-align: center
+    }
+    
+    .pwyw-pining-info {
+        font-size: 30px
+    }
+    
+    .pwyw-pining-suggest {
+        font-size: 30px
+    }
+    
+    .pwyw-container {
+        width: 393px
+    }
+    
+    .pwyw-qrcode {
+        margin: 10px 5px;
+    }
+    
+    .pwyw-somespace {
+        height: 10px
+    }
 
     </style>
 </head>
@@ -145,21 +344,22 @@
                     <li class="ri-publisher">publisher</li>
                     <li class="ri-btc-address">BTC address</li>
                     <li>Released <span class="ri-date">October 10, 2015</span></li>
-                    <li><span class="ri-audio-count">0</span> Audio Track</li>
+                    <li class="ri-track-count"><span class="ri-audio-count">0</span> Audio Track</li>
                     <li class="ri-runtime">runtime</li>
-                    <li><span class="ri-xfile-count">2</span> extra files</li>
+                    <li class="ri-xfile-container"><span class="ri-xfile-count">2</span> extra files</li>
                 </ul>
 
                 <div class="pwwy-stuff">
+                    <div class="pwyw-close"></div>
                     <div class="pwyw-container pwyw-activate-pin">
-                        <p>currently there are</p>
+                        <i class="pwyw-pin-pretext">currently there are</i>
                         <div class="pwyw-pining-info pwyw-suggest">
                             <span class="pwyw-currently-pining">497</span> users pining this file
                         </div>
                         <div class="pwyw-pining-suggestion">
                             if you pin it, you can play the song for free!
                         </div>
-                        <span class="pwyw-suggest">
+                        <span class="pwyw-pining-suggest pwyw-suggest">
                             $<span class="pwyw-pin-price pwyw-suggested-price">0.00</span> per play
                         </span>
                         <button class="pwyw-pin-it">Pin It!</button>
@@ -167,48 +367,46 @@
                     <div class="pwyw-container pwyw-activate-download">
                         <div class="pwyw-paybox">
                             <div class="pwyw-payinfo">
-                                <p>
-                                    The suggested price is:
-                                </p>
+                                The suggested price is:
                                 <span class="pwyw-suggest">
                                     $<span class="pwyw-price-suggest-download pwyw-suggested-price">suggest-dl</span> to buy
                                 </span>
+                                <br>
                                 <span>
                                     $
      <input class="pwyw-usd-price-input pwyw-usd-download-price-input"> USD
                                 </span>
-                                </span>
-                            </div>
-                            <div class="pwyw-qrcode">
-                                <img src="" />
+                                <div class="pwyw-somespace"></div>
                             </div>
                         </div>
                         <div class="pwyw-footer">
-                            <span class="pwyw-btc-download-price">dl-price</span> BTC to
+                            <span class="pwyw-btc-download-price">dl-price</span> BTC to<br>
+                            <div class="pwyw-qrcode">
+                                <img src="" />
+                            </div>
                             <span class="pwyw-btc-address">                            </span>
                         </div>
                     </div>
                     <div class="pwyw-container pwyw-activate-play">
                         <div class="pwyw-paybox">
                             <div class="pwyw-payinfo">
-                                <p>
-                                    The suggested price is:
-                                </p>
+                                The suggested price is:
                                 <span class="pwyw-suggest">
                                     $<span class="pwyw-price-suggest-play pwyw-suggested-price">suggest-play</span> to play
                                 </span>
+                                <br>
                                 <span>
                                     $
      <input class="pwyw-usd-price-input pwyw-usd-play-price-input"> USD
                                 </span>
-                                </span>
-                            </div>
-                            <div class="pwyw-qrcode">
-                                <img src="http://www.wired.com/images_blogs/magazine/2013/04/qrcode_f.jpg" />
+                                <div class="pwyw-somespace"></div>
                             </div>
                         </div>
                         <div class="pwyw-footer">
                             <span class="pwyw-btc-play-price">play-price</span> BTC to
+                            <div class="pwyw-qrcode">
+                                <img src="http://www.wired.com/images_blogs/magazine/2013/04/qrcode_f.jpg" />
+                            </div>
                             <span class="pwyw-btc-address">1CvDLWNzX4PEkzMU7t2pVGsT858pMiNorQ
                             </span>
                         </div>
@@ -247,9 +445,10 @@
                         <div class="jp-gui jp-interface">
                             <div class="jp-controls-holder">
                                 <div class="jp-controls">
-                                    <button class="jp-play" role="button" tabindex="0">play</button>
-                                    <button class="jp-stop" role="button" tabindex="0">stop</button>
+                                    <button class="jp-play" role="button" tabindex="0"></button>
+                                    <button class="jp-stop" role="button" tabindex="0"></button>
                                 </div>
+                                <div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
                                 <div class="jp-progress">
                                     <div class="jp-seek-bar">
                                         <div class="jp-play-bar">
@@ -257,7 +456,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
                                 <div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
                                 <div class="jp-toggles" style="display: none">
                                     <button class="jp-repeat" role="button" tabindex="0">repeat</button>
@@ -318,6 +516,7 @@
             </div>
         </div>
     </div>
+    <div class="pwyw-overlay"></div>
     </script>
     <div id="media-browser"></div>
     <iframe id="my_iframe" style="display:none;"></iframe>
@@ -328,7 +527,7 @@
 
     <script type="text/javascript">
      $('document').ready(function () {
-         var txid = location.hash || "048bff9ec5ab073e63779685fb5c0ee0fa37d709e488e3d380b949d9dd856a12";
+         var txid = location.hash || "85180edf2e5adf71ca5db8a0fd73856beed4758ef5485575c7fb21d823022bfa";
          var data = window.searchAPI('media', 'txid', txid.replace(/^#/, ''));
 
          console.log (txid, data);
