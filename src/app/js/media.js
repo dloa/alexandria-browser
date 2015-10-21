@@ -172,31 +172,34 @@ function IPFSUrl (components) {
 function showPaymentOption(e) {
         var self = this;
         $('.pwyw-item').removeClass('active');
-        this.classList.forEach(function (className) {
-            if (!className.match(/pwyw-action/))
-                return
+        this.classList = toArray(this.classList);
 
-            var action = className.replace(/^pwyw-action-/, '');
-            var actionElement = $('.pwyw-activate-' + action);
-            var price = $('.pwyw-suggested-price', actionElement).text();
+        for (i = 0; this.classList[i]; i++) {
+            className = this.classList[i];
+            if (className.match(/pwyw-action/)) {
 
-            $('.pwyw-' + action + '-price').text(price);
-            if (actionElement.hasClass('active')) {
-                return $('.pwyw-container').removeClass('active');
+                var action = className.replace(/^pwyw-action-/, '');
+                var actionElement = $('.pwyw-activate-' + action);
+                var price = $('.pwyw-suggested-price', actionElement).text();
+    
+                $('.pwyw-' + action + '-price').text(price);
+                if (actionElement.hasClass('active')) {
+                    return $('.pwyw-container').removeClass('active');
+                }
+    
+                var btcAddress = $('.ri-btc-address').text();
+                var btcprice = makePaymentToAddress(btcAddress, price, function () {
+                    return onPaymentDone(action, $('.media-data').data());
+                });
+                $('.pwyw-btc-' + action + '-price').text(btcprice);
+                $('.pwyw-usd-' + action + '-price-input').val(price);
+                $('.pwyw-container').removeClass('active');
+                actionElement.addClass('active');
+                $(self).addClass('active')
+    
+                console.log ('btc', btcprice, 'pwyw-btc-' + action + '-price');
             }
-
-            var btcAddress = $('.ri-btc-address').text();
-            var btcprice = makePaymentToAddress(btcAddress, price, function () {
-                return onPaymentDone(action, $('.media-data').data());
-            });
-            $('.pwyw-btc-' + action + '-price').text(btcprice);
-            $('.pwyw-usd-' + action + '-price-input').val(price);
-            $('.pwyw-container').removeClass('active');
-            actionElement.addClass('active');
-            $(self).addClass('active')
-
-            console.log ('btc', btcprice, 'pwyw-btc-' + action + '-price');
-        });
+        }
         $('.pwyw-overlay').show();
         $('.pwyw-close').show();
 }
