@@ -1,4 +1,4 @@
-var serverAddress = 'alexandria.media'; // Dev
+var serverAddress = 'libraryd.alexandria.media'; // Dev
 // var serverAddress = 'localhost';
 
 // MEDIA + PUBLISHER SEARCH API
