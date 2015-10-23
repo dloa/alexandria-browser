@@ -251,7 +251,6 @@ function mountMediaBrowser(el, data) {
             url: "http://localhost:8079/api/ipfs/pin/add/" + keepHash
         })
         .done(function (data) {
-//            console.log(data);
             if (data.status == "ok") {
                 togglePlaybarShadow(true);
                 $('.pwyw-close').trigger('click');

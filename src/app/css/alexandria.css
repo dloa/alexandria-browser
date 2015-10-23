@@ -1523,6 +1523,13 @@ ul.distNetList li {
 	width: 100%;
 	height: auto;
 }
+#pwyw-pin-error {
+	margin-top: 10px;
+}
+/* hides Florincoin Payment Tab, remove this later on */
+li[name=pwyw-flo] {
+	display: none !important;
+}
 /* CLOSE MODAL */
 .close-modal {
 	color: #fff;
