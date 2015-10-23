@@ -175,7 +175,7 @@ jQuery(document).ready(function($){
 	});
 
 	// API Server ID and Control
-	if(serverAddress == '54.172.28.195'){
+	if(serverAddress == 'libraryd.alexandria.media'){
 		$('#serverID').text('Gateway');
 	} else {
 		$('#serverID').text('Local');
