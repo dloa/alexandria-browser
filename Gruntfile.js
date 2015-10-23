@@ -121,7 +121,6 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		nwjs: {
 			options: {
-				version: '0.9.2',
 				build_dir: './build', // Where the build version of my node-webkit app is saved
 				keep_nw: true,
 				embed_nw: false,
@@ -131,7 +130,6 @@ module.exports = function (grunt) {
 				win: buildPlatforms.win,
 				linux32: buildPlatforms.linux32,
 				linux64: buildPlatforms.linux64,
-				download_url: 'http://get.popcorntime.io/nw/'
 			},
 			src: ['./src/**',
 			      './node_modules/**', './plugins/**', '!./node_modules/bower/**', '!./node_modules/*grunt*/**',
