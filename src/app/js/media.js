@@ -199,8 +199,7 @@ function showPaymentOption(e) {
                 console.log ('btc', btcprice, 'pwyw-btc-' + action + '-price');
             }
         }
-        $('.pwyw-overlay').show();
-        $('.pwyw-close').show();
+        togglePWYWOverlay(true)
 }
 
 function mountMediaBrowser(el, data) {
@@ -238,13 +237,11 @@ function mountMediaBrowser(el, data) {
     $('.pwyw-item').on('click', showPaymentOption)
     $('.pwyw-overlay').on('click',function() {
         $('.pwyw-item.active').trigger('click');
-        $('.pwyw-close').hide();
-        $('.pwyw-overlay').hide();
+        togglePWYWOverlay(false)
     });
     $('.pwyw-close').on('click',function() {
         $('.pwyw-item.active').trigger('click');
-        $('.pwyw-close').hide();
-        $('.pwyw-overlay').hide();
+        togglePWYWOverlay(false)
     });
     $('.pwyw-pin-it').on('click', function (e) {
         $.ajax({
@@ -292,6 +289,13 @@ function loadTrack (name, url) {
     })
 }
 
+function togglePWYWOverlay (bool) {
+    var action = bool?'show':'hide';
+
+    $('.pwyw-close')[action]();
+    $('.pwyw-overlay')[action]();
+}
+
 function onPaymentDone (action, media) {
     var xinfo = media.info['extra-info'];
     var selectedTrackData = $('.playlist-tracks tr.selected').data();
@@ -304,8 +308,7 @@ function onPaymentDone (action, media) {
 
     if ($('.pwyw-item.active').length > 0 && action != 'pin') {
         $('.pwyw-item.active').trigger('click');
-        $('.pwyw-close').hide();
-        $('.pwyw-overlay').hide();
+        togglePWYWOverlay(false)
         togglePlaybarShadow(true);
     }
 
