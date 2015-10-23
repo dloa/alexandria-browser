@@ -1,4 +1,4 @@
-var serverAddress = '54.172.28.195'; // Dev
+var serverAddress = 'alexandria.media'; // Dev
 // var serverAddress = 'localhost';
 
 // MEDIA + PUBLISHER SEARCH API
