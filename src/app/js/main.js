@@ -1,6 +1,6 @@
 /* some global variables to make mistakes only once */
 
-var serverAddress = '54.172.28.195'; // Dev
+var serverAddress = 'libraryd.alexandria.media'; // Dev
 // var serverAddress = 'localhost';
 
 var IPFSserver = 'ipfs.alexandria.media';
