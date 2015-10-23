@@ -158,11 +158,33 @@ function applyMediaData(data) {
     keepHash = media.torrent;
 
     console.log (media, tracks);
-    
+
     $('.ri-date').text(moment(media.timestamp).format('MMMM Do YYYY'));
+
+    watchForPin (ipfsAddr, xinfo.filename)
     //             debugger;
 
     return media;
+}
+
+function watchForPin (addr, filename) {
+    if (window.pinWatcher)
+        clearInterval (window.pinWatcher)
+
+    var pinningSel = $('.pwyw-currently-pinning');
+    window.pinWatcher = setInterval (function () {
+        $.ajax ({
+            // XXX(xaiki): hardcoded Tiny Human.mp3
+            url: window.librarianHost + '/api/ipfs/dht/findprovs/' + 'QmRb23uqmA3uJRUoDkRyG3qXvTpSV5a4zwe6yjJRsLZvAm'
+        })
+            .done(function (data) {
+                var count = data.output.split('error:')[0].split(' ').length;
+                pinningSel.text(count)
+            })
+            .fail(function () {
+
+            })
+    }, 2000)
 }
 
 function IPFSUrl (components) {
