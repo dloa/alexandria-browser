@@ -1,11 +1,11 @@
-/* Taken from PopcornTime.io */
+/* Taken from butterproject.org */
 /* Licence: GPLv2 */
 
 var projectName = "Alexandria"
 var projectNameNS = projectName.replace(/\s/, '-')
 var config = {
         mac : {
-                icon: './src/app/images/popcorntime.icns'
+                icon: './src/app/images/alexandria.icns'
         }
 }
 
