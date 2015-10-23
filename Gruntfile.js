@@ -11,27 +11,14 @@ var config = {
         }
 }
 
-var platformToGoArch = {
-	'mac': 'amd64',
-	'win': '386',
-	'linux32': '386',
-	'linux64': 'amd64'
-}
-
-var parsePlatforms = function (arg) {
+var parseBuildPlatforms = function (argumentPlatform) {
 	// this will make it build no platform when the platform option is specified
 	// without a value which makes argumentPlatform into a boolean
-	var inputPlatforms = arg || process.platform + ";" + process.arch;
+	var inputPlatforms = argumentPlatform || process.platform + ";" + process.arch;
 
 	// Do some scrubbing to make it easier to match in the regexes bellow
 	inputPlatforms = inputPlatforms.replace("darwin", "mac");
 	inputPlatforms = inputPlatforms.replace(/;ia|;x|;arm/, "");
-
-	return inputPlatforms
-}
-
-var parseBuildPlatforms = function (argumentPlatform) {
-	var inputPlatforms = parsePlatforms (argumentPlatform)
 
 	var buildAll = /^all$/.test(inputPlatforms);
 	var buildPlatforms = {
@@ -65,9 +52,8 @@ module.exports = function (grunt) {
 	grunt.registerTask('build', [
 		'injectgit',
 		'bower_clean',
-//		'shell:goget',
-//		'shell:goinstall',
 		'nodewebkit',
+		'shell:goget',
 		'shell:setexecutable'
 	]);
 
@@ -135,7 +121,7 @@ module.exports = function (grunt) {
 	grunt.initConfig({
 		nodewebkit: {
 			options: {
-				version: '0.12.2',
+				version: '0.9.2',
 				build_dir: './build', // Where the build version of my node-webkit app is saved
 				keep_nw: true,
 				embed_nw: false,
@@ -150,7 +136,8 @@ module.exports = function (grunt) {
 			src: ['./src/**',
 			      './node_modules/**', './plugins/**', '!./node_modules/bower/**', '!./node_modules/*grunt*/**',
 			      '!./**/test*/**', '!./**/doc*/**', '!./**/example*/**', '!./**/demo*/**', '!./**/bin/**', '!./**/build/**', '!./**/.*/**',
-			      './package.json', './README.md', './LICENSE.txt', './.git.json'
+			      './package.json', './README.md', './LICENSE.txt', './.git.json',
+			      'gocode/bin/**'
 			]
 		},
 
@@ -192,62 +179,15 @@ module.exports = function (grunt) {
 		shell: {
 			goget: {
 				command: function () {
-					var ret = []
-					Object.keys(buildPlatforms).forEach (function (platform) {
-						if (! buildPlatforms[platform])
-							return;
-
-						var goGetPath = process.cwd() + '/build/cache/' + platform +  '/gocode/'
-						try { // ugly js construct…
-							var files = fs.readdirSync (goGetPath + '/bin/')
-						} catch (e) {}
-
-						/* this is a bit counterintuive:
-						 * fs.lstat[Sync] was returning a valid object
-						 * on non-existent files (joys of JS)…
-						 * so I hacked this around to be more
-						 * deterministic (xaiki)
-						 */
-						if (files && files.indexOf('ipfs')) {
-							console.log (goGetPath, files, ': ipfs already exists, not gogetting anything');
-							return;
-						}
-
-						console.log ('gogeting to', goGetPath)
-						ret.push([
-							'env',
-							'GOPATH=' + goGetPath,
-							'GOARCH=' + platformToGoArch[platform],
-							'go get -u github.com/ipfs/go-ipfs/cmd/ipfs'
-						].join (' '))
-					})
-
-					return ret.join ('&&');
-				}
-			},
-			goinstall: {
-				command: function () {
-					var ret = []
-					Object.keys(buildPlatforms).forEach (function (platform) {
-						if (! buildPlatforms[platform])
-							return;
-
-						var goGetPath     = process.cwd()
-						    + '/build/cache/' + platform +  '/gocode/'
-						var goInstallPath = process.cwd()
-						    + '/build/releases/'
-						    + projectNameNS + '/'
-						    + platform      + '/'
-						    + projectNameNS + '/'
-
-						console.log ('installing to', goInstallPath)
-						ret.push([
-							'cp', goGetPath + '/bin/ipfs',
-							goInstallPath
-						].join (' '))
-					})
-
-					return ret.join ('&&');
+					try {
+						fs.lstatSync(process.cwd() + '/gocode/bin/ipfs')
+					} catch (e) {
+						return ['GOPATH=' + process.cwd() + '/gocode',
+							'go get -u github.com/ipfs/go-ipfs/cmd/ipfs']
+							.join (' ');
+					}
+					console.log ('ipfs already exists, not gogetting anything')
+					return '';
 				}
 			},
 			setexecutable: {
