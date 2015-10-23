@@ -182,12 +182,12 @@ jQuery(document).ready(function($){
 	}
 	if (location.protocol == 'app:') {
 		$('#serverID').click(function(){
-			if(serverAddress == '54.172.28.195'){
+			if(serverAddress == 'libraryd.alexandria.media'){
 				serverAddress = 'localhost';
 				IPFSserver = 'localhost:8080';
 				$('#serverID').text('Local');
 			} else {
-				serverAddress = '54.172.28.195'
+				serverAddress = 'libraryd.alexandria.media'
 				IPFSserver = 'ipfs.alexandria.media';
 				$('#serverID').text('Gateway');
 			}
