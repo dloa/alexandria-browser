@@ -1,4 +1,4 @@
-/* Taken from PopcornTime.io */
+/* Taken from ButterProject.org */
 /* Licence: GPLv2 */
 
 var fs = require ('fs')
@@ -7,7 +7,7 @@ var projectName = "Alexandria"
 var projectNameNS = projectName.replace(/\s/, '-')
 var config = {
         mac : {
-                icon: './src/app/images/popcorntime.icns'
+                icon: './src/app/img/alexandria.icns'
         }
 }
 
