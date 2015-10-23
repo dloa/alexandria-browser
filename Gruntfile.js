@@ -52,7 +52,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('build', [
 		'injectgit',
 		'bower_clean',
-		'nodewebkit',
+		'nwjs',
 		'shell:goget',
 		'shell:setexecutable'
 	]);
@@ -119,7 +119,7 @@ module.exports = function (grunt) {
 	});
 
 	grunt.initConfig({
-		nodewebkit: {
+		nwjs: {
 			options: {
 				version: '0.9.2',
 				build_dir: './build', // Where the build version of my node-webkit app is saved
@@ -143,16 +143,16 @@ module.exports = function (grunt) {
 
 		exec: {
 			win: {
-				cmd: '"build/cache/win/<%= nodewebkit.options.version %>/nw.exe" .'
+				cmd: '"build/cache/win/<%= nwjs.options.version %>/nw.exe" .'
 			},
 			mac: {
-				cmd: 'build/cache/mac/<%= nodewebkit.options.version %>/node-webkit.app/Contents/MacOS/node-webkit .'
+				cmd: 'build/cache/mac/<%= nwjs.options.version %>/node-webkit.app/Contents/MacOS/node-webkit .'
 			},
 			linux32: {
-				cmd: '"build/cache/linux32/<%= nodewebkit.options.version %>/nw" .'
+				cmd: '"build/cache/linux32/<%= nwjs.options.version %>/nw" .'
 			},
 			linux64: {
-				cmd: '"build/cache/linux64/<%= nodewebkit.options.version %>/nw" .'
+				cmd: '"build/cache/linux64/<%= nwjs.options.version %>/nw" .'
 			},
 			codesign: {
 				cmd: 'sh dist/mac/codesign.sh || echo "Codesign failed, likely caused by not being run on mac, continuing"'
