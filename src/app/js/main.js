@@ -3313,6 +3313,9 @@ function goBack() {
 	player.stop();
 	player.clearPlaylist();
 	navCounter--;
+	if ($('#app-overlay').css('display') == 'block') {
+		hideOverlay();
+	}
 	history.back();
 }
 
