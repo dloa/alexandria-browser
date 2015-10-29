@@ -2040,6 +2040,28 @@ div#lightbox #qrcode-lightbox {
 	margin: 0;
 	padding: 0;
 }
+
+/* ==========================================================================
+	Player styles
+	========================================================================== */
+	
+#player {
+	height: 500px;
+	display: none
+}
+
+.wcp-subtitle-but {
+	display: none !important
+}
+
+.wcp-prev {
+	line-height: 26px !important
+}
+
+.wcp-next {
+	line-height: 26px !important
+}
+
 /* ==========================================================================
 	Print styles
 	========================================================================== */

@@ -46,7 +46,8 @@
     "grunt-shell": "^1.1.1",
     "load-grunt-tasks": "0.4.0",
     "nw-gyp": "^0.12.2",
-    "tmp": "0.0.23"
+    "tmp": "0.0.23",
+    "wcjs-player": "git://github.com/jaruba/wcjs-player.git#alexandria"
   },
   "webkit": {
     "plugin": true
