@@ -146,84 +146,84 @@ if (location.protocol == 'app:') {
 	process.on('uncaughtException', function (err) {
 		window.console.error(err, err.stack || false);
 	});
-}
-
-function checkServiceIsRunning(service, url){
-	var request = require ('request'),
-	    App = require("nw.gui").App;
-
-	return new Promise (function (accept, reject) {
-		request (url, function (err, res, data) {
-			if (err)
-				return reject (err)
-			return accept (data)
+	
+	function checkServiceIsRunning(service, url){
+		var request = require ('request'),
+		    App = require("nw.gui").App;
+	
+		return new Promise (function (accept, reject) {
+			request (url, function (err, res, data) {
+				if (err)
+					return reject (err)
+				return accept (data)
+			})
+		}).then(function (data) {
+			App.emit(service + ':connected');
+		}).catch (function () {
+			App.emit(service + ':disconnected');
+		});
+	}
+	
+	function connectionHandler(className) {
+		var App = require("nw.gui").App;
+		var connected = false;
+	
+		function setClassToState(className, state) {
+			var cs = $('#cs-' + className)
+			cs.removeClass('connected connecting disconnected disconnecting')
+			cs.addClass(state)
+		}
+	
+		window['toggle' + className.toUpperCase()] =  function (e) {
+			var next = (connected)?"disconnect":"connect";
+			var emit = className + ":" + next;
+	
+			setClassToState (className, next + 'ing')
+			console.error ("TOGGLE", className, emit)
+		}
+	
+		App.on (className + ":connect", function() {
+			debugger;
 		})
-	}).then(function (data) {
-		App.emit(service + ':connected');
-	}).catch (function () {
-		App.emit(service + ':disconnected');
-	});
-}
-
-function connectionHandler(className) {
-	var App = require("nw.gui").App;
-	var connected = false;
-
-	function setClassToState(className, state) {
-		var cs = $('#cs-' + className)
-		cs.removeClass('connected connecting disconnected disconnecting')
-		cs.addClass(state)
+	
+		App.on (className + ":disconnect", function() {
+			debugger;
+		})
+	
+		App.on (className + ":connected", function() {
+			console.log (className + " connect")
+			setClassToState (className, 'connected')
+		})
+	
+		App.on (className + ":disconnected", function() {
+			console.log (className + " disconnect")
+			setClassToState (className, 'disconnected')
+		})
 	}
-
-	window['toggle' + className.toUpperCase()] =  function (e) {
-		var next = (connected)?"disconnect":"connect";
-		var emit = className + ":" + next;
-
-		setClassToState (className, next + 'ing')
-		console.error ("TOGGLE", className, emit)
-	}
-
-	App.on (className + ":connect", function() {
-		debugger;
+	
+	var deamons = {
+		'ipfs': 'http://localhost:5001/api/v0/version',
+		'libraryd': 'http://localhost:41289/alexandria/v1/publisher/get/all',
+		'florincoin': 'http://localhost:41289/alexandria/v1/publisher/get/all'
+	};
+	
+	Object.keys(deamons).map (function (service) {
+		connectionHandler (service)
+		setInterval (function () {
+			checkServiceIsRunning(service, deamons[service])
+		}, 1000)
 	})
-
-	App.on (className + ":disconnect", function() {
-		debugger;
-	})
-
-	App.on (className + ":connected", function() {
-		console.log (className + " connect")
-		setClassToState (className, 'connected')
-	})
-
-	App.on (className + ":disconnected", function() {
-		console.log (className + " disconnect")
-		setClassToState (className, 'disconnected')
-	})
+	
+	/* 
+	var ADH = require('alexandria-daemon-handler');
+	var IPFSHandler     = new ADH('ipfs');
+	var LibrarydHandler = new ADH('libraryd');
+	
+	IPFSHandler()
+		.then(LibrarydHandler)
+		.catch (function (err) {
+			console.error('there was a fatal1 issue launching daemons');
+		})
+	
+	*/
 }
-
-var deamons = {
-	'ipfs': 'http://localhost:5001/api/v0/version',
-	'libraryd': 'http://localhost:41289/alexandria/v1/publisher/get/all',
-	'florincoin': 'http://localhost:41289/alexandria/v1/publisher/get/all'
-};
-
-Object.keys(deamons).map (function (service) {
-	connectionHandler (service)
-	setInterval (function () {
-		checkServiceIsRunning(service, deamons[service])
-	}, 1000)
-})
-
-/* 
-var ADH = require('alexandria-daemon-handler');
-var IPFSHandler     = new ADH('ipfs');
-var LibrarydHandler = new ADH('libraryd');
-
-IPFSHandler()
-	.then(LibrarydHandler)
-	.catch (function (err) {
-		console.error('there was a fatal1 issue launching daemons');
-	})
-
-*/
