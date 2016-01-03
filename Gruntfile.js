@@ -7,7 +7,7 @@ var projectName = "Alexandria"
 var projectNameNS = projectName.replace(/\s/, '-')
 var config = {
         mac : {
-                icon: './src/app/img/alexandria.icns'
+                icon: './src/app/images/alexandria.icns'
         }
 }
 
@@ -131,6 +131,7 @@ module.exports = function (grunt) {
 				win: buildPlatforms.win,
 				linux32: buildPlatforms.linux32,
 				linux64: buildPlatforms.linux64,
+				download_url: 'http://dl.nwjs.io/'
 			},
 			src: ['./src/**',
 			      './node_modules/**', './plugins/**', '!./node_modules/bower/**', '!./node_modules/*grunt*/**',
