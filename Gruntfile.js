@@ -7,7 +7,7 @@ var projectName = "Alexandria"
 var projectNameNS = projectName.replace(/\s/, '-')
 var config = {
         mac : {
-                icon: './src/app/images/alexandria.icns'
+                icon: './src/app/img/alexandria.icns'
         }
 }
 
