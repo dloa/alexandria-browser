@@ -8,7 +8,7 @@
     "url": "https://github.com/blocktech/alexandria-web"
   },
   "license": "GPL-3.0",
-  "main": "app://host/src/app/alexandria.html",
+  "main": "app://host/src/app/index.html",
   "version": "0.5.1",
   "releaseName": "",
   "scripts": {

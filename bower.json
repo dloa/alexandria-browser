@@ -7,7 +7,7 @@
   ],
   "directory": "js/vendor",
   "description": "UX for the Alexandria Blocktech Library",
-  "main": "alexandria.html",
+  "main": "index.html",
   "license": "GPL",
   "private": true,
   "ignore": [
