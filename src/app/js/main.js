@@ -2719,10 +2719,11 @@ function loadWalletView() {
 			document.getElementById('wallet-token').value = '';	
 			if (location.protocol == 'app:') {
 				document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
+				$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FLO")');
 			} else {
 				document.getElementById('wallet-connect-currency').innerHTML = 'FloVault';
+				$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FloVault")');
 			}
-			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FLO")');
 			$('#wallet-auth-modal').fadeIn(fadeTimer);
 			document.getElementById('app-overlay').style.display = 'block';
 	}
@@ -2761,6 +2762,8 @@ function connectWallet(obj, wallet) {
 		  timeout: 30000
 		});
 		hideOverlay();
+	} else if (wallet == 'FloVault') {
+		alert('Under Development');
 	}
 }
 
