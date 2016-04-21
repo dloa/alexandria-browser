@@ -180,20 +180,20 @@ jQuery(document).ready(function($){
 	});
 
 	// API Server ID and Control
-	if(serverAddress == 'libraryd.alexandria.media'){
+	if(serverAddress == 'libraryd.alexandria.io'){
 		$('#serverID').text('Gateway');
 	} else {
 		$('#serverID').text('Local');
 	}
 	if (location.protocol == 'app:') {
 		$('#serverID').click(function(){
-			if(serverAddress == 'libraryd.alexandria.media'){
+			if(serverAddress == 'libraryd.alexandria.io'){
 				serverAddress = 'localhost';
 				IPFSserver = 'localhost:8080';
 				$('#serverID').text('Local');
 			} else {
-				serverAddress = 'libraryd.alexandria.media'
-				IPFSserver = 'ipfs.alexandria.media';
+				serverAddress = 'libraryd.alexandria.io'
+				IPFSserver = 'ipfs.alexandria.io';
 				$('#serverID').text('Gateway');
 			}
 			setMediaTypeFilter();
@@ -201,17 +201,17 @@ jQuery(document).ready(function($){
 			console.log(IPFSserver);
 		});
 	} else {
-		if (IPFSserver == 'ipfs.alexandria.media') {
+		if (IPFSserver == 'ipfs.alexandria.io') {
 			$('#IPFS-switch').text('IPFS: Gateway');
 		} else {
 			$('#IPFS-switch').text('IPFS: Local');
 		}
 		$('#IPFS-switch').click(function(){
-			if(IPFSserver == 'ipfs.alexandria.media'){
+			if(IPFSserver == 'ipfs.alexandria.io'){
 				IPFSserver = 'localhost:8080';
 				$('#IPFS-switch').text('IPFS: Local');
 			} else {
-				IPFSserver = 'ipfs.alexandria.media';
+				IPFSserver = 'ipfs.alexandria.io';
 				$('#IPFS-switch').text('IPFS: Gateway');
 			}
 			setMediaTypeFilter();
