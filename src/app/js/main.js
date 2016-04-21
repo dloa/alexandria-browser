@@ -1,9 +1,9 @@
 /* some global variables to make mistakes only once */
 
-var serverAddress = 'libraryd.alexandria.media'; // Dev
+var serverAddress = 'libraryd.alexandria.io'; // Dev
 // var serverAddress = 'localhost';
 
-var IPFSserver = 'ipfs.alexandria.media';
+var IPFSserver = 'ipfs.alexandria.io';
 // var IPFSserver = 'localhost:8080';
 
 
