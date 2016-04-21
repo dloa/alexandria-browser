@@ -3402,10 +3402,29 @@ function makeHistory(stateObj, newTitle) {
 	history.pushState(stateObj, newTitle, newUrl);
 }
 
-/* FloVault */
+// Load Script
+function loadScript(url, callback)
+{
+    // Adding the script tag to the head as suggested before
+    var body = document.getElementsByTagName('body')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
 
-function FloVaultInit() {
-	$.getScript("http://flovault.alexandria.io/assets/js/wallet.js", function(){
-	   alert("Wallet script loaded but not necessarily executed.");	
-	});
+    // Then bind the event to the callback function.
+    // There are several events for cross browser compatibility.
+    script.onreadystatechange = callback;
+    script.onload = callback;
+
+    // Fire the loading
+    body.appendChild(script);
 }
+
+// FloVault
+function FloVaultInit() {
+	loadScript('http://flovault.alexandria.io/assets/js/wallet.js', walletJS_loaded);
+}
+
+function walletJS_loaded() {
+	console.log('wallet.js loaded');
+};
