@@ -15,15 +15,6 @@ if (location.protocol == 'app:') {
 } else {
 	$('.webOnly').css('display','inline-block');
 	$('.appOnly').remove();
-	FloVaultInit();
-}
-
-function FloVaultInit() {
-	var position = document.getElementsByTagName('body')[0];
-	var script= document.createElement('script');
-	script.type= 'text/javascript';
-	script.src= 'http://flovault.alexandria.io/assets/js/wallet.js';
-	position.appendChild(script);
 }
 
 var prevTipAmount = '';
@@ -44,6 +35,11 @@ jQuery(document).ready(function($){
 
 	replaceSVG();
 	
+	if (location.protocol != 'app:') {
+		FloVaultInit();
+	}
+
+
 	loadAlexandria();
 	
 	// RUN SEARCH
@@ -3314,7 +3310,8 @@ function copyArtifact(source, target) {
 	}); //copies directory, even if it has subdirectories or files}
 }
 
-// CHECK CONNECTION
+// CHECK LOCAL CONNECTIONS
+
 /*
 function checkConnection() {
 	var url = 'http://localhost:3000/stream/08D72B48F0799BBF62A2DC54CB66CB1ED14F9431/bitcoin.pdf';
@@ -3324,6 +3321,7 @@ function checkConnection() {
     return http.status!=404;
 }
 */
+
 // GO BACK
 function goBack() {
 	$('video').trigger('pause');
@@ -3402,4 +3400,12 @@ function makeHistory(stateObj, newTitle) {
 	document.getElementById('viewlabel').style.display = 'inline-block';
 	document.title = newTitle;
 	history.pushState(stateObj, newTitle, newUrl);
+}
+
+/* FloVault */
+
+function FloVaultInit() {
+	$.getScript("http://flovault.alexandria.io/assets/js/wallet.js", function(){
+	   alert("Wallet script loaded but not necessarily executed.");	
+	});
 }
