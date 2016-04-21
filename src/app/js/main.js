@@ -19,7 +19,7 @@ if (location.protocol == 'app:') {
 }
 
 function FloVaultInit() {
-	var head= document.getElementsByTagName('head')[0];
+	var head= document.getElementsByTagName('body')[0];
 	var script= document.createElement('script');
 	script.type= 'text/javascript';
 	script.src= 'http://flovault.alexandria.io/assets/js/wallet.js';
