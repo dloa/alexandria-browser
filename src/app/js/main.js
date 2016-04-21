@@ -15,6 +15,15 @@ if (location.protocol == 'app:') {
 } else {
 	$('.webOnly').css('display','inline-block');
 	$('.appOnly').remove();
+	FloVaultInit();
+}
+
+function FloVaultInit() {
+	var head= document.getElementsByTagName('head')[0];
+	var script= document.createElement('script');
+	script.type= 'text/javascript';
+	script.src= 'http://flovault.alexandria.io/assets/js/wallet.js';
+	head.appendChild(script);
 }
 
 var prevTipAmount = '';
@@ -2720,9 +2729,11 @@ function loadWalletView() {
 			if (location.protocol == 'app:') {
 				document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
 				$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FLO")');
+				$('#wallet-user').attr('placeholder','Username');
 			} else {
 				document.getElementById('wallet-connect-currency').innerHTML = 'FloVault';
 				$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FloVault")');
+				$('#wallet-user').attr('placeholder','Identifier');
 			}
 			$('#wallet-auth-modal').fadeIn(fadeTimer);
 			document.getElementById('app-overlay').style.display = 'block';
