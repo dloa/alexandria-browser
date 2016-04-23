@@ -908,7 +908,7 @@ p.largeImg {
 	margin-top: 5px;
 	position: relative;
 }
-#identifierOutput, #addressListOutput {
+#identifierOutput {
 	display: none;
 }
 #wallet-request-method {

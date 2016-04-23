@@ -2733,6 +2733,7 @@ function loadWalletView() {
 				$('#wallet-user').attr('placeholder','Identifier');
 				$('#refreshBalance').attr('onclick','updateAddressList();');
 				$("#newAddressBtn").attr('onclick','newFloVaultAddress()');
+				$("#sendFloBtn").attr('onclick','sendFloVault()');
 			}
 			$('#wallet-auth-modal').fadeIn(fadeTimer);
 			document.getElementById('app-overlay').style.display = 'block';
@@ -3446,12 +3447,15 @@ var registerOutput = $("#registerOutput");
 
 var identifierInput = $("#wallet-user");
 var identifierPassInput = $("#wallet-token");
-var identifierButton = $("#wallet-connect-btn");
 var identifierOutput = $("#identifierOutput");
 
-var newAddressButton = $("#newAddressBtn");
 var refreshAddressButton = $("#refreshBalance");
 var addressListOutput = $("#addressListOutput");
+
+var sendFromInput = $("#wallet-address-select");
+var sendToInput = $("#wallet-send-address");
+var sendAmountInput = $("#wallet-send-amount-flo");
+var sendOutput = $("#sendOutput");
 
 registerBtn.click(function () {
     var data = {};
@@ -3514,18 +3518,16 @@ function newFloVaultAddress() {
     updateAddressList();
 }
 
-refreshAddressButton.click(function () {
+function refreshFloVaultBalances() {
     wallet.refreshBalances();
     updateAddressList();
-});
-
-var walletWaitIntervalId = 0;
+}
 
 function updateAddressList() {
 	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
 	if ( (!wallet) || (Object.keys(wallet.balances).length == 0) || (loadedAddresses ==  Object.keys(wallet.balances).length) )  {
 		console.log('Running Timer');
-		walletWaitTimeoutId = setTimeout("updateAddressList()", 1000);
+		var walletWaitTimeoutId = setTimeout("updateAddressList()", 1000);
 	} else {
 		clearTimeout(walletWaitTimeoutId);
 		console.log(wallet);
@@ -3554,4 +3556,9 @@ function updateAddressList() {
 		    }
 		}, 100);
 	}
+}
+
+function sendFloVault() {
+	wallet.sendCoins(sendFromInput.val(), sendToInput.val(), sendAmountInput.val());
+    refreshFloVaultBalances();
 }
