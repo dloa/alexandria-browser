@@ -3520,25 +3520,31 @@ refreshAddressButton.click(function () {
 var walletWaitIntervalId = 0;
 
 function updateAddressList() {
+	document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
+	document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
+	document.getElementById('newMediaPublisherFLO').innerHTML = '<option value="">Select Address</option>';
+	for (var addr in wallet.balances) {
+		document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+		document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+		document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+	}
+	var loadedAddresses = document.getElementById('wallet-address-select').length - 1;
 	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
-	if ( (!wallet) || (Object.keys(wallet.balances).length == 0) )  {
+	console.log('loadedAddresses = ' + loadedAddresses);
+	console.log('wallet.balances = ' + Object.keys(wallet.balances).length);
+	if ( (!wallet) || (Object.keys(wallet.balances).length == 0) || (loadedAddresses != Object.keys(wallet.balances).length) )  {
 		console.log('Running Timer');
-		walletWaitTimeoutId = setTimeout("updateAddressList()", 500);
+		walletWaitTimeoutId = setTimeout("updateAddressList()", 1000);
 	} else {
 		clearTimeout(walletWaitTimeoutId);
 		console.log(wallet);
 		addressListOutput.text("");
 		var TotalBalance = 0;
-		document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
-		document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
-		document.getElementById('newMediaPublisherFLO').innerHTML = '<option value="">Select Address</option>';
 		for (var addr in wallet.balances) {
 			addressListOutput.text(addressListOutput.text() + "\n" + addr + " : " + wallet.balances[addr]);
 			TotalBalance += wallet.balances[addr];
-			document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
-			document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
-			document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
 		}
+		console.log('TotalBalance = ' + TotalBalance);
 		document.getElementById('wallet-balance-flo').innerHTML = TotalBalance + ' FLO';
 		document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((TotalBalance*FLOUSD)*100)/100;
 		var selectInterval = setInterval(function() {
