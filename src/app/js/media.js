@@ -2,6 +2,8 @@ var filetype = 'mp3';
 var day_avg = false;
 var delay = 5000;
 var keepHash;
+var URL_RECV = "http://localhost:11306/payproc/api/receive";
+var URL_GETRECVD = "http://localhost:11306/payproc/api/getreceivedbyaddress/";
 
 window.doMountMediaBrowser = function (el, data) {
     console.log (el, data)
@@ -304,6 +306,10 @@ function USDToBTC (amount) {
     return Math.round((Number(amount)/day_avg).toString().substring(0, 16)*100000000)/100000000
 }
 
+function BTCtoUSD (amount) {
+    return Math.round((Number(amount)*day_avg).toString().substring(0, 16)*100)/100
+}
+
 function loadTrack (name, url) {
     $('#audio-player').jPlayer("setMedia", {
         title: name,
@@ -348,14 +354,21 @@ var lastAddress;
 function makePaymentToAddress(address, amount, done) {
     resetQR();
     togglePlaybarShadow(false);
+    var amountInBTC = USDToBTC(amount);
+    var params = { address: address, amount: amountInBTC };
+
     $.ajax({
-        url: "https://blockchain.info/api/receive?method=create&address=" + address
+        url: URL_RECV,
+        data: params
     })
-        .done(function (data) {
+        .done(function (data, textStatus, jqXHR) {
             console.log(data.input_address);
             lastAddress = data.input_address;
             setQR(data.input_address, USDToBTC(amount));
             watchForpayment(data.input_address, amount, done);
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            console.error(textStatus);
         });
 
     return USDToBTC(amount);
@@ -378,7 +391,7 @@ function watchForpayment(address, amount, done) {
     }
 
     $.ajax({
-        url: "https://blockchain.info/q/getreceivedbyaddress/" + address
+        url: URL_GETRECVD + address
     })
         .done(function (data) {
             if (!day_avg) {
@@ -390,7 +403,7 @@ function watchForpayment(address, amount, done) {
                 }, delay);
                 return false;
             }
-            var amountpaid = USDToBTC(data)
+            var amountpaid = BTCtoUSD(data)  // data is expected to be BTC...for now
             console.log(amountpaid);
             var amountRequired = amount;
             if (amountpaid < amountRequired) {

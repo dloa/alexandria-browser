@@ -1,5 +1,6 @@
-var serverAddress = '54.172.28.195'; // Dev
-// var serverAddress = 'localhost';
+//var serverAddress = '54.172.28.195'; // Dev
+//var serverAddress = 'localhost';
+var serverAddress = 'libraryd.alexandria.media'; // Dev
 
 // MEDIA + PUBLISHER SEARCH API
 window.searchAPI = function(module, searchOn, searchFor) {
