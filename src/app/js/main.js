@@ -2732,7 +2732,7 @@ function loadWalletView() {
 				$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FloVault")');
 				$('#wallet-user').attr('placeholder','Identifier');
 				$('#refreshBalance').attr('onclick','updateAddressList();');
-				$("#newAddressBtn").attr('onclick','newFloVaultAddress');
+				$("#newAddressBtn").attr('onclick','newFloVaultAddress()');
 			}
 			$('#wallet-auth-modal').fadeIn(fadeTimer);
 			document.getElementById('app-overlay').style.display = 'block';
