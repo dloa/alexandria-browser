@@ -1655,7 +1655,7 @@ function tradeModal() {
 				}
 			});
 			$.ajax({
-				url: 'http://trade.blocktech.com:5000/depositaddress?floaddress='+floAddress,
+				url: 'http://tradebot.alexandria.io/depositaddress?floaddress='+floAddress,
 				success: function(e) {
 					document.getElementById('trade-address').innerHTML = e;
 					document.getElementById('trade-modal').style.display = 'block';
