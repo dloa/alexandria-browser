@@ -908,6 +908,9 @@ p.largeImg {
 	margin-top: 5px;
 	position: relative;
 }
+#identifierOutput, #addressListOutput {
+	display: none;
+}
 #wallet-request-method {
 	overflow: hidden;
 	margin-top: -2px;

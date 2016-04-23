@@ -1,17 +1,17 @@
 <!DOCTYPE html> 
 <html class="no-js">
 	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 		<title>ALEXANDRIA</title>
-		<meta name="description" content="">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-		<link rel="stylesheet" href="css/fonts.css">
-		<link rel="stylesheet" href="css/normalize.min.css">
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+		<link rel="stylesheet" href="css/fonts.css" />
+		<link rel="stylesheet" href="css/normalize.min.css" />
 <!--		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"> -->
-		<link rel="stylesheet" href="css/alexandria.css">
+		<link rel="stylesheet" href="css/alexandria.css" />
                 <!-- HACK: xaiki
 		<script type="text/javascript">
 			SC.initialize({
@@ -724,7 +724,7 @@
 												</div>
 												<div class="col" id="media-genre-wrap">
 													<div class="input-container">
-														<label><span id="media-meta-taxonomy">Genre</label>
+														<label><span id="media-meta-taxonomy">Genre</span></label>
 														<select id="media-genre-select"></select>
 													</div>
 												</div>
@@ -1085,7 +1085,7 @@
 
 					<div class="sectionSep"></div>
 					
-					<strong>v0.5 Private Beta for Mac, Win & Linux</strong>
+					<h3>v0.5 Private Beta for Mac, Win & Linux</h3>
 					<ul>
 						<li>Distributed, persistent and unalterable library of art, history and culture</li>
 						<li>Media artifact publishing at low cost (~$0.01 currently)</li>
@@ -1098,7 +1098,7 @@
 						<li>APIs open-sourced on <a href="https://github.com/" target="_blank">GitHub</a></li>
 					</ul>
 											
-					<strong>v0.6 Open-Source Public Beta</strong>
+					<h3>v0.6 Open-Source Public Beta</h3>
 					<ul>
 						<li>Seed-as-a-Service (Librarian background app)</li>
 						<li>Crypto-Market-Historian (Librarian background app)</li>
@@ -1112,13 +1112,13 @@
 						<li>All code open-sourced on GitHub with <a href="https://gnu.org/licenses/gpl.html" target="_blank">GPL license</a></li>
 					</ul>
 					
-					<strong>v0.7 Open-Source Public Beta</strong>
+					<h3>v0.7 Open-Source Public Beta</h3>
 					<ul>
 						<li><a href="https://www.raspberrypi.org/" target="_blank">Raspberry Pi</a> client (open source set-top box)</li>
 						<li>Android app</li>
 					</ul>
 					
-					<strong>v0.8 Open-Source Public Beta and Web Client:</strong>
+					<h3>v0.8 Open-Source Public Beta and Web Client:</h3>
 					<ul>
 						<li>Twitter-Historian (Librarian background app)</li>
 						<li>Browsable, searchable Tweet archives in Library</li>
@@ -1128,14 +1128,14 @@
 						<li>"Publisher" app (streamlined, publisher-features-only)</li>
 					</ul>
 											
-					<strong>v0.9 Release Candidate:</strong>
+					<h3>v0.9 Release Candidate:</h3>
 					<ul>
 						<li>Zero-knowledge web wallet</li>
 						<li><a href="https://www.indiegogo.com/projects/protip-peer-to-peer-tipping-for-the-web" target="_blank">ProTip</a> integration for subscription-based payments to publishers</li>
 						<li>iOS app</li>
 					</ul>
 
-					<strong>v1.0 The Distributed Library of Alexandria</strong>
+					<h3>v1.0 The Distributed Library of Alexandria</h3>
 
 					<div class="sectionSep"></div>
 
@@ -1250,6 +1250,11 @@
 									<a id="refreshBalance" onclick="getBalance(this, FLOclient);" style="font-size:.875em">Refresh</a>
 								</div>
 							</div>
+							<div class="row full">
+								<div class="col">
+									<pre id="identifierOutput"></pre>
+								</div>
+							</div>							
 						</div>
 					</div>
 				</div>
@@ -1277,6 +1282,11 @@
 									<div id="wallet-request-qr">
 										<a id="wallet-receive-qrcode" onclick="loadQR();"></a>
 									</div>
+								</div>
+							</div>
+							<div class="row full">
+								<div class="col">
+									<pre id="addressListOutput"></pre>
 								</div>
 							</div>
 						</div>
