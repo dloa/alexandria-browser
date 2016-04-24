@@ -117,9 +117,6 @@ function getPrices (pwyw) {
 
 function togglePlaybarShadow (bool) {
     $('.playbar-shadow').toggleClass('hidden', bool);
-    if (bool) {
-        $('#audio-player').jPlayer("play");
-    }
 }
 
 function applyMediaData(data) {
@@ -340,13 +337,14 @@ function onPaymentDone (action, media) {
         togglePlaybarShadow(true);
     }
 
-    var res = loadTrack (xinfo.filename, url)
+    var res = loadTrack (xinfo.filename, url);
+    $('#audio-player').jPlayer("play");
 
     if (action === 'download') {
         document.getElementById('my_iframe').src = url;
     }
 
-    console.log ('player', res, IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]))
+    console.log ('player', res, IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]));
 }
 
 var lastAddress;
@@ -419,7 +417,7 @@ function watchForpayment(address, amount, done) {
 
             console.log('payed.');
             togglePlaybarShadow(true);
-            done(amountpaid)
+            done(amountpaid);
         });
 }
 
