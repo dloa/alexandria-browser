@@ -14,6 +14,7 @@ if (location.protocol == 'app:') {
 } else {
 	$('.webOnly').css('display','inline-block');
 	$('.appOnly').remove();
+	var wallet;
 }
 
 var prevTipAmount = '';
@@ -34,6 +35,11 @@ jQuery(document).ready(function($){
 
 	replaceSVG();
 	
+	if (location.protocol != 'app:') {
+		FloVaultInit();
+	}
+
+
 	loadAlexandria();
 	
 	// RUN SEARCH
@@ -174,20 +180,20 @@ jQuery(document).ready(function($){
 	});
 
 	// API Server ID and Control
-	if(serverAddress == 'libraryd.alexandria.media'){
+	if(serverAddress == 'libraryd.alexandria.io'){
 		$('#serverID').text('Gateway');
 	} else {
 		$('#serverID').text('Local');
 	}
 	if (location.protocol == 'app:') {
 		$('#serverID').click(function(){
-			if(serverAddress == 'libraryd.alexandria.media'){
+			if(serverAddress == 'libraryd.alexandria.io'){
 				serverAddress = 'localhost';
 				IPFSserver = 'localhost:8080';
 				$('#serverID').text('Local');
 			} else {
-				serverAddress = 'libraryd.alexandria.media'
-				IPFSserver = 'ipfs.alexandria.media';
+				serverAddress = 'libraryd.alexandria.io'
+				IPFSserver = 'ipfs.alexandria.io';
 				$('#serverID').text('Gateway');
 			}
 			setMediaTypeFilter();
@@ -195,17 +201,17 @@ jQuery(document).ready(function($){
 			console.log(IPFSserver);
 		});
 	} else {
-		if (IPFSserver == 'ipfs.alexandria.media') {
+		if (IPFSserver == 'ipfs.alexandria.io') {
 			$('#IPFS-switch').text('IPFS: Gateway');
 		} else {
 			$('#IPFS-switch').text('IPFS: Local');
 		}
 		$('#IPFS-switch').click(function(){
-			if(IPFSserver == 'ipfs.alexandria.media'){
+			if(IPFSserver == 'ipfs.alexandria.io'){
 				IPFSserver = 'localhost:8080';
 				$('#IPFS-switch').text('IPFS: Local');
 			} else {
-				IPFSserver = 'ipfs.alexandria.media';
+				IPFSserver = 'ipfs.alexandria.io';
 				$('#IPFS-switch').text('IPFS: Gateway');
 			}
 			setMediaTypeFilter();
@@ -1648,7 +1654,7 @@ function tradeModal() {
 				}
 			});
 			$.ajax({
-				url: 'http://trade.blocktech.com:5000/depositaddress?floaddress='+floAddress,
+				url: 'http://tradebot.alexandria.io/depositaddress?floaddress='+floAddress,
 				success: function(e) {
 					document.getElementById('trade-address').innerHTML = e;
 					document.getElementById('trade-modal').style.display = 'block';
@@ -2713,11 +2719,21 @@ function loadWalletView() {
 		currentView: 'wallet'
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ Wallet');
-	if (FLOauth.length == 0) {
+	if ( (FLOauth.length == 0) && (!wallet) ) {
 			document.getElementById('wallet-user').value = '';
-			document.getElementById('wallet-token').value = '';		
-			document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
-			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FLO")');
+			document.getElementById('wallet-token').value = '';	
+			if (location.protocol == 'app:') {
+				document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
+				$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FLO")');
+				$('#wallet-user').attr('placeholder','Username');
+			} else {
+				document.getElementById('wallet-connect-currency').innerHTML = 'FloVault';
+				$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FloVault")');
+				$('#wallet-user').attr('placeholder','Identifier');
+				$('#refreshBalance').attr('onclick','updateAddressList();');
+				$("#newAddressBtn").attr('onclick','newFloVaultAddress()');
+				$("#sendFloBtn").attr('onclick','sendFloVault()');
+			}
 			$('#wallet-auth-modal').fadeIn(fadeTimer);
 			document.getElementById('app-overlay').style.display = 'block';
 	}
@@ -2756,6 +2772,8 @@ function connectWallet(obj, wallet) {
 		  timeout: 30000
 		});
 		hideOverlay();
+	} else if (wallet == 'FloVault') {
+		FloVaultIdentify();
 	}
 }
 
@@ -3295,7 +3313,8 @@ function copyArtifact(source, target) {
 	}); //copies directory, even if it has subdirectories or files}
 }
 
-// CHECK CONNECTION
+// CHECK LOCAL CONNECTIONS
+
 /*
 function checkConnection() {
 	var url = 'http://localhost:3000/stream/08D72B48F0799BBF62A2DC54CB66CB1ED14F9431/bitcoin.pdf';
@@ -3305,6 +3324,7 @@ function checkConnection() {
     return http.status!=404;
 }
 */
+
 // GO BACK
 function goBack() {
 	$('video').trigger('pause');
@@ -3383,4 +3403,161 @@ function makeHistory(stateObj, newTitle) {
 	document.getElementById('viewlabel').style.display = 'inline-block';
 	document.title = newTitle;
 	history.pushState(stateObj, newTitle, newUrl);
+}
+
+// Load Script
+function loadScript(url, callback)
+{
+    // Adding the script tag to the head as suggested before
+    var body = document.getElementsByTagName('body')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+
+    // Then bind the event to the callback function.
+    // There are several events for cross browser compatibility.
+    script.onreadystatechange = callback;
+    script.onload = callback;
+
+    // Fire the loading
+    body.appendChild(script);
+}
+
+// FloVault
+function FloVaultInit() {
+	loadScript('/js/SimpleWallet.js', SimpleWallet_loaded);
+}
+
+function SimpleWallet_loaded() {
+	console.log('SimpleWallet.js loaded');
+	loadScript('/js/SimpleDeps.js', SimpleDeps_loaded);
+};
+
+function SimpleDeps_loaded() {
+	console.log('SimpleDeps.js loaded');
+};
+
+// ToDo: No error cases are handled
+
+var registerBtn = $("#registerButton");
+var emailInput = $("#registerEmailInput");
+var registerPassInput = $("#registerPassInput");
+var registerOutput = $("#registerOutput");
+
+var identifierInput = $("#wallet-user");
+var identifierPassInput = $("#wallet-token");
+var identifierOutput = $("#identifierOutput");
+
+var refreshAddressButton = $("#refreshBalance");
+var addressListOutput = $("#addressListOutput");
+
+var sendFromInput = $("#wallet-address-select");
+var sendToInput = $("#wallet-send-address");
+var sendAmountInput = $("#wallet-send-amount-flo");
+var sendOutput = $("#sendOutput");
+
+registerBtn.click(function () {
+    var data = {};
+    if (emailInput.val().length > 3)
+        data = {email: emailInput.val()};
+
+    $.post("http://flovault.alexandria.io/wallet/create", data, function (response) {
+        console.log("Create Response");
+        console.log(response);
+        registerOutput.text(JSON.stringify(response, null, 2));
+
+        if (response.error) {
+            console.error("Register failed :(");
+            return;
+        }
+
+        identifierInput.val(response.identifier);
+
+        wallet = new Wallet(response.identifier, identifierPassInput.val());
+        wallet.setSharedKey(response.shared_key);
+        wallet.store();
+    });
+});
+
+function FloVaultIdentify() {
+	$.ajax({
+		url: 'http://flovault.alexandria.io/wallet/checkload/' + identifierInput.val(),
+		success: function(response) {
+	         console.log("Check Load Response");
+	         console.log(response);
+	         identifierOutput.text(JSON.stringify(response, null, 2));
+	
+	         if (response.gauth_enabled) {
+	             console.log("2FA unsupported");
+	             alert("Sorry, 2FA is not supported at this time");
+	             $('#wallet-connect-btn').removeClass('disabled');
+	             return false;
+	             // ToDo: add 2FA support, needs further research
+	         }
+	
+	         wallet = new Wallet(response.identifier, identifierPassInput.val());
+	         wallet.load(function () {
+				console.log("Wallet Post-Load");
+				identifierOutput.text(identifierOutput.text() + "\n\nWallet Balance: " + wallet.getTotalBalance());
+				hideOverlay();
+				updateAddressList();		
+	         });
+	     },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+		}
+	});
+}
+
+var loadedAddresses;
+function newFloVaultAddress() {
+    wallet.generateAddress();
+	loadedAddresses = document.getElementById('wallet-address-select').length - 1;
+    updateAddressList();
+}
+
+function refreshFloVaultBalances() {
+    wallet.refreshBalances();
+    updateAddressList();
+}
+
+function updateAddressList() {
+	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
+	if ( (!wallet) || (Object.keys(wallet.balances).length == 0) || (loadedAddresses ==  Object.keys(wallet.balances).length) )  {
+		console.log('Running Timer');
+		var walletWaitTimeoutId = setTimeout("updateAddressList()", 1000);
+	} else {
+		clearTimeout(walletWaitTimeoutId);
+		console.log(wallet);
+		addressListOutput.text("");
+		var TotalBalance = 0;
+		document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
+		document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
+		document.getElementById('newMediaPublisherFLO').innerHTML = '<option value="">Select Address</option>';
+		for (var addr in wallet.balances) {
+			addressListOutput.text(addressListOutput.text() + "\n" + addr + " : " + wallet.balances[addr]);
+			TotalBalance += wallet.balances[addr];
+			document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+			document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+			document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+		}
+		console.log('TotalBalance = ' + TotalBalance);
+		document.getElementById('wallet-balance-flo').innerHTML = TotalBalance + ' FLO';
+		document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((TotalBalance*FLOUSD)*100)/100;
+		var selectInterval = setInterval(function() {
+		    if (document.getElementById('wallet-address-select').length > 1) {
+		        clearInterval(selectInterval);
+				document.getElementById('wallet-address-select').removeAttribute('disabled');
+				document.getElementById('newPublisher-floAdd').removeAttribute('disabled');
+				document.getElementById('newMediaPublisherFLO').removeAttribute('disabled');
+				$('#newAddressBtn').removeClass('disabled');
+		    }
+		}, 100);
+	}
+}
+
+function sendFloVault() {
+	wallet.sendCoins(sendFromInput.val(), sendToInput.val(), sendAmountInput.val());
+    refreshFloVaultBalances();
 }
