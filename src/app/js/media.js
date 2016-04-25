@@ -224,6 +224,11 @@ function showPaymentOption(e) {
 }
 
 function mountMediaBrowser(el, data) {
+	var mediaPublisher = data[0]['publisher-name'];
+	var mediaID = data[0]['txid'];
+	var data = data[0]['media-data'];
+	console.info(data);
+	console.info(mediaPublisher);
     $(el).html($('#media-template').html())
     var mediaData = applyMediaData(data)
     getUSDdayAvg();
@@ -293,6 +298,17 @@ function mountMediaBrowser(el, data) {
         $('.format-selector button').removeClass('active');
         $(this).addClass('active')
     })
+	// MAKE HISTORY ARTIFACT VIEW
+	var stateObj = {
+		currentView: 'artifact',
+		searchResults: false,
+		subView: mediaID,
+		artifactTitle: mediaData.info.title,
+		mediaType: mediaData.type,
+		artifactPublisher: mediaPublisher,
+		publisherId: mediaData.publisher
+	}
+	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);    
 }
 
 function USDTouBTC (amount) {
