@@ -2,6 +2,8 @@ var filetype = 'mp3';
 var day_avg = false;
 var delay = 5000;
 var keepHash;
+var URL_RECV = "http://localhost:11306/payproc/api/receive";
+var URL_GETRECVD = "http://localhost:11306/payproc/api/getreceivedbyaddress/";
 
 window.doMountMediaBrowser = function (el, data) {
     console.log (el, data)
@@ -115,9 +117,6 @@ function getPrices (pwyw) {
 
 function togglePlaybarShadow (bool) {
     $('.playbar-shadow').toggleClass('hidden', bool);
-    if (bool) {
-        $('#audio-player').jPlayer("play");
-    }
 }
 
 function applyMediaData(data) {
@@ -158,11 +157,33 @@ function applyMediaData(data) {
     keepHash = media.torrent;
 
     console.log (media, tracks);
-    
+
     $('.ri-date').text(moment(media.timestamp).format('MMMM Do YYYY'));
+
+    watchForPin (ipfsAddr, xinfo.filename)
     //             debugger;
 
     return media;
+}
+
+function watchForPin (addr, filename) {
+    if (window.pinWatcher)
+        clearInterval (window.pinWatcher)
+
+    var pinningSel = $('.pwyw-currently-pinning');
+    window.pinWatcher = setInterval (function () {
+        $.ajax ({
+            // XXX(xaiki): hardcoded Tiny Human.mp3
+            url: window.librarianHost + '/api/ipfs/dht/findprovs/' + 'QmRb23uqmA3uJRUoDkRyG3qXvTpSV5a4zwe6yjJRsLZvAm'
+        })
+            .done(function (data) {
+                var count = data.output.split('error:')[0].split(' ').length;
+                pinningSel.text(count)
+            })
+            .fail(function () {
+
+            })
+    }, 2000)
 }
 
 function IPFSUrl (components) {
@@ -282,6 +303,10 @@ function USDToBTC (amount) {
     return Math.round((Number(amount)/day_avg).toString().substring(0, 16)*100000000)/100000000
 }
 
+function BTCtoUSD (amount) {
+    return Math.round((Number(amount)*day_avg).toString().substring(0, 16)*100)/100
+}
+
 function loadTrack (name, url) {
     $('#audio-player').jPlayer("setMedia", {
         title: name,
@@ -312,13 +337,14 @@ function onPaymentDone (action, media) {
         togglePlaybarShadow(true);
     }
 
-    var res = loadTrack (xinfo.filename, url)
+    var res = loadTrack (xinfo.filename, url);
+    $('#audio-player').jPlayer("play");
 
     if (action === 'download') {
         document.getElementById('my_iframe').src = url;
     }
 
-    console.log ('player', res, IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]))
+    console.log ('player', res, IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]));
 }
 
 var lastAddress;
@@ -326,14 +352,21 @@ var lastAddress;
 function makePaymentToAddress(address, amount, done) {
     resetQR();
     togglePlaybarShadow(false);
+    var amountInBTC = USDToBTC(amount);
+    var params = { address: address, amount: amountInBTC };
+
     $.ajax({
-        url: "https://blockchain.info/api/receive?method=create&address=" + address
+        url: URL_RECV,
+        data: params
     })
-        .done(function (data) {
+        .done(function (data, textStatus, jqXHR) {
             console.log(data.input_address);
             lastAddress = data.input_address;
             setQR(data.input_address, USDToBTC(amount));
             watchForpayment(data.input_address, amount, done);
+        })
+        .fail(function (jqXHR, textStatus, errorThrown) {
+            console.error(textStatus);
         });
 
     return USDToBTC(amount);
@@ -356,7 +389,7 @@ function watchForpayment(address, amount, done) {
     }
 
     $.ajax({
-        url: "https://blockchain.info/q/getreceivedbyaddress/" + address
+        url: URL_GETRECVD + address
     })
         .done(function (data) {
             if (!day_avg) {
@@ -368,7 +401,7 @@ function watchForpayment(address, amount, done) {
                 }, delay);
                 return false;
             }
-            var amountpaid = USDToBTC(data)
+            var amountpaid = BTCtoUSD(data)  // data is expected to be BTC...for now
             console.log(amountpaid);
             var amountRequired = amount;
             if (amountpaid < amountRequired) {
@@ -384,7 +417,7 @@ function watchForpayment(address, amount, done) {
 
             console.log('payed.');
             togglePlaybarShadow(true);
-            done(amountpaid)
+            done(amountpaid);
         });
 }
 

@@ -9,7 +9,8 @@
     </script>
     <script type="text/javascript">
      /* hacks */
-     window.IPFSHost = 'http://ipfs.alexandria.media/ipfs/'
+     window.IPFSHost = 'http://ipfs.alexandria.media/ipfs';
+     window.librarianHost = 'http://localhost:8079';
     </script>
 
     <script src="vendor/jquery/dist/jquery.min.js"></script>
@@ -298,12 +299,12 @@
     .pwyw-footer {
         text-align: center
     }
-
-    .pwyw-pinning-info {
+    
+    .pwyw-pining-info {
         font-size: 30px
     }
     
-    .pwyw-pinning-suggest {
+    .pwyw-pining-suggest {
         font-size: 30px
     }
     
@@ -319,11 +320,11 @@
         height: 10px
     }
     
-    .pwyw-pinning-suggestion {
+    .pwyw-pining-suggestion {
         text-align: center
     }
     
-    .pwyw-pinning-error {
+    .pwyw-pining-error {
         margin-bottom: 13px;
         display: none
     }
@@ -368,19 +369,17 @@
                 <div class="pwwy-stuff">
                     <div class="pwyw-close"></div>
                     <div class="pwyw-container pwyw-activate-pin">
-                        <div clas="pinning-info" style="display:none;">
-                            <i class="pwyw-pin-pretext">currently there are</i>
-                            <div class="pwyw-pinning-info pwyw-suggest">
-                                <span class="pwyw-currently-pinning">497</span> users pinning this file
-                            </div>
+                        <i class="pwyw-pin-pretext">currently there are</i>
+                        <div class="pwyw-pining-info pwyw-suggest">
+                            <span class="pwyw-currently-pining">497</span> users pining this file
                         </div>
-                        <div class="pwyw-pinning-suggestion">
+                        <div class="pwyw-pining-suggestion">
                             if you pin it, you can play the song for free!
                         </div>
-                        <span class="pwyw-pinning-suggest pwyw-suggest">
+                        <span class="pwyw-pining-suggest pwyw-suggest">
                             $<span class="pwyw-pin-price pwyw-suggested-price">0.00</span> per play
                         </span>
-                        <span class="pwyw-pinning-error"></span>
+                        <span class="pwyw-pining-error"></span>
                         <button class="pwyw-pin-it">Pin It!</button>
                     </div>
                     <div class="pwyw-container pwyw-activate-download">
@@ -546,7 +545,7 @@
 
     <script type="text/javascript">
      $('document').ready(function () {
-         var txid = location.hash || "85180edf2e5adf71ca5db8a0fd73856beed4758ef5485575c7fb21d823022bfa";
+         var txid = location.hash || "fc9220025df5f2bf76fcda8f66bced4c95846e136ff3f5ff4c36fede3a5e3fc5";
          var data = window.searchAPI('media', 'txid', txid.replace(/^#/, ''));
 
          console.log (txid, data);
