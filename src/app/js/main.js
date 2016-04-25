@@ -426,7 +426,14 @@ function router (event, goUrl) {
     	} else if (paths[1].length == 64) {
 			var searchResults = searchAPI('publisher', 'txid', paths[1]);
 			if (!searchResults) {
-				loadArtifactView(paths[1]);
+				var thisMediaData = searchAPI('media', 'txid', paths[1]);
+				var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
+				console.info(mediaType);
+				if (mediaType == 'music') {
+					loadArtifactView2(paths[1]);
+				} else {
+					loadArtifactView(paths[1]);
+				}
 			} else {
 				loadPublisherView(paths[1]);
 			}

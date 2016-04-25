@@ -87,14 +87,15 @@ function secondsToPrettyString (s, short){
 }
 
 function getPrices (pwyw) {
+
     if (! pwyw) {
         return  {
             play: {
-                suggested: 0.0125,
+                suggested: 0,
                 min: 0
             },
             download: {
-                suggested: 1,
+                suggested: 0,
                 min: 0
             }
         }
