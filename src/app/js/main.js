@@ -707,7 +707,11 @@ function loadMediaEntity(obj) {
   */
 	} else {
 		// Load Media Entity View
-		loadArtifactView2(parentObj);
+		if (mediaType == 'music') {
+			loadArtifactView2(parentObj);
+		} else {
+			loadArtifactView(parentObj);
+		}
 	}
 }
 
