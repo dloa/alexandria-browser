@@ -20,19 +20,6 @@
 			});
 		</script>
                 -->
-                
-<!--                
-		<script type="text/javascript">
-	           var playerDomain = 'player.animatron.com';
-	           var amazonDomain = 'https://snapshots.animatron.com';
-	           var width = 30;
-	           var height = 30;
-	           var playerVersion = 'v1.3';
-	           var filename = 'ba1301d4ec40418b0c51912d0294c0f6.json';
-	           var autostart = true;
-	           var loop = true;
-		</script>
--->
 	</head>
 	
 	<body onload="if(typeof start === 'function' ) { start(); }" class="no-iframe">
@@ -1067,16 +1054,6 @@
 					<div class="sectionSep"></div>
 					
 					<div class="row media-embed" id="video-embed"></div>
-					<!--
-					<div id="screensWrap">
-						<ul id="screenshots">
-							<li><img src="img/screens/Alexandria-Media-Browse-thumb.png" onclick="lightbox('img/screens/Alexandria-Media-Browse.png')"/></li>
-							<li><img src="img/screens/Alexandria-ApocalypseCA-thumb.png" onclick="lightbox('img/screens/Alexandria-ApocalypseCA.png')"/></li>
-							<li><img src="img/screens/Alexandria-Publisher-View-thumb.png" onclick="lightbox('img/screens/Alexandria-Publisher-View.png')"/></li>
-							<li><img src="img/screens/Alexandria-Wallet-thumb.png" onclick="lightbox('img/screens/Alexandria-Wallet.png')"/></li>
-						</ul>
-					</div>	
-					-->
 					<div class="sectionSep"></div>
 
 					<h2>How does it work?</h2>
@@ -1086,73 +1063,6 @@
 
 					<div class="sectionSep"></div>
 					
-					<h3>v0.5 Private Beta for Mac, Win & Linux</h3>
-					<ul>
-						<li>Distributed, persistent and unalterable library of art, history and culture</li>
-						<li>Media artifact publishing at low cost (~$0.01 currently)</li>
-						<li>Browse and search the entire library</li>
-						<li>Supported artifact types: Movies, Videos, Musics, Podcasts, Books, Documents, Things</li>
-						<li>In-app embedded and streaming artifacts</li>
-						<li>Share links to artifacts and publishers</li>
-						<li>Publisher choice to receive tips and use a "pay what you want" wall</li>
-						<li>In-app Bitcoin to Florincoin trade</li>
-						<li>APIs open-sourced on <a href="https://github.com/" target="_blank">GitHub</a></li>
-					</ul>
-											
-					<h3>v0.6 Open-Source Public Beta</h3>
-					<ul>
-						<li>Seed-as-a-Service (Librarian background app)</li>
-						<li>Crypto-Market-Historian (Librarian background app)</li>
-						<li>Library-Node (Librarian background app)</li>
-						<li>In-app IPFS file publishing</li>
-						<li>New artifact types: Recipes, Software, Games, Webpages</li>
-						<li>User purchase and tip history</li>
-						<li>Artifact comments via Florincoin tips</li>
-						<li>Free encrypted peer-to-peer messaging</li>
-						<li>First "Artifacts" app: San Francisco Bitcoin Meetup</li>
-						<li>All code open-sourced on GitHub with <a href="https://gnu.org/licenses/gpl.html" target="_blank">GPL license</a></li>
-					</ul>
-					
-					<h3>v0.7 Open-Source Public Beta</h3>
-					<ul>
-						<li><a href="https://www.raspberrypi.org/" target="_blank">Raspberry Pi</a> client (open source set-top box)</li>
-						<li>Android app</li>
-					</ul>
-					
-					<h3>v0.8 Open-Source Public Beta and Web Client:</h3>
-					<ul>
-						<li>Twitter-Historian (Librarian background app)</li>
-						<li>Browsable, searchable Tweet archives in Library</li>
-						<li>Subscribe to publishers to auto download and seed new artifacts</li>
-						<li>First web release at Alexandria.media and <a href="https://www.torproject.org/" target="_blank">TOR</a> hidden service</li>
-						<li>Users to seed while watching</li>
-						<li>"Publisher" app (streamlined, publisher-features-only)</li>
-					</ul>
-											
-					<h3>v0.9 Release Candidate:</h3>
-					<ul>
-						<li>Zero-knowledge web wallet</li>
-						<li><a href="https://www.indiegogo.com/projects/protip-peer-to-peer-tipping-for-the-web" target="_blank">ProTip</a> integration for subscription-based payments to publishers</li>
-						<li>iOS app</li>
-					</ul>
-
-					<h3>v1.0 The Distributed Library of Alexandria</h3>
-
-					<div class="sectionSep"></div>
-
-					<h2>The Alexandria Team</h2>
-					<ul class="noList">
-						<li><a href="https://onename.com/dread" target="_blank">Devon Read</a> - Project Management</li>
-						<li><a href="https://onename.com/copernicusmogley" target="_blank">Ryan Taylor</a> - Development</li>
-						<li><a href="https://onename.com/metacoin" target="_blank">Joey Fiscella</a> - Development</li>
-						<li><a href="https://keybase.io/xaiki" target="_blank">Niv Sardi</a> - Development</li>
-						<li><a href="https://keybase.io/ryanjordan" target="_blank">Ryan Jordan</a> - Design</li>
-						<li><a href="https://onename.com/alan_tran" target="_blank">Alan Tran</a> - Comm. &amp; Social Media</li>
-						<li>Loring Small - Engineering</li>
-						<li><a href="https://onename.com/joepeck" target="_blank">Joe Peck</a> - Legal</li>
-						<li><a href="https://onename.com/nathanstevens" target="_blank">Nathan Stevens</a> - Advising</li>
-					</ul>
-					<div class="sectionSep"></div>
 					<h3>Want to help with development or have some ideas you want to discuss? <br />We'd love to hear from you! <br /><a href="mailto:hello@blocktech.com">Contact</a> the team to get involved.</h3>
 				</div>
 				<!-- SUPPORT ALEXANDRIA -->
@@ -1163,7 +1073,8 @@
 				<p class="largeImg"><img src="img/libraryofalexandria.png" /></p>
 			</div>
 		</main>
-		
+
+		<!-- INFO MODALS -->		
 		<div id="info-modal-small" class="info-modal">
 			
 		</div>
@@ -1185,12 +1096,16 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- SHARE MODAL -->
 		<div id="share-modal" class="bubble-modal">
 			<h3>Share</h3>
 			<p><span id="share-title"></span></p>
 			<p id="share-url-wrap"><span id="share-url" onclick="selectText('share-url');" class="selectable"></span></p>
 			
 		</div>
+
+		<!-- TIP MODAL -->
 		<div id="tip-modal" class="bubble-modal">
 			<h3>Send a Tip</h3>
 			<ul class="tip-amounts">
@@ -1228,6 +1143,7 @@
 			</div>
 		</div>
 		
+		<!-- WALLET VIEW -->
 		<main id="wallet-view">
 			<div class="wrapper">
 				<div id="wallet-balance-wrap">
@@ -1346,15 +1262,17 @@
 			</div>
 		</main>
 
+		<!-- WALLET AUTH MODAL -->
 		<div id="wallet-auth-modal" class="overlay-modal">
 			<h3>Login to <span id="wallet-connect-currency"></span> Wallet</h3>
 			<input type="text" placeholder="Username" name="wallet-user" id="wallet-user" />
 			<input type="password" placeholder="Password" name="wallet-token" id="wallet-token" />
 			<div class="row">
-				<!-- <a href="http://florincoin.org" target="_blank" class="left btnLightGray">Download Wallet</a> --><a onclick="" id="wallet-connect-btn" class="btnLightGray">Connect</a>
+				<a onclick="" id="wallet-connect-btn" class="btnLightGray">Connect</a>
 			</div>
 		</div>
 		
+		<!-- NEW WALLET ADDRESS MODAL -->
 		<div id="new-address-modal" class="overlay-modal">
 			<h3>New Address</h3>
 			<div class="row full">
@@ -1365,6 +1283,7 @@
 			</div>
 		</div>
 		
+		<!-- DEACTIVATE MEDIA MODAL -->
 		<div id="deactivate-media-modal" class="overlay-modal">
 			<h3>Deactivate Media</h3>
 			<div class="tbl input-container">
@@ -1390,6 +1309,7 @@
 			</div>
 		</div>
 		
+		<!-- TIP ALEXANDRIA MODAL -->
 		<div id="tip-alexandria-modal" class="overlay-modal">
 			<h3>Would you like to include a tip to support Alexandria development?</h3>
 			<div class="input-container">
@@ -1400,7 +1320,7 @@
 			</div>
 		</div>
 
-		<!-- PAY-WHAT-YOU-WANT -->
+		<!-- OLD PAY-WHAT-YOU-WANT -->
 		<div id="pwyw-modal" class="overlay-modal">
 			<h3>Pay What You Want</h3>
 			<div class="tbl">
@@ -1447,7 +1367,7 @@
 			</div>
 		</div>
 
-		<!-- Application components -->
+		<!-- APP LAYOUT COMPONENTS -->
 
 		<footer id="footer">
 			<div class="left">
@@ -1513,6 +1433,7 @@
 		<script src="app.js"></script>
 		<script src="js/search.js"></script>
 		<script src="js/main.js"></script>
+		<script src="js/media.js"></script>
 <!--		<script src="streamer.js"></script> -->
 		
 	</body>
