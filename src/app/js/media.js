@@ -30,7 +30,7 @@ function fixDataMess(data) {
         
         j = 'track' + formatInt (i++, 2);
     }
-
+    
     return ret;
 }
 
@@ -78,7 +78,6 @@ function renderPlaylistTracksHTML (tracks, prices, xinfo, el) {
         el.addClass('selected');
     })
     console.log (el, tracks);
-	console.info(xinfo.pwyw);
     if (!xinfo.pwyw) {
         togglePlaybarShadow(true);
         var freePlayTimer = setTimeout("autoPlayFree()", 500);
@@ -243,8 +242,6 @@ function mountMediaBrowser(el, data) {
 	var mediaPublisher = data[0]['publisher-name'];
 	var mediaID = data[0]['txid'];
 	var data = data[0]['media-data'];
-	console.info(data);
-	console.info(mediaPublisher);
     $(el).html($('#media-template').html())
     var mediaData = applyMediaData(data)
     getUSDdayAvg();

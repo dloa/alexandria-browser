@@ -35,7 +35,9 @@
     text-align: left;
 }
 
-.format-selector {}
+.format-selector {
+	display: none;
+}
 
 .format-selector button {
     text-transform: uppercase;
