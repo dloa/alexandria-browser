@@ -46,7 +46,7 @@
          border: none;
          font-size: 34px;
          position: relative;
-         top: 4px;
+         top: -19px;
          background-color: #fff
      }
      
@@ -72,7 +72,7 @@
 
       .playbar .jp-current-time {
          position: relative;
-         top: 13px;
+         top: -9px;
          left: 5px;
          z-index: -1
       }
@@ -81,7 +81,7 @@
          height: 3px;
          float: left;
          margin-top: 1px;
-         margin-left: 10px;
+         margin-left: 19px;
          width: calc( 100% - 50px - 50px - 50px - 10px);
          background-color: lightgrey;
          position: relative;
