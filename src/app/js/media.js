@@ -77,6 +77,17 @@ function renderPlaylistTracksHTML (tracks, prices, xinfo, el) {
         el.addClass('selected');
     })
     console.log (el, tracks);
+	console.info(xinfo.pwyw);
+    if (!xinfo.pwyw) {
+        togglePlaybarShadow(true);
+        var freePlayTimer = setTimeout("autoPlayFree()", 500);
+    } else {
+        togglePlaybarShadow(false);
+    }
+}
+
+function autoPlayFree() {
+	$('.playlist-tracks tr:first').click();
 }
 
 function secondsToPrettyString (s, short){
@@ -118,6 +129,7 @@ function getPrices (pwyw) {
 
 function togglePlaybarShadow (bool) {
     $('.playbar-shadow').toggleClass('hidden', bool);
+	$('.buybox').toggleClass('hidden', bool);
 }
 
 function applyMediaData(data) {
@@ -134,10 +146,6 @@ function applyMediaData(data) {
 
     var prices = getPrices (xinfo.pwyw)
 
-    if (!xinfo.pwyw) {
-        togglePlaybarShadow(false);
-    }
-
     mediaDataSel.data(media)
 
     $('.pwyw-price-play').text (prices.play.suggested)
@@ -152,7 +160,10 @@ function applyMediaData(data) {
     $('.ri-publisher', releaseInfoSel).text (media.publisher);
     $('.ri-btc-address', releaseInfoSel).text (xinfo['Bitcoin Address']);
 
-    $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  xinfo.coverArt]));
+	if (xinfo.coverArt) {
+	    $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  xinfo.coverArt]));
+		$('.media-cover').show();
+	}
     renderPlaylistTracksHTML(tracks, prices, xinfo, $('.playlist-tracks'))
 
     keepHash = media.torrent;
@@ -328,7 +339,10 @@ function loadTrack (name, url) {
     $('#audio-player').jPlayer("setMedia", {
         title: name,
         mp3: url
-    })
+    });
+    if ($('.playbar-shadow:visible').length == 0) {
+	    $('#audio-player').jPlayer("play");
+    }
 }
 
 function togglePWYWOverlay (bool) {

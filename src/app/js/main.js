@@ -207,6 +207,7 @@ jQuery(document).ready(function($){
 			$('#IPFS-switch').text('IPFS: Local');
 		}
 		$('#IPFS-switch').click(function(){
+			$('#audio-player').jPlayer("stop");
 			if(IPFSserver == 'ipfs.alexandria.io'){
 				IPFSserver = 'localhost:8080';
 				$('#IPFS-switch').text('IPFS: Local');
@@ -767,6 +768,7 @@ function loadArtifactView2(objMeta) {
 	// GET ALL THE MEDIA DATA
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
     console.log (mediaID, thisMediaData);
+	$('.media-cover').hide();
     window.doMountMediaBrowser('#media-browser', thisMediaData);
 }
 
@@ -3587,11 +3589,11 @@ function newFloVaultAddress() {
 // FLOVAULT REFRESH BALANCES
 function refreshFloVaultBalances() {
     wallet.refreshBalances();
-    updateAddressList(true);
+    updateAddressList();
 }
 
 // FLOVAULT UPDATE ADDRESS LIST
-function updateAddressList(force) {
+function updateAddressList() {
 	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
 	if ( (!wallet) || (Object.keys(wallet.balances).length == 0) || (loadedAddresses ==  Object.keys(wallet.balances).length) )  {
 		console.log('Running Timer');

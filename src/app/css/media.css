@@ -140,7 +140,9 @@
 	-webkit-justify-content: space-around;
     justify-content: space-around;
 }
-
+.buybox {
+	margin-bottom: 1em;
+}
 .pwyw-item {
 	display: -webkit-flex;
     display: flex;
