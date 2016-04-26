@@ -3512,6 +3512,7 @@ var addressListOutput = $("#addressListOutput");
 var sendFromInput = $("#wallet-address-select");
 var sendToInput = $("#wallet-send-address");
 var sendAmountInput = $("#wallet-send-amount-flo");
+var sendCommentInput = $("#wallet-send-message");
 var sendOutput = $("#sendOutput");
 
 // FLOVAULT REGISTER
@@ -3622,6 +3623,9 @@ function updateAddressList() {
 
 // FLOVAULT SEND FLO
 function sendFloVault() {
-	wallet.sendCoins(sendFromInput.val(), sendToInput.val(), sendAmountInput.val());
-    refreshFloVaultBalances();
+	console.log( sendFromInput.val() + ' ' + sendToInput.val() + ' ' + sendAmountInput.val() + ' ' + sendCommentInput.val() );
+	if (window.confirm('Send '+ sendAmountInput.val() + ' FLO to ' + sendToInput.val() + ' with comment: ' + sendCommentInput.val() + '?')) { 
+		wallet.sendCoins(sendFromInput.val(), sendToInput.val(), sendAmountInput.val(), sendCommentInput.val());
+	    refreshFloVaultBalances();
+	}
 }

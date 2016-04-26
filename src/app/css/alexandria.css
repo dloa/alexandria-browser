@@ -567,7 +567,6 @@ ul#media-type-select-list {
 	padding-top: 10px;
 }
 .wrapper, #add-media > * {
-	width: 95.5%;
 	display: inline-block;
 	zoom: 1;*display:inline;
 	max-width: 1200px;
@@ -575,6 +574,10 @@ ul#media-type-select-list {
 }
 .wrapper {
 	margin: 0 auto;
+	width: 60%;
+}
+#add-media > * {
+	width: 95.5%;
 }
 #browse-media .container:first-of-type {
   margin-bottom: 1.5em;
