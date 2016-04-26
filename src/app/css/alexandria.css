@@ -574,7 +574,7 @@ ul#media-type-select-list {
 }
 .wrapper {
 	margin: 0 auto;
-	width: 60%;
+	width: 72.5%;
 }
 #add-media > * {
 	width: 95.5%;
@@ -681,7 +681,7 @@ ul#media-type-select-list {
 #media-txnID {
 	display: none !important;
 }
-#view-media, #view-publisher {
+#view-media, #view-publisher, #view-artifact {
 	padding: 50px 0;
 }
 .entity-view {
@@ -883,9 +883,6 @@ p.largeImg {
 	max-width: 100%;
 }
 /* WALLET VIEW */
-#wallet-view {
-	padding-top: 30px;
-}
 #wallet-view h3 {
 	float: left;
 	font-size: 1.25em;
@@ -897,7 +894,7 @@ p.largeImg {
 #wallet-view .wrapper > * {
 	width: 360px;
 	display: inline-block;
-	margin: 0 70px 50px;
+	margin: 0 30px 50px;
 	min-width: 37.5%;
 	vertical-align: top;
 }
@@ -913,6 +910,9 @@ p.largeImg {
 }
 #identifierOutput {
 	display: none;
+}
+#addressListOutput {
+	margin-top: -1em;
 }
 #wallet-request-method {
 	overflow: hidden;
@@ -1954,6 +1954,14 @@ div#lightbox #qrcode-lightbox {
 			-moz-box-shadow: 0 5px 10px #aaa;
 				box-shadow: 0 5px 10px #aaa;
 	}
+	.overlay-modal {
+		width: 40%;
+		left: 30%;
+	}
+	#wallet-view .wrapper > * {
+		width: 420px;
+		min-width: 36.5%;
+	}	
 /* ============
 	WIDE: Menu
 	============ */

@@ -1710,7 +1710,7 @@ function tradeModal() {
 	if ( (document.getElementById('trade-modal').style.display == 'none') || (document.getElementById('trade-modal').style.display == '') ) {
 		var floAddress = document.getElementById('wallet-address-select').value;
 		if (floAddress == '') {
-			alert('Please select a Florincoin address');
+			alert('Please select an address in Request Tokens section');
 		} else {
 			$.ajax({
 				url: 'http://trade.blocktech.com:5000/flobalance',
@@ -2786,7 +2786,7 @@ function loadWalletView() {
 				document.getElementById('wallet-connect-currency').innerHTML = 'FloVault';
 				$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FloVault")');
 				$('#wallet-user').attr('placeholder','Identifier');
-				$('#refreshBalance').attr('onclick','updateAddressList();');
+				$('#refreshBalance').attr('onclick','refreshFloVaultBalances();');
 				$("#newAddressBtn").attr('onclick','newFloVaultAddress()');
 				$("#sendFloBtn").attr('onclick','sendFloVault()');
 			}
@@ -2943,6 +2943,7 @@ function getWalletAccts(client) {
 			console.info(walletAccts);
 			console.info(walletAccts.length);
 			document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
+			document.getElementById('wallet-from-address-select').innerHTML = '<option value="">Select Address</option>';
 			document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
 			document.getElementById('newMediaPublisherFLO').innerHTML = '<option value="">Select Address</option>';
 			getWalletAddresses(client);
@@ -2962,6 +2963,7 @@ function getWalletAddresses(client) {
 			var acctLabel = walletAccts[addressCount];
 			for (var a = 0; a < address.length; a++) {
 				document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[a]+'">' + address[a] +'</option>';
+				document.getElementById('wallet-from-address-select').innerHTML = document.getElementById('wallet-from-address-select').innerHTML + '<option value="'+address[a]+'">' + address[a] +'</option>';
 				document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[a]+'">' + address[a] +'</option>';
 				document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+address[a]+'">' + address[a] +'</option>';
 			}
@@ -2972,6 +2974,7 @@ function getWalletAddresses(client) {
 	    if (document.getElementById('wallet-address-select').length > 1) {
 	        clearInterval(selectInterval);
 			document.getElementById('wallet-address-select').removeAttribute('disabled');
+			document.getElementById('wallet-from-address-select').removeAttribute('disabled');
 			document.getElementById('newPublisher-floAdd').removeAttribute('disabled');
 			document.getElementById('newMediaPublisherFLO').removeAttribute('disabled');
 			$('#newAddressBtn').removeClass('disabled');
@@ -3395,12 +3398,14 @@ function goBack() {
 function makeHistory(stateObj, newTitle) {
 	console.info(stateObj);
 	navCounter++;
-	if ( ( (document.getElementById('browser-nav')) && (history.state) && (history.state.isFront) ) || (navCounter == 1) ) {
-		$('#browser-nav').remove();
-	} else {
-		resetInterface();
-		if (!document.getElementById('browser-nav')) {
-			$('#logo').after('<div id="browser-nav" class="nodrag"><a onclick="goBack()">Back</a></div>');
+	if (location.protocol == 'app:') {		
+		if ( ( (document.getElementById('browser-nav')) && (history.state) && (history.state.isFront) ) || (navCounter == 1) ) {
+			$('#browser-nav').remove();
+		} else {
+			resetInterface();
+			if (!document.getElementById('browser-nav')) {
+				$('#logo').after('<div id="browser-nav" class="nodrag"><a onclick="goBack()">Back</a></div>');
+			}
 		}
 	}
 	$('#viewlabel').children().hide();
@@ -3509,7 +3514,7 @@ var identifierOutput = $("#identifierOutput");
 var refreshAddressButton = $("#refreshBalance");
 var addressListOutput = $("#addressListOutput");
 
-var sendFromInput = $("#wallet-address-select");
+var sendFromInput = $("#wallet-from-address-select");
 var sendToInput = $("#wallet-send-address");
 var sendAmountInput = $("#wallet-send-amount-flo");
 var sendCommentInput = $("#wallet-send-message");
@@ -3582,27 +3587,29 @@ function newFloVaultAddress() {
 // FLOVAULT REFRESH BALANCES
 function refreshFloVaultBalances() {
     wallet.refreshBalances();
-    updateAddressList();
+    updateAddressList(true);
 }
 
 // FLOVAULT UPDATE ADDRESS LIST
-function updateAddressList() {
+function updateAddressList(force) {
 	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
 	if ( (!wallet) || (Object.keys(wallet.balances).length == 0) || (loadedAddresses ==  Object.keys(wallet.balances).length) )  {
 		console.log('Running Timer');
-		var walletWaitTimeoutId = setTimeout("updateAddressList()", 1000);
+		var walletWaitTimeoutId = setTimeout("updateAddressList()", 1500);
 	} else {
 		clearTimeout(walletWaitTimeoutId);
 		console.log(wallet);
 		addressListOutput.text("");
 		var TotalBalance = 0;
 		document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
+		document.getElementById('wallet-from-address-select').innerHTML = '<option value="">Select Address</option>';
 		document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
 		document.getElementById('newMediaPublisherFLO').innerHTML = '<option value="">Select Address</option>';
 		for (var addr in wallet.balances) {
 			addressListOutput.text(addressListOutput.text() + "\n" + addr + " : " + wallet.balances[addr]);
 			TotalBalance += wallet.balances[addr];
 			document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+			document.getElementById('wallet-from-address-select').innerHTML = document.getElementById('wallet-from-address-select').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
 			document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
 			document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
 		}
@@ -3613,6 +3620,7 @@ function updateAddressList() {
 		    if (document.getElementById('wallet-address-select').length > 1) {
 		        clearInterval(selectInterval);
 				document.getElementById('wallet-address-select').removeAttribute('disabled');
+				document.getElementById('wallet-from-address-select').removeAttribute('disabled');
 				document.getElementById('newPublisher-floAdd').removeAttribute('disabled');
 				document.getElementById('newMediaPublisherFLO').removeAttribute('disabled');
 				$('#newAddressBtn').removeClass('disabled');
@@ -3625,7 +3633,11 @@ function updateAddressList() {
 function sendFloVault() {
 	console.log( sendFromInput.val() + ' ' + sendToInput.val() + ' ' + sendAmountInput.val() + ' ' + sendCommentInput.val() );
 	if (window.confirm('Send '+ sendAmountInput.val() + ' FLO to ' + sendToInput.val() + ' with comment: ' + sendCommentInput.val() + '?')) { 
-		wallet.sendCoins(sendFromInput.val(), sendToInput.val(), sendAmountInput.val(), sendCommentInput.val());
+		wallet.sendCoins(sendFromInput.val(), sendToInput.val(), sendAmountInput.val(), sendCommentInput.val(), sendcallback());
 	    refreshFloVaultBalances();
 	}
+}
+
+function sendcallback(data) {
+//	alert('FLO Sent!');
 }

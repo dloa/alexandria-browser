@@ -1211,7 +1211,7 @@
 				           </div>
 				       </div>
 				       <div class="media-cover">
-				           <img src="http://teamclermont.com/i/cover_placeholder.jpg" />
+				           <img src="img/cover_placeholder.jpg" />
 				       </div>
 				   </div>
 				   <div class="bottom">
@@ -1386,6 +1386,7 @@
 							</div>
 							<div class="row full">
 								<div class="col">
+									<pre id="addressListOutput"></pre>
 									<pre id="identifierOutput"></pre>
 								</div>
 							</div>							
@@ -1418,11 +1419,6 @@
 									</div>
 								</div>
 							</div>
-							<div class="row full">
-								<div class="col">
-									<pre id="addressListOutput"></pre>
-								</div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -1436,6 +1432,16 @@
 					</div>
 					<div class="container">
 						<div class="tbl">
+							<div class="row full">
+								<div class="col">
+									<label>From:</label>
+								</div>
+								<div class="col">
+									<div id="wallet-from-address">
+										<select id="wallet-from-address-select" disabled="disabled"></select>
+									</div>
+								</div>
+							</div>
 							<div class="row full">
 								<div class="col">
 									<label>To:</label>
@@ -1588,7 +1594,7 @@
 
 		<footer id="footer">
 			<div class="left">
-				<div id="footer-title" onclick="resetAlexandria()">ΛLΞXΛNDRIΛ v0.5.1</div>
+				<div id="footer-title" onclick="resetAlexandria()">ΛLΞXΛNDRIΛ v0.5.5</div>
 		 		<div id="viewlabel">
 		 			<div id="alexandria-breadcrumbs"></div>
 				</div>
