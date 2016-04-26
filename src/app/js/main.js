@@ -995,9 +995,6 @@ function loadArtifactView(objMeta) {
 	}
 	$('#media-view-entity .entity-footer').hide();
 	$('#media-view-entity .entity-footer.media-'+mediaType).show();
-	// IFRAME EMBED CODE
-	var iframeEmbedCode = '<iframe src="'+window.location+'" width="800px" height="600px"></iframe>';
-	$('.iframecode').text(iframeEmbedCode);
 	$('#media-view-entity').show();
 	var stateObj = {
 		currentView: 'artifact',
@@ -3471,6 +3468,10 @@ function makeHistory(stateObj, newTitle) {
 	document.getElementById('viewlabel').style.display = 'inline-block';
 	document.title = newTitle;
 	history.pushState(stateObj, newTitle, newUrl);
+	// IFRAME EMBED CODE
+	var iframeEmbedCode = '<iframe src="'+ newUrl +'" width="800px" height="600px"></iframe>';
+	console.info(iframeEmbedCode);
+	$('.iframecode').text(iframeEmbedCode);
 }
 
 // LOAD SCRIPT
