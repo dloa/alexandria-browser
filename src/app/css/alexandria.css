@@ -653,7 +653,6 @@ ul#media-type-select-list {
 }
 .embedcode {
 	margin-top: 1em;
-	background-color: rgba(230, 230, 230, 0.8);
 	padding: 15px;
 }
 .embedcode * {
