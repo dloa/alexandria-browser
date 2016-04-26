@@ -31,6 +31,14 @@ if (location.protocol == 'app:') {
 		}
 	};
 
+	var nativeMenuBar = new gui.Menu({ type: "menubar" });
+	try {
+		nativeMenuBar.createMacBuiltin("My App");
+		win.menu = nativeMenuBar;
+	} catch (ex) {
+		console.log(ex.message);
+	}
+
 	(function resizeHiDPI (options) {
 		// this is the 'do things with resolutions and size initializer
 		var zoom = 0;
