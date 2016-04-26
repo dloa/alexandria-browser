@@ -311,6 +311,10 @@ function mountMediaBrowser(el, data) {
         $('.format-selector button').removeClass('active');
         $(this).addClass('active')
     })
+	// IFRAME EMBED CODE
+	var iframeEmbedCode = '<iframe src="'+window.location+'" width="800px" height="600px"></iframe>';
+	console.info(iframeEmbedCode);
+	$('.iframecode').text(iframeEmbedCode);
 	// MAKE HISTORY ARTIFACT VIEW
 	var stateObj = {
 		currentView: 'artifact',

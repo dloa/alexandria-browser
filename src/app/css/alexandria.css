@@ -651,6 +651,9 @@ ul#media-type-select-list {
 #browse-media-wrap .row.media-entity[media-type="book"] .media-runtime, #browse-media-wrap .row.media-entity[media-type="book"] .playbtn-icon, #browse-media-wrap .row.media-entity[media-type="book"] .btnLightGray {
 	display: none ;
 }
+.embedcode * {
+	text-align: left;
+}
 /* ARTIFACT AND PUBLISHER UI */
 .icon {
 	color: transparent;
