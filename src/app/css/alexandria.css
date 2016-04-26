@@ -651,8 +651,20 @@ ul#media-type-select-list {
 #browse-media-wrap .row.media-entity[media-type="book"] .media-runtime, #browse-media-wrap .row.media-entity[media-type="book"] .playbtn-icon, #browse-media-wrap .row.media-entity[media-type="book"] .btnLightGray {
 	display: none ;
 }
+.embedcode {
+	margin-top: 1em;
+	background-color: rgba(230, 230, 230, 0.8);
+	padding: 15px;
+}
 .embedcode * {
 	text-align: left;
+	margin-top: 0;
+}
+.embedcode h3 {
+	font-family: Avenir-Medium, avenir, 'Open Sans', open_sansregular, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.embedcode pre {
+	font-family: Avenir-Book, avenir, 'Open Sans', open_sansregular, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 /* ARTIFACT AND PUBLISHER UI */
 .icon {
@@ -2113,3 +2125,4 @@ div#lightbox #qrcode-lightbox {
 		page-break-after: avoid;
 	}
 }
+embedcode
