@@ -197,6 +197,7 @@
         margin-top: 12px;
         position: relative;
         left: 5px;
+        z-index: -1;
     }
     
     .playbar-shadow h2 {
