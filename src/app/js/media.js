@@ -162,8 +162,11 @@ function applyMediaData(data) {
     $('.ri-btc-address', releaseInfoSel).text (xinfo['Bitcoin Address']);
 
 	if (xinfo.coverArt) {
+    	$('.playbar-shadow').css('width','initial');
 	    $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  xinfo.coverArt]));
 		$('.media-cover').show();
+	} else {
+    	$('.playbar-shadow').css('width','100%');
 	}
     renderPlaylistTracksHTML(tracks, prices, xinfo, $('.playlist-tracks'))
 
