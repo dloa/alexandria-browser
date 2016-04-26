@@ -6,7 +6,8 @@ var URL_RECV = "http://localhost:11306/payproc/api/receive";
 var URL_GETRECVD = "http://localhost:11306/payproc/api/getreceivedbyaddress/";
 
 window.doMountMediaBrowser = function (el, data) {
-    console.log (el, data)
+    console.log (el, data);
+    $('.media-cover img').attr('src','');
     return mountMediaBrowser(el, data);
 }
 
