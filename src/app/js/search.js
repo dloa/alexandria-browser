@@ -1,6 +1,11 @@
 var serverAddress = 'libraryd.alexandria.media'; // Dev
 // var serverAddress = 'localhost';
 
+var apiProtocol = 'https:';
+if (location.protocol == 'http:') {
+	apiProtocol == location.protocol;
+}
+
 // MEDIA + PUBLISHER SEARCH API
 window.searchAPI = function(module, searchOn, searchFor) {
 	if ( (searchOn == 'type') && (searchFor.length > 1) ) {

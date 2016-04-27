@@ -7,6 +7,7 @@ var IPFSserver = 'ipfs.alexandria.io';
 // var IPFSserver = 'localhost:8080';
 
 var apiProtocol = 'https:';
+var defaultPath = window.location.pathname.slice(0,0-window.location.pathname.split('/').pop().length);
 
 if (location.protocol == 'app:') {
 	var bitcoin = require('bitcoin');
@@ -3499,12 +3500,12 @@ function loadScript(url, callback)
 
 // FLOVAULT INIT
 function FloVaultInit() {
-	loadScript('/js/SimpleWallet.js', SimpleWallet_loaded);
+	loadScript(defaultPath+'js/SimpleWallet.js', SimpleWallet_loaded);
 }
 
 function SimpleWallet_loaded() {
 	console.log('SimpleWallet.js loaded');
-	loadScript('/js/SimpleDeps.js', SimpleDeps_loaded);
+	loadScript(defaultPath+'js/SimpleDeps.js', SimpleDeps_loaded);
 };
 
 function SimpleDeps_loaded() {
