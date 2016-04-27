@@ -2,8 +2,8 @@ var filetype = 'mp3';
 var day_avg = false;
 var delay = 5000;
 var keepHash;
-var URL_RECV = "http://localhost:11306/payproc/api/receive";
-var URL_GETRECVD = "http://localhost:11306/payproc/api/getreceivedbyaddress/";
+var URL_RECV = apiProtocol+"//localhost:11306/payproc/api/receive";
+var URL_GETRECVD = apiProtocol+"//localhost:11306/payproc/api/getreceivedbyaddress/";
 
 window.doMountMediaBrowser = function (el, data) {
     console.log (el, data);
@@ -289,7 +289,7 @@ function mountMediaBrowser(el, data) {
     });
     $('.pwyw-pin-it').on('click', function (e) {
         $.ajax({
-            url: "http://localhost:8079/api/ipfs/pin/add/" + keepHash
+            url: apiProtocol+"//localhost:8079/api/ipfs/pin/add/" + keepHash
         })
         .done(function (data) {
             if (data.status == "ok") {
@@ -467,7 +467,7 @@ function resetQR() {
 
 function setQR(address, amount) {
     if (amount) {
-        var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=bitcoin:" + address + "?amount=" + amount;
+        var url = apiProtocol+"//api.qrserver.com/v1/create-qr-code/?size=300x300&data=bitcoin:" + address + "?amount=" + amount;
         $('.pwyw-qrcode img').attr("src", url);
     
         $('.pwyw-btc-address').text(address);

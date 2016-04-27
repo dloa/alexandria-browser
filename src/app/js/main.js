@@ -6,6 +6,8 @@ var serverAddress = 'libraryd.alexandria.io'; // Dev
 var IPFSserver = 'ipfs.alexandria.io';
 // var IPFSserver = 'localhost:8080';
 
+var apiProtocol = 'https:';
+
 if (location.protocol == 'app:') {
 	var bitcoin = require('bitcoin');
 	$('.webOnly').remove();
@@ -15,7 +17,11 @@ if (location.protocol == 'app:') {
 	$('.webOnly').css('display','inline-block');
 	$('.appOnly').remove();
 	var wallet;
+	if (location.protocol == 'http:') {
+		apiProtocol == location.protocol;
+	}
 }
+
 
 var prevTipAmount = '';
 var fadeTimer = 200;
@@ -466,8 +472,7 @@ function getCryptos() {
 	cryptoTimerRunning = 0;
 // Alexandria Crytpo Price
 	$.ajax({
-		url: 'http://colorcoin.org:41290/flo-market-data/v1/getAll',
-//		url: 'http://localhost:41290/flo-market-data/v1/getAll',
+		url: apiProtocol+'//colorcoin.org:41290/flo-market-data/v1/getAll',
 		success: function(e) {
 			console.info(e);
 			var data = $.parseJSON(e);
@@ -490,7 +495,7 @@ function getCryptos() {
 	});
 // Bitcoin
 	$.ajax({
-	    url: 'https://api.bitcoinaverage.com/ticker/global/USD/',
+	    url: apiProtocol+'//api.bitcoinaverage.com/ticker/global/USD/',
 	    success: function(e) {
 			console.info(e);
 			BTCUSD = parseFloat(e.last);
@@ -544,7 +549,7 @@ function getAllPublishers() {
 	$('.view-publishers-ui').hide();
 	console.log('loadRecentMedia() publisher/get/all ...');
 	$.ajax({
-		url: 'http://'+serverAddress+':41289/alexandria/v1/publisher/get/all',
+		url: apiProtocol+'//'+serverAddress+':41289/alexandria/v1/publisher/get/all',
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
@@ -618,7 +623,7 @@ function loadPublisherView(objMeta) {
 	var publisherMD5;
 	if (thisPublisher['emailmd5'] != '') {
 		publisherMD5 = thisPublisher['emailmd5'];
-		document.getElementById('publisher-avatar').src = 'http://www.gravatar.com/avatar/'+publisherMD5;
+		document.getElementById('publisher-avatar').src = apiProtocol+'//www.gravatar.com/avatar/'+publisherMD5;
 		document.getElementById('publisher-avatar').style.display = 'block';
 	} else {
 		document.getElementById('publisher-avatar').style.display = 'none';
@@ -725,7 +730,7 @@ function loadMediaEntity(obj) {
 
 function IPFS (cmd, args) {
 	args = args?('?' + Object.keys(args).map(function (k) { return k + '=' + args[k]}).join('&')):'';
-	return getJSON('http://localhost:5001/api/v0/' + cmd + args)
+	return getJSON(apiProtocol+'//localhost:5001/api/v0/' + cmd + args)
 }
 
 function getJSON (url) {
@@ -810,7 +815,7 @@ function loadArtifactView(objMeta) {
 		$('.row.media-embed').html(fileEmbed);
 		// IN APP DOWNLOAD LINK
 		if (location.protocol == 'app:') {
-			$('#media-Tid').attr('onclick', 'copyArtifact("http://' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
+			$('#media-Tid').attr('onclick', 'copyArtifact("'+apiProtocol+'//' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
 		}
 	}
 	// HIDE OTHER VIEWS
@@ -903,13 +908,13 @@ function loadArtifactView(objMeta) {
 			mediaFilename = xinfo.filename;
 		}
 		if(xinfo.poster) {
-			var poster = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.poster;
+			var poster = apiProtocol+'//' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.poster;
 		}
 		if(xinfo.posterFrame) {
-			var posterFrame = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.posterFrame;
+			var posterFrame = apiProtocol+'//' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.posterFrame;
 		}		
 		if(xinfo.trailer) {
-			var trailer = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.trailer;
+			var trailer = apiProtocol+'//' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.trailer;
 		}
 		if(xinfo.wwwId) {
 			wwwId = xinfo.wwwId;
@@ -1045,20 +1050,20 @@ function embedArtifact(mediaType, fileHash, mediaFilename, posterFrame) {
 //		if (location.protocol == 'app:') {
 //			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 //		} else {
-			var embedCode = '<video controls="controls" poster="'+ posterFrame +'"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /><param name="autoplay" value="true" /></video>';	
+			var embedCode = '<video controls="controls" poster="'+ posterFrame +'"><source src="'+apiProtocol+'//' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /><param name="autoplay" value="true" /></video>';	
 //		}
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
 // 		if (location.protocol == 'app:') {
 //			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="100px" />';
 //		} else {
-			var embedCode = '<audio controls="controls"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="audio/mp3" /></audio>';
+			var embedCode = '<audio controls="controls"><source src="'+apiProtocol+'//' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="audio/mp3" /></audio>';
 //		}
 	} else if (mediaType == 'book') {
-		var embedCode = '<object data="http://' + IPFSserver +'/ipfs/'+ fileHash + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="http://' + IPFSserver +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
+		var embedCode = '<object data="'+apiProtocol+'//' + IPFSserver +'/ipfs/'+ fileHash + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="'+apiProtocol+'//' + IPFSserver +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
 	} else if (mediaType == 'recipe') {
-		var embedCode = '<object data="http://' + IPFSserver +'/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
+		var embedCode = '<object data="'+apiProtocol+'//' + IPFSserver +'/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
 	} else if (mediaType == 'thing') {
-		var embedCode = '<img src="http://' + IPFSserver +'/ipfs/'+fileHash+'" class="large-poster" />';
+		var embedCode = '<img src="'+apiProtocol+'//' + IPFSserver +'/ipfs/'+fileHash+'" class="large-poster" />';
 	}
 	return embedCode;
 }
@@ -1068,7 +1073,7 @@ function changeAudioTrack(obj) {
 	var audioPlayer = $('audio:visible');
 	var fileHash = $('audio:visible source').attr('src').split('/')[4];
 	var trackFile = $(obj).text();
-	$('audio:visible source').attr('src', 'http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(trackFile));
+	$('audio:visible source').attr('src', apiProtocol+'//' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(trackFile));
 	audioPlayer.load();
 }
 
@@ -1715,13 +1720,13 @@ function tradeModal() {
 			alert('Please select an address in Request Tokens section');
 		} else {
 			$.ajax({
-				url: 'http://trade.blocktech.com:5000/flobalance',
+				url: apiProtocol+'//trade.blocktech.com:5000/flobalance',
 				success: function(e) {
 					document.getElementById('trade-balance').innerHTML = Math.round((.5*e*(Math.round((FLOUSD/BTCUSD)*100000000)/100000000))*100000000)/100000000;
 				}
 			});
 			$.ajax({
-				url: 'http://tradebot.alexandria.io/depositaddress?floaddress='+floAddress,
+				url: apiProtocol+'//tradebot.alexandria.io/depositaddress?floaddress='+floAddress,
 				success: function(e) {
 					document.getElementById('trade-address').innerHTML = e;
 					document.getElementById('trade-modal').style.display = 'block';
@@ -1963,7 +1968,7 @@ function showAutoFill(obj){
 function getIMDBinfo() {
 //	var IMDBid = document.getElementById('www-id').value;
 	var IMDBid = 'tt1273193';
-	var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ mediaWwwID +'&actors=S&uniqueName=1';
+	var IMDBapi = apiProtocol+'//www.myapifilms.com/imdb?idIMDB='+ mediaWwwID +'&actors=S&uniqueName=1';
 	$.ajax({
 	    url: IMDBapi,
 //	    type: 'GET',
@@ -2094,7 +2099,7 @@ function getSoundcloudInfo() {
 // GET ROTTEN TOMATOES RATING
 function getRotten() {
 	var RottenID = parseInt(document.getElementById('movie-rotten').innerHTML);
-	var RottenAPI = 'http://api.rottentomatoes.com/api/public/v1.0/movies/'+ RottenID +'.json?apikey=uatf974sbyb7reyrstwnpmzu';
+	var RottenAPI = apiProtocol+'//api.rottentomatoes.com/api/public/v1.0/movies/'+ RottenID +'.json?apikey=uatf974sbyb7reyrstwnpmzu';
 	$.ajax({
 	    url: RottenAPI,
 	    type: 'GET',
@@ -2169,7 +2174,7 @@ function deactivateMedia(obj) {
 	var signature;
 	var stopError = 0;
 	$.ajax({
-	    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign',
+	    url: apiProtocol+'//'+ serverAddress +':41289/alexandria/v1/sign',
 	    type: 'POST',
 		data: sigQueryString.toString(),
 	    success: function(e) {
@@ -2210,7 +2215,7 @@ function deactivateMedia(obj) {
 	console.info(queryString);
 	if (window.confirm('Deactivate Artifact?')) { 
 		$.ajax({
-		    url: 'http://'+ serverAddress +':41289/alexandria/v1/send',
+		    url: apiProtocol+'//'+ serverAddress +':41289/alexandria/v1/send',
 		    type: 'POST',
 			data: queryString.toString(),
 		    success: function(e) {
@@ -2272,7 +2277,7 @@ function unlockPWYW(obj, currency) {
 
 
 		$('#pwyw-pin-error').text('');
-		request ("http://localhost:8079/api/ipfs/pin/add/" + fileHash, function (err, res, data) {
+		request (apiProtocol+"//localhost:8079/api/ipfs/pin/add/" + fileHash, function (err, res, data) {
 			if (err) {
 	            $('#pwyw-pin-error').text('You must have Librarian installed and running in order to use this feature.').show();
 				return;
@@ -2556,7 +2561,7 @@ function postMedia(tipAlexandria) {
 		var signature;
 		var stopError = 0;
 		$.ajax({
-		    url: 'http://'+ serverAddress +':41289/alexandria/v1/sign',
+		    url: apiProtocol+'//'+ serverAddress +':41289/alexandria/v1/sign',
 		    type: 'POST',
 			data: sigQueryString.toString(),
 		    success: function(e) {
@@ -2659,7 +2664,7 @@ function postMedia(tipAlexandria) {
 		var FLOAccount = $('#newMediaPublisherFLO option:selected').html();
 		if (window.confirm('Publish Artifact using '+ FLOAccount +' : '+ FLOadd +'?')) { 
 			$.ajax({
-			    url: 'http://'+ serverAddress +':41289/alexandria/v1/send',
+			    url: apiProtocol+'//'+ serverAddress +':41289/alexandria/v1/send',
 			    type: 'POST',
 				data: queryString.toString(),
 			    success: function(e) {
@@ -2754,7 +2759,7 @@ function loadAboutView() {
 	document.getElementById('search').style.display = 'block';
 	document.getElementById('about').style.display = 'block';
 	$('#about #video-embed video').remove();
-	$('#about #video-embed').append('<video controls="controls" poster="https://i.ytimg.com/vi/z_u-ndscZjY/hqdefault.jpg"><source src="http://' + IPFSserver +'/ipfs/QmUbsjbjkRu41JqiyAhq61inUpDSB8uMHsTkdtbHg2jYmv/" type="video/mp4"></video>');
+	$('#about #video-embed').append('<video controls="controls" poster="https://i.ytimg.com/vi/z_u-ndscZjY/hqdefault.jpg"><source src="'+apiProtocol+'//' + IPFSserver +'/ipfs/QmUbsjbjkRu41JqiyAhq61inUpDSB8uMHsTkdtbHg2jYmv/" type="video/mp4"></video>');
 	var stateObj = {
 		currentView: 'about'
 	}
@@ -3532,7 +3537,7 @@ registerBtn.click(function () {
     if (emailInput.val().length > 3)
         data = {email: emailInput.val()};
 
-    $.post("http://flovault.alexandria.io/wallet/create", data, function (response) {
+    $.post(apiProtocol+"//flovault.alexandria.io/wallet/create", data, function (response) {
         console.log("Create Response");
         console.log(response);
         registerOutput.text(JSON.stringify(response, null, 2));
@@ -3553,7 +3558,7 @@ registerBtn.click(function () {
 // FLOVAULT LOAD WALLET
 function FloVaultIdentify() {
 	$.ajax({
-		url: 'http://flovault.alexandria.io/wallet/checkload/' + identifierInput.val(),
+		url: apiProtocol+'//flovault.alexandria.io/wallet/checkload/' + identifierInput.val(),
 		success: function(response) {
 	         console.log("Check Load Response");
 	         console.log(response);
