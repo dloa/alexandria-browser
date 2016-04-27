@@ -92,8 +92,10 @@ jQuery(document).ready(function($){
 		if ( ( ($('#tip-modal').css('display') == 'block') && ($('#tip-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#tip-modal')[0]) && ( (!$(e.target).parents('.tip-icon')[0]) ) ) ) {
 			$('#tip-modal').fadeOut(fadeTimer);
 		}
-		if ( (document.getElementById('bitmsg-modal').style.display == 'block') && ( (!$(e.target).parents('#bitmsg-modal')[0]) && (!$(e.target).parents('.bitmsg-icon')[0]) ) ) {
-			document.getElementById('bitmsg-modal').style.display = 'none';
+		if (window.location.pathname != '/embed.html') {
+			if ( (document.getElementById('bitmsg-modal').style.display == 'block') && ( (!$(e.target).parents('#bitmsg-modal')[0]) && (!$(e.target).parents('.bitmsg-icon')[0]) ) ) {
+				document.getElementById('bitmsg-modal').style.display = 'none';
+			}
 		}
 		if ( ( ($('#share-modal').css('display') == 'block') && ($('#share-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#share-modal')[0]) && ( (!$(e.target).parents('.share-icon')[0]) ) ) ) {
 			$('#share-modal').fadeOut(fadeTimer);
@@ -421,6 +423,9 @@ function router (event, goUrl) {
     } else {
     	// ROUTE DOESN'T EXIST - IF ADDRESS LOAD PUBLISHER
     	console.info(paths[1]);
+    	if (!paths[1]) {
+			loadArtifactView(location.hash.slice(1));
+    	}
     	if (paths[1].length == 34) {
 //			var searchResults = searchAPI('publisher', 'address', paths[1]);
 			loadPublisherView(paths[1]);
@@ -814,11 +819,15 @@ function loadArtifactView(objMeta) {
 		}
 	}
 	// HIDE OTHER VIEWS
-	document.getElementById('intro').style.display = 'none';
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('intro').style.display = 'none';
+	}
 	$('main').hide();
 	hideOverlay();
 	resetInterface();
-	document.getElementById('search').style.display = 'block';
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('search').style.display = 'block';
+	}
 	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').hide();
@@ -965,7 +974,9 @@ function loadArtifactView(objMeta) {
 	}
 	// SHOW AND BUILD MEDIA UI
 	$('.view-media-ui').show();
-	document.getElementById('viewlabel').style.display = 'inline-block';
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('viewlabel').style.display = 'inline-block';
+	}
 	$('#media-txnID').html(mediaID);	
 	$('main:visible .FLO-address').html(mediaFLO);
 	if (mediaBTC) {
@@ -2358,8 +2369,10 @@ function unlockPWYW(obj, currency) {
 function hideOverlay() {
 	$('.overlay-modal').fadeOut(fadeTimer);
 	$('.overlay-modal input[type="text"]').val('');
-	document.getElementById('disabler').style.display = 'none';	
-	document.getElementById('app-overlay').style.display = 'none';
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('disabler').style.display = 'none';	
+		document.getElementById('app-overlay').style.display = 'none';
+	}
 }
 
 // SELECT MEDIA TYPE ON ADD MEDIA
@@ -3086,10 +3099,12 @@ function resetInterface() {
 	// Reset Interface
 	$('video').trigger('pause');
 	document.getElementById('tip-comment').value = '';
-	document.getElementById('viewlabel').style.display = 'none';
-	document.getElementById('disabler').style.display = 'none';
-	if (document.getElementById('intro').style.display == 'block') {
-		$('#intro').fadeOut(fadeTimer);
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('viewlabel').style.display = 'none';
+		document.getElementById('disabler').style.display = 'none';
+		if (document.getElementById('intro').style.display == 'block') {
+			$('#intro').fadeOut(fadeTimer);
+		}
 	}
 	$('#browse-media h2').remove();
 	$('.search').attr('disabled',false);
@@ -3105,8 +3120,10 @@ function resetInterface() {
 			'left':'initial',
 			'right':'initial'
 		}).hide();
-	if (document.getElementById('user-modal').style.display == 'block') {
-		$('#user-modal').fadeOut(fadeTimer);
+	if (window.location.pathname != '/embed.html') {
+		if (document.getElementById('user-modal').style.display == 'block') {
+			$('#user-modal').fadeOut(fadeTimer);
+		}
 	}
 }
 
@@ -3291,27 +3308,28 @@ function replaceSVG() {
 }
 
 // SPINNER
-var largeSpinConfig = {
-	lines: 17, // The number of lines to draw
-	length: 7, // The length of each line
-	width: 1, // The line thickness
-	radius: 10, // The radius of the inner circle
-	corners: 1, // Corner roundness (0..1)
-	rotate: 0, // The rotation offset
-	direction: 1, // 1: clockwise, -1: counterclockwise
-	color: '#000', // #rgb or #rrggbb or array of colors
-	speed: .5, // Rounds per second
-	trail: 34, // Afterglow percentage
-	shadow: false, // Whether to render a shadow
-	hwaccel: false, // Whether to use hardware acceleration
-	className: 'spinner', // The CSS class to assign to the spinner
-	zIndex: 2e9, // The z-index (defaults to 2000000000)
-	top: '50%', // Top position relative to parent
-	left: '50%' // Left position relative to parent
-};
-var target = document.getElementById('wait');
-var spinner = new Spinner(largeSpinConfig).spin(target);
-
+if (window.location.pathname != '/embed.html') {
+	var largeSpinConfig = {
+		lines: 17, // The number of lines to draw
+		length: 7, // The length of each line
+		width: 1, // The line thickness
+		radius: 10, // The radius of the inner circle
+		corners: 1, // Corner roundness (0..1)
+		rotate: 0, // The rotation offset
+		direction: 1, // 1: clockwise, -1: counterclockwise
+		color: '#000', // #rgb or #rrggbb or array of colors
+		speed: .5, // Rounds per second
+		trail: 34, // Afterglow percentage
+		shadow: false, // Whether to render a shadow
+		hwaccel: false, // Whether to use hardware acceleration
+		className: 'spinner', // The CSS class to assign to the spinner
+		zIndex: 2e9, // The z-index (defaults to 2000000000)
+		top: '50%', // Top position relative to parent
+		left: '50%' // Left position relative to parent
+	};
+	var target = document.getElementById('wait');
+	var spinner = new Spinner(largeSpinConfig).spin(target);
+}
 // DEFAULT BROWSER FONT SIZE
 document.emSize=function(pa){
 	pa= pa || document.body;
@@ -3463,13 +3481,21 @@ function makeHistory(stateObj, newTitle) {
 		newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
 		
 	}
-	document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
-	document.getElementById('alexandria-breadcrumbs').style.display = 'inline-block';
-	document.getElementById('viewlabel').style.display = 'inline-block';
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
+		document.getElementById('alexandria-breadcrumbs').style.display = 'inline-block';
+		document.getElementById('viewlabel').style.display = 'inline-block';
+	}
 	document.title = newTitle;
 	history.pushState(stateObj, newTitle, newUrl);
 	// IFRAME EMBED CODE
-	var iframeEmbedCode = '<iframe src="'+ newUrl +'" width="800px" height="600px"></iframe>';
+	var embedUrl = newUrl;
+	if (stateObj.mediaType == 'music') {
+		embedUrl = window.location.protocol + '//' + window.location.hostname + '/music.html#' + stateObj.subView;
+	} else {
+		embedUrl = window.location.protocol + '//' + window.location.hostname + '/embed.html#' + stateObj.subView;
+	}
+	var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
 	console.info(iframeEmbedCode);
 	$('.iframecode').text(iframeEmbedCode);
 }

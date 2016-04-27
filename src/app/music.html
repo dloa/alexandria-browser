@@ -15,326 +15,20 @@
 
     <script src="vendor/jquery/dist/jquery.min.js"></script>
     <script src="vendor/moment/min/moment.min.js"></script>
-    <link rel="stylesheet" href="css/fonts.css">
-    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/fonts.css" />
+    <link rel="stylesheet" href="css/normalize.min.css" />
     <!--        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"> -->
-    <link rel="stylesheet" href="css/alexandria.css">
-    <link rel="stylesheet" href="css/media.css">
-
-    <style>
-    
-@font-face {
-  font-family: 'mediaicns';
-  src: url('icons/media.eot?75606605');
-  src: url('icons/media.eot?75606605#iefix') format('embedded-opentype'),
-       url('icons/media.woff?75606605') format('woff'),
-       url('icons/media.ttf?75606605') format('truetype'),
-       url('icons/media.svg?75606605#fontello') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-     .playbar {
-         width: 100%;
-         height: 50px;
-     }
-
-     #playbar-container {
-         position: relative;
-     }
-
-     .playbar-shadow {
-         border-radius: 20px;
-         background: rgba(255,255,255,1);
-         height: 70px;
-         position: absolute;
-         top: -15px;
-         margin: 10px 0px;
-         overflow: hide;
-         transition: all 0.2s;
-     }
-     .playbar-shadow.hide {
-         transform: translate(0%, -5000%)
-     }
-     .playbar-shadow h2 {
-         padding: 0;
-         text-align: center;
-     }
-     .playbar .jp-play, .playbar .jp-stop {
-         float: left;
-         width: 40px;
-         height: 40px;
-         font-family: 'mediaicns';
-         border: none;
-         font-size: 34px;
-         position: relative;
-         top: 4px;
-         background-color: #fff
-     }
-     
-     .playbar .jp-play:before {
-         content: '\e800'
-     }
-
-     .playback .jp-stop {
-         display: none;
-     }
-
-     .playbar .jp-stop:before{
-         content: '\e801';
-     }
-
-     .playbar.jp-state-playing .jp-play:before{
-         content: '\e802';
-     }
-
-     .playbar .jp-stop {
-         display: none !important; /* no need for stop atm */
-     }
-
-      .playbar .jp-current-time {
-         position: relative;
-         top: 13px;
-         left: 5px;
-         z-index: -1
-      }
-
-      .playbar .jp-progress {
-         height: 3px;
-         float: left;
-         margin-top: 1px;
-         margin-left: 10px;
-         width: calc( 100% - 50px - 50px - 50px - 10px);
-         background-color: lightgrey;
-         position: relative;
-         left: 46px;
-      }
-
-     .playbar .jp-seek-bar {
-         height: 40px;
-         margin-top: -20px;
-         padding-top: 20px;
-     }
-
-     .playbar .jp-play-bar {
-         background-color: #868686;
-         height: 3px;
-     }
-
-     .playbar .jp-play-button {
-         content: "";
-         width: 10px;
-         top: -4px;
-         position: relative;
-         border-radius: 100%;
-         background-color: #868686;
-         height: 10px;
-         float: right;
-     }
-
-     .playbar .scrobble-bar p {
-         line-height: 0px;
-         /* hack to make it sit higher -- its 2:12 am ill fix this up later */
-     }
-
-     .playbar .jp-duration {
-         float: right;
-         line-height: 50px;
-         padding-right: 7px;
-         height: 100%;
-         position: relative;
-         top: -23px;
-     }
-     
-     html {
-         height: 100%;
-     }
-     
-    body {
-        background-color: #fff !important;
-        padding-top: 44px;
-        min-height: calc(100% - 44px);
-        box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.75);
-        -webkit-box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.5);
-        -moz-box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.5);
-        box-shadow: inset 0px 5px 40px -8px rgba(0,0,0,0.5);
-    }
-    
-    .media-info h1, .media-info h2, .media-info h3 {
-        margin-bottom: 14px;
-        text-align: left;
-    }
-    
-    .ri-publisher {
-        display: none
-    }
-    
-    .ri-btc-address {
-        display: none
-    }
-    
-    .ri-runtime {
-        display: none
-    }
-    
-    .ri-track-count {
-        display: none
-    }
-    
-    .ri-xfile-container {
-        display: none
-    }
-    
-    .release-info {
-        font-size: 1.05em;
-    }
-    
-    .price {
-        margin-top: 7px;
-    }
-    
-    .playlist-table thead {
-        color: #7c7c7c !important;
-    }
-    
-    .playlist-table {
-        margin-top: 15px
-    }
-    
-    .pwyw-item .button-svg {
-        cursor: pointer
-    }
-    
-    .tipbox {
-        display: none
-    }
-    
-    .media-info h1, .media-info h2, .media-info h3 {
-        margin-bottom: 0
-    }
-    
-    .jp-details {
-        margin-top: 12px;
-        position: relative;
-        left: 5px;
-    }
-    
-    .playbar-shadow h2 {
-        text-align: center
-    }
-    
-    .pwwy-stuff {
-        position: fixed;
-        top: 10%;
-        left: 50%;
-        z-index: 1050;
-        margin-left: -169px;
-    }
-    
-    .pwyw-item.active:before {
-        display: none !important;
-    }
-    
-    .pwyw-container {
-        background-color: #f7f6f5;
-    }
-    
-    .pwyw-overlay {
-        display: none;
-        position:absolute;
-        top:0;
-        left:0;
-        right:0;
-        bottom:0;
-        background-color:rgba(230, 230, 230, 0.85);
-        background: url(data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuNUmK/OAAAAATSURBVBhXY2RgYNgHxGAAYuwDAA78AjwwRoQYAAAAAElFTkSuQmCC) repeat scroll transparent\9; /* ie fallback png background image */
-        z-index:1000;
-    }
-    
-    .pwyw-container {
-        border-radius: 5px;
-        -webkit-box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.41);
-        -moz-box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.41);
-        box-shadow: 0px 0px 23px 0px rgba(0,0,0,0.41);
-    }
-    
-    .pwyw-close {
-        font-family: 'mediaicns';
-        position: absolute;
-        right: 32px;
-        top: 25px;
-        font-size: 16px;
-        cursor: pointer;
-        display: none
-    }
-    
-    .pwyw-close:before {
-        content: '\e803';
-    }
-    
-    .pwyw-suggest {
-        margin-bottom: 13px;
-        margin-top: 10px;
-        font-size: 16px;
-    }
-    
-    .pwyw-pin-pretext {
-        margin-bottom: 5px;
-    }
-    
-    .pwyw-payinfo {
-        display: block;
-        -webkit-justify-content: inherit;
-        justify-content: inherit;
-        -webkit-flex-direction: inherit;
-        flex-direction: inherit;
-    }
-    
-    .pwyw-paybox input {
-        width: 45px;
-        text-align: center;
-        padding: 0 10px;
-    }
-    
-    .pwyw-footer {
-        text-align: center
-    }
-    
-    .pwyw-pining-info {
-        font-size: 30px
-    }
-    
-    .pwyw-pining-suggest {
-        font-size: 30px
-    }
-    
-    .pwyw-container {
-        width: 393px
-    }
-    
-    .pwyw-qrcode {
-        margin: 10px 5px;
-    }
-    
-    .pwyw-somespace {
-        height: 10px
-    }
-    
-    .pwyw-pining-suggestion {
-        text-align: center
-    }
-    
-    .pwyw-pining-error {
-        margin-bottom: 13px;
-        display: none
-    }
-    
-    .media-cover img {
-        display: block;
-        width: 100%;
-    }
-
-    </style>
+    <link rel="stylesheet" href="css/alexandria.css" />
+    <link rel="stylesheet" href="css/media.css" />
+	<link rel="stylesheet" href="css/media-play.css" />
+	<style>
+		.wrapper {
+			width: 100%;
+			max-width: 100%;
+			box-sizing: border-box;
+			padding: 0 15px;
+		}
+	</style>
 </head>
 
 <body>
@@ -495,9 +189,9 @@
                     </div>
                 </div>
             </div>
-            <div class="media-cover">
-                <img src="http://teamclermont.com/i/cover_placeholder.jpg" />
-            </div>
+	       <div class="media-cover">
+	           <img src="img/cover_placeholder.jpg" />
+	       </div>
         </div>
         <div class="bottom">
             <div class="playlist">
@@ -536,12 +230,13 @@
     </div>
     <div class="pwyw-overlay"></div>
     </script>
-    <div id="media-browser"></div>
+    <div id="media-browser" class="wrapper"></div>
     <iframe id="my_iframe" style="display:none;"></iframe>
     <script src="js/vendor/jquery-2.1.1.min.js"></script>
     <script src="vendor/jplayer/dist/jplayer/jquery.jplayer.min.js "></script>
-    <script src="js/search.js"></script>
-    <script src="js/media.js"></script>
+	<script src="js/search.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/media.js"></script>
 
     <script type="text/javascript">
      $('document').ready(function () {
@@ -549,7 +244,7 @@
          var data = window.searchAPI('media', 'txid', txid.replace(/^#/, ''));
 
          console.log (txid, data);
-         window.doMountMediaBrowser('#media-browser', data[0]['media-data']);
+         window.doMountMediaBrowser('#media-browser', data);
 
      })
 

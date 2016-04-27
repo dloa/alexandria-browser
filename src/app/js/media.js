@@ -164,12 +164,12 @@ function applyMediaData(data) {
     $('.ri-audio-count', releaseInfoSel).text (tracks.length);
     $('.ri-publisher', releaseInfoSel).text (media.publisher);
     $('.ri-btc-address', releaseInfoSel).text (xinfo['Bitcoin Address']);
-
 	if (xinfo.coverArt) {
     	$('.playbar-shadow').css('width','initial');
 	    $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  xinfo.coverArt]));
 		$('.media-cover').show();
 	} else {
+	    $('.media-cover').hide();
     	$('.playbar-shadow').css('width','100%');
 	}
     renderPlaylistTracksHTML(tracks, prices, xinfo, $('.playlist-tracks'))
