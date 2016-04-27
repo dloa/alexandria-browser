@@ -15,7 +15,7 @@ window.searchAPI = function(module, searchOn, searchFor) {
 	$('#browse-media-wrap .row').remove();
 	$.ajax({
 		type: "POST",
-		url: 'http://'+ serverAddress +':41289/alexandria/v1/search',
+		url: apiProtocol+'//'+ serverAddress +':41289/alexandria/v1/search',
 		data: queryString.toString(),
 		success: function (e) {
 			mediaData = $.parseJSON(e).response;
