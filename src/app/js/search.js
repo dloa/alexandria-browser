@@ -1,11 +1,6 @@
 var serverAddress = 'libraryd.alexandria.media'; // Dev
 // var serverAddress = 'localhost';
 
-var apiProtocol = 'https:';
-if (location.protocol == 'http:') {
-	apiProtocol == location.protocol;
-}
-
 // MEDIA + PUBLISHER SEARCH API
 window.searchAPI = function(module, searchOn, searchFor) {
 	if ( (searchOn == 'type') && (searchFor.length > 1) ) {
@@ -20,7 +15,7 @@ window.searchAPI = function(module, searchOn, searchFor) {
 	$('#browse-media-wrap .row').remove();
 	$.ajax({
 		type: "POST",
-		url: apiProtocol+'//'+ serverAddress +':41289/alexandria/v1/search',
+		url: 'http://'+ serverAddress +':41289/alexandria/v1/search',
 		data: queryString.toString(),
 		success: function (e) {
 			mediaData = $.parseJSON(e).response;
