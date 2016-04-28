@@ -651,6 +651,9 @@ ul#media-type-select-list {
 #browse-media-wrap .row.media-entity[media-type="book"] .media-runtime, #browse-media-wrap .row.media-entity[media-type="book"] .playbtn-icon, #browse-media-wrap .row.media-entity[media-type="book"] .btnLightGray {
 	display: none ;
 }
+.playbtn-icon {
+	display: none !important;
+}
 .embedcode {
 	margin-top: 1em;
 	padding: 15px;
