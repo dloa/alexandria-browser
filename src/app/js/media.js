@@ -141,6 +141,7 @@ function applyMediaData(data) {
     var media = data['alexandria-media'];
     var info = media.info;
     var xinfo = info['extra-info'];
+	filetype = xinfo.filename.slice(-3);
     var payment = media.payment;
     var ipfsAddr = xinfo['DHT Hash'];
 
@@ -250,21 +251,38 @@ function mountMediaBrowser(el, data) {
     $(el).html($('#media-template').html())
     var mediaData = applyMediaData(data)
     getUSDdayAvg();
-
-    $('#audio-player').jPlayer({
-        cssSelectorAncestor: "#playbar-container",
-        swfPath: "/js",
-        supplied: "mp3",
-        useStateClassSkin: true,
-        autoBlur: false,
-        smoothPlayBar: true,
-        keyEnabled: true,
-        remainingDuration: true,
-        toggleDuration: true,
-        error: function (e) {
-            console.error('got jplayer error', e)
-        }
-    })
+	
+	if (filetype == 'mp3') {
+	    $('#audio-player').jPlayer({
+	        cssSelectorAncestor: "#playbar-container",
+	        swfPath: "/js",
+	        supplied: "mp3",
+	        useStateClassSkin: true,
+	        autoBlur: false,
+	        smoothPlayBar: true,
+	        keyEnabled: true,
+	        remainingDuration: true,
+	        toggleDuration: true,
+	        error: function (e) {
+	            console.error('got jplayer error', e)
+	        }
+	    })
+	} else if (filetype == 'mp4') {
+	    $('#audio-player').jPlayer({
+	        cssSelectorAncestor: "#playbar-container",
+	        swfPath: "/js",
+	        supplied: "m4v",
+	        useStateClassSkin: true,
+	        autoBlur: false,
+	        smoothPlayBar: true,
+	        keyEnabled: true,
+	        remainingDuration: true,
+	        toggleDuration: true,
+	        error: function (e) {
+	            console.error('got jplayer error', e)
+	        }
+	    })
+	}
 
     $('.pwyw-usd-price-input').on('keyup', function (e) {
         var action = this.classList[1]
@@ -342,10 +360,17 @@ function BTCtoUSD (amount) {
 }
 
 function loadTrack (name, url) {
-    $('#audio-player').jPlayer("setMedia", {
-        title: name,
-        mp3: url
-    });
+	if (filetype == 'mp3') {
+	    $('#audio-player').jPlayer("setMedia", {
+	        title: name,
+	        mp3: url
+	    });
+	} else if (filetype == 'mp4') {
+	    $('#audio-player').jPlayer("setMedia", {
+	        title: name,
+	        m4v: url
+	    });		
+	}
     if ($('.playbar-shadow:visible').length == 0) {
 	    $('#audio-player').jPlayer("play");
     }
