@@ -687,7 +687,11 @@ function loadMediaEntity(obj) {
 	// Check Movie for IMDB Verification
 	if (mediaType == 'movie') {
 		// VERIFICATION DISABLED
+		if($(parentObj).attr('id').slice(6) == 'c2f512f71052555f133cb9e1d58371496b6928df90c1bafbb699468c63095221') {
+			loadArtifactView2(parentObj);
+		} else {
 			loadArtifactView(parentObj);
+		}
 /*
 		var mediaTxnID = $(parentObj).attr('id').split('-')[1];
 		var IMDBid = $(parentObj).find('.media-www-id').text();
@@ -720,7 +724,7 @@ function loadMediaEntity(obj) {
   */
 	} else {
 		// Load Media Entity View
-		if (mediaType == 'music') {
+		if ( mediaType == 'music' ) {
 			loadArtifactView2(parentObj);
 		} else {
 			loadArtifactView(parentObj);
