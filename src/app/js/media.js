@@ -182,6 +182,8 @@ function applyMediaData(data) {
 
     $('.ri-date').text(moment(media.timestamp).format('MMMM Do YYYY'));
 
+    $('.media-description').text(info.description);
+
     watchForPin (ipfsAddr, xinfo.filename)
     //             debugger;
 

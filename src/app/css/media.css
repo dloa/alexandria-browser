@@ -32,7 +32,8 @@
 
 .media-info h1,
 .media-info h2,
-.media-info h3 {
+.media-info h3,
+.media-description {
     text-align: left;
 }
 
@@ -204,6 +205,10 @@
 
 .tipbox .share {
     cursor: pointer;
+}
+
+.media-description {
+	margin-top: 25px;
 }
 
 .playlist {
