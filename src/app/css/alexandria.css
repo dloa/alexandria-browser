@@ -36,6 +36,7 @@ canvas,
 img,
 video {
 	vertical-align: middle;
+	max-width: 100%;
 }
 fieldset {
 	border: 0;
@@ -1986,6 +1987,14 @@ div#lightbox #qrcode-lightbox {
 		font-size: 1.2em;
 	}
 }
+@media only screen and (min-width: 768px) {
+	.wrapper {
+		width: 100%;
+	    padding: 0 15px;
+	    box-sizing: border-box;
+	}
+}
+
 @media only screen and (min-width: 1140px) {
 /* ===============
 	Maximal Width

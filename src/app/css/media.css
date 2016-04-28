@@ -17,6 +17,7 @@
     flex-direction: column;
 	-webkit-justify-content: space-around;
     justify-content: space-around;
+    max-width: 100%;
 }
 
 .media-info,

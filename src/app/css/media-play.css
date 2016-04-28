@@ -9,6 +9,10 @@
   font-style: normal;
 }
 
+#audio-player {
+	max-width: 100%;
+}
+
      .playbar {
          width: 100%;
          height: 50px;

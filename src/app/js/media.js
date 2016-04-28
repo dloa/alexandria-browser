@@ -8,6 +8,7 @@ var URL_GETRECVD = "http://localhost:11306/payproc/api/getreceivedbyaddress/";
 window.doMountMediaBrowser = function (el, data) {
     console.log (el, data);
     $('.media-cover img').attr('src','');
+    $('#audio-player').slideUp();
     return mountMediaBrowser(el, data);
 }
 
@@ -141,7 +142,7 @@ function applyMediaData(data) {
     var media = data['alexandria-media'];
     var info = media.info;
     var xinfo = info['extra-info'];
-	filetype = xinfo.filename.slice(-3);
+	filetype = xinfo.filename.split('.')[1];
     var payment = media.payment;
     var ipfsAddr = xinfo['DHT Hash'];
 
@@ -251,7 +252,6 @@ function mountMediaBrowser(el, data) {
     $(el).html($('#media-template').html())
     var mediaData = applyMediaData(data)
     getUSDdayAvg();
-	
 	if (filetype == 'mp3') {
 	    $('#audio-player').jPlayer({
 	        cssSelectorAncestor: "#playbar-container",
@@ -272,6 +272,29 @@ function mountMediaBrowser(el, data) {
 	        cssSelectorAncestor: "#playbar-container",
 	        swfPath: "/js",
 	        supplied: "m4v",
+	        size: {
+	        	width: '820px',
+	        	height: '547px'
+	        },
+	        useStateClassSkin: true,
+	        autoBlur: false,
+	        smoothPlayBar: true,
+	        keyEnabled: true,
+	        remainingDuration: true,
+	        toggleDuration: true,
+	        error: function (e) {
+	            console.error('got jplayer error', e)
+	        }
+	    })
+	} else if (filetype == 'webm') {
+	    $('#audio-player').jPlayer({
+	        cssSelectorAncestor: "#playbar-container",
+	        swfPath: "/js",
+	        supplied: "webmv",
+	        size: {
+	        	width: '820px',
+	        	height: '547px'
+	        },
 	        useStateClassSkin: true,
 	        autoBlur: false,
 	        smoothPlayBar: true,
@@ -369,7 +392,14 @@ function loadTrack (name, url) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        m4v: url
-	    });		
+	    });
+	    $('#audio-player').slideDown('slow');
+	} else if (filetype == 'webm') {
+	    $('#audio-player').jPlayer("setMedia", {
+	        title: name,
+	        webmv: url
+	    });
+	    $('#audio-player').slideDown('slow');
 	}
     if ($('.playbar-shadow:visible').length == 0) {
 	    $('#audio-player').jPlayer("play");

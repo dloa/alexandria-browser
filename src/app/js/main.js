@@ -435,7 +435,7 @@ function router (event, goUrl) {
 				var thisMediaData = searchAPI('media', 'txid', paths[1]);
 				var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
 				console.info(mediaType);
-				if ( (mediaType == 'music') || (paths[1] == 'c2f512f71052555f133cb9e1d58371496b6928df90c1bafbb699468c63095221') ) {
+				if ( (mediaType == 'music') || (mediaType == 'movie') || (mediaType == 'video') ) {
 					loadArtifactView2(paths[1]);
 				} else {
 					loadArtifactView(paths[1]);
@@ -536,6 +536,7 @@ var publishedArtifactSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink=
 function getAllPublishers() {
 	document.getElementById('publisher-avatar').src = '';
 	$('video').trigger('pause');
+	$('#audio-player').jPlayer('destroy');
 	$('#browse-media .module-links a.active').removeClass('active');
 	document.getElementById('intro').style.display = 'none';
 	$('.sharing-ui').hide();
@@ -570,6 +571,7 @@ function getAllPublishers() {
 // PUBLISHER SINGLE ENTITY VIEW
 function loadPublisherEntity(obj) {
 	$('video').trigger('pause');
+	$('#audio-player').jPlayer('destroy');
 	var publisherNav = $(obj).parents('.publisher-entity').hasClass('publisher-entity');
 	if (publisherNav == true) {
 		var parentObj = $(obj).parents('.publisher-entity');
@@ -687,11 +689,7 @@ function loadMediaEntity(obj) {
 	// Check Movie for IMDB Verification
 	if (mediaType == 'movie') {
 		// VERIFICATION DISABLED
-		if($(parentObj).attr('id').slice(6) == 'c2f512f71052555f133cb9e1d58371496b6928df90c1bafbb699468c63095221') {
-			loadArtifactView2(parentObj);
-		} else {
-			loadArtifactView(parentObj);
-		}
+		loadArtifactView2(parentObj);
 /*
 		var mediaTxnID = $(parentObj).attr('id').split('-')[1];
 		var IMDBid = $(parentObj).find('.media-www-id').text();
@@ -724,7 +722,7 @@ function loadMediaEntity(obj) {
   */
 	} else {
 		// Load Media Entity View
-		if ( mediaType == 'music' ) {
+		if ( (mediaType == 'music') || (mediaType == 'movie') || (mediaType == 'video') ) {
 			loadArtifactView2(parentObj);
 		} else {
 			loadArtifactView(parentObj);
@@ -1246,6 +1244,7 @@ function setMediaTypeFilter(obj, resetSearch) {
 
 function filterMediaByType(obj, resetSearch) {
 	$('video').trigger('pause');
+	$('#audio-player').jPlayer('destroy');
 	document.getElementById('intro').style.display = 'none';
 	$('main').not('#browse-media').hide();
 	$('body').append($('#info-modal-media'));
@@ -3102,6 +3101,7 @@ function loadAlexandria() {
 function resetInterface() {
 	// Reset Interface
 	$('video').trigger('pause');
+	$('#audio-player').jPlayer('destroy');
 	document.getElementById('tip-comment').value = '';
 	if (window.location.pathname != '/embed.html') {
 		document.getElementById('viewlabel').style.display = 'none';
@@ -3133,6 +3133,7 @@ function resetInterface() {
 
 // RESET ALEXANDRIA
 function resetAlexandria() {
+	$('#audio-player').jPlayer('destroy');
 	$('video').trigger('pause');
 	$('audio').trigger('pause');
 	$('main').not('#browse-media').hide();
@@ -3414,6 +3415,7 @@ function checkConnection() {
 function goBack() {
 	$('video').trigger('pause');
 	$('audio').trigger('pause');
+	$('#audio-player').jPlayer('destroy');
 	navCounter--;
 	history.back();
 }
