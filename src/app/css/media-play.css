@@ -15,7 +15,7 @@
 
      .playbar {
          width: 100%;
-         height: 50px;
+         min-height: 50px;
 	    padding: 0 15px;
 	    box-sizing: border-box;
         }
@@ -30,8 +30,8 @@
          background: rgba(255,255,255,1);
          height: 70px;
          position: absolute;
-         top: -35px;
-         margin: 10px 0px;
+	    top: -35px;
+	    margin: 15px 0px;
          overflow: hide;
          transition: all 0.2s;
          box-sizing: border-box;
@@ -200,9 +200,11 @@
     .jp-details {
         margin-top: 12px;
         position: relative;
-        left: 5px;
+	    top: -15px;
         z-index: -1;
-    }
+		width: 100%;
+	    clear: both;
+	}
     
     .playbar-shadow h2 {
         text-align: center

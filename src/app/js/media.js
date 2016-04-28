@@ -313,6 +313,8 @@ function mountMediaBrowser(el, data) {
 	            console.error('got jplayer error', e)
 	        }
 	    })
+	} else {
+		$('.jp-title').text('Unsupported File Format');
 	}
 
     $('.pwyw-usd-price-input').on('keyup', function (e) {
