@@ -143,6 +143,7 @@ function applyMediaData(data) {
     var info = media.info;
     var xinfo = info['extra-info'];
 	filetype = xinfo.filename.split('.')[1];
+	console.log(filetype);
     var payment = media.payment;
     var ipfsAddr = xinfo['DHT Hash'];
 
@@ -184,7 +185,7 @@ function applyMediaData(data) {
 	if (pubTime.toString().length == 10) {
 		pubTime = media.timestamp * 1000;
 	}	
-	console.log(pubTime);
+
     $('.ri-date').text(moment(pubTime).format('MMMM Do YYYY'));
 
     $('.media-description').text(info.description);
@@ -259,11 +260,11 @@ function mountMediaBrowser(el, data) {
     $(el).html($('#media-template').html())
     var mediaData = applyMediaData(data)
     getUSDdayAvg();
-	if (filetype == 'mp3') {
+	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
 	    $('#audio-player').jPlayer({
 	        cssSelectorAncestor: "#playbar-container",
 	        swfPath: "/js",
-	        supplied: "mp3",
+	        supplied: filetype,
 	        useStateClassSkin: true,
 	        autoBlur: false,
 	        smoothPlayBar: true,
@@ -274,7 +275,7 @@ function mountMediaBrowser(el, data) {
 	            console.error('got jplayer error', e)
 	        }
 	    })
-	} else if (filetype == 'mp4') {
+	} else if ( (filetype == 'mp4') || (filetype == 'm4v') ) {
 	    $('#audio-player').jPlayer({
 	        cssSelectorAncestor: "#playbar-container",
 	        swfPath: "/js",
@@ -390,12 +391,12 @@ function BTCtoUSD (amount) {
 }
 
 function loadTrack (name, url) {
-	if (filetype == 'mp3') {
+	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        mp3: url
 	    });
-	} else if (filetype == 'mp4') {
+	} else if ( (filetype == 'mp4') || (filetype == 'm4v') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        m4v: url
