@@ -435,7 +435,7 @@ function router (event, goUrl) {
 				var thisMediaData = searchAPI('media', 'txid', paths[1]);
 				var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
 				console.info(mediaType);
-				if (mediaType == 'music') {
+				if ( (mediaType == 'music') || (paths[1] == 'c2f512f71052555f133cb9e1d58371496b6928df90c1bafbb699468c63095221') ) {
 					loadArtifactView2(paths[1]);
 				} else {
 					loadArtifactView(paths[1]);
