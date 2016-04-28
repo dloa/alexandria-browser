@@ -180,7 +180,12 @@ function applyMediaData(data) {
 
     console.log (media, tracks);
 
-    $('.ri-date').text(moment(media.timestamp).format('MMMM Do YYYY'));
+	var pubTime = media.timestamp;
+	if (pubTime.toString().length == 10) {
+		pubTime = media.timestamp * 1000;
+	}	
+	console.log(pubTime);
+    $('.ri-date').text(moment(pubTime).format('MMMM Do YYYY'));
 
     $('.media-description').text(info.description);
 

@@ -3502,7 +3502,6 @@ function makeHistory(stateObj, newTitle) {
 		embedUrl = window.location.protocol + '//' + window.location.hostname + '/embed.html#' + stateObj.subView;
 	}
 	var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
-	console.info(iframeEmbedCode);
 	$('.iframecode').text(iframeEmbedCode);
 }
 
