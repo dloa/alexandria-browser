@@ -48,6 +48,7 @@ textarea {
 }
 a {
 	cursor: pointer;
+	text-decoration: none;
 }
 .browsehappy {
 	margin: 0.2em 0;
@@ -412,6 +413,9 @@ header #app-user-icon {
 	margin: .5em 0 0;
 	padding: 0 36px 0 24px;
 	white-space: nowrap;
+}
+.header-modal ul li a {
+	color: inherit;
 }
 .header-modal ul li img, .header-modal ul li svg {
 	display: inline;

@@ -212,7 +212,7 @@
 			<h2 class="publisher-ui">Create New Publisher</h2>
 			<h2 class="wallet-ui">Wallet</h2>
 			<div id="header-menu" class="nodrag">
-				<div id="addNewContent-icon" onclick="loadAddContentModal();" class="header-icon appOnly">
+				<div id="addNewContent-icon" onclick="loadAddContentModal();" class="header-icon">
 					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25px" height="25px" viewBox="0 0 25 25" version="1.1" class="replaced-svg">
 					    <title>add new content icon</title>
 					    <desc></desc>
@@ -230,7 +230,7 @@
 				</div>
 				<div id="add-menu-modal" class="header-modal ">
 					<ul>
-						<li><a onclick="loadShareMod();"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="125px" height="125px" viewBox="0 0 125 125" version="1.1" class="replaced-svg">
+						<li><a onclick="loadShareMod();" id="publish-module-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="125px" height="125px" viewBox="0 0 125 125" version="1.1" class="replaced-svg">
 						    <title>Media icon</title>
 						    <desc></desc>
 						    <defs></defs>
@@ -243,8 +243,8 @@
 						            </g>
 						        </g>
 						    </g>
-						</svg> Media</a></li>
-						<li><a onclick="loadCreatePublisherMod();" class="publisher-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="69px" height="66px" viewBox="0 0 69 66" version="1.1" class="replaced-svg">
+						</svg> Publish Artifact</a></li>
+						<li class="appOnly"><a onclick="loadCreatePublisherMod();" class="publisher-icon"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="69px" height="66px" viewBox="0 0 69 66" version="1.1" class="replaced-svg">
 						    <title>Publisher icon</title>
 						        <path d="M36.65,10.1 C24.2344595,10.1 14.15,20.1844595 14.15,32.6 C14.15,45.0155405 24.2344595,55.1 36.65,55.1 C49.0655405,55.1 59.15,45.0155405 59.15,32.6 C59.15,20.1844595 49.0655405,10.1 36.65,10.1 L36.65,10.1 Z M53.1195946,43.85 L48.1027027,42.6844595 C47.5959459,42.5831081 47.0385135,42.4310811 46.4304054,42.3297297 C43.3898649,41.6709459 41.5655405,41.2148649 41.2108108,40.4547297 C41.0587838,40.1 41.1601351,39.5425676 41.5148649,38.8837838 C45.0114865,32.2959459 45.5689189,27.2790541 43.2885135,23.4783784 C42.1736486,21.6033784 40.4,20.2858108 38.1702703,19.6777027 C37.6635135,19.5763514 37.1567568,19.5256757 36.65,19.5256757 C35.8898649,19.5256757 35.0790541,19.6777027 34.3189189,19.9310811 C34.1162162,19.9817568 33.6094595,20.2351351 33.5587838,20.2351351 C32.0385135,20.9445946 30.8222973,22.0594595 29.9608108,23.4783784 C27.6804054,27.2790541 28.2378378,32.3466216 31.6837838,38.8837838 C32.0385135,39.5932432 32.1398649,40.1 31.9878378,40.4547297 C31.6331081,41.2148649 29.8087838,41.6709459 26.7682432,42.3297297 C26.2108108,42.4310811 20.0790541,43.85 20.0790541,43.85 L20.0283784,43.697973 C17.8493243,40.4040541 16.6837838,36.6033784 16.6837838,32.6 C16.6837838,21.4006757 25.4506757,12.6337838 36.65,12.6337838 C47.6466216,12.6337838 56.6162162,21.6033784 56.6162162,32.6 C56.6162162,36.5527027 55.4506757,40.4040541 53.2209459,43.697973 L53.1195946,43.85 Z" id="path-header-publisher-icon-1"></path>
 						    <g id="g-header-publisher-icon-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" type="MSPage">
