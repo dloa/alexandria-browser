@@ -1,18 +1,21 @@
 /* some global variables to make mistakes only once */
 
-var serverAddress = '54.172.28.195'; // Dev
+var serverAddress = 'libraryd.alexandria.io'; // Dev
 // var serverAddress = 'localhost';
 
-var IPFSserver = 'gateway.ipfs.io';
+var IPFSserver = 'ipfs.alexandria.io';
 // var IPFSserver = 'localhost:8080';
-
-var fs = require('fs-extra');
 
 if (location.protocol == 'app:') {
 	var bitcoin = require('bitcoin');
-	$('.appOnly').css('display','inline-block');
+	$('.webOnly').remove();
+	$('.appOnly').css('display','inline-block');	
+	var fs = require('fs-extra');
 } else {
+	$('.webOnly').css('display','inline-block');
 	$('.appOnly').remove();
+	var wallet;
+	$('#publish-module-link').removeAttr('onclick').attr('href','http://alexandria.io/publisher/');
 }
 
 var prevTipAmount = '';
@@ -33,6 +36,11 @@ jQuery(document).ready(function($){
 
 	replaceSVG();
 	
+	if (location.protocol != 'app:') {
+		FloVaultInit();
+	}
+
+
 	loadAlexandria();
 	
 	// RUN SEARCH
@@ -85,8 +93,10 @@ jQuery(document).ready(function($){
 		if ( ( ($('#tip-modal').css('display') == 'block') && ($('#tip-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#tip-modal')[0]) && ( (!$(e.target).parents('.tip-icon')[0]) ) ) ) {
 			$('#tip-modal').fadeOut(fadeTimer);
 		}
-		if ( (document.getElementById('bitmsg-modal').style.display == 'block') && ( (!$(e.target).parents('#bitmsg-modal')[0]) && (!$(e.target).parents('.bitmsg-icon')[0]) ) ) {
-			document.getElementById('bitmsg-modal').style.display = 'none';
+		if (window.location.pathname != '/embed.html') {
+			if ( (document.getElementById('bitmsg-modal').style.display == 'block') && ( (!$(e.target).parents('#bitmsg-modal')[0]) && (!$(e.target).parents('.bitmsg-icon')[0]) ) ) {
+				document.getElementById('bitmsg-modal').style.display = 'none';
+			}
 		}
 		if ( ( ($('#share-modal').css('display') == 'block') && ($('#share-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#share-modal')[0]) && ( (!$(e.target).parents('.share-icon')[0]) ) ) ) {
 			$('#share-modal').fadeOut(fadeTimer);
@@ -105,7 +115,12 @@ jQuery(document).ready(function($){
 		if (code == 27) {
 			// esc pressed
 			if ($('#lightbox').css('display') == 'block') {
+				$('#lightbox video').trigger('pause');
 				$('#lightbox').fadeOut(fadeTimer);
+				$('#lightbox video').css({
+					'top': '100%',
+					'left': '100%'
+				});
 			}
 			if($('#wait').css('display') == 'block') {
 				document.getElementById('wait').style.display = 'none';
@@ -134,14 +149,25 @@ jQuery(document).ready(function($){
 			});
 		}
 	});
+	
+	$('#lightbox').click(function(e){
+		if ($(e.target).attr('id') == 'lightbox') {
+			$('#lightbox video').trigger('pause');
+			$(this).fadeOut(fadeTimer);
+			$('#lightbox video').css({
+				'top': '100%',
+				'left': '100%'
+			});
+		}
+	});
 
 	$('input[name="dNetwork"]').click(function(){
 		if ($(this)[0]['checked']) {
 			$(this).siblings('.input-container').slideDown(fadeTimer);
-			resizeTabs(fadeTimer);
+			resizeTabs(true, fadeTimer);
 		} else {
 			$(this).siblings('.input-container').slideUp(fadeTimer);
-			resizeTabs(fadeTimer);
+			resizeTabs(true, fadeTimer);
 		}
 	});
 
@@ -157,25 +183,44 @@ jQuery(document).ready(function($){
 	});
 
 	// API Server ID and Control
-	if(serverAddress == '54.172.28.195'){
+	if(serverAddress == 'libraryd.alexandria.io'){
 		$('#serverID').text('Gateway');
 	} else {
 		$('#serverID').text('Local');
 	}
-	$('#serverID').click(function(){
-		if(serverAddress == '54.172.28.195'){
-			serverAddress = 'localhost';
-			IPFSserver = 'localhost:8080';
-			$('#serverID').text('Local');
+	if (location.protocol == 'app:') {
+		$('#serverID').click(function(){
+			if(serverAddress == 'libraryd.alexandria.io'){
+				serverAddress = 'localhost';
+				IPFSserver = 'localhost:8080';
+				$('#serverID').text('Local');
+			} else {
+				serverAddress = 'libraryd.alexandria.io'
+				IPFSserver = 'ipfs.alexandria.io';
+				$('#serverID').text('Gateway');
+			}
+			setMediaTypeFilter();
+			console.log(serverAddress);
+			console.log(IPFSserver);
+		});
+	} else {
+		if (IPFSserver == 'ipfs.alexandria.io') {
+			$('#IPFS-switch').text('IPFS: Gateway');
 		} else {
-			serverAddress = '54.172.28.195'
-			IPFSserver = 'gateway.ipfs.io';
-			$('#serverID').text('Gateway');
+			$('#IPFS-switch').text('IPFS: Local');
 		}
-		setMediaTypeFilter();
-		console.log(serverAddress);
-		console.log(IPFSserver);
-	});
+		$('#IPFS-switch').click(function(){
+			$('#audio-player').jPlayer("stop");
+			if(IPFSserver == 'ipfs.alexandria.io'){
+				IPFSserver = 'localhost:8080';
+				$('#IPFS-switch').text('IPFS: Local');
+			} else {
+				IPFSserver = 'ipfs.alexandria.io';
+				$('#IPFS-switch').text('IPFS: Gateway');
+			}
+			setMediaTypeFilter();
+		});
+	}
 	
 	// SET LOADED VALUE
 	var loadedTimer = setTimeout(function(){
@@ -184,29 +229,7 @@ jQuery(document).ready(function($){
 
 	// Get exchange rates
 	getCryptos();
-/*
-	var connectingTimerId = setInterval(function() {
-		var connected = checkConnection();
-    	console.log(connected);
-	    if (connected == true) {
-	    	$('#target').remove();
-			var connectedGraphic = '<script id="connected-graphic" type="text/javascript" async="" src="js/animatron.min.js?1426211998079"></script>';
-			$('body').append(connectedGraphic);
-			playerDomain = 'player.animatron.com';
-			amazonDomain = 'https://snapshots.animatron.com';
-			width = 30;
-			height = 30;
-			playerVersion = 'v1.3';
-			filename = 'ba1301d4ec40418b0c51912d0294c0f6.json';
-			autostart = false;
-			loop = false;			
-	    	document.getElementById('connection-indicator').innerHTML = '<div id="target" style="width: 30px; height: 30px;"><canvas id="target-cvs" width="30" height="30"></canvas></canvas></div><div style="visibility: hidden; position: absolute; top: -10000px; left: -10000px;"><span></span></div>';
-			if(typeof start === 'function' ) { start(); }
 
-	        clearInterval(connectingTimerId);	
-	    }
-	}, 10000);
-*/
 }); // End Document.Ready
 
 // The route registering function:
@@ -401,13 +424,23 @@ function router (event, goUrl) {
     } else {
     	// ROUTE DOESN'T EXIST - IF ADDRESS LOAD PUBLISHER
     	console.info(paths[1]);
+    	if (!paths[1]) {
+			loadArtifactView(location.hash.slice(1));
+    	}
     	if (paths[1].length == 34) {
 //			var searchResults = searchAPI('publisher', 'address', paths[1]);
 			loadPublisherView(paths[1]);
     	} else if (paths[1].length == 64) {
 			var searchResults = searchAPI('publisher', 'txid', paths[1]);
 			if (!searchResults) {
-				loadArtifactView(paths[1]);
+				var thisMediaData = searchAPI('media', 'txid', paths[1]);
+				var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
+				console.info(mediaType);
+				if ( (mediaType == 'music') || (mediaType == 'movie') || (mediaType == 'video') ) {
+					loadArtifactView2(paths[1]);
+				} else {
+					loadArtifactView(paths[1]);
+				}
 			} else {
 				loadPublisherView(paths[1]);
 			}
@@ -440,6 +473,7 @@ function getCryptos() {
 // Alexandria Crytpo Price
 	$.ajax({
 		url: 'http://colorcoin.org:41290/flo-market-data/v1/getAll',
+//		url: 'http://localhost:41290/flo-market-data/v1/getAll',
 		success: function(e) {
 			console.info(e);
 			var data = $.parseJSON(e);
@@ -453,7 +487,6 @@ function getCryptos() {
 			var pwywAmount = $('.pwyw-wall-amount:visible').val();
 			$('.pwyw-wall-amount:hidden').val(pwywAmount);
 			$('#pwyw-modal .flo-usd-output').text(Math.round((pwywAmount/FLOUSD)*100000)/100000);
-			$('#pwyw-modal .btc-usd-output').text(Math.round((pwywAmount/BTCUSD)*100000)/100000);
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.error(xhr.status);
@@ -468,57 +501,11 @@ function getCryptos() {
 			console.info(e);
 			BTCUSD = parseFloat(e.last);
 			console.info(BTCUSD);
+			var pwywAmount = $('.pwyw-wall-amount:visible').val();
 			$('.btc-usd .btc-usd-output').text(Math.round((1/BTCUSD)*100000000)/100000000);
+			$('#pwyw-modal .btc-usd-output').text(Math.round((pwywAmount/BTCUSD)*100000)/100000);
 		}
 	});
-/*
-	$.ajax({
-	    url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=2',
-	    type: 'GET',
-	    success: function(e) {
-			var el = $( '#sketchpad' );
-			el.html(e.responseText);
-			var data = $.parseJSON($(el).html());
-			BTCUSD = parseFloat(data.return.markets.BTC.lasttradeprice);
-			console.info(BTCUSD);
-			$('.btc-usd .btc-usd-output').text(Math.round((1/BTCUSD)*100000000)/100000000);
-		}
-	});
-	$.ajax({
-	    url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=61',
-	    type: 'GET',
-	    success: function(e) {
-			var el = $( '#sketchpad' );
-			el.html(e.responseText);
-			var data = $.parseJSON($(el).html());
-			$('#flo-ltc label').text(data.return.markets.FLO.label).next('span').text(data.return.markets.FLO.lasttradeprice);
-			console.info(data.return.markets.FLO.lasttradeprice);
-			FLOLTC = parseFloat(data.return.markets.FLO.lasttradeprice);
-			$.ajax({
-				url: 'http://pubapi.cryptsy.com/api.php?method=singlemarketdata&marketid=1',
-				type: 'GET',
-				success: function(e) {
-					var el = $( '#sketchpad' );
-					el.html(e.responseText);
-					var data = $.parseJSON($(el).html());
-					console.info(data);
-					$('#ltc-usd label').text(data.return.markets.LTC.label).next('span').text(data.return.markets.LTC.lasttradeprice);
-					LTCUSD = parseFloat($('#ltc-usd span').text());
-					FLOUSD = FLOLTC*LTCUSD;
-					$('#flo-usd label').text('FLO/USD').next('span').text(FLOUSD);
-					FLOCost = parseFloat($('#flo-cost').text());
-					$('#tip-modal .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
-					$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);					
-					$('#tip-alexandria-modal .flo-usd-output').text(Math.round((document.getElementById('alexandria-tip-amount').value*FLOUSD)*100000)/100000);
-					var pwywAmount = $('.pwyw-wall-amount:visible').val();
-					$('.pwyw-wall-amount:hidden').val(pwywAmount);
-					$('#pwyw-modal .flo-usd-output').text(Math.round((pwywAmount/FLOUSD)*100000)/100000);
-					$('#pwyw-modal .btc-usd-output').text(Math.round((pwywAmount/BTCUSD)*100000)/100000);
-				}
-			});
-		}
-	});
-*/
 }
 
 // SVG GRAPHICS FOR APPEND
@@ -550,6 +537,7 @@ var publishedArtifactSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink=
 function getAllPublishers() {
 	document.getElementById('publisher-avatar').src = '';
 	$('video').trigger('pause');
+	$('#audio-player').jPlayer('destroy');
 	$('#browse-media .module-links a.active').removeClass('active');
 	document.getElementById('intro').style.display = 'none';
 	$('.sharing-ui').hide();
@@ -584,6 +572,7 @@ function getAllPublishers() {
 // PUBLISHER SINGLE ENTITY VIEW
 function loadPublisherEntity(obj) {
 	$('video').trigger('pause');
+	$('#audio-player').jPlayer('destroy');
 	var publisherNav = $(obj).parents('.publisher-entity').hasClass('publisher-entity');
 	if (publisherNav == true) {
 		var parentObj = $(obj).parents('.publisher-entity');
@@ -701,7 +690,7 @@ function loadMediaEntity(obj) {
 	// Check Movie for IMDB Verification
 	if (mediaType == 'movie') {
 		// VERIFICATION DISABLED
-			loadArtifactView(parentObj);
+		loadArtifactView2(parentObj);
 /*
 		var mediaTxnID = $(parentObj).attr('id').split('-')[1];
 		var IMDBid = $(parentObj).find('.media-www-id').text();
@@ -734,11 +723,30 @@ function loadMediaEntity(obj) {
   */
 	} else {
 		// Load Media Entity View
-		loadArtifactView(parentObj);
+		if ( (mediaType == 'music') || (mediaType == 'movie') || (mediaType == 'video') ) {
+			loadArtifactView2(parentObj);
+		} else {
+			loadArtifactView(parentObj);
+		}
 	}
 }
 
-function loadArtifactView(objMeta) {
+function IPFS (cmd, args) {
+	args = args?('?' + Object.keys(args).map(function (k) { return k + '=' + args[k]}).join('&')):'';
+	return getJSON('http://localhost:5001/api/v0/' + cmd + args)
+}
+
+function getJSON (url) {
+	return Promise.resolve($.ajax({
+		url: url,
+		type: 'GET',
+		dataType: 'JSON'
+	}));
+}
+
+// v0.6 LOAD ARTIFACT VIEW
+function loadArtifactView2(objMeta) {
+	// HIDE OTHER VIEWS
 	document.getElementById('intro').style.display = 'none';
 	$('main').hide();
 	hideOverlay();
@@ -749,12 +757,13 @@ function loadArtifactView(objMeta) {
 	$('.sharing-ui').hide();
 	$('.view-publishers-ui').hide();
 	$('#view-media .entity-view').hide();
-	document.getElementById('view-media').style.display = 'block';
-	$('.row.media-embed').html('');
-	$('#media-Tid').attr('href','').hide();
+	// SHOW MEDIA VIEW
+	document.getElementById('view-artifact').style.display = 'block';
 	var mediaID = '';
+	// GET MEDIA ID FROM objMeta
 	if ( (objMeta) && (objMeta.length == 1) ) {
 		mediaID = $(objMeta).attr('id').split('-')[1];
+	// GET MEDIA ID FROM LOCATION
 	} else if (!objMeta) {
 		if (location.hash.slice(1).split('/')[2]) {
 			mediaID = location.hash.slice(1).split('/')[2];
@@ -764,41 +773,126 @@ function loadArtifactView(objMeta) {
 	} else {
 		mediaID = objMeta;
 	}
+	// GET ALL THE MEDIA DATA
+	var thisMediaData = searchAPI('media', 'txid', mediaID);
+    console.log (mediaID, thisMediaData);
+	$('.media-cover').hide();
+    window.doMountMediaBrowser('#media-browser', thisMediaData);
+}
+
+// v0.5.1 LOAD ARTIFACT VIEW
+function loadArtifactView(objMeta) {
+	// THING AND VIDEO SPECIFIC SOMETHING
+	function showMedia (mediaType){
+		if (mediaType == 'thing') {
+			if(mediaInfo['extra-info']) {
+				if(mediaInfo['extra-info']['coverArt']) {
+					fileHash = mediaInfo['extra-info']['coverArt'];
+				}
+			}
+		}
+		// VIDEO POSTER FRAME
+		if ( (mediaType == 'video') && (wwwId != '') ) {
+			if (!posterFrame) {
+				var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBH_FceJKLSmo0hk9y2zBdZ8ZTmUiNJr8o&part=snippet&id='+ wwwId;
+				$.ajax({
+					url: url,
+					type: 'GET',
+					success: function(e) {
+						var el = $( '#sketchpad' );
+						el.html(e.responseText);
+						var data = $.parseJSON($(el).html());
+						var posterFrame = data['items'][0]['snippet']['thumbnails']['high']['url'];
+						$('.media-embed video').attr('poster',posterFrame);
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						console.error(xhr.status);
+						console.error(thrownError);
+					},
+					async:   false
+				});
+			}
+		}
+		// GET FILE EMBED
+		var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename, posterFrame);
+		$('.row.media-embed').html(fileEmbed);
+		// IN APP DOWNLOAD LINK
+		if (location.protocol == 'app:') {
+			$('#media-Tid').attr('onclick', 'copyArtifact("http://' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
+		}
+	}
+	// HIDE OTHER VIEWS
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('intro').style.display = 'none';
+	}
+	$('main').hide();
+	hideOverlay();
+	resetInterface();
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('search').style.display = 'block';
+	}
+	$('.wallet-ui').hide();
+	$('.publisher-ui').hide();
+	$('.sharing-ui').hide();
+	$('.view-publishers-ui').hide();
+	$('#view-media .entity-view').hide();
+	// SHOW MEDIA VIEW
+	document.getElementById('view-media').style.display = 'block';
+	$('.row.media-embed').html('');
+	$('#media-Tid').attr('href','').hide();
+	var mediaID = '';
+	// GET MEDIA ID FROM objMeta
+	if ( (objMeta) && (objMeta.length == 1) ) {
+		mediaID = $(objMeta).attr('id').split('-')[1];
+	// GET MEDIA ID FROM LOCATION
+	} else if (!objMeta) {
+		if (location.hash.slice(1).split('/')[2]) {
+			mediaID = location.hash.slice(1).split('/')[2];
+		} else {
+			mediaID = location.hash.slice(1).split('/')[1];
+		}
+	} else {
+		mediaID = objMeta;
+	}
+	// GET ALL THE MEDIA DATA
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
 	console.info(thisMediaData);
 	mediaID = thisMediaData[0]['txid'];
 	var mediaPublisher = thisMediaData[0]['publisher-name'];
 	var publisherID = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
+	// GENERATE QR CODE FOR FLO TIPS
 	generateQR(publisherID, 'tip-QR', 100, 100, 'florincoin');
 	if (document.getElementById('sendTipBtn')) {
 		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherID + '", "FLO")');
 	}
-	var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
-	var mediaInfo = thisMediaData[0]['media-data']['alexandria-media']['info'];
-	var mediaPubTime = thisMediaData[0]['media-data']['alexandria-media']['timestamp'];
-	var mediaPubTimeLen = thisMediaData[0]['media-data']['alexandria-media']['timestamp'].toString().length;
+	var media = thisMediaData[0]['media-data']['alexandria-media'];
+	var mediaType = media.type;
+	var mediaInfo = media.info;
+	var mediaPubTime = media.timestamp;
+	var mediaPubTimeLen = mediaPubTime.toString().length;
 	if (mediaPubTimeLen == 10) {
 		mediaPubTime = parseInt(mediaPubTime)*1000;
 	}
 	mediaPubTime  = new Date(parseInt(mediaPubTime));
-	var mediaTitle = mediaInfo['title'];
-	var mediaDesc = mediaInfo['description'];
+	var mediaTitle = mediaInfo.title;
+	var mediaDesc = mediaInfo.description;
 	var mediaRuntime = 0;
 	var mediaArtist = '';
 	var mediaFilename = '';
 	var wwwId = '';
-	var mediaTid = thisMediaData[0]['media-data']['alexandria-media']['torrent'];
-	var mediaFLO = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
-	if(thisMediaData[0]['media-data']['alexandria-media']['payment']) {
-		var mediaPymnt = thisMediaData[0]['media-data']['alexandria-media']['payment'];
+	var mediaTid = media['torrent'];
+	var mediaFLO = media['publisher'];
+	if(media['payment']) {
+		var mediaPymnt = media['payment'];
 	}
 	if ( (!mediaPymnt) || (mediaPymnt == 'none') ) {
 		$('#view-media .tip-icon').hide();
 	}
-	if ((mediaPymnt) && (mediaPymnt['type'] == 'tip')) {
+	// DISPLAY TIP JAR
+	if ((mediaPymnt) && (mediaPymnt.type == 'tip')) {
 		$('#view-media .tip-icon').show();
 		$('.tip-amounts li').remove();
-		var tipAmounts = thisMediaData[0]['media-data']['alexandria-media']['payment']['amount'].split(',');
+		var tipAmounts = media.payment.amount.split(',');
 		for (var i = 0; i < tipAmounts.length; i++) {
 			var thisTipAmount = tipAmounts[i]/100;
 			var tipOption = '<li><input type="radio" name="tip-amount" id="tip-option-'+i+'" value="'+ thisTipAmount +'" onclick="changeTipAmount(this);"><label for="tip-option-'+i+'">$'+ thisTipAmount +'</label></li>';
@@ -806,56 +900,86 @@ function loadArtifactView(objMeta) {
 		}
 		$('.tip-amounts').append('<li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet(this);" onKeyUp="customTipAmountInput(event, this);" /></li>');
 	}
-//	var fileHash = mediaTid.split('btih:')[1];
+
 	var fileHash = mediaTid;
+	// EXTRA INFO
 	if(mediaInfo['extra-info']){
-		if(mediaInfo['extra-info']['runtime']){
-			mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
+		var xinfo = mediaInfo['extra-info'];
+		if(xinfo.runtime){
+			mediaRuntime = calcRuntime(xinfo.runtime);
 		}
-		if(mediaInfo['extra-info']['artist']){
-			mediaArtist = mediaInfo['extra-info']['artist'];
+		if(xinfo.artist){
+			mediaArtist = xinfo.artist;
 		}						
-		if(mediaInfo['extra-info']['filename']){
-			mediaFilename = mediaInfo['extra-info']['filename'];
+		if(xinfo.filename){
+			mediaFilename = xinfo.filename;
 		}
-		if(mediaInfo['extra-info']['posterFrame']) {
-			var posterFrame = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ mediaInfo['extra-info']['posterFrame'];
+		if(xinfo.poster) {
+			var poster = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.poster;
+		}
+		if(xinfo.posterFrame) {
+			var posterFrame = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.posterFrame;
 		}		
-		if(mediaInfo['extra-info']['wwwId']) {
-			wwwId = mediaInfo['extra-info']['wwwId'];
+		if(xinfo.trailer) {
+			var trailer = 'http://' + IPFSserver + '/ipfs/'+ fileHash +'/'+ xinfo.trailer;
 		}
-		if(mediaInfo['extra-info']['Bitcoin Address']) {
-			var mediaBTC = mediaInfo['extra-info']['Bitcoin Address'];
+		if(xinfo.wwwId) {
+			wwwId = xinfo.wwwId;
 		}
-		if(mediaInfo['extra-info']['pwyw']) {
-			var PWYW = mediaInfo['extra-info']['pwyw'];
+		if(xinfo['Bitcoin Address']) {
+			var mediaBTC = xinfo['Bitcoin Address'];
+		}
+		// SHOW/HIDE TRAILER LINK
+		if (trailer) {
+			$('#trailer-link').attr('data-source',trailer).show();
+		} else {
+			$('#trailer-link').attr('data-source',trailer).hide();
+		}
+		// PAY WHAT YOU WANT WALL + MEDIA EMBED
+		if(xinfo.pwyw) {
+			var PWYW = xinfo.pwyw;
 			var pwywSuggUSD = PWYW[0]/100;
 			console.info(pwywSuggUSD);
 			$('.pwyw-wall-amount').val(pwywSuggUSD);
-			showPWYWModal(mediaType, fileHash, mediaFilename);
+//			$('.pwyw-wall-pin').hide();
+
+			IPFS('version')
+				.catch (function (e) {
+					console.error ("ipfs NOT runing, paywall")
+					/* ipfs not running locally */
+					$('.ipfs-running').hide()
+					$('.ipfs-not-running').show()
+					showPWYWModal(mediaType, fileHash, mediaFilename);
+				})
+				.then (function () {
+					$('.ipfs-running').show()
+					$('.ipfs-not-running').hide()
+//					$('.pwyw-wall-pin').show();
+					return IPFS('pin/ls', {type: 'all'})
+				})
+				.then (function(pinned) {
+					/* look for file in pinned */
+					if (! pinned.keys[fileHash])
+						throw new Error ('hash not pinned');
+
+					showMedia(mediaType);
+				})
+				.catch (function (e) {
+					showPWYWModal(mediaType, fileHash, mediaFilename);
+				})
 		} else {
-			if (mediaType == 'thing') {
-				if(mediaInfo['extra-info']) {
-					if(mediaInfo['extra-info']['coverArt']) {
-						fileHash = mediaInfo['extra-info']['coverArt'];
-					}
-				}
-			}
-			var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
-			$('.row.media-embed').html(fileEmbed);
-			$('#media-Tid').attr('onclick', 'copyArtifact("http://' + IPFSserver + 'ipfs/'+ fileHash + '","'+process.env.HOME+'/Alexandria-Downloads/'+ fileHash + '")').show();
+			showMedia(mediaType);
 		}
 	}
-	if ( (mediaType == 'video') && (wwwId != '') ) {
-		if (!posterFrame) {
-			var posterFrame = getYouTubePic(wwwId);
-		}
-	}
+	// ROTTEN TOMATOES FOR MOVIES
 	if (mediaType == 'movie') {
 		getRotten();
 	}
+	// SHOW AND BUILD MEDIA UI
 	$('.view-media-ui').show();
-	document.getElementById('viewlabel').style.display = 'inline-block';
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('viewlabel').style.display = 'inline-block';
+	}
 	$('#media-txnID').html(mediaID);	
 	$('main:visible .FLO-address').html(mediaFLO);
 	if (mediaBTC) {
@@ -869,17 +993,20 @@ function loadArtifactView(objMeta) {
 	if (mediaArtist) {
 		document.getElementById('media-artist-name').outerHTML = '<h3 id="media-artist-name" onclick="searchByField(&apos;media&apos;, &apos;info_extra&apos;, &apos;'+ mediaArtist +'&apos;)">'+ mediaArtist +'</h3>';
 	}
-//	$('#media-view-entity .entity-meta-header .entity-runtime').css('display',$(objMeta).find('.media-runtime').css('display'));
 	document.getElementById('entity-runtime').innerHTML = mediaRuntime;
 	$('#media-view-entity .entity-meta-header .media-header').hide();
 	$('#media-view-entity .entity-meta-header .media-header.media-'+mediaType).show();
 	// $('#media-view-entity .media-image').html(mediaIcon);
 	$('#media-view-entity .entity-pub-time span').html(mediaPubTime);
-	if (posterFrame) {
-//		mediaDesc = '<img src="http://localhost:8080/stream/'+ fileHash +'/'+ mediaInfo['extra-info']['poster'] +'" class="media-poster" />'+ mediaDesc;
-		mediaDesc = '<img src="'+posterFrame+'" class="media-poster" />'+ mediaDesc;
+	// POSTER FRAME
+	if (poster) {
+		mediaDesc = '<img src="'+poster+'" class="media-poster" />'+ mediaDesc;
 	}
 	$('#media-view-entity .media-desc').html('<p>'+ mediaDesc +'</p>');
+	// IF MUSIC THEN GET TRACKS
+	if (mediaType == 'music') {
+		getTracks(mediaTid, mediaInfo, 2);
+	}
 	$('#media-view-entity .entity-footer').hide();
 	$('#media-view-entity .entity-footer.media-'+mediaType).show();
 	$('#media-view-entity').show();
@@ -892,21 +1019,54 @@ function loadArtifactView(objMeta) {
 		artifactPublisher: mediaPublisher,
 		publisherId: publisherID
 	}
+	// MAKE HISTORY ARTIFACT VIEW
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);
 }
 
-function embedArtifact(mediaType, fileHash, mediaFilename) {
+// GET ALBUM TRACKS
+function getTracks(fileHash, mediaInfo, trackCount) {
+	if (trackCount < 10) {
+		var trackNo = '0'+ trackCount;
+	} else {
+		var trackNo = trackCount;
+	}
+	if (mediaInfo['extra-info']['track'+ trackNo]) {
+		var trackFile = mediaInfo['extra-info']['track'+ trackNo];
+		console.info(trackFile);
+		if ($('#media-view-entity .media-desc #track-list').length < 1) {
+			if(mediaInfo['extra-info']['filename']){
+				mediaFilename = mediaInfo['extra-info']['filename'];
+			}
+			$('#media-view-entity .media-desc').append('<ol id="track-list"><li onclick="changeAudioTrack(this)">'+ mediaFilename +'</li></ol>');
+		}
+		$('#media-view-entity .media-desc #track-list').append('<li onclick="changeAudioTrack(this)">'+trackFile+'</li>');
+		trackCount++;
+		getTracks(fileHash, mediaInfo, trackCount);
+	} else {
+		return false;
+	}
+}
+
+// EMBED ARTIFACT FROM DHT
+function embedArtifact(mediaType, fileHash, mediaFilename, posterFrame) {
 	if (mediaFilename == 'none') {
 		mediaFilename = '';
 	}
 	if ( (mediaType == 'video') || (mediaType == 'movie') ) {
-		// FIX FOR SF BITCOIN MEETUP WITHOUT FILENAME
-		if ( (fileHash == '4C44B49C1227F04697C963425E471A786E2960C4' ) && (mediaFilename == '') ) {
-			mediaFilename = 'SF Bitcoin Meetup @ Geekdom - November 18, 2014.mp4';
+		if (!posterFrame) {
+			var posterFrame = '';
 		}
-		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+//		if (location.protocol == 'app:') {
+//			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+//		} else {
+			var embedCode = '<video controls="controls" poster="'+ posterFrame +'"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /><param name="autoplay" value="true" /></video>';	
+//		}
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
-		var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
+// 		if (location.protocol == 'app:') {
+//			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="100px" />';
+//		} else {
+			var embedCode = '<audio controls="controls"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="audio/mp3" /></audio>';
+//		}
 	} else if (mediaType == 'book') {
 		var embedCode = '<object data="http://' + IPFSserver +'/ipfs/'+ fileHash + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="http://' + IPFSserver +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
 	} else if (mediaType == 'recipe') {
@@ -915,6 +1075,15 @@ function embedArtifact(mediaType, fileHash, mediaFilename) {
 		var embedCode = '<img src="http://' + IPFSserver +'/ipfs/'+fileHash+'" class="large-poster" />';
 	}
 	return embedCode;
+}
+
+// CHANGE AUDIO TRACK
+function changeAudioTrack(obj) {
+	var audioPlayer = $('audio:visible');
+	var fileHash = $('audio:visible source').attr('src').split('/')[4];
+	var trackFile = $(obj).text();
+	$('audio:visible source').attr('src', 'http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(trackFile));
+	audioPlayer.load();
 }
 
 // CHANGE CUSTOM TIP AMOUNT
@@ -1057,6 +1226,7 @@ function searchByField(module, searchOn, searchFor) {
 	populateSearchResults(AdvSearchResults, module);
 }
 var resetSearch = 0;
+
 // MEDIA TYPE FILTER
 function setMediaTypeFilter(obj, resetSearch) {
 	var filterTypes = '';
@@ -1075,6 +1245,7 @@ function setMediaTypeFilter(obj, resetSearch) {
 
 function filterMediaByType(obj, resetSearch) {
 	$('video').trigger('pause');
+	$('#audio-player').jPlayer('destroy');
 	document.getElementById('intro').style.display = 'none';
 	$('main').not('#browse-media').hide();
 	$('body').append($('#info-modal-media'));
@@ -1195,33 +1366,8 @@ function filterMediaByType(obj, resetSearch) {
 			}
 		}
 	}
-	console.log(filteredMedia);
 	console.log(history.state);
 	populateSearchResults(filteredMedia, 'media');
-}
-
-// MEDIA + PUBLISHER SEARCH API
-function searchAPI(module, searchOn, searchFor) {
-	if ( (searchOn == 'type') && (searchFor.length > 1) ) {
-		searchFor = '['+searchFor+']';
-	} else {
-		searchFor = '"'+searchFor+'"';
-	}
-	queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":'+searchFor+',"search-like": true}';
-	console.log(queryString);
-	var mediaData;
-	$('body').append($('#info-modal-media'));
-	$('#browse-media-wrap .row').remove();
-	$.ajax({
-		type: "POST",
-		url: 'http://'+ serverAddress +':41289/alexandria/v1/search',
-		data: queryString.toString(),
-		success: function (e) {
-			mediaData = $.parseJSON(e).response;
-		},
-		async:   false
-	});
-	return mediaData;
 }
 
 // POPULATE SEARCH RESULTS
@@ -1230,7 +1376,6 @@ function populateSearchResults(results, module) {
 	if (module == 'publishers') {
 		module = 'publisher';
 	};
-	console.info(results);
 	$('#'+module+'-results-title').remove();
 	if ( (module =='media') && (results) ) {
 		for (var i = 0; i < results.length; i++) {
@@ -1582,7 +1727,7 @@ function tradeModal() {
 	if ( (document.getElementById('trade-modal').style.display == 'none') || (document.getElementById('trade-modal').style.display == '') ) {
 		var floAddress = document.getElementById('wallet-address-select').value;
 		if (floAddress == '') {
-			alert('Please select a Florincoin address');
+			alert('Please select an address in Request Tokens section');
 		} else {
 			$.ajax({
 				url: 'http://trade.blocktech.com:5000/flobalance',
@@ -1591,7 +1736,7 @@ function tradeModal() {
 				}
 			});
 			$.ajax({
-				url: 'http://trade.blocktech.com:5000/depositaddress?floaddress='+floAddress,
+				url: 'http://tradebot.alexandria.io/depositaddress?floaddress='+floAddress,
 				success: function(e) {
 					document.getElementById('trade-address').innerHTML = e;
 					document.getElementById('trade-modal').style.display = 'block';
@@ -1613,7 +1758,7 @@ function loadShareMod() {
 	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').show();
-	resizeTabs();
+	resizeTabs(true);
 	var stateObj = {
 		currentView: 'add-media'
 	}
@@ -1663,7 +1808,7 @@ function loadCreatePublisherMod() {
 	$('.wallet-ui').hide();
 	$('.sharing-ui').hide();
 	$('.publisher-ui').show();
-	resizeTabs();
+	resizeTabs(true);
 	if (FLOauth.length == 0) {
 			document.getElementById('wallet-user').value = '';
 			document.getElementById('wallet-token').value = '';		
@@ -1783,7 +1928,6 @@ function sendPublisherTxn(obj, client, pubAdd, queryString) {
 		    	$('#publisher-process input[type="text"]').val('');
 		    	alertModal(announcePubSVG+'<br />Publisher Announced!');
 				$(obj).removeClass('disabled');
-//				getBalance(obj, client);
 			}
 		});	
 	} else {
@@ -1797,7 +1941,7 @@ function changeAddMediaTab(obj) {
 	$('#newMedia-tabs').find('.modal-tab#'+$(obj).attr("name")).show().siblings().hide();
 	var activeTabName = $('#add-media-menu li.active').attr('name');
 	$('#add-media .pagination ul li').show();
-	resizeTabs();
+	resizeTabs(true);
 	var firstTab = $('#add-media-menu li:first-child').attr('name');
 	var lastTab = $('#add-media-menu li:last-child').attr('name');
 	if (activeTabName == lastTab) {
@@ -1962,26 +2106,6 @@ function getSoundcloudInfo() {
 	$('fieldset:visible textarea').removeAttr('disabled');	
 }
 
-// GET YOUTUBE SCREENGRAB FOR VIDEO VIEW
-function getYouTubePic(YouTubeId) {
-	var url = 'https://www.googleapis.com/youtube/v3/videos?key=AIzaSyBH_FceJKLSmo0hk9y2zBdZ8ZTmUiNJr8o&part=snippet&id='+ YouTubeId;
-	$.ajax({
-	    url: url,
-	    type: 'GET',
-	    success: function(e) {
-			var el = $( '#sketchpad' );
-			el.html(e.responseText);
-			var data = $.parseJSON($(el).html());
-			var mediaData = data['items'][0]['snippet']['thumbnails']['medium']['url'];
-			$('#media-view-entity .row.media-desc').prepend('<img src="'+mediaData+'" class="poster-frame" />');
-	    },
-		error: function (xhr, ajaxOptions, thrownError) {
-			console.error(xhr.status);
-			console.error(thrownError);
-	    }
-    });
-}
-
 // GET ROTTEN TOMATOES RATING
 function getRotten() {
 	var RottenID = parseInt(document.getElementById('movie-rotten').innerHTML);
@@ -2075,12 +2199,10 @@ function deactivateMedia(obj) {
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.error(xhr.status);
 			console.error(thrownError);
-//				$(obj).removeClass('disabled');
 		},
 		async:   false
 	});
 	if (stopError == 1) {
-//			$(obj).removeClass('disabled');
 		signature = false;
 	}		
 
@@ -2133,7 +2255,6 @@ function sendMediaTxn(obj, client, txid, queryString) {
 		    	resetAlexandria();
 		    	alert('Media Deactivated! TxId: ' + txid);
 				$(obj).removeClass('disabled');
-//				getBalance(obj, client);
 			}
 		});
 	} else {
@@ -2160,6 +2281,51 @@ function showPWYWModal(mediaType, fileHash, mediaFilename) {
 }
 
 function unlockPWYW(obj, currency) {
+	if (currency == 'PIN') {
+		var request = require('request'),
+			fileHash = $('#pwyw-modal .btnLightGray').attr('data-hash');
+
+
+		$('#pwyw-pin-error').text('');
+		request ("http://localhost:8079/api/ipfs/pin/add/" + fileHash, function (err, res, data) {
+			if (err) {
+	            $('#pwyw-pin-error').text('You must have Librarian installed and running in order to use this feature.').show();
+				return;
+			}
+			
+			data = JSON.parse(data);
+			
+            if (data.status == "ok") {
+				$('#pwyw-pin-error').text('');
+				var mediaType = $('#pwyw-modal .btnLightGray').attr('data-type');
+				var mediaFilename = $('#pwyw-modal .btnLightGray').attr('data-file');
+				var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
+				$('.row.media-embed').html(fileEmbed);
+				var mediaTitle = $('.entity-meta-header h2').text();
+				$('#media-Tid').attr('href','magnet:?xt=urn:'+fileHash+'&dn='+escape(mediaTitle)).show();
+				hideOverlay();
+				$(obj).removeClass('disabled');
+            } else if (data.status == "error") {
+                if (data.error.indexOf('already pinned recursively') > -1) {
+					$('#pwyw-pin-error').text('');
+					var mediaType = $('#pwyw-modal .btnLightGray').attr('data-type');
+					var mediaFilename = $('#pwyw-modal .btnLightGray').attr('data-file');
+					var fileEmbed = embedArtifact(mediaType, fileHash, mediaFilename);
+					$('.row.media-embed').html(fileEmbed);
+					var mediaTitle = $('.entity-meta-header h2').text();
+					$('#media-Tid').attr('href','magnet:?xt=urn:'+fileHash+'&dn='+escape(mediaTitle)).show();
+					hideOverlay();
+					$(obj).removeClass('disabled');
+                } else {
+					$('#pwyw-pin-error').text('An unknown error has occured, please make sure you have Librarian installed and running.');
+                }
+            } else {
+				$('#pwyw-pin-error').text('An unknown error has occured, please make sure you have Librarian installed and running.');
+            }
+		})
+		
+		return;
+	}
 	$(obj).addClass('disabled');
 	var pwywAmount = $('.pwyw-wall-amount:visible').val();
 	var FLOadd = $('main:visible .FLO-address').html();
@@ -2180,7 +2346,6 @@ function unlockPWYW(obj, currency) {
 				$('#media-Tid').attr('href','magnet:?xt=urn:'+fileHash+'&dn='+escape(mediaTitle)).show();
 				hideOverlay();
 				$(obj).removeClass('disabled');
-	//			getBalance(obj, client);
 			}
 		});
 	} else if (currency == 'BTC') {
@@ -2199,7 +2364,6 @@ function unlockPWYW(obj, currency) {
 				$('#media-Tid').attr('href','magnet:?xt=urn:'+fileHash+'&dn='+escape(mediaTitle)).show();
 				hideOverlay();
 				$(obj).removeClass('disabled');
-	//			getBalance(obj, client);
 			}
 		});
 	}
@@ -2209,8 +2373,10 @@ function unlockPWYW(obj, currency) {
 function hideOverlay() {
 	$('.overlay-modal').fadeOut(fadeTimer);
 	$('.overlay-modal input[type="text"]').val('');
-	document.getElementById('disabler').style.display = 'none';	
-	document.getElementById('app-overlay').style.display = 'none';
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('disabler').style.display = 'none';	
+		document.getElementById('app-overlay').style.display = 'none';
+	}
 }
 
 // SELECT MEDIA TYPE ON ADD MEDIA
@@ -2228,6 +2394,7 @@ function selectMediaType(obj, mediaType) {
 		if (mediaType == 'movie') {
 			mediaMetaData = {
 				"www":"IMDB",
+				"filename":"Filename",
 				"runtime":"Runtime",
 				"creators1":"Director",
 				"creators2":"Screenwriter(s)",
@@ -2242,6 +2409,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'music') {
 			mediaMetaData = {
 				"www":"",
+				"filename":"Track 1 Filename",
 				"runtime":"Runtime",
 				"creators1":"Artist",
 				"creators2":"",
@@ -2256,6 +2424,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'podcast') {
 			mediaMetaData = {
 				"www":"Soundcloud",
+				"filename":"Filename",
 				"runtime":"Runtime",
 				"creators1":"Host(s)",
 				"creators2":"Co-Host(s)",
@@ -2270,6 +2439,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'video') {
 			mediaMetaData = {
 				"www":"YouTube",
+				"filename":"Filename",
 				"runtime":"Runtime",
 				"creators1":"Creator",
 				"creators2":"",
@@ -2284,6 +2454,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'book') {
 			mediaMetaData = {
 				"www":"",
+				"filename":"Filename",
 				"runtime":"",
 				"creators1":"Author",
 				"creators2":"Editor(s)",
@@ -2298,6 +2469,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'thing') {
 			mediaMetaData = {
 				"www":"",
+				"filename":"Filename",
 				"runtime":"",
 				"creators1":"Creator",
 				"creators2":"Contributors",
@@ -2311,6 +2483,7 @@ function selectMediaType(obj, mediaType) {
 		} else if (mediaType == 'recipe') {
 			mediaMetaData = {
 				"www":"",
+				"filename":"Filename",
 				"runtime":"Number of Servings",
 				"creators1":"Chef",
 				"creators2":"",
@@ -2352,14 +2525,38 @@ function selectMediaType(obj, mediaType) {
 			for (var i = 0; i < mediaFiles.length; i++) {
 				$('#extra-files').append('<div class="row full"><div class="col"><div class="input-container"><label><span id="media-meta-'+mediaFiles[i]+'">'+mediaFiles[i].charAt(0).toUpperCase()+mediaFiles[i].slice(1)+' Filename</span></label><input type="text" name="'+mediaFiles[i].replace(' ','')+'" id="addMedia-'+mediaFiles[i].replace(' ','')+'" /></div></div></div>');
 			}
-		}		
+		}
+		if (mediaType == 'music') {
+			$('#extra-files').append('<div class="row full repeater"><div class="col"><div class="input-container"><label><span id="media-meta-track02">Track 02 Filename</span></label><input type="text" name="track02" id="addMedia-track02" /><a class="add-remove" onclick="repeaterFields(this);">+</span></div></div></div>');
+		}
 		$('fieldset#new-media-meta').show();
 	} else {
 		$('#newMedia-info .left').fadeOut(fadeTimer);
 		$('#newMedia-info .pull-right').fadeOut(fadeTimer);
 	}
-	resizeTabs();
+	resizeTabs(true);
 }
+
+// REPEATER FIELDS
+function repeaterFields(obj) {
+	if ($(obj).text() == '+') {
+		$(obj).text('');
+		var rowCount = $(obj).closest('.repeater').index() + 2;
+		if (rowCount < 10) {
+			rowCount = '0'+rowCount;
+		}
+		var newRow = '<div class="row full repeater"><div class="col"><div class="input-container"><label><span id="media-meta-track'+rowCount+'">Track '+rowCount+' Filename</span></label><input type="text" name="track'+rowCount+'" id="addMedia-track'+rowCount+'" /><a class="add-remove" onclick="repeaterFields(this);">+</span></div></div></div>';
+		$(obj).closest('.repeater').after(newRow);
+		resizeTabs(false);
+	} else {
+		
+	}
+/*
+	if($(obj).closest('.repeater').index() > $(obj).closest('.repeater').siblings('.repeater').length) {		
+	}
+*/
+}
+
 // SUBMIT MEDIA TO BLOCKCHAIN
 function postMedia(tipAlexandria) {
 	var reqCheck = mediaReqCheck();
@@ -2391,12 +2588,10 @@ function postMedia(tipAlexandria) {
 			error: function (xhr, ajaxOptions, thrownError) {
 				console.error(xhr.status);
 				console.error(thrownError);
-//				$(obj).removeClass('disabled');
 			},
 			async:   false
 		});
 		if (stopError == 1) {
-//			$(obj).removeClass('disabled');
 			signature = false;
 		}		
 
@@ -2502,7 +2697,7 @@ function postMedia(tipAlexandria) {
 }
 
 /* ADD NEW CONTENT INTERFACE */
-function resizeTabs(t) {
+function resizeTabs(scroll, t) {
 	if (t) {		
 		var tabsTimeout = setTimeout(function() {
 			resizeTabs();
@@ -2519,14 +2714,14 @@ function resizeTabs(t) {
 	});
 	$('.media-info-container').css('overflow','initial');
 	$('#newMedia-tabs').css('height',tabHeight+'px');
-	var tabsTimeout = setTimeout(function() {
-		window.scrollTo(0, $('#newMedia-info .left').position().top);
-	}, fadeTimer);
-	
+	if (scroll) {
+		var tabsTimeout = setTimeout(function() {
+			window.scrollTo(0, $('#newMedia-info .left').position().top);
+		}, fadeTimer);
+	}	
 }
 
 // ALERT MODAL
-
 function alertModal(alertText) {
 	var modalHTML = '<p>' + alertText + '</p><div><a onclick="hideOverlay()" class="btnLightGray">OK</a></div>';
 	
@@ -2575,6 +2770,8 @@ function loadAboutView() {
 	$('.view-publishers-ui').hide();
 	document.getElementById('search').style.display = 'block';
 	document.getElementById('about').style.display = 'block';
+	$('#about #video-embed video').remove();
+	$('#about #video-embed').append('<video controls="controls" poster="https://i.ytimg.com/vi/z_u-ndscZjY/hqdefault.jpg"><source src="http://' + IPFSserver +'/ipfs/QmUbsjbjkRu41JqiyAhq61inUpDSB8uMHsTkdtbHg2jYmv/" type="video/mp4"></video>');
 	var stateObj = {
 		currentView: 'about'
 	}
@@ -2597,17 +2794,27 @@ function loadWalletView() {
 		currentView: 'wallet'
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ Wallet');
-	if (FLOauth.length == 0) {
+	if ( (FLOauth.length == 0) && (!wallet) ) {
 			document.getElementById('wallet-user').value = '';
-			document.getElementById('wallet-token').value = '';		
-			document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
-			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FLO")');
+			document.getElementById('wallet-token').value = '';	
+			if (location.protocol == 'app:') {
+				document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
+				$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FLO")');
+				$('#wallet-user').attr('placeholder','Username');
+			} else {
+				document.getElementById('wallet-connect-currency').innerHTML = 'FloVault';
+				$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FloVault")');
+				$('#wallet-user').attr('placeholder','Identifier');
+				$('#refreshBalance').attr('onclick','refreshFloVaultBalances();');
+				$("#newAddressBtn").attr('onclick','newFloVaultAddress()');
+				$("#sendFloBtn").attr('onclick','sendFloVault()');
+			}
 			$('#wallet-auth-modal').fadeIn(fadeTimer);
 			document.getElementById('app-overlay').style.display = 'block';
 	}
 }
 
-// CONNECT TO FLORINCOIN WALLET
+// RPC CONNECT TO FLORINCOIN WALLET
 var FLOclient = {};
 var FLOauth = [];
 function connectWallet(obj, wallet) {
@@ -2640,10 +2847,12 @@ function connectWallet(obj, wallet) {
 		  timeout: 30000
 		});
 		hideOverlay();
+	} else if (wallet == 'FloVault') {
+		FloVaultIdentify();
 	}
 }
 
-// CONNECT TO BITCOIN WALLET
+// RPC CONNECT TO BITCOIN WALLET
 var BTCclient = {};
 var BTCauth = [];
 function connectBTCWallet(obj) {
@@ -2676,10 +2885,9 @@ function connectBTCWallet(obj) {
 			console.info(balance);
 		}
 	});
-//	getBalance(obj, BTCclient);
 }
 
-// GET WALLET BALANCE
+// RPC WALLET BALANCE
 function getBalance(obj, client) {
 	document.getElementById('wallet-balance-flo').innerHTML = '';
 	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
@@ -2735,7 +2943,7 @@ function getBalance(obj, client) {
 	});
 }
 
-// GET WALLET ACCOUNTS
+// RPC WALLET ACCOUNTS
 var walletAccts = [];
 var addressCount = 0;
 function getWalletAccts(client) {
@@ -2754,6 +2962,7 @@ function getWalletAccts(client) {
 			console.info(walletAccts);
 			console.info(walletAccts.length);
 			document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
+			document.getElementById('wallet-from-address-select').innerHTML = '<option value="">Select Address</option>';
 			document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
 			document.getElementById('newMediaPublisherFLO').innerHTML = '<option value="">Select Address</option>';
 			getWalletAddresses(client);
@@ -2761,7 +2970,7 @@ function getWalletAccts(client) {
 	});
 }
 
-// GET WALLET ADDRESSES
+// RPC WALLET ADDRESSES
 function getWalletAddresses(client) {
 	console.info(walletAccts);
 	for (var i = 0; i < walletAccts.length; i++) {
@@ -2773,6 +2982,7 @@ function getWalletAddresses(client) {
 			var acctLabel = walletAccts[addressCount];
 			for (var a = 0; a < address.length; a++) {
 				document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+address[a]+'">' + address[a] +'</option>';
+				document.getElementById('wallet-from-address-select').innerHTML = document.getElementById('wallet-from-address-select').innerHTML + '<option value="'+address[a]+'">' + address[a] +'</option>';
 				document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+address[a]+'">' + address[a] +'</option>';
 				document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+address[a]+'">' + address[a] +'</option>';
 			}
@@ -2783,6 +2993,7 @@ function getWalletAddresses(client) {
 	    if (document.getElementById('wallet-address-select').length > 1) {
 	        clearInterval(selectInterval);
 			document.getElementById('wallet-address-select').removeAttribute('disabled');
+			document.getElementById('wallet-from-address-select').removeAttribute('disabled');
 			document.getElementById('newPublisher-floAdd').removeAttribute('disabled');
 			document.getElementById('newMediaPublisherFLO').removeAttribute('disabled');
 			$('#newAddressBtn').removeClass('disabled');
@@ -2812,12 +3023,13 @@ function generateQR(address, wrapper, qrw, qrh, wallet) {
 	});
 }
 
+// NEW ADDRESS MODAL
 function displayNewAddModal() {
 	$('#new-address-modal').fadeIn(fadeTimer);
 	document.getElementById('app-overlay').style.display = 'block';
 }
 
-// GENERATE NEW FLORINCOIN ADDRESS
+// RPC GENERATE NEW FLORINCOIN ADDRESS
 function newFloAddress(obj, client) {
 	console.info(client);
 	if ($(obj).hasClass('disabled')) {
@@ -2838,7 +3050,7 @@ function newFloAddress(obj, client) {
 	});	
 }
 
-// SEND FLO
+// RPC SEND FLO
 function sendFLO(obj) {
 	if ($(obj).hasClass('disabled')) {
 		return false;
@@ -2890,12 +3102,14 @@ function loadAlexandria() {
 function resetInterface() {
 	// Reset Interface
 	$('video').trigger('pause');
+	$('#audio-player').jPlayer('destroy');
 	document.getElementById('tip-comment').value = '';
-	document.getElementById('viewlabel').style.display = 'none';
-	document.getElementById('disabler').style.display = 'none';
-//	hideOverlay();
-	if (document.getElementById('intro').style.display == 'block') {
-		$('#intro').fadeOut(fadeTimer);
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('viewlabel').style.display = 'none';
+		document.getElementById('disabler').style.display = 'none';
+		if (document.getElementById('intro').style.display == 'block') {
+			$('#intro').fadeOut(fadeTimer);
+		}
 	}
 	$('#browse-media h2').remove();
 	$('.search').attr('disabled',false);
@@ -2911,14 +3125,18 @@ function resetInterface() {
 			'left':'initial',
 			'right':'initial'
 		}).hide();
-	if (document.getElementById('user-modal').style.display == 'block') {
-		$('#user-modal').fadeOut(fadeTimer);
+	if (window.location.pathname != '/embed.html') {
+		if (document.getElementById('user-modal').style.display == 'block') {
+			$('#user-modal').fadeOut(fadeTimer);
+		}
 	}
 }
 
 // RESET ALEXANDRIA
 function resetAlexandria() {
+	$('#audio-player').jPlayer('destroy');
 	$('video').trigger('pause');
+	$('audio').trigger('pause');
 	$('main').not('#browse-media').hide();
 	document.getElementById('search-main').value = '';
 	$('#browse-media .module-links a.active').removeClass('active');
@@ -2950,11 +3168,12 @@ function clearModal() {
 	return false;
 }
 
+// QUIT
 function closeWindow() { 
 	gui.App.quit();
 } 
 
-// LIGHTBOX FUNCTION
+// LIGHTBOX
 function lightbox(obj){
 	var imgContent = $(obj).find('img').clone();
 	$('#lightbox').children().remove();
@@ -2977,6 +3196,42 @@ function lightbox(obj){
 		'top': (window.innerHeight-imgContentHeight)/2+'px',
 		'left': (window.innerWidth-imgContentWidth)/2+'px'
 	});
+}
+
+// LIGHTBOX FOR VIDEO
+function lightboxVideo(obj) {
+	var videoURL = $(obj).attr('data-source');
+	var videoContent = '<video controls="controls" poster=""><source src="'+videoURL+'" type="video/mp4" /><param name="autoplay" value="true" /></video>'
+	$('#lightbox').children().remove();
+	$('#lightbox').append(videoContent);
+	$('#lightbox video').css({
+		'top': '100%',
+		'left': '100%'
+	});
+	$('#lightbox').show();
+	var lightboxInterval = setInterval(function() {
+		if ($('#lightbox video').width() > 200) {
+			var videoContentWidth = $('#lightbox video').width();
+			console.info(videoContentWidth);
+			var maxWH = .95; // Max width and height for lightboxed image
+			if (videoContentWidth > window.innerWidth*maxWH) {
+				$('#lightbox video').css('width',window.innerWidth*maxWH+'px');
+				videoContentWidth = $('#lightbox video').width();
+			}
+			var videoContentHeight = $('#lightbox video').height();
+			console.info(videoContentHeight);
+			if (videoContentHeight > window.innerHeight*maxWH) {
+				$('#lightbox video').css('width','auto');
+				$('#lightbox video').css('height',window.innerHeight*maxWH+'px');
+				videoContentHeight = $('#lightbox video').height();
+				videoContentWidth = $('#lightbox video').width();
+			}
+			$('#lightbox video').css({
+				'top': (window.innerHeight-videoContentHeight)/2+'px',
+				'left': (window.innerWidth-videoContentWidth)/2+'px'
+			});
+		}
+	}, 500);
 }
 
 // INT SORT
@@ -3057,28 +3312,30 @@ function replaceSVG() {
 		}, 'xml');
 	});
 }
-// SPINNER
-var largeSpinConfig = {
-	lines: 17, // The number of lines to draw
-	length: 7, // The length of each line
-	width: 1, // The line thickness
-	radius: 10, // The radius of the inner circle
-	corners: 1, // Corner roundness (0..1)
-	rotate: 0, // The rotation offset
-	direction: 1, // 1: clockwise, -1: counterclockwise
-	color: '#000', // #rgb or #rrggbb or array of colors
-	speed: .5, // Rounds per second
-	trail: 34, // Afterglow percentage
-	shadow: false, // Whether to render a shadow
-	hwaccel: false, // Whether to use hardware acceleration
-	className: 'spinner', // The CSS class to assign to the spinner
-	zIndex: 2e9, // The z-index (defaults to 2000000000)
-	top: '50%', // Top position relative to parent
-	left: '50%' // Left position relative to parent
-};
-var target = document.getElementById('wait');
-var spinner = new Spinner(largeSpinConfig).spin(target);
 
+// SPINNER
+if (window.location.pathname != '/embed.html') {
+	var largeSpinConfig = {
+		lines: 17, // The number of lines to draw
+		length: 7, // The length of each line
+		width: 1, // The line thickness
+		radius: 10, // The radius of the inner circle
+		corners: 1, // Corner roundness (0..1)
+		rotate: 0, // The rotation offset
+		direction: 1, // 1: clockwise, -1: counterclockwise
+		color: '#000', // #rgb or #rrggbb or array of colors
+		speed: .5, // Rounds per second
+		trail: 34, // Afterglow percentage
+		shadow: false, // Whether to render a shadow
+		hwaccel: false, // Whether to use hardware acceleration
+		className: 'spinner', // The CSS class to assign to the spinner
+		zIndex: 2e9, // The z-index (defaults to 2000000000)
+		top: '50%', // Top position relative to parent
+		left: '50%' // Left position relative to parent
+	};
+	var target = document.getElementById('wait');
+	var spinner = new Spinner(largeSpinConfig).spin(target);
+}
 // DEFAULT BROWSER FONT SIZE
 document.emSize=function(pa){
 	pa= pa || document.body;
@@ -3143,7 +3400,8 @@ function copyArtifact(source, target) {
 	}); //copies directory, even if it has subdirectories or files}
 }
 
-// CHECK CONNECTION
+// CHECK LOCAL CONNECTIONS
+
 /*
 function checkConnection() {
 	var url = 'http://localhost:3000/stream/08D72B48F0799BBF62A2DC54CB66CB1ED14F9431/bitcoin.pdf';
@@ -3153,8 +3411,12 @@ function checkConnection() {
     return http.status!=404;
 }
 */
+
 // GO BACK
 function goBack() {
+	$('video').trigger('pause');
+	$('audio').trigger('pause');
+	$('#audio-player').jPlayer('destroy');
 	navCounter--;
 	history.back();
 }
@@ -3163,12 +3425,14 @@ function goBack() {
 function makeHistory(stateObj, newTitle) {
 	console.info(stateObj);
 	navCounter++;
-	if ( ( (document.getElementById('browser-nav')) && (history.state) && (history.state.isFront) ) || (navCounter == 1) ) {
-		$('#browser-nav').remove();
-	} else {
-		resetInterface();
-		if (!document.getElementById('browser-nav')) {
-			$('#logo').after('<div id="browser-nav" class="nodrag"><a onclick="goBack()">Back</a></div>');
+	if (location.protocol == 'app:') {		
+		if ( ( (document.getElementById('browser-nav')) && (history.state) && (history.state.isFront) ) || (navCounter == 1) ) {
+			$('#browser-nav').remove();
+		} else {
+			resetInterface();
+			if (!document.getElementById('browser-nav')) {
+				$('#logo').after('<div id="browser-nav" class="nodrag"><a onclick="goBack()">Back</a></div>');
+			}
 		}
 	}
 	$('#viewlabel').children().hide();
@@ -3224,9 +3488,194 @@ function makeHistory(stateObj, newTitle) {
 		newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
 		
 	}
-	document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
-	document.getElementById('alexandria-breadcrumbs').style.display = 'inline-block';
-	document.getElementById('viewlabel').style.display = 'inline-block';
+	if (window.location.pathname != '/embed.html') {
+		document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
+		document.getElementById('alexandria-breadcrumbs').style.display = 'inline-block';
+		document.getElementById('viewlabel').style.display = 'inline-block';
+	}
 	document.title = newTitle;
 	history.pushState(stateObj, newTitle, newUrl);
+	// IFRAME EMBED CODE
+	var embedUrl = newUrl;
+	if (stateObj.mediaType == 'music') {
+		embedUrl = window.location.protocol + '//' + window.location.hostname + '/music.html#' + stateObj.subView;
+	} else {
+		embedUrl = window.location.protocol + '//' + window.location.hostname + '/embed.html#' + stateObj.subView;
+	}
+	var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
+	$('.iframecode').text(iframeEmbedCode);
+}
+
+// LOAD SCRIPT
+function loadScript(url, callback)
+{
+    // Adding the script tag to the head as suggested before
+    var body = document.getElementsByTagName('body')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+
+    // Then bind the event to the callback function.
+    // There are several events for cross browser compatibility.
+    script.onreadystatechange = callback;
+    script.onload = callback;
+
+    // Fire the loading
+    body.appendChild(script);
+}
+
+// FLOVAULT INIT
+function FloVaultInit() {
+	loadScript('/js/SimpleWallet.js', SimpleWallet_loaded);
+}
+
+function SimpleWallet_loaded() {
+	console.log('SimpleWallet.js loaded');
+	loadScript('/js/SimpleDeps.js', SimpleDeps_loaded);
+};
+
+function SimpleDeps_loaded() {
+	console.log('SimpleDeps.js loaded');
+};
+
+// ToDo: No error cases are handled
+
+var registerBtn = $("#registerButton");
+var emailInput = $("#registerEmailInput");
+var registerPassInput = $("#registerPassInput");
+var registerOutput = $("#registerOutput");
+
+var identifierInput = $("#wallet-user");
+var identifierPassInput = $("#wallet-token");
+var identifierOutput = $("#identifierOutput");
+
+var refreshAddressButton = $("#refreshBalance");
+var addressListOutput = $("#addressListOutput");
+
+var sendFromInput = $("#wallet-from-address-select");
+var sendToInput = $("#wallet-send-address");
+var sendAmountInput = $("#wallet-send-amount-flo");
+var sendCommentInput = $("#wallet-send-message");
+var sendOutput = $("#sendOutput");
+
+// FLOVAULT REGISTER
+registerBtn.click(function () {
+    var data = {};
+    if (emailInput.val().length > 3)
+        data = {email: emailInput.val()};
+
+    $.post("http://flovault.alexandria.io/wallet/create", data, function (response) {
+        console.log("Create Response");
+        console.log(response);
+        registerOutput.text(JSON.stringify(response, null, 2));
+
+        if (response.error) {
+            console.error("Register failed :(");
+            return;
+        }
+
+        identifierInput.val(response.identifier);
+
+        wallet = new Wallet(response.identifier, identifierPassInput.val());
+        wallet.setSharedKey(response.shared_key);
+        wallet.store();
+    });
+});
+
+// FLOVAULT LOAD WALLET
+function FloVaultIdentify() {
+	$.ajax({
+		url: 'http://flovault.alexandria.io/wallet/checkload/' + identifierInput.val(),
+		success: function(response) {
+	         console.log("Check Load Response");
+	         console.log(response);
+	         identifierOutput.text(JSON.stringify(response, null, 2));
+	
+	         if (response.gauth_enabled) {
+	             console.log("2FA unsupported");
+	             alert("Sorry, 2FA is not supported at this time");
+	             $('#wallet-connect-btn').removeClass('disabled');
+	             return false;
+	             // ToDo: add 2FA support, needs further research
+	         }
+	
+	         wallet = new Wallet(response.identifier, identifierPassInput.val());
+	         wallet.load(function () {
+				console.log("Wallet Post-Load");
+				identifierOutput.text(identifierOutput.text() + "\n\nWallet Balance: " + wallet.getTotalBalance());
+				hideOverlay();
+				updateAddressList();		
+	         });
+	     },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+		}
+	});
+}
+
+// FLOVAULT LOAD ADDRESSES
+var loadedAddresses;
+function newFloVaultAddress() {
+    wallet.generateAddress();
+	loadedAddresses = document.getElementById('wallet-address-select').length - 1;
+    updateAddressList();
+}
+
+// FLOVAULT REFRESH BALANCES
+function refreshFloVaultBalances() {
+    wallet.refreshBalances();
+    updateAddressList();
+}
+
+// FLOVAULT UPDATE ADDRESS LIST
+function updateAddressList() {
+	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
+	if ( (!wallet) || (Object.keys(wallet.balances).length == 0) || (loadedAddresses ==  Object.keys(wallet.balances).length) )  {
+		console.log('Running Timer');
+		var walletWaitTimeoutId = setTimeout("updateAddressList()", 1500);
+	} else {
+		clearTimeout(walletWaitTimeoutId);
+		console.log(wallet);
+		addressListOutput.text("");
+		var TotalBalance = 0;
+		document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
+		document.getElementById('wallet-from-address-select').innerHTML = '<option value="">Select Address</option>';
+		document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
+		document.getElementById('newMediaPublisherFLO').innerHTML = '<option value="">Select Address</option>';
+		for (var addr in wallet.balances) {
+			addressListOutput.text(addressListOutput.text() + "\n" + addr + " : " + wallet.balances[addr]);
+			TotalBalance += wallet.balances[addr];
+			document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+			document.getElementById('wallet-from-address-select').innerHTML = document.getElementById('wallet-from-address-select').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+			document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+			document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+		}
+		console.log('TotalBalance = ' + TotalBalance);
+		document.getElementById('wallet-balance-flo').innerHTML = TotalBalance + ' FLO';
+		document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((TotalBalance*FLOUSD)*100)/100;
+		var selectInterval = setInterval(function() {
+		    if (document.getElementById('wallet-address-select').length > 1) {
+		        clearInterval(selectInterval);
+				document.getElementById('wallet-address-select').removeAttribute('disabled');
+				document.getElementById('wallet-from-address-select').removeAttribute('disabled');
+				document.getElementById('newPublisher-floAdd').removeAttribute('disabled');
+				document.getElementById('newMediaPublisherFLO').removeAttribute('disabled');
+				$('#newAddressBtn').removeClass('disabled');
+		    }
+		}, 100);
+	}
+}
+
+// FLOVAULT SEND FLO
+function sendFloVault() {
+	console.log( sendFromInput.val() + ' ' + sendToInput.val() + ' ' + sendAmountInput.val() + ' ' + sendCommentInput.val() );
+	if (window.confirm('Send '+ sendAmountInput.val() + ' FLO to ' + sendToInput.val() + ' with comment: ' + sendCommentInput.val() + '?')) { 
+		wallet.sendCoins(sendFromInput.val(), sendToInput.val(), sendAmountInput.val(), sendCommentInput.val(), sendcallback());
+	    refreshFloVaultBalances();
+	}
+}
+
+function sendcallback(data) {
+//	alert('FLO Sent!');
 }

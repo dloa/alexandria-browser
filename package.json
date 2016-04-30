@@ -8,8 +8,8 @@
     "url": "https://github.com/blocktech/alexandria-web"
   },
   "license": "GPL-3.0",
-  "main": "app://host/src/app/alexandria.html",
-  "version": "0.4.2",
+  "main": "app://host/src/app/index.html",
+  "version": "0.5.7",
   "releaseName": "",
   "scripts": {
     "test": "grunt --verbose"
@@ -17,7 +17,7 @@
   "window": {
     "title": "Alexandria",
     "icon": "src/app/img/logo.png",
-    "toolbar": false,
+    "toolbar": true,
     "frame": true,
     "min_width": 960,
     "min_height": 520,
@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "bower": "1.3.8",
+    "fs-extra": "0.18.4",
     "grunt": "0.4.5",
     "grunt-bower-clean": "^0.2.1",
     "grunt-contrib-clean": "^0.5.0",
@@ -41,11 +42,11 @@
     "grunt-exec": "0.4.x",
     "grunt-jsbeautifier": "*",
     "grunt-node-webkit-builder": "0.1.x",
+    "grunt-nw-builder": "^2.0.0",
     "grunt-shell": "^1.1.1",
     "load-grunt-tasks": "0.4.0",
     "nw-gyp": "^0.12.2",
-    "tmp": "0.0.23",
-    "fs-extra": "0.18.4"
+    "tmp": "0.0.23"
   },
   "webkit": {
     "plugin": true

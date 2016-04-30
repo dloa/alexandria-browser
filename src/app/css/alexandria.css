@@ -1,6 +1,8 @@
 /* @override
 	http://sandbox.dev/css/alexandria.css */
 
+@import url("connection-status.css");
+
 /*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
 html,
 button,
@@ -34,6 +36,7 @@ canvas,
 img,
 video {
 	vertical-align: middle;
+	max-width: 100%;
 }
 fieldset {
 	border: 0;
@@ -45,6 +48,7 @@ textarea {
 }
 a {
 	cursor: pointer;
+	text-decoration: none;
 }
 .browsehappy {
 	margin: 0.2em 0;
@@ -315,7 +319,7 @@ div#logoImg {
 	right: 25px;
 	line-height: 72px;
 }
-.header-icon, header #serverID {
+.header-icon, header #serverID, header #IPFS-switch {
 	line-height: 72px;
 }
 .header-icon {
@@ -323,13 +327,14 @@ div#logoImg {
 	width: 25px;
 	cursor: pointer;
 }
-header #serverID {
+header #serverID, header #IPFS-switch {
   display: block;
   right: 105px;
   cursor: default;
   color: #979797;
   position: absolute;
-  top: 0;
+  top: 2px;
+	font-size: 0.9375rem;
 }
 header #addNewContent-icon {
 	margin-right: 10px;
@@ -408,6 +413,9 @@ header #app-user-icon {
 	margin: .5em 0 0;
 	padding: 0 36px 0 24px;
 	white-space: nowrap;
+}
+.header-modal ul li a {
+	color: inherit;
 }
 .header-modal ul li img, .header-modal ul li svg {
 	display: inline;
@@ -564,14 +572,17 @@ ul#media-type-select-list {
 	padding-top: 10px;
 }
 .wrapper, #add-media > * {
-	width: 95.5%;
-	display: inline-block;
-	zoom: 1;*display:inline;
-	max-width: 1200px;
 	padding-bottom: 2em;
 }
 .wrapper {
 	margin: 0 auto;
+	width: 72.5%;
+    max-width: 820px;
+}
+#add-media > * {
+	width: 95.5%;
+	display: inline-block;
+	zoom: 1;*display:inline;
 }
 #browse-media .container:first-of-type {
   margin-bottom: 1.5em;
@@ -644,6 +655,23 @@ ul#media-type-select-list {
 #browse-media-wrap .row.media-entity[media-type="book"] .media-runtime, #browse-media-wrap .row.media-entity[media-type="book"] .playbtn-icon, #browse-media-wrap .row.media-entity[media-type="book"] .btnLightGray {
 	display: none ;
 }
+.playbtn-icon {
+	display: none !important;
+}
+.embedcode {
+	margin-top: 1em;
+	padding: 15px;
+}
+.embedcode * {
+	text-align: left;
+	margin-top: 0;
+}
+.embedcode h3 {
+	font-family: Avenir-Medium, avenir, 'Open Sans', open_sansregular, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+.embedcode pre {
+	font-family: Avenir-Book, avenir, 'Open Sans', open_sansregular, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
 /* ARTIFACT AND PUBLISHER UI */
 .icon {
 	color: transparent;
@@ -675,7 +703,7 @@ ul#media-type-select-list {
 #media-txnID {
 	display: none !important;
 }
-#view-media, #view-publisher {
+#view-media, #view-publisher, #view-artifact {
 	padding: 50px 0;
 }
 .entity-view {
@@ -690,7 +718,7 @@ ul#media-type-select-list {
 .row.media-embed {
   text-align: center;
 }
-.media-embed embed {
+.media-embed embed, .media-embed video {
   display: inline-block;
 }
 .media-embed object.book-embed {
@@ -781,6 +809,11 @@ n#rotten-wrap a, #rotten-wrap img, #rotten-wrap svg {
 .entity-view .row.media-desc {
 	margin-bottom: 2em;
 }
+.entity-view .row.media-desc #track-list li {
+	cursor: pointer;
+	float: left;
+	clear: both;
+}
 img.poster-frame {
 	float: left;
 	margin-right: 1em;
@@ -854,7 +887,7 @@ img.poster-frame {
 p.container {
 	padding: 1.25em 2em;
 	background: #efefef;
-	margin: 45px auto 0;
+	margin: 20px auto 0;
 	float: none;
 	width: 355px;
 	font-size: .875em;
@@ -864,10 +897,14 @@ p.container {
 p.largeImg {
 	margin-top: 0;
 }
-/* WALLET VIEW */
-#wallet-view {
-	padding-top: 30px;
+.sectionSep {
+    clear: both;
+    margin: 2.5em 0px;
 }
+#video-embed video {
+	max-width: 100%;
+}
+/* WALLET VIEW */
 #wallet-view h3 {
 	float: left;
 	font-size: 1.25em;
@@ -879,7 +916,7 @@ p.largeImg {
 #wallet-view .wrapper > * {
 	width: 360px;
 	display: inline-block;
-	margin: 0 70px 50px;
+	margin: 0 30px 50px;
 	min-width: 37.5%;
 	vertical-align: top;
 }
@@ -892,6 +929,12 @@ p.largeImg {
 #buyMoreBtn {
 	margin-top: 5px;
 	position: relative;
+}
+#identifierOutput {
+	display: none;
+}
+#addressListOutput {
+	margin-top: -1em;
 }
 #wallet-request-method {
 	overflow: hidden;
@@ -1210,6 +1253,15 @@ ul.distNetList li {
 #add-media .pagination ul li {
 	margin-top: .5em;
 }
+.repeater .input-container input {
+	width: calc(100% - 36px);
+	position: relative;
+}
+.repeater .input-container .add-remove {
+	position: absolute;
+	bottom: 10px;
+	right: 0;
+}
 /* MODALS */
 .info-modal {
 	position: fixed;
@@ -1499,6 +1551,13 @@ ul.distNetList li {
 	width: 100%;
 	height: auto;
 }
+#pwyw-pin-error {
+	margin-top: 10px;
+}
+/* hides Florincoin Payment Tab, remove this later on */
+li[name=pwyw-flo] {
+	display: none !important;
+}
 /* CLOSE MODAL */
 .close-modal {
 	color: #fff;
@@ -1766,6 +1825,8 @@ div#lightbox > * {
 }
 div#lightbox video {
 	background-color:#000;
+	top: 100%;
+	left: 100%;
 }
 div#lightbox #qrcode-lightbox {
 	margin-left: -220px;
@@ -1915,6 +1976,14 @@ div#lightbox #qrcode-lightbox {
 			-moz-box-shadow: 0 5px 10px #aaa;
 				box-shadow: 0 5px 10px #aaa;
 	}
+	.overlay-modal {
+		width: 40%;
+		left: 30%;
+	}
+	#wallet-view .wrapper > * {
+		width: 420px;
+		min-width: 36.5%;
+	}	
 /* ============
 	WIDE: Menu
 	============ */
@@ -1925,6 +1994,14 @@ div#lightbox #qrcode-lightbox {
 		font-size: 1.2em;
 	}
 }
+@media only screen and (min-width: 768px) {
+	.wrapper {
+		width: 100%;
+	    padding: 0 15px;
+	    box-sizing: border-box;
+	}
+}
+
 @media only screen and (min-width: 1140px) {
 /* ===============
 	Maximal Width
@@ -2062,3 +2139,4 @@ div#lightbox #qrcode-lightbox {
 		page-break-after: avoid;
 	}
 }
+embedcode

@@ -1,0 +1,248 @@
+<!doctype html>
+<html>
+    <head>
+        <title></title>
+        <meta charset="utf-8" />
+        <script type="emacs-lisp">
+         (progn
+             (setq httpd-port 8001)
+                 (httpd-start)
+                 (impatient-mode))
+
+        </script>
+
+        <style>
+
+         .overlay-modal {
+             text-align: center;
+             //	display: none;
+             background-color: rgba(220, 220, 220, .9);
+             border-radius: 10px;
+	     position: fixed;
+	     width: 60%;
+	     top: 100px;
+	     left: 20%;
+	     z-index: 500;
+	     padding: 2.25em;
+	     box-sizing: border-box;
+	     border: 1px solid #979797;
+	     box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+	     -moz-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+	     -webkit-box-shadow: 2px 2px 2px rgba(20,20,20,.2);
+         }
+
+         ul.modal-tabs {
+             padding: 0px;
+             display: flex;
+             flex-pack: center;
+             flex-wrap: nowrap;
+             justify-content: space-around;
+         }
+
+         body {
+             padding: 20px;
+             text-align: left;
+             font-family: Lato;
+             color: #fff;
+             background: #9b59b6;
+         }
+
+
+         .tabs {
+             float: none;
+             list-style: none;
+             position: relative;
+             margin: 80px 0 0 10px;
+             text-align: left;
+         }
+         .tabs li {
+             float: left;
+             display: block;
+         }
+         .tabs input[type="radio"] {
+             position: absolute;
+             top: -9999px;
+             left: -9999px;
+         }
+         .tabs label {
+             text-align: center;
+             background-repeat: none;
+             height: 100px;
+             width: 100px;
+             display: block;
+
+             border-radius: 200px;
+             margin: 20px;
+             transition: all 1s;
+
+             font-size: 20px;
+             font-weight: normal;
+             text-transform: uppercase;
+
+             cursor: pointer;
+             position: relative;
+         }
+
+         .tabs label.sublabel {
+             font-weight: bold;
+         }
+         .tabs label img {
+             width: 100%;
+         }
+
+         .tabs label:hover {
+             background-color: lightblue;
+         }
+         .tabs .tab-content {
+             z-index: 2;
+             opacity: 0;
+             overflow: hidden;
+             width: 90%;
+             font-size: 17px;
+             line-height: 25px;
+             padding: 25px;
+             top: 130px;
+             position: absolute;
+             left: 0;
+         }
+
+         .tab-content label {
+             width: auto;
+             height: auto;
+             border: none;
+         }
+
+         .tabs [id^="tab"]:checked + label {
+             background: lightcyan;
+         }
+         .tabs [id^="tab"]:checked + label:before {
+             content: "";
+             border: 10px solid;
+             border-color: transparent transparent rgba(190, 190, 190, 0.8) transparent;
+             position: absolute;
+             bottom: -10px;
+             right: 40px;
+         }
+
+         .tabs [id^="tab"]:checked ~ [id^="tab-content"] {
+             opacity: 1;
+         }
+
+         p.link {
+             clear: both;
+             margin: 380px 0 0 15px;
+         }
+         p.link a {
+             text-transform: uppercase;
+             text-decoration: none;
+             display: inline-block;
+             color: #fff;
+             padding: 5px 10px;
+             margin: 0 5px;
+             background-color: #612e76;
+             -moz-transition: all 0.2s ease-in;
+             -o-transition: all 0.2s ease-in;
+             -webkit-transition: all 0.2s ease-in;
+             transition: all 0.2s ease-in;
+         }
+         p.link a:hover {
+             background-color: #522764;
+         }
+        </style>
+    </head>
+    <body>
+        <div id="pwyw-modal" class="overlay-modal">
+            <h3>Pay What You Want</h3>
+            <div class="tbl">
+	        <ul class="modal-tabs tabs">
+	            <li name="pwyw-play">
+                        <input type="radio" name="tabs" id="tab-play" checked/>
+                        <label for="tab-play">
+                            <img src="svg/paywall-play.svg"/>
+                            download
+                        </label>
+                        <div id="tab-content-play" class="tab-content overlay-modal">
+                            <div id="pwyw-play" class="modal-tab">
+	                        <div class="row">
+	                            <div class="input-container">
+		                        <label class="sublabel">Suggested Payment <span class="pwyw-play-amount">0.02</span>$USD</label>
+                                        <div id="pwyw-play-btc" class="modal-tab">
+                                            <input type="text" name="PWYW Amount" id="pwyw-play-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="play-usd-output"></span> BTC
+                                            <input type="text" name="PWYW Amount" id="pwyw-play-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="play-usd-output"></span> FLO
+                                            <input type="text" name="PWYW Amount" id="pwyw-play-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="play-usd-output"></span> USD
+                                            <div class="row">
+	                                        <a onclick="unlockPWYW(this, 'PLAY');" class="btnLightGray">Send Payment</a>
+	                                    </div>
+                                        </div>
+	                            </div>
+	                        </div>
+                            </div>
+                        </div>
+                    </li>
+
+	            <li name="pwyw-pin">
+                        <input type="radio" name="tabs" id="tab-pin" />
+                        <label for="tab-pin">
+                            <img src="svg/paywall-pin.svg"/>
+                            pin
+                        </label>
+                        <div id="tab-content-pin" class="tab-content overlay-modal">
+                            <div id="pwyw-play" class="modal-tab">
+	                        <div class="row">
+	                            <div class="input-container">
+		                        <label class="sublabel">FREE</label>
+                                        <div id="pwyw-pin-ipfs" class="modal-tab">
+	                                    <div class="row ipfs-running">
+	                                        <a onclick="unlockPWYW(this, 'PIN');" class="btnLightGray">Pin this file on your IPFS install to Play for FREE !</a>
+	                                    </div>
+	                                    <div class="row ipfs-not-running">
+	                                        <a onclick="unlockPWYW(this, 'PIN');" class="btnLightGray">Install IPFS and PIN this file to Play for FREE !</a>
+	                                    </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+	            <li name="pwyw-download">
+                        <input type="radio" name="tabs" id="tab-download" />
+                        <label for="tab-download">
+                            <img src="svg/paywall-download.svg"/>
+                            play</label>
+                            <div id="tab-content-download" class="tab-content overlay-modal">
+                            <div id="pwyw-download" class="modal-tab">
+	                        <div class="row">
+                                    <div class="input-container">
+		                        <label class="sublabel">Suggested Payment <span class="pwyw-download-amount">1.00</span>$USD</label>
+                                        <div id="pwyw-download-btc" class="modal-tab">
+                                            <input type="text" name="PWYW Amount" id="pwyw-download-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="download-usd-output"></span> BTC
+                                            <input type="text" name="PWYW Amount" id="pwyw-download-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="download-usd-output"></span> FLO
+                                            <input type="text" name="PWYW Amount" id="pwyw-download-amount" class="pwyw-wall-amount" onkeyup="changeCryptoRates();" /> <span class="download-usd-output"></span> USD
+                                            <div class="row">
+	                                        <a onclick="unlockPWYW(this, 'DOWNLOAD');" class="btnLightGray">Send Payment</a>
+	                                    </div>
+                                        </div>
+	                            </div>
+	                        </div>
+                            </div>
+                        </div>
+                    </li>
+	        </ul>
+            </div>
+        </div>
+        <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. Donec et mollis dolor. Praesent et diam eget libero egestas mattis sit amet vitae augue. Nam tincidunt congue enim, ut porta lorem lacinia consectetur. Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem. Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. Pellentesque auctor nisi id magna consequat sagittis. Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. Ut convallis libero in urna ultrices accumsan. Donec sed odio eros. Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In rutrum accumsan ultricies. Mauris vitae nisi at sem facilisis semper ac in est.
+</p>
+        <p>
+        Vivamus fermentum semper porta. Nunc diam velit, adipiscing ut tristique vitae, sagittis vel odio. Maecenas convallis ullamcorper ultricies. Curabitur ornare, ligula semper consectetur sagittis, nisi diam iaculis velit, id fringilla sem nunc vel mi. Nam dictum, odio nec pretium volutpat, arcu ante placerat erat, non tristique elit urna et turpis. Quisque mi metus, ornare sit amet fermentum et, tincidunt et orci. Fusce eget orci a orci congue vestibulum. Ut dolor diam, elementum et vestibulum eu, porttitor vel elit. Curabitur venenatis pulvinar tellus gravida ornare. Sed et erat faucibus nunc euismod ultricies ut id justo. Nullam cursus suscipit nisi, et ultrices justo sodales nec. Fusce venenatis facilisis lectus ac semper. Aliquam at massa ipsum. Quisque bibendum purus convallis nulla ultrices ultricies. Nullam aliquam, mi eu aliquam tincidunt, purus velit laoreet tortor, viverra pretium nisi quam vitae mi. Fusce vel volutpat elit. Nam sagittis nisi dui.
+</p>
+        <p>
+        Suspendisse lectus leo, consectetur in tempor sit amet, placerat quis neque. Etiam luctus porttitor lorem, sed suscipit est rutrum non. Curabitur lobortis nisl a enim congue semper. Aenean commodo ultrices imperdiet. Vestibulum ut justo vel sapien venenatis tincidunt. Phasellus eget dolor sit amet ipsum dapibus condimentum vitae quis lectus. Aliquam ut massa in turpis dapibus convallis. Praesent elit lacus, vestibulum at malesuada et, ornare et est. Ut augue nunc, sodales ut euismod non, adipiscing vitae orci. Mauris ut placerat justo. Mauris in ultricies enim. Quisque nec est eleifend nulla ultrices egestas quis ut quam. Donec sollicitudin lectus a mauris pulvinar id aliquam urna cursus. Cras quis ligula sem, vel elementum mi. Phasellus non ullamcorper urna.
+        </p>
+        <p>
+            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In euismod ultrices facilisis. Vestibulum porta sapien adipiscing augue congue id pretium lectus molestie. Proin quis dictum nisl. Morbi id quam sapien, sed vestibulum sem. Duis elementum rutrum mauris sed convallis. Proin vestibulum magna mi. Aenean tristique hendrerit magna, ac facilisis nulla hendrerit ut. Sed non tortor sodales quam auctor elementum. Donec hendrerit nunc eget elit pharetra pulvinar. Suspendisse id tempus tortor. Aenean luctus, elit commodo laoreet commodo, justo nisi consequat massa, sed vulputate quam urna quis eros. Donec vel.
+        </p>
+    </body>
+</html>
+
+

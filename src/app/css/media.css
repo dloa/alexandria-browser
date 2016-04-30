@@ -1,0 +1,309 @@
+.hidden {
+    display: none;
+}
+.container {
+    margin: 0px auto;
+}
+
+.top {
+	display: -webkit-flex;
+    display: flex;
+}
+
+.media-info {
+	display: -webkit-flex;
+    display: flex;
+	-webkit-flex-direction: column;
+    flex-direction: column;
+	-webkit-justify-content: space-around;
+    justify-content: space-around;
+    max-width: 100%;
+}
+
+.media-info,
+.media-cover {
+	-webkit-flex: 1;
+    flex: 1;
+}
+
+.media-cover img {
+    border-radius: 5px;
+}
+
+.media-info h1,
+.media-info h2,
+.media-info h3,
+.media-description {
+    text-align: left;
+}
+
+.format-selector {
+	display: none;
+}
+
+.format-selector button {
+    text-transform: uppercase;
+    background-color: #cbcbcb;
+    color: black;
+    padding-left: 25px;
+    padding-right: 25px;
+    float: left;
+    outline: none;
+    border: 0;
+    border-color: #838383;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.format-selector .active {
+    background-color: #838383;
+    color: white;
+}
+
+.format-selector button:first-of-type {
+    border-radius: 5px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.cover img {
+    width: 100%;
+    height: 100%;
+}
+
+.bottom {
+    width: 100%;
+}
+
+.pwyw-container {
+    max-height: 0px;
+    overflow: hidden;
+    padding: 0px 10px;
+	display: -webkit-flex;
+    display: flex;
+	-webkit-flex-direction: column;
+    flex-direction: column;
+    margin: 0px auto;
+    background-color: lightcyan;
+    //             transition: all 1s;
+}
+
+.pwyw-container.active {
+    max-height: 100%;
+    padding: 25px;
+    margin: 20px;
+}
+
+.pwyw-paybox {
+	display: -webkit-flex;
+    display: flex;
+    text-align: center;
+}
+
+.pwyw-paybox input {
+    width: 40%;
+    padding: 10px;
+}
+
+.pwyw-suggest {
+    display: inline-block;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0px auto;
+}
+
+.pwyw-btc-price-input {
+    display: inline-block;
+}
+
+.pwyw-payinfo,
+.pwyw-qrcode {
+	-webkit-flex: 1;
+    flex: 1;
+    margin: 0px 5px;
+}
+
+.pwyw-payinfo {
+	display: -webkit-flex;
+    display: flex;
+	-webkit-justify-content: space-around;
+    justify-content: space-around;
+	-webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+.pwyw-list {
+	display: -webkit-flex;
+    display: flex;
+    margin: 0;
+    padding: 0;
+	-webkit-justify-content: space-around;
+    justify-content: space-around;
+}
+.buybox {
+	margin-bottom: 1em;
+}
+.pwyw-item {
+	display: -webkit-flex;
+    display: flex;
+	-webkit-flex-direction: column;
+    flex-direction: column;
+    list-style: none;
+	-webkit-flex: auto 0;
+    flex: auto 0;
+}
+
+.pwyw-item img {
+    border-radius: 100%;
+    height: 60px;
+    width: 60px;;
+    margin: auto;
+}
+
+.pwyw-item img:hover {
+    background-color: lightblue;
+}
+
+.pwyw-item.active img {
+    background-color: lightcyan;
+}
+
+.pwyw-item.active:before {
+    border: 20px solid;
+    border-color: lightcyan transparent transparent transparent;
+    margin: -20px 30px;
+    position: relative;
+    content: ""
+}
+
+.release-info {
+    list-style: none;
+    padding: 0;
+}
+
+.release-info li {}
+
+.release-info .ri-publisher, .release-info .ri-btc-address, {
+    display: none;
+}
+
+.tipbox {
+    float: right;
+    padding: 0 20px;
+}
+
+.tipbox .tip {
+    font-size: 20px;
+    font-weight: 600;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.tipbox .share {
+    cursor: pointer;
+}
+
+.media-description {
+	margin-top: 25px;
+}
+
+.playlist {
+    padding: 25px 0;
+}
+
+.playlist-table {
+    width: 100%;
+}
+
+.playlist-table td,
+.playlist-table th {
+    text-align: left;
+    padding: 0 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.playlist-table tr {
+    cursor: pointer;
+}
+
+.playlist-tracks tr:nth-child(odd) {
+    background-color: rgba(230, 230, 230, 0.8) ;
+}
+
+.playlist-tracks tr:hover {
+    background-color: rgba(210, 210, 210, 0.8);
+}
+
+.playlist-tracks tr.selected {
+    background-color: rgba(190, 190, 210, 0.8);
+}
+
+.playlist-tracks tr.selected td:first-child:before {
+    content: '';
+    border: 10px solid;
+    border-color: transparent transparent transparent grey;
+    position: absolute;
+    margin: 0px 0px 0px -20px;
+}
+
+
+.playlist-table thead {
+    color: #a5a5a5;
+    border-width: 2px;
+    line-height: 25px;
+    cursor: default;
+    border-color: #cccbcb;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    margin-bottom: 5px;
+}
+
+.playlist-table th:first-child + th + th + th + th,
+/* fifth column: Price/Play */
+
+.playlist-table th:first-child + th + th + th + th + th {
+    /* sixth column: Price/Buy */
+    text-align: center;
+}
+
+.playlist-table td:first-child {
+    /* first column: # */
+}
+
+.playlist-table td:first-child + td {
+    /* second column: Name */
+    width: 60%;
+}
+
+.playlist-table td:first-child + td + td {
+    /* third column: Artist */
+    width: 60%;
+}
+
+.playlist-table td:first-child + td + td + td {
+    /* forth column: Time */
+}
+
+.playlist-table span.price
+/* fifth column: Price/Play */
+{
+    padding: 0 20px;
+    border-radius: 4px;
+    background: lightgrey;
+    font-weight: bold;
+}
+
+.media-meta .artist {
+    color: grey;
+}
+
+.media-info .media-meta {
+    position: relative;
+    top: -15px;
+}
+

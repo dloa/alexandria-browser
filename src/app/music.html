@@ -1,0 +1,254 @@
+<!doctype html>
+<html>
+
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+    <script type="emacs-lisp">
+        (progn (setq httpd-port 8001) (httpd-start) (impatient-mode))
+    </script>
+    <script type="text/javascript">
+     /* hacks */
+     window.IPFSHost = 'http://ipfs.alexandria.media/ipfs';
+     window.librarianHost = 'http://localhost:8079';
+    </script>
+
+    <script src="vendor/jquery/dist/jquery.min.js"></script>
+    <script src="vendor/moment/min/moment.min.js"></script>
+    <link rel="stylesheet" href="css/fonts.css" />
+    <link rel="stylesheet" href="css/normalize.min.css" />
+    <!--        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css"> -->
+    <link rel="stylesheet" href="css/alexandria.css" />
+    <link rel="stylesheet" href="css/media.css" />
+	<link rel="stylesheet" href="css/media-play.css" />
+	<style>
+		.wrapper {
+			width: 100%;
+			max-width: 100%;
+			box-sizing: border-box;
+			padding: 0 15px;
+		}
+	</style>
+</head>
+
+<body>
+    <script type="text/html" id="media-template">
+     <div class="container">
+        <div class="top">
+            <div class="media-info">
+                <h1 class="media-title">Title</h1>
+                <div class="row">
+                    <h2 class="media-meta">
+                            <span class="media-artist">Artist</span>
+                            <div class="tipbox">
+                                <span class="tip">Tip</span>
+                                <span class="share"><img src="./svg/share.svg"</span>
+                            </div>
+                        </h2>
+                </div>
+                <div class="row format-selector">
+                    <button class="active">mp3</button>
+                    <button>flac</button>
+                </div>
+
+                <ul class="release-info">
+                    <li class="ri-publisher">publisher</li>
+                    <li class="ri-btc-address">BTC address</li>
+                    <li>Published <span class="ri-date">October 10, 2015</span></li>
+                    <li class="ri-track-count"><span class="ri-audio-count">0</span> Audio Track</li>
+                    <li class="ri-runtime">runtime</li>
+                    <li class="ri-xfile-container"><span class="ri-xfile-count">2</span> extra files</li>
+                </ul>
+
+                <div class="pwwy-stuff">
+                    <div class="pwyw-close"></div>
+                    <div class="pwyw-container pwyw-activate-pin">
+                        <i class="pwyw-pin-pretext">currently there are</i>
+                        <div class="pwyw-pining-info pwyw-suggest">
+                            <span class="pwyw-currently-pining">497</span> users pining this file
+                        </div>
+                        <div class="pwyw-pining-suggestion">
+                            if you pin it, you can play the song for free!
+                        </div>
+                        <span class="pwyw-pining-suggest pwyw-suggest">
+                            $<span class="pwyw-pin-price pwyw-suggested-price">0.00</span> per play
+                        </span>
+                        <span class="pwyw-pining-error"></span>
+                        <button class="pwyw-pin-it">Pin It!</button>
+                    </div>
+                    <div class="pwyw-container pwyw-activate-download">
+                        <div class="pwyw-paybox">
+                            <div class="pwyw-payinfo">
+                                The suggested price is:
+                                <span class="pwyw-suggest">
+                                    $<span class="pwyw-price-suggest-download pwyw-suggested-price">suggest-dl</span> to buy
+                                </span>
+                                <br>
+                                <span>
+                                    $
+     <input class="pwyw-usd-price-input pwyw-usd-download-price-input" maxlength="4"> USD
+                                </span>
+                                <div class="pwyw-somespace"></div>
+                            </div>
+                        </div>
+                        <div class="pwyw-footer">
+                            <span class="pwyw-btc-download-price">dl-price</span> BTC to<br>
+                            <div class="pwyw-qrcode">
+                                <img src="" />
+                            </div>
+                            <span class="pwyw-btc-address">                            </span>
+                        </div>
+                    </div>
+                    <div class="pwyw-container pwyw-activate-play">
+                        <div class="pwyw-paybox">
+                            <div class="pwyw-payinfo">
+                                The suggested price is:
+                                <span class="pwyw-suggest">
+                                    $<span class="pwyw-price-suggest-play pwyw-suggested-price">suggest-play</span> to play
+                                </span>
+                                <br>
+                                <span>
+                                    $
+     <input class="pwyw-usd-price-input pwyw-usd-play-price-input" maxlength="4"> USD
+                                </span>
+                                <div class="pwyw-somespace"></div>
+                            </div>
+                        </div>
+                        <div class="pwyw-footer">
+                            <span class="pwyw-btc-play-price">play-price</span> BTC to
+                            <div class="pwyw-qrcode">
+                                <img src="http://www.wired.com/images_blogs/magazine/2013/04/qrcode_f.jpg" />
+                            </div>
+                            <span class="pwyw-btc-address">1CvDLWNzX4PEkzMU7t2pVGsT858pMiNorQ
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="buybox">
+                    <ul class="pwyw-list">
+                        <li class="pwyw-item pwyw-action-play">
+                            <img class="button-svg" src="svg/paywall-play.svg" />
+                            <span class="price">
+                                $<span class="pwyw-price-play">play-price</span> to Play
+                            </span>
+                        </li>
+                        <li class="pwyw-item pwyw-action-download">
+                            <img class="button-svg" src="svg/paywall-download.svg" />
+                            <span class="price">
+                                $<span class="pwyw-price-download">dl-price</span> to Buy</span>
+                        </li>
+                        <li class="pwyw-item pwyw-action-pin">
+                            <img class="button-svg" src="svg/paywall-pin.svg" />
+                            <span class="price price-pin">
+                                    Pin to Play
+                                </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="media-data" style="display: none">
+                    <ul>
+                        <li class="md-title">title</li>
+                        <li class="md-tracks">title</li>
+                    </ul>
+                </div>
+                <div id="audio-player" class="jp-player"></div>
+                <div id="playbar-container" class="jp-audio playbar" role="application" aria-label="media player">
+                    <div class="jp-type-single">
+                        <div class="jp-gui jp-interface">
+                            <div class="jp-controls-holder">
+                                <div class="jp-controls">
+                                    <button class="jp-play" role="button" tabindex="0"></button>
+                                    <button class="jp-stop" role="button" tabindex="0"></button>
+                                </div>
+                                <div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
+                                <div class="jp-progress">
+                                    <div class="jp-seek-bar">
+                                        <div class="jp-play-bar">
+                                            <div class="jp-play-button"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+                                <div class="jp-toggles" style="display: none">
+                                    <button class="jp-repeat" role="button" tabindex="0">repeat</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="jp-details">
+                            <div class="jp-title" aria-label="title">&nbsp;</div>
+                        </div>
+                        <div class="jp-no-solution">
+                            <span>Update Required</span>
+                            To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                        </div>
+                    </div>
+                    <div class="playbar-shadow">
+                        <h2>
+                            You need to pay the artist or pin the file/album in order to play this track !
+                        </h2>
+                    </div>
+                </div>
+            </div>
+	       <div class="media-cover">
+	           <img src="img/cover_placeholder.jpg" />
+	       </div>
+        </div>
+        <div class="bottom">
+            <div class="playlist">
+                <table class="playlist-table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Artist</th>
+                        <th>Time</th>
+                        <th>Price/Play</th>
+                        <th>Price/Buy</th>
+                    </tr>
+                    </thead>
+                    <tbody class="playlist-tracks">
+                        <tr>
+                            <td>1</td>
+                            <td>Tiny Human</td>
+                            <td>Imogen Heap</td>
+                            <td>3:39</td>
+                            <td>$<span class="price-play">0.0125</span></td>
+                            <td>$<span class="price-download">1.00</span></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Another Tiny Human</td>
+                            <td>Imogen Heap</td>
+                            <td>3:19</td>
+                            <td><span>$0.0025</span></td>
+                            <td><span>$0.040</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="pwyw-overlay"></div>
+    </script>
+    <div id="media-browser" class="wrapper"></div>
+    <iframe id="my_iframe" style="display:none;"></iframe>
+    <script src="js/vendor/jquery-2.1.1.min.js"></script>
+    <script src="vendor/jplayer/dist/jplayer/jquery.jplayer.min.js "></script>
+	<script src="js/search.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/media.js"></script>
+
+    <script type="text/javascript">
+     $('document').ready(function () {
+         var txid = location.hash || "fc9220025df5f2bf76fcda8f66bced4c95846e136ff3f5ff4c36fede3a5e3fc5";
+         var data = window.searchAPI('media', 'txid', txid.replace(/^#/, ''));
+
+         console.log (txid, data);
+         window.doMountMediaBrowser('#media-browser', data);
+
+     })
+
+    </script>
+</body>
+
+</html>

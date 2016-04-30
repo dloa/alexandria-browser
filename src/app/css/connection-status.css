@@ -1,0 +1,35 @@
+.connection-status {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-left: 10px;
+    margin-bottom: 1px;
+    border-radius: 25px;
+    border: 1px solid #919191;
+    background-color: #464646
+}
+
+.connection-status.connected {
+    background-image: radial-gradient(50% 100%, #53D561 50%, rgba(56,131,75,0.55) 100%);
+//    background-image: radial-gradient(50% 59%, rgba(255,255,255,0.50) 25%, rgba(0,0,0,0.30) 60%);
+    border: 0px solid #717171;
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.34), 0px 2px 4px 2px rgba(73,124,83,0.49);
+}
+
+.connection-status.connecting {
+    background-color: #e44d26;
+}
+
+.connection-status.disconnected {
+    background-image: radial-gradient(50% 100%, #C06562 50%, rgba(239,18,18,0.64) 100%);
+
+//    background-image: radial-gradient(50% 59%, rgba(255,255,255,0.50) 25%, rgba(0,0,0,0.30) 60%);
+
+    border: 0px solid #ADADAD;
+
+    box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.34), 0px 2px 4px 2px rgba(124,73,73,0.49);
+}
+
+.connection-status.disconnecting {
+    background-color: #3293ba
+}

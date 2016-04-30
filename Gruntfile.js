@@ -1,11 +1,13 @@
-/* Taken from butterproject.org */
+/* Taken from ButterProject.org */
 /* Licence: GPLv2 */
+
+var fs = require ('fs')
 
 var projectName = "Alexandria"
 var projectNameNS = projectName.replace(/\s/, '-')
 var config = {
         mac : {
-                icon: './src/app/images/alexandria.icns'
+                icon: './src/app/img/alexandria.icns'
         }
 }
 
@@ -50,7 +52,8 @@ module.exports = function (grunt) {
 	grunt.registerTask('build', [
 		'injectgit',
 		'bower_clean',
-		'nodewebkit',
+		'nwjs',
+		'shell:goget',
 		'shell:setexecutable'
 	]);
 
@@ -103,7 +106,6 @@ module.exports = function (grunt) {
 				currCommit = grunt.file.read('.git/' + gitRef).trim();
 
 			} catch (e) {
-				var fs = require('fs');
 				currCommit = gitRef.trim();
 				var items = fs.readdirSync('.git/refs/heads');
 				gitBranch = items[0];
@@ -117,9 +119,9 @@ module.exports = function (grunt) {
 	});
 
 	grunt.initConfig({
-		nodewebkit: {
+		nwjs: {
 			options: {
-				version: '0.9.2',
+				version: '0.12.3',
 				build_dir: './build', // Where the build version of my node-webkit app is saved
 				keep_nw: true,
 				embed_nw: false,
@@ -132,24 +134,25 @@ module.exports = function (grunt) {
 				download_url: 'http://dl.nwjs.io/'
 			},
 			src: ['./src/**',
-				'./node_modules/**', './plugins/**', '!./node_modules/bower/**', '!./node_modules/*grunt*/**',
-				'!./**/test*/**', '!./**/doc*/**', '!./**/example*/**', '!./**/demo*/**', '!./**/bin/**', '!./**/build/**', '!./**/.*/**',
-				'./package.json', './README.md', './LICENSE.txt', './.git.json'
+			      './node_modules/**', './plugins/**', '!./node_modules/bower/**', '!./node_modules/*grunt*/**',
+			      '!./**/test*/**', '!./**/doc*/**', '!./**/example*/**', '!./**/demo*/**', '!./**/bin/**', '!./**/build/**', '!./**/.*/**',
+			      './package.json', './README.md', './LICENSE.txt', './.git.json',
+			      'gocode/bin/**'
 			]
 		},
 
 		exec: {
 			win: {
-				cmd: '"build/cache/win/<%= nodewebkit.options.version %>/nw.exe" .'
+				cmd: '"build/cache/win/<%= nwjs.options.version %>/nw.exe" .'
 			},
 			mac: {
-				cmd: 'build/cache/mac/<%= nodewebkit.options.version %>/node-webkit.app/Contents/MacOS/node-webkit .'
+				cmd: 'build/cache/mac/<%= nwjs.options.version %>/node-webkit.app/Contents/MacOS/node-webkit .'
 			},
 			linux32: {
-				cmd: '"build/cache/linux32/<%= nodewebkit.options.version %>/nw" .'
+				cmd: '"build/cache/linux32/<%= nwjs.options.version %>/nw" .'
 			},
 			linux64: {
-				cmd: '"build/cache/linux64/<%= nodewebkit.options.version %>/nw" .'
+				cmd: '"build/cache/linux64/<%= nwjs.options.version %>/nw" .'
 			},
 			codesign: {
 				cmd: 'sh dist/mac/codesign.sh || echo "Codesign failed, likely caused by not being run on mac, continuing"'
@@ -174,6 +177,19 @@ module.exports = function (grunt) {
 
 
 		shell: {
+			goget: {
+				command: function () {
+					try {
+						fs.lstatSync(process.cwd() + '/gocode/bin/ipfs')
+					} catch (e) {
+						return ['GOPATH=' + process.cwd() + '/gocode',
+							'go get -u github.com/ipfs/go-ipfs/cmd/ipfs']
+							.join (' ');
+					}
+					console.log ('ipfs already exists, not gogetting anything')
+					return '';
+				}
+			},
 			setexecutable: {
 				command: function () {
 					if (process.platform === "win32") {
