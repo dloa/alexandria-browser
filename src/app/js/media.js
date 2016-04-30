@@ -3,7 +3,7 @@ var day_avg = false;
 var delay = 5000;
 var keepHash;
 var URL_RECV = "http://localhost:11306/payproc/api/receive";
-var URL_GETRECVD = "http://localhost:11306/payproc/api/getreceivedbyaddress/";
+var URL_GETRECVD = "http://192.241.219.201:11306/payproc/api/getreceivedbyaddress/";
 
 window.doMountMediaBrowser = function (el, data) {
     console.log (el, data);
