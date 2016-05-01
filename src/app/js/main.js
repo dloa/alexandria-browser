@@ -3497,10 +3497,14 @@ function makeHistory(stateObj, newTitle) {
 	history.pushState(stateObj, newTitle, newUrl);
 	// IFRAME EMBED CODE
 	var embedUrl = newUrl;
+        var prefix = window.location.protocol + '//' + window.location.hostname;
+        if (window.location.hostname = 'alexandria.io')
+                prefix = 'https://embed.alexandria.io';
+                
 	if (stateObj.mediaType == 'music') {
-		embedUrl = window.location.protocol + '//' + window.location.hostname + '/music.html#' + stateObj.subView;
+		embedUrl = prefix + '/music.html#' + stateObj.subView;
 	} else {
-		embedUrl = window.location.protocol + '//' + window.location.hostname + '/embed.html#' + stateObj.subView;
+		embedUrl = prefix + '/embed.html#' + stateObj.subView;
 	}
 	var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
 	$('.iframecode').text(iframeEmbedCode);
