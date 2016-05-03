@@ -1,4 +1,4 @@
-var serverAddress = 'libraryd.alexandria.media'; // Dev
+var serverAddress = 'libraryd.alexandria.io'; // Dev
 // var serverAddress = 'localhost';
 
 // MEDIA + PUBLISHER SEARCH API
@@ -15,7 +15,7 @@ window.searchAPI = function(module, searchOn, searchFor) {
 	$('#browse-media-wrap .row').remove();
 	$.ajax({
 		type: "POST",
-		url: 'https://'+ serverAddress +':41289/alexandria/v1/search',
+		url: 'https://'+ serverAddress +'/alexandria/v1/search',
 		data: queryString.toString(),
 		success: function (e) {
 			mediaData = $.parseJSON(e).response;

@@ -3530,12 +3530,12 @@ function loadScript(url, callback)
 
 // FLOVAULT INIT
 function FloVaultInit() {
-	loadScript('/js/SimpleWallet.js', SimpleWallet_loaded);
+	loadScript('js/SimpleWallet.js', SimpleWallet_loaded);
 }
 
 function SimpleWallet_loaded() {
 	console.log('SimpleWallet.js loaded');
-	loadScript('/js/SimpleDeps.js', SimpleDeps_loaded);
+	loadScript('js/SimpleDeps.js', SimpleDeps_loaded);
 };
 
 function SimpleDeps_loaded() {
