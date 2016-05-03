@@ -472,7 +472,7 @@ function getCryptos() {
 	cryptoTimerRunning = 0;
 // Alexandria Crytpo Price
 	$.ajax({
-		url: 'http://colorcoin.org:41290/flo-market-data/v1/getAll',
+		url: 'https://libraryd.alexandria.io/flo-market-data/v1/getAll',
 //		url: 'http://localhost:41290/flo-market-data/v1/getAll',
 		success: function(e) {
 			console.info(e);
@@ -551,7 +551,7 @@ function getAllPublishers() {
 	$('.view-publishers-ui').hide();
 	console.log('loadRecentMedia() publisher/get/all ...');
 	$.ajax({
-		url: 'http://'+serverAddress+':41289/alexandria/v1/publisher/get/all',
+		url: 'https://'+serverAddress+':41289/alexandria/v1/publisher/get/all',
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
@@ -1730,7 +1730,7 @@ function tradeModal() {
 			alert('Please select an address in Request Tokens section');
 		} else {
 			$.ajax({
-				url: 'http://trade.blocktech.com:5000/flobalance',
+				url: 'http://tradebot.alexandria.io/flobalance',
 				success: function(e) {
 					document.getElementById('trade-balance').innerHTML = Math.round((.5*e*(Math.round((FLOUSD/BTCUSD)*100000000)/100000000))*100000000)/100000000;
 				}
@@ -3589,7 +3589,7 @@ registerBtn.click(function () {
 // FLOVAULT LOAD WALLET
 function FloVaultIdentify() {
 	$.ajax({
-		url: 'http://flovault.alexandria.io/wallet/checkload/' + identifierInput.val(),
+		url: 'https://flovault.alexandria.io/wallet/checkload/' + identifierInput.val(),
 		success: function(response) {
 	         console.log("Check Load Response");
 	         console.log(response);

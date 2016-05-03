@@ -8,7 +8,7 @@
  * Created by Someguy123 (http://someguy123.com)
  * Modified by bitspill
  */
-var baseURL = "http://flovault.alexandria.io";
+var baseURL = "https://flovault.alexandria.io";
 
 var Wallet = (function () {
     function Wallet(identifier, password) {
