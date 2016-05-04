@@ -191,7 +191,6 @@ function applyMediaData(data) {
     $('.media-description').text(info.description);
 
     watchForPin (ipfsAddr, xinfo.filename)
-    //             debugger;
 
     return media;
 }
