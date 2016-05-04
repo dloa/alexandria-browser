@@ -3,6 +3,8 @@
 var serverAddress = 'libraryd.alexandria.io'; // Dev
 // var serverAddress = 'localhost';
 
+var publisherGetUrl = 'https://' + serverAddress + '/alexandria/v1/publisher/get/all';
+
 var IPFSserver = 'ipfs.alexandria.io';
 // var IPFSserver = 'localhost:8080';
 
@@ -550,7 +552,7 @@ function getAllPublishers() {
 	$('.view-publishers-ui').hide();
 	console.log('loadRecentMedia() publisher/get/all ...');
 	$.ajax({
-		url: 'https://'+serverAddress+':41289/alexandria/v1/publisher/get/all',
+		url: publisherGetUrl,
 		success: function (e) {
 			var data = $.parseJSON(e);
 			console.info(data);
