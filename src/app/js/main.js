@@ -40,7 +40,6 @@ jQuery(document).ready(function($){
 		FloVaultInit();
 	}
 
-
 	loadAlexandria();
 	
 	// RUN SEARCH
@@ -247,7 +246,7 @@ route('/about', 'about', function () {  });
 route('/wallet', 'wallet', function () { });
 
 var el = null;  
-function router (event, goUrl) {  
+function router (event, goUrl) {
     // Current route url (getting rid of '#' in hash as well):
     var url = location.hash.slice(1) || '/';
   	console.info(event);
@@ -3497,9 +3496,10 @@ function makeHistory(stateObj, newTitle) {
 	history.pushState(stateObj, newTitle, newUrl);
 	// IFRAME EMBED CODE
 	var embedUrl = newUrl;
-        var prefix = window.location.protocol + '//' + window.location.hostname;
-        if (window.location.hostname = 'alexandria.io')
-                prefix = 'https://embed.alexandria.io';
+    var prefix = window.location.protocol + '//' + window.location.host;
+
+    if (window.location.hostname === 'alexandria.io')
+        prefix = 'https://embed.alexandria.io';
                 
 	if (stateObj.mediaType == 'music') {
 		embedUrl = prefix + '/music.html#' + stateObj.subView;
