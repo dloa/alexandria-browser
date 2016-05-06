@@ -103,34 +103,32 @@ function secondsToPrettyString (s, short){
     return duration.minutes() + ' minutes ' + duration.seconds() + ' seconds';
 }
 
-function getPrices (pwyw) {
+function getPrices (file) {
 
-    if (! pwyw) {
-        return  {
-            play: {
-                suggested: 0,
-                min: 0
-            },
-            download: {
-                suggested: 0,
-                min: 0
-            }
-        }
-    }
-
-    var pricesArray = pwyw.split(',')
-
-    return {
+    var prices = {
         play: {
-            suggested: pricesArray[0]/100,
-            min: pricesArray[1]/100
+            suggested: 0,
+            min: 0
         },
         download: {
-            suggested: pricesArray[0],
-            min: pricesArray[1]
+            suggested: 0,
+            min: 0
         }
-    }
+    };
 
+    if (file.minBuy)
+        prices.download.min = file.minBuy;
+
+    if (file.sugBuy)
+        prices.download.suggested = file.sugBuy;
+
+    if (file.minPlay)
+        prices.play.min = file.minPlay;
+
+    if (file.sugPlay)
+        prices.play.suggested = file.sugPlay;
+
+    return prices;
 }
 
 function togglePlaybarShadow (bool) {
@@ -143,7 +141,6 @@ function applyMediaData(data) {
     var info = media.info;
     var xinfo = info['extra-info'];
 	filetype = xinfo.filename.split('.')[xinfo.filename.split('.').length - 1];
-	console.log(filetype);
     var payment = media.payment;
     var ipfsAddr = xinfo['DHT Hash'];
 
@@ -152,7 +149,8 @@ function applyMediaData(data) {
     var mediaDataSel = $('.media-data');
     var tracks = fixDataMess(xinfo);
 
-    var prices = getPrices (xinfo.pwyw)
+    var prices = getPrices(xinfo['files'][0]);
+    console.log(prices);
 
     mediaDataSel.data(media)
 
@@ -202,6 +200,7 @@ function watchForPin (addr, filename) {
 
     var pinningSel = $('.pwyw-currently-pinning');
     window.pinWatcher = setInterval (function () {
+        /* ToDo: Implement Pinning.
         $.ajax ({
             // XXX(xaiki): hardcoded Tiny Human.mp3
             url: window.librarianHost + '/api/ipfs/dht/findprovs/' + 'QmRb23uqmA3uJRUoDkRyG3qXvTpSV5a4zwe6yjJRsLZvAm'
@@ -212,7 +211,7 @@ function watchForPin (addr, filename) {
             })
             .fail(function () {
 
-            })
+            })*/
     }, 2000)
 }
 
