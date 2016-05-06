@@ -43,29 +43,26 @@ function prettifyTrack (track, xinfo) {
         .replace (/^[0-9]+ +/, '');
 }
 
-function renderPlaylistTracksHTML (tracks, prices, xinfo, el) {
-	console.info(tracks.length);
+function renderPlaylistFilesHTML (files, xinfo, el) {
+    // Remove all current elements
     el.empty();
     var i = 1;
-    var price = {
-        play: prices.play.suggested?prices.play.suggested:"FREE!",
-        download: prices.download.suggested?prices.download.suggested:"FREE!"
-    }
-    var trackTime = secondsToPrettyString(xinfo.runtime, true);
-    if (tracks.length > 1) {
+
+    var trackTime = secondsToPrettyString(parseInt(xinfo.runtime), true);
+    if (files.length > 1) {
     	trackTime = '';
     }
-    tracks.forEach (function (track) {
-        var name = prettifyTrack(track, xinfo)
+    files.forEach (function (file) {
+        console.log(file);
         el.append("<tr><td>" + i++ + "</td>" +
-                  "<td>" + name + "</td>" +
-                  "<td>" + xinfo.artist +"</td>" +
-                  "<td>" + trackTime + "</td>" +
-                  "<td><span class=\"price\">$<span class=\"price tb-price-play\">" + price.play + "</span></span></td>" +
-                  "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + price.download + "</span></span></td>" +
+                  "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
+                  "<td>" + (xinfo.artist ? xinfo.artist : "") +"</td>" +
+                  "<td>" + (file.runtime ? secondsToPrettyString(parseInt(file.runtime), true) : "") + "</td>" +
+                  "<td><span class=\"price\">$<span class=\"price tb-price-play\">" + (file.sugPlay ? file.sugPlay : "Free!") + "</span></span></td>" +
+                  "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + (file.sugBuy ? file.sugBuy : "Free!") + "</span></span></td>" +
                   "</tr>");
         var trackEl = el.children().last();
-        trackEl.data({track: track, name: name, url: IPFSUrl([xinfo['DHT Hash'], track])});
+        trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file])});
     });
 
     $('.tb-price-play', el).on ('click', function () {
@@ -83,8 +80,8 @@ function renderPlaylistTracksHTML (tracks, prices, xinfo, el) {
         $('.playlist-tracks tr').removeClass ('selected');
         el.addClass('selected');
     })
-    console.log (el, tracks);
-    if (!xinfo.pwyw) {
+
+    if (!files[0].sugPlay) {
         togglePlaybarShadow(true);
         var freePlayTimer = setTimeout("autoPlayFree()", 500);
     } else {
@@ -150,7 +147,6 @@ function applyMediaData(data) {
     var tracks = fixDataMess(xinfo);
 
     var prices = getPrices(xinfo['files'][0]);
-    console.log(prices);
 
     mediaDataSel.data(media)
 
@@ -159,9 +155,9 @@ function applyMediaData(data) {
     $('.pwyw-price-download').text (prices.download.suggested)
     $('.pwyw-price-suggest-download').text (prices.download.suggested)
 
-    $('.media-artist', mediaInfoSel).text(xinfo.artist);
+    $('.media-artist', mediaInfoSel).text(xinfo.artist ? xinfo.artist : "");
     $('.media-title', mediaInfoSel).text(info.title)
-    $('.ri-runtime', releaseInfoSel).text (secondsToPrettyString(xinfo.runtime))
+    $('.ri-runtime', releaseInfoSel).text (secondsToPrettyString(parseInt(xinfo.runtime)))
     $('.ri-audio-count', releaseInfoSel).text (tracks.length);
     $('.ri-publisher', releaseInfoSel).text (media.publisher);
     $('.ri-btc-address', releaseInfoSel).text (xinfo['Bitcoin Address']);
@@ -173,7 +169,7 @@ function applyMediaData(data) {
 	    $('.media-cover').hide();
     	$('.playbar-shadow').css('width','100%');
 	}
-    renderPlaylistTracksHTML(tracks, prices, xinfo, $('.playlist-tracks'))
+    renderPlaylistFilesHTML(xinfo['files'], xinfo, $('.playlist-tracks'))
 
     keepHash = media.torrent;
 
@@ -425,9 +421,7 @@ function togglePWYWOverlay (bool) {
 function onPaymentDone (action, media) {
     var xinfo = media.info['extra-info'];
     var selectedTrackData = $('.playlist-tracks tr.selected').data();
-    var url = selectedTrackData?
-        selectedTrackData.url:
-        IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]);
+    var url = IPFSUrl ([xinfo['DHT Hash'], xinfo.files[0].fname]);
     resetQR();
 
     if (action == 'pin') $('.pwyw-pining-error').hide();
@@ -438,7 +432,7 @@ function onPaymentDone (action, media) {
         togglePlaybarShadow(true);
     }
 
-    var res = loadTrack (xinfo.filename, url);
+    var res = loadTrack (xinfo.files[0].fname, url);
     $('#audio-player').jPlayer("play");
 
     if (action === 'download') {
