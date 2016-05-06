@@ -3498,8 +3498,8 @@ function makeHistory(stateObj, newTitle) {
 	// IFRAME EMBED CODE
 	var embedUrl = newUrl;
         var prefix = window.location.protocol + '//' + window.location.hostname;
-        if (window.location.hostname = 'alexandria.io')
-                prefix = 'https://embed.alexandria.io';
+        if (window.location.hostname === 'alexandria.io')
+            prefix = 'https://embed.alexandria.io';
                 
 	if (stateObj.mediaType == 'music') {
 		embedUrl = prefix + '/music.html#' + stateObj.subView;
