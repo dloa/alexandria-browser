@@ -95,9 +95,10 @@ function autoPlayFree() {
 
 function secondsToPrettyString (s, short){
     var duration = moment.duration(s, 's');
+    var seconds = duration.seconds()<10 ? "0" + duration.seconds() : duration.seconds();
     if (short)
-        return duration.minutes() + ':' + duration.seconds();
-    return duration.minutes() + ' minutes ' + duration.seconds() + ' seconds';
+        return duration.minutes() + ':' + seconds;
+    return duration.minutes() + ' minutes ' + seconds + ' seconds';
 }
 
 function getPrices (file) {
