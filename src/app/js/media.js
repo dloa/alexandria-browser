@@ -134,7 +134,7 @@ function applyMediaData(data) {
     var media = data['alexandria-media'];
     var info = media.info;
     var xinfo = info['extra-info'];
-	filetype = xinfo.filename.split('.')[xinfo.filename.split('.').length - 1];
+	filetype = xinfo.filename.split('.')[xinfo.filename.split('.').length - 1].toLowerCase();
     var payment = media.payment;
     var ipfsAddr = xinfo['DHT Hash'];
 
@@ -434,6 +434,8 @@ function BTCtoUSD (amount) {
 }
 
 function loadTrack (name, url) {
+	console.log(url);
+	console.log(filetype);
 	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
@@ -451,6 +453,8 @@ function loadTrack (name, url) {
 	        webmv: url
 	    });
 	    $('#audio-player').slideDown('slow');
+	} else if (filetype == 'mov') {
+		$('#playbar-container').hide().after('<video id="native-player" controls="controls" poster=""><source src="'+url+'" /><param name="autoplay" value="true" /></video>');
 	}
     if ($('.playbar-shadow:visible').length == 0) {
 	    $('#audio-player').jPlayer("play");

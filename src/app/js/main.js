@@ -3135,8 +3135,10 @@ function resetInterface() {
 // RESET ALEXANDRIA
 function resetAlexandria() {
 	$('#audio-player').jPlayer('destroy');
-	$('video').trigger('pause');
-	$('audio').trigger('pause');
+		if($('#native-player')) {
+		$('#native-player').remove();
+		$('#playbar-container').show();
+	}
 	$('main').not('#browse-media').hide();
 	document.getElementById('search-main').value = '';
 	$('#browse-media .module-links a.active').removeClass('active');
