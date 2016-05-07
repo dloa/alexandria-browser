@@ -2,6 +2,7 @@ var filetype = 'mp3';
 var day_avg = false;
 var delay = 5000;
 var keepHash;
+var mainFile;
 var URL_RECV = "http://192.241.219.201:11306/payproc/api/receive";
 var URL_GETRECVD = "http://192.241.219.201:11306/payproc/api/getreceivedbyaddress/";
 
@@ -143,15 +144,26 @@ function applyMediaData(data) {
     var mediaDataSel = $('.media-data');
     var tracks = fixDataMess(xinfo);
 
-    var prices = getPrices(xinfo['files'][0]);
+    // This sets a global mainFile object to the main object.
+    mainFile = {
+        track: xinfo['files'][0], 
+        name: xinfo['files'][0].dname, 
+        url: IPFSUrl([xinfo['DHT Hash'], xinfo['files'][0].fname]), 
+        sugPlay: xinfo['files'][0].sugPlay, 
+        minPlay: xinfo['files'][0].minPlay, 
+        sugBuy: xinfo['files'][0].sugBuy, 
+        minBuy: xinfo['files'][0].minBuy
+    };
 
     mediaDataSel.data(media)
 
-    $('.pwyw-price-play').text (prices.play.suggested)
-    $('.pwyw-price-suggest-play').text (prices.play.suggested)
-    $('.pwyw-price-download').text (prices.download.suggested)
-    $('.pwyw-price-suggest-download').text (prices.download.suggested)
+    // Set what the circles will use for pricing.
+    $('.pwyw-price-play').text (xinfo['files'][0].sugPlay)
+    $('.pwyw-price-suggest-play').text (xinfo['files'][0].sugPlay)
+    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy)
+    $('.pwyw-price-suggest-download').text (xinfo['files'][0].sugBuy)
 
+    // Set other meta info
     $('.media-artist', mediaInfoSel).text(xinfo.artist ? xinfo.artist : "");
     $('.media-title', mediaInfoSel).text(info.title)
     $('.ri-runtime', releaseInfoSel).text (secondsToPrettyString(parseInt(xinfo.runtime)))
@@ -218,77 +230,49 @@ function showPaymentOption(e) {
         var fileData = $(this).parent().parent().parent().data();
         console.log(fileData);
 
-        // Check if we are working with the main buttons or the table buttons.
-        if (fileData && $(this).hasClass('price')){
-            var btcAddress = $('.ri-btc-address').text();
-            var price = 0;
-            var actionElement;
-            var action;
+        // Check if fileData is an empty object, if it is, then fill it with the main file info as it is most likely that the circular buttons were pressed
+        if (jQuery.isEmptyObject(fileData))
+            fileData = mainFile;
 
-            $('.pwyw-item').removeClass('active');
-            // Check if we are the play or download button
-            if ($(this).hasClass('tb-price-play')){
-                actionElement = $('.pwyw-activate-play');
-                action = 'play';
-                price = fileData.sugPlay;
-            }
-
-            if ($(this).hasClass('tb-price-download')){
-                actionElement = $('.pwyw-activate-download');
-                action = 'download';
-                price = fileData.sugBuy;
-            }
-
-            if (actionElement.hasClass('active')) {
-                return $('.pwyw-container').removeClass('active');
-            }
-
-            if (price === 0 || price === undefined || price == NaN){
-                onPaymentDone(action, fileData)
-                return;
-            }
-
-            var btcprice = makePaymentToAddress(btcAddress, price, function () {
-                return onPaymentDone(action, fileData);
-            });
-            $('.pwyw-btc-' + action + '-price').text(btcprice);
-            $('.pwyw-usd-' + action + '-price-input').val(price);
-
-            $('.pwyw-container').removeClass('active');
-            actionElement.addClass('active');
-            //$(self).addClass('active');
-        } else {
-            // Since we are not working with a file but rather main buttons, use the old way.
-            $('.pwyw-item').removeClass('active');
-
-            for (i = 0; this.classList[i]; i++) {
-                className = this.classList[i];
-                if (className.match(/pwyw-action/)) {
-
-                    var action = className.replace(/^pwyw-action-/, '');
-                    var actionElement = $('.pwyw-activate-' + action);
-                    var price = $('.pwyw-suggested-price', actionElement).text();
+        console.log(fileData)
         
-                    $('.pwyw-' + action + '-price').text(price);
-                    if (actionElement.hasClass('active')) {
-                        return $('.pwyw-container').removeClass('active');
-                    }
-        
-                    var btcAddress = $('.ri-btc-address').text();
+        var btcAddress = $('.ri-btc-address').text();
+        var price = 0;
+        var actionElement;
+        var action;
 
-                    var btcprice = makePaymentToAddress(btcAddress, price, function () {
-                        return onPaymentDone(action, $('.media-data').data());
-                    });
-                    $('.pwyw-btc-' + action + '-price').text(btcprice);
-                    $('.pwyw-usd-' + action + '-price-input').val(price);
-                    $('.pwyw-container').removeClass('active');
-                    actionElement.addClass('active');
-                    $(self).addClass('active')
-        
-                    console.log ('btc', btcprice, 'pwyw-btc-' + action + '-price');
-                }
-            }
+        $('.pwyw-item').removeClass('active');
+        // Check if we are the play or download button
+        if ($(this).hasClass('tb-price-play') || $(this).hasClass('pwyw-action-play')){
+            actionElement = $('.pwyw-activate-play');
+            action = 'play';
+            price = fileData.sugPlay;
         }
+
+        if ($(this).hasClass('tb-price-download') || $(this).hasClass('pwyw-action-download')){
+            actionElement = $('.pwyw-activate-download');
+            action = 'download';
+            price = fileData.sugBuy;
+        }
+
+        if (actionElement.hasClass('active')) {
+            return $('.pwyw-container').removeClass('active');
+        }
+
+        if (price === 0 || price === undefined || price == NaN){
+            onPaymentDone(action, fileData);
+            return;
+        }
+
+        var btcprice = makePaymentToAddress(btcAddress, price, function () {
+            return onPaymentDone(action, fileData);
+        });
+        $('.pwyw-btc-' + action + '-price').text(btcprice);
+        $('.pwyw-usd-' + action + '-price-input').val(price);
+
+        $('.pwyw-container').removeClass('active');
+        actionElement.addClass('active');
+        //$(self).addClass('active');
 
         togglePWYWOverlay(true);
 }
