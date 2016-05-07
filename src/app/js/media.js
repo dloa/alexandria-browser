@@ -62,16 +62,8 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
                   "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + (file.sugBuy ? file.sugBuy : "Free!") + "</span></span></td>" +
                   "</tr>");
         var trackEl = el.children().last();
-        trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file])});
+        trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay, minPlay: file.minPlay, sugBuy: file.sugBuy, minBuy: file.minBuy});
     });
-
-    $('.tb-price-play', el).on ('click', function () {
-        $('.pwyw-action-play').click();
-    })
-
-    $('.tb-price-download', el).on ('click', function () {
-        $('.pwyw-action-download').click();
-    })
 
     $('.playlist-tracks tr').on ('click', function (e) {
         var el = $(this)
@@ -80,6 +72,10 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
         $('.playlist-tracks tr').removeClass ('selected');
         el.addClass('selected');
     })
+
+    $('.tb-price-play', el).on ('click', showPaymentOption);
+
+    $('.tb-price-download', el).on ('click', showPaymentOption);
 
     if (!files[0].sugPlay) {
         togglePlaybarShadow(true);
@@ -218,35 +214,78 @@ function IPFSUrl (components) {
 
 function showPaymentOption(e) {
         var self = this;
-        $('.pwyw-item').removeClass('active');
+        // Hacky get data using lots of parents.
+        var fileData = $(this).parent().parent().parent().data();
+        console.log(fileData);
 
-        for (i = 0; this.classList[i]; i++) {
-            className = this.classList[i];
-            if (className.match(/pwyw-action/)) {
+        // Check if we are working with the main buttons or the table buttons.
+        if (fileData){
+            var btcAddress = $('.ri-btc-address').text();
+            var price = 0;
+            var actionElement;
+            var action;
 
-                var action = className.replace(/^pwyw-action-/, '');
-                var actionElement = $('.pwyw-activate-' + action);
-                var price = $('.pwyw-suggested-price', actionElement).text();
-    
-                $('.pwyw-' + action + '-price').text(price);
-                if (actionElement.hasClass('active')) {
-                    return $('.pwyw-container').removeClass('active');
+            // Check if we are the play or download button
+            if ($(this).hasClass('tb-price-play')){
+                actionElement = $('.pwyw-activate-play');
+                action = 'play';
+                price = fileData.sugPlay;
+            }
+
+            if ($(this).hasClass('tb-price-download')){
+                actionElement = $('.pwyw-activate-download');
+                action = 'download';
+                price = fileData.sugBuy;
+            }
+
+            if (price === 0 || price === undefined || price == NaN){
+                onPaymentDone(action, fileData)
+                return;
+            }
+
+            var btcprice = makePaymentToAddress(btcAddress, price, function () {
+                return onPaymentDone(action, fileData);
+            });
+            $('.pwyw-btc-' + action + '-price').text(btcprice);
+            $('.pwyw-usd-' + action + '-price-input').val(price);
+
+            $('.pwyw-container').removeClass('active');
+            actionElement.addClass('active');
+            //$(self).addClass('active');
+        } else {
+            // Since we are not working with a file but rather main buttons, use the old way.
+            $('.pwyw-item').removeClass('active');
+
+            for (i = 0; this.classList[i]; i++) {
+                className = this.classList[i];
+                if (className.match(/pwyw-action/)) {
+
+                    var action = className.replace(/^pwyw-action-/, '');
+                    var actionElement = $('.pwyw-activate-' + action);
+                    var price = $('.pwyw-suggested-price', actionElement).text();
+        
+                    $('.pwyw-' + action + '-price').text(price);
+                    if (actionElement.hasClass('active')) {
+                        return $('.pwyw-container').removeClass('active');
+                    }
+        
+                    var btcAddress = $('.ri-btc-address').text();
+
+                    var btcprice = makePaymentToAddress(btcAddress, price, function () {
+                        return onPaymentDone(action, $('.media-data').data());
+                    });
+                    $('.pwyw-btc-' + action + '-price').text(btcprice);
+                    $('.pwyw-usd-' + action + '-price-input').val(price);
+                    $('.pwyw-container').removeClass('active');
+                    actionElement.addClass('active');
+                    $(self).addClass('active')
+        
+                    console.log ('btc', btcprice, 'pwyw-btc-' + action + '-price');
                 }
-    
-                var btcAddress = $('.ri-btc-address').text();
-                var btcprice = makePaymentToAddress(btcAddress, price, function () {
-                    return onPaymentDone(action, $('.media-data').data());
-                });
-                $('.pwyw-btc-' + action + '-price').text(btcprice);
-                $('.pwyw-usd-' + action + '-price-input').val(price);
-                $('.pwyw-container').removeClass('active');
-                actionElement.addClass('active');
-                $(self).addClass('active')
-    
-                console.log ('btc', btcprice, 'pwyw-btc-' + action + '-price');
             }
         }
-        togglePWYWOverlay(true)
+
+        togglePWYWOverlay(true);
 }
 
 function mountMediaBrowser(el, data) {
@@ -326,6 +365,7 @@ function mountMediaBrowser(el, data) {
     })
 
     $('.pwyw-item').on('click', showPaymentOption)
+
     $('.pwyw-overlay').on('click',function() {
         $('.pwyw-item.active').trigger('click');
         togglePWYWOverlay(false)
@@ -419,10 +459,8 @@ function togglePWYWOverlay (bool) {
     $('.pwyw-overlay')[action]();
 }
 
-function onPaymentDone (action, media) {
-    var xinfo = media.info['extra-info'];
-    var selectedTrackData = $('.playlist-tracks tr.selected').data();
-    var url = IPFSUrl ([xinfo['DHT Hash'], xinfo.files[0].fname]);
+function onPaymentDone (action, file) {
+    var url = file.url;
     resetQR();
 
     if (action == 'pin') $('.pwyw-pining-error').hide();
@@ -433,14 +471,13 @@ function onPaymentDone (action, media) {
         togglePlaybarShadow(true);
     }
 
-    var res = loadTrack (xinfo.files[0].fname, url);
-    $('#audio-player').jPlayer("play");
+    var res = loadTrack(file.track.fname, url);
 
     if (action === 'download') {
         document.getElementById('my_iframe').src = url;
     }
 
-    console.log ('player', res, IPFSUrl ([xinfo['DHT Hash'], xinfo.filename]));
+    $('#audio-player').jPlayer("play");
 }
 
 var lastAddress;
@@ -473,7 +510,7 @@ function getUSDdayAvg() {
         url: "https://api.bitcoinaverage.com/ticker/global/USD/"
     }).done(function (usddata) {
         day_avg = usddata['24h_avg'];
-        console.log(day_avg)
+        //console.log(day_avg)
     });
 }
 
@@ -501,7 +538,7 @@ function watchForpayment(address, amount, done) {
             console.log(amountpaid);
             var amountRequired = amount;
             if (amountpaid < amountRequired) {
-                console.log('not paid checking again.');
+                //console.log('not paid checking again.');
                 if (paymentTimeout) {
                     clearTimeout (paymentTimeout)
                 }
@@ -520,8 +557,7 @@ function watchForpayment(address, amount, done) {
 function resetQR() {
     $('.pwyw-qrcode img').attr("src", 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==');
 
-    $('.pwyw-btc-address').text('');
-    
+    $('.pwyw-btc-address').text('');   
 }
 
 function setQR(address, amount) {
