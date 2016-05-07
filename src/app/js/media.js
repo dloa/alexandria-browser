@@ -474,7 +474,12 @@ function onPaymentDone (action, file) {
     var res = loadTrack(file.track.fname, url);
 
     if (action === 'download') {
-        document.getElementById('my_iframe').src = url;
+        // Add a link to download
+        var a = $("<a>").attr("href", url).attr("download", file.track.fname).appendTo("body");
+        // Click the link
+        a[0].click();  
+        // Remove the link we added.
+        a.remove();
     }
 
     $('#audio-player').jPlayer("play");
