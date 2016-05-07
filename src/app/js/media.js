@@ -225,6 +225,7 @@ function showPaymentOption(e) {
             var actionElement;
             var action;
 
+            $('.pwyw-item').removeClass('active');
             // Check if we are the play or download button
             if ($(this).hasClass('tb-price-play')){
                 actionElement = $('.pwyw-activate-play');
@@ -236,6 +237,10 @@ function showPaymentOption(e) {
                 actionElement = $('.pwyw-activate-download');
                 action = 'download';
                 price = fileData.sugBuy;
+            }
+
+            if (actionElement.hasClass('active')) {
+                return $('.pwyw-container').removeClass('active');
             }
 
             if (price === 0 || price === undefined || price == NaN){
@@ -467,6 +472,7 @@ function onPaymentDone (action, file) {
 
     if (action != 'pin') {
         //$('.pwyw-item.active').trigger('click');
+        $('.pwyw-container.active').removeClass('active');
         togglePWYWOverlay(false)
         togglePlaybarShadow(true);
     }
