@@ -54,6 +54,12 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     	trackTime = '';
     }
     files.forEach (function (file) {
+        // If we are the preview image or an extra file, do not add it to the table for now.
+        // ToDo: Add new table for extra files.
+        // ToDo: Check for all different file types once implemented
+        if (file.type == 'preview' || file.type == 'extra')
+            return;
+
         console.log(file);
         el.append("<tr><td>" + i++ + "</td>" +
                   "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
