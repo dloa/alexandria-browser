@@ -219,7 +219,7 @@ function showPaymentOption(e) {
         console.log(fileData);
 
         // Check if we are working with the main buttons or the table buttons.
-        if (fileData){
+        if (fileData && $(this).hasClass('price')){
             var btcAddress = $('.ri-btc-address').text();
             var price = 0;
             var actionElement;
