@@ -465,8 +465,8 @@ function onPaymentDone (action, file) {
 
     if (action == 'pin') $('.pwyw-pining-error').hide();
 
-    if ($('.pwyw-item.active').length > 0 && action != 'pin') {
-        $('.pwyw-item.active').trigger('click');
+    if (action != 'pin') {
+        //$('.pwyw-item.active').trigger('click');
         togglePWYWOverlay(false)
         togglePlaybarShadow(true);
     }
