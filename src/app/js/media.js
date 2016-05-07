@@ -357,10 +357,12 @@ function mountMediaBrowser(el, data) {
 
     $('.pwyw-overlay').on('click',function() {
         $('.pwyw-item.active').trigger('click');
+        $('.pwyw-container.active').removeClass('active');
         togglePWYWOverlay(false)
     });
     $('.pwyw-close').on('click',function() {
         $('.pwyw-item.active').trigger('click');
+        $('.pwyw-container.active').removeClass('active');
         togglePWYWOverlay(false)
     });
     $('.pwyw-pin-it').on('click', function (e) {
