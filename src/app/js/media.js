@@ -427,7 +427,6 @@ function BTCtoUSD (amount) {
 
 function loadTrack (name, url) {
 	console.log(url);
-	console.log(filetype);
 	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
