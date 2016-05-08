@@ -232,7 +232,7 @@ var Wallet = (function () {
         }
         return allTransactions;
     };
-    Wallet.prototype.sendCoins = function (fromAddress, toAddress, amount, txComment, callback) {
+    Wallet.prototype.sendCoins = function (fromAddress, toAddress, amount, txComment) {
         var _this = this;
         if (this.validateKey(toAddress) && this.validateKey(fromAddress)) {
             if (fromAddress in this.addresses && this.validateKey(this.addresses[fromAddress].priv, true)) {
@@ -285,34 +285,36 @@ var Wallet = (function () {
                     var rawHex = tx.toHex();
                     console.log(rawHex);
 
-                    if (typeof txComment === "undefined")
-                        txComment = '';
+                    if (typeof txComment != "undefined" && txComment.length > 0) {
+                        console.log("Comment:");
+                        console.log(txComment);
 
-                    console.log("Comment:");
-                    console.log(txComment);
+                        var lenBuffer = Bitcoin.bufferutils.varIntBuffer(txComment.length);
+                        var hexComment = '';
 
-                    var lenBuffer = Bitcoin.bufferutils.varIntBuffer(txComment.length);
-                    var hexComment = '';
+                        for (var i = 0; i < lenBuffer.length; ++i) {
+                            hexComment += toHex(lenBuffer[i]);
+                        }
+                        for (i = 0; i < txComment.length; ++i) {
+                            hexComment += toHex(txComment.charCodeAt(i));
+                        }
+                        rawHex += hexComment;
 
-                    for (var i = 0; i < lenBuffer.length; ++i) {
-                        hexComment += toHex(lenBuffer[i]);
+                        // bump transaction version so it reads the comment
+                        if (rawHex.slice(0,2) == "01")
+                            rawHex = "02" + rawHex.slice(2);
+
+                        console.log("Raw");
+                        console.log(rawHex);
                     }
-                    for (i = 0; i < txComment.length; ++i) {
-                        hexComment += toHex(txComment.charCodeAt(i));
-                    }
-                    rawHex += hexComment;
 
-                    console.log("Raw");
-                    console.log(rawHex);
-
-                    _this.pushTX(rawHex, function (data) {
+                    _this.pushTX(rawHex, function () {
                         try {
                             beep(300, 4);
                         }
                         catch (e) {
                             console.error('Beep is not supported by this browser???');
                         }
-                        callback(data);
                     });
                 });
                 this.refreshBalances();
