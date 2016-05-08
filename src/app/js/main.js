@@ -252,8 +252,6 @@ var el = null;
 function router (event, goUrl) {  
     // Current route url (getting rid of '#' in hash as well):
     var url = location.hash.slice(1) || '/';
-  	console.info(event);
-  	console.info(goUrl);
   	if (goUrl) {
 		url = goUrl.split('#')[1];
   	}
@@ -263,7 +261,6 @@ function router (event, goUrl) {
 	} else {
 		var module = url;
 	}
-	console.info(paths);
     // Get route by url:
     var route = routes[module];
     // Route the URL
@@ -437,7 +434,6 @@ function router (event, goUrl) {
 			if (!searchResults) {
 				var thisMediaData = searchAPI('media', 'txid', paths[1]);
 				var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
-				console.info(mediaType);
 				if ( (mediaType == 'music') || (mediaType == 'movie') || (mediaType == 'video') ) {
 					loadArtifactView2(paths[1]);
 				} else {
