@@ -445,7 +445,7 @@ function loadTrack (name, url) {
 	    });
 	    $('#audio-player').slideDown('slow');
 	} else if (filetype == 'mov') {
-		$('#playbar-container').hide().after('<video id="native-player" controls="controls" poster=""><source src="'+url+'" /><param name="autoplay" value="true" /></video>');
+		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster=""><source src="'+url+'" /><param name="autoplay" value="true" /></video>');
 	}
     if ($('.playbar-shadow:visible').length == 0) {
 	    $('#audio-player').jPlayer("play");
