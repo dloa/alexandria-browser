@@ -201,9 +201,7 @@ jQuery(document).ready(function($){
 				window.IPFSHost = 'ipfs.alexandria.io';
 				$('#serverID').text('Gateway');
 			}
-			setMediaTypeFilter();
-			console.log(serverAddress);
-			console.log(IPFSserver);
+			resetAlexandria();
 		});
 	} else {
 		if (IPFSserver == 'ipfs.alexandria.io') {
@@ -222,7 +220,7 @@ jQuery(document).ready(function($){
 				window.IPFSHost = 'ipfs.alexandria.io';
 				$('#IPFS-switch').text('IPFS: Gateway');
 			}
-			setMediaTypeFilter();
+			resetAlexandria();
 		});
 	}
 	
@@ -3139,10 +3137,8 @@ function resetInterface() {
 // RESET ALEXANDRIA
 function resetAlexandria() {
 	$('#audio-player').jPlayer('destroy');
-		if($('#native-player')) {
-		$('#native-player').remove();
-		$('#playbar-container').show();
-	}
+	$('#native-player').remove();
+	$('#playbar-container').show();
 	$('main').not('#browse-media').hide();
 	document.getElementById('search-main').value = '';
 	$('#browse-media .module-links a.active').removeClass('active');
