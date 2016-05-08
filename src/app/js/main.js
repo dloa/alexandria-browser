@@ -193,10 +193,12 @@ jQuery(document).ready(function($){
 			if(serverAddress == 'libraryd.alexandria.io'){
 				serverAddress = 'localhost';
 				IPFSserver = 'localhost:8080';
+				window.IPFSHost = 'localhost:8080';
 				$('#serverID').text('Local');
 			} else {
 				serverAddress = 'libraryd.alexandria.io'
 				IPFSserver = 'ipfs.alexandria.io';
+				window.IPFSHost = 'ipfs.alexandria.io';
 				$('#serverID').text('Gateway');
 			}
 			setMediaTypeFilter();
@@ -213,9 +215,11 @@ jQuery(document).ready(function($){
 			$('#audio-player').jPlayer("stop");
 			if(IPFSserver == 'ipfs.alexandria.io'){
 				IPFSserver = 'localhost:8080';
+				window.IPFSHost = 'localhost:8080';
 				$('#IPFS-switch').text('IPFS: Local');
 			} else {
 				IPFSserver = 'ipfs.alexandria.io';
+				window.IPFSHost = 'ipfs.alexandria.io';
 				$('#IPFS-switch').text('IPFS: Gateway');
 			}
 			setMediaTypeFilter();

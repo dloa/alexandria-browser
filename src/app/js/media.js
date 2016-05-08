@@ -227,7 +227,7 @@ function watchForPin (addr, filename) {
 }
 
 function IPFSUrl (components) {
-    return encodeURI (IPFSHost + '/' + components.join ('/'));
+    return encodeURI ('http://' + IPFSHost + '/ipfs/' + components.join ('/'));
 }
 
 function showPaymentOption(e) {
