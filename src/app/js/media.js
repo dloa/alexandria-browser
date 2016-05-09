@@ -53,6 +53,7 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     if (files.length > 1) {
     	trackTime = '';
     }
+    console.log(files);
     files.forEach (function (file) {
         // If we are the preview image or an extra file, do not add it to the table for now.
         // ToDo: Add new table for extra files.
@@ -60,7 +61,6 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
         if (file.type == 'preview' || file.type == 'extra')
             return;
 
-        console.log(file);
         el.append("<tr><td>" + i++ + "</td>" +
                   "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
                   "<td>" + (xinfo.artist ? xinfo.artist : "") +"</td>" +
@@ -151,6 +151,32 @@ function applyMediaData(data) {
     var tracks = fixDataMess(xinfo);
 
     // This sets a global mainFile object to the main object.
+    if (!xinfo['files']) {
+    	xinfo['files'] = [];
+		var i = 0;
+		tracks.forEach( function (file) {
+			xinfo['files'][i] = {
+				fname: file,
+				runtime: xinfo['runtime'],
+				type: payment['type'],
+				minBuy: 0,
+				sugBuy: 0,
+				minPlay: 0,
+				sugPlay: 0,
+			}
+			if (xinfo['pwyw']) {
+		    	var pwywArray = xinfo['pwyw'].split(',');
+				xinfo['files'][i]['sugBuy'] = parseFloat(pwywArray[0]);
+				xinfo['files'][i]['sugPlay'] = parseFloat(pwywArray[1]);
+				xinfo['files'][i]['minBuy'] = parseFloat(pwywArray[1]);
+			} else {
+				xinfo['files'][i]['sugBuy'] = 0;
+				xinfo['files'][i]['sugPlay'] =  0;
+				xinfo['files'][i]['minBuy'] =  0;
+			}
+			i++
+		});
+	}
     mainFile = {
         track: xinfo['files'][0], 
         name: xinfo['files'][0].dname, 
@@ -160,7 +186,6 @@ function applyMediaData(data) {
         sugBuy: xinfo['files'][0].sugBuy, 
         minBuy: xinfo['files'][0].minBuy
     };
-
     mediaDataSel.data(media)
 
     // Set what the circles will use for pricing.
@@ -184,6 +209,7 @@ function applyMediaData(data) {
 	    $('.media-cover').hide();
     	$('.playbar-shadow').css('width','100%');
 	}
+
     renderPlaylistFilesHTML(xinfo['files'], xinfo, $('.playlist-tracks'))
 
     keepHash = media.torrent;
