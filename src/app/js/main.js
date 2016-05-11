@@ -194,15 +194,15 @@ jQuery(document).ready(function($){
 			if(serverAddress == 'libraryd.alexandria.io'){
 				serverAddress = 'localhost';
 				IPFSserver = 'localhost:8080';
+				window.IPFSHost = 'localhost:8080';
 				$('#serverID').text('Local');
 			} else {
 				serverAddress = 'libraryd.alexandria.io'
 				IPFSserver = 'ipfs.alexandria.io';
+				window.IPFSHost = 'ipfs.alexandria.io';
 				$('#serverID').text('Gateway');
 			}
-			setMediaTypeFilter();
-			console.log(serverAddress);
-			console.log(IPFSserver);
+			resetAlexandria();
 		});
 	} else {
 		if (IPFSserver == 'ipfs.alexandria.io') {
@@ -214,12 +214,14 @@ jQuery(document).ready(function($){
 			$('#audio-player').jPlayer("stop");
 			if(IPFSserver == 'ipfs.alexandria.io'){
 				IPFSserver = 'localhost:8080';
+				window.IPFSHost = 'localhost:8080';
 				$('#IPFS-switch').text('IPFS: Local');
 			} else {
 				IPFSserver = 'ipfs.alexandria.io';
+				window.IPFSHost = 'ipfs.alexandria.io';
 				$('#IPFS-switch').text('IPFS: Gateway');
 			}
-			setMediaTypeFilter();
+			resetAlexandria();
 		});
 	}
 	
@@ -251,8 +253,6 @@ var el = null;
 function router (event, goUrl) {
     // Current route url (getting rid of '#' in hash as well):
     var url = location.hash.slice(1) || '/';
-  	console.info(event);
-  	console.info(goUrl);
   	if (goUrl) {
 		url = goUrl.split('#')[1];
   	}
@@ -262,7 +262,6 @@ function router (event, goUrl) {
 	} else {
 		var module = url;
 	}
-	console.info(paths);
     // Get route by url:
     var route = routes[module];
     // Route the URL
@@ -436,7 +435,6 @@ function router (event, goUrl) {
 			if (!searchResults) {
 				var thisMediaData = searchAPI('media', 'txid', paths[1]);
 				var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
-				console.info(mediaType);
 				if ( (mediaType == 'music') || (mediaType == 'movie') || (mediaType == 'video') ) {
 					loadArtifactView2(paths[1]);
 				} else {
@@ -1060,7 +1058,7 @@ function embedArtifact(mediaType, fileHash, mediaFilename, posterFrame) {
 //		if (location.protocol == 'app:') {
 //			var embedCode = '<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" target="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" width="640px" height="360px" />';
 //		} else {
-			var embedCode = '<video controls="controls" poster="'+ posterFrame +'"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /><param name="autoplay" value="true" /></video>';	
+			var embedCode = '<video controls="controls" poster="'+ posterFrame +' autoplay"><source src="http://' + IPFSserver +'/ipfs/'+ fileHash +'/'+ encodeURIComponent(mediaFilename) +'" type="video/mp4" /><param name="autoplay" value="true" /></video>';	
 //		}
 	} else if ( (mediaType == 'music') || (mediaType == 'podcast') ) {
 // 		if (location.protocol == 'app:') {
@@ -2772,7 +2770,7 @@ function loadAboutView() {
 	document.getElementById('search').style.display = 'block';
 	document.getElementById('about').style.display = 'block';
 	$('#about #video-embed video').remove();
-	$('#about #video-embed').append('<video controls="controls" poster="https://i.ytimg.com/vi/z_u-ndscZjY/hqdefault.jpg"><source src="http://' + IPFSserver +'/ipfs/QmUbsjbjkRu41JqiyAhq61inUpDSB8uMHsTkdtbHg2jYmv/" type="video/mp4"></video>');
+	$('#about #video-embed').append('<video controls="controls" poster="https://i.ytimg.com/vi/z_u-ndscZjY/hqdefault.jpg" autoplay><source src="http://' + IPFSserver +'/ipfs/QmUbsjbjkRu41JqiyAhq61inUpDSB8uMHsTkdtbHg2jYmv/" type="video/mp4"></video>');
 	var stateObj = {
 		currentView: 'about'
 	}
@@ -3136,8 +3134,8 @@ function resetInterface() {
 // RESET ALEXANDRIA
 function resetAlexandria() {
 	$('#audio-player').jPlayer('destroy');
-	$('video').trigger('pause');
-	$('audio').trigger('pause');
+	$('#native-player').remove();
+	$('#playbar-container').show();
 	$('main').not('#browse-media').hide();
 	document.getElementById('search-main').value = '';
 	$('#browse-media .module-links a.active').removeClass('active');
@@ -3202,7 +3200,7 @@ function lightbox(obj){
 // LIGHTBOX FOR VIDEO
 function lightboxVideo(obj) {
 	var videoURL = $(obj).attr('data-source');
-	var videoContent = '<video controls="controls" poster=""><source src="'+videoURL+'" type="video/mp4" /><param name="autoplay" value="true" /></video>'
+	var videoContent = '<video controls="controls" poster="" autoplay><source src="'+videoURL+'" type="video/mp4" /><param name="autoplay" value="true" /></video>'
 	$('#lightbox').children().remove();
 	$('#lightbox').append(videoContent);
 	$('#lightbox video').css({

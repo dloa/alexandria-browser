@@ -9,7 +9,6 @@ window.searchAPI = function(module, searchOn, searchFor) {
 		searchFor = '"'+searchFor+'"';
 	}
 	queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":'+searchFor+',"search-like": true}';
-	console.log(queryString);
 	var mediaData;
 	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();
