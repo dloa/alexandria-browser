@@ -223,7 +223,7 @@ function applyMediaData(data) {
 
     $('.ri-date').text(moment(pubTime).format('MMMM Do YYYY'));
 
-    $('.media-description').text(info.description);
+    $('.media-description').html(info.description.replace(/(?:\r\n|\r|\n)/g, '<br />'));
 
     watchForPin (ipfsAddr, xinfo.filename)
     //             debugger;
