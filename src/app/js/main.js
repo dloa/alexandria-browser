@@ -1382,6 +1382,7 @@ function populateSearchResults(results, module) {
 			}
 			var mediaID = results[i]['txid'];
 			var mediaPublisher = results[i]['publisher-name'];
+			var publisherID = results[i]['media-data']['alexandria-media']['publisher'];
 			var mediaInfo = results[i]['media-data']['alexandria-media']['info'];
 			var mediaPubTime = results[i]['media-data']['alexandria-media']['timestamp'];
 			var mediaPubTimeLen = results[i]['media-data']['alexandria-media']['timestamp'].toString().length;
@@ -1405,10 +1406,10 @@ function populateSearchResults(results, module) {
 			} else {
 				mediaRuntime = '';
 			}
-			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+mediaIconSVGs[mediaType]+'</div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '</div> '+ mediaRuntime +' <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div>';
-			var thisTitleAndPublisher = mediaTitle+mediaPublisher;
+			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+mediaIconSVGs[mediaType]+'</div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '<span class="publisher-id hidden">'+ publisherID +'</span></div> '+ mediaRuntime +' <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div>';
+			var thisTitleAndPublisher = mediaTitle+publisherID;
 			$('#browse-media-wrap .row').each(function(){
-				var checkTitleAndPublisher = $(this).find('.media-title').text()+$(this).find('.media-meta').text();
+				var checkTitleAndPublisher = $(this).find('.media-title').text()+$(this).find('.publisher-id').text();
 				if(checkTitleAndPublisher == thisTitleAndPublisher){
 					$(this).remove();
 				}
