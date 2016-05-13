@@ -223,7 +223,7 @@ function applyMediaData(data) {
 
     $('.ri-date').text(moment(pubTime).format('MMMM Do YYYY'));
 
-    $('.media-description').text(info.description);
+    $('.media-description').html(info.description.replace(/(?:\r\n|\r|\n)/g, '<br />'));
 
     watchForPin (ipfsAddr, xinfo.filename)
 
@@ -252,7 +252,7 @@ function watchForPin (addr, filename) {
 }
 
 function IPFSUrl (components) {
-    return encodeURI ('http://' + IPFSHost + '/ipfs/' + components.join ('/'));
+    return encodeURI (IPFSHost + '/ipfs/' + components.join ('/'));
 }
 
 function showPaymentOption(e) {
