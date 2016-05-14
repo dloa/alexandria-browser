@@ -1402,7 +1402,7 @@ function populateSearchResults(results, module) {
 				}						
 			}
 			if (mediaRuntime != 0) {
-				mediaRuntime = '<div class="media-runtime">Runtime: <span>' + mediaRuntime + '</span></div>';
+				mediaRuntime = '<div class="media-runtime">&bull; Runtime: <span>' + mediaRuntime + '</span></div>';
 			} else {
 				mediaRuntime = '';
 			}
