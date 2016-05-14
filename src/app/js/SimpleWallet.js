@@ -8,7 +8,8 @@
  * Created by Someguy123 (http://someguy123.com)
  * Modified by bitspill
  */
-var baseURL = "http://flovault.alexandria.io";
+var flovaultBaseURL = "https://flovault.alexandria.io";
+var florinsightBaseURL = "http://florinsight.alexandria.io";
 
 var Wallet = (function () {
     function Wallet(identifier, password) {
@@ -22,6 +23,8 @@ var Wallet = (function () {
         };
         this.identifier = identifier;
         this.password = password;
+        this.known_spent = [];
+        this.known_unspent = [];
     }
 
     /**
@@ -61,7 +64,7 @@ var Wallet = (function () {
             };
         }
         var _this = this;
-        $.get(baseURL + '/wallet/load/' + this.identifier, function (data) {
+        $.get(flovaultBaseURL + '/wallet/load/' + this.identifier, function (data) {
             if (data.error !== false) {
                 alert(data.error.message);
             }
@@ -103,7 +106,7 @@ var Wallet = (function () {
         var encWalletData = CryptoJS.AES.encrypt(walletData, this.password, this.CryptoConfig);
         var encWalletDataCipher = encWalletData.toString();
         var _this = this;
-        $.post(baseURL + "/wallet/update", {
+        $.post(flovaultBaseURL + "/wallet/update", {
             identifier: this.identifier,
             shared_key: this.shared_key,
             wallet_data: encWalletDataCipher
@@ -138,7 +141,7 @@ var Wallet = (function () {
         }
         var _this = this;
         for (var i in this.addresses) {
-            $.get(baseURL + '/wallet/getbalances/' + this.addresses[i].addr, function (data) {
+            $.get(flovaultBaseURL + '/wallet/getbalances/' + this.addresses[i].addr, function (data) {
                 if (data) {
                     var addr_data = data;
                     _this.setBalance(addr_data['addrStr'], addr_data['balance']);
@@ -147,7 +150,7 @@ var Wallet = (function () {
         }
     };
     Wallet.prototype.getUnspent = function (address, callback) {
-        $.get(baseURL + '/wallet/getunspent/' + address, function (data) {
+        $.get(florinsightBaseURL + '/api/addr/' + address + '/utxo', function (data) {
             console.log(data);
             // put into window var
             var output;
@@ -160,6 +163,50 @@ var Wallet = (function () {
                 callback([data]);
             }
         }, "json");
+    };
+
+    /**
+     * Attempts to remove inputs that are known to be spent.
+     * This helps avoid problems when sending multiple transactions shortly
+     * after eachother.
+     */
+    Wallet.prototype.removeSpent = function (coins) {
+        console.log("removeSpent");
+        console.log(JSON.stringify(coins));
+        var clean_coins = coins;
+        for (var v in this.known_spent) {
+            for (var k in coins) {
+                if (JSON.stringify(coins[k]) == JSON.stringify(this.known_spent[v])) {
+                    delete clean_coins[k];
+                }
+            }
+        }
+        console.log(JSON.stringify(clean_coins));
+        return clean_coins;
+    };
+    Wallet.prototype.mergeUnspent = function (unspent, address) {
+        var merged = unspent;
+        console.log("!unspent!");
+        console.log(JSON.stringify(unspent, null, 2));
+
+        for (var i = 0; i < this.known_unspent.length; ++i)
+            if (this.known_unspent[i].address == address) {
+                var dupe = false;
+                for (var j = 0; j < unspent.length; ++j)
+                    if (this.known_unspent[i].txid == merged[j].txid &&
+                        this.known_unspent[i].vout == merged[j].vout) {
+                        dupe = true;
+                        break;
+                    }
+                if (!dupe)
+                    merged.push(this.known_unspent[i]);
+            }
+
+        console.log("!known_unspent!");
+        console.log(JSON.stringify(this.known_unspent, null, 2));
+        console.log("!merged!");
+        console.log(JSON.stringify(merged, null, 2));
+        return merged;
     };
     /**
      * calculateBestUnspent()
@@ -174,24 +221,37 @@ var Wallet = (function () {
      * @returns {{unspent: Array<UnspentTX>, total: number}}
      */
     Wallet.prototype.calculateBestUnspent = function (amount, unspents) {
+        console.log("calcBestUnspent");
+        console.log(unspents);
         // note: unspents = [ {tx, amount, n, confirmations, script}, ... ]
         // TODO: implement a real algorithm to determine the best unspents
         // e.g. compare the size to the confirmations so that larger coins
         // are used, as well as ones with the highest confirmations.
         unspents.sort(function (a, b) {
-            if (a.confirmations > b.confirmations) {
-                return -1;
-            }
-            if (a.confirmations < b.confirmations) {
+            // if (a.confirmations > b.confirmations) {
+            //     return -1;
+            // }
+            // if (a.confirmations < b.confirmations) {
+            //     return 1;
+            // }
+            if (a.amount > b.amount) {
                 return 1;
+            }
+            if (a.amount < b.amount) {
+                return -1;
             }
             return 0;
         });
         var CutUnspent = [], CurrentAmount = 0;
         for (var v in unspents) {
+            // if (parseFloat(unspents[v].amount) > amount) {
+            //     CurrentAmount += parseFloat(unspents[v].amount);
+            //     CutUnspent.push(unspents[v]);
+            //     break;
+            // }
             CurrentAmount += parseFloat(unspents[v].amount);
             CutUnspent.push(unspents[v]);
-            if (CurrentAmount >= amount) {
+            if (CurrentAmount > amount) {
                 break;
             }
         }
@@ -232,7 +292,17 @@ var Wallet = (function () {
         }
         return allTransactions;
     };
-    Wallet.prototype.sendCoins = function (fromAddress, toAddress, amount, txComment) {
+    Wallet.prototype.sendCoins = function (fromAddress, toAddress, amount, txComment, callback) {
+        if (typeof txComment == "undefined")
+            txComment = '';
+        if (typeof txComment == typeof Function) {
+            callback = txComment;
+            txComment = '';
+        }
+        if (typeof callback != typeof Function)
+            callback = function (err, data) {
+            };
+
         var _this = this;
         if (this.validateKey(toAddress) && this.validateKey(fromAddress)) {
             if (fromAddress in this.addresses && this.validateKey(this.addresses[fromAddress].priv, true)) {
@@ -242,7 +312,9 @@ var Wallet = (function () {
                     return;
                 }
                 this.getUnspent(fromAddress, function (data) {
-                    data = _this.calculateBestUnspent(amount, data);
+                    var merged = _this.mergeUnspent(data, fromAddress);
+                    var clean_unspent = _this.removeSpent(merged);
+                    data = _this.calculateBestUnspent(amount, clean_unspent);
                     console.log(data);
                     // temporary constant
                     var minFeePerKb = 100000;
@@ -259,6 +331,7 @@ var Wallet = (function () {
                     for (var v in unspents) {
                         if (unspents[v].confirmations) {
                             tx.addInput(unspents[v].txid, unspents[v].vout);
+                            _this.known_spent.push(unspents[v]);
                         }
                     }
                     tx.addOutput(toAddress, amount);
@@ -266,7 +339,7 @@ var Wallet = (function () {
                     var estimatedFee = _this.coin_network.estimateFee(tx);
                     if (estimatedFee > 0) {
                         // Temporary fix for "stuck" transactions
-                        estimatedFee = estimatedFee * 3;
+                        // estimatedFee = estimatedFee * 3;
                     }
                     if ((amount + estimatedFee) > totalUnspent) {
                         alert("Can't fit fee of " + estimatedFee / Math.pow(10, 8) + " - lower your sending amount");
@@ -285,36 +358,51 @@ var Wallet = (function () {
                     var rawHex = tx.toHex();
                     console.log(rawHex);
 
-                    if (typeof txComment != "undefined" && txComment.length > 0) {
-                        console.log("Comment:");
-                        console.log(txComment);
+                    console.log("Comment:");
+                    console.log(txComment);
 
-                        var lenBuffer = Bitcoin.bufferutils.varIntBuffer(txComment.length);
-                        var hexComment = '';
+                    var lenBuffer = Bitcoin.bufferutils.varIntBuffer(txComment.length);
+                    var hexComment = '';
 
-                        for (var i = 0; i < lenBuffer.length; ++i) {
-                            hexComment += toHex(lenBuffer[i]);
-                        }
-                        for (i = 0; i < txComment.length; ++i) {
-                            hexComment += toHex(txComment.charCodeAt(i));
-                        }
-                        rawHex += hexComment;
-
-                        // bump transaction version so it reads the comment
-                        if (rawHex.slice(0,2) == "01")
-                            rawHex = "02" + rawHex.slice(2);
-
-                        console.log("Raw");
-                        console.log(rawHex);
+                    for (var i = 0; i < lenBuffer.length; ++i) {
+                        hexComment += toHex(lenBuffer[i]);
                     }
+                    for (i = 0; i < txComment.length; ++i) {
+                        hexComment += toHex(txComment.charCodeAt(i));
+                    }
+                    rawHex += hexComment;
 
-                    _this.pushTX(rawHex, function () {
+                    console.log("Raw");
+                    console.log(rawHex);
+
+                    _this.pushTX(rawHex, function (data) {
+                        // If I'm paying myself it's known_unspent
+                        if (toAddress == fromAddress) {
+                            _this.known_unspent.push({
+                                address: toAddress,
+                                txid: data.txid,
+                                vout: 0,
+                                confirmations: -1,
+                                amount: amount / Math.pow(10, 8)
+                            });
+                        }
+                        // Add the change as a known_unspent
+                        if (changeValue >= minFeePerKb)
+                            _this.known_unspent.push({
+                                address: fromAddress,
+                                txid: data.txid,
+                                vout: 1,
+                                confirmations: -1,
+                                amount: changeValue / Math.pow(10, 8)
+                            });
                         try {
                             beep(300, 4);
                         }
                         catch (e) {
                             console.error('Beep is not supported by this browser???');
                         }
+                        if (typeof callback == typeof Function)
+                            callback(null, data);
                     });
                 });
                 this.refreshBalances();
@@ -333,7 +421,7 @@ var Wallet = (function () {
             };
         }
         var _this = this;
-        $.post(baseURL + '/wallet/pushtx', {hex: tx}, function (data) {
+        $.post(flovaultBaseURL + '/wallet/pushtx', {hex: tx}, function (data) {
             if (!data.txid) {
                 alert('There was an error pushing your transaction. May be a temporary problem, please try again later.');
             }
@@ -367,7 +455,8 @@ var Wallet = (function () {
     };
 
     Wallet.prototype.signMessage = function (address, message) {
-        var privkey = new Bitcoin.ECKey.fromWIF(this.addresses[address].priv), signed_message = Bitcoin.Message.sign(privkey, message, this.coin_network);
+        var privkey = new Bitcoin.ECKey.fromWIF(this.addresses[address].priv);
+        var signed_message = Bitcoin.Message.sign(privkey, message, this.coin_network);
         return signed_message.toString('base64');
     };
 
