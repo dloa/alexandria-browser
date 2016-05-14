@@ -54,6 +54,7 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     }
     console.log(files);
     files.forEach (function (file) {
+    	console.info(file.runtime);
         // If we are the preview image or an extra file, do not add it to the table for now.
         // ToDo: Add new table for extra files.
         // ToDo: Check for all different file types once implemented
@@ -97,10 +98,12 @@ function autoPlayFree() {
 
 function secondsToPrettyString (s, short){
     var duration = moment.duration(s, 's');
+    console.log(duration);
+    var minutes = duration.minutes()<10 ? "0" + duration.minutes() : duration.minutes();
     var seconds = duration.seconds()<10 ? "0" + duration.seconds() : duration.seconds();
     if (short)
-        return duration.minutes() + ':' + seconds;
-    return duration.minutes() + ' minutes ' + seconds + ' seconds';
+        return duration.hours() + ':' + minutes + ':' + seconds;
+    return duration.hours() + ' hours ' + minutes + ' minutes ' + seconds + ' seconds';
 }
 
 function getPrices (file) {
