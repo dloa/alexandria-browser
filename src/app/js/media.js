@@ -195,7 +195,7 @@ function applyMediaData(data) {
 
     // Set other meta info
     $('.media-artist', mediaInfoSel).text(xinfo.artist ? xinfo.artist : "");
-    $('.media-title', mediaInfoSel).text(info.title)
+    $('.artifact-title', mediaInfoSel).text(info.title)
     $('.ri-runtime', releaseInfoSel).text (secondsToPrettyString(parseInt(xinfo.runtime)))
     $('.ri-audio-count', releaseInfoSel).text (tracks.length);
     $('.ri-publisher', releaseInfoSel).text (media.publisher);
