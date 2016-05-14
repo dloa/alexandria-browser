@@ -494,7 +494,7 @@ function loadTrack (name, url) {
 	        ogv: url
 	    });
 	    $('#audio-player').slideDown('slow');
-	} else if ( (filetype == 'mov')  || (filetype == 'mkv') ) {
+	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') ) {
 		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster=""><source src="'+url+'" /><param name="autoplay" value="true" /></video>');
 	}
     if ($('.playbar-shadow:visible').length == 0) {
