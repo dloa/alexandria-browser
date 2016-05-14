@@ -658,9 +658,9 @@ function loadPublisherView(objMeta) {
 				mediaRuntime = '';
 			}
 			var mediaEntity = '<li id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+mediaIconSVGs[mediaType]+'</div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> '+ mediaRuntime +' <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div></li>';
-			var thisTitle = mediaTitle;
+			var thisTitle = mediaTitle.trim();
 			$('#publisher-media-list li').each(function(){
-				var checkTitle = $(this).find('.media-title').text();
+				var checkTitle = $(this).find('.media-title').text().trim();
 				if(checkTitle == thisTitle){
 					$(this).remove();
 				}
@@ -1409,7 +1409,7 @@ function populateSearchResults(results, module) {
 			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+mediaIconSVGs[mediaType]+'</div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '<span class="publisher-id hidden">'+ publisherID +'</span></div> '+ mediaRuntime +' <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div>';
 			var thisTitleAndPublisher = mediaTitle+publisherID;
 			$('#browse-media-wrap .row').each(function(){
-				var checkTitleAndPublisher = $(this).find('.media-title').text()+$(this).find('.publisher-id').text();
+				var checkTitleAndPublisher = $(this).find('.media-title').text().trim()+$(this).find('.publisher-id').text();
 				if(checkTitleAndPublisher == thisTitleAndPublisher){
 					$(this).remove();
 				}
