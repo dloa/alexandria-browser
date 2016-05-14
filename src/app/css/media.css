@@ -4,7 +4,9 @@
 .container {
     margin: 0px auto;
 }
-
+#browse-media-wrap .container {
+	margin-bottom: 15px;
+}
 .top {
 	display: -webkit-flex;
     display: flex;

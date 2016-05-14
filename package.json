@@ -9,7 +9,7 @@
   },
   "license": "GPL-3.0",
   "main": "app://host/src/app/index.html",
-  "version": "0.5.9",
+  "version": "0.5.9.2",
   "releaseName": "",
   "scripts": {
     "test": "grunt --verbose"

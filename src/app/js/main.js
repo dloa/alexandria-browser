@@ -1439,6 +1439,7 @@ function populateSearchResults(results, module) {
 		}
 		$('#browse-media-wrap #'+module+'-results-wrap .row.'+module+'-entity:first-of-type').addClass('first');
 	}
+	$('#results-count-wrap span').text($('#browse-media-wrap #'+module+'-results-wrap .row').length);
 	if (!results) {
 		var mediaIcon = (module == 'media') ? (mediaIconSVGs['media']) : (publisherIconSVG);
 		var mediaEntity = '<div class="row '+module+'-entity"><div class="'+module+'-icon browse-icon">'+ mediaIcon +'</div><h3 class="'+module+'-title">No Results Found</h3></div>';
@@ -1456,7 +1457,10 @@ function populateSearchResults(results, module) {
 			$(this).show();
 		}
 	});
-	$('#browse-media').show();	
+	$('#browse-media').show();
+	$('#browse-media-wrap .container').hide();
+	$('#browse-media-wrap #'+module+'-results-wrap.container').show();
+	$('#browse-media-wrap #results-count-wrap.container').show();
 }
 
 // DISPLAY MEDIA INFO MODAL
