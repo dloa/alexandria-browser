@@ -185,6 +185,8 @@
 .release-info {
     list-style: none;
     padding: 0;
+    margin: .5em 0 0;
+    text-align: left;
 }
 
 .release-info li {}
@@ -306,6 +308,6 @@
 
 .media-info .media-meta {
     position: relative;
-    top: -15px;
+    margin-top: -15px;
 }
 
