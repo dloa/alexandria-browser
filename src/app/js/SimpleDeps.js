@@ -13000,7 +13000,7 @@ CryptoJS.pad.Iso10126 = {
                 var Script = require("./script");
 
                 function Transaction() {
-                    this.version = 2;
+                    this.version = 1;
                     this.locktime = 0;
                     this.ins = [];
                     this.outs = []
