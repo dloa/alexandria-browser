@@ -575,18 +575,15 @@ ul#media-type-select-list {
 	padding-bottom: 2em;
 }
 .wrapper {
-	margin: 0 auto;
+	margin: 15px auto 0;
 	width: 72.5%;
     max-width: 820px;
-    padding-bottom: 50px;
+    padding-bottom: 35px;
 }
 #add-media > * {
 	width: 95.5%;
 	display: inline-block;
 	zoom: 1;*display:inline;
-}
-#browse-media .container:first-of-type {
-  margin-bottom: 1.5em;
 }
 .row.media-list {
 	width: 100%;
@@ -609,7 +606,7 @@ ul#media-type-select-list {
 	text-align: left;
 }
 #browse-media-wrap > .container > .row {
-	padding: .25em 0;
+	padding: 30px 0 0;
 	position: relative;
 }
 .hasInfo input[type="text"], .hasInfo select {
@@ -623,7 +620,6 @@ ul#media-type-select-list {
 	cursor: pointer;
 }
 #browse-media-wrap .row.first, #publisher-media-list li:first-child {
-	padding-top: .75em;
 	border-top: 1px solid #979797;
 	position: relative;
 }
@@ -638,7 +634,7 @@ ul#media-type-select-list {
 .browse-icon {
 	width: 32px;
 	height: 32px;
-	padding: .5em .5em .5em 0;
+	padding: 0 15px 0 0;
 }
 #browse-media-wrap .row .media-meta, #browse-media-wrap .row .media-runtime, #browse-media-wrap .row .publisher-date, #publisher-media-list li .media-runtime {
 	color: #9797a0;
