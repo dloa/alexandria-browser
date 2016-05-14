@@ -1,4 +1,3 @@
-var filetype = 'mp3';
 var day_avg = false;
 var delay = 5000;
 var keepHash;
@@ -369,7 +368,26 @@ function mountMediaBrowser(el, data) {
 	            console.error('got jplayer error', e)
 	        }
 	    })
-	} else {
+	} else if (filetype == 'ogv') {
+	    $('#audio-player').jPlayer({
+	        cssSelectorAncestor: "#playbar-container",
+	        swfPath: "/js",
+	        supplied: "ogv",
+	        size: {
+	        	width: '820px',
+	        	height: '547px'
+	        },
+	        useStateClassSkin: true,
+	        autoBlur: false,
+	        smoothPlayBar: true,
+	        keyEnabled: true,
+	        remainingDuration: true,
+	        toggleDuration: true,
+	        error: function (e) {
+	            console.error('got jplayer error', e)
+	        }
+	    })
+   	} else {
 		$('.jp-title').text('Unsupported File Format');
 	}
 
@@ -468,6 +486,12 @@ function loadTrack (name, url) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        webmv: url
+	    });
+	    $('#audio-player').slideDown('slow');
+	} else if (filetype == 'ogv') {
+	    $('#audio-player').jPlayer("setMedia", {
+	        title: name,
+	        ogv: url
 	    });
 	    $('#audio-player').slideDown('slow');
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') ) {
