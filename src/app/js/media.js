@@ -98,7 +98,6 @@ function autoPlayFree() {
 
 function secondsToPrettyString (s, short){
     var duration = moment.duration(s, 's');
-    console.log(duration);
     var minutes = duration.minutes()<10 ? "0" + duration.minutes() : duration.minutes();
     var seconds = duration.seconds()<10 ? "0" + duration.seconds() : duration.seconds();
     if (short)
