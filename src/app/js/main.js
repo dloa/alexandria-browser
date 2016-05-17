@@ -398,13 +398,13 @@ function router (event, goUrl) {
     	} else if (route.templateId == 'add-publisher') {
 			loadCreatePublisherMod();
     	} else if (route.templateId == 'search') {
-    		console.info(paths[2]);
 			var stateObj = {
 				currentView: 'search',
 				searchResults: true
 			}
 			stateObj.searchTerm = (paths[2]) ? (paths[2].toString().replace("-"," ").split('?')[0]) : ('');
     		fullSearch(stateObj.searchTerm);
+			$('#search-main').val(paths[2].toString().replace("-"," "));
     	} else if (route.templateId == 'about') {
     		loadAboutView();
     	} else if (route.templateId == 'wallet') {
