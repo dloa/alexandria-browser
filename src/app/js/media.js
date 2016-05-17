@@ -8,6 +8,7 @@ var URL_GETRECVD = "http://192.241.219.201:11306/payproc/api/getreceivedbyaddres
 window.doMountMediaBrowser = function (el, data) {
     console.log (el, data);
     $('.media-cover img').attr('src','');
+    $('.jp-type-single').hide();
     $('#audio-player').slideUp();
     return mountMediaBrowser(el, data);
 }
@@ -87,6 +88,8 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     if (!files[0].sugPlay) {
         togglePlaybarShadow(true);
         var freePlayTimer = setTimeout("autoPlayFree()", 500);
+	    $('.jp-type-single').show();
+	    $('#audio-player').slideDown('slow');
     } else {
         togglePlaybarShadow(false);
     }
@@ -190,10 +193,20 @@ function applyMediaData(data) {
     mediaDataSel.data(media)
 
     // Set what the circles will use for pricing.
-    $('.pwyw-price-play').text (xinfo['files'][0].sugPlay)
-    $('.pwyw-price-suggest-play').text (xinfo['files'][0].sugPlay)
-    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy)
-    $('.pwyw-price-suggest-download').text (xinfo['files'][0].sugBuy)
+    if(xinfo['files'][0].sugPlay) {
+    	$('.pwyw-action-play').show();
+	    $('.pwyw-price-play').text (xinfo['files'][0].sugPlay);
+	    $('.pwyw-price-suggest-play').text (xinfo['files'][0].sugPlay)
+    } else {
+    	$('.pwyw-action-play').hide();
+    }
+    if(xinfo['files'][0]. sugBuy) {
+    	$('.pwyw-action-download').show();
+	    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy)
+	    $('.pwyw-price-suggest-download').text (xinfo['files'][0].sugBuy)
+    } else {
+    	$('.pwyw-action-download').hide();
+    }
 
     // Set other meta info
     $('.media-artist', mediaInfoSel).text(xinfo.artist ? xinfo.artist : "");
@@ -483,19 +496,16 @@ function loadTrack (name, url) {
 	        title: name,
 	        m4v: url
 	    });
-	    $('#audio-player').slideDown('slow');
 	} else if (filetype == 'webm') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        webmv: url
 	    });
-	    $('#audio-player').slideDown('slow');
 	} else if (filetype == 'ogv') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        ogv: url
 	    });
-	    $('#audio-player').slideDown('slow');
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') ) {
 		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster=""><source src="'+url+'" /><param name="autoplay" value="true" /></video>');
 	}
@@ -534,7 +544,8 @@ function onPaymentDone (action, file) {
         // Remove the link we added.
         a.remove();
     }
-
+    $('.jp-type-single').show();
+    $('#audio-player').slideDown('slow');
     $('#audio-player').jPlayer("play");
 }
 

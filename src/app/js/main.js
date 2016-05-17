@@ -1259,7 +1259,6 @@ function filterMediaByType(obj, resetSearch) {
 	console.info(obj);
 	if ( ( (obj == '') && (history.state) && (history.state.searchResults != true) ) || (resetSearch) && ( (history.state) && (!history.state.isFront) ) ) {
 		var filteredMedia = searchAPI('media', '*', '');
-		console.info(filteredMedia);
 		$('#browse-media .module-links a.active').removeClass('active');
 		var stateObj = {
 			currentView: 'media',

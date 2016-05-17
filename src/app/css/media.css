@@ -185,11 +185,9 @@
 .release-info {
     list-style: none;
     padding: 0;
-    margin: .5em 0 0;
+    margin: 15px 0;
     text-align: left;
 }
-
-.release-info li {}
 
 .release-info .ri-publisher, .release-info .ri-btc-address, {
     display: none;
