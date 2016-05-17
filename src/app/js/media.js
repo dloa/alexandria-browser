@@ -327,7 +327,7 @@ function mountMediaBrowser(el, data) {
 	var mediaPublisher = data[0]['publisher-name'];
 	var mediaID = data[0]['txid'];
 	var data = data[0]['media-data'];
-    $(el).html($('#media-template').html())
+    $(el).html($('#media-template').html());
     var mediaData = applyMediaData(data)
     getUSDdayAvg();
 	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
@@ -341,6 +341,7 @@ function mountMediaBrowser(el, data) {
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
+	        poster: IPFSHost + '/ipfs/' + mediaData['info']['extra-info']['DHT Hash']+'/'+mediaData['info']['extra-info']['posterFrame'],
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
@@ -360,6 +361,7 @@ function mountMediaBrowser(el, data) {
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
+	        poster: IPFSHost + '/ipfs/' + mediaData['info']['extra-info']['DHT Hash']+'/'+mediaData['info']['extra-info']['posterFrame'],
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
@@ -379,6 +381,7 @@ function mountMediaBrowser(el, data) {
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
+	        poster: IPFSHost + '/ipfs/' + mediaData['info']['extra-info']['DHT Hash']+'/'+mediaData['info']['extra-info']['posterFrame'],
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
@@ -398,6 +401,7 @@ function mountMediaBrowser(el, data) {
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
+	        poster: IPFSHost + '/ipfs/' + mediaData['info']['extra-info']['DHT Hash']+'/'+mediaData['info']['extra-info']['posterFrame'],
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
@@ -509,9 +513,11 @@ function loadTrack (name, url) {
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') ) {
 		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster=""><source src="'+url+'" /><param name="autoplay" value="true" /></video>');
 	}
+/* Enable autoplay on free artifacts
     if ($('.playbar-shadow:visible').length == 0) {
 	    $('#audio-player').jPlayer("play");
     }
+*/
 }
 
 function togglePWYWOverlay (bool) {

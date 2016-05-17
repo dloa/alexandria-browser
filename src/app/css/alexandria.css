@@ -110,6 +110,9 @@ h1 {
 	letter-spacing: 7px;
 	line-height: 1.65;
 }
+#noscript {
+	display: none;
+}
 /* HEADER */
 header {
 	position: fixed;
