@@ -1458,8 +1458,12 @@ function populateSearchResults(results, module) {
 		}
 	});
 	$('#browse-media').show();
-	$('#browse-media-wrap .container').hide();
-	$('#browse-media-wrap #'+module+'-results-wrap.container').show();
+	$('#browse-media-wrap .container').each(function() {
+		console.log($(this).children('.row').length);
+		if ( $(this).children('.row').length == 0 ) {			
+			$(this).hide();
+		}
+	});
 	$('#browse-media-wrap #results-count-wrap.container').show();
 }
 
