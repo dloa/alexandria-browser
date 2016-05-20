@@ -50,7 +50,7 @@
          font-size: 34px;
          position: relative;
          top: -19px;
-         background-color: #fff;
+         background-color: transparent;
 		 padding: 0 15px 0 0;
 	 }
      
@@ -146,9 +146,8 @@
     }
     
     .media-info h1, .media-info h2, .media-info h3 {
-        margin-bottom: 15px;
         text-align: left;
-        line-height: 1.4;
+        line-height: 1.6;
     }
     
     .ri-publisher {
@@ -194,11 +193,7 @@
     .tipbox {
         display: none
     }
-    
-    .media-info h2, .media-info h3 {
-        margin-bottom: 0
-    }
-    
+        
     .jp-details {
         margin-top: 12px;
         position: relative;
