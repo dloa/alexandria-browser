@@ -303,7 +303,7 @@ function router (event, goUrl) {
 			} else {
 				if (paths[2] == 'search') {
 					console.info(paths);
-					var searchTerm = paths[paths.length-1].toString().replace("-"," ").split('?')[0];
+					var searchTerm = paths[paths.length-1].toString().replace(/\s/g , "-").split('?')[0];
 					if (paths[4]) {
 						var searchOn = paths[3];
 					}
@@ -353,7 +353,7 @@ function router (event, goUrl) {
 								var searchFor = [paths[3]];
 							}
 						} else if ((paths[2] != 'type') && (paths[3])) {
-							var searchFor = paths[3].replace("-"," ");
+							var searchFor = paths[3].replace(/-/g, ' ');
 						} else {
 							var searchFor = '';
 						}
@@ -363,7 +363,6 @@ function router (event, goUrl) {
 							searchResults: false,
 							isFront: true							
 						}
-						console.info(stateObj);
 						makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
 						populateSearchResults(searchResults, route.templateId);
 					}
@@ -382,7 +381,7 @@ function router (event, goUrl) {
 					searchResults = searchAPI('publisher', 'txid', paths[2]);
 					loadPublisherView();
 				} else {
-					var searchTerm = paths[paths.length - 1].replace('-',' ');
+					var searchTerm = paths[paths.length - 1].replace(/-/g, ' ');
 					searchResults = searchAPI('publisher', 'name', searchTerm);
 					populateSearchResults(searchResults, route.templateId);
 					var stateObj = {
@@ -402,9 +401,9 @@ function router (event, goUrl) {
 				currentView: 'search',
 				searchResults: true
 			}
-			stateObj.searchTerm = (paths[2]) ? (paths[2].toString().replace("-"," ").split('?')[0]) : ('');
+			stateObj.searchTerm = (paths[2]) ? (paths[2].toString().replace(/-/g, ' ').split('?')[0]) : ('');
+			$('#search-main').val(paths[2].toString().replace(/-/g, ' '));
     		fullSearch(stateObj.searchTerm);
-			$('#search-main').val(paths[2].toString().replace("-"," "));
     	} else if (route.templateId == 'about') {
     		loadAboutView();
     	} else if (route.templateId == 'wallet') {
@@ -1216,7 +1215,6 @@ function searchByField(module, searchOn, searchFor) {
 		module: module,
 		searchOn: searchOn
 	}
-	console.info(stateObj);
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) +' > Search > ' + searchOn + ' > ' + stateObj.searchTerm.charAt(0).toUpperCase() + stateObj.searchTerm.slice(1));
 	populateSearchResults(AdvSearchResults, module);
 }
@@ -1255,8 +1253,6 @@ function filterMediaByType(obj, resetSearch) {
 	$('.view-media-ui').hide();
 	$('.view-publishers-ui').hide();
 	document.getElementById('publisher-avatar').src = '';
-	console.info(history.state);
-	console.info(obj);
 	if ( ( (obj == '') && (history.state) && (history.state.searchResults != true) ) || (resetSearch) && ( (history.state) && (!history.state.isFront) ) ) {
 		var filteredMedia = searchAPI('media', '*', '');
 		$('#browse-media .module-links a.active').removeClass('active');
@@ -1305,7 +1301,6 @@ function filterMediaByType(obj, resetSearch) {
 			r.clean(undefined);
 		    return r;  
 		}
-		console.log(filterTypes[0]);
 		if (filterTypes[0]) {
 			filterTypes = filterTypes.unique();
 		} else {
@@ -1322,9 +1317,7 @@ function filterMediaByType(obj, resetSearch) {
 			}
 		}
 		$('#browse-media .module-links a[value="'+ filterTypes +'"]').addClass('active');
-			console.info(history.state);
 		if ( (!history.state) || (history.state.searchResults != true) ) {
-			console.log(filterTypesStr);
 			var filteredMedia = searchAPI('media', 'type', filterTypesStr);
 			var stateObj = {
 				currentView: 'media',
@@ -1344,7 +1337,6 @@ function filterMediaByType(obj, resetSearch) {
 				}
 				titleStr = ' > ' + titleStr;	
 			}
-			console.info(stateObj);
 			makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media' + titleStr);
 		} else {
 			if ( (history.state) && (!history.state.isFront) ) {
@@ -3435,7 +3427,6 @@ function goBack() {
 
 // MAKE HISTORY AND LOCATION
 function makeHistory(stateObj, newTitle) {
-	console.info(stateObj);
 	navCounter++;
 	if (location.protocol == 'app:') {		
 		if ( ( (document.getElementById('browser-nav')) && (history.state) && (history.state.isFront) ) || (navCounter == 1) ) {
@@ -3479,7 +3470,7 @@ function makeHistory(stateObj, newTitle) {
 	}
 	if (stateObj.searchTerm) {
 		newBreadcrumbs = ((!stateObj.searchOn) || (stateObj.searchOn == '*')) ? (newBreadcrumbs + ' / ' + stateObj.searchTerm) : (newBreadcrumbs + ' / <span id="breadcrumbs-searchOn">' + stateObj.searchOn + '</span> / ' + stateObj.searchTerm);
-		newUrl = ((!stateObj.searchOn) || (stateObj.searchOn == '*')) ? (newUrl + '/' + stateObj.searchTerm.toString().toLowerCase().replace(" ","-")) : (newUrl + '/' + stateObj.searchOn + '/' + stateObj.searchTerm.toString().toLowerCase().replace(" ","-"));
+		newUrl = ((!stateObj.searchOn) || (stateObj.searchOn == '*')) ? (newUrl + '/' + stateObj.searchTerm.toString().toLowerCase().replace(/\s/g , "-")) : (newUrl + '/' + stateObj.searchOn + '/' + stateObj.searchTerm.toString().toLowerCase().replace(/\s/g , "-"));
 	} else if (stateObj.subView) {
 		if (stateObj.artifactTitle) {
 			newBreadcrumbs = newBreadcrumbs + ' / <a onclick="setMediaTypeFilter(&apos;&apos;,true);" class="currentView-breadcrumb">Media</a> / <a onclick="loadPublisherEntity(this)" id="publisher-'+ stateObj.publisherId +'">'+ stateObj.artifactPublisher +'</a> / <a onclick="filterMediaByType(&apos;'+stateObj.mediaType+'&apos;)">' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + '</a> / ' + stateObj.artifactTitle;
