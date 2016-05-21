@@ -74,7 +74,11 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     $('.playlist-tracks tr').on ('click', function (e) {
         var el = $(this)
         var trackData = el.data();
-        loadTrack (trackData.name, trackData.url)
+        var ipfsURL = trackData.url.slice(0, trackData.track.fname.length);
+        var posterFrame = getObjects(files, 'type', 'preview');
+        posterFrame = (posterFrame[0]) ? (posterFrame[0]['fname']) : ('');
+
+        loadTrack (trackData.name, ipfsURL, trackData.track.fname, posterFrame);
         $('.playlist-tracks tr').removeClass ('selected');
         el.addClass('selected');
     })
@@ -328,8 +332,6 @@ function mountMediaBrowser(el, data) {
     $(el).html($('#media-template').html());
     var mediaData = applyMediaData(data)
     getUSDdayAvg();
-    var posterImage = IPFSHost + '/ipfs/' + mediaData['info']['extra-info']['DHT Hash']+'/'+mediaData['info']['extra-info']['posterFrame'];
-    console.log(posterImage);
 	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
 	    $('#audio-player').jPlayer({
 	        cssSelectorAncestor: "#playbar-container",
@@ -345,7 +347,6 @@ function mountMediaBrowser(el, data) {
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
-	        poster: posterImage,
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
@@ -365,7 +366,6 @@ function mountMediaBrowser(el, data) {
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
-	        poster: posterImage,
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
@@ -385,7 +385,6 @@ function mountMediaBrowser(el, data) {
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
-	        poster: posterImage,
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
@@ -405,7 +404,6 @@ function mountMediaBrowser(el, data) {
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
-	        poster: posterImage,
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
@@ -492,30 +490,33 @@ function BTCtoUSD (amount) {
     return Math.round((Number(amount)*day_avg).toString().substring(0, 16)*100)/100
 }
 
-function loadTrack (name, url) {
-	console.log(url);
+function loadTrack (name, url, fname, poster) {
 	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
-	        mp3: url
+	        mp3: url + '/' + fname,
+	        poster: poster
 	    });
 	} else if ( (filetype == 'mp4') || (filetype == 'm4v') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
-	        m4v: url
+	        m4v: url + '/' + fname,
+	        poster: poster
 	    });
 	} else if (filetype == 'webm') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
-	        webmv: url
+	        webmv: url + '/' + fname,
+	        poster: poster
 	    });
 	} else if (filetype == 'ogv') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
-	        ogv: url
+	        ogv: url + '/' + fname,
+	        poster: poster
 	    });
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') ) {
-		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster=""><source src="'+url+'" /><param name="autoplay" value="true" /></video>');
+		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="'+poster+'" height="444px" width="820px"><source src="'+url+'" /><param name="autoplay" value="true" /></video>');
 	}
 /* Enable autoplay on free artifacts
     if ($('.playbar-shadow:visible').length == 0) {
