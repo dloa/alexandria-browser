@@ -12,6 +12,7 @@
 #audio-player, #native-player {
 	max-width: 100%;
 	background: rgb(34, 34, 34);
+	margin-bottom: 15px;
 }
 .playbar {
     width: 100%;
