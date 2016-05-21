@@ -75,14 +75,13 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
         var el = $(this)
         var trackData = el.data();
         var trackPath = trackData.url.slice(0, '-'+escape(trackData.track.fname).length);
-        console.log(trackPath);
-        console.log(escape(trackData.track.fname));
         var posterFrame = getObjects(files, 'type', 'preview');
         posterFrame = (posterFrame[0]) ? (posterFrame[0]['fname']) : ('');
-
-        loadTrack (trackData.name, trackPath, trackData.track.fname, posterFrame);
-        $('.playlist-tracks tr').removeClass ('selected');
-        el.addClass('selected');
+		if ($('.tb-price-play', el).text() == 'Free!') {
+	        loadTrack (trackData.name, trackPath, trackData.track.fname, posterFrame);
+	        $('.playlist-tracks tr').removeClass ('selected');
+	        el.addClass('selected');
+		}
     })
 
     $('.tb-price-play', el).on ('click', showPaymentOption);
@@ -93,7 +92,7 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
         togglePlaybarShadow(true);
         var freePlayTimer = setTimeout("autoPlayFree()", 500);
 	    $('.jp-type-single').show();
-	    $('#audio-player').slideDown('slow');
+	    $('#audio-player').show();
     } else {
         togglePlaybarShadow(false);
     }
@@ -205,6 +204,7 @@ function applyMediaData(data) {
     	$('.pwyw-action-play').hide();
     }
     if(xinfo['files'][0]. sugBuy) {
+    	$('#audio-player').hide();
     	$('.pwyw-action-download').show();
 	    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy)
 	    $('.pwyw-price-suggest-download').text (xinfo['files'][0].sugBuy)
@@ -560,7 +560,7 @@ function onPaymentDone (action, file) {
         a.remove();
     }
     $('.jp-type-single').show();
-    $('#audio-player').slideDown('slow');
+    $('#audio-player').show();
     $('#audio-player').jPlayer("play");
 }
 
@@ -656,7 +656,6 @@ function setQR(address, amount) {
     if (amount) {
         var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=bitcoin:" + address + "?amount=" + amount;
         $('.pwyw-qrcode img').attr("src", url);
-    
         $('.pwyw-btc-address').text(address);
     }
 }
