@@ -625,7 +625,12 @@ function loadPublisherView(objMeta) {
 	} else {
 		document.getElementById('publisher-bitmsg').style.display = 'none';
 	}
-	publisherTime = new Date(parseInt(publisherTime));
+	publisherTime = parseInt(publisherTime);
+	console.log(publisherTime.length);
+	if (publisherTime.toString().length == 10) {
+		publisherTime = parseInt(publisherTime)*1000;
+	}
+	publisherTime = new Date(publisherTime);
 	document.getElementById('view-publisher-name').innerHTML = publisherName;
 	document.getElementById('publisher-FLO-address').innerHTML = publisherAddress;
 	generateQR(publisherAddress, 'publisher-QR', 80, 80, 'florincoin');
