@@ -74,9 +74,7 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     $('.playlist-tracks tr').on ('click', function (e) {
         var el = $(this)
         var trackData = el.data();
-        console.log(trackData.url);
-        console.log(trackData.track.fname.length);
-        var trackPath = trackData.url.slice(0, trackData.track.fname.length);
+        var trackPath = trackData.url.slice(0, '-'+trackData.track.fname.length);
         console.log(trackPath);
         var posterFrame = getObjects(files, 'type', 'preview');
         posterFrame = (posterFrame[0]) ? (posterFrame[0]['fname']) : ('');
@@ -497,26 +495,26 @@ function loadTrack (name, url, fname, poster) {
 	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
-	        mp3: url + '/' + fname,
-	        poster: poster
+	        mp3: url + fname,
+	        poster: url + poster
 	    });
 	} else if ( (filetype == 'mp4') || (filetype == 'm4v') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
-	        m4v: url + '/' + fname,
-	        poster: poster
+	        m4v: url + fname,
+	        poster: url + poster
 	    });
 	} else if (filetype == 'webm') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
-	        webmv: url + '/' + fname,
-	        poster: poster
+	        webmv: url + fname,
+	        poster: url + poster
 	    });
 	} else if (filetype == 'ogv') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
-	        ogv: url + '/' + fname,
-	        poster: poster
+	        ogv: url + fname,
+	        poster: url + poster
 	    });
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') ) {
 		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="'+poster+'" height="444px" width="820px"><source src="'+url+'" /><param name="autoplay" value="true" /></video>');
