@@ -493,6 +493,7 @@ function BTCtoUSD (amount) {
 }
 
 function loadTrack (name, url, fname, poster) {
+	$('#audio-player').show();
 	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
@@ -518,7 +519,8 @@ function loadTrack (name, url, fname, poster) {
 	        poster: url + poster
 	    });
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') ) {
-		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="'+poster+'" height="444px" width="820px"><source src="'+url+'" /><param name="autoplay" value="true" /></video>');
+		$('#audio-player').hide();
+		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="'+poster+'" height="444px" width="820px"><source src="'+ url + fname +'" /><param name="autoplay" value="true" /></video>');
 	}
 }
 
