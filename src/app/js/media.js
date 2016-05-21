@@ -54,7 +54,6 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     }
     console.log(files);
     files.forEach (function (file) {
-    	console.info(file.runtime);
         // If we are the preview image or an extra file, do not add it to the table for now.
         // ToDo: Add new table for extra files.
         // ToDo: Check for all different file types once implemented
@@ -225,7 +224,7 @@ function applyMediaData(data) {
 
     renderPlaylistFilesHTML(xinfo['files'], xinfo, $('.playlist-tracks'))
 
-    keepHash = media.torrent;
+    keepHash = (xinfo['DHT Hash']) ? (xinfo['DHT Hash']) : (media.torrent);
 
     console.log (media, tracks);
 

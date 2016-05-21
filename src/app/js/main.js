@@ -874,7 +874,7 @@ function loadArtifactView(objMeta) {
 	var mediaArtist = '';
 	var mediaFilename = '';
 	var wwwId = '';
-	var mediaTid = media['torrent'];
+	var mediaTid = (media['info']['extra-info']['DHT Hash']) ? (media['info']['extra-info']['DHT Hash']) : (media['torrent']);
 	var mediaFLO = media['publisher'];
 	if(media['payment']) {
 		var mediaPymnt = media['payment'];
