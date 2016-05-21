@@ -41,7 +41,7 @@ jQuery(document).ready(function($){
 	$('#search-main').on("keyup", function(e) {
 		var code = e.keyCode || e.which;
 		if (code == 13) {
-			fullSearch(document.getElementById('search-main').value);
+			fullSearch(htmlEscape(document.getElementById('search-main').value));
 		}
 	});
 
@@ -1145,7 +1145,7 @@ function fullSearch(searchFor) {
 		currentView: 'search',
 		searchResults: true
 	}
-	stateObj.searchTerm = (document.getElementById('search-main').value != '') ? (document.getElementById('search-main').value) : (searchFor);
+	stateObj.searchTerm = (document.getElementById('search-main').value != '') ? (htmlEscape(document.getElementById('search-main').value)) : (searchFor);
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Search > '+ stateObj.searchTerm);
 	populateSearchResults(publisherResults, 'publisher');
 	populateSearchResults(mediaResults, 'media');
@@ -3683,6 +3683,12 @@ function sendFloVault() {
 	}
 }
 
-function sendcallback(data) {
-//	alert('FLO Sent!');
+// HTML ESCAPE
+function htmlEscape(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
 }
