@@ -11,6 +11,8 @@
 
 #audio-player {
 	max-width: 100%;
+	margin-bottom: 15px;
+	background: rgb(34, 34, 34);
 }
 
      .playbar {
@@ -51,14 +53,18 @@
          position: relative;
          top: -19px;
          background-color: transparent;
-		 padding: 0 15px 0 0;
+		 margin: 0 15px 0 0;
+		 padding: 0;
 	 }
      
      .playbar .jp-play:before {
          content: '\e800'
      }
 
-     .playback .jp-stop {
+	button.jp-play:focus {
+	   outline: 0;
+	}
+    .playback .jp-stop {
          display: none;
      }
 
@@ -91,7 +97,7 @@
          width: calc( 100% - 50px - 50px - 50px - 10px);
          background-color: lightgrey;
          position: relative;
-         left: 19px;
+         left: 12px;
       }
 
      .playbar .jp-seek-bar {
@@ -180,10 +186,6 @@
     
     .playlist-table thead {
         color: #7c7c7c !important;
-    }
-    
-    .playlist-table {
-        margin-top: 15px
     }
     
     .pwyw-item .button-svg {

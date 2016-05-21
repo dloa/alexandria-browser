@@ -9,7 +9,6 @@ window.doMountMediaBrowser = function (el, data) {
     console.log (el, data);
     $('.media-cover img').attr('src','');
     $('.jp-type-single').hide();
-    $('#audio-player').slideUp();
     return mountMediaBrowser(el, data);
 }
 
@@ -330,18 +329,24 @@ function mountMediaBrowser(el, data) {
     $(el).html($('#media-template').html());
     var mediaData = applyMediaData(data)
     getUSDdayAvg();
+    var posterImage = IPFSHost + '/ipfs/' + mediaData['info']['extra-info']['DHT Hash']+'/'+mediaData['info']['extra-info']['posterFrame'];
+    console.log(posterImage);
 	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
 	    $('#audio-player').jPlayer({
 	        cssSelectorAncestor: "#playbar-container",
 	        swfPath: "/js",
 	        supplied: filetype,
+	        size: {
+	        	width: '820px',
+	        	height: '444px'
+	        },
 	        useStateClassSkin: true,
 	        autoBlur: false,
 	        smoothPlayBar: true,
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
-	        poster: IPFSHost + '/ipfs/' + mediaData['info']['extra-info']['DHT Hash']+'/'+mediaData['info']['extra-info']['posterFrame'],
+	        poster: posterImage,
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
@@ -353,7 +358,7 @@ function mountMediaBrowser(el, data) {
 	        supplied: "m4v",
 	        size: {
 	        	width: '820px',
-	        	height: '547px'
+	        	height: '444px'
 	        },
 	        useStateClassSkin: true,
 	        autoBlur: false,
@@ -361,7 +366,7 @@ function mountMediaBrowser(el, data) {
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
-	        poster: IPFSHost + '/ipfs/' + mediaData['info']['extra-info']['DHT Hash']+'/'+mediaData['info']['extra-info']['posterFrame'],
+	        poster: posterImage,
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
@@ -373,7 +378,7 @@ function mountMediaBrowser(el, data) {
 	        supplied: "webmv",
 	        size: {
 	        	width: '820px',
-	        	height: '547px'
+	        	height: '444px'
 	        },
 	        useStateClassSkin: true,
 	        autoBlur: false,
@@ -381,7 +386,7 @@ function mountMediaBrowser(el, data) {
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
-	        poster: IPFSHost + '/ipfs/' + mediaData['info']['extra-info']['DHT Hash']+'/'+mediaData['info']['extra-info']['posterFrame'],
+	        poster: posterImage,
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
@@ -393,7 +398,7 @@ function mountMediaBrowser(el, data) {
 	        supplied: "ogv",
 	        size: {
 	        	width: '820px',
-	        	height: '547px'
+	        	height: '444px'
 	        },
 	        useStateClassSkin: true,
 	        autoBlur: false,
@@ -401,7 +406,7 @@ function mountMediaBrowser(el, data) {
 	        keyEnabled: true,
 	        remainingDuration: true,
 	        toggleDuration: true,
-	        poster: IPFSHost + '/ipfs/' + mediaData['info']['extra-info']['DHT Hash']+'/'+mediaData['info']['extra-info']['posterFrame'],
+	        poster: posterImage,
 	        error: function (e) {
 	            console.error('got jplayer error', e)
 	        }
