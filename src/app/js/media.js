@@ -74,8 +74,9 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     $('.playlist-tracks tr').on ('click', function (e) {
         var el = $(this)
         var trackData = el.data();
-        var trackPath = trackData.url.slice(0, '-'+trackData.track.fname.length);
+        var trackPath = trackData.url.slice(0, '-'+escape(trackData.track.fname).length);
         console.log(trackPath);
+        console.log(escape(trackData.track.fname));
         var posterFrame = getObjects(files, 'type', 'preview');
         posterFrame = (posterFrame[0]) ? (posterFrame[0]['fname']) : ('');
 
