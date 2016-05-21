@@ -493,6 +493,11 @@ function BTCtoUSD (amount) {
 }
 
 function loadTrack (name, url, fname, poster) {
+	if (fname == 'none') {
+		$('#audio-player').hide();
+		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="'+poster+'" height="444px" width="820px"><source src="'+ url.slice(0,-1) + '" /><param name="autoplay" value="true" /></video>');
+		return false;
+	}
 	$('#audio-player').show();
 	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
 	    $('#audio-player').jPlayer("setMedia", {
