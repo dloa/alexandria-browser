@@ -9,12 +9,11 @@
   font-style: normal;
 }
 
-#audio-player {
+#audio-player, #native-player {
 	max-width: 100%;
 	margin-bottom: 15px;
 	background: rgb(34, 34, 34);
 }
-
      .playbar {
          width: 100%;
          min-height: 50px;

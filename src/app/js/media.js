@@ -564,6 +564,14 @@ function onPaymentDone (action, file) {
     $('#audio-player').jPlayer("play");
 }
 
+$('#audio-player').click(function(){
+	if ( $('#audio-player').jPlayer().data().jPlayer.status.paused == true ) {
+		$('#audio-player').jPlayer("play");
+	} else {
+		$('#audio-player').jPlayer("pause");
+	}
+});
+
 var lastAddress;
 
 function makePaymentToAddress(address, amount, done) {
