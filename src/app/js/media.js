@@ -74,11 +74,14 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     $('.playlist-tracks tr').on ('click', function (e) {
         var el = $(this)
         var trackData = el.data();
-        var ipfsURL = trackData.url.slice(0, trackData.track.fname.length);
+        console.log(trackData.url);
+        console.log(trackData.track.fname.length);
+        var trackPath = trackData.url.slice(0, trackData.track.fname.length);
+        console.log(trackPath);
         var posterFrame = getObjects(files, 'type', 'preview');
         posterFrame = (posterFrame[0]) ? (posterFrame[0]['fname']) : ('');
 
-        loadTrack (trackData.name, ipfsURL, trackData.track.fname, posterFrame);
+        loadTrack (trackData.name, trackPath, trackData.track.fname, posterFrame);
         $('.playlist-tracks tr').removeClass ('selected');
         el.addClass('selected');
     })
@@ -518,11 +521,6 @@ function loadTrack (name, url, fname, poster) {
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') ) {
 		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="'+poster+'" height="444px" width="820px"><source src="'+url+'" /><param name="autoplay" value="true" /></video>');
 	}
-/* Enable autoplay on free artifacts
-    if ($('.playbar-shadow:visible').length == 0) {
-	    $('#audio-player').jPlayer("play");
-    }
-*/
 }
 
 function togglePWYWOverlay (bool) {
