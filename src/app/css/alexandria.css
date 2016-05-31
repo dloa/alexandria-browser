@@ -641,7 +641,7 @@ ul#media-type-select-list {
 	height: 32px;
 	padding: 0 15px 0 0;
 }
-#browse-media-wrap .row .media-meta, #browse-media-wrap .row .media-runtime, #browse-media-wrap .row .publisher-date, #publisher-media-list li .media-runtime {
+#browse-media-wrap .row .media-meta, #browse-media-wrap .row .media-runtime, #browse-media-wrap .row .publisher-date, #publisher-media-list li .media-meta {
 	color: #9797a0;
 	font-size: .85em;
 }

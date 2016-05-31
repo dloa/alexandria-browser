@@ -39,22 +39,23 @@ box-sizing: border-box;
 .playbar .jp-play, .playbar .jp-stop {
     float: left;
     height: 40px;
+    width: 29px;
     font-family: 'mediaicns';
     border: none;
     font-size: 34px;
     position: relative;
     top: -19px;
     background-color: transparent;
-margin: 0 15px 0 0;
-padding: 0;
+	margin: 0 12px 0 0;
+	padding: 0;
 }
 
 .playbar .jp-play:before {
     content: '\e800'
 }
 
-button.jp-play:focus {
-outline: 0;
+button.jp-play:focus, .jp-volume-controls button:focus {
+	outline: 0;
 }
 .playback .jp-stop {
     display: none;
@@ -75,21 +76,17 @@ outline: 0;
  .playbar .jp-current-time {
     position: relative;
     top: -9px;
-    left: 5px;
     z-index: -1;
     float: left;
-    padding: 0 6px 0 0;
  }
 
  .playbar .jp-progress {
     height: 3px;
     float: left;
-    margin-top: 1px;
-    margin-left: 0;
-    width: calc( 100% - 50px - 50px - 50px - 10px);
+    margin: 1px 12px;
+    width: calc( 100% - 52px - 40px - 24px - 40px - 105px);
     background-color: lightgrey;
     position: relative;
-    left: 12px;
  }
 
 .playbar .jp-seek-bar {
@@ -120,13 +117,71 @@ outline: 0;
 }
 
 .playbar .jp-duration {
-    float: right;
+    float: left;
     line-height: 50px;
-    padding-right: 7px;
     height: 100%;
     position: relative;
     top: -23px;
-    padding: 0;
+}
+
+.jp-volume-controls {
+    width: 95px;
+    position: relative;
+    float: left;
+    margin-left: 12px;
+    top: -28px;
+}
+
+.jp-volume-bar {
+    background-color: #aaa;
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    padding: 2px 2px 1px;
+    overflow: hidden;
+    cursor: pointer;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    margin-top: 33px;
+}
+
+.jp-volume-bar-value {
+    background-color: #000;
+    height: 100%;
+}
+
+.jp-volume-controls button {
+	position: absolute;
+	display: block;
+	overflow: hidden;
+	margin: 0px;
+	padding: 0px;
+	width: 16px;
+	height: 16px;
+	border: medium none;
+	cursor: pointer;
+    font-family: 'mediaicns';
+    background-color: transparent;
+    text-align: left;
+}
+
+.jp-volume-controls .jp-mute, .jp-volume-controls .jp-unmute {
+	left: 0px;
+	top: 14px;
+}
+
+.jp-volume-controls .jp-mute:before {
+    content: '\e804';
+}
+
+.jp-volume-controls .jp-volume-max {
+	left: 84px;
+	top: 14px;
+}
+
+.jp-volume-controls .jp-volume-max:before {
+    content: '\e805';
 }
 
 html {
