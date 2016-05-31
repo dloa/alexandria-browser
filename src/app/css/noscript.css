@@ -1,0 +1,15 @@
+header, main, #app-shading, #footer {
+	display: none
+}
+#noscript {
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	margin-top: -1em;
+	width: 100%;
+	text-align: center;
+}
+#noscript h1 {
+	font-weight: 100;
+}
