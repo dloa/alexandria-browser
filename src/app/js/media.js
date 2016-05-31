@@ -77,6 +77,9 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
         var trackPath = trackData.url.slice(0, '-'+escape(trackData.track.fname).length);
         var posterFrame = getObjects(files, 'type', 'preview');
         posterFrame = (posterFrame[0]) ? (posterFrame[0]['fname']) : ('');
+        if (posterFrame == '') {
+        	posterFrame = 'alexandria-default-posterframe.png';
+        }
 		if ($('.tb-price-play', el).text() == 'Free!') {
 	        loadTrack (trackData.name, trackPath, trackData.track.fname, posterFrame);
 	        $('.playlist-tracks tr').removeClass ('selected');
@@ -165,11 +168,13 @@ function applyMediaData(data) {
 			xinfo['files'][i] = {
 				fname: file,
 				runtime: xinfo['runtime'],
-				type: payment['type'],
 				minBuy: 0,
 				sugBuy: 0,
 				minPlay: 0,
 				sugPlay: 0,
+			}
+			if (payment) {
+				xinfo['files'][i]['type'] = payment['type'];
 			}
 			if (xinfo['pwyw']) {
 		    	var pwywArray = xinfo['pwyw'].split(',');
@@ -340,8 +345,7 @@ function mountMediaBrowser(el, data) {
 	        swfPath: "/js",
 	        supplied: filetype,
 	        size: {
-	        	width: '820px',
-	        	height: '444px'
+	        	width: '820px'
 	        },
 	        useStateClassSkin: true,
 	        autoBlur: false,
@@ -360,7 +364,7 @@ function mountMediaBrowser(el, data) {
 	        supplied: "m4v",
 	        size: {
 	        	width: '820px',
-	        	height: '444px'
+	        	height: '461px'
 	        },
 	        useStateClassSkin: true,
 	        autoBlur: false,
@@ -379,7 +383,7 @@ function mountMediaBrowser(el, data) {
 	        supplied: "webmv",
 	        size: {
 	        	width: '820px',
-	        	height: '444px'
+	        	height: '461px'
 	        },
 	        useStateClassSkin: true,
 	        autoBlur: false,
@@ -398,7 +402,7 @@ function mountMediaBrowser(el, data) {
 	        supplied: "ogv",
 	        size: {
 	        	width: '820px',
-	        	height: '444px'
+	        	height: '461px'
 	        },
 	        useStateClassSkin: true,
 	        autoBlur: false,
@@ -493,39 +497,44 @@ function BTCtoUSD (amount) {
 }
 
 function loadTrack (name, url, fname, poster) {
+	fname = encodeURI(fname);
+	console.info(url + fname);
+	var posterurl = url;
+	if (poster == 'alexandria-default-posterframe.png') {
+		posterurl = IPFSHost+'/ipfs/QmQhoySfbL9j4jbDRSsZaeu3DACVBYW1o9vgs8aZAc5bLP/';
+	}
 	if (fname == 'none') {
 		$('#audio-player').hide();
-		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="'+poster+'" height="444px" width="820px"><source src="'+ url.slice(0,-1) + '" /><param name="autoplay" value="true" /></video>');
+		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="' + posterurl + poster +'" height="461px" width="820px"><source src="'+ url.slice(0,-1) + '" /><param name="autoplay" value="true" /></video>');
 		return false;
 	}
 	$('#audio-player').show();
 	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
-	        mp3: url + fname,
-	        poster: url + poster
-	    });
+	        mp3: url + fname
+		});
 	} else if ( (filetype == 'mp4') || (filetype == 'm4v') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        m4v: url + fname,
-	        poster: url + poster
+	        poster: posterurl + poster
 	    });
 	} else if (filetype == 'webm') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        webmv: url + fname,
-	        poster: url + poster
+	        poster: posterurl + poster
 	    });
 	} else if (filetype == 'ogv') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        ogv: url + fname,
-	        poster: url + poster
+	        poster: posterurl + poster
 	    });
-	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') ) {
+	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
 		$('#audio-player').hide();
-		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="'+poster+'" height="444px" width="820px"><source src="'+ url + fname +'" /><param name="autoplay" value="true" /></video>');
+		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="' + posterurl + poster +'" height="461px" width="820px"><source src="'+ url + fname +'" /><param name="autoplay" value="true" /></video>');
 	}
 }
 

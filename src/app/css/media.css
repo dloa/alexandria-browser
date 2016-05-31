@@ -7,9 +7,6 @@
 #browse-media-wrap .container {
 	margin-bottom: 30px;
 }
-.top {
-	margin-bottom: 15px;
-}
 .media-info {
 	display: block;
 	-webkit-justify-content: space-around;
@@ -29,13 +26,15 @@
 		-webkit-flex-direction: column;
 	    flex-direction: column;
 		margin: 0;
-		padding-right: 15px;
 	}
 	
 	.media-info,
 	.media-cover {
 		-webkit-flex: 1;
 	    flex: 1;
+	}
+	.media-cover {
+		padding-left: 15px;
 	}
 }
 
@@ -89,6 +88,7 @@
 
 .bottom {
     width: 100%;
+    margin-top: 15px;
 }
 
 .pwyw-container {

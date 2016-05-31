@@ -663,7 +663,7 @@ function loadPublisherView(objMeta) {
 			var thisTitle = mediaTitle;
 			$('#publisher-media-list li').each(function(){
 				var checkTitle = $(this).find('.media-title').text();
-				if(checkTitle == thisTitle){
+				if(checkTitle.toLowerCase() == thisTitle.toLowerCase()){
 					$(this).remove();
 				}
 			});
@@ -1405,7 +1405,7 @@ function populateSearchResults(results, module) {
 			var thisTitleAndPublisher = mediaTitle+publisherID;
 			$('#browse-media-wrap .row').each(function(){
 				var checkTitleAndPublisher = $(this).find('.media-title').text()+$(this).find('.publisher-id').text();
-				if(checkTitleAndPublisher == thisTitleAndPublisher){
+				if(checkTitleAndPublisher.toLowerCase() == thisTitleAndPublisher.toLowerCase()){
 					$(this).remove();
 				}
 			});

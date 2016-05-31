@@ -11,7 +11,7 @@
 
 #audio-player, #native-player {
 	max-width: 100%;
-	background: rgb(34, 34, 34);
+//	background: transparent url('../img/alexandria-default-posterframe.png');
 	margin-bottom: 15px;
 }
 .playbar {
@@ -125,19 +125,18 @@ button.jp-play:focus, .jp-volume-controls button:focus {
 }
 
 .jp-volume-controls {
-    width: 95px;
+    width: 97px;
     position: relative;
     float: left;
     margin-left: 12px;
-    top: -28px;
+    top: -27px;
 }
 
 .jp-volume-bar {
     background-color: #aaa;
     position: absolute;
-    width: 100%;
     height: 4px;
-    padding: 2px 2px 1px;
+    padding: 1px;
     overflow: hidden;
     cursor: pointer;
     top: 0px;
@@ -147,7 +146,7 @@ button.jp-play:focus, .jp-volume-controls button:focus {
 }
 
 .jp-volume-bar-value {
-    background-color: #000;
+    background-color: #222;
     height: 100%;
 }
 
@@ -157,9 +156,9 @@ button.jp-play:focus, .jp-volume-controls button:focus {
 	overflow: hidden;
 	margin: 0px;
 	padding: 0px;
-	width: 16px;
-	height: 16px;
-	border: medium none;
+	width: 15px;
+	height: 15px;
+	border: 0 none;
 	cursor: pointer;
     font-family: 'mediaicns';
     background-color: transparent;
@@ -176,7 +175,7 @@ button.jp-play:focus, .jp-volume-controls button:focus {
 }
 
 .jp-volume-controls .jp-volume-max {
-	left: 84px;
+	right: 0;
 	top: 14px;
 }
 
