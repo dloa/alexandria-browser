@@ -175,6 +175,7 @@ function applyMediaData(data) {
 			}
 			if (payment) {
 				xinfo['files'][i]['type'] = payment['type'];
+				console.error('Something about old payment format!');
 			}
 			if (xinfo['pwyw']) {
 		    	var pwywArray = xinfo['pwyw'].split(',');

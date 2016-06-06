@@ -84,7 +84,7 @@ button.jp-play:focus, .jp-volume-controls button:focus {
     height: 3px;
     float: left;
     margin: 1px 12px;
-    width: calc( 100% - 52px - 40px - 24px - 40px - 105px);
+    width: calc( 100% - 52px - 40px - 24px - 40px - 115px);
     background-color: lightgrey;
     position: relative;
  }
