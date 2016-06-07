@@ -177,19 +177,19 @@ jQuery(document).ready(function($){
 	});
 
 	// API Server ID and Control
-	if(librarianHost == 'https://libraryd.alexandria.io'){
+	if(librarianHost == 'https://api.alexandria.io'){
 		$('#serverID').text('Gateway');
 	} else {
 		$('#serverID').text('Local');
 	}
 	if (location.protocol == 'app:') {
 		$('#serverID').click(function(){
-			if(librarianHost == 'https://libraryd.alexandria.io'){
+			if(librarianHost == 'https://api.alexandria.io'){
 				librarianHost = 'http://localhost:41289';
 				IPFSHost = 'http://localhost:8080';
 				$('#serverID').text('Local');
 			} else {
-				librarianHost = 'https://libraryd.alexandria.io'
+				librarianHost = 'https://api.alexandria.io'
 				IPFSHost = 'http://ipfs.alexandria.io';
 				$('#serverID').text('Gateway');
 			}
@@ -1738,13 +1738,13 @@ function tradeModal() {
 			alert('Please select an address in Request Tokens section');
 		} else {
 			$.ajax({
-				url: 'http://trade.blocktech.com:5000/flobalance',
+				url: 'http://api.alexandria.io/tradebot/flobalance',
 				success: function(e) {
 					document.getElementById('trade-balance').innerHTML = Math.round((.5*e*(Math.round((FLOUSD/BTCUSD)*100000000)/100000000))*100000000)/100000000;
 				}
 			});
 			$.ajax({
-				url: 'http://tradebot.alexandria.io/depositaddress?floaddress='+floAddress,
+				url: 'http://api.alexandria.io/tradebot/depositaddress?floaddress='+floAddress,
 				success: function(e) {
 					document.getElementById('trade-address').innerHTML = e;
 					document.getElementById('trade-modal').style.display = 'block';
