@@ -9,11 +9,11 @@
     </script>
     <script type="text/javascript">
      /* hacks */
-     window.IPFSHost = 'http://ipfs.alexandria.media/ipfs';
-     window.librarianHost = 'http://localhost:8079';
+	 window.IPFSHost = 'http://ipfs.alexandria.io';
+	 window.librarianHost = 'https://api.alexandria.io';
     </script>
 
-    <script src="vendor/jquery/dist/jquery.min.js"></script>
+    <script src="js/vendor/jquery-2.1.1.min.js"></script>
     <script src="vendor/moment/min/moment.min.js"></script>
     <link rel="stylesheet" href="css/fonts.css" />
     <link rel="stylesheet" href="css/normalize.min.css" />
@@ -21,13 +21,18 @@
     <link rel="stylesheet" href="css/alexandria.css" />
     <link rel="stylesheet" href="css/media.css" />
 	<link rel="stylesheet" href="css/media-play.css" />
+	<noscript>
+		<link rel="stylesheet" href="css/noscript.css" />	
+	</noscript>
 	<style>
+/*
 		.wrapper {
 			width: 100%;
 			max-width: 100%;
 			box-sizing: border-box;
 			padding: 0 15px;
 		}
+*/
 	</style>
 </head>
 
@@ -169,6 +174,13 @@
                                     </div>
                                 </div>
                                 <div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
+								<div class="jp-volume-controls">
+									<button class="jp-mute" role="button" tabindex="0"></button>
+									<button class="jp-volume-max" role="button" tabindex="0"></button>
+									<div class="jp-volume-bar">
+										<div class="jp-volume-bar-value"></div>
+									</div>
+								</div>					
                                 <div class="jp-toggles" style="display: none">
                                     <button class="jp-repeat" role="button" tabindex="0">repeat</button>
                                 </div>
@@ -231,8 +243,7 @@
     <div class="pwyw-overlay"></div>
     </script>
     <div id="media-browser" class="wrapper"></div>
-    <iframe id="my_iframe" style="display:none;"></iframe>
-    <script src="js/vendor/jquery-2.1.1.min.js"></script>
+	<script src="vendor/jquery-ui/jquery-ui.min.js"></script>
     <script src="vendor/jplayer/dist/jplayer/jquery.jplayer.min.js "></script>
 	<script src="js/search.js"></script>
 	<script src="js/main.js"></script>
@@ -240,9 +251,10 @@
 
     <script type="text/javascript">
      $('document').ready(function () {
-         var txid = location.hash || "fc9220025df5f2bf76fcda8f66bced4c95846e136ff3f5ff4c36fede3a5e3fc5";
-         var data = window.searchAPI('media', 'txid', txid.replace(/^#/, ''));
-
+         var txid = location.hash.slice(2);
+         console.log(txid);
+//         var data = window.searchAPI('media', 'txid', txid.replace(^#/, ''));
+         var data = window.searchAPI('media', 'txid', txid);
          console.log (txid, data);
          window.doMountMediaBrowser('#media-browser', data);
 

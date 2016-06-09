@@ -87,8 +87,8 @@ jQuery(document).ready(function($){
 		if ( ( ($('#tip-modal').css('display') == 'block') && ($('#tip-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#tip-modal')[0]) && ( (!$(e.target).parents('.tip-icon')[0]) ) ) ) {
 			$('#tip-modal').fadeOut(fadeTimer);
 		}
-		if (window.location.pathname != '/embed.html') {
-			if ( (document.getElementById('bitmsg-modal').style.display == 'block') && ( (!$(e.target).parents('#bitmsg-modal')[0]) && (!$(e.target).parents('.bitmsg-icon')[0]) ) ) {
+	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
+		if ( (document.getElementById('bitmsg-modal').style.display == 'block') && ( (!$(e.target).parents('#bitmsg-modal')[0]) && (!$(e.target).parents('.bitmsg-icon')[0]) ) ) {
 				document.getElementById('bitmsg-modal').style.display = 'none';
 			}
 		}
@@ -819,13 +819,13 @@ function loadArtifactView(objMeta) {
 		}
 	}
 	// HIDE OTHER VIEWS
-	if (window.location.pathname != '/embed.html') {
+	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
 		document.getElementById('intro').style.display = 'none';
 	}
 	$('main').hide();
 	hideOverlay();
 	resetInterface();
-	if (window.location.pathname != '/embed.html') {
+	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
 		document.getElementById('search').style.display = 'block';
 	}
 	$('.wallet-ui').hide();
@@ -974,7 +974,7 @@ function loadArtifactView(objMeta) {
 	}
 	// SHOW AND BUILD MEDIA UI
 	$('.view-media-ui').show();
-	if (window.location.pathname != '/embed.html') {
+	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
 		document.getElementById('viewlabel').style.display = 'inline-block';
 	}
 	$('#media-txnID').html(mediaID);	
@@ -2381,8 +2381,7 @@ function unlockPWYW(obj, currency) {
 function hideOverlay() {
 	$('.overlay-modal').fadeOut(fadeTimer);
 	$('.overlay-modal input[type="text"]').val('');
-	if (window.location.pathname != '/embed.html') {
-		document.getElementById('disabler').style.display = 'none';	
+	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {		document.getElementById('disabler').style.display = 'none';	
 		document.getElementById('app-overlay').style.display = 'none';
 	}
 }
@@ -3112,8 +3111,7 @@ function resetInterface() {
 	$('video').trigger('pause');
 	$('#audio-player').jPlayer('destroy');
 	document.getElementById('tip-comment').value = '';
-	if (window.location.pathname != '/embed.html') {
-		document.getElementById('viewlabel').style.display = 'none';
+	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {		document.getElementById('viewlabel').style.display = 'none';
 		document.getElementById('disabler').style.display = 'none';
 		if (document.getElementById('intro').style.display == 'block') {
 			$('#intro').fadeOut(fadeTimer);
@@ -3133,7 +3131,7 @@ function resetInterface() {
 			'left':'initial',
 			'right':'initial'
 		}).hide();
-	if (window.location.pathname != '/embed.html') {
+	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
 		if (document.getElementById('user-modal').style.display == 'block') {
 			$('#user-modal').fadeOut(fadeTimer);
 		}
@@ -3322,8 +3320,8 @@ function replaceSVG() {
 }
 
 // SPINNER
-if (window.location.pathname != '/embed.html') {
-	var largeSpinConfig = {
+	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
+		var largeSpinConfig = {
 		lines: 17, // The number of lines to draw
 		length: 7, // The length of each line
 		width: 1, // The line thickness
@@ -3495,8 +3493,7 @@ function makeHistory(stateObj, newTitle) {
 		newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
 		
 	}
-	if (window.location.pathname != '/embed.html') {
-		document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
+	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {		document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
 		document.getElementById('alexandria-breadcrumbs').style.display = 'inline-block';
 		document.getElementById('viewlabel').style.display = 'inline-block';
 	}
@@ -3508,8 +3505,8 @@ function makeHistory(stateObj, newTitle) {
         if (window.location.hostname === 'alexandria.io')
             prefix = 'https://embed.alexandria.io';
                 
-	if (stateObj.mediaType == 'music') {
-		embedUrl = prefix + '/music.html#' + stateObj.subView;
+	if ( (stateObj.mediaType == 'music') || (stateObj.mediaType == 'video') ) {
+		embedUrl = prefix + '/artifact.html#' + stateObj.subView;
 	} else {
 		embedUrl = prefix + '/embed.html#' + stateObj.subView;
 	}
