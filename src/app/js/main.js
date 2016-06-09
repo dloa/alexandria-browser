@@ -3505,7 +3505,7 @@ function makeHistory(stateObj, newTitle) {
         if (window.location.hostname === 'alexandria.io')
             prefix = 'https://embed.alexandria.io';
                 
-	if ( (stateObj.mediaType == 'music') || (stateObj.mediaType == 'video') ) {
+	if ( (stateObj.mediaType == 'music') || (stateObj.mediaType == 'video') || (stateObj.mediaType == 'movie') ) {
 		embedUrl = prefix + '/artifact.html#' + stateObj.subView;
 	} else {
 		embedUrl = prefix + '/embed.html#' + stateObj.subView;
