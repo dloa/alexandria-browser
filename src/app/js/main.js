@@ -190,24 +190,24 @@ jQuery(document).ready(function($){
 				$('#serverID').text('Local');
 			} else {
 				librarianHost = 'https://api.alexandria.io'
-				IPFSHost = 'http://ipfs.alexandria.io';
+				IPFSHost = 'https://ipfs.alexandria.io';
 				$('#serverID').text('Gateway');
 			}
 			resetAlexandria();
 		});
 	} else {
-		if (IPFSHost == 'http://ipfs.alexandria.io') {
+		if (IPFSHost == 'https://ipfs.alexandria.io') {
 			$('#IPFS-switch').text('IPFS: Gateway');
 		} else {
 			$('#IPFS-switch').text('IPFS: Local');
 		}
 		$('#IPFS-switch').click(function(){
 			$('#audio-player').jPlayer("stop");
-			if(IPFSHost == 'http://ipfs.alexandria.io'){
+			if(IPFSHost == 'https://ipfs.alexandria.io'){
 				IPFSHost = 'http://localhost:8080';
 				$('#IPFS-switch').text('IPFS: Local');
 			} else {
-				IPFSHost = 'http://ipfs.alexandria.io';
+				IPFSHost = 'https://ipfs.alexandria.io';
 				$('#IPFS-switch').text('IPFS: Gateway');
 			}
 			resetAlexandria();
