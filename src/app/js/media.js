@@ -228,10 +228,11 @@ function applyMediaData(data) {
 	if (xinfo.coverArt) {
     	$('.playbar-shadow').css('width','initial');
 	    $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  xinfo.coverArt]));
-		$('.media-cover').show();
+		$('.media-cover').css('width','50%').show();
+		$('.media-info').css('width','50%');
 	} else {
 	    $('.media-cover').hide();
-    	$('.playbar-shadow').css('width','100%');
+		$('.media-info').css('width','100%');
 	}
 
     renderPlaylistFilesHTML(xinfo['files'], xinfo, $('.playlist-tracks'))
@@ -366,6 +367,24 @@ function mountMediaBrowser(el, data) {
 	        size: {
 	        	width: '820px',
 	        	height: '461px'
+	        },
+	        useStateClassSkin: true,
+	        autoBlur: false,
+	        smoothPlayBar: true,
+	        keyEnabled: true,
+	        remainingDuration: true,
+	        toggleDuration: true,
+	        error: function (e) {
+	            console.error('got jplayer error', e)
+	        }
+	    })
+	} else if ( (filetype == 'ogg') || (filetype == 'oga') ) {
+	    $('#audio-player').jPlayer({
+	        cssSelectorAncestor: "#playbar-container",
+	        swfPath: "/js",
+	        supplied: "ogg,oga",
+	        size: {
+	        	width: '820px'
 	        },
 	        useStateClassSkin: true,
 	        autoBlur: false,
@@ -519,6 +538,12 @@ function loadTrack (name, url, fname, poster) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        m4v: url + fname,
+	        poster: posterurl + poster
+	    });
+	} else if ( (filetype == 'ogg') || (filetype == 'oga') ) {
+	    $('#audio-player').jPlayer("setMedia", {
+	        title: name,
+	        oga: url + fname,
 	        poster: posterurl + poster
 	    });
 	} else if (filetype == 'webm') {
