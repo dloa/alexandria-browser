@@ -276,7 +276,7 @@ function loadTipModal(obj) {
 	if (document.getElementById('sendTipBtn')) {
 		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + mediaFLO + '", "FLO")');
 	}
-	if (mediaBTC != 'BTC address') {
+	if ( (mediaBTC != 'BTC address') && (mediaBTC != '') ) {
 		$('#tipAdd-BTC').html(mediaBTC);
 		$('.modal-tabs li[name="tip-bitcoin"]').removeClass('hidden');
 		generateQR(mediaBTC, 'BTC-tip-QR', 100, 100, 'bitcoin');

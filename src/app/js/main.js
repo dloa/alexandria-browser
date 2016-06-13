@@ -202,8 +202,6 @@ jQuery(document).ready(function($){
 			$('#IPFS-switch').text('IPFS: Local');
 		}
 		$('#IPFS-switch').click(function(){
-			$('#native-player').remove();
-			$('#audio-player').jPlayer('destroy');
 			if(IPFSHost == 'https://ipfs.alexandria.io'){
 				IPFSHost = 'http://localhost:8080';
 				$('#IPFS-switch').text('IPFS: Local');
@@ -524,8 +522,6 @@ var publishedArtifactSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink=
 // GET ALL PUBLISHERS
 function getAllPublishers() {
 	document.getElementById('publisher-avatar').src = '';
-	$('#native-player').remove();
-	$('#audio-player').jPlayer('destroy');
 	$('#browse-media .module-links a.active').removeClass('active');
 	document.getElementById('intro').style.display = 'none';
 	$('.sharing-ui').hide();
@@ -1240,8 +1236,7 @@ function filterMediaByType(obj, resetSearch) {
 	$('.publisher-ui').hide();
 	document.getElementById('search').style.display = 'block';
 	document.getElementById('share-modal').style.display = 'none';
-	$('#tipAdd-FLO').html('');
-	$('#tipAdd-BTC').html('');
+	resetTipModal();
 	document.getElementById('tip-modal').style.display = 'none';
 	$('#user-modal').fadeOut(fadeTimer);
 	$('.view-media-ui').hide();
@@ -3088,8 +3083,7 @@ function resetInterface() {
 	$('#browse-media-wrap .row').remove();
 	document.getElementById('share-modal').style.display = 'none';
 	document.getElementById('tip-modal').style.display = 'none';
-	$('#tipAdd-FLO').html('');
-	$('#tipAdd-BTC').html('');
+	resetTipModal();
 	$('#share-modal').css({
 			left:'initial',
 			right:'initial'
@@ -3121,8 +3115,7 @@ function resetAlexandria() {
 			left:'initial',
 			right:'initial'
 		}).hide();
-	$('#tipAdd-FLO').html('');
-	$('#tipAdd-BTC').html('');
+	resetTipModal();
 	$('#tip-modal').css({
 			'left':'initial',
 			'right':'initial'
@@ -3136,6 +3129,15 @@ function resetAlexandria() {
 	$('#app-shading').css('bottom','0');
 	filterMediaByType('', true);
 }
+
+// RESET TIP MODAL
+function resetTipModal() {
+	$('.ri-publisher').text('');
+	$('.ri-btc-address').text('');
+	$('#tipAdd-FLO').html('');
+	$('#tipAdd-BTC').html('');
+}
+
 
 // CLEAR MODAL
 function clearModal() {
@@ -3391,6 +3393,7 @@ function checkConnection() {
 function goBack() {
 	$('#native-player').remove();
 	$('#audio-player').jPlayer('destroy');
+	resetTipModal();
 	navCounter--;
 	history.back();
 }
