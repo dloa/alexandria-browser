@@ -271,9 +271,18 @@ function loadTipModal(obj) {
 		var mediaBTC = $('.ri-btc-address').text();
 	}
 	$('#tipAdd-FLO').html(mediaFLO);
+	// GENERATE QR CODE FOR FLO TIPS
+	generateQR(mediaFLO, 'tip-QR', 100, 100, 'florincoin');
+	if (document.getElementById('sendTipBtn')) {
+		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + mediaFLO + '", "FLO")');
+	}
 	if (mediaBTC != 'BTC address') {
 		$('#tipAdd-BTC').html(mediaBTC);
 		$('.modal-tabs li[name="tip-bitcoin"]').removeClass('hidden');
+		generateQR(mediaBTC, 'BTC-tip-QR', 100, 100, 'bitcoin');
+		if (document.getElementById('sendBTCTipBtn')) {
+			document.getElementById('sendBTCTipBtn').setAttribute('onclick','sendTip(this, BTCclient, "' + mediaBTC + '", "BTC")');
+		}
 	} else {
 		$('#tipAdd-BTC').text('No Address Available');
 		$('.modal-tabs li[name="tip-bitcoin"]').addClass('hidden');

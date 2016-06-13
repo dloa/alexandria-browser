@@ -858,11 +858,6 @@ function loadArtifactView(objMeta) {
 	mediaID = thisMediaData[0]['txid'];
 	var mediaPublisher = thisMediaData[0]['publisher-name'];
 	var publisherID = thisMediaData[0]['media-data']['alexandria-media']['publisher'];
-	// GENERATE QR CODE FOR FLO TIPS
-	generateQR(publisherID, 'tip-QR', 100, 100, 'florincoin');
-	if (document.getElementById('sendTipBtn')) {
-		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + publisherID + '", "FLO")');
-	}
 	var media = thisMediaData[0]['media-data']['alexandria-media'];
 	var mediaType = media.type;
 	var mediaInfo = media.info;
@@ -980,13 +975,6 @@ function loadArtifactView(objMeta) {
 	}
 	$('#media-txnID').html(mediaID);	
 	$('main:visible .FLO-address').html(mediaFLO);
-	if (mediaBTC) {
-		$('main:visible .BTC-address').html(mediaBTC);
-		if (document.getElementById('sendBTCTipBtn')) {
-			generateQR(mediaBTC, 'BTC-tip-QR', 100, 100, 'bitcoin');
-			document.getElementById('sendBTCTipBtn').setAttribute('onclick','sendTip(this, BTCclient, "' + mediaBTC + '", "BTC")');
-		}
-	}
 	$('#media-view-entity .entity-meta-header h2').html(mediaTitle);
 	if (mediaArtist) {
 		document.getElementById('media-artist-name').outerHTML = '<h3 id="media-artist-name" onclick="searchByField(&apos;media&apos;, &apos;info_extra&apos;, &apos;'+ mediaArtist +'&apos;)">'+ mediaArtist +'</h3>';
