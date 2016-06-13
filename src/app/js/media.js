@@ -560,7 +560,10 @@ function loadTrack (name, url, fname, poster) {
 	    });
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
 		$('#audio-player').hide();
-		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="' + posterurl + poster +'" height="461px" width="820px"><source src="'+ url + fname +'" /><param name="autoplay" value="true" /></video>');
+		if ('#native-player') {
+			$('#native-player').remove();
+		}
+		$('#playbar-container').hide().after('<video id="native-player" controls="controls" poster="' + posterurl + poster +'" height="461px" width="820px"><source src="'+ url + fname +'" /><param name="autoplay" value="true" /></video>');
 	}
 }
 

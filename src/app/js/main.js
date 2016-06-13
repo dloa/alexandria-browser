@@ -202,7 +202,8 @@ jQuery(document).ready(function($){
 			$('#IPFS-switch').text('IPFS: Local');
 		}
 		$('#IPFS-switch').click(function(){
-			$('#audio-player').jPlayer("stop");
+			$('#native-player').remove();
+			$('#audio-player').jPlayer('destroy');
 			if(IPFSHost == 'https://ipfs.alexandria.io'){
 				IPFSHost = 'http://localhost:8080';
 				$('#IPFS-switch').text('IPFS: Local');
@@ -523,7 +524,7 @@ var publishedArtifactSVG = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink=
 // GET ALL PUBLISHERS
 function getAllPublishers() {
 	document.getElementById('publisher-avatar').src = '';
-	$('video').trigger('pause');
+	$('#native-player').remove();
 	$('#audio-player').jPlayer('destroy');
 	$('#browse-media .module-links a.active').removeClass('active');
 	document.getElementById('intro').style.display = 'none';
@@ -558,7 +559,7 @@ function getAllPublishers() {
 
 // PUBLISHER SINGLE ENTITY VIEW
 function loadPublisherEntity(obj) {
-	$('video').trigger('pause');
+	$('#native-player').remove();
 	$('#audio-player').jPlayer('destroy');
 	var publisherNav = $(obj).parents('.publisher-entity').hasClass('publisher-entity');
 	if (publisherNav == true) {
@@ -1240,7 +1241,7 @@ function setMediaTypeFilter(obj, resetSearch) {
 }
 
 function filterMediaByType(obj, resetSearch) {
-	$('video').trigger('pause');
+	$('#native-player').remove();
 	$('#audio-player').jPlayer('destroy');
 	document.getElementById('intro').style.display = 'none';
 	$('main').not('#browse-media').hide();
@@ -3108,7 +3109,7 @@ function loadAlexandria() {
 // RESET INTERFACE
 function resetInterface() {
 	// Reset Interface
-	$('video').trigger('pause');
+	$('#native-player').remove();
 	$('#audio-player').jPlayer('destroy');
 	document.getElementById('tip-comment').value = '';
 	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {		document.getElementById('viewlabel').style.display = 'none';
@@ -3140,8 +3141,8 @@ function resetInterface() {
 
 // RESET ALEXANDRIA
 function resetAlexandria() {
-	$('#audio-player').jPlayer('destroy');
 	$('#native-player').remove();
+	$('#audio-player').jPlayer('destroy');
 	$('#playbar-container').show();
 	$('main').not('#browse-media').hide();
 	document.getElementById('search-main').value = '';
@@ -3420,8 +3421,7 @@ function checkConnection() {
 
 // GO BACK
 function goBack() {
-	$('video').trigger('pause');
-	$('audio').trigger('pause');
+	$('#native-player').remove();
 	$('#audio-player').jPlayer('destroy');
 	navCounter--;
 	history.back();
