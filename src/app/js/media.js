@@ -256,6 +256,34 @@ function applyMediaData(data) {
     return media;
 }
 
+// DISPLAY TIP MODAL
+function loadTipModal(obj) {
+	if ($(obj).parents('.entity-market #tip-modal').length == 0) {
+		$(obj).parents('.entity-market').append($('#tip-modal'));
+	}
+	$('input[name="tip-amount"]:eq(2)').click();
+	var mediaFLO = $('main:visible .FLO-address').html();
+	if (!mediaFLO) {
+		var mediaFLO = $('.ri-publisher').text();
+	}
+	var mediaBTC = $('main:visible .BTC-address').html();
+	if (!mediaBTC) {
+		var mediaBTC = $('.ri-btc-address').text();
+	}
+	$('#tipAdd-FLO').html(mediaFLO);
+	if (mediaBTC != 'BTC address') {
+		$('#tipAdd-BTC').html(mediaBTC);
+		$('.modal-tabs li[name="tip-bitcoin"]').removeClass('hidden');
+	} else {
+		$('#tipAdd-BTC').text('No Address Available');
+		$('.modal-tabs li[name="tip-bitcoin"]').addClass('hidden');
+	}
+	$('#tip-modal .modal-tabs li').not('.hidden').first().click();
+	var modalPos = (history.state.currentView == 'artifact') ? ('right') : ('left');
+	var tipModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 32) : ($(obj).position().left - 50);
+	$(obj).parents('.entity-market').find('#tip-modal').css(modalPos,tipModalPos+'px').fadeToggle(fadeTimer);
+}
+
 function watchForPin (addr, filename) {
     if (window.pinWatcher)
         clearInterval (window.pinWatcher)
@@ -560,9 +588,6 @@ function loadTrack (name, url, fname, poster) {
 	    });
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
 		$('#audio-player').hide();
-		if ('#native-player') {
-			$('#native-player').remove();
-		}
 		$('#playbar-container').hide().after('<video id="native-player" controls="controls" poster="' + posterurl + poster +'" height="461px" width="820px"><source src="'+ url + fname +'" /><param name="autoplay" value="true" /></video>');
 	}
 }

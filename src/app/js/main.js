@@ -1252,6 +1252,8 @@ function filterMediaByType(obj, resetSearch) {
 	$('.publisher-ui').hide();
 	document.getElementById('search').style.display = 'block';
 	document.getElementById('share-modal').style.display = 'none';
+	$('#tipAdd-FLO').html('');
+	$('#tipAdd-BTC').html('');
 	document.getElementById('tip-modal').style.display = 'none';
 	$('#user-modal').fadeOut(fadeTimer);
 	$('.view-media-ui').hide();
@@ -1612,32 +1614,6 @@ function loadShareModal(obj) {
 	document.getElementById('share-url').innerHTML = location.hash.slice(2);
 	document.getElementById('share-title').innerHTML = $('.entity-meta-header h2:visible').text();
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
-}
-
-// DISPLAY TIP MODAL
-function loadTipModal(obj) {
-	if ($(obj).parents('.entity-market #tip-modal').length == 0) {
-		$(obj).parents('.entity-market').append($('#tip-modal'));
-	}
-	$('input[name="tip-amount"]:eq(2)').click();
-	var mediaFLO = $('main:visible .FLO-address').html();
-	var mediaBTC = $('main:visible .BTC-address').html();
-	if (mediaFLO != '') {
-		$('#tipAdd-FLO').html(mediaFLO);
-	} else {
-		$('#tipAdd-FLO').text('No Address Available');
-	}
-	if (mediaBTC != '') {
-		$('#tipAdd-BTC').html(mediaBTC);
-		$('.modal-tabs li[name="tip-bitcoin"]').removeClass('hidden');
-	} else {
-		$('#tipAdd-BTC').text('No Address Available');
-		$('.modal-tabs li[name="tip-bitcoin"]').addClass('hidden');
-	}
-	$('#tip-modal .modal-tabs li').not('.hidden').first().click();
-	var modalPos = (history.state.currentView == 'artifact') ? ('right') : ('left');
-	var tipModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 76) : ($(obj).position().left - 50);
-	$(obj).parents('.entity-market').find('#tip-modal').css(modalPos,tipModalPos+'px').fadeToggle(fadeTimer);
 }
 
 // SEND TIP WITH FLORINCOIN-QT WALLET
@@ -3124,6 +3100,8 @@ function resetInterface() {
 	$('#browse-media-wrap .row').remove();
 	document.getElementById('share-modal').style.display = 'none';
 	document.getElementById('tip-modal').style.display = 'none';
+	$('#tipAdd-FLO').html('');
+	$('#tipAdd-BTC').html('');
 	$('#share-modal').css({
 			left:'initial',
 			right:'initial'
@@ -3155,6 +3133,8 @@ function resetAlexandria() {
 			left:'initial',
 			right:'initial'
 		}).hide();
+	$('#tipAdd-FLO').html('');
+	$('#tipAdd-BTC').html('');
 	$('#tip-modal').css({
 			'left':'initial',
 			'right':'initial'
