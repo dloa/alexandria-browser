@@ -2,8 +2,8 @@ var day_avg = false;
 var delay = 5000;
 var keepHash;
 var mainFile;
-var URL_RECV = "http://192.241.219.201:11306/payproc/api/receive";
-var URL_GETRECVD = "http://192.241.219.201:11306/payproc/api/getreceivedbyaddress/";
+var URL_RECV = window.location.protocol+"//api.alexandria.io/payproc/api/receive";
+var URL_GETRECVD = window.location.protocol+"//api.alexandria.io/payproc/api/getreceivedbyaddress/";
 
 window.doMountMediaBrowser = function (el, data) {
     console.log (el, data);
