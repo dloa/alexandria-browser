@@ -353,7 +353,7 @@ function showPaymentOption(e) {
         }
 
         if (actionElement.hasClass('active')) {
-            return $('.pwyw-container').removeClass('active');
+//            return $('.pwyw-container').removeClass('active');
         }
 
         if (price === 0 || price === undefined || price == NaN){
