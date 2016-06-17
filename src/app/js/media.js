@@ -74,6 +74,7 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     $('.playlist-tracks tr').on ('click', function (e) {
         var el = $(this)
         var trackData = el.data();
+        console.info(trackData);
         var trackPath = trackData.url.slice(0, '-'+escape(trackData.track.fname).length);
         var posterFrame = getObjects(files, 'type', 'preview');
         posterFrame = (posterFrame[0]) ? (posterFrame[0]['fname']) : ('');
@@ -351,11 +352,11 @@ function showPaymentOption(e) {
             action = 'download';
             price = fileData.sugBuy;
         }
-
+/*
         if (actionElement.hasClass('active')) {
-//            return $('.pwyw-container').removeClass('active');
+            return $('.pwyw-container').removeClass('active');
         }
-
+*/
         if (price === 0 || price === undefined || price == NaN){
             onPaymentDone(action, fileData);
             return;
@@ -559,6 +560,7 @@ function BTCtoUSD (amount) {
 function loadTrack (name, url, fname, poster) {
 	fname = encodeURI(fname);
 	console.info(url + fname);
+
 	var posterurl = url;
 	if (poster == 'alexandria-default-posterframe.png') {
 		posterurl = IPFSHost+'/ipfs/QmQhoySfbL9j4jbDRSsZaeu3DACVBYW1o9vgs8aZAc5bLP/';
@@ -630,7 +632,10 @@ function onPaymentDone (action, file) {
         togglePlaybarShadow(true);
     }
 
-    var res = loadTrack(file.track.fname, url);
+	console.info(file);
+
+    var trackPath = file.url.slice(0, '-'+escape(file.track.fname).length);
+    var res = loadTrack(file.name, trackPath, file.track.fname);
 
     if (action === 'download') {
         // Add a link to download
