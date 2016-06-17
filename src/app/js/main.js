@@ -3068,6 +3068,7 @@ function loadAlexandria() {
 // RESET INTERFACE
 function resetInterface() {
 	// Reset Interface
+	$('.pwyw-close').click();
 	$('#native-player').remove();
 	$('#audio-player').jPlayer('destroy');
 	document.getElementById('tip-comment').value = '';
@@ -3083,6 +3084,7 @@ function resetInterface() {
 	$('#browse-media-wrap .row').remove();
 	document.getElementById('share-modal').style.display = 'none';
 	document.getElementById('tip-modal').style.display = 'none';
+	resetQR();
 	resetTipModal();
 	$('#share-modal').css({
 			left:'initial',
@@ -3101,6 +3103,7 @@ function resetInterface() {
 
 // RESET ALEXANDRIA
 function resetAlexandria() {
+	$('.pwyw-close').click();
 	$('#native-player').remove();
 	$('#audio-player').jPlayer('destroy');
 	$('#playbar-container').show();
@@ -3116,6 +3119,7 @@ function resetAlexandria() {
 			right:'initial'
 		}).hide();
 	resetTipModal();
+	resetQR();
 	$('#tip-modal').css({
 			'left':'initial',
 			'right':'initial'

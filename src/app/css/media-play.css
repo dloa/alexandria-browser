@@ -273,7 +273,8 @@ width: 100%;
 
 .pwyw-overlay {
     display: none;
-    position:absolute;
+    position:fixed;
+    height: 100%;
     top:0;
     left:0;
     right:0;
