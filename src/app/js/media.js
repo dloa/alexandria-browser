@@ -96,7 +96,10 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
         var freePlayTimer = setTimeout("autoPlayFree()", 500);
 	    $('.jp-type-single').show();
 	    $('#audio-player').show();
+	    $('#native-player').show();
     } else {
+	    $('#audio-player').hide();
+	    $('#native-player').hide();
         togglePlaybarShadow(false);
     }
 }
@@ -175,7 +178,7 @@ function applyMediaData(data) {
 			}
 			if (payment) {
 				xinfo['files'][i]['type'] = payment['type'];
-				console.error('Something about old payment format!');
+				console.log('Artifact uses old payment format');
 			}
 			if (xinfo['pwyw']) {
 		    	var pwywArray = xinfo['pwyw'].split(',');
@@ -562,6 +565,9 @@ function loadTrack (name, url, fname, poster) {
 	}
 	if (fname == 'none') {
 		$('#audio-player').hide();
+		if( $('#native-player') ) {
+			$('#native-player').remove();
+		}
 		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="' + posterurl + poster +'" height="461px" width="820px"><source src="'+ url.slice(0,-1) + '" /><param name="autoplay" value="true" /></video>');
 		return false;
 	}
@@ -597,6 +603,9 @@ function loadTrack (name, url, fname, poster) {
 	    });
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
 		$('#audio-player').hide();
+		if( $('#native-player') ) {
+			$('#native-player').remove();
+		}
 		$('#playbar-container').hide().after('<video id="native-player" controls="controls" poster="' + posterurl + poster +'" height="461px" width="820px"><source src="'+ url + fname +'" /><param name="autoplay" value="true" /></video>');
 	}
 }
