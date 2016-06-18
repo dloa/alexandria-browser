@@ -324,6 +324,9 @@ function IPFSUrl (components) {
 
 function showPaymentOption(e) {
         var self = this;
+        if( $(self).hasClass('disabled') ) {
+        	return false;	
+        }
         // Hacky get data using lots of parents.
         var fileData = $(this).parent().parent().parent().data();
         console.log(fileData);

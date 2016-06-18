@@ -167,6 +167,10 @@
     flex: auto 0;
 }
 
+.pwyw-item.disabled {
+	opacity:.2;
+}
+
 .pwyw-item img {
     border-radius: 100%;
     height: 60px;
