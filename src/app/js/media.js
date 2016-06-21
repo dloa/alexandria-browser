@@ -2,8 +2,8 @@ var day_avg = false;
 var delay = 5000;
 var keepHash;
 var mainFile;
-var URL_RECV = window.location.protocol+"//api.alexandria.io/payproc/api/receive";
-var URL_GETRECVD = window.location.protocol+"//api.alexandria.io/payproc/api/getreceivedbyaddress/";
+var URL_RECV = window.location.protocol+"//api.alexandria.io/payproc/receive";
+var URL_GETRECVD = window.location.protocol+"//api.alexandria.io/payproc/getreceivedbyaddress/";
 
 window.doMountMediaBrowser = function (el, data) {
     console.log (el, data);
