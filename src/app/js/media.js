@@ -225,8 +225,10 @@ function applyMediaData(data) {
 
     // Set other meta info
     $('.media-artist', mediaInfoSel).text(xinfo.artist ? xinfo.artist : "");
-    $('.artifact-title', mediaInfoSel).text(info.title)
-    $('.ri-runtime', releaseInfoSel).text (secondsToPrettyString(parseInt(xinfo.runtime)))
+    $('.artifact-title', mediaInfoSel).text(info.title);
+    $('#titlemeta').text(info.title);
+    $('meta[name="description"]').attr('content', info.title);
+    $('.ri-runtime', releaseInfoSel).text (secondsToPrettyString(parseInt(xinfo.runtime)));
     $('.ri-audio-count', releaseInfoSel).text (tracks.length);
     $('.ri-publisher', releaseInfoSel).text (media.publisher);
     $('.ri-btc-address', releaseInfoSel).text (xinfo['Bitcoin Address']);
