@@ -99,6 +99,7 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
 	    $('#audio-player').show();
 	    $('#native-player').show();
     } else {
+	    $('.jp-type-single').hide();
 	    $('#audio-player').hide();
 	    $('#native-player').hide();
         togglePlaybarShadow(false);
