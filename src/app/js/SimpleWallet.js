@@ -8,8 +8,8 @@
  * Created by Someguy123 (http://someguy123.com)
  * Modified by bitspill
  */
-var flovaultBaseURL = "https://flovault.alexandria.io";
-var florinsightBaseURL = "http://florinsight.alexandria.io";
+var flovaultBaseURL = "https://alexandria.io/flovault";
+var florinsightBaseURL = "https://alexandria.io/florinsight";
 
 var Wallet = (function () {
     function Wallet(identifier, password) {
