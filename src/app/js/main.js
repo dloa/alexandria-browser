@@ -9,7 +9,7 @@ if (location.protocol == 'app:') {
 	$('.webOnly').css('display','inline-block');
 	$('.appOnly').remove();
 	var wallet;
-	$('#publish-module-link').removeAttr('onclick').attr('href','http://alexandria.io/publisher/');
+	$('#publish-module-link').removeAttr('onclick').attr('href','https://alexandria.io/publisher/');
 }
 
 var prevTipAmount = '';
@@ -1698,13 +1698,13 @@ function tradeModal() {
 			alert('Please select an address in Request Tokens section');
 		} else {
 			$.ajax({
-				url: 'http://api.alexandria.io/tradebot/flobalance',
+				url: 'https://api.alexandria.io/tradebot/flobalance',
 				success: function(e) {
 					document.getElementById('trade-balance').innerHTML = Math.round((.5*e*(Math.round((FLOUSD/BTCUSD)*100000000)/100000000))*100000000)/100000000;
 				}
 			});
 			$.ajax({
-				url: 'http://api.alexandria.io/tradebot/depositaddress?floaddress='+floAddress,
+				url: 'https://api.alexandria.io/tradebot/depositaddress?floaddress='+floAddress,
 				success: function(e) {
 					document.getElementById('trade-address').innerHTML = e;
 					document.getElementById('trade-modal').style.display = 'block';
@@ -3547,7 +3547,7 @@ registerBtn.click(function () {
     if (emailInput.val().length > 3)
         data = {email: emailInput.val()};
 
-    $.post("http://flovault.alexandria.io/wallet/create", data, function (response) {
+    $.post("https://flovault.alexandria.io/wallet/create", data, function (response) {
         console.log("Create Response");
         console.log(response);
         registerOutput.text(JSON.stringify(response, null, 2));
@@ -3568,7 +3568,7 @@ registerBtn.click(function () {
 // FLOVAULT LOAD WALLET
 function FloVaultIdentify() {
 	$.ajax({
-		url: 'http://flovault.alexandria.io/wallet/checkload/' + identifierInput.val(),
+		url: 'https://flovault.alexandria.io/wallet/checkload/' + identifierInput.val(),
 		success: function(response) {
 	         console.log("Check Load Response");
 	         console.log(response);
