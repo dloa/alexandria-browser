@@ -12458,12 +12458,26 @@ CryptoJS.pad.Iso10126 = {
                     feePerKb: 1e4,
                     estimateFee: estimateFee("testnet")
                 },
+                litecoin: {
+                    magicPrefix: "Litecoin Signed Message:\n",
+                    bip32: {
+                        "public": 27108450,
+                        "private": 27106558
+                    },
+                    pubKeyHash: 48,
+                    scriptHash: 5,
+                    wif: 176,
+                    dustThreshold: 0,
+                    dustSoftThreshold: 1e5,
+                    feePerKb: 1e5,
+                    estimateFee: estimateFee("litecoin")
+                },
                 florincoin: {
                     magicPrefix: "\x1bFlorincoin Signed Message:\n",
-                    bip32: {"public": 27108450, "private": 27106558},
+                    bip32: {"public": 27108450, "private": 27106558}, // ToDo: Look into this.
                     pubKeyHash: 35,
                     scriptHash: 8,
-                    wif: 176,
+                    wif: 163,
                     dustThreshold: 0,
                     dustSoftThreshold: 1e5,
                     feePerKb: 1e5,
