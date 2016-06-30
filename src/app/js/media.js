@@ -60,12 +60,28 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
         if (file.type == 'preview' || file.type == 'extra')
             return;
 
+        // Setup cell for price to play, blank td when disallowPlay === true
+        var tdPlay = "";
+        if (file.disallowPlay && file.disallowPlay === true) {
+            tdPlay = "<td><span class=\"price disabled\">$<span class=\"price\">N/A</span></span></td>";
+        } else {
+            tdPlay = "<td><span class=\"price\">$<span class=\"price tb-price-play\">" + (file.sugPlay ? file.sugPlay : "Free!") + "</span></span></td>";
+        }
+        
+        // Setup cell for price to buy, N/A when disallowBuy === true
+        var tdBuy = "";
+        if (file.disallowBuy && file.disallowBuy === true) {
+            tdBuy = "<td><span class=\"price disabled\">$<span class=\"price\"><span>N/A</span></span></td>";
+        } else {
+            tdBuy = "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + (file.sugBuy ? file.sugBuy : "Free!") + "</span></span></td>";
+        }
+
         el.append("<tr><td>" + i++ + "</td>" +
                   "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
                   "<td>" + (xinfo.artist ? xinfo.artist : "") +"</td>" +
                   "<td>" + (file.runtime ? secondsToPrettyString(parseInt(file.runtime), true) : "") + "</td>" +
-                  "<td><span class=\"price\">$<span class=\"price tb-price-play\">" + (file.sugPlay ? file.sugPlay : "Free!") + "</span></span></td>" +
-                  "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + (file.sugBuy ? file.sugBuy : "Free!") + "</span></span></td>" +
+                  tdPlay +
+                  tdBuy +
                   "</tr>");
         var trackEl = el.children().last();
         trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay, minPlay: file.minPlay, sugBuy: file.sugBuy, minBuy: file.minBuy});
@@ -207,14 +223,14 @@ function applyMediaData(data) {
     mediaDataSel.data(media)
 
     // Set what the circles will use for pricing.
-    if(xinfo['files'][0].sugPlay) {
+    if(!xinfo['files'][0].disallowPlay && xinfo['files'][0].sugPlay) {
     	$('.pwyw-action-play').show();
 	    $('.pwyw-price-play').text (xinfo['files'][0].sugPlay);
 	    $('.pwyw-price-suggest-play').text (xinfo['files'][0].sugPlay)
     } else {
     	$('.pwyw-action-play').hide();
     }
-    if(xinfo['files'][0]. sugBuy) {
+    if(!xinfo['files'][0].disallowBuy && xinfo['files'][0].sugBuy) {
     	$('#audio-player').hide();
     	$('.pwyw-action-download').show();
 	    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy)
