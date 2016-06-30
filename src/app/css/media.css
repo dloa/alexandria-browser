@@ -308,3 +308,6 @@
     color: grey;
 }
 
+.playlist-table span.price.disabled {
+    opacity: 0.2;
+}
