@@ -60,10 +60,10 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
         if (file.type == 'preview' || file.type == 'extra')
             return;
 
-        // Setup cell for price to play, N/A when disallowPlay === true
+        // Setup cell for price to play, blank td when disallowPlay === true
         var tdPlay = "";
         if (file.disallowPlay && file.disallowPlay === true) {
-            tdPlay = "<td><span class=\"price\">$<span class=\"price\">N/A</span></span></td>";
+            tdPlay = "<td></td>";
         } else {
             tdPlay = "<td><span class=\"price\">$<span class=\"price tb-price-play\">" + (file.sugPlay ? file.sugPlay : "Free!") + "</span></span></td>";
         }
@@ -71,7 +71,7 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
         // Setup cell for price to buy, N/A when disallowBuy === true
         var tdBuy = "";
         if (file.disallowBuy && file.disallowBuy === true) {
-            tdBuy = "<td><span class=\"price\">$<span class=\"price\"><span>N/A</span></span></td>";
+            tdBuy = "<td></td>";
         } else {
             tdBuy = "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + (file.sugBuy ? file.sugBuy : "Free!") + "</span></span></td>";
         }
