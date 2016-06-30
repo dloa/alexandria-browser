@@ -3652,11 +3652,23 @@ function updateAddressList() {
 
 // FLOVAULT SEND FLO
 function sendFloVault() {
-	console.log( sendFromInput.val() + ' ' + sendToInput.val() + ' ' + sendAmountInput.val() + ' ' + sendCommentInput.val() );
-	if (window.confirm('Send '+ sendAmountInput.val() + ' FLO to ' + sendToInput.val() + ' with comment: ' + sendCommentInput.val() + '?')) { 
-		wallet.sendCoins(sendFromInput.val(), sendToInput.val(), sendAmountInput.val(), sendCommentInput.val(), sendcallback());
-	    refreshFloVaultBalances();
-	}
+        console.log( sendFromInput.val() + ' ' + sendToInput.val() + ' ' + sendAmountInput.val() + ' ' + sendCommentInput.val() );
+        if (window.confirm('Send '+ sendAmountInput.val() + ' FLO to ' + sendToInput.val() + ' with comment: ' + sendCommentInput.val() + '?')) $
+                wallet.sendCoins(sendFromInput.val(), sendToInput.val(), sendAmountInput.val(), sendCommentInput.val(), sendcallback);
+            refreshFloVaultBalances();
+        }
+}
+
+// FloVault Callback
+function sendcallback(err, data){
+    if( err == null ){
+        alert("Send successful\n"+data.txid);
+    }
+    else
+    {
+        console.log(err);
+        alert("Send failed");
+    }
 }
 
 // HTML ESCAPE
