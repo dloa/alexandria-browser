@@ -596,10 +596,15 @@ function loadTrack (name, url, fname, poster) {
 		return false;
 	}
 	$('#audio-player').show();
-	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
+	if (filetype == 'mp3') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        mp3: url + fname
+		});
+	} else if (filetype == 'm4a') {
+	    $('#audio-player').jPlayer("setMedia", {
+	        title: name,
+	        m4a: url + fname
 		});
 	} else if ( (filetype == 'mp4') || (filetype == 'm4v') ) {
 	    $('#audio-player').jPlayer("setMedia", {
