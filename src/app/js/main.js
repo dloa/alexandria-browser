@@ -9,7 +9,7 @@ if (location.protocol == 'app:') {
 	$('.webOnly').css('display','inline-block');
 	$('.appOnly').remove();
 	var wallet;
-	$('#publish-module-link').removeAttr('onclick').attr('href','https://alexandria.io/publisher/');
+	$('#publish-module-link').removeAttr('onclick').attr('href','http://alexandria.io/publisher/');
 }
 
 var prevTipAmount = '';
