@@ -580,7 +580,7 @@ function BTCtoUSD (amount) {
 }
 
 function loadTrack (name, url, fname, poster) {
-	fname = encodeURI(fname);
+	fname = encodeURI(fname).replace('+', '%20');
 	console.info(url + fname);
 
 	var posterurl = url;
