@@ -91,7 +91,7 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
         var el = $(this)
         var trackData = el.data();
         console.info(trackData);
-        var trackPath = trackData.url.slice(0, '-'+escape(trackData.track.fname).length);
+        var trackPath = trackData.url.slice(0, '-'+ encodeURI(trackData.track.fname).length);
         var posterFrame = getObjects(files, 'type', 'preview');
         posterFrame = (posterFrame[0]) ? (posterFrame[0]['fname']) : ('');
         if (posterFrame == '') {
@@ -404,7 +404,7 @@ function mountMediaBrowser(el, data) {
     $(el).html($('#media-template').html());
     var mediaData = applyMediaData(data)
     getUSDdayAvg();
-	if ( (filetype == 'mp3') || (filetype == 'm4a') ) {
+	if ( (filetype == 'mp3') || (filetype == 'm4a') || (filetype == 'flac') ) {
 	    $('#audio-player').jPlayer({
 	        cssSelectorAncestor: "#playbar-container",
 	        swfPath: "/js",
@@ -596,10 +596,16 @@ function loadTrack (name, url, fname, poster) {
 		return false;
 	}
 	$('#audio-player').show();
+	console.info(filetype);
 	if (filetype == 'mp3') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        mp3: url + fname
+		});
+	} else if (filetype == 'flac') {
+	    $('#audio-player').jPlayer("setMedia", {
+	        title: name,
+	        flac: url + fname
 		});
 	} else if (filetype == 'm4a') {
 	    $('#audio-player').jPlayer("setMedia", {
@@ -661,7 +667,7 @@ function onPaymentDone (action, file) {
 
 	console.info(file);
 
-    var trackPath = file.url.slice(0, '-'+escape(file.track.fname).length);
+    var trackPath = file.url.slice(0, '-'+ encodeURI(file.track.fname).length);
     var res = loadTrack(file.name, trackPath, file.track.fname);
 
     if (action === 'download') {
