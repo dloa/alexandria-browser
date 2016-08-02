@@ -773,8 +773,31 @@ function resetQR() {
 
 function setQR(address, amount) {
     if (amount) {
-        var url = "http://api.qrserver.com/v1/create-qr-code/?size=300x300&data=bitcoin:" + address + "?amount=" + amount;
-        $('.pwyw-qrcode img').attr("src", url);
+
         $('.pwyw-btc-address').text(address);
+        var qrOptions = {
+             text: "bitcoin:" + address + "?amount=" + amount,
+		     width: 300,
+		     height: 300,
+		     colorDark : "#000000",
+		     colorLight : "#FFFFFF",
+		     correctLevel : QRCode.CorrectLevel.H };
+
+        var qrPlay = document.getElementById('pwyw-btc-play-qrcode');
+        var qrcodePlay
+        if (qrPlay) {
+            qrcodePlay = new QRCode(qrPlay, qrOptions);
+        }
+
+        var qrDwnload = document.getElementById('pwyw-btc-download-qrcode');
+        var qrcodeDwnload;
+        if (qrDwnload) {
+            qrcodeDwnload = new QRCode(qrDwnload, qrOptions);
+        }
+        
+
+        $('.pwyw-qrcode img').each(function() {
+            $(this).css('margin','auto');
+        });
     }
 }
