@@ -90,7 +90,6 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     $('.playlist-tracks tr').on ('click', function (e) {
         var el = $(this)
         var trackData = el.data();
-        console.info(trackData);
         var trackPath = trackData.url.slice(0, '-'+ encodeURI(trackData.track.fname).length);
         var posterFrame = getObjects(files, 'type', 'preview');
         posterFrame = (posterFrame[0]) ? (posterFrame[0]['fname']) : ('');
@@ -172,7 +171,6 @@ function applyMediaData(data) {
     var media = data['alexandria-media'];
     var info = media.info;
     var xinfo = info['extra-info'];
-	filetype = xinfo.filename.split('.')[xinfo.filename.split('.').length - 1].toLowerCase();
     var payment = media.payment;
     var ipfsAddr = xinfo['DHT Hash'];
 
@@ -220,6 +218,8 @@ function applyMediaData(data) {
         sugBuy: xinfo['files'][0].sugBuy, 
         minBuy: xinfo['files'][0].minBuy
     };
+    filetype = mainFile.track.fname.split('.')[mainFile.track.fname.split('.').length - 1].toLowerCase();
+    console.info(filetype);
     mediaDataSel.data(media)
 
     // Set what the circles will use for pricing.
@@ -582,7 +582,6 @@ function BTCtoUSD (amount) {
 function loadTrack (name, url, fname, poster) {
 	fname = encodeURI(fname).replace('+', '%20');
 	console.info(url + fname);
-
 	var posterurl = url;
 	if (poster == 'alexandria-default-posterframe.png') {
 		posterurl = IPFSHost+'/ipfs/QmQhoySfbL9j4jbDRSsZaeu3DACVBYW1o9vgs8aZAc5bLP/';
@@ -596,7 +595,6 @@ function loadTrack (name, url, fname, poster) {
 		return false;
 	}
 	$('#audio-player').show();
-	console.info(filetype);
 	if (filetype == 'mp3') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
