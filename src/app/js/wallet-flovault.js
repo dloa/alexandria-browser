@@ -1,0 +1,163 @@
+// FLOVAULT INIT
+function FloVaultInit() {
+	loadScript('js/SimpleWallet.js', SimpleWallet_loaded);
+}
+
+function SimpleWallet_loaded() {
+	console.log('SimpleWallet.js loaded');
+	loadScript('js/SimpleDeps.js', SimpleDeps_loaded);
+};
+
+function SimpleDeps_loaded() {
+	console.log('SimpleDeps.js loaded');
+};
+
+// ToDo: No error cases are handled
+
+var registerBtn = $("#registerButton");
+var emailInput = $("#registerEmailInput");
+var registerPassInput = $("#registerPassInput");
+var registerOutput = $("#registerOutput");
+
+var identifierInput = $("#wallet-user");
+var identifierPassInput = $("#wallet-token");
+var identifierOutput = $("#identifierOutput");
+
+var refreshAddressButton = $("#refreshBalance");
+var addressListOutput = $("#addressListOutput");
+
+var sendFromInput = $("#wallet-from-address-select");
+var sendToInput = $("#wallet-send-address");
+var sendAmountInput = $("#wallet-send-amount-flo");
+var sendCommentInput = $("#wallet-send-message");
+var sendOutput = $("#sendOutput");
+
+// FLOVAULT REGISTER
+registerBtn.click(function () {
+    var data = {};
+    if (emailInput.val().length > 3)
+        data = {email: emailInput.val()};
+
+    $.post("https://flovault.alexandria.io/wallet/create", data, function (response) {
+        console.log("Create Response");
+        console.log(response);
+        registerOutput.text(JSON.stringify(response, null, 2));
+
+        if (response.error) {
+            console.error("Register failed :(");
+            return;
+        }
+
+        identifierInput.val(response.identifier);
+
+        wallet = new Wallet(response.identifier, identifierPassInput.val());
+        wallet.setSharedKey(response.shared_key);
+        wallet.store();
+    });
+});
+
+// FLOVAULT LOAD WALLET
+function FloVaultIdentify() {
+	$.ajax({
+		url: 'https://flovault.alexandria.io/wallet/checkload/' + identifierInput.val(),
+		success: function(response) {
+	         console.log("Check Load Response");
+	         console.log(response);
+	         identifierOutput.text(JSON.stringify(response, null, 2));
+	
+	         if (response.gauth_enabled) {
+	             console.log("2FA unsupported");
+	             alert("Sorry, 2FA is not supported at this time");
+	             $('#wallet-connect-btn').removeClass('disabled');
+	             return false;
+	             // ToDo: add 2FA support, needs further research
+	         }
+	
+	         wallet = new Wallet(response.identifier, identifierPassInput.val());
+	         wallet.load(function () {
+				console.log("Wallet Post-Load");
+				identifierOutput.text(identifierOutput.text() + "\n\nWallet Balance: " + wallet.getTotalBalance());
+				hideOverlay();
+				updateAddressList();		
+	         });
+	     },
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.error(xhr.status);
+			console.error(thrownError);
+		}
+	});
+}
+
+// FLOVAULT LOAD ADDRESSES
+var loadedAddresses;
+function newFloVaultAddress() {
+    wallet.generateAddress();
+	loadedAddresses = document.getElementById('wallet-address-select').length - 1;
+    updateAddressList();
+}
+
+// FLOVAULT REFRESH BALANCES
+function refreshFloVaultBalances() {
+    wallet.refreshBalances();
+    updateAddressList();
+}
+
+// FLOVAULT UPDATE ADDRESS LIST
+function updateAddressList() {
+	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
+	if ( (!wallet) || (Object.keys(wallet.balances).length == 0) || (loadedAddresses ==  Object.keys(wallet.balances).length) )  {
+		console.log('Running Timer');
+		var walletWaitTimeoutId = setTimeout("updateAddressList()", 1500);
+	} else {
+		clearTimeout(walletWaitTimeoutId);
+		console.log(wallet);
+		addressListOutput.text("");
+		var TotalBalance = 0;
+		document.getElementById('wallet-address-select').innerHTML = '<option value="">Select Address</option>';
+		document.getElementById('wallet-from-address-select').innerHTML = '<option value="">Select Address</option>';
+		document.getElementById('newPublisher-floAdd').innerHTML = '<option value="">Select Address</option>';
+		document.getElementById('newMediaPublisherFLO').innerHTML = '<option value="">Select Address</option>';
+		for (var addr in wallet.balances) {
+			addressListOutput.text(addressListOutput.text() + "\n" + addr + " : " + wallet.balances[addr]);
+			TotalBalance += wallet.balances[addr];
+			document.getElementById('wallet-address-select').innerHTML = document.getElementById('wallet-address-select').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+			document.getElementById('wallet-from-address-select').innerHTML = document.getElementById('wallet-from-address-select').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+			document.getElementById('newPublisher-floAdd').innerHTML = document.getElementById('newPublisher-floAdd').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+			document.getElementById('newMediaPublisherFLO').innerHTML = document.getElementById('newMediaPublisherFLO').innerHTML + '<option value="'+ addr+'">' + addr +'</option>';
+		}
+		console.log('TotalBalance = ' + TotalBalance);
+		document.getElementById('wallet-balance-flo').innerHTML = TotalBalance + ' FLO';
+		document.getElementById('wallet-balance-amount').innerHTML = '$'+Math.round((TotalBalance*FLOUSD)*100)/100;
+		var selectInterval = setInterval(function() {
+		    if (document.getElementById('wallet-address-select').length > 1) {
+		        clearInterval(selectInterval);
+				document.getElementById('wallet-address-select').removeAttribute('disabled');
+				document.getElementById('wallet-from-address-select').removeAttribute('disabled');
+				document.getElementById('newPublisher-floAdd').removeAttribute('disabled');
+				document.getElementById('newMediaPublisherFLO').removeAttribute('disabled');
+				$('#newAddressBtn').removeClass('disabled');
+		    }
+		}, 100);
+	}
+}
+
+// FLOVAULT SEND FLO
+function sendFloVault() {
+        console.log( sendFromInput.val() + ' ' + sendToInput.val() + ' ' + sendAmountInput.val() + ' ' + sendCommentInput.val() );
+        if (window.confirm('Send '+ sendAmountInput.val() + ' FLO to ' + sendToInput.val() + ' with comment: ' + sendCommentInput.val() + '?')) {
+                wallet.sendCoins(sendFromInput.val(), sendToInput.val(), sendAmountInput.val(), sendCommentInput.val(), sendcallback);
+            refreshFloVaultBalances();
+        }
+}
+
+// FloVault Callback
+function sendcallback(err, data){
+    if( err == null ){
+        alert("Send successful\n"+data.txid);
+    }
+    else
+    {
+        console.log(err);
+        alert("Send failed");
+    }
+}
