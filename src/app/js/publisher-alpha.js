@@ -788,6 +788,7 @@ function postMedia(tipAlexandria) {
 		mediaInfo = mediaInfo + ',' + '"description":"'+ mediaDesc +'"';
 	
 		var mediaExtraInfo = '';
+
 		$('#newMedia-info input[type="text"]').not('.info-field').each(function(){
 			if ( $(this).val() != '' ) {
 				var infoKeyName = $(this).attr('name');
