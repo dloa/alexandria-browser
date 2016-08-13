@@ -1,3 +1,21 @@
+// The route registering function:
+var routes = {};
+
+function route (path, templateId, controller) {  
+  routes[path] = {templateId: templateId, controller: controller};
+}
+route('/', 'front', function () {  });  
+route('/media', 'media', function () {  });
+route('/publishers', 'publishers', function () {  });
+route('/publisher', 'publisher', function () {  });
+route('/add-media', 'add-media', function () {  });
+route('/add-publisher', 'add-publisher', function () {  });
+route('/search', 'search', function () {  });
+route('/about', 'about', function () {  });
+route('/wallet', 'wallet', function () { });
+
+var el = null;  
+
 function router (event, goUrl) {  
     // Current route url (getting rid of '#' in hash as well):
     var url = location.hash.slice(1) || '/';
