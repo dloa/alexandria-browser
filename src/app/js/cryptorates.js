@@ -1,3 +1,10 @@
+var FLOCost;
+var FLOLTC;
+var LTCUSD;
+var FLOUSD;
+var BTCUSD;
+var cryptoTimerId = 0;
+
 // TIMER FOR CHANGING EXCHANGE RATES
 function changeCryptoRates() {
 	if (cryptoTimerRunning == 1) {

@@ -1,3 +1,39 @@
+// v0.6 LOAD ARTIFACT VIEW
+function loadArtifactView2(objMeta) {
+	// HIDE OTHER VIEWS
+	document.getElementById('intro').style.display = 'none';
+	$('main').hide();
+	hideOverlay();
+	resetInterface();
+	document.getElementById('search').style.display = 'block';
+	$('.wallet-ui').hide();
+	$('.publisher-ui').hide();
+	$('.sharing-ui').hide();
+	$('.view-publishers-ui').hide();
+	$('#view-media .entity-view').hide();
+	// SHOW MEDIA VIEW
+	document.getElementById('view-artifact').style.display = 'block';
+	var mediaID = '';
+	// GET MEDIA ID FROM objMeta
+	if ( (objMeta) && (objMeta.length == 1) ) {
+		mediaID = $(objMeta).attr('id').split('-')[1];
+	// GET MEDIA ID FROM LOCATION
+	} else if (!objMeta) {
+		if (location.hash.slice(1).split('/')[2]) {
+			mediaID = location.hash.slice(1).split('/')[2];
+		} else {
+			mediaID = location.hash.slice(1).split('/')[1];
+		}
+	} else {
+		mediaID = objMeta;
+	}
+	// GET ALL THE MEDIA DATA
+	var thisMediaData = searchAPI('media', 'txid', mediaID);
+    console.log (mediaID, thisMediaData);
+	$('.media-cover').hide();
+    window.doMountMediaBrowser('#media-browser', thisMediaData);
+}
+
 var day_avg = false;
 var delay = 5000;
 var keepHash;
