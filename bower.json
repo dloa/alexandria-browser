@@ -1,6 +1,6 @@
 {
   "name": "alexandria",
-  "version": "0.0.1",
+  "version": "0.6.0",
   "homepage": "https://github.com/blocktech/alexandriaux",
   "authors": [
     "Niv Sardi <xaiki@evilgiggle.com>"
@@ -24,6 +24,7 @@
     "jquery-mousewheel": "~3.1.12",
     "mousetrap": "~1.4.6",
     "jplayer": "~2.9.2",
-    "moment": "~2.10.6"
+    "moment": "~2.10.6",
+    "jplayer": "~2.9.2"
   }
 }
