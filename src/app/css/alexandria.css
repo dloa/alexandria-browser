@@ -1681,25 +1681,48 @@ li[name=pwyw-flo] {
 .appOnly {
 	display: none;
 }
-footer#footer {
-	font-size: 0.875em;
-	width: 100%;
-	position: fixed;
+#contact-tab, #app-footer {
+	font-size: 0.875rem;
 	z-index: 500;
-	bottom: 0;
-	left: 0;
-	padding: 5px 19px 0;
 	line-height: 1.4;
+}
+#contact-tab, #app-footer, #footer {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
-	background: #797979;
 }
-footer#footer, footer#footer a {
+#app-footer, #footer {
+	width: 100%;
+}
+#app-footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+}
+#contact-tab, #footer {
+	padding: 5px 19px;
+}
+#contact-tab {
+	background-color: rgba(255,255,255,.8);
+	position: absolute;
+	bottom: 100%;
+	right: 0;
+	border: 1px solid rgba(151, 151, 160, .5);
+	border-right: 0 none transparent;
+	border-bottom: 0 none transparent;
+	border-radius: 5px 0 0 0;
+	text-align: right;
+}
+#footer {
+	background: #797979;
+	overflow: hidden;
+	padding-bottom: 0;
+}
+#footer, #footer a {
 	color: #eee;
 	text-decoration: none;
 }
-footer#footer div {
+#footer div {
 	display: inline-block;
 	vertical-align: bottom;
 	line-height: 30px;
@@ -1720,7 +1743,7 @@ footer#footer div {
   left: 0;
 }
 /* BREADCRUMBS */
-footer#footer div#viewlabel {
+#footer div#viewlabel {
 	display: none;
 }
 .view-media-ui {
