@@ -161,3 +161,29 @@ function sendcallback(err, data){
         alert("Send failed");
     }
 }
+
+// DISPLAY TRADE MODAL
+function tradeModal() {
+	if ( (document.getElementById('trade-modal').style.display == 'none') || (document.getElementById('trade-modal').style.display == '') ) {
+		var floAddress = document.getElementById('wallet-address-select').value;
+		if (floAddress == '') {
+			alert('Please select an address in Request Tokens section');
+		} else {
+			$.ajax({
+				url: 'https://api.alexandria.io/tradebot/flobalance',
+				success: function(e) {
+					document.getElementById('trade-balance').innerHTML = Math.round((.5*e*(Math.round((FLOUSD/BTCUSD)*100000000)/100000000))*100000000)/100000000;
+				}
+			});
+			$.ajax({
+				url: 'https://api.alexandria.io/tradebot/depositaddress?floaddress='+floAddress,
+				success: function(e) {
+					document.getElementById('trade-address').innerHTML = e;
+					document.getElementById('trade-modal').style.display = 'block';
+				}
+			});
+		}
+	} else {
+		document.getElementById('trade-modal').style.display = 'none';
+	}
+}
