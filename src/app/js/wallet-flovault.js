@@ -33,7 +33,7 @@ var sendCommentInput = $("#wallet-send-message");
 var sendOutput = $("#sendOutput");
 
 var flovaultURL = 'https://flovault.alexandria.io';
-var tradebotURL = 'https://tradebot.alexandria.io';
+var tradebotURL = 'http://tradebot.alexandria.io';
 
 // FLOVAULT REGISTER
 registerBtn.click(function () {
