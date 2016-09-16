@@ -847,9 +847,9 @@ function setQR(address, amount) {
 function displayEmbedCode (mediaID, mediaType) {
 
 	if ( (mediaType == 'music') || (mediaType == 'video') || (mediaType == 'movie') ) {
-		embedUrl = window.location + '/artifact.html#' + mediaID;
+		embedUrl = window.location.origin + window.location.pathname + 'artifact.html#' + mediaID;
 	} else {
-		embedUrl = window.location + '/embed.html#' + mediaID;
+		embedUrl = window.location.origin + window.location.pathname + 'embed.html#' + mediaID;
 	}
 
 	var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
