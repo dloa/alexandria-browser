@@ -1,17 +1,16 @@
 @font-face {
   font-family: 'mediaicns';
-  src: url('../icons/media.eot?75606605');
-  src: url('../icons/media.eot?75606605#iefix') format('embedded-opentype'),
-       url('../icons/media.woff?75606605') format('woff'),
-       url('../icons/media.ttf?75606605') format('truetype'),
-       url('../icons/media.svg?75606605#fontello') format('svg');
+  src: url('../icons/media.eot?53903517');
+  src: url('../icons/media.eot?53903517#iefix') format('embedded-opentype'),
+       url('../icons/media.woff2?53903517') format('woff2'),
+       url('../icons/media.woff?53903517') format('woff'),
+       url('../icons/media.ttf?53903517') format('truetype'),
+       url('../icons/media.svg?53903517#fontello') format('svg');
   font-weight: normal;
   font-style: normal;
 }
-
 #audio-player, #native-player {
 	max-width: 100%;
-//	background: transparent url('../img/alexandria-default-posterframe.png');
 	margin-bottom: 15px;
 }
 .playbar {
@@ -22,9 +21,10 @@ box-sizing: border-box;
 
 #playbar-container {
     position: relative;
-    margin-top: 15px;
 }
-
+.jp-interface {
+	margin-top: 30px;
+}
 .playbar-shadow {
     border-radius: 20px;
     transition: all 0.2s;
@@ -36,7 +36,7 @@ box-sizing: border-box;
 .playbar-shadow h2 {
     text-align: center;
 }
-.playbar .jp-play, .playbar .jp-stop {
+.playbar .jp-play, .playbar .jp-stop, .playbar .jp-full-screen {
     float: left;
     height: 40px;
     width: 29px;
@@ -69,6 +69,17 @@ button.jp-play:focus, .jp-volume-controls button:focus {
     content: '\e802';
 }
 
+.playbar .jp-full-screen:before {
+	content: '\f0b2';
+}
+.playbar .jp-full-screen {
+	cursor: pointer;
+	line-height: 35px;
+	font-size: 24px;
+	top: -15px;
+	left: 7px;
+}
+
 .playbar .jp-stop {
     display: none !important; /* no need for stop atm */
 }
@@ -84,7 +95,7 @@ button.jp-play:focus, .jp-volume-controls button:focus {
     height: 3px;
     float: left;
     margin: 1px 12px;
-    width: calc( 100% - 52px - 40px - 24px - 40px - 115px);
+    width: calc( 100% - 52px - 40px - 24px - 40px - 144px);
     background-color: lightgrey;
     position: relative;
  }

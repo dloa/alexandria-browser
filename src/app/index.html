@@ -1178,8 +1178,8 @@
 				                   <li class="md-tracks">title</li>
 				               </ul>
 				           </div>
-				           <div id="audio-player" class="jp-player"></div>
-				           <div id="playbar-container" class="jp-audio playbar" role="application" aria-label="media player">
+				           <div id="playbar-container" class="playbar" role="application" aria-label="media player">
+					       <div id="audio-player" class="jp-player"></div>
 				               <div class="jp-type-single">
 				                   <div class="jp-gui jp-interface">
 				                       <div class="jp-controls-holder">
@@ -1196,13 +1196,17 @@
 				                               </div>
 				                           </div>
 				                           <div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
-											<div class="jp-volume-controls">
-												<button class="jp-mute" role="button" tabindex="0"></button>
-												<button class="jp-volume-max" role="button" tabindex="0"></button>
-												<div class="jp-volume-bar">
-													<div class="jp-volume-bar-value"></div>
-												</div>
-											</div>					
+							<div class="jp-toggles">
+<!--								<button class="jp-repeat" role="button" tabindex="0">repeat</button> -->
+								<div class="jp-full-screen"></div>
+							</div>
+							<div class="jp-volume-controls">
+								<button class="jp-mute" role="button" tabindex="0"></button>
+								<button class="jp-volume-max" role="button" tabindex="0"></button>
+								<div class="jp-volume-bar">
+									<div class="jp-volume-bar-value"></div>
+								</div>
+							</div>					
 				                           <div class="jp-toggles" style="display: none">
 				                               <button class="jp-repeat" role="button" tabindex="0">repeat</button>
 				                           </div>
