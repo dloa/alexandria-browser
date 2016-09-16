@@ -41,6 +41,9 @@ var mainFile;
 var URL_RECV = "https://api.alexandria.io/payproc/receive";
 var URL_GETRECVD = "https://api.alexandria.io/payproc/getreceivedbyaddress/";
 
+var autoplayFree = false;
+var posterFrame = '';
+
 window.doMountMediaBrowser = function (el, data) {
     console.log (el, data);
     $('.media-cover img').attr('src','');
@@ -97,17 +100,17 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         // Setup cell for price to play, blank td when disallowPlay === true
         var tdPlay = "";
         if (file.disallowPlay && file.disallowPlay === true) {
-            tdPlay = "<td><span class=\"price disabled\">$<span class=\"price\">N/A</span></span></td>";
+            tdPlay = "<td class=\"price disabled\"><span>$<span class=\"price\">N/A</span></span></td>";
         } else {
-            tdPlay = "<td><span class=\"price\">$<span class=\"price tb-price-play\">" + (file.sugPlay ? file.sugPlay : "Free!") + "</span></span></td>";
+            tdPlay = "<td class=\"price tb-price-play\"><span>$<span class=\"price\">" + (file.sugPlay ? file.sugPlay : "Free!") + "</span></span></td>";
         }
         
         // Setup cell for price to buy, N/A when disallowBuy === true
         var tdBuy = "";
         if (file.disallowBuy && file.disallowBuy === true) {
-            tdBuy = "<td><span class=\"price disabled\">$<span class=\"price\"><span>N/A</span></span></td>";
+            tdBuy = "<td class=\"price disabled\"><span>$<span class=\"price\"><span>N/A</span></span></td>";
         } else {
-            tdBuy = "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + (file.sugBuy ? file.sugBuy : "Free!") + "</span></span></td>";
+            tdBuy = "<td class=\"price tb-price-download\"><span>$<span class=\"price\"><span>" + (file.sugBuy ? file.sugBuy : "Free!") + "</span></span></td>";
         }
 
         // Only add files to the main playlist where type matches artifact type.
@@ -118,8 +121,8 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
 		          "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
 		          tdBuy +
 		          "</tr>");
-//		var trackEl = extraFiles.children().last();
-//		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay, minPlay: file.minPlay, sugBuy: file.sugBuy, minBuy: file.minBuy}
+		var trackEl = extraFiles.children().last();
+		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay, minPlay: file.minPlay, sugBuy: file.sugBuy, minBuy: file.minBuy});
 	} else {
 
 		el.append("<tr><td>" + i++ + "</td>" +
@@ -137,27 +140,12 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         extraFiles.parent().hide();
     }
 
-    $('.playlist-tracks tr').on ('click', function (e) {
-        var el = $(this)
-        var trackData = el.data();
-        var trackPath = trackData.url.slice(0, '-'+ encodeURI(trackData.track.fname).length);
-        var posterFrame = getObjects(files, 'type', 'preview');
-        posterFrame = (posterFrame[0]) ? (posterFrame[0]['fname']) : ('');
-        if (posterFrame == '') {
-        	posterFrame = 'alexandria-default-posterframe.png';
-        }
-		if ($('.tb-price-play', el).text() == 'Free!') {
-	        loadTrack (trackData.name, trackPath, trackData.track.fname, posterFrame);
-	        $('.playlist-tracks tr').removeClass ('selected');
-	        el.addClass('selected');
-		}
-    })
-
-    $('.tb-price-play', el).on ('click', showPaymentOption);
-
-    $('.tb-price-download', el).on ('click', showPaymentOption);
-
-    if (!files[0].sugPlay) {
+    $('.playlist td').on ('click', function (e) {
+	showPaymentOption(e);
+    });
+ 
+/*
+   if (!files[0].sugPlay) {
         togglePlaybarShadow(true);
         var freePlayTimer = setTimeout("autoPlayFree()", 500);
 	    $('.jp-type-single').show();
@@ -169,10 +157,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
 	    $('#native-player').hide();
         togglePlaybarShadow(false);
     }
-}
-
-function autoPlayFree() {
-	$('.playlist-tracks tr:first').click();
+*/
 }
 
 function secondsToPrettyString (s, short){
@@ -213,6 +198,11 @@ function getPrices (file) {
 }
 
 function togglePlaybarShadow (bool) {
+    var action = bool?'show':'hide';
+
+    $('.jp-type-single')[action]();
+    $('#audio-player')[action]();
+    $('#native-player')[action]();
     $('.playbar-shadow').toggleClass('hidden', bool);
 	$('.buybox').toggleClass('hidden', bool);
 }
@@ -310,6 +300,12 @@ function applyMediaData(data) {
 
     renderPlaylistFilesHTML(xinfo['files'], xinfo, $('.playlist-tracks'), media['type'], $('.playlist-extra-files'));
 
+	posterFrame = getObjects(xinfo['files'], 'type', 'preview');
+        posterFrame = (posterFrame[0]) ? (posterFrame[0]['fname']) : ('');
+        if (posterFrame == '') {
+        	posterFrame = 'alexandria-default-posterframe.png';
+        }
+
     keepHash = (xinfo['DHT Hash']) ? (xinfo['DHT Hash']) : (media.torrent);
 
     console.log (media, tracks);
@@ -392,13 +388,11 @@ function IPFSUrl (components) {
 }
 
 function showPaymentOption(e) {
-        var self = this;
+        var self = e.target;
         if( $(self).hasClass('disabled') ) {
         	return false;	
         }
-        // Hacky get data using lots of parents.
-        var fileData = $(this).parent().parent().parent().data();
-        console.log(fileData);
+	var fileData = $(self).closest('tr').data();
 
         // Check if fileData is an empty object, if it is, then fill it with the main file info as it is most likely that the circular buttons were pressed
         if (jQuery.isEmptyObject(fileData))
@@ -412,23 +406,17 @@ function showPaymentOption(e) {
         var action;
 
         $('.pwyw-item').removeClass('active');
-        // Check if we are the play or download button
-        if ($(this).hasClass('tb-price-play') || $(this).hasClass('pwyw-action-play')){
-            actionElement = $('.pwyw-activate-play');
-            action = 'play';
-            price = fileData.sugPlay;
-        }
 
-        if ($(this).hasClass('tb-price-download') || $(this).hasClass('pwyw-action-download')){
+        // Check if we are the play or download button
+        if ($(self).closest('td').hasClass('tb-price-download') || $(self).closest('td').hasClass('pwyw-action-download') || $(self).closest('tbody').hasClass('playlist-extra-files')){
             actionElement = $('.pwyw-activate-download');
             action = 'download';
             price = fileData.sugBuy;
-        }
-/*
-        if (actionElement.hasClass('active')) {
-            return $('.pwyw-container').removeClass('active');
-        }
-*/
+        } else {
+            actionElement = $('.pwyw-activate-play');
+            action = 'play';
+            price = fileData.sugPlay;
+	}
         if (price === 0 || price === undefined || price == NaN){
             onPaymentDone(action, fileData);
             return;
@@ -442,9 +430,9 @@ function showPaymentOption(e) {
 
         $('.pwyw-container').removeClass('active');
         actionElement.addClass('active');
-        //$(self).addClass('active');
 
         togglePWYWOverlay(true);
+        togglePlaybarShadow(false);
 }
 
 function mountMediaBrowser(el, data) {
@@ -452,7 +440,7 @@ function mountMediaBrowser(el, data) {
 	var mediaID = data[0]['txid'];
 	var data = data[0]['media-data'];
     $(el).html($('#media-template').html());
-    var mediaData = applyMediaData(data)
+    var mediaData = applyMediaData(data);
     getUSDdayAvg();
 	if ( (filetype == 'mp3') || (filetype == 'm4a') || (filetype == 'flac') ) {
 	    $('#audio-player').jPlayer({
@@ -606,6 +594,8 @@ function mountMediaBrowser(el, data) {
     })
 
 	displayEmbedCode(mediaID, mediaData.type);
+	
+	$('.playlist-tracks tr:first').children(':first').click();
 
 	// MAKE HISTORY ARTIFACT VIEW
 	var stateObj = {
@@ -632,11 +622,11 @@ function BTCtoUSD (amount) {
     return Math.round((Number(amount)*day_avg).toString().substring(0, 16)*100)/100
 }
 
-function loadTrack (name, url, fname, poster) {
+function loadTrack (name, url, fname) {
 	fname = encodeURI(fname).replace('+', '%20');
 	console.info(url + fname);
 	var posterurl = url;
-	if (poster == 'alexandria-default-posterframe.png') {
+	if (posterFrame == 'alexandria-default-posterframe.png') {
 		posterurl = IPFSHost+'/ipfs/QmQhoySfbL9j4jbDRSsZaeu3DACVBYW1o9vgs8aZAc5bLP/';
 	}
 	if (fname == 'none') {
@@ -644,10 +634,11 @@ function loadTrack (name, url, fname, poster) {
 		if( $('#native-player') ) {
 			$('#native-player').remove();
 		}
-		$('#playbar-container').hide().after('<video id="native-player" controls="controls" autoplay poster="' + posterurl + poster +'" height="461px" width="820px"><source src="'+ url.slice(0,-1) + '" /><param name="autoplay" value="true" /></video>');
+		$('#playbar-container').hide().after('<video id="native-player" controls="controls" poster="' + posterurl + posterFrame +'" height="461px" width="820px"><source src="'+ url.slice(0,-1) + '" /></video>');
 		return false;
 	}
 	$('#audio-player').show();
+	console.info(name);
 	if (filetype == 'mp3') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
@@ -667,32 +658,32 @@ function loadTrack (name, url, fname, poster) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        m4v: url + fname,
-	        poster: posterurl + poster
+	        poster: posterurl + posterFrame
 	    });
 	} else if ( (filetype == 'ogg') || (filetype == 'oga') ) {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        oga: url + fname,
-	        poster: posterurl + poster
+	        poster: posterurl + posterFrame
 	    });
 	} else if (filetype == 'webm') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        webmv: url + fname,
-	        poster: posterurl + poster
+	        poster: posterurl + posterFrame
 	    });
 	} else if (filetype == 'ogv') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
 	        ogv: url + fname,
-	        poster: posterurl + poster
+	        poster: posterurl + posterFrame
 	    });
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
 		$('#audio-player').hide();
 		if( $('#native-player') ) {
 			$('#native-player').remove();
 		}
-		$('#playbar-container').hide().after('<video id="native-player" controls="controls" poster="' + posterurl + poster +'" height="461px" width="820px"><source src="'+ url + fname +'" /><param name="autoplay" value="true" /></video>');
+		$('#playbar-container').hide().after('<video id="native-player" controls="controls" poster="' + posterurl + posterFrame +'" height="461px" width="820px"><source src="'+ url + fname +'" /></video>');
 	}
 }
 
@@ -719,19 +710,25 @@ function onPaymentDone (action, file) {
 	console.info(file);
 
     var trackPath = file.url.slice(0, '-'+ encodeURI(file.track.fname).length);
-    var res = loadTrack(file.name, trackPath, file.track.fname);
+    var res = loadTrack(file.track.dname, trackPath, file.track.fname);
 
+    togglePlaybarShadow(true);
     if (action === 'download') {
         // Add a link to download
-        var a = $("<a>").attr("href", url).attr("download", file.track.fname).appendTo("body");
+        var a = $("<a>").attr("href", url).attr("download", file.track.fname).attr("target","_blank").appendTo("body");
         // Click the link
         a[0].click();  
         // Remove the link we added.
         a.remove();
+        $('#audio-player').jPlayer("load");
+    } else {
+	if (autoplayFree === false) {
+		$('#audio-player').jPlayer("load");
+		autoplayFree = true;
+	} else {
+		$('#audio-player').jPlayer("play");
+	}
     }
-    $('.jp-type-single').show();
-    $('#audio-player').show();
-    $('#audio-player').jPlayer("play");
 }
 
 $('#audio-player').click(function(){
@@ -772,7 +769,6 @@ function getUSDdayAvg() {
         url: "https://api.bitcoinaverage.com/ticker/global/USD/"
     }).done(function (usddata) {
         day_avg = usddata['24h_avg'];
-        //console.log(day_avg)
     });
 }
 

@@ -254,12 +254,12 @@ body {
 }
     
 .jp-details {
-    margin-top: 12px;
     position: relative;
- top: -15px;
+    top: -15px;
     z-index: -1;
-width: 100%;
- clear: both;
+    width: 100%;
+    clear: both;
+    font-weight: bold;
 }
 
 .playbar-shadow h2 {
