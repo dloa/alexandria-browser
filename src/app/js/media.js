@@ -79,10 +79,12 @@ function prettifyTrack (track, xinfo) {
         .replace (/^[0-9]+ +/, '');
 }
 
-function renderPlaylistFilesHTML (files, xinfo, el, artifactType) {
+function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
 
     // Remove all current elements
     el.empty();
+    extraFiles.parent().show();
+    extraFiles.empty();
     var i = 1;
 
     var trackTime = secondsToPrettyString(parseInt(xinfo.runtime), true);
@@ -91,11 +93,6 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType) {
     }
 
     files.forEach (function (file) {
-        // Only add files to the main playlist where type matches artifact type.
-        // ToDo: Add new table for extra files.
-        // ToDo: Check for all different file types once implemented
-        if (file.type != artifactType)
-            return;
 
         // Setup cell for price to play, blank td when disallowPlay === true
         var tdPlay = "";
@@ -113,16 +110,32 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType) {
             tdBuy = "<td><span class=\"price\">$<span class=\"price tb-price-download\"><span>" + (file.sugBuy ? file.sugBuy : "Free!") + "</span></span></td>";
         }
 
-        el.append("<tr><td>" + i++ + "</td>" +
-                  "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
-                  "<td>" + (xinfo.artist ? xinfo.artist : "") +"</td>" +
-                  "<td>" + (file.runtime ? secondsToPrettyString(parseInt(file.runtime), true) : "") + "</td>" +
-                  tdPlay +
-                  tdBuy +
-                  "</tr>");
-        var trackEl = el.children().last();
-        trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay, minPlay: file.minPlay, sugBuy: file.sugBuy, minBuy: file.minBuy});
+        // Only add files to the main playlist where type matches artifact type.
+	// Extra files get added to a separate table
+        // ToDo: Check for all different file types once implemented
+        if (file.type != artifactType) {
+		extraFiles.append("<tr>" +
+		          "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
+		          tdBuy +
+		          "</tr>");
+//		var trackEl = extraFiles.children().last();
+//		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay, minPlay: file.minPlay, sugBuy: file.sugBuy, minBuy: file.minBuy}
+	} else {
+
+		el.append("<tr><td>" + i++ + "</td>" +
+		          "<td>" + (file.dname ? file.dname : file.fname) + "</td>" +
+		          "<td>" + (xinfo.artist ? xinfo.artist : "") +"</td>" +
+		          "<td>" + (file.runtime ? secondsToPrettyString(parseInt(file.runtime), true) : "") + "</td>" +
+		          tdPlay +
+		          tdBuy +
+		          "</tr>");
+		var trackEl = el.children().last();
+		trackEl.data({track: file, name: name, url: IPFSUrl([xinfo['DHT Hash'], file.fname]), sugPlay: file.sugPlay, minPlay: file.minPlay, sugBuy: file.sugBuy, minBuy: file.minBuy});
+	}
     });
+    if (extraFiles.children().length < 1) {
+        extraFiles.parent().hide();
+    }
 
     $('.playlist-tracks tr').on ('click', function (e) {
         var el = $(this)
@@ -295,7 +308,7 @@ function applyMediaData(data) {
 		$('.media-info').css('width','100%');
 	}
 
-    renderPlaylistFilesHTML(xinfo['files'], xinfo, $('.playlist-tracks'), media['type'])
+    renderPlaylistFilesHTML(xinfo['files'], xinfo, $('.playlist-tracks'), media['type'], $('.playlist-extra-files'));
 
     keepHash = (xinfo['DHT Hash']) ? (xinfo['DHT Hash']) : (media.torrent);
 

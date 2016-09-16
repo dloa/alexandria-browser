@@ -238,11 +238,11 @@
     cursor: pointer;
 }
 
-.playlist-tracks tr:nth-child(odd) {
+.playlist-tracks tr:nth-child(odd), .playlist-extra-files tr:nth-child(odd) {
     background-color: rgba(230, 230, 230, 0.8) ;
 }
 
-.playlist-tracks tr:hover {
+.playlist-tracks tr:hover, .playlist-extra-files tr:hover{
     background-color: rgba(210, 210, 210, 0.8);
 }
 
@@ -303,6 +303,20 @@
     background: lightgrey;
     font-weight: bold;
 }
+
+.extra-files .playlist-table th:first-child + th {
+    /* second column: Price */
+    text-align: center;
+}
+.extra-files .playlist-table td:first-child {
+    /* first column: # */
+    width: 80%;
+}
+.extra-files .playlist-table td:first-child + td {
+    /* second column: Price */
+    width: initial;
+}
+
 
 .media-meta .artist {
     color: grey;
