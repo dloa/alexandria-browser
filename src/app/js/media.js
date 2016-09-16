@@ -79,7 +79,8 @@ function prettifyTrack (track, xinfo) {
         .replace (/^[0-9]+ +/, '');
 }
 
-function renderPlaylistFilesHTML (files, xinfo, el) {
+function renderPlaylistFilesHTML (files, xinfo, el, artifactType) {
+
     // Remove all current elements
     el.empty();
     var i = 1;
@@ -88,12 +89,12 @@ function renderPlaylistFilesHTML (files, xinfo, el) {
     if (files.length > 1) {
     	trackTime = '';
     }
-    console.log(files);
+
     files.forEach (function (file) {
-        // If we are the preview image or an extra file, do not add it to the table for now.
+        // Only add files to the main playlist where type matches artifact type.
         // ToDo: Add new table for extra files.
         // ToDo: Check for all different file types once implemented
-        if (file.type == 'preview' || file.type == 'extra')
+        if (file.type != artifactType)
             return;
 
         // Setup cell for price to play, blank td when disallowPlay === true
@@ -294,7 +295,7 @@ function applyMediaData(data) {
 		$('.media-info').css('width','100%');
 	}
 
-    renderPlaylistFilesHTML(xinfo['files'], xinfo, $('.playlist-tracks'))
+    renderPlaylistFilesHTML(xinfo['files'], xinfo, $('.playlist-tracks'), media['type'])
 
     keepHash = (xinfo['DHT Hash']) ? (xinfo['DHT Hash']) : (media.torrent);
 
