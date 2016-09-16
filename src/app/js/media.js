@@ -31,6 +31,7 @@ function loadArtifactView2(objMeta) {
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
     console.log (mediaID, thisMediaData);
 	$('.media-cover').hide();
+	autoplayFree = false;
     window.doMountMediaBrowser('#media-browser', thisMediaData);
 }
 
@@ -41,7 +42,7 @@ var mainFile;
 var URL_RECV = "https://api.alexandria.io/payproc/receive";
 var URL_GETRECVD = "https://api.alexandria.io/payproc/getreceivedbyaddress/";
 
-var autoplayFree = false;
+var autoplayFree;
 var posterFrame = '';
 
 window.doMountMediaBrowser = function (el, data) {
