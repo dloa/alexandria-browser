@@ -64,23 +64,11 @@ function makeHistory(stateObj, newTitle) {
 		newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
 		
 	}
-	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {		document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
+	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
+		document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
 		document.getElementById('alexandria-breadcrumbs').style.display = 'inline-block';
 		document.getElementById('viewlabel').style.display = 'inline-block';
 	}
 	document.title = newTitle;
 	history.pushState(stateObj, newTitle, newUrl);
-	// IFRAME EMBED CODE
-	var embedUrl = newUrl;
-        var prefix = window.location.protocol + '//' + window.location.hostname;
-        if (window.location.hostname === 'alexandria.io')
-            prefix = 'https://embed.alexandria.io';
-                
-	if ( (stateObj.mediaType == 'music') || (stateObj.mediaType == 'video') || (stateObj.mediaType == 'movie') ) {
-		embedUrl = prefix + '/artifact.html#' + stateObj.subView;
-	} else {
-		embedUrl = prefix + '/embed.html#' + stateObj.subView;
-	}
-	var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
-	$('.iframecode').text(iframeEmbedCode);
 }

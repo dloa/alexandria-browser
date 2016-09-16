@@ -22,8 +22,7 @@ function getCryptos() {
 	cryptoTimerRunning = 0;
 // Alexandria Crytpo Price
 	$.ajax({
-		url: 'http://colorcoin.org:41290/flo-market-data/v1/getAll',
-//		url: 'http://localhost:41290/flo-market-data/v1/getAll',
+		url: 'https://api.alexandria.io/flo-market-data/v1/getAll',
 		success: function(e) {
 			console.info(e);
 			var data = $.parseJSON(e);

@@ -590,6 +590,9 @@ function mountMediaBrowser(el, data) {
         $('.format-selector button').removeClass('active');
         $(this).addClass('active')
     })
+
+//	displayEmbedCode(mediaID);
+
 	// MAKE HISTORY ARTIFACT VIEW
 	var stateObj = {
 		currentView: 'artifact',
@@ -838,4 +841,21 @@ function setQR(address, amount) {
             $(this).css('margin','auto');
         });
     }
+}
+
+// IFRAME EMBED CODE
+function displayEmbedCode (mediaID) {
+	var embedUrl = newUrl;
+	var currentPath = window.location.pathname.split('/');
+	console.info(currentPath);
+	var prefix = location.window.protocol + '//' + window.location.hostname;
+
+	if ( (stateObj.mediaType == 'music') || (stateObj.mediaType == 'video') || (stateObj.mediaType == 'movie') ) {
+		embedUrl = prefix + '/artifact.html#' + stateObj.subView;
+	} else {
+		embedUrl = prefix + '/embed.html#' + stateObj.subView;
+	}
+
+	var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
+	$('.iframecode').text(iframeEmbedCode);
 }
