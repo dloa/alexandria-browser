@@ -591,7 +591,7 @@ function mountMediaBrowser(el, data) {
         $(this).addClass('active')
     })
 
-//	displayEmbedCode(mediaID);
+	displayEmbedCode(mediaID, mediaData.type);
 
 	// MAKE HISTORY ARTIFACT VIEW
 	var stateObj = {
@@ -844,16 +844,12 @@ function setQR(address, amount) {
 }
 
 // IFRAME EMBED CODE
-function displayEmbedCode (mediaID) {
-	var embedUrl = newUrl;
-	var currentPath = window.location.pathname.split('/');
-	console.info(currentPath);
-	var prefix = location.window.protocol + '//' + window.location.hostname;
+function displayEmbedCode (mediaID, mediaType) {
 
-	if ( (stateObj.mediaType == 'music') || (stateObj.mediaType == 'video') || (stateObj.mediaType == 'movie') ) {
-		embedUrl = prefix + '/artifact.html#' + stateObj.subView;
+	if ( (mediaType == 'music') || (mediaType == 'video') || (mediaType == 'movie') ) {
+		embedUrl = window.location + '/artifact.html#' + mediaID;
 	} else {
-		embedUrl = prefix + '/embed.html#' + stateObj.subView;
+		embedUrl = window.location + '/embed.html#' + mediaID;
 	}
 
 	var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
