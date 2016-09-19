@@ -193,7 +193,6 @@ function getPrices (file) {
 
 function togglePlaybarShadow (bool) {
     var action = bool?'show':'hide';
-
     $('.jp-type-single')[action]();
     $('#audio-player')[action]();
     $('#native-player')[action]();
@@ -387,11 +386,7 @@ function showPaymentOption(e) {
         }
         var	fileData = $('.playlist tr.active').data();
         console.info(fileData);
-        if (!fileData.track.dname) {
-            $('.media-track').text(fileData.track.fname);
-        } else {
-            $('.media-track').text(fileData.track.dname);
-        }
+        $('.media-track').hide();
         var btcAddress = $('.ri-btc-address').text();
         var price = 0;
         var actionElement;
@@ -412,6 +407,12 @@ function showPaymentOption(e) {
             return;
         }
 
+        if (!fileData.track.dname) {
+            $('.media-track').text(fileData.track.fname);
+        } else {
+            $('.media-track').text(fileData.track.dname);
+        }
+        $('.media-track').show();
         togglePlaybarShadow(false);
         if (artifactLoaded === false) {
             artifactLoaded = true;
