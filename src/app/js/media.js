@@ -12,6 +12,7 @@ function loadArtifactView2(objMeta) {
 	$('.view-publishers-ui').hide();
 	$('#view-media .entity-view').hide();
 	// SHOW MEDIA VIEW
+    artifactLoaded = false;
 	document.getElementById('view-artifact').style.display = 'block';
 	var mediaID = '';
 	// GET MEDIA ID FROM objMeta
@@ -31,7 +32,6 @@ function loadArtifactView2(objMeta) {
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
     console.log (mediaID, thisMediaData);
 	$('.media-cover').hide();
-	autoplayFree = false;
     window.doMountMediaBrowser('#media-browser', thisMediaData);
 }
 
@@ -42,7 +42,7 @@ var mainFile;
 var URL_RECV = "https://api.alexandria.io/payproc/receive";
 var URL_GETRECVD = "https://api.alexandria.io/payproc/getreceivedbyaddress/";
 
-var autoplayFree;
+var artifactLoaded;
 var posterFrame = '';
 
 window.doMountMediaBrowser = function (el, data) {
@@ -144,21 +144,6 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
     $('.playlist td').on ('click', function (e) {
 	showPaymentOption(e);
     });
- 
-/*
-   if (!files[0].sugPlay) {
-        togglePlaybarShadow(true);
-        var freePlayTimer = setTimeout("autoPlayFree()", 500);
-	    $('.jp-type-single').show();
-	    $('#audio-player').show();
-	    $('#native-player').show();
-    } else {
-	    $('.jp-type-single').hide();
-	    $('#audio-player').hide();
-	    $('#native-player').hide();
-        togglePlaybarShadow(false);
-    }
-*/
 }
 
 function secondsToPrettyString (s, short){
@@ -393,7 +378,7 @@ function showPaymentOption(e) {
         if( $(self).hasClass('disabled') ) {
         	return false;	
         }
-	var fileData = $(self).closest('tr').data();
+        var fileData = $(self).closest('tr').data();
 
         // Check if fileData is an empty object, if it is, then fill it with the main file info as it is most likely that the circular buttons were pressed
         if (jQuery.isEmptyObject(fileData))
@@ -423,17 +408,20 @@ function showPaymentOption(e) {
             return;
         }
 
-        var btcprice = makePaymentToAddress(btcAddress, price, function () {
-            return onPaymentDone(action, fileData);
-        });
-        $('.pwyw-btc-' + action + '-price').text(btcprice);
-        $('.pwyw-usd-' + action + '-price-input').val(price);
-
-        $('.pwyw-container').removeClass('active');
-        actionElement.addClass('active');
-
-        togglePWYWOverlay(true);
         togglePlaybarShadow(false);
+        if (artifactLoaded === false) {
+            artifactLoaded = true;
+        } else {        
+            var btcprice = makePaymentToAddress(btcAddress, price, function () {
+                return onPaymentDone(action, fileData);
+            });
+            $('.pwyw-btc-' + action + '-price').text(btcprice);
+            $('.pwyw-usd-' + action + '-price-input').val(price);
+
+            $('.pwyw-container').removeClass('active');
+            actionElement.addClass('active');
+            togglePWYWOverlay(true);
+        }
 }
 
 function mountMediaBrowser(el, data) {
@@ -596,6 +584,7 @@ function mountMediaBrowser(el, data) {
 
 	displayEmbedCode(mediaID, mediaData.type);
 	
+	window.scroll(0,0);
 	$('.playlist-tracks tr:first').children(':first').click();
 
 	// MAKE HISTORY ARTIFACT VIEW
@@ -723,9 +712,9 @@ function onPaymentDone (action, file) {
         a.remove();
         $('#audio-player').jPlayer("load");
     } else {
-	if (autoplayFree === false) {
+	if (artifactLoaded === false) {
 		$('#audio-player').jPlayer("load");
-		autoplayFree = true;
+		artifactLoaded = true;
 	} else {
 		$('#audio-player').jPlayer("play");
 	}
