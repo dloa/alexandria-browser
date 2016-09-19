@@ -806,6 +806,9 @@ function resetAlexandria() {
 		}).hide();
 	resetTipModal();
 	resetQR();
+    if (paymentTimeout) {
+        clearTimeout (paymentTimeout)
+    }	
 	$('#tip-modal').css({
 			'left':'initial',
 			'right':'initial'
