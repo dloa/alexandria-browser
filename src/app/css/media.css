@@ -242,7 +242,7 @@
     background-color: rgba(230, 230, 230, 0.8) ;
 }
 
-.playlist-tracks tr:hover, .playlist-extra-files tr:hover{
+.playlist-tracks tr:hover, .playlist-extra-files tr:hover, .playlist-tracks tr.active, .playlist-extra-files tr.active {
     background-color: rgba(210, 210, 210, 0.8);
 }
 

@@ -386,9 +386,12 @@ function showPaymentOption(e) {
         	return false;	
         }
         var	fileData = $('.playlist tr.active').data();
-
         console.info(fileData);
-        
+        if (!fileData.track.dname) {
+            $('.media-track').text(fileData.track.fname);
+        } else {
+            $('.media-track').text(fileData.track.dname);
+        }
         var btcAddress = $('.ri-btc-address').text();
         var price = 0;
         var actionElement;
