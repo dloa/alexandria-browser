@@ -16,7 +16,7 @@ route('/wallet', 'wallet', function () { });
 
 var el = null;  
 
-function router (event, goUrl) {  
+function router (event, goUrl) {
     // Current route url (getting rid of '#' in hash as well):
     var url = location.hash.slice(1) || '/';
   	if (goUrl) {

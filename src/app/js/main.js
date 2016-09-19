@@ -247,10 +247,9 @@ function loadMediaEntity(obj) {
 	var parentObj = $(obj).parents('.media-entity');
 	var mediaType = $(parentObj).attr('media-type');
 	// Check Movie for IMDB Verification
-	if (mediaType == 'movie') {
-		loadArtifactView2(parentObj);
 	// VERIFICATION DISABLED
 	/*
+	if (mediaType == 'movie') {
 		var mediaTxnID = $(parentObj).attr('id').split('-')[1];
 		var IMDBid = $(parentObj).find('.media-www-id').text();
 		var IMDBapi = 'http://www.myapifilms.com/imdb?idIMDB='+ IMDBid;
@@ -279,14 +278,13 @@ function loadMediaEntity(obj) {
 				console.error(thrownError);
 			}
 	    });
+	}
   */
+	// Load Media Entity View
+	if ( (mediaType == 'music') || (mediaType == 'movie') || (mediaType == 'video') ) {
+		loadArtifactView2(parentObj);
 	} else {
-		// Load Media Entity View
-		if ( (mediaType == 'music') || (mediaType == 'movie') || (mediaType == 'video') ) {
-			loadArtifactView2(parentObj);
-		} else {
-			loadArtifactView(parentObj);
-		}
+		loadArtifactView(parentObj);
 	}
 }
 

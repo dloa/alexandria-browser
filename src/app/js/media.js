@@ -306,8 +306,7 @@ function applyMediaData(data) {
     $('.media-description').html(info.description.replace(/(?:\r\n|\r|\n)/g, '<br />'));
 
     watchForPin (ipfsAddr, xinfo.filename)
-    //             debugger;
-
+    
     return media;
 }
 
