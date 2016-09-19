@@ -141,8 +141,16 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         extraFiles.parent().hide();
     }
 
+    $('.pwyw-item').off ('click');
+
+    $('.pwyw-item').on ('click', function (e) {
+		showPaymentOption(e);
+    });
+
     $('.playlist td').on ('click', function (e) {
-	showPaymentOption(e);
+    	$('.playlist tr').removeClass('active');
+    	$(e.target).parent().addClass('active');
+		showPaymentOption(e);
     });
 }
 
@@ -377,23 +385,17 @@ function showPaymentOption(e) {
         if( $(self).hasClass('disabled') ) {
         	return false;	
         }
-        var fileData = $(self).closest('tr').data();
+        var	fileData = $('.playlist tr.active').data();
 
-        // Check if fileData is an empty object, if it is, then fill it with the main file info as it is most likely that the circular buttons were pressed
-        if (jQuery.isEmptyObject(fileData))
-            fileData = mainFile;
-
-        console.log(fileData)
+        console.info(fileData);
         
         var btcAddress = $('.ri-btc-address').text();
         var price = 0;
         var actionElement;
         var action;
 
-        $('.pwyw-item').removeClass('active');
-
         // Check if we are the play or download button
-        if ($(self).closest('td').hasClass('tb-price-download') || $(self).closest('td').hasClass('pwyw-action-download') || $(self).closest('tbody').hasClass('playlist-extra-files')){
+        if ($(self).closest('td').hasClass('tb-price-download') || $(self).closest('li').hasClass('pwyw-action-download') || $(self).closest('tbody').hasClass('playlist-extra-files')){
             actionElement = $('.pwyw-activate-download');
             action = 'download';
             price = fileData.sugBuy;
@@ -401,7 +403,7 @@ function showPaymentOption(e) {
             actionElement = $('.pwyw-activate-play');
             action = 'play';
             price = fileData.sugPlay;
-	}
+		}
         if (price === 0 || price === undefined || price == NaN){
             onPaymentDone(action, fileData);
             return;
@@ -414,6 +416,7 @@ function showPaymentOption(e) {
             var btcprice = makePaymentToAddress(btcAddress, price, function () {
                 return onPaymentDone(action, fileData);
             });
+            console.info(btcprice);
             $('.pwyw-btc-' + action + '-price').text(btcprice);
             $('.pwyw-usd-' + action + '-price-input').val(price);
 
@@ -532,23 +535,17 @@ function mountMediaBrowser(el, data) {
             .replace(/^pwyw-usd-/, '')
             .replace(/-price-input$/, '')
 
-        $('.pwyw-btc-' + action + '-price').text (USDToBTC(this.value))
+        $('.pwyw-btc-' + action + '-price').text (USDToBTC(this.value));
         if (lastAddress) {
             setQR(lastAddress, USDToBTC(this.value));
         }
 
     })
 
-    $('.pwyw-item').on('click', showPaymentOption)
-
     $('.pwyw-overlay').on('click',function() {
-        $('.pwyw-item.active').trigger('click');
-        $('.pwyw-container.active').removeClass('active');
         togglePWYWOverlay(false);
     });
     $('.pwyw-close').on('click',function() {
-        $('.pwyw-item.active').trigger('click');
-        $('.pwyw-container.active').removeClass('active');
         togglePWYWOverlay(false);
     });
     $('.pwyw-pin-it').on('click', function (e) {
@@ -627,7 +624,6 @@ function loadTrack (name, url, fname) {
 		return false;
 	}
 	$('#audio-player').show();
-	console.info(name);
 	if (filetype == 'mp3') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
@@ -677,22 +673,24 @@ function loadTrack (name, url, fname) {
 }
 
 function togglePWYWOverlay (bool) {
+	$('#pwyw-btc-play-qrcode').hide();
+	$('#pwyw-btc-play-qrcode img').attr('src','');
+	$('.pwyw-btc-address').text('');
     var action = bool?'show':'hide';
-
     $('.pwyw-close')[action]();
     $('.pwyw-overlay')[action]();
+	if (bool === false) {
+		$('.pwyw-container.active').toggleClass('active');
+	}
 }
 
 function onPaymentDone (action, file) {
     var url = file.url;
-    resetQR();
 
     if (action == 'pin') $('.pwyw-pining-error').hide();
 
     if (action != 'pin') {
-        //$('.pwyw-item.active').trigger('click');
-        $('.pwyw-container.active').removeClass('active');
-        togglePWYWOverlay(false)
+        togglePWYWOverlay(false);
         togglePlaybarShadow(true);
     }
 
@@ -731,7 +729,6 @@ $('#audio-player').click(function(){
 var lastAddress;
 
 function makePaymentToAddress(address, amount, done) {
-    resetQR();
     togglePlaybarShadow(false);
     var amountInBTC = USDToBTC(amount);
     var params = { address: address, amount: amountInBTC };
@@ -801,12 +798,6 @@ function watchForpayment(address, amount, done) {
         });
 }
 
-function resetQR() {
-    $('.pwyw-qrcode img').attr("src", 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==');
-
-    $('.pwyw-btc-address').text('');   
-}
-
 function setQR(address, amount) {
     // Reset the QR Code Div
     var qrCodes = ['pwyw-btc-play-qrcode', 'pwyw-btc-download-qrcode'];
@@ -839,6 +830,7 @@ function setQR(address, amount) {
         $('.pwyw-qrcode img').each(function() {
             $(this).css('margin','auto');
         });
+		$('#pwyw-btc-play-qrcode').show();
     }
 }
 
