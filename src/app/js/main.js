@@ -288,52 +288,6 @@ function loadMediaEntity(obj) {
 	}
 }
 
-// CHANGE CUSTOM TIP AMOUNT
-function changeCustomTipAmount() {
-	$('#tip-option-custom').click();
-}
-
-// CHANGE FLO TIP AMOUNT
-function changeTipAmount(opt) {
-	var tipAmount = ($(opt).attr('id')=='tip-option-custom') ? (parseFloat($(opt).siblings('.tip-input').val())) : parseFloat($(opt).val()) ;
-	$('.tip-value').text(tipAmount);
-	$('#tip-modal .flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100)/100);
-	$('#tip-modal .btc-usd-output').text(Math.round((tipAmount/BTCUSD)*100000000)/100000000);
-}
-
-// SET CUSTOM TIP AMOUNT BY INPUT
-function prevTipAmountSet(obj) {
-	prevTipAmount = obj.value;
-}
-
-function customTipAmountInput(event, obj) {
-	var charCode = event.keyCode;
-	var tipAmount = obj.value;
-	if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 185)  && (charCode != 190) ) {
-		tipAmount = parseFloat(obj.value);
-		obj.value = prevTipAmount;
-		if (obj == document.getElementById('CustomTipAmount')) {
-			$('.tip-value').text(prevTipAmount);
-			$('#tip-modal .flo-usd-output').text(Math.round((prevTipAmount/FLOUSD)*100000000)/100000000);
-		}
-		alert('Input a valid amount.');
-	} else if ( (tipAmount != prevTipAmount) && (tipAmount != '') ) {
-		var decValue = tipAmount.split('.')[1];
-		if(decValue) {
-			if (decValue.length > 2){
-				console.log(decValue[0]);
-				decValue = decValue[0].toString() + decValue[1].toString();
-				tipAmount = tipAmount.split('.')[0]+'.'+decValue;
-				obj.value = tipAmount;
-			}
-		}
-		if (obj == document.getElementById('CustomTipAmount')) {
-			document.getElementById('tip-option-custom').value = tipAmount;
-			$('.tip-value').text(tipAmount);
-			$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
-		}
-	}
-}
 
 // DISPLAY MEDIA INFO MODAL
 function loadInfoModal(childObj) {
@@ -459,14 +413,117 @@ function loadShareModal(obj) {
 	$(obj).parents('.entity-market').find('#share-modal').css(modalPos, shareModalPos +'px').fadeToggle(fadeTimer);
 }
 
+// DISPLAY TIP MODAL
+function loadTipModal(obj) {
+	if ($(obj).parents('.entity-market #tip-modal').length == 0) {
+		$(obj).parents('.entity-market').append($('#tip-modal'));
+	}
+	$('input[name="tip-amount"]:eq(2)').click();
+	var mediaFLO = $('main:visible .FLO-address').html();
+	if (!mediaFLO) {
+		var mediaFLO = $('.ri-publisher').text();
+	}
+	var mediaBTC = $('main:visible .BTC-address').html();
+	if (!mediaBTC) {
+		var mediaBTC = $('.ri-btc-address').text();
+	}
+	$('#tipAdd-FLO').html(mediaFLO);
+	// GENERATE QR CODE FOR FLO TIPS
+	var tipAmount = $('input[name="tip-amount"]:checked').val()/FLOUSD;
+	tipAmount = Math.round(tipAmount*100000000)/100000000;
+	var dname = 'Current artifact display name';
+	var tipCurrency = 'florincoin';
+	generateQR(mediaFLO, 'tip-QR', 100, 100, tipCurrency, tipAmount, dname);
+	if (document.getElementById('sendTipBtn')) {
+		document.getElementById('sendTipBtn').setAttribute('onclick','sendTip(this, FLOclient, "' + mediaFLO + '", "FLO")');
+	}
+	if ( (mediaBTC != 'BTC address') && (mediaBTC != '') ) {
+		$('#tipAdd-BTC').html(mediaBTC);
+		$('.modal-tabs li[name="tip-bitcoin"]').removeClass('hidden');
+		// GENERATE QR CODE FOR BTC TIPS
+		tipAmount = $('input[name="tip-amount"]:checked').val()/BTCUSD;
+		tipAmount = Math.round(tipAmount*100000000)/100000000;
+		tipCurrency = 'bitcion';
+		generateQR(mediaBTC, 'BTC-tip-QR', 100, 100, tipCurrency, tipAmount, dname);
+		if (document.getElementById('sendBTCTipBtn')) {
+			document.getElementById('sendBTCTipBtn').setAttribute('onclick','sendTip(this, BTCclient, "' + mediaBTC + '", "BTC")');
+		}
+	} else {
+		$('#tipAdd-BTC').text('No Address Available');
+		$('.modal-tabs li[name="tip-bitcoin"]').addClass('hidden');
+	}
+	$('#tip-modal .modal-tabs li').not('.hidden').first().click();
+	var modalPos = (history.state.currentView == 'artifact') ? ('right') : ('left');
+	var tipModalPos = (history.state.currentView == 'artifact') ? ($(obj).parent().width() - $(obj).position().left - 32) : ($(obj).position().left - 50);
+	$(obj).parents('.entity-market').find('#tip-modal').css(modalPos,tipModalPos+'px').fadeToggle(fadeTimer);
+}
+
+// CHANGE CUSTOM TIP AMOUNT
+function changeCustomTipAmount() {
+	$('#tip-option-custom').click();
+}
+
+// CHANGE FLO TIP AMOUNT
+function changeTipAmount(opt) {
+	var tipAddBTC = $('#tipAdd-BTC').text();
+	var tipAddFLO = $('#tipAdd-FLO').text();
+	var tipAmount = ($(opt).attr('id')=='tip-option-custom') ? (parseFloat($(opt).siblings('.tip-input').val())) : parseFloat($(opt).val()) ;
+	$('.tip-value').text(tipAmount);
+	var tipAmountFLO = Math.round((tipAmount/FLOUSD)*100)/100;
+	var tipAmountBTC = Math.round((tipAmount/BTCUSD)*100000000)/100000000;
+	$('#tip-modal .flo-usd-output').text(tipAmountFLO);
+	$('#tip-modal .btc-usd-output').text(tipAmountBTC);
+	var dname = ($('.playlist-tracks .active').data().track.dname) ? ($('.playlist-tracks .active').data().track.dname) : ($('.playlist-tracks .active').data().track.fname);
+	var mediaFLO = $('main:visible .FLO-address').html();
+	if (!mediaFLO) {
+		var mediaFLO = $('.ri-publisher').text();
+	}
+	var mediaBTC = $('main:visible .BTC-address').html();
+	if (!mediaBTC) {
+		var mediaBTC = $('.ri-btc-address').text();
+	}
+	generateQR(mediaFLO, 'tip-QR', 100, 100, 'florincoin', tipAmountFLO, dname);
+	generateQR(mediaBTC, 'BTC-tip-QR', 100, 100, 'bitcoin', tipAmountBTC, dname);
+}
+
+// SET CUSTOM TIP AMOUNT BY INPUT
+function prevTipAmountSet(obj) {
+	prevTipAmount = (obj) ? (obj.value) : ($(CustomTipAmount).val());
+}
+
+function customTipAmountInput(event, obj) {
+	var charCode = event.keyCode;
+	var tipAmount = obj.value;
+	if ( ( (charCode > 64) && (charCode < 91) ) || ( (charCode > 105) && (charCode < 144) ) || (charCode > 185)  && (charCode != 190) ) {
+		tipAmount = parseFloat(obj.value);
+		obj.value = prevTipAmount;
+		if (obj == document.getElementById('CustomTipAmount')) {
+			$('.tip-value').text(prevTipAmount);
+			$('#tip-modal .flo-usd-output').text(Math.round((prevTipAmount/FLOUSD)*100000000)/100000000);
+		}
+		alert('Input a valid amount.');
+	} else if ( (tipAmount != prevTipAmount) && (tipAmount != '') ) {
+		var decValue = tipAmount.split('.')[1];
+		if(decValue) {
+			if (decValue.length > 2){
+				decValue = decValue[0].toString() + decValue[1].toString();
+				tipAmount = tipAmount.split('.')[0]+'.'+decValue;
+				obj.value = tipAmount;
+			}
+		}
+		if (obj == document.getElementById('CustomTipAmount')) {
+			document.getElementById('tip-option-custom').value = tipAmount;
+			$('.tip-value').text(tipAmount);
+			$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
+		}
+	}
+}
+
 // SEND TIP WITH FLORINCOIN-QT WALLET
 function sendTip(obj, client, pubAdd, currency) {
 	if ($(obj).hasClass('disabled')) {
 		return false;
 	}	
-	console.info(obj);
-	console.info(client);
-	console.info(pubAdd);
 	if (currency == 'FLO') {
 		if (FLOauth.length == 0) {
 			document.getElementById('wallet-user').value = '';
@@ -720,12 +777,12 @@ function receiveQR(obj) {
 }
 
 // FLO QR CODE
-function generateQR(address, wrapper, qrw, qrh, wallet) {
+function generateQR(address, wrapper, qrw, qrh, wallet, amount, label) {
 	var qrWrap = document.getElementById(wrapper);
 	qrWrap.innerHTML = '';
-	qrWrap.setAttribute('onclick','loadQR('+wallet+':'+address+')');
+//	qrWrap.setAttribute('onclick','loadQR('+wallet+':'+address+')');
 	var qrcode = new QRCode(wrapper, {
-		text: wallet+':'+address,
+		text: wallet+':'+address+'?amount='+amount+'&label='+label,
 		width: qrw,
 		height: qrh,
 		colorDark : "#000000",
