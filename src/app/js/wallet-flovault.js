@@ -185,14 +185,13 @@ function tradeModal() {
 					document.getElementById('trade-balance').innerHTML = Math.round((.5*e*(Math.round((FLOUSD/BTCUSD)*100000000)/100000000))*100000000)/100000000;
 				}
 			});
-			console.log(tradebotURL+'/depositaddress?floaddress='+floaddress+'&raw');
 			$.ajax({
-				url: tradebotURL+'/depositaddress?floaddress='+floaddress+'&raw',
+				url: tradebotURL+'/depositaddress?floaddress='+floaddress,
 				success: function(e) {
-					btcAddress = e;
-					console.info(btcAddress);
+					document.getElementById('trade-address').innerHTML = e;
+					btcAddress = $('#trade-address code').text();
+					$('#trade-address img').appendTo('#tradebotQR');
 					document.getElementById('trade-address').innerHTML = btcAddress;
-					generateQR($('#trade-address').text(), 'tradebotQR', 250, 250, 'bitcoin');
 					document.getElementById('trade-modal').style.display = 'block';
 				},
 				error: function(e) {

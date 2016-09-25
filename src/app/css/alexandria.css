@@ -1344,6 +1344,7 @@ ul.distNetList li {
 }
 #tradebotQR {
 	display: inline-block !important;
+	max-width: 250px;
 }
 .bubble-modal:before {
 	bottom: 100%;
