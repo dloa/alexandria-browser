@@ -1399,12 +1399,11 @@ ul.distNetList li {
 .tip-amounts label, .bubble-modal h3, .crypto-price, .credebit-price, .bubble-modal .btnLightGray {
 	color: #919191;
 }
-#tip-QR, #BTC-tip-QR {
-	display: inline-block;
-	margin: 1em auto 0;
-	cursor: pointer;
+#tip-modal .tip-qr-wrap {
 	width: 100px;
 	height: 100px;
+	margin: 1em auto 0;
+	cursor: pointer;
 }
 .bubble-modal h3 {
 	font-weight: bold;

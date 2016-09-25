@@ -465,6 +465,7 @@ function changeCustomTipAmount() {
 
 // CHANGE FLO TIP AMOUNT
 function changeTipAmount(opt) {
+	console.info(opt);
 	var tipAddBTC = $('#tipAdd-BTC').text();
 	var tipAddFLO = $('#tipAdd-FLO').text();
 	var tipAmount = ($(opt).attr('id')=='tip-option-custom') ? (parseFloat($(opt).siblings('.tip-input').val())) : parseFloat($(opt).val()) ;
@@ -517,6 +518,8 @@ function customTipAmountInput(event, obj) {
 			$('.flo-usd-output').text(Math.round((tipAmount/FLOUSD)*100000000)/100000000);
 		}
 	}
+	var opt = $(obj).siblings('input[type="radio"]');
+	changeTipAmount(opt);
 }
 
 // SEND TIP WITH FLORINCOIN-QT WALLET
