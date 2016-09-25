@@ -1446,7 +1446,6 @@ ul.distNetList li {
 	margin: 0;
 	display: table-cell;
 	padding: 0 .8em;
-	border-left: 2px solid #FFF;
 	cursor: pointer;
 	width: 50%;
 }
