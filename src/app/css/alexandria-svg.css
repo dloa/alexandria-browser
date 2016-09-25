@@ -1,0 +1,11 @@
+svg  {
+	width: 98%;
+	height: 98%;
+}
+svg path {
+	fill: #92b4c6;
+	fill-opacity: 1;
+}
+svg:hover path {
+	fill: #797979;
+}
