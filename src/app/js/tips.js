@@ -180,23 +180,28 @@ function sendTip(obj, client, pubAdd, currency) {
 		}
 	} else {
 		// SEND TIP WITH FLOVAULT WALLET
-		var sendTo = $('.tip-address:visible').text();
-		var sendAmount = $('.tip-amount-crypto:visible').text();
-		var sendComment = $('#tip-comment').val();
-		var sendFrom = '';
-		for (var addr in wallet.balances) {
-			console.log(wallet.balances[addr]);
-			console.log(wallet.addresses[addr].addr);
-			if (wallet.balances[addr] >= sendAmount) {
-				sendFrom = wallet.addresses[addr].addr;
-			}
-		}
-		if (sendFrom == '') {
+		var sendTipTo = $('.tip-address:visible').text();
+		var sendTipAmount = $('.tip-amount-crypto:visible').text();
+		var sendTipComment = $('#tip-comment').val();
+		var sendTipFrom = getSendFrom(sendTipAmount);
+		if (sendTipFrom == '') {
 			alert('Insufficient Florincoin');
 		} else {
-			sendFloVault(sendFrom, sendTo, sendAmount, sendComment);
+			sendFloVault(sendTipFrom, sendTipTo, sendTipAmount, sendTipComment);
 		}
 	}
+}
+
+function getSendFrom(sendAmount) {
+	var sendFromAdd = '';
+	for (var addr in wallet.balances) {
+		console.log(wallet.balances[addr]);
+		console.log(wallet.addresses[addr].addr);
+		if (wallet.balances[addr] >= sendAmount) {
+			sendFromAdd = wallet.addresses[addr].addr;
+		}
+	}
+	return sendFromAdd;
 }
 
 // LOAD TIP-TO-ALEXANDRIA MODAL

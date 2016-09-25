@@ -150,6 +150,7 @@ function sendFloVault(sendFrom, sendTo, sendAmount, sendComment) {
         if (window.confirm('Send '+ sendAmount + ' FLO to ' + sendTo + ' with comment: ' + sendComment + '?')) {
                 wallet.sendCoins(sendFrom, sendTo, sendAmount, sendComment, sendcallback);
             refreshFloVaultBalances();
+            $('#tip-modal').fadeOut(fadeTimer);
         }
 }
 

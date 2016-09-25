@@ -289,6 +289,7 @@ var Wallet = (function () {
         }
         if (CurrentAmount < amount) {
             throw "Not enough coins in unspents to reach target amount";
+            alert("Not enough coins in unspents to reach target amount");
         }
         return {unspent: CutUnspent, total: CurrentAmount};
     };
