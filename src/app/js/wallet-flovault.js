@@ -33,7 +33,7 @@ var sendCommentInput = $("#wallet-send-message");
 var sendOutput = $("#sendOutput");
 
 var flovaultURL = 'https://flovault.alexandria.io';
-var tradebotURL = 'http://tradebot.alexandria.io';
+var tradebotURL = 'https://api.alexandria.io/tradebot';
 
 // FLOVAULT REGISTER
 registerBtn.click(function () {
@@ -174,25 +174,40 @@ function sendcallback(err, data){
 // DISPLAY TRADE MODAL
 function tradeModal() {
 	if ( (document.getElementById('trade-modal').style.display == 'none') || (document.getElementById('trade-modal').style.display == '') ) {
-		var floAddress = document.getElementById('wallet-address-select').value;
-		if (floAddress == '') {
+		var floaddress = document.getElementById('wallet-address-select').value;
+		if (floaddress == '') {
 			alert('Please select an address in Request Tokens section');
 		} else {
 			$.ajax({
-				url: flovaultURL +'/flobalance',
+				url: tradebotURL +'/flobalance',
 				success: function(e) {
+					console.info(e);
 					document.getElementById('trade-balance').innerHTML = Math.round((.5*e*(Math.round((FLOUSD/BTCUSD)*100000000)/100000000))*100000000)/100000000;
 				}
 			});
+			console.log(tradebotURL+'/depositaddress?floaddress='+floaddress+'&raw');
 			$.ajax({
-				url: tradebotURL+'/depositaddress?floaddress='+floAddress,
+				url: tradebotURL+'/depositaddress?floaddress='+floaddress+'&raw',
 				success: function(e) {
-					document.getElementById('trade-address').innerHTML = e;
+					btcAddress = e;
+					console.info(btcAddress);
+					document.getElementById('trade-address').innerHTML = btcAddress;
+					generateQR($('#trade-address').text(), 'tradebotQR', 250, 250, 'bitcoin');
 					document.getElementById('trade-modal').style.display = 'block';
+				},
+				error: function(e) {
+					console.error(e);
+					alert('Sorry. Tradebot has malfunctioned. Please try again later.');
 				}
 			});
 		}
 	} else {
 		document.getElementById('trade-modal').style.display = 'none';
 	}
+}
+
+function getTradeBotBitcoinAddress(floaddress, callback){
+	$.get(tradebotURL+"/depositaddress?floaddress=" + floaddress, function(data){
+		callback(data.responseText);
+	})
 }
