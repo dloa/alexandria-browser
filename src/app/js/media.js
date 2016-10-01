@@ -281,6 +281,13 @@ function applyMediaData(data) {
     $('.ri-audio-count', releaseInfoSel).text (tracks.length);
     $('.ri-publisher', releaseInfoSel).text (media.publisher);
     $('.ri-btc-address', releaseInfoSel).text (xinfo['Bitcoin Address']);
+    if (!xinfo['Bitcoin Address']) {
+        console.info(media.publisher);
+        getTradeBotBitcoinAddress(media.publisher, function(data){
+            console.info(data);
+            $('.ri-btc-address').html(data);
+        });
+    }
 	if (xinfo.coverArt) {
     	$('.playbar-shadow').css('width','initial');
 	    $('.media-cover img').attr('src', IPFSUrl ([ipfsAddr,  xinfo.coverArt]));

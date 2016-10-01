@@ -190,6 +190,7 @@ function tradeModal() {
 				success: function(e) {
 					document.getElementById('trade-address').innerHTML = e;
 					btcAddress = $('#trade-address code').text();
+					$('#tradebotQR').html('');
 					$('#trade-address img').appendTo('#tradebotQR');
 					document.getElementById('trade-address').innerHTML = btcAddress;
 					document.getElementById('trade-modal').style.display = 'block';
@@ -206,7 +207,7 @@ function tradeModal() {
 }
 
 function getTradeBotBitcoinAddress(floaddress, callback){
-	$.get(tradebotURL+"/depositaddress?floaddress=" + floaddress, function(data){
+	$.get(tradebotURL+"/depositaddress?floaddress=" + floaddress + '&raw', function(data){
 		callback(data.responseText);
 	})
 }
