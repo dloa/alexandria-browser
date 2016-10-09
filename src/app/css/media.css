@@ -92,6 +92,8 @@
 }
 
 .pwyw-container {
+    width: 320px;
+    max-width: 80%;
     max-height: 0px;
     overflow: hidden;
     padding: 0px 10px;
@@ -101,13 +103,12 @@
     flex-direction: column;
     margin: 0px auto;
     background-color: lightcyan;
-    //             transition: all 1s;
 }
 
 .pwyw-container.active {
     max-height: 100%;
-    padding: 25px;
-    margin: 20px;
+    padding: 15px;
+    position: relative;
 }
 
 .pwyw-paybox {
@@ -137,7 +138,7 @@
 .pwyw-qrcode {
 	-webkit-flex: 1;
     flex: 1;
-    margin: 0px 5px;
+    margin: 0px 25px;
 }
 
 .pwyw-payinfo {
@@ -236,6 +237,15 @@
 
 .playlist-table tr {
     cursor: pointer;
+}
+.playlist-table td, .playlist-table th {
+	display: block;
+	text-align: left !important;
+}
+@media only screen and (min-width: 725px) {
+	.playlist-table td, .playlist-table th {
+		display: table-cell !important;
+	}
 }
 
 .playlist-tracks tr:nth-child(odd), .playlist-extra-files tr:nth-child(odd) {

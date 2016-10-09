@@ -281,6 +281,7 @@ function applyMediaData(data) {
     $('.ri-audio-count', releaseInfoSel).text (tracks.length);
     $('.ri-publisher', releaseInfoSel).text (media.publisher);
     $('.ri-btc-address', releaseInfoSel).text (xinfo['Bitcoin Address']);
+    console.info(xinfo['Bitcoin Address']);
     if (!xinfo['Bitcoin Address']) {
         console.info(media.publisher);
         getTradeBotBitcoinAddress(media.publisher, function(data){
@@ -653,6 +654,7 @@ function togglePWYWOverlay (bool) {
     var action = bool?'show':'hide';
     $('.pwyw-close')[action]();
     $('.pwyw-overlay')[action]();
+    $('.pwyw-close').appendTo('.pwyw-container.active');
 	if (bool === false) {
 		$('.pwyw-container.active').toggleClass('active');
 	}

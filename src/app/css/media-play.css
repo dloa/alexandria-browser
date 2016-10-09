@@ -269,9 +269,9 @@ body {
 .pwwy-stuff {
     position: fixed;
     top: 10%;
-    left: 50%;
+    left: 0;
     z-index: 1050;
-    margin-left: -169px;
+    width: 100%;
 }
 
 .pwyw-item.active:before {
@@ -305,7 +305,7 @@ body {
 .pwyw-close {
     font-family: 'mediaicns';
     position: absolute;
-    right: 32px;
+    right: 25px;
     top: 25px;
     font-size: 16px;
     cursor: pointer;
@@ -341,19 +341,34 @@ body {
 }
 
 .pwyw-footer {
-    text-align: center
+    text-align: center;
+}
+.pwyw-btc-address {
+    font-size: .75rem !important;
 }
 
+@media only screen and (min-width: 338px) {
+    .pwyw-btc-address {
+        font-size: .8rem !important;
+    }
+}
+@media only screen and (min-width: 373px) {
+    .pwyw-btc-address {
+        font-size: .9rem !important;
+    }
+}
+
+@media only screen and (min-width: 410px) {
+    .pwyw-btc-address {
+        font-size: 1rem !important;
+    }
+}
 .pwyw-pining-info {
     font-size: 30px
 }
 
 .pwyw-pining-suggest {
     font-size: 30px
-}
-
-.pwyw-container {
-    width: 393px
 }
 
 .pwyw-qrcode {
