@@ -585,10 +585,10 @@ function embedFile(mediaType, fileHash, mediaFilename, posterFrame) {
     }
     if (mediaType == 'book') {
         embedCode = '<object data="' + IPFSHost +'/ipfs/'+ fileHash + '/' + mediaFilename + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="' + IPFSHost +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
-    } else if (mediaType == 'recipe') {
-        embedCode = '<object data="' + IPFSHost +'/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
     } else if (mediaType == 'thing') {
         embedCode = '<img src="' + IPFSHost +'/ipfs/'+fileHash+'" class="large-poster" />';
+    } else {
+        embedCode = '<object data="' + IPFSHost +'/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
     }
     $('#embedded-file').html(embedCode).show();
 }
