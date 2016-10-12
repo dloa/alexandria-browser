@@ -195,6 +195,7 @@ function togglePlaybarShadow (bool) {
     var action = bool?'show':'hide';
     $('.jp-type-single')[action]();
     $('#audio-player')[action]();
+    $('#embedded-file')[action]();
     $('#native-player')[action]();
     $('.playbar-shadow').toggleClass('hidden', bool);
 	$('.buybox').toggleClass('hidden', bool);
@@ -356,7 +357,6 @@ function showPaymentOption(e) {
         	return false;	
         }
         var	fileData = $('.playlist tr.active').data();
-        console.info(fileData);
         $('.media-track').hide();
         var btcAddress = $('.ri-btc-address').text();
         var price = 0;
@@ -408,102 +408,108 @@ function mountMediaBrowser(el, data) {
     $(el).html($('#media-template').html());
     var mediaData = applyMediaData(data);
     getUSDdayAvg();
-	if ( (filetype == 'mp3') || (filetype == 'm4a') || (filetype == 'flac') ) {
-	    $('#audio-player').jPlayer({
-	        cssSelectorAncestor: "#playbar-container",
-	        swfPath: "/js",
-	        supplied: filetype,
-	        size: {
-	        	width: '820px'
-	        },
-	        useStateClassSkin: true,
-	        autoBlur: false,
-	        smoothPlayBar: true,
-	        keyEnabled: true,
-	        remainingDuration: true,
-	        toggleDuration: true,
-	        error: function (e) {
-	            console.error('got jplayer error', e)
-	        }
-	    })
-	} else if ( (filetype == 'mp4') || (filetype == 'm4v') ) {
-	    $('#audio-player').jPlayer({
-	        cssSelectorAncestor: "#playbar-container",
-	        swfPath: "/js",
-	        supplied: "m4v",
-	        size: {
-	        	width: '820px',
-	        	height: '461px'
-	        },
-	        useStateClassSkin: true,
-	        autoBlur: false,
-	        smoothPlayBar: true,
-	        keyEnabled: true,
-	        remainingDuration: true,
-	        toggleDuration: true,
-	        error: function (e) {
-	            console.error('got jplayer error', e)
-	        }
-	    })
-	} else if ( (filetype == 'ogg') || (filetype == 'oga') ) {
-	    $('#audio-player').jPlayer({
-	        cssSelectorAncestor: "#playbar-container",
-	        swfPath: "/js",
-	        supplied: "ogg,oga",
-	        size: {
-	        	width: '820px'
-	        },
-	        useStateClassSkin: true,
-	        autoBlur: false,
-	        smoothPlayBar: true,
-	        keyEnabled: true,
-	        remainingDuration: true,
-	        toggleDuration: true,
-	        error: function (e) {
-	            console.error('got jplayer error', e)
-	        }
-	    })
-	} else if (filetype == 'webm') {
-	    $('#audio-player').jPlayer({
-	        cssSelectorAncestor: "#playbar-container",
-	        swfPath: "/js",
-	        supplied: "webmv",
-	        size: {
-	        	width: '820px',
-	        	height: '461px'
-	        },
-	        useStateClassSkin: true,
-	        autoBlur: false,
-	        smoothPlayBar: true,
-	        keyEnabled: true,
-	        remainingDuration: true,
-	        toggleDuration: true,
-	        error: function (e) {
-	            console.error('got jplayer error', e)
-	        }
-	    })
-	} else if (filetype == 'ogv') {
-	    $('#audio-player').jPlayer({
-	        cssSelectorAncestor: "#playbar-container",
-	        swfPath: "/js",
-	        supplied: "ogv",
-	        size: {
-	        	width: '820px',
-	        	height: '461px'
-	        },
-	        useStateClassSkin: true,
-	        autoBlur: false,
-	        smoothPlayBar: true,
-	        keyEnabled: true,
-	        remainingDuration: true,
-	        toggleDuration: true,
-	        error: function (e) {
-	            console.error('got jplayer error', e)
-	        }
-	    })
-   	} else {
-		$('.jp-title').text('Unsupported File Format');
-	}
+    var artifactType = mediaData['type'];
+    if ( (artifactType === 'video') || (artifactType === 'movie') || (artifactType === 'music') ) {
+        // Prep file types that use the built-in media player
+        if ( (filetype == 'mp3') || (filetype == 'm4a') || (filetype == 'flac') ) {
+    	    $('#audio-player').jPlayer({
+    	        cssSelectorAncestor: "#playbar-container",
+    	        swfPath: "/js",
+    	        supplied: filetype,
+    	        size: {
+    	        	width: '820px'
+    	        },
+    	        useStateClassSkin: true,
+    	        autoBlur: false,
+    	        smoothPlayBar: true,
+    	        keyEnabled: true,
+    	        remainingDuration: true,
+    	        toggleDuration: true,
+    	        error: function (e) {
+    	            console.error('got jplayer error', e)
+    	        }
+    	    })
+    	} else if ( (filetype == 'mp4') || (filetype == 'm4v') ) {
+    	    $('#audio-player').jPlayer({
+    	        cssSelectorAncestor: "#playbar-container",
+    	        swfPath: "/js",
+    	        supplied: "m4v",
+    	        size: {
+    	        	width: '820px',
+    	        	height: '461px'
+    	        },
+    	        useStateClassSkin: true,
+    	        autoBlur: false,
+    	        smoothPlayBar: true,
+    	        keyEnabled: true,
+    	        remainingDuration: true,
+    	        toggleDuration: true,
+    	        error: function (e) {
+    	            console.error('got jplayer error', e)
+    	        }
+    	    })
+    	} else if ( (filetype == 'ogg') || (filetype == 'oga') ) {
+    	    $('#audio-player').jPlayer({
+    	        cssSelectorAncestor: "#playbar-container",
+    	        swfPath: "/js",
+    	        supplied: "ogg,oga",
+    	        size: {
+    	        	width: '820px'
+    	        },
+    	        useStateClassSkin: true,
+    	        autoBlur: false,
+    	        smoothPlayBar: true,
+    	        keyEnabled: true,
+    	        remainingDuration: true,
+    	        toggleDuration: true,
+    	        error: function (e) {
+    	            console.error('got jplayer error', e)
+    	        }
+    	    })
+    	} else if (filetype == 'webm') {
+    	    $('#audio-player').jPlayer({
+    	        cssSelectorAncestor: "#playbar-container",
+    	        swfPath: "/js",
+    	        supplied: "webmv",
+    	        size: {
+    	        	width: '820px',
+    	        	height: '461px'
+    	        },
+    	        useStateClassSkin: true,
+    	        autoBlur: false,
+    	        smoothPlayBar: true,
+    	        keyEnabled: true,
+    	        remainingDuration: true,
+    	        toggleDuration: true,
+    	        error: function (e) {
+    	            console.error('got jplayer error', e)
+    	        }
+    	    })
+    	} else if (filetype == 'ogv') {
+    	    $('#audio-player').jPlayer({
+    	        cssSelectorAncestor: "#playbar-container",
+    	        swfPath: "/js",
+    	        supplied: "ogv",
+    	        size: {
+    	        	width: '820px',
+    	        	height: '461px'
+    	        },
+    	        useStateClassSkin: true,
+    	        autoBlur: false,
+    	        smoothPlayBar: true,
+    	        keyEnabled: true,
+    	        remainingDuration: true,
+    	        toggleDuration: true,
+    	        error: function (e) {
+    	            console.error('got jplayer error', e)
+    	        }
+    	    })
+       	} else {
+            // Handle Artifact Types that don't use the built-in media player
+    		$('.jp-title').text('Unsupported File Format');
+
+    	}
+    }
 
     $('.pwyw-usd-price-input').on('keyup', function (e) {
         var action = this.classList[1]
@@ -553,7 +559,7 @@ function mountMediaBrowser(el, data) {
         $(this).addClass('active')
     })
 
-	displayEmbedCode(mediaID, mediaData.type);
+	displayEmbedCode(mediaID, mediaData.type, true);
 	
 	window.scroll(0,0);
 	$('.playlist-tracks tr:first').children(':first').click();
@@ -569,6 +575,22 @@ function mountMediaBrowser(el, data) {
 		publisherId: mediaData.publisher
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);    
+}
+
+// EMBED ARTIFACT FROM DHT
+function embedFile(mediaType, fileHash, mediaFilename, posterFrame) {
+    var embedCode = '';
+    if (mediaFilename == 'none') {
+        mediaFilename = '';
+    }
+    if (mediaType == 'book') {
+        embedCode = '<object data="' + IPFSHost +'/ipfs/'+ fileHash + '/' + mediaFilename + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="' + IPFSHost +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
+    } else if (mediaType == 'recipe') {
+        embedCode = '<object data="' + IPFSHost +'/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
+    } else if (mediaType == 'thing') {
+        embedCode = '<img src="' + IPFSHost +'/ipfs/'+fileHash+'" class="large-poster" />';
+    }
+    $('#embedded-file').html(embedCode).show();
 }
 
 function USDTouBTC (amount) {
@@ -683,14 +705,25 @@ function onPaymentDone (action, file) {
         a[0].click();  
         // Remove the link we added.
         a.remove();
+        $('#playbar-container').show();
         $('#audio-player').jPlayer("load");
     } else {
-	if (artifactLoaded === false) {
-		$('#audio-player').jPlayer("load");
-		artifactLoaded = true;
-	} else {
-		$('#audio-player').jPlayer("play");
-	}
+        var fileType = file.track.type;
+        if ( (fileType === 'video') || (fileType === 'movie') || (fileType === 'music') ) {
+            // Use built-in media player for audio and video
+            $('#playbar-container').show();
+            if (artifactLoaded === false) {
+                $('#playbar-container').jPlayer("load");
+                artifactLoaded = true;
+            } else {
+                $('#audio-player').jPlayer("play");
+            }
+        } else {
+            // Hide built-in media player
+            $('#playbar-container').hide();
+            // Embed static artifacts
+            embedFile(fileType, trackPath.split('/')[4], file.track.fname, '');
+        }
     }
 }
 
@@ -811,14 +844,16 @@ function setQR(address, amount) {
 }
 
 // IFRAME EMBED CODE
-function displayEmbedCode (mediaID, mediaType) {
+function displayEmbedCode (mediaID, mediaType, isNew) {
 
-	if ( (mediaType == 'music') || (mediaType == 'video') || (mediaType == 'movie') ) {
-		embedUrl = window.location.origin + window.location.pathname + 'artifact.html#' + mediaID;
-	} else {
-		embedUrl = window.location.origin + window.location.pathname + 'embed.html#' + mediaID;
-	}
+    if ( isNew != true ) {
+        // Use old embed html for old artifacts
+        embedUrl = window.location.origin + window.location.pathname + 'embed.html#' + mediaID;
+    } else {
+        // Use new embed html for new artifacts
+        embedUrl = window.location.origin + window.location.pathname + 'artifact.html#' + mediaID;
+    }
 
-	var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
-	$('.iframecode').text(iframeEmbedCode);
+    var iframeEmbedCode = '<iframe src="'+ embedUrl +'" width="800px" height="600px"></iframe>';
+    $('.iframecode').text(iframeEmbedCode);
 }

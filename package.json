@@ -1,11 +1,11 @@
 {
   "name": "alexandria",
-  "homepage": "https://blocktech.com",
-  "bugs": "https://github.com/blocktech/alexandria-web/issues",
+  "homepage": "https://alexandria.io",
+  "bugs": "https://github.com/dloa/alexandria-browser/issues",
   "single-instance": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/blocktech/alexandria-web"
+    "url": "https://github.com/dloa/alexandria-browser"
   },
   "license": "GPL-3.0",
   "main": "app://host/src/app/index.html",

@@ -215,6 +215,7 @@ function loadArtifactView(objMeta) {
 	}
 	$('#media-view-entity .entity-footer').hide();
 	$('#media-view-entity .entity-footer.media-'+mediaType).show();
+	displayEmbedCode(mediaID, mediaType, false);
 	$('#media-view-entity').show();
 	var stateObj = {
 		currentView: 'artifact',

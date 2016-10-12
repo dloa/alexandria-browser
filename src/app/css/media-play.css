@@ -16,8 +16,8 @@
 .playbar {
     width: 100%;
     min-height: 50px;
-box-sizing: border-box;
-   }
+	box-sizing: border-box;
+}
 
 #playbar-container {
     position: relative;

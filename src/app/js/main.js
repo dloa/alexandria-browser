@@ -279,13 +279,19 @@ function loadMediaEntity(obj) {
 			}
 	    });
 	}
-  */
-	// Load Media Entity View
-	if ( (mediaType == 'music') || (mediaType == 'movie') || (mediaType == 'video') ) {
-		loadArtifactView2(parentObj);
-	} else {
+	*/
+
+	var pubTime = parseInt($(parentObj).find('.media-pub-time').html());
+	if (pubTime.toString().length === 10) {
+		pubTime = pubTime * 1000;
+	}	
+	if ( (mediaType != 'music') && (mediaType != 'movie') && (mediaType != 'video') && (pubTime < 1476249400000) ) {
 		loadArtifactView(parentObj);
+	} else {
+		loadArtifactView2(parentObj);
 	}
+	// Load Media Entity View
+//	loadArtifactView2(parentObj);
 }
 
 
@@ -302,7 +308,7 @@ function loadInfoModal(childObj) {
 			$(parentObj).append($('#info-modal-media'));
 		}
 		var mediaRuntime = $(parentObj).find('.media-runtime').html();
-		var mediaPubTime = $(parentObj).find('.media-pub-time').html();
+		var mediaPubTime = new Date(parseInt($(parentObj).find('.media-pub-time').html()));
 		var mediaTitle = $(parentObj).find('.media-title').html();
 		var mediaMeta = $(parentObj).find('.media-meta').html();
 		var mediaDesc = $(parentObj).find('.media-desc').html();
@@ -640,7 +646,9 @@ function resetInterface() {
     togglePWYWOverlay(false);
     togglePlaybarShadow(true);
 	$('#native-player').remove();
+	$('.jp-title').html('');
 	$('#audio-player').jPlayer('destroy');
+	$('#embedded-file').html('');
 	document.getElementById('tip-comment').value = '';
 	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {		document.getElementById('viewlabel').style.display = 'none';
 		document.getElementById('disabler').style.display = 'none';

@@ -200,10 +200,14 @@ function router (event, goUrl) {
 			if (!searchResults) {
 				var thisMediaData = searchAPI('media', 'txid', paths[1]);
 				var mediaType = thisMediaData[0]['media-data']['alexandria-media']['type'];
-				if ( (mediaType == 'music') || (mediaType == 'movie') || (mediaType == 'video') ) {
-					loadArtifactView2(paths[1]);
-				} else {
+				var pubTime = thisMediaData[0]['media-data']['alexandria-media']['timestamp'];
+				if (pubTime.toString().length === 10) {
+					pubTime = pubTime * 1000;
+				}	
+				if ( (mediaType != 'music') && (mediaType != 'movie') && (mediaType != 'video') && (pubTime < 1476249400000) ) {
 					loadArtifactView(paths[1]);
+				} else {
+					loadArtifactView2(paths[1]);
 				}
 			} else {
 				loadPublisherView(paths[1]);
