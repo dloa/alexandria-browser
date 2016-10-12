@@ -149,7 +149,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
 
     $('.playlist td').on ('click', function (e) {
     	$('.playlist tr').removeClass('active');
-    	$(e.target).parent().addClass('active');
+    	$(e.target).closest('tr').addClass('active');
 		showPaymentOption(e);
     });
 }
@@ -282,11 +282,8 @@ function applyMediaData(data) {
     $('.ri-audio-count', releaseInfoSel).text (tracks.length);
     $('.ri-publisher', releaseInfoSel).text (media.publisher);
     $('.ri-btc-address', releaseInfoSel).text (xinfo['Bitcoin Address']);
-    console.info(xinfo['Bitcoin Address']);
     if (!xinfo['Bitcoin Address']) {
-        console.info(media.publisher);
         getTradeBotBitcoinAddress(media.publisher, function(data){
-            console.info(data);
             $('.ri-btc-address').html(data);
         });
     }
