@@ -64,7 +64,7 @@ function makeHistory(stateObj, newTitle) {
 		newBreadcrumbs = newBreadcrumbs + ' / ' + stateObj.currentView.charAt(0).toUpperCase() + stateObj.currentView.slice(1);
 		
 	}
-	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
+	if (!isEmbed) {
 		document.getElementById('alexandria-breadcrumbs').innerHTML = newBreadcrumbs;
 		document.getElementById('alexandria-breadcrumbs').style.display = 'inline-block';
 		document.getElementById('viewlabel').style.display = 'inline-block';
