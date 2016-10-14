@@ -105,8 +105,8 @@ function createCoinbaseModal(bitcoinAddress, amount, action) {
 }
 
 function updateCoinbaseModal(bitcoinAddress, amount){
-	$('#coinbase_widget_download').css('display', 'block');
-	$('#coinbase_widget_play').css('display', 'block');
+	$('#coinbase_widget_download').css('display', 'none');
+	$('#coinbase_widget_play').css('display', 'none');
 	$('.coinbase_button_iframe').css('display', 'block');
 	// Coinbase enforces a minimum $1 transaction
 	if (amount < 1)
