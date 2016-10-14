@@ -244,6 +244,44 @@
             </div>
         </div>
     </div>
+            <!-- TIP MODAL -->
+        <div id="tip-modal" class="bubble-modal">
+            <h3>Send a Tip</h3>
+            <ul class="tip-amounts">
+                <li><input type="radio" name="tip-amount" id="tip-option-0" value="0.25" onclick="changeTipAmount(this);" /><label for="tip-option-0">25&cent;</label></li>
+                <li><input type="radio" name="tip-amount" id="tip-option-1" value="0.50" onclick="changeTipAmount(this);" /><label for="tip-option-1">50&cent;</label></li>
+                <li><input type="radio" name="tip-amount" id="tip-option-2" value="1" onclick="changeTipAmount(this);" /><label for="tip-option-2">$1.00</label></li>
+                <li><input type="radio" name="tip-amount" id="tip-option-custom" value="5" onclick="changeTipAmount(this);" /><label for="tip-option-custom">$</label><input type="text" value="5.00" class="tip-input intInput" name="CustomTipAmount"  id="CustomTipAmount" onfocus="changeCustomTipAmount();" onKeyDown="prevTipAmountSet();" onKeyUp="customTipAmountInput(event, this);" /></li>
+            </ul>
+            <div class="tbl">
+                <ul class="modal-tabs">
+                    <li name="tip-bitcoin">Bitcoin</li>
+                    <li name="tip-flo">Florincoin</li>
+                </ul>
+            </div>
+            <div id="tip-bitcoin" class="modal-tab">
+                <div class="row">
+                    <div class="crypto-price strong btc-usd">$<span class="tip-value">1.00</span> USD = <span class="btc-usd-output"></span> BTC</div>
+                </div>
+                <div class="row">
+                    <a id="sendBTCTipBtn" class="btnLightGray appOnly">Send Tip</a>
+                    <p>Send <span id="tip-btc-usd-output" class="btc-usd-output selectable tip-amount-crypto" onclick="selectText('tip-btc-usd-output');" class="selectable"></span> BTC to:<br />
+                    <span id="tipAdd-BTC" onclick="selectText('tipAdd-BTC');" class="selectable tip-address">[insert BTC address]</span><br /><div id="BTC-tip-QR" class="tip-qr-wrap"></div></p>
+                </div>
+            </div>
+            <div id="tip-flo" class="modal-tab">
+                <div class="row">
+                    <div class="crypto-price strong flo-usd">$<span class="tip-value">1.00</span> USD = <span class="flo-usd-output"></span> FLO</div>
+                </div>
+                <div class="row">
+                    <input type="text" id="tip-comment" placeholder="Comment" />
+                    <a id="sendTipBtn" class="btnLightGray hidden">Send Tip</a>
+                    <p>Send <span id="tip-flo-usd-output" class="flo-usd-output selectable tip-amount-crypto" onclick="selectText('tip-flo-usd-output');" class="selectable"></span> FLO to:<br />
+                    <span id="tipAdd-FLO" onclick="selectText('tipAdd-FLO');" class="selectable tip-address">[insert FLO address]</span><br /><div id="tip-QR" class="tip-qr-wrap"></div></p>
+                </div>
+            </div>
+        </div>
+    
     <div class="pwyw-overlay"></div>
     <div id="media-browser" class="wrapper"></div>
 	<script src="vendor/jquery-ui/jquery-ui.min.js"></script>
