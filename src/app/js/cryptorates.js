@@ -31,8 +31,10 @@ function getCryptos() {
 			$('#flo-usd label').text('FLO/USD').next('span').text(FLOUSD);
 			FLOCost = parseFloat($('#flo-cost').text());
 			$('#tip-modal .flo-usd-output').text(Math.round((1/FLOUSD)*100)/100);
-			$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);					
-			$('#tip-alexandria-modal .flo-usd-output').text(Math.round((document.getElementById('alexandria-tip-amount').value*FLOUSD)*100000)/100000);
+			$('#newMedia-notary .flo-usd-output').text(Math.round((FLOUSD*FLOCost)*100000)/100000);
+			if ($('#alexandria-tip-amount').length > 0) {
+				$('#tip-alexandria-modal .flo-usd-output').text(Math.round((document.getElementById('alexandria-tip-amount').value*FLOUSD)*100000)/100000);
+			}
 			var pwywAmount = $('.pwyw-wall-amount:visible').val();
 			$('.pwyw-wall-amount:hidden').val(pwywAmount);
 			$('#pwyw-modal .flo-usd-output').text(Math.round((pwywAmount/FLOUSD)*100000)/100000);

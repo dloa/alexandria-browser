@@ -202,7 +202,7 @@ jQuery(document).ready(function($){
 	
 	// SET LOADED VALUE
 	var loadedTimer = setTimeout(function(){
-		document.getElementById('loaded').innerHTML = '1';
+		$('#loaded').html('1');
 	}, 3000);
 
 	// Get exchange rates
@@ -583,7 +583,7 @@ function resetInterface() {
 	$('.jp-title').html('');
 	$('#audio-player').jPlayer('destroy');
 	$('#embedded-file').html('');
-	document.getElementById('tip-comment').value = '';
+	$('#tip-comment').val('');
 	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {		document.getElementById('viewlabel').style.display = 'none';
 		document.getElementById('disabler').style.display = 'none';
 		if (document.getElementById('intro').style.display == 'block') {
@@ -593,8 +593,8 @@ function resetInterface() {
 	$('#browse-media h2').remove();
 	$('.search').attr('disabled',false);
 	$('#browse-media-wrap .row').remove();
-	document.getElementById('share-modal').style.display = 'none';
-	document.getElementById('tip-modal').style.display = 'none';
+	$('#share-modal').hide();
+	$('#tip-modal').hide();
 	resetTipModal();
 	$('#share-modal').css({
 			left:'initial',

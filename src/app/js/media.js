@@ -1,11 +1,13 @@
 // v0.6 LOAD ARTIFACT VIEW
 function loadArtifactView2(objMeta) {
 	// HIDE OTHER VIEWS
-	document.getElementById('intro').style.display = 'none';
+    if ($('#intro').length > 0) {
+    	document.getElementById('intro').style.display = 'none';
+    }
 	$('main').hide();
 	hideOverlay();
 	resetInterface();
-	document.getElementById('search').style.display = 'block';
+	$('#search').show();
 	$('.wallet-ui').hide();
 	$('.publisher-ui').hide();
 	$('.sharing-ui').hide();
@@ -13,7 +15,7 @@ function loadArtifactView2(objMeta) {
 	$('#view-media .entity-view').hide();
 	// SHOW MEDIA VIEW
     artifactLoaded = false;
-	document.getElementById('view-artifact').style.display = 'block';
+	$('#view-artifact').show();
 	var mediaID = '';
 	// GET MEDIA ID FROM objMeta
 	if ( (objMeta) && (objMeta.length == 1) ) {
