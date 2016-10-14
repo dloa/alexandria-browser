@@ -68,9 +68,6 @@ jQuery(document).ready(function($){
 				$('#adv-search').fadeToggle(fadeTimer);
 			}
 		}
-		if ( ( ($('#info-modal-media').css('display') == 'block') && ($('#info-modal-media').css('opacity') == 1) ) && ( (!$(e.target).parents('#info-modal-media')[0]) && ( (!$(e.target).parents('.info-icon')[0]) ) ) ) {
-			$('#info-modal-media').fadeOut(fadeTimer);
-		}
 		if ( ( ($('#info-modal-small').css('display') == 'block') && ($('#info-modal-small').css('opacity') == 1) ) && ( (!$(e.target).parents('#info-modal-small')[0]) && ( (!$(e.target).parents('.info-icon')[0]) ) ) ) {
 			$('#info-modal-small').fadeOut(fadeTimer);
 		}
@@ -243,7 +240,6 @@ function loadPublisherEntity(obj) {
 
 // LOAD MEDIA ARTIFACT VIEW
 function loadMediaEntity(obj) {
-	$('#info-modal-media').fadeOut(fadeTimer);
 	var parentObj = $(obj).parents('.media-entity');
 	var mediaType = $(parentObj).attr('media-type');
 	// Check Movie for IMDB Verification
@@ -292,68 +288,6 @@ function loadMediaEntity(obj) {
 	}
 	// Load Media Entity View
 //	loadArtifactView2(parentObj);
-}
-
-
-// DISPLAY MEDIA INFO MODAL
-function loadInfoModal(childObj) {
-    var parentObj = childObj.parentNode;
-    if ( $(parentObj).hasClass('media-entity') ) {
-	    // LOAD MEDIA ENTITY INFO MODAL
-		if ( ($('#info-modal-media').css('display') == 'block') && ($('#info-modal-media').css('opacity')==1) ) {
-			$('#info-modal-media').fadeOut(fadeTimer);
-			return false;
-		}
-		if ($(parentObj).find('#info-modal-media').length == 0) {
-			$(parentObj).append($('#info-modal-media'));
-		}
-		var mediaRuntime = $(parentObj).find('.media-runtime').html();
-		var mediaPubTime = new Date(parseInt($(parentObj).find('.media-pub-time').html()));
-		var mediaTitle = $(parentObj).find('.media-title').html();
-		var mediaMeta = $(parentObj).find('.media-meta').html();
-		var mediaDesc = $(parentObj).find('.media-desc').html();
-		var mediaIcon = $(parentObj).find('.browse-icon').html();
-		$('#info-modal-media .entity-meta-header h2').html(mediaTitle);
-		$('#info-modal-media .entity-meta-header h3').html(mediaMeta);
-		$('#info-modal-media .entity-meta-header .entity-runtime').html(mediaRuntime);
-		$('#info-modal-media .media-image').html(mediaIcon);
-		$('#info-modal-media .entity-pub-time span').html(mediaPubTime);	
-		$('#info-modal-media .media-desc').html('<p>'+ mediaDesc +'</p>');
-		$(childObj).siblings('#info-modal-media').fadeIn(fadeTimer);
-    } else {
-        if ($(parentObj.parentNode).hasClass('col')) {    	
-			if ( ($('#info-modal-small').css('display') == 'block') && ($('#info-modal-small').css('opacity')==1) ) {
-				$('#info-modal-small').fadeOut(fadeTimer);
-				return false;
-			}
-        }
-		// INFO MODAL for LI
-		$('#info-modal-small').html('');
-		var localFile = ($(childObj).siblings('label').length != 0) ? ($(childObj).siblings('label').text()) : ($(childObj).parent().siblings('label').text());
-		localFile = localFile.replace(/\s/g , "-").toLowerCase();
-		getInfoFile(localFile);
-		if ($(childObj).find('#info-modal-small').length == 0) {
-			$(childObj).append($('#info-modal-small'));
-		}
-		var infoInterval = setInterval(function() {
-		    if ($(childObj).find('#info-modal-small').html()!='') {
-		        clearInterval(infoInterval);
-				$(childObj).find('#info-modal-small').fadeIn(fadeTimer);
-		    }
-		}, 100);
-    }
-}
-
-// LOAD LOCAL HTML FILES FOR INFO MODAL
-function getInfoFile(localFile) {
-	var localURL = 'modals/info-'+ localFile +'.html';
-	$.ajax({
-	    url: localURL,
-	    type: 'GET',
-	    success: function(res) {
-			$('#info-modal-small').html(res);
-	    }
-	});
 }
 
 // LOAD ADD CONTENT MODAL
@@ -658,7 +592,6 @@ function resetInterface() {
 	}
 	$('#browse-media h2').remove();
 	$('.search').attr('disabled',false);
-	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();
 	document.getElementById('share-modal').style.display = 'none';
 	document.getElementById('tip-modal').style.display = 'none';
@@ -676,6 +609,8 @@ function resetInterface() {
 			$('#user-modal').fadeOut(fadeTimer);
 		}
 	}
+	$('#browse-media-wrap #results-count-wrap.container').hide();
+    clearTimeout (window.liveRefresh);
 }
 
 // RESET ALEXANDRIA
@@ -689,7 +624,6 @@ function resetAlexandria() {
 	document.getElementById('search-main').value = '';
 	$('#browse-media .module-links a.active').removeClass('active');
 	hideOverlay();
-	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();
 	document.getElementById('search').style.display = 'block';
 	$('#share-modal').css({

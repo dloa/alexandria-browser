@@ -21,7 +21,6 @@ function filterMediaByType(obj, resetSearch) {
 	$('#audio-player').jPlayer('destroy');
 	document.getElementById('intro').style.display = 'none';
 	$('main').not('#browse-media').hide();
-	$('body').append($('#info-modal-media'));
 	$('#browse-media-wrap .row').remove();
 	$('.sharing-ui').hide();
 	$('.wallet-ui').hide();
@@ -139,12 +138,14 @@ function filterMediaByType(obj, resetSearch) {
 
 // POPULATE SEARCH RESULTS
 function populateSearchResults(results, module) {
+
 	artifact = '';
-	if (module == 'publishers') {
+	if (module === 'publishers') {
 		module = 'publisher';
 	};
 	$('#'+module+'-results-title').remove();
 	if ( (module =='media') && (results) ) {
+		var revs = 0;
 		for (var i = 0; i < results.length; i++) {
 			var mediaType = results[i]['media-data']['alexandria-media']['type'];
 			if ( (history.state) && (history.state.mediaTypes) ) {
@@ -182,8 +183,9 @@ function populateSearchResults(results, module) {
 			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+mediaIconSVGs[mediaType]+'</div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle.trim() + '</h3> <div class="media-meta" onclick="loadMediaEntity(this);">' + mediaYear + ' &bull; ' + mediaPublisher + '<span class="publisher-id hidden">'+ publisherID +'</span></div> '+ mediaRuntime +' <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-pub-time hidden">' + mediaPubTime + '</div><div class="media-desc hidden">' + mediaDesc + '</div>';
 			var thisTitleAndPublisher = mediaTitle+publisherID;
 			$('#browse-media-wrap .row').each(function(){
-				var checkTitleAndPublisher = $(this).find('.media-title').text()+$(this).find('.publisher-id').text();
-				if(checkTitleAndPublisher.toLowerCase() == thisTitleAndPublisher.toLowerCase()){
+				var checkTitleAndPublisher = $(this).find('.media-title').text() + $(this).find('.publisher-id').text();
+				if(checkTitleAndPublisher.toLowerCase() === thisTitleAndPublisher.toLowerCase()){
+					revs ++;
 					$(this).remove();
 				}
 			});
@@ -193,6 +195,7 @@ function populateSearchResults(results, module) {
 				$('#browse-media-wrap #'+module+'-results-wrap .row:first-of-type').before(mediaEntity);
 			}
 		}
+		console.log(revs + ' revisions or dupes found');
 		$('#browse-media-wrap #'+module+'-results-wrap .row.'+module+'-entity:first-of-type').addClass('first');
 	} else if ( (module =='publisher') && (results) ) {
 		for (var i = 0; i < results.length; i++) {
@@ -229,7 +232,7 @@ function afterSearch() {
 	$('#browse-media').show();
 	var visibleResults = 0;
 	$('#browse-media-wrap .container').each(function() {
-		if ( $(this).children('.row').length == 0 ) {
+		if ( $(this).children('.row').length === 0 ) {
 			$(this).hide();
 		} else {
 			$(this).show();
@@ -238,6 +241,28 @@ function afterSearch() {
 			}
 		}
 	});
+	var prevResultCount = $('#results-count-wrap span').text();
+	var diffResults = visibleResults - prevResultCount;
+	console.log('prevResultCount = '+ prevResultCount);
+	console.log('visibleResults = '+ visibleResults);
+	console.log('Variation in results = ' + diffResults);
 	$('#results-count-wrap span').text(visibleResults);
 	$('#browse-media-wrap #results-count-wrap.container').show();
+	// Auto-refresh media list
+	// THIS IS NOT ACTIVE YET
+	// Make this more complex for different use cases (ie. Search reults + Publisher views)
+	if ( (history.state.currentView === 'media') && (history.state.searchResults === false) ) {
+//		autofeed(true);
+	}
+}
+
+var liveRefresh;
+function autofeed(feed) {
+    clearTimeout (window.liveRefresh);
+	// Make this more complex for different use cases (ie. Search reults + Publisher views)
+    liveRefresh = setTimeout (function () {
+		var filteredMedia = searchAPI('media', '*', '');
+		console.info(filteredMedia);
+		populateSearchResults(filteredMedia, 'media');
+    }, 60000);
 }

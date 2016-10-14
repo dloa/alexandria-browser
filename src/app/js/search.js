@@ -7,8 +7,6 @@ window.searchAPI = function(module, searchOn, searchFor) {
 	}
 	queryString = '{"protocol":"'+ module +'","search-on":"'+ searchOn +'","search-for":'+searchFor+',"search-like": true}';
 	var mediaData;
-	$('body').append($('#info-modal-media'));
-	$('#browse-media-wrap .row').remove();
 	$.ajax({
 		type: "POST",
 		url: librarianHost +'/alexandria/v1/search',
