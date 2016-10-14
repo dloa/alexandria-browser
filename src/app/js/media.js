@@ -388,12 +388,25 @@ function showPaymentOption(e) {
             var btcprice = makePaymentToAddress(btcAddress, price, function () {
                 return onPaymentDone(action, fileData);
             });
-            console.info(btcprice);
+            console.info("Cost of artifact: " + btcprice);
             $('.pwyw-btc-' + action + '-price').text(btcprice);
             $('.pwyw-usd-' + action + '-price-input').val(price);
 
             $('.pwyw-container').removeClass('active');
             actionElement.addClass('active');
+
+            // Coinbase BTC Code
+            // If the price is between $1 and $5 then show the BTC buy widget
+            console.log(btcAddress);
+            console.log(price);
+            if (price >= 1 && price <= 5){
+                testDomain();
+                createCoinbaseModal(btcAddress, price, action);
+            } else {
+                hideCoinbaseButton();
+            }
+
+            // Show paywall
             togglePWYWOverlay(true);
         }
 }
@@ -516,6 +529,14 @@ function mountMediaBrowser(el, data) {
         $('.pwyw-btc-' + action + '-price').text (USDToBTC(this.value));
         if (lastAddress) {
             setQR(lastAddress, USDToBTC(this.value));
+
+            // Update Coinbase modal!
+            console.log(this.value);
+            if (this.value >= 1 && this.value <= 5){
+                createCoinbaseModal(lastAddress, this.value, action);
+            } else {
+                hideCoinbaseButton();
+            }
         }
 
     })
