@@ -74,6 +74,7 @@ jQuery(document).ready(function($){
 		if ( ( ($('#tip-modal').css('display') == 'block') && ($('#tip-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#tip-modal')[0]) && ( (!$(e.target).parents('.tip-icon')[0]) ) ) ) {
 			$('#tip-modal').fadeOut(fadeTimer);
 		}
+		console.info(window.location);
 	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
 		if ( (document.getElementById('bitmsg-modal').style.display == 'block') && ( (!$(e.target).parents('#bitmsg-modal')[0]) && (!$(e.target).parents('.bitmsg-icon')[0]) ) ) {
 				document.getElementById('bitmsg-modal').style.display = 'none';
