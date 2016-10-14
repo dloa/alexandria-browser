@@ -46,7 +46,7 @@ function loadArtifactView(objMeta) {
 	$('main').hide();
 	hideOverlay();
 	resetInterface();
-	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
+	if (!isEmbed) {
 		document.getElementById('search').style.display = 'block';
 	}
 	$('.wallet-ui').hide();
@@ -190,7 +190,7 @@ function loadArtifactView(objMeta) {
 	}
 	// SHOW AND BUILD MEDIA UI
 	$('.view-media-ui').show();
-	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
+	if (!isEmbed) {
 		document.getElementById('viewlabel').style.display = 'inline-block';
 	}
 	$('#media-txnID').html(mediaID);	

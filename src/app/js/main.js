@@ -378,7 +378,8 @@ function loadQR(obj) {
 function hideOverlay() {
 	$('.overlay-modal').fadeOut(fadeTimer);
 	$('.overlay-modal input[type="text"]').val('');
-	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {		document.getElementById('disabler').style.display = 'none';	
+	if (!isEmbed) {
+		document.getElementById('disabler').style.display = 'none';	
 		document.getElementById('app-overlay').style.display = 'none';
 	}
 }
@@ -591,7 +592,8 @@ function resetInterface() {
 	$('#audio-player').jPlayer('destroy');
 	$('#embedded-file').html('');
 	$('#tip-comment').val('');
-	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {		document.getElementById('viewlabel').style.display = 'none';
+	if (!isEmbed) {
+		document.getElementById('viewlabel').style.display = 'none';
 		document.getElementById('disabler').style.display = 'none';
 		if (document.getElementById('intro').style.display == 'block') {
 			$('#intro').fadeOut(fadeTimer);
@@ -611,7 +613,7 @@ function resetInterface() {
 			'left':'initial',
 			'right':'initial'
 		}).hide();
-	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
+	if (!isEmbed) {
 		if (document.getElementById('user-modal').style.display == 'block') {
 			$('#user-modal').fadeOut(fadeTimer);
 		}
@@ -754,7 +756,7 @@ function replaceSVG() {
 }
 
 /* SPINNER
-	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
+	if (!isEmbed) {
 		var largeSpinConfig = {
 		lines: 17, // The number of lines to draw
 		length: 7, // The length of each line
