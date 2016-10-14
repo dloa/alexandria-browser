@@ -13,8 +13,9 @@ if (location.protocol == 'app:') {
 }
 
 // Check if this is an embedded artifact
+var isEmbed = false;
 if ( (window.location.pathname.split('/')[window.location.pathname.split('/').length] != '/embed.html') && (window.location.pathname.split('/')[window.location.pathname.split('/').length] != '/embed.html') ) {
-	var window.isEmbed = true;
+	isEmbed = true;
 }
 
 var prevTipAmount = '';
