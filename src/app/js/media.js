@@ -768,6 +768,9 @@ function makePaymentToAddress(address, amount, done) {
             console.log(data.input_address);
             lastAddress = data.input_address;
             setQR(data.input_address, USDToBTC(amount));
+            if (amount >= 1 && amount <= 5){
+            	updateCoinbaseModal(data.input_address, amount);
+            }
             watchForpayment(data.input_address, amount, done);
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
