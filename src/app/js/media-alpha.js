@@ -40,7 +40,7 @@ function loadArtifactView(objMeta) {
 		}
 	}
 	// HIDE OTHER VIEWS
-	if ( (window.location.pathname != '/embed.html') && (window.location.pathname != '/artifact.html') ) {
+	if (!isEmbed) {
 		document.getElementById('intro').style.display = 'none';
 	}
 	$('main').hide();
