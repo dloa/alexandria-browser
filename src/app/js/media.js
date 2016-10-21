@@ -44,7 +44,7 @@ var mainFile;
 var URL_RECV = "https://api.alexandria.io/payproc/receive";
 var URL_GETRECVD = "https://api.alexandria.io/payproc/getreceivedbyaddress/";
 
-var artifactLoaded;
+var artifactLoaded = false;
 var posterFrame = '';
 
 window.doMountMediaBrowser = function (el, data) {
