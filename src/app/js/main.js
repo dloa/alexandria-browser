@@ -14,8 +14,9 @@ if (location.protocol == 'app:') {
 
 // Check if this is an embedded artifact
 var isEmbed = false;
-if ( (window.location.pathname.split('/')[window.location.pathname.split('/').length] != '/embed.html') && (window.location.pathname.split('/')[window.location.pathname.split('/').length] != '/embed.html') ) {
+if ( (window.location.pathname.split('/')[window.location.pathname.split('/').length -1] === 'embed.html') || (window.location.pathname.split('/')[window.location.pathname.split('/').length -1] === 'artifact.html') ) {
 	isEmbed = true;
+	console.log('is Embed!');
 	$('body').addClass('isEmbed');
 }
 
@@ -594,12 +595,12 @@ function resetInterface() {
 	$('#embedded-file').html('');
 	$('#tip-comment').val('');
 	if (!isEmbed) {
-		$('#viewlabel').style.display = 'none';
-		$('#disabler').style.display = 'none';
-		if ($('#intro').style.display == 'block') {
+		$('#viewlabel').css('display', 'none');
+		$('#disabler').css('display', 'none');
+		if ($('#intro').css('display') == 'block') {
 			$('#intro').fadeOut(fadeTimer);
 		}
-		if ($('#user-modal').style.display == 'block') {
+		if ($('#user-modal').css('display') == 'block') {
 			$('#user-modal').fadeOut(fadeTimer);
 		}
 	}	$('#browse-media h2').remove();
