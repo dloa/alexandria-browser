@@ -16,6 +16,7 @@ if (location.protocol == 'app:') {
 var isEmbed = false;
 if ( (window.location.pathname.split('/')[window.location.pathname.split('/').length] != '/embed.html') && (window.location.pathname.split('/')[window.location.pathname.split('/').length] != '/embed.html') ) {
 	isEmbed = true;
+	$('body').addClass('isEmbed');
 }
 
 var prevTipAmount = '';
@@ -601,8 +602,7 @@ function resetInterface() {
 		if ($('#user-modal').style.display == 'block') {
 			$('#user-modal').fadeOut(fadeTimer);
 		}
-	}
-	$('#browse-media h2').remove();
+	}	$('#browse-media h2').remove();
 	$('.search').attr('disabled',false);
 	$('#browse-media-wrap .row').remove();
 	$('#share-modal').hide();

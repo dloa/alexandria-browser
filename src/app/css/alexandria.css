@@ -83,7 +83,9 @@ body, html { margin: 0; padding: 0;}
 body { 
 	color: #464646;
 	background-color: #ecedec;
-	height:100%;
+}
+body.isEmbed {
+	padding-top: 15px;
 }
 html, button, input, select, textarea, h2, h3, h4, p, text {
 	font-family: Avenir-Book, avenir, 'Open Sans', open_sansregular, 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -559,6 +561,10 @@ ul#media-type-select-list {
 	width: 92.5%;
     max-width: 820px;
     padding-bottom: 35px;
+}
+.isEmbed .wrapper {
+	margin: 0 auto;
+	overflow: hidden;
 }
 #add-media > * {
 	width: 95.5%;
