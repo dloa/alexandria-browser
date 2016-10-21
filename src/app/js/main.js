@@ -593,10 +593,13 @@ function resetInterface() {
 	$('#embedded-file').html('');
 	$('#tip-comment').val('');
 	if (!isEmbed) {
-		document.getElementById('viewlabel').style.display = 'none';
-		document.getElementById('disabler').style.display = 'none';
-		if (document.getElementById('intro').style.display == 'block') {
+		$('#viewlabel').style.display = 'none';
+		$('#disabler').style.display = 'none';
+		if ($('#intro').style.display == 'block') {
 			$('#intro').fadeOut(fadeTimer);
+		}
+		if ($('#user-modal').style.display == 'block') {
+			$('#user-modal').fadeOut(fadeTimer);
 		}
 	}
 	$('#browse-media h2').remove();
@@ -606,18 +609,13 @@ function resetInterface() {
 	$('#tip-modal').hide();
 	resetTipModal();
 	$('#share-modal').css({
-			left:'initial',
-			right:'initial'
-		}).hide();
+		left:'initial',
+		right:'initial'
+	}).hide();
 	$('#tip-modal').css({
-			'left':'initial',
-			'right':'initial'
-		}).hide();
-	if (!isEmbed) {
-		if (document.getElementById('user-modal').style.display == 'block') {
-			$('#user-modal').fadeOut(fadeTimer);
-		}
-	}
+		'left':'initial',
+		'right':'initial'
+	}).hide();
 	$('#browse-media-wrap #results-count-wrap.container').hide();
     clearTimeout (window.liveRefresh);
 }

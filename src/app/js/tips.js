@@ -1,5 +1,6 @@
 // DISPLAY TIP MODAL
 function loadTipModal(obj) {
+	console.info(obj);
 	if ($(obj).parents('.entity-market #tip-modal').length == 0) {
 		$(obj).parents('.entity-market').append($('#tip-modal'));
 	}

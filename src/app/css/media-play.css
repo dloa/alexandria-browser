@@ -260,6 +260,7 @@ body {
     width: 100%;
     clear: both;
     font-weight: bold;
+    text-align: center;
 }
 
 .playbar-shadow h2 {

@@ -45,3 +45,24 @@
 .info-icon:hover svg path, .playbtn-icon:hover svg path {
 	fill: #464646;
 }
+/* Publisher and Artifact View Icons */
+.icon {
+	color: transparent;
+	cursor: pointer;
+	width: 32px;
+	height: 32px;
+}
+.icon svg, .icon object svg {
+	width: 100%;
+	height: 100%;
+}
+.icon svg path, .icon object svg path {
+	fill: #979797;
+	fill-opacity: 1;
+}
+.icon:hover svg path, .icon:hover object svg path {
+	fill: #464646;
+}
+.tip-icon svg, .tip-icon object {
+  height: 30px;
+}
