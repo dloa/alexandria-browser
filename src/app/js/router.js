@@ -17,6 +17,7 @@ route('/wallet', 'wallet', function () { });
 var el = null;  
 
 function router (event, goUrl) {
+	console.log(isEmbed);
     // Current route url (getting rid of '#' in hash as well):
     var url = location.hash.slice(1) || '/';
   	if (goUrl) {
@@ -217,8 +218,14 @@ function router (event, goUrl) {
 
 }
 
-// Listen on hash change:
-window.addEventListener('hashchange', router);  
+// Check if this is an embedded artifact
+var isEmbed = false;
+if ( (window.location.pathname.split('/')[window.location.pathname.split('/').length -1] === 'embed.html') || (window.location.pathname.split('/')[window.location.pathname.split('/').length -1] === 'artifact.html') ) {
+	isEmbed = true;
+} else {
+	// Listen on hash change:
+	window.addEventListener('hashchange', router);  
 
-// Listen on page load:
-window.addEventListener('load', router);
+	// Listen on page load:
+		window.addEventListener('load', router);
+}

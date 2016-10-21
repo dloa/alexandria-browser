@@ -12,10 +12,7 @@ if (location.protocol == 'app:') {
 	$('#publish-module-link').removeAttr('onclick').attr('href','http://alexandria.io/publisher/');
 }
 
-// Check if this is an embedded artifact
-var isEmbed = false;
-if ( (window.location.pathname.split('/')[window.location.pathname.split('/').length -1] === 'embed.html') || (window.location.pathname.split('/')[window.location.pathname.split('/').length -1] === 'artifact.html') ) {
-	isEmbed = true;
+if (isEmbed) {
 	console.log('is Embed!');
 	$('body').addClass('isEmbed');
 }
