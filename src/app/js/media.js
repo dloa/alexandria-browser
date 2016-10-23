@@ -276,7 +276,7 @@ function applyMediaData(data) {
     }
 
     // Set other meta info
-    $('.media-artist', mediaInfoSel).text(xinfo.artist ? xinfo.artist : "");
+    $('.media-artist', mediaInfoSel).text(xinfo.artist ? xinfo.artist : xinfo.creator ? xinfo.creator : "");
     $('.artifact-title', mediaInfoSel).text(info.title);
     $('#titlemeta').text(info.title);
     $('meta[name="description"]').attr('content', info.title);

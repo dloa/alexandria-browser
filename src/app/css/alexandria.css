@@ -499,6 +499,7 @@ main {
 	z-index: 10;
 	text-align: center;
 	-webkit-overflow-scrolling: touch;
+	font-size: .9em;
 }
 /* FRONT VIEW */
 div#intro {
@@ -532,8 +533,7 @@ div#intro {
 	color: #979797;
 	display: inline-block;
 	margin: 1em .75em 0;
-	font-size: 16px;
-	font-size: 1rem;
+	font-size: 15px;
 }
 .module-links li .imgwrap {
 	border-color: #979797;
@@ -616,7 +616,11 @@ ul#media-type-select-list {
 #browse-media-wrap > .container > .row > *, #publisher-media-list li > * {
 	margin: 0;
 	display: inline-block;
-	vertical-align: middle;
+	vertical-align: bottom;
+}
+#browse-media-wrap > .container > .row > .browse-icon {
+	position: relative;
+	top: .25em;
 }
 #browse-media-wrap .row .load-entity {
 	cursor: pointer;
@@ -628,7 +632,6 @@ ul#media-type-select-list {
 }
 #browse-media-wrap .row .media-meta, #browse-media-wrap .row .media-runtime, #browse-media-wrap .row .publisher-date, #publisher-media-list li .media-meta {
 	color: #9797a0;
-	font-size: .85em;
 }
 .playbtn-icon, .info-icon {
 	width: 24px;
@@ -771,13 +774,9 @@ n#rotten-wrap a, #rotten-wrap img, #rotten-wrap svg {
 .entity-view .entity-image {
 	border-radius: 5px;
 }
-.entity-view .row.media-desc {
-	margin-bottom: 2em;
-}
-.entity-view .row.media-desc #track-list li {
-	cursor: pointer;
-	float: left;
-	clear: both;
+.row.media-description {
+	margin: 30px 0;
+	font-size: 1rem;
 }
 img.poster-frame {
 	float: left;
@@ -791,8 +790,7 @@ img.poster-frame {
 	float: right;
 	height: 32px;
 	line-height: 32px;
-	margin-top: -.25em;
-	margin-left: 15px;
+	margin: .75em 0 .75em 15px;
 }
 .entity-market .share-icon svg {
 	width: 32px;
