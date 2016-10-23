@@ -76,7 +76,7 @@ jQuery(document).ready(function($){
 		if ( ( ($('#info-modal-small').css('display') == 'block') && ($('#info-modal-small').css('opacity') == 1) ) && ( (!$(e.target).parents('#info-modal-small')[0]) && ( (!$(e.target).parents('.info-icon')[0]) ) ) ) {
 			$('#info-modal-small').fadeOut(fadeTimer);
 		}
-		if ( ( ($('#tip-modal').css('display') == 'block') && ($('#tip-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#tip-modal')[0]) && ( (!$(e.target).parents('.tip-icon')[0]) ) ) ) {
+		if ( ( ($('#tip-modal').css('display') == 'block') && ($('#tip-modal').css('opacity') == 1) ) && ( (!$(e.target).parents('#tip-modal')[0]) && ( (!$(e.target).parents('.tip-icon')[0]) ) && ( ($('#wallet-auth-modal').css('display') != 'block') ) ) ) {
 			$('#tip-modal').fadeOut(fadeTimer);
 		}
 		if ( ($('#bitmsg-modal').css('display') == 'block') && ( (!$(e.target).parents('#bitmsg-modal')[0]) && (!$(e.target).parents('.bitmsg-icon')[0]) ) ) {
@@ -465,7 +465,7 @@ function loadAboutView() {
 // CONNECT TO WALLET
 var FLOclient = {};
 var FLOauth = [];
-function connectWallet(obj, wallet) {
+function connectWallet(obj, wallet, send) {
 	if ($(obj).hasClass('disabled')) {
 		return false;
 	}
@@ -496,7 +496,7 @@ function connectWallet(obj, wallet) {
 		});
 		hideOverlay();
 	} else if (wallet == 'FloVault') {
-		FloVaultIdentify();
+		FloVaultIdentify(send);
 	}
 }
 
@@ -521,7 +521,7 @@ function loadWalletView() {
 	}
 }
 
-function showWalletAuth() {
+function showWalletAuth(send) {
 	document.getElementById('wallet-user').value = '';
 	document.getElementById('wallet-token').value = '';	
 	if (location.protocol == 'app:') {
@@ -530,7 +530,7 @@ function showWalletAuth() {
 		$('#wallet-user').attr('placeholder','Username');
 	} else {
 		document.getElementById('wallet-connect-currency').innerHTML = 'FloVault';
-		$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FloVault")');
+		$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FloVault", '+send+')');
 		$('#wallet-user').attr('placeholder','Identifier');
 		$('#refreshBalance').attr('onclick','refreshFloVaultBalances();');
 		$("#newAddressBtn").attr('onclick','newFloVaultAddress()');

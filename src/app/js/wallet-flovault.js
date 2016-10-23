@@ -60,7 +60,7 @@ registerBtn.click(function () {
 });
 
 // FLOVAULT LOAD WALLET
-function FloVaultIdentify() {
+function FloVaultIdentify(send) {
 	$.ajax({
 		url: 'https://flovault.alexandria.io/wallet/checkload/' + identifierInput.val(),
 		success: function(response) {
@@ -81,7 +81,7 @@ function FloVaultIdentify() {
 				console.log("Wallet Post-Load");
 				identifierOutput.text(identifierOutput.text() + "\n\nWallet Balance: " + wallet.getTotalBalance());
 				hideOverlay();
-				updateAddressList();		
+				updateAddressList(send);
 	         });
 	     },
 		error: function (xhr, ajaxOptions, thrownError) {
@@ -106,11 +106,11 @@ function refreshFloVaultBalances() {
 }
 
 // FLOVAULT UPDATE ADDRESS LIST
-function updateAddressList() {
+function updateAddressList(send) {
 	document.getElementById('wallet-balance-amount').innerHTML = 'Updating ...'
 	if ( (!wallet) || (Object.keys(wallet.balances).length == 0) || (loadedAddresses ==  Object.keys(wallet.balances).length) )  {
 		console.log('Running Timer');
-		var walletWaitTimeoutId = setTimeout("updateAddressList()", 1500);
+		var walletWaitTimeoutId = setTimeout('updateAddressList('+send+')', 1500);
 	} else {
 		clearTimeout(walletWaitTimeoutId);
 		console.log(wallet);
@@ -141,6 +141,10 @@ function updateAddressList() {
 				$('#newAddressBtn').removeClass('disabled');
 		    }
 		}, 100);
+		if (send === true) {
+			console.log('Continue to send confirmation.');
+			sendTip();
+		}	
 	}
 }
 

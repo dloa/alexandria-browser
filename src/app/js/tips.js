@@ -17,13 +17,16 @@ function loadTipModal(obj) {
 	// GENERATE QR CODE FOR FLO TIPS
 	var tipAmount = $('input[name="tip-amount"]:checked').val()/FLOUSD;
 	tipAmount = Math.round(tipAmount*100000000)/100000000;
-	var dname = ($('.playlist-tracks .active').data().track.dname) ? ($('.playlist-tracks .active').data().track.dname) : ($('.playlist-tracks .active').data().track.fname);
+	var dname = '';
+	if ($('.playlist-tracks .active').data()) {
+		dname = ($('.playlist-tracks .active').data().track.dname) ? ($('.playlist-tracks .active').data().track.dname) : ($('.playlist-tracks .active').data().track.fname);
+	}
 	var tipCurrency = 'florincoin';
 	generateQR(mediaFLO, 'tip-QR', 100, 100, tipCurrency, tipAmount, dname);
 	if (wallet) {
 		$('#sendTipBtn').attr('onclick','sendTip()').removeClass('hidden');
 	} else {
-		$('#sendTipBtn').attr('onclick','showWalletAuth()').removeClass('hidden');
+		$('#sendTipBtn').attr('onclick','showWalletAuth(true)').removeClass('hidden');
 	}
 	/* Old send-from-wallet code for app
 	if (document.getElementById('sendTipBtn')) {
@@ -66,7 +69,10 @@ function changeTipAmount(opt) {
 	var tipAmountBTC = Math.round((tipAmount/BTCUSD)*100000000)/100000000;
 	$('#tip-modal .flo-usd-output').text(tipAmountFLO);
 	$('#tip-modal .btc-usd-output').text(tipAmountBTC);
-	var dname = ($('.playlist-tracks .active').data().track.dname) ? ($('.playlist-tracks .active').data().track.dname) : ($('.playlist-tracks .active').data().track.fname);
+	var dname = '';
+	if ($('.playlist-tracks .active').data()) {
+		dname = ($('.playlist-tracks .active').data().track.dname) ? ($('.playlist-tracks .active').data().track.dname) : ($('.playlist-tracks .active').data().track.fname);
+	}
 	var mediaFLO = $('main:visible .FLO-address').html();
 	if (!mediaFLO) {
 		var mediaFLO = $('.ri-publisher').text();

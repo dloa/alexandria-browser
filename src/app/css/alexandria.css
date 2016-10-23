@@ -1598,8 +1598,11 @@ li[name=pwyw-flo] {
 	bottom: 0;
 	left: 0;
 }
-#contact-tab, #footer {
-	padding: 5px 19px;
+#contact-tab {
+	padding: 5px 15px;
+}
+#footer {
+	padding: 0 15px;
 }
 #contact-tab {
 	background-color: rgba(255,255,255,.8);
