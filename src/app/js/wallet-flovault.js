@@ -146,8 +146,13 @@ function updateAddressList() {
 
 // FLOVAULT SEND FLO
 function sendFloVault(sendFrom, sendTo, sendAmount, sendComment) {
+		var sendCommentRaw = sendComment;
+		console.log(sendComment);
+		if ( (history.state.currentView != 'wallet') && (sendCommentRaw != '') ) {
+			sendComment = '{ "artifact": "'+window.history.state.subView+'", "comment": "'+sendCommentRaw+'"}';
+		}
         console.log( sendFrom + ' ' + sendTo + ' ' + sendAmount + ' ' + sendComment );
-        if (window.confirm('Send '+ sendAmount + ' FLO to ' + sendTo + ' with comment: ' + sendComment + '?')) {
+        if (window.confirm('Send '+ sendAmount + ' FLO to ' + sendTo + ' with comment: ' + sendCommentRaw)) {
                 wallet.sendCoins(sendFrom, sendTo, sendAmount, sendComment, sendcallback);
             refreshFloVaultBalances();
             $('#tip-modal').fadeOut(fadeTimer);

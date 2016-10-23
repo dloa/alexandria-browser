@@ -21,7 +21,6 @@ function loadTipModal(obj) {
 	var tipCurrency = 'florincoin';
 	generateQR(mediaFLO, 'tip-QR', 100, 100, tipCurrency, tipAmount, dname);
 	if (wallet) {
-		console.info(wallet);
 		$('#sendTipBtn').attr('onclick','sendTip()').removeClass('hidden');
 	} else {
 		$('#sendTipBtn').attr('onclick','showWalletAuth()').removeClass('hidden');
