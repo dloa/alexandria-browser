@@ -99,29 +99,44 @@ function loadPublisherView(objMeta) {
 		for (var i = 0; i < thisPublisherMedia.length; i++) {
 			var mediaID = thisPublisherMedia[i]['txid'];
 			var mediaType = thisPublisherMedia[i]['media-data']['alexandria-media']['type'];
+			var mediaThumb = mediaIconSVGs[mediaType];
+			var mediaHash = thisPublisherMedia[i]['media-data']['alexandria-media']['torrent'];
 			var mediaInfo = thisPublisherMedia[i]['media-data']['alexandria-media']['info'];
 			var mediaPubTime = thisPublisherMedia[i]['media-data']['alexandria-media']['timestamp'];
 			var mediaPubTimeLen = thisPublisherMedia[i]['media-data']['alexandria-media']['timestamp'].toString().length;
 			if (mediaPubTimeLen == 10) {
 				mediaPubTime = parseInt(mediaPubTime)*1000;
 			}					
+			mediaPubTime = new Date(mediaPubTime);
+			var mediaTimestamp = mediaPubTime.toString().split(' ')[4];
+			mediaPubTime = $.datepicker.formatDate("M d, yy", mediaPubTime) + ' ' + mediaTimestamp;
 			var mediaTitle = mediaInfo['title'].trim();
 			var mediaYear = mediaInfo['year'];
 			var mediaDesc = mediaInfo['description'];
 			var mediaRuntime = 0;
 			var mediaArtist = '';
-			if (mediaInfo['extra-info']) {
-				if(mediaInfo['extra-info']['runtime']){
+			if(mediaInfo['extra-info']){
+				console.info(mediaInfo['extra-info']);
+				if (mediaInfo['extra-info']['runtime']) {
 					mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
+				} else if (mediaInfo['extra-info']['files']) {
+					mediaRuntime = calcRuntime(mediaInfo['extra-info']['files'][0]['duration']);
 				}
-				if(mediaInfo['extra-info']['artist']){
+				if (mediaInfo['extra-info']['artist']) {
 					mediaArtist = mediaInfo['extra-info']['artist'];
-				}						
+				}
+				if (mediaInfo['extra-info']['posterFrame']) {
+					mediaThumb = '<img src="'+IPFSHost+'/ipfs/'+mediaHash +'/'+mediaInfo['extra-info']['posterFrame']+'" />';
+				} else if (mediaInfo['extra-info']['preview']) {
+					mediaThumb = '<img src="'+IPFSHost+'/ipfs/'+mediaHash +'/'+mediaInfo['extra-info']['preview']+'" />';
+				}
 			}
-			if (mediaRuntime == 0) {
+			if ( (mediaRuntime != 0) && (mediaRuntime != '00:00:undefined') ) {
+				mediaRuntime = ' &bull; '+mediaRuntime.split('.')[0];
+			} else {
 				mediaRuntime = '';
 			}
-			var mediaEntity = '<li id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+mediaIconSVGs[mediaType]+'</div><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle.trim() + '</h3> <div class="media-meta">' + mediaYear + ' &bull; ' + mediaRuntime +' <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-pub-time hidden">' + new Date(parseInt(mediaPubTime)) + '</div><div class="media-desc hidden">' + mediaDesc + '</div></div></li>';
+			var mediaEntity = '<li id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+ mediaThumb +'</div><div class="meta-container"><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle.trim() + '</h3><br /><div class="media-meta" onclick="loadMediaEntity(this);">' + mediaYear + mediaRuntime +' &bull; <span class="media-pub-time">' + mediaPubTime + '</span> <span class="publisher-id hidden">'+ publisherAddress +'</span></div> <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a> <div class="media-desc hidden">' + mediaDesc + '</div></li>';
 			var thisTitle = mediaTitle;
 			$('#publisher-media-list li').each(function(){
 				var checkTitle = $(this).find('.media-title').text();

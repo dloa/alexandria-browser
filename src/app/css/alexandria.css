@@ -542,7 +542,7 @@ div#intro {
 	line-height: 1;
 	display: inline-block;
 }
-.module-links li .imgwrap, .module-links.mod-filter li .imgwrap, .browse-icon {
+.module-links li .imgwrap, .module-links.mod-filter li .imgwrap {
 	width: 24px;
 	height: 24px;
 	padding: 10px;
@@ -597,6 +597,10 @@ ul#media-type-select-list {
 #browse-media-wrap > .container > .row {
 	padding: 30px 0 0;
 	position: relative;
+	overflow: hidden;
+}
+#browse-media-wrap > .container > .row *, #publisher-media-list li * {
+	cursor: pointer;
 }
 .hasInfo input[type="text"], .hasInfo select {
 	margin: 0 0 1em;
@@ -606,32 +610,41 @@ ul#media-type-select-list {
 	width: calc(100% - 36px);
 }
 .media-title, .publisher-title {
-	cursor: pointer;
     padding-right: 11px;
 }
 #browse-media-wrap .row.first, #publisher-media-list li:first-child {
 	border-top: 1px solid #979797;
 	position: relative;
 }
-#browse-media-wrap > .container > .row > *, #publisher-media-list li > * {
-	margin: 0;
-	display: inline-block;
-	vertical-align: bottom;
-}
-#browse-media-wrap > .container > .row > .browse-icon {
+#browse-media-wrap > .container > .row > .browse-icon, #publisher-media-list .browse-icon {
 	display: block;
 	float: left;
-	width: 32px;
-	height: 32px;
+	width: 64px;
+	height: 48px;
 	padding: 0;
 	margin: 0 15px 0 0;
 	position: relative;
+	text-align: center;
+}
+#browse-media-wrap > .container > .row > .meta-container, #publisher-media-list .meta-container {
+	display: inline-block;
+	max-width: calc(100% - 80px);
+	box-sizing: border-box;
+}
+#browse-media-wrap > .container > .row > .meta-container > *, #publisher-media-list li > .meta-container > * {
+	margin: 0;
+	display: inline-block;
+	vertical-align: bottom;
+	text-align: left;
 }
 #browse-media-wrap .row .load-entity {
 	cursor: pointer;
 }
-#browse-media-wrap .row .media-meta, #browse-media-wrap .row .media-runtime, #browse-media-wrap .row .publisher-date, #publisher-media-list li .media-meta {
+.meta-container, .meta-container * {
 	color: #9797a0;
+}
+.meta-container h3 {
+	color: #464646;
 }
 .playbtn-icon, .info-icon {
 	width: 24px;

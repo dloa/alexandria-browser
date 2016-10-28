@@ -1,6 +1,11 @@
-.links .module-icon .imgwrap img, .module-links li .imgwrap img, .imgwrap svg, .imgwrap object, .browse-icon svg  {
+.links .module-icon .imgwrap img, .module-links li .imgwrap img, .imgwrap svg, .imgwrap object {
 	width: 98%;
 	height: 98%;
+}
+.browse-icon svg  {
+	width: 60%;
+	height: initial;
+	display: inline-block;
 }
 .browse-icon svg path, .media-image svg path, .browse-icon svg path {
 	fill: #797979;
