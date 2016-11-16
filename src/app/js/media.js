@@ -366,11 +366,11 @@ function showPaymentOption(e) {
         if ($(self).closest('td').hasClass('tb-price-download') || $(self).closest('li').hasClass('pwyw-action-download') || $(self).closest('tbody').hasClass('playlist-extra-files')){
             actionElement = $('.pwyw-activate-download');
             action = 'download';
-            price = fileData.sugBuy;
+            price = fileData.minBuy ? fileData.minBuy : 0;
         } else {
             actionElement = $('.pwyw-activate-play');
             action = 'play';
-            price = fileData.sugPlay;
+            price = fileData.minPlay ? fileData.minPlay : 0;
 		}
         if (price === 0 || price === undefined || price == NaN){
             onPaymentDone(action, fileData);
