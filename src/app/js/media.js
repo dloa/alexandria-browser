@@ -359,6 +359,7 @@ function showPaymentOption(e) {
         $('.media-track').hide();
         var btcAddress = $('.ri-btc-address').text();
         var price = 0;
+        var sugPrice = 0;
         var actionElement;
         var action;
 
@@ -367,10 +368,12 @@ function showPaymentOption(e) {
             actionElement = $('.pwyw-activate-download');
             action = 'download';
             price = fileData.minBuy ? fileData.minBuy : 0;
+            sugPrice = fileData.sugBuy ? fileData.sugBuy : 0;
         } else {
             actionElement = $('.pwyw-activate-play');
             action = 'play';
             price = fileData.minPlay ? fileData.minPlay : 0;
+            sugPrice = fileData.sugPlay ? fileData.sugPlay : 0;
 		}
         if (price === 0 || price === undefined || price == NaN){
             onPaymentDone(action, fileData);
@@ -387,12 +390,12 @@ function showPaymentOption(e) {
         if (artifactLoaded === false) {
             artifactLoaded = true;
         } else {        
-            var btcprice = makePaymentToAddress(btcAddress, price, function () {
+            var btcprice = makePaymentToAddress(btcAddress, price, sugPrice, function () {
                 return onPaymentDone(action, fileData);
             });
             console.info("Cost of artifact: " + btcprice);
             $('.pwyw-btc-' + action + '-price').text(btcprice);
-            $('.pwyw-usd-' + action + '-price-input').val(price);
+            $('.pwyw-usd-' + action + '-price-input').val(sugPrice);
 
             $('.pwyw-container').removeClass('active');
             actionElement.addClass('active');
@@ -757,9 +760,9 @@ $('#audio-player').click(function(){
 
 var lastAddress;
 
-function makePaymentToAddress(address, amount, done) {
+function makePaymentToAddress(address, minAmt, sugAmt, done) {
     togglePlaybarShadow(false);
-    var amountInBTC = USDToBTC(amount);
+    var amountInBTC = USDToBTC(minAmt);
     var params = { address: address, amount: amountInBTC };
 
     $.ajax({
@@ -767,19 +770,20 @@ function makePaymentToAddress(address, amount, done) {
         data: params
     })
         .done(function (data, textStatus, jqXHR) {
-            console.log(data.input_address);
+            console.log("Payment address", data.input_address, "Amount:", sugAmt);
             lastAddress = data.input_address;
-            setQR(data.input_address, USDToBTC(amount));
-            if (amount >= 1 && amount <= 5){
-            	updateCoinbaseModal(data.input_address, amount);
+            setQR(data.input_address, USDToBTC(sugAmt));
+            if (sugAmt >= 1 && sugAmt <= 5){
+            	updateCoinbaseModal(data.input_address, sugAmt);
             }
-            watchForpayment(data.input_address, amount, done);
+            watchForpayment(data.input_address, minAmt, done);
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
-            console.error(textStatus);
+            console.error(textStatus, errorThrown);
+            setTimeout(makePaymentToAddress(address, minAmt, sugAmt, done), 5000);            
         });
 
-    return USDToBTC(amount);
+    return USDToBTC(sugAmt);
 }
 
 function getUSDdayAvg() {
