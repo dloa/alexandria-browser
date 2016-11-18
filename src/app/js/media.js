@@ -70,10 +70,10 @@ function fixDataMess(data) {
     while (data.hasOwnProperty(j)) {
         ret.push(data[j]);
 
-        
+
         j = 'track' + formatInt (i++, 2);
     }
-    
+
     return ret;
 }
 
@@ -107,7 +107,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         } else {
             tdPlay = "<td class=\"price tb-price-play\"><span>$<span class=\"price\">" + (file.sugPlay ? file.sugPlay : "Free!") + "</span></span></td>";
         }
-        
+
         // Setup cell for price to buy, N/A when disallowBuy === true
         var tdBuy = "";
         if (file.disallowBuy && file.disallowBuy === true) {
@@ -246,12 +246,12 @@ function applyMediaData(data) {
 		});
 	}
     mainFile = {
-        track: xinfo['files'][0], 
-        name: xinfo['files'][0].dname, 
-        url: IPFSUrl([xinfo['DHT Hash'], xinfo['files'][0].fname]), 
-        sugPlay: xinfo['files'][0].sugPlay, 
-        minPlay: xinfo['files'][0].minPlay, 
-        sugBuy: xinfo['files'][0].sugBuy, 
+        track: xinfo['files'][0],
+        name: xinfo['files'][0].dname,
+        url: IPFSUrl([xinfo['DHT Hash'], xinfo['files'][0].fname]),
+        sugPlay: xinfo['files'][0].sugPlay,
+        minPlay: xinfo['files'][0].minPlay,
+        sugBuy: xinfo['files'][0].sugBuy,
         minBuy: xinfo['files'][0].minBuy
     };
     filetype = mainFile.track.fname.split('.')[mainFile.track.fname.split('.').length - 1].toLowerCase();
@@ -314,14 +314,14 @@ function applyMediaData(data) {
 	var pubTime = media.timestamp;
 	if (pubTime.toString().length == 10) {
 		pubTime = media.timestamp * 1000;
-	}	
+	}
 
     $('.ri-date').text(moment(pubTime).format('MMMM Do YYYY'));
 
     $('.media-description').html(info.description.replace(/(?:\r\n|\r|\n)/g, '<br />'));
 
     watchForPin (ipfsAddr, xinfo.filename)
-    
+
     return media;
 }
 
@@ -353,7 +353,7 @@ function IPFSUrl (components) {
 function showPaymentOption(e) {
         var self = e.target;
         if( $(self).hasClass('disabled') ) {
-        	return false;	
+        	return false;
         }
         var	fileData = $('.playlist tr.active').data();
         $('.media-track').hide();
@@ -389,7 +389,7 @@ function showPaymentOption(e) {
         togglePlaybarShadow(false);
         if (artifactLoaded === false) {
             artifactLoaded = true;
-        } else {        
+        } else {
             var btcprice = makePaymentToAddress(btcAddress, price, sugPrice, function () {
                 return onPaymentDone(action, fileData);
             });
@@ -406,7 +406,7 @@ function showPaymentOption(e) {
             console.log(price);
             if (price >= 1 && price <= 5){
                 testDomain();
-                createCoinbaseModal(btcAddress, price, action);
+                createCoinbaseModal(btcAddress, sugPrice, action);
             } else {
                 hideCoinbaseButton();
             }
@@ -583,7 +583,7 @@ function mountMediaBrowser(el, data) {
     })
 
 	displayEmbedCode(mediaID, mediaData.type, true);
-	
+
 	window.scroll(0,0);
 	$('.playlist-tracks tr:first').children(':first').click();
 
@@ -597,7 +597,7 @@ function mountMediaBrowser(el, data) {
 		artifactPublisher: mediaPublisher,
 		publisherId: mediaData.publisher
 	}
-	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);    
+	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media > ' + stateObj.mediaType.charAt(0).toUpperCase() + stateObj.mediaType.slice(1) + ' > ' + stateObj.artifactTitle);
 }
 
 // EMBED ARTIFACT FROM DHT
@@ -725,7 +725,7 @@ function onPaymentDone (action, file) {
         // Add a link to download
         var a = $("<a>").attr("href", url).attr("download", file.track.fname).attr("target","_blank").appendTo("body");
         // Click the link
-        a[0].click();  
+        a[0].click();
         // Remove the link we added.
         a.remove();
         $('#playbar-container').show();
@@ -780,7 +780,7 @@ function makePaymentToAddress(address, minAmt, sugAmt, done) {
         })
         .fail(function (jqXHR, textStatus, errorThrown) {
             console.error(textStatus, errorThrown);
-            setTimeout(makePaymentToAddress(address, minAmt, sugAmt, done), 5000);            
+            setTimeout(makePaymentToAddress(address, minAmt, sugAmt, done), 5000);
         });
 
     return USDToBTC(sugAmt);
@@ -861,7 +861,7 @@ function setQR(address, amount) {
             if (qrPlay) {
                 qrcodePlay = new QRCode(qrPlay, qrOptions);
             }
-        }        
+        }
 
         $('.pwyw-qrcode img').each(function() {
             $(this).css('margin','auto');
