@@ -404,7 +404,7 @@ function showPaymentOption(e) {
             // If the price is between $1 and $5 then show the BTC buy widget
             console.log(btcAddress);
             console.log(price);
-            if (price >= 1 && price <= 5){
+            if (sugPrice >= 1 && sugPrice <= 5){
                 testDomain();
                 createCoinbaseModal(btcAddress, sugPrice, action);
             } else {
