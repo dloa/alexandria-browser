@@ -831,6 +831,10 @@ function watchForpayment(address, amount, done) {
             console.log('payed.');
             togglePlaybarShadow(true);
             done(amountpaid);
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            console.error(textStatus, errorThrown);
+            setTimeout(watchForpayment(address, amount, done), delay); 
         });
 }
 
