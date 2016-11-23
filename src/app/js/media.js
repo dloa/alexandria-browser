@@ -416,6 +416,14 @@ function showPaymentOption(e) {
         }
 }
 
+function showPayByBitcoin() {
+    console.log("showPayByBitcoin()");
+    $('.pwyw-container').removeClass('active');
+    $('#pwyw-paywbtc-download-dialog').addClass('active');
+    $('.pwyw-close').appendTo('.pwyw-container.active');
+    $('#pwyw-paywbtc-download-dialog').show();
+}
+
 function mountMediaBrowser(el, data) {
 	var mediaPublisher = data[0]['publisher-name'];
 	var mediaID = data[0]['txid'];
