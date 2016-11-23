@@ -342,10 +342,12 @@ body {
     text-align: center;
     padding: 0 10px;
 }
+.payment-select-buttons a, .payment-select-buttons iframe {
+    margin: 1em auto;
+}
 .payment-select-buttons a {
     display: block;
     clear: both;
-    margin: 1em auto;
     border-radius: 5px;
     padding: 0.7em 1.4em;
     line-height: 1.3;
