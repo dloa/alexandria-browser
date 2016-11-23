@@ -345,7 +345,7 @@ body {
 .payment-select-buttons a {
     display: block;
     clear: both;
-    width: 273px;
+    width: 190px;
     margin: 1em auto;
     border-radius: 5px;
     padding: 0.7em 1.4em;
@@ -360,9 +360,6 @@ body {
     box-shadow: none;
     font-size: 18px;
     font-family: 'helvetica neue';
-}
-#coinbase_button {
-    width: 100%;
 }
 .pwyw-footer {
     text-align: center;
