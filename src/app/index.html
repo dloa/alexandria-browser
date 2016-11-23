@@ -1107,7 +1107,7 @@
 				                   <button class="pwyw-pin-it">Pin It!</button>
 				               </div>
 				               <div class="pwyw-container pwyw-activate-download">
-				                   <div class="pwyw-paybox">
+				                   <div class="pwyw-paybox paybox-bitcoin">
 				                       <div class="pwyw-payinfo">
 				                           The suggested price is:
 				                           <span class="pwyw-suggest">
@@ -1127,7 +1127,7 @@
 				                   </div>
 				               </div>
 				               <div class="pwyw-container pwyw-activate-play">
-				                   <div class="pwyw-paybox">
+				               		<div class="pwyw-paybox paybox-first">
 				                       <div class="pwyw-payinfo">
 				                           The suggested price is:
 				                           <span class="pwyw-suggest">
@@ -1135,16 +1135,20 @@
 				                           </span>
 				                           <br />
 				                           <span>$ <input class="pwyw-usd-price-input pwyw-usd-play-price-input" maxlength="4" /> USD</span>
-				                           <div class="pwyw-somespace"></div>
+				                           <div class="payment-select-buttons">
+				                           		<a onclick="toggleBitcoinPay(true)">Send Bitcoin</a>
+												<a class="coinbase-widget" id="coinbase_widget_play" href="">Pay with Debit/Credit</a>
+				                           </div>
+<!--				                    <div class="pwyw-somespace"></div> -->
 				                       </div>
-				                   </div>
-				                   <div class="pwyw-footer">
-				                       <span class="pwyw-btc-play-price">play-price</span> BTC to
-				                       <div id="pwyw-btc-play-qrcode" class="pwyw-qrcode" style="display: block;">
-				                       </div>
-				                       <span class="pwyw-btc-address" style="display: block;">1CvDLWNzX4PEkzMU7t2pVGsT858pMiNorQ
-				                       </span>
-				                       <center><div><a class="coinbase-widget" id="coinbase_widget_play" href="">Buy FLO with Debit/Credit</a></div></center>
+				               		</div>
+				                   <div class="pwyw-paybox paybox-bitcoin">
+					                   <div class="pwyw-footer">
+											<div class="pwyw-somespace"></div>
+					                       Send <span class="pwyw-btc-play-price">play-price</span> BTC to: <span class="pwyw-btc-address" style="display: block;"></span>
+					                       <div id="pwyw-btc-play-qrcode" class="pwyw-qrcode" style="display: block;">
+					                       </div>
+					                   </div>
 				                   </div>
 				               </div>
 				           </div>

@@ -306,8 +306,8 @@ body {
 .pwyw-close {
     font-family: 'mediaicns';
     position: absolute;
-    right: 25px;
-    top: 25px;
+    right: 1em;
+    top: 1em;
     font-size: 16px;
     cursor: pointer;
     display: none
@@ -334,13 +334,20 @@ body {
     -webkit-flex-direction: inherit;
     flex-direction: inherit;
 }
-
+.pwyw-paybox {
+    display: none;
+}
 .pwyw-paybox input {
     width: 45px;
     text-align: center;
     padding: 0 10px;
 }
-
+.payment-select-buttons a {
+    display: block;
+    clear: both;
+    width: 80%;
+    margin: 1em auto 0;
+}
 .pwyw-footer {
     text-align: center;
 }

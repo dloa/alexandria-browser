@@ -693,16 +693,23 @@ function loadTrack (name, url, fname) {
 }
 
 function togglePWYWOverlay (bool) {
-	$('#pwyw-btc-play-qrcode').hide();
+	$('.paybox-bitcoin').hide();
 	$('#pwyw-btc-play-qrcode img').attr('src','');
 	$('.pwyw-btc-address').text('');
     var action = bool?'show':'hide';
     $('.pwyw-close')[action]();
     $('.pwyw-overlay')[action]();
+    $('.pwyw-paybox.paybox-first')[action]();
     $('.pwyw-close').appendTo('.pwyw-container.active');
 	if (bool === false) {
 		$('.pwyw-container.active').toggleClass('active');
 	}
+}
+
+function toggleBitcoinPay (bool) {
+    var action = bool?'show':'hide';
+    $('.pwyw-paybox.paybox-first').hide();
+	$('.paybox-bitcoin')[action]();
 }
 
 function onPaymentDone (action, file) {
