@@ -637,6 +637,17 @@ ul#media-type-select-list {
 	vertical-align: bottom;
 	text-align: left;
 }
+.hasCost {
+	margin-left: .5em;
+	width: 23px;
+	display: inline-block;
+}
+.hasCost object {
+	height: auto;
+	width: 1em;
+	position: relative;
+	top: .1em;
+}
 #browse-media-wrap .row .load-entity {
 	cursor: pointer;
 }

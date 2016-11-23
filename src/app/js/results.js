@@ -182,6 +182,7 @@ function populateSearchResults(results, module) {
 					mediaArtist = mediaInfo['extra-info']['artist'];
 				}
 /* LOAD ARTIFACT PREVIEW IMAGE - NOT IMPLEMENTED BECAUSE IT FORCED DOWNLOAD OF ~ 100 MB
+	** Lazyload images
 				if (mediaInfo['extra-info']['posterFrame']) {
 					mediaThumb = '<img src="'+IPFSHost+'/ipfs/'+mediaHash +'/'+mediaInfo['extra-info']['posterFrame']+'" />';
 				} else if (mediaInfo['extra-info']['preview']) {
@@ -195,7 +196,15 @@ function populateSearchResults(results, module) {
 			} else {
 				mediaRuntime = '';
 			}
-			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+ mediaThumb +'</div><div class="meta-container"><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle.trim() + '</h3><br /><div class="media-meta" onclick="loadMediaEntity(this);">' + mediaYear + ' &bull; ' + mediaPublisher + '<span class="publisher-id hidden">'+ publisherID +'</span></div> '+ mediaRuntime +' <span class="media-pub-time">&bull; ' + mediaPubTime + '</span> <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-desc hidden">' + mediaDesc + '</div></div>';
+			var hasCost = '';
+			var sugCost = '';
+			if (mediaInfo['extra-info']['files']) {
+				if (mediaInfo['extra-info']['files'][0]['sugPlay']) {
+					hasCost = '<object data="svg/usd_icon_greencircle.svg" type="image/svg+xml"></object>';
+					sugCost = mediaInfo['extra-info']['files'][0]['sugPlay'];
+				}
+			}
+			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+ mediaThumb +'</div><div class="meta-container"><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle.trim() + '<span class="hasCost">'+hasCost+'</span></h3><br /><div class="media-meta" onclick="loadMediaEntity(this);">' + mediaYear + ' &bull; ' + mediaPublisher + '<span class="publisher-id hidden">'+ publisherID +'</span></div> '+ mediaRuntime +' <span class="media-pub-time">&bull; ' + mediaPubTime + '</span> <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-desc hidden">' + mediaDesc + '</div></div>';
 			var thisTitleAndPublisher = mediaTitle+publisherID;
 			$('#browse-media-wrap .row').each(function(){
 				var checkTitleAndPublisher = $(this).find('.media-title').text() + $(this).find('.publisher-id').text();
