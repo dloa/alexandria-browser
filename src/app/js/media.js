@@ -802,13 +802,13 @@ function getUSDdayAvg() {
 }
 
 var paymentTimeout;
+var restartWebSocket = true;
+var recievedPartial = false;
 function watchForpayment(address, amount, done) {
     done = done || function () {};
     if (amount <= 0) {
         return done(amount);
     }
-
-    var recievedPartial = false;
 
     bitcoinWebsocket = new WebSocket("wss://ws.blockchain.info/inv");
 
