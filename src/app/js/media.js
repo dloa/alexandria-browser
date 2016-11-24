@@ -808,41 +808,59 @@ function watchForpayment(address, amount, done) {
         return done(amount);
     }
 
-    $.ajax({
-        url: URL_GETRECVD + address
-    })
-        .done(function (data) {
-            if (!day_avg) {
-                if (paymentTimeout) {
-                    clearTimeout (paymentTimeout)
+    var recievedPartial = false;
+
+    bitcoinWebsocket = new WebSocket("wss://ws.blockchain.info/inv");
+
+    bitcoinWebsocket.onopen = function(evt){
+        console.log('Websocket Opened...');
+        bitcoinWebsocket.send('{"op":"addr_sub", "addr":"' + address + '"}');
+    }
+
+    bitcoinWebsocket.onmessage = function(evt){
+        var received_msg = evt.data;
+        var message = JSON.parse(received_msg);
+        if (message.op == "utx"){
+            console.log(message);
+            console.log("Recieved transaction, hash: " + message.x.hash);
+            
+            var bitsRecieved = 0;
+
+            for (var i = 0; i < message.x.out.length; i++) {
+                if (message.x.out[i].addr == address){
+                    bitsRecieved = message.x.out[i].value;
+                    console.log("Bits Recieved: " + bitsRecieved);
                 }
-                paymentTimeout = setTimeout(function () {
-                    watchForpayment(address, amount, done);
-                }, delay);
-                return false;
-            }
-            var amountpaid = BTCtoUSD(data)  // data is expected to be BTC...for now
-            console.log(amountpaid);
-            var amountRequired = amount;
-            if (amountpaid < amountRequired) {
-                //console.log('not paid checking again.');
-                if (paymentTimeout) {
-                    clearTimeout (paymentTimeout)
-                }
-                paymentTimeout = setTimeout(function () {
-                    watchForpayment(address, amount, done);
-                }, delay);
-                return true;
             }
 
-            console.log('payed.');
-            togglePlaybarShadow(true);
-            done(amountpaid);
-        })
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            console.error(textStatus, errorThrown);
-            setTimeout(watchForpayment(address, amount, done), delay); 
-        });
+            // This converts it from bits to full Bitcoin (i.e. 13312 bits would become 0.00013312 BTC);
+            var formattedBTCRecieved = bitsRecieved/100000000;
+
+            // amountPaid is the value in USD recieved.
+            var amountPaid = BTCtoUSD(formattedBTCRecieved);
+            console.log("Recieved $" + amountPaid);
+
+            var amountRequired = amount;
+
+            if (amountPaid >= amountRequired){
+                togglePlaybarShadow(true);
+                done(amountPaid);
+
+                restartWebSocket = false;
+                bitcoinWebsocket.close();
+            } else {
+                recievedPartial = true;
+            }
+        }
+    }
+
+    bitcoinWebsocket.onclose = function(evt){
+        // Sometimes the websocket will timeout or close, when it does just respawn the thread.
+        console.log("Websocket Closed")
+
+        if (restartWebSocket)
+            setTimeout(function(){ watchForpayment(address, amount, done); }, 200);
+    }
 }
 
 function setQR(address, amount) {
