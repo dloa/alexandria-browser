@@ -642,7 +642,7 @@ ul#media-type-select-list {
 	width: 23px;
 	display: inline-block;
 }
-.hasCost object {
+.hasCost object, .hasCost svg {
 	height: auto;
 	width: 1em;
 	position: relative;
