@@ -86,7 +86,6 @@ window.oipDowngrade = function(oipObject){
 				delete files[i].displayname;
 			}
 		}
-		console.log(files);
 
 		alexandriaObject["media-data"]["alexandria-media"]["info"]["extra-info"].files = [];
 		alexandriaObject["media-data"]["alexandria-media"]["info"]["extra-info"].files = files;
