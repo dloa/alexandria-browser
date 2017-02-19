@@ -267,16 +267,16 @@ function applyMediaData(data) {
     // Set what the circles will use for pricing.
     if(!xinfo['files'][0].disallowPlay && xinfo['files'][0].sugPlay) {
     	$('.pwyw-action-play').show();
-	    $('.pwyw-price-play').text (xinfo['files'][0].sugPlay);
-	    $('.pwyw-price-suggest-play').text (xinfo['files'][0].sugPlay)
+	    $('.pwyw-price-play').text (xinfo['files'][0].sugPlay/priceScale);
+	    $('.pwyw-price-suggest-play').text (xinfo['files'][0].sugPlay/priceScale)
     } else {
     	$('.pwyw-action-play').hide();
     }
     if(!xinfo['files'][0].disallowBuy && xinfo['files'][0].sugBuy) {
     	$('#audio-player').hide();
     	$('.pwyw-action-download').show();
-	    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy)
-	    $('.pwyw-price-suggest-download').text (xinfo['files'][0].sugBuy)
+	    $('.pwyw-price-download').text (xinfo['files'][0].sugBuy/priceScale)
+	    $('.pwyw-price-suggest-download').text (xinfo['files'][0].sugBuy/priceScale)
     } else {
     	$('.pwyw-action-download').hide();
     }
