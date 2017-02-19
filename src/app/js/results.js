@@ -41,7 +41,7 @@ function filterMediaByType(obj, resetSearch) {
 			searchResults: false
 		}
 		makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Media');
-		populateSearchResults(filteredMedia, 'media');
+		deDupeResults(filteredMedia);
 		return false;
 	} else {
 		var filterTypes = [obj];
@@ -133,7 +133,77 @@ function filterMediaByType(obj, resetSearch) {
 		}
 	}
 	console.log(history.state);
-	populateSearchResults(filteredMedia, 'media');
+	deDupeResults(filteredMedia);
+}
+
+// DEDUPE SEARCH RESULTS
+function deDupeResults(filteredMedia) {
+	console.info(filteredMedia);
+	var revs = 0;
+	var results = {};
+	results.length = 0;
+	for (var i = filteredMedia.length - 1; i >= 0 ; i--) {
+		var txid = filteredMedia[i]['txid'];
+		var artifactData = parseArtifactData(filteredMedia[i]);
+		var deDupeHash = new String(artifactData['info']['title']+'_'+artifactData['publisher']).hashCode();
+		if (results.length === 0) {
+			results[results.length] = {
+				0: deDupeHash,
+				1: artifactData,
+				2: txid,
+				3: filteredMedia[i]['publisher-name']
+			}
+			results.length ++;
+		} else {
+			var isRev = in_array(deDupeHash, results);
+			if (isRev === false) {
+				results[results.length] = {
+					0: deDupeHash,
+					1: artifactData,
+					2: txid,
+					3: filteredMedia[i]['publisher-name']
+				}
+				results.length ++;
+			} else {
+				revs++;
+			}
+		}
+	}
+	populateSearchResults(results, 'media');
+}
+
+function parseArtifactData(artifactObj) {
+	if (artifactObj['media-data']){
+		var artifactData = artifactObj['media-data']['alexandria-media'];
+	} else {
+		var artifactData = artifactObj['oip-041']['artifact'];
+	}
+	return artifactData;
+}
+
+function in_array(what, where) {
+    var a=false;
+    for (var i=0; i<where.length; i++) {
+        if(what == where[i][0]) {
+            a=true;
+            break;
+        }
+    }
+    return a;
+}
+
+String.prototype.hashCode = function(){
+    if (Array.prototype.reduce){
+        return this.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);              
+    } 
+    var hash = 0;
+    if (this.length === 0) return hash;
+    for (var i = 0; i < this.length; i++) {
+        var character  = this.charCodeAt(i);
+        hash  = ((hash<<5)-hash)+character;
+        hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
 }
 
 // POPULATE SEARCH RESULTS
@@ -146,8 +216,9 @@ function populateSearchResults(results, module) {
 	$('#'+module+'-results-title').remove();
 	if ( (module =='media') && (results) ) {
 		var revs = 0;
-		for (var i = 0; i < results.length; i++) {
-			var mediaType = results[i]['media-data']['alexandria-media']['type'];
+		console.info(results);
+		for (var i = results.length - 1; i >= 0; i--) {
+			var mediaType = results[i][1]['type'];
 			if ( (history.state) && (history.state.mediaTypes) ) {
 				if ( (history.state.mediaTypes.length > 0) && (history.state.searchResults == true) && (history.state.mediaTypes.indexOf(mediaType) == -1) ) {
 					continue;
@@ -158,13 +229,13 @@ function populateSearchResults(results, module) {
 				console.error('UNKNOWN MEDIA TYPE ICON');
 				var mediaThumb = '';
 			}
-			var mediaID = results[i]['txid'];
-			var mediaPublisher = results[i]['publisher-name'];
-			var publisherID = results[i]['media-data']['alexandria-media']['publisher'];
-			var mediaHash = results[i]['media-data']['alexandria-media']['torrent'];
-			var mediaInfo = results[i]['media-data']['alexandria-media']['info'];
-			var mediaPubTime = results[i]['media-data']['alexandria-media']['timestamp'];
-			var mediaPubTimeLen = results[i]['media-data']['alexandria-media']['timestamp'].toString().length;
+			var mediaID = results[i][2];
+			var mediaPublisher = results[i][3];
+			var publisherID = results[i][1]['publisher'];
+			var mediaHash = results[i][1]['torrent'];
+			var mediaInfo = results[i][1]['info'];
+			var mediaPubTime = results[i][1]['timestamp'];
+			var mediaPubTimeLen = results[i][1]['timestamp'].toString().length;
 			if (mediaPubTimeLen == 10) {
 				mediaPubTime = parseInt(mediaPubTime)*1000;
 			}
@@ -305,6 +376,6 @@ function autofeed(feed) {
     liveRefresh = setTimeout (function () {
 		var filteredMedia = searchAPI('media', '*', '');
 		console.info(filteredMedia);
-		populateSearchResults(filteredMedia, 'media');
+		deDupeResults(filteredMedia);
     }, 60000);
 }

@@ -19,7 +19,7 @@ function fullSearch(searchFor) {
 	stateObj.searchTerm = (document.getElementById('search-main').value != '') ? (htmlEscape(document.getElementById('search-main').value)) : (searchFor);
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > Search > '+ stateObj.searchTerm);
 	populateSearchResults(publisherResults, 'publisher');
-	populateSearchResults(mediaResults, 'media');
+	deDupeResults(mediaResults);
 }
 
 // ADVANCED SEARCH
@@ -60,7 +60,11 @@ function buildSearch() {
 		module: searchProtocol
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ searchProtocol.charAt(0).toUpperCase() + searchProtocol.slice(1) +' > Search > '+ stateObj.searchTerm);
-	populateSearchResults(AdvSearchResults, searchProtocol);
+	if (searchProtocol === 'media') {
+		deDupeResults(AdvSearchResults);
+	} else {
+		populateSearchResults(AdvSearchResults, searchProtocol);
+	}
 	document.getElementById('searchTermInput').value = '';
 }
 
@@ -87,5 +91,9 @@ function searchByField(module, searchOn, searchFor) {
 		searchOn: searchOn
 	}
 	makeHistory(stateObj, 'ΛLΞXΛNDRIΛ > '+ stateObj.module.charAt(0).toUpperCase() + stateObj.module.slice(1) +' > Search > ' + searchOn + ' > ' + stateObj.searchTerm.charAt(0).toUpperCase() + stateObj.searchTerm.slice(1));
-	populateSearchResults(AdvSearchResults, module);
+	if (module === 'media') {
+		deDupeResults(AdvSearchResults);
+	} else {
+		populateSearchResults(AdvSearchResults, module);
+	}
 }

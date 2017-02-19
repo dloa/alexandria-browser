@@ -116,7 +116,6 @@ function loadPublisherView(objMeta) {
 			var mediaRuntime = 0;
 			var mediaArtist = '';
 			if(mediaInfo['extra-info']){
-				console.info(mediaInfo['extra-info']);
 				if (mediaInfo['extra-info']['runtime']) {
 					mediaRuntime = calcRuntime(mediaInfo['extra-info']['runtime']);
 				} else if (mediaInfo['extra-info']['files']) {

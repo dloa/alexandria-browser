@@ -1,4 +1,6 @@
 // v0.6 LOAD ARTIFACT VIEW
+var priceScale = 1;
+
 function loadArtifactView2(objMeta) {
 	// HIDE OTHER VIEWS
     if ($('#intro').length > 0) {
@@ -33,6 +35,10 @@ function loadArtifactView2(objMeta) {
 	// GET ALL THE MEDIA DATA
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
     console.log (mediaID, thisMediaData);
+    if (thisMediaData[0]['media-data']['alexandria-media']['payment']['scale']) {
+        priceScale = thisMediaData[0]['media-data']['alexandria-media']['payment']['scale'].split(':')[0];
+    }
+    console.log(priceScale);
 	$('.media-cover').hide();
     window.doMountMediaBrowser('#media-browser', thisMediaData);
 }
@@ -105,7 +111,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         if (file.disallowPlay && file.disallowPlay === true) {
             tdPlay = "<td class=\"price disabled\"><span>$<span class=\"price\">N/A</span></span></td>";
         } else {
-            tdPlay = "<td class=\"price tb-price-play\"><span>$<span class=\"price\">" + (file.sugPlay ? file.sugPlay : "Free!") + "</span></span></td>";
+            tdPlay = "<td class=\"price tb-price-play\"><span>$<span class=\"price\">" + (file.sugPlay ? file.sugPlay/priceScale : "Free!") + "</span></span></td>";
         }
 
         // Setup cell for price to buy, N/A when disallowBuy === true
@@ -113,7 +119,7 @@ function renderPlaylistFilesHTML (files, xinfo, el, artifactType, extraFiles) {
         if (file.disallowBuy && file.disallowBuy === true) {
             tdBuy = "<td class=\"price disabled\"><span>$<span class=\"price\"><span>N/A</span></span></td>";
         } else {
-            tdBuy = "<td class=\"price tb-price-download\"><span>$<span class=\"price\"><span>" + (file.sugBuy ? file.sugBuy : "Free!") + "</span></span></td>";
+            tdBuy = "<td class=\"price tb-price-download\"><span>$<span class=\"price\"><span>" + (file.sugBuy ? file.sugBuy/priceScale : "Free!") + "</span></span></td>";
         }
 
         // Only add files to the main playlist where type matches artifact type.
