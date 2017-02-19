@@ -154,6 +154,10 @@ function populateSearchResults(results, module) {
 				}
 			}
 			var mediaThumb = mediaIconSVGs[mediaType];
+			if (!mediaThumb) {
+				console.error('UNKNOWN MEDIA TYPE ICON');
+				var mediaThumb = '';
+			}
 			var mediaID = results[i]['txid'];
 			var mediaPublisher = results[i]['publisher-name'];
 			var publisherID = results[i]['media-data']['alexandria-media']['publisher'];
@@ -218,7 +222,7 @@ function populateSearchResults(results, module) {
 					});
 				}
 			}
-			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+ mediaThumb +'</div><div class="meta-container"><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle.trim() + '<span class="hasCost">'+thisHasCost+'</span></h3><br /><div class="media-meta" onclick="loadMediaEntity(this);">' + mediaYear + ' &bull; ' + mediaPublisher + '<span class="publisher-id hidden">'+ publisherID +'</span></div> '+ mediaRuntime +' <span class="media-pub-time">&bull; ' + mediaPubTime + '</span> <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-desc hidden">' + mediaDesc + '</div></div>';
+			var mediaEntity = '<div id="media-' + mediaID + '" class="row media-entity" media-type="' + mediaType + '"><div class="browse-icon" onclick="loadMediaEntity(this);">'+ mediaThumb +'</div><div class="meta-container"><h3 class="media-title" onclick="loadMediaEntity(this);">' + mediaTitle.trim() + '<span class="hasCost">'+thisHasCost+'</span></h3><br /><div class="media-meta" onclick="loadMediaEntity(this);">' + mediaPublisher + '<span class="publisher-id hidden">'+ publisherID +'</span></div>'+ mediaRuntime +' <span class="media-pub-time">&bull; ' + mediaPubTime + '</span> <a class="info-icon hidden" onclick="loadInfoModal(this)">'+ infoIconSVG +'info</a><a class="playbtn-icon" onclick="loadMediaEntity(this);">'+ playIconSVG +'play</a><div class="media-desc hidden">' + mediaDesc + '</div></div>';
 			var thisTitleAndPublisher = mediaTitle+publisherID;
 			$('#browse-media-wrap .row').each(function(){
 				var checkTitleAndPublisher = $(this).find('.media-title').text() + $(this).find('.publisher-id').text();

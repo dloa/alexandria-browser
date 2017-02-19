@@ -187,17 +187,17 @@ jQuery(document).ready(function($){
 		});
 	} else {
 		if (IPFSHost == 'https://ipfs.alexandria.io') {
-			$('#IPFS-switch').text('IPFS: Gateway');
+			$('#IPFS-switch').html('<strong>IPFS</strong> Use Local');
 		} else {
-			$('#IPFS-switch').text('IPFS: Local');
+			$('#IPFS-switch').html('<strong>IPFS</strong> Use Gateway');
 		}
 		$('#IPFS-switch').click(function(){
 			if(IPFSHost == 'https://ipfs.alexandria.io'){
 				IPFSHost = 'http://localhost:8080';
-				$('#IPFS-switch').text('IPFS: Local');
+				$('#IPFS-switch').html('<strong>IPFS</strong> Use Gateway');
 			} else {
 				IPFSHost = 'https://ipfs.alexandria.io';
-				$('#IPFS-switch').text('IPFS: Gateway');
+				$('#IPFS-switch').html('<strong>IPFS</strong> Use Local');
 			}
 			resetAlexandria();
 		});

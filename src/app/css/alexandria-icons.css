@@ -3,10 +3,12 @@
 	height: 98%;
 }
 .browse-icon svg, .browse-icon object  {
-	width: 60%;
+	width: 98%;
 	height: initial;
 	max-height: 100%;
 	display: inline-block;
+	position: relative;
+	top: 4px;
 }
 .browse-icon svg path, .media-image svg path, .browse-icon svg path, .browse-icon object path {
 	fill: #797979;

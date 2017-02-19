@@ -343,15 +343,18 @@ div#logoImg {
 	right: 25px;
 	line-height: 72px;
 }
-.header-icon, header #serverID, header #IPFS-switch {
+.header-icon, header #serverID, header #IPFS-switch.appOnly {
 	line-height: 72px;
+}
+header #serverID, header #IPFS-switch {
+	cursor: pointer;
 }
 .header-icon {
 	display: inline-block;
 	width: 25px;
 	cursor: pointer;
 }
-header #serverID, header #IPFS-switch {
+header #serverID, header #IPFS-switch.appOnly {
   display: block;
   right: 105px;
   cursor: default;
@@ -362,7 +365,7 @@ header #serverID, header #IPFS-switch {
 	display: none !important;
 }
 @media only screen and (min-width: 829px) {
-	header #serverID, header #IPFS-switch {
+	header #serverID, header #IPFS-switch.appOnly {
 		display: inherit !important;
 	}
 }
@@ -445,8 +448,13 @@ header #app-user-icon {
 	padding: 0 36px 0 24px;
 	white-space: nowrap;
 }
-.header-modal ul li a {
+.header-modal ul li a, #publish-module-link {
 	color: inherit;
+}
+#publish-module-link {
+	margin-right: 15px;
+	top: 3px;
+	position: relative;
 }
 .header-modal ul li img, .header-modal ul li svg {
 	display: inline;
@@ -619,8 +627,8 @@ ul#media-type-select-list {
 #browse-media-wrap > .container > .row > .browse-icon, #publisher-media-list .browse-icon {
 	display: block;
 	float: left;
-	width: 64px;
-	height: 48px;
+	width: 24px;
+	height: 24px;
 	padding: 0;
 	margin: 0 15px 0 0;
 	position: relative;
