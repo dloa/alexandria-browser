@@ -16,7 +16,6 @@ window.searchAPI = function(module, searchOn, searchFor) {
 		},
 		async:   false
 	});
-	//console.info(mediaData);
 
 	// HACK: OstlerDev
 	// Hack oip to conform to alexandria-media temporarialy. 
@@ -32,7 +31,11 @@ window.searchAPI = function(module, searchOn, searchFor) {
 		console.log("Conformed " + count + " OIP-041 Artifacts to alexandria-media Artifacts");
 	}
 
-	return mediaData;
+	var sortedResults = mediaData.sort(function(a, b) {
+	    return parseFloat(a.block) - parseFloat(b.block);
+	});
+
+	return sortedResults;
 }
 
 // This method downgrades oip-041 objects to alexandria-media objects until the code can be updated to only support oip-041.
@@ -45,7 +48,7 @@ window.oipDowngrade = function(oipObject){
 			"alexandria-media":{  
 				"torrent": oip.artifact.storage.location,
 				"publisher": oip.artifact.publisher,
-				"timestamp": oip.artifact.timestamp,
+				"timestamp": oip.artifact.timestamp*1000,
 				"type": oip.artifact.type,
 				"info":{  
 					"title": oip.artifact.info.title,

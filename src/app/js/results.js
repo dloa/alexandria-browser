@@ -132,13 +132,11 @@ function filterMediaByType(obj, resetSearch) {
 			}
 		}
 	}
-	console.log(history.state);
 	deDupeResults(filteredMedia);
 }
 
 // DEDUPE SEARCH RESULTS
 function deDupeResults(filteredMedia) {
-	console.info(filteredMedia);
 	var revs = 0;
 	var results = {};
 	results.length = 0;
@@ -226,7 +224,6 @@ function populateSearchResults(results, module) {
 			}
 			var mediaThumb = mediaIconSVGs[mediaType];
 			if (!mediaThumb) {
-				console.error('UNKNOWN MEDIA TYPE ICON');
 				var mediaThumb = '';
 			}
 			var mediaID = results[i][2];
@@ -356,9 +353,6 @@ function afterSearch() {
 	});
 	var prevResultCount = $('#results-count-wrap span').text();
 	var diffResults = visibleResults - prevResultCount;
-	console.log('prevResultCount = '+ prevResultCount);
-	console.log('visibleResults = '+ visibleResults);
-	console.log('Variation in results = ' + diffResults);
 	$('#results-count-wrap span').text(visibleResults);
 	$('#browse-media-wrap #results-count-wrap.container').show();
 	// Auto-refresh media list
@@ -375,7 +369,6 @@ function autofeed(feed) {
 	// Make this more complex for different use cases (ie. Search reults + Publisher views)
     liveRefresh = setTimeout (function () {
 		var filteredMedia = searchAPI('media', '*', '');
-		console.info(filteredMedia);
 		deDupeResults(filteredMedia);
     }, 60000);
 }
