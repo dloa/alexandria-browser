@@ -689,6 +689,8 @@ function loadTrack (name, url, fname) {
 	        ogv: url + fname,
 	        poster: posterurl + posterFrame
 	    });
+	} else if (filetype == 'mov') {
+		console.log('MOV FILE');
 	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
 		$('#audio-player').hide();
 		if( $('#native-player') ) {

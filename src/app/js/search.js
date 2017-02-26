@@ -29,13 +29,16 @@ window.searchAPI = function(module, searchOn, searchFor) {
 		}
 
 		console.log("Conformed " + count + " OIP-041 Artifacts to alexandria-media Artifacts");
+		var sortedResults = mediaData.sort(function(a, b) {
+		    return parseFloat(a.block) - parseFloat(b.block);
+		});
+
+		return sortedResults;
+
+	} else {
+		return mediaData;
 	}
 
-	var sortedResults = mediaData.sort(function(a, b) {
-	    return parseFloat(a.block) - parseFloat(b.block);
-	});
-
-	return sortedResults;
 }
 
 // This method downgrades oip-041 objects to alexandria-media objects until the code can be updated to only support oip-041.
