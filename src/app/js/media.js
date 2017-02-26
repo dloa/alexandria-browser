@@ -34,11 +34,9 @@ function loadArtifactView2(objMeta) {
 	}
 	// GET ALL THE MEDIA DATA
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
-    console.log (mediaID, thisMediaData);
     if (thisMediaData[0]['media-data']['alexandria-media']['payment']['scale']) {
         priceScale = thisMediaData[0]['media-data']['alexandria-media']['payment']['scale'].split(':')[0];
     }
-    console.log(priceScale);
 	$('.media-cover').hide();
     window.doMountMediaBrowser('#media-browser', thisMediaData);
 }
@@ -236,7 +234,6 @@ function applyMediaData(data) {
 			}
 			if (payment) {
 				xinfo['files'][i]['type'] = payment['type'];
-				console.log('Artifact uses old payment format');
 			}
 			if (xinfo['pwyw']) {
 		    	var pwywArray = xinfo['pwyw'].split(',');
@@ -261,7 +258,6 @@ function applyMediaData(data) {
         minBuy: xinfo['files'][0].minBuy
     };
     filetype = mainFile.track.fname.split('.')[mainFile.track.fname.split('.').length - 1].toLowerCase();
-    console.info(filetype);
     mediaDataSel.data(media)
 
     // Set what the circles will use for pricing.
@@ -314,8 +310,6 @@ function applyMediaData(data) {
         }
 
     keepHash = (xinfo['DHT Hash']) ? (xinfo['DHT Hash']) : (media.torrent);
-
-    console.log (media, tracks);
 
 	var pubTime = media.timestamp;
 	if (pubTime.toString().length == 10) {
@@ -399,7 +393,6 @@ function showPaymentOption(e) {
             var btcprice = makePaymentToAddress(btcAddress, price, sugPrice, function () {
                 return onPaymentDone(action, fileData);
             });
-            console.info("Cost of artifact: " + btcprice);
             $('.pwyw-btc-' + action + '-price').text(btcprice);
             $('.pwyw-usd-' + action + '-price-input').val(sugPrice);
 
@@ -408,8 +401,6 @@ function showPaymentOption(e) {
 
             // Coinbase BTC Code
             // If the price is between $1 and $5 then show the BTC buy widget
-            console.log(btcAddress);
-            console.log(price);
             if (sugPrice >= 1 && sugPrice <= 5){
                 testDomain();
                 createCoinbaseModal(btcAddress, sugPrice, action);
@@ -525,6 +516,9 @@ function mountMediaBrowser(el, data) {
     	            console.error('got jplayer error', e)
     	        }
     	    })
+		} else if ( (filetype == 'mov') || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
+			$('#audio-player').hide();
+			$('#playbar-container').hide();
        	} else {
             // Handle Artifact Types that don't use the built-in media player
     		$('.jp-title').text('Unsupported File Format');
@@ -542,7 +536,6 @@ function mountMediaBrowser(el, data) {
             setQR(lastAddress, USDToBTC(this.value));
 
             // Update Coinbase modal!
-            console.log(this.value);
             if (this.value >= 1 && this.value <= 5){
                 createCoinbaseModal(lastAddress, this.value, action);
             } else {
@@ -689,9 +682,7 @@ function loadTrack (name, url, fname) {
 	        ogv: url + fname,
 	        poster: posterurl + posterFrame
 	    });
-	} else if (filetype == 'mov') {
-		console.log('MOV FILE');
-	} else if ( (filetype == 'mov')  || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
+	} else if ( (filetype == 'mov') || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
 		$('#audio-player').hide();
 		if( $('#native-player') ) {
 			$('#native-player').remove();
@@ -749,7 +740,9 @@ function onPaymentDone (action, file) {
         var fileType = file.track.type;
         if ( (fileType === 'video') || (fileType === 'movie') || (fileType === 'music') ) {
             // Use built-in media player for audio and video
-            $('#playbar-container').show();
+			if( !$('#native-player') ) {
+	            $('#playbar-container').show();
+			}
             if (artifactLoaded === false) {
                 $('#playbar-container').jPlayer("load");
                 artifactLoaded = true;
