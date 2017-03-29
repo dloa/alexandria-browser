@@ -152,7 +152,7 @@ function updateAddressList(send) {
 function sendFloVault(sendFrom, sendTo, sendAmount, sendComment) {
 		var sendCommentRaw = sendComment;
 		console.log(sendComment);
-		if ( (history.state.currentView != 'wallet') && (sendCommentRaw != '') ) {
+		if ( (history.state.currentView != 'wallet') && (history.state.currentView != 'add-media') && (sendCommentRaw != '') ) {
 			sendComment = '{ "artifact": "'+window.history.state.subView+'", "comment": "'+sendCommentRaw+'"}';
 		}
         console.log( sendFrom + ' ' + sendTo + ' ' + sendAmount + ' ' + sendComment );

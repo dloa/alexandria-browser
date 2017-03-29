@@ -26,8 +26,8 @@ function loadShareMod() {
 	if (FLOauth.length == 0) {
 			document.getElementById('wallet-user').value = '';
 			document.getElementById('wallet-token').value = '';		
-			document.getElementById('wallet-connect-currency').innerHTML = 'Florincoin';
-			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FLO")');
+			document.getElementById('wallet-connect-currency').innerHTML = 'FloVault';
+			$('#wallet-connect-btn').attr('onclick','connectWallet(this, "FloVault")');
 			$('#wallet-auth-modal').fadeIn(fadeTimer);
 			document.getElementById('app-overlay').style.display = 'block';
 	}
@@ -439,10 +439,11 @@ function deactivateMedia(obj) {
 	$(obj).addClass('disabled');
 	var TxId = document.getElementById('deactivate-txid').value;
 	var FLOadd = document.getElementById('deactivate-address').value;
-	var sigQueryString = '{ "address":"'+ FLOadd +'", "text":"'+ FLOadd + '-' + TxId +'" }';
+	var sigQueryString = FLOadd + '-' + TxId;
 	console.log(sigQueryString);
 	var signature;
 	var stopError = 0;
+	/*
 	$.ajax({
 	    url: librarianHost +'/alexandria/v1/sign',
 	    type: 'POST',
@@ -470,6 +471,9 @@ function deactivateMedia(obj) {
 	if (signature == false) {
 		return false;
 	}
+	*/
+	// Sign with FloVault
+	signature = wallet.signMessage(FLOadd, sigQueryString);
 /*		
 	FLOclient.cmd('signmessage', FLOadd, sigString, function(err, sig, resHeaders){
 		if (err) {
@@ -481,9 +485,12 @@ function deactivateMedia(obj) {
 		}
 	});
 */
-	var queryString = '{ "alexandria-deactivation": { "address": "'+ FLOadd +'", "txid": "'+ TxId +'" }, "signature":"'+ signature +'" }';
+	var queryString = '{"alexandria-deactivation":{"address":"'+ FLOadd +'","txid":"'+ TxId +'"},"signature":"'+ signature +'"}';
 	console.info(queryString);
 	if (window.confirm('Deactivate Artifact?')) { 
+		// Deactivate with FloVault
+		sendFloVault(FLOadd, FLOadd, 0.001, queryString);
+		/* Deactivate with libraryd
 		$.ajax({
 		    url: librarianHost +'/alexandria/v1/send',
 		    type: 'POST',
@@ -499,6 +506,7 @@ function deactivateMedia(obj) {
 				console.error(thrownError);
 			}
 		});
+		*/
 	}
 }
 

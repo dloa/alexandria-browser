@@ -110,10 +110,10 @@ h1, h2, h3, h4 {
 h1 {
 	font-size: 1.65em;
 	margin-top: 0;
+	margin-bottom: 10px;
 	color: #444;	
-	text-transform: uppercase;
-	letter-spacing: 7px;
-	line-height: 1.65;
+	letter-spacing: 1px;
+	line-height: 1.4;
 }
 #noscript {
 	display: none;
@@ -585,6 +585,7 @@ ul#media-type-select-list {
 	width: 100%;
 	clear: both;
 	float: left;
+	margin-bottom: 30px;
 }
 #publisher-media-list, #publisher-media-list li {
 	margin: 0;

@@ -1391,15 +1391,6 @@
 			<div class="wrapper">
 				<div id="wallet-balance-wrap">
 					<h3>Balance</h3>
-					<div id="buyMoreBtn" class="pull-right">
-						<a onclick="tradeModal();">Buy More</a>
-						<div id="trade-modal" class="bubble-modal">
-							<div>Send BTC to: <span id="trade-address" onclick="selectText('trade-address');" class="selectable"></span><br />
-							Max <span id="trade-balance"></span> BTC
-							</div>
-							<div id="tradebotQR"></div>
-						</div>
-					</div>
 					<div class="container">
 						<div class="tbl">
 							<div class="row full">
@@ -1423,6 +1414,15 @@
 				<div class="clearfix"></div>
 				<div id="wallet-request-wrap">
 					<h3>Request Tokens</h3>
+					<div id="buyMoreBtn" class="pull-right">
+						<a onclick="tradeModal();">Buy FLO</a>
+						<div id="trade-modal" class="bubble-modal">
+							<div>Send BTC to: <span id="trade-address" onclick="selectText('trade-address');" class="selectable"></span><br />
+							Max <span id="trade-balance"></span> BTC
+							</div>
+							<div id="tradebotQR"></div>
+						</div>
+					</div>
 					<div class="container">
 						<div class="tbl">
 							<div class="row full">
@@ -1621,7 +1621,7 @@
 		<footer id="app-footer">
 			<div id="footer">
 				<div class="left">
-					<div id="footer-title" onclick="resetAlexandria()">ΛLΞXΛNDRIΛ v0.6.2</div>
+					<div id="footer-title" onclick="resetAlexandria()">ΛLΞXΛNDRIΛ v0.6.5</div>
 			 		<div id="viewlabel">
 			 			<div id="alexandria-breadcrumbs"></div>
 					</div>
@@ -1695,6 +1695,7 @@
 		<script src="js/coinbase.js"></script>
 		<script src="js/media.js"></script>
 		<script src="js/media-alpha.js"></script>
+<!--	<script src="js/publisher-alpha.js"></script> -->
 		<script src="js/makehistory.js"></script>
 		<script src="js/wallet-flovault.js"></script>
 		<script src="js/tips.js"></script>
