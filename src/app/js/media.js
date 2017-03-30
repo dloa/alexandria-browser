@@ -34,9 +34,11 @@ function loadArtifactView2(objMeta) {
 	}
 	// GET ALL THE MEDIA DATA
 	var thisMediaData = searchAPI('media', 'txid', mediaID);
-    if (thisMediaData[0]['media-data']['alexandria-media']['payment']['scale']) {
-        priceScale = thisMediaData[0]['media-data']['alexandria-media']['payment']['scale'].split(':')[0];
-    }
+	if (thisMediaData[0]['media-data']['alexandria-media']['payment']) {
+	    if (thisMediaData[0]['media-data']['alexandria-media']['payment']['scale']) {
+	        priceScale = thisMediaData[0]['media-data']['alexandria-media']['payment']['scale'].split(':')[0];
+	    }
+	}
 	$('.media-cover').hide();
     window.doMountMediaBrowser('#media-browser', thisMediaData);
 }
@@ -602,13 +604,16 @@ function mountMediaBrowser(el, data) {
 // EMBED ARTIFACT FROM DHT
 function embedFile(mediaType, fileHash, mediaFilename, posterFrame) {
     var embedCode = '';
+    var fileExt = mediaFilename.split('.')[mediaFilename.split('.').length-1];
     if (mediaFilename == 'none') {
         mediaFilename = '';
     }
     if (mediaType == 'book') {
         embedCode = '<object data="' + IPFSHost +'/ipfs/'+ fileHash + '/' + mediaFilename + '" type="application/pdf" width="100%" height="800px" class="book-embed"><p>No PDF plugin installed. You can <a href="' + IPFSHost +'/ipfs/'+ fileHash +'">click here to download the PDF file.</a></p></object>'
-    } else if (mediaType == 'thing') {
+    } else if ( (mediaType == 'thing') && (fileExt != 'html') ) {
         embedCode = '<img src="' + IPFSHost +'/ipfs/'+fileHash+ '/' + mediaFilename +'" class="large-poster" />';
+    } else if (fileExt == 'html') {
+        embedCode = '<object data="' + IPFSHost +'/ipfs/'+fileHash+'/'+mediaFilename+'" type="text/html" width="100%" height="620px" />';
     } else {
         embedCode = '<object data="' + IPFSHost +'/ipfs/'+fileHash+'" type="text/html" width="100%" height="620px" />';
     }
@@ -628,6 +633,7 @@ function BTCtoUSD (amount) {
 }
 
 function loadTrack (name, url, fname) {
+	filetype = filetype.toLowerCase();
 	fname = encodeURI(fname).replace('+', '%20');
 	console.info(url + fname);
 	var posterurl = url;
@@ -639,10 +645,11 @@ function loadTrack (name, url, fname) {
 		if( $('#native-player') ) {
 			$('#native-player').remove();
 		}
-		$('#playbar-container').hide().after('<video id="native-player" controls="controls" poster="' + posterurl + posterFrame +'" height="461px" width="820px"><source src="'+ url.slice(0,-1) + '" /></video>');
+		$('#embedded-file').append('<video id="native-player" controls="controls" poster="' + posterurl + posterFrame +'" height="461px" width="820px"><source src="'+ url.slice(0,-1) + '" /></video>');
 		return false;
 	}
 	$('#audio-player').show();
+	$('#playbar-container').show();
 	if (filetype == 'mp3') {
 	    $('#audio-player').jPlayer("setMedia", {
 	        title: name,
@@ -683,11 +690,13 @@ function loadTrack (name, url, fname) {
 	        poster: posterurl + posterFrame
 	    });
 	} else if ( (filetype == 'mov') || (filetype == 'mkv') || (filetype == 'avi') || (filetype == 'wav') ) {
-		$('#audio-player').hide();
+		// If there's a player still hanging around, remove it first.
 		if( $('#native-player') ) {
 			$('#native-player').remove();
 		}
-		$('#playbar-container').hide().after('<video id="native-player" controls="controls" poster="' + posterurl + posterFrame +'" height="461px" width="820px"><source src="'+ url + fname +'" /></video>');
+		$('#audio-player').hide();
+		$('#playbar-container').hide();
+		$('#embedded-file').append('<video id="native-player" controls="controls" poster="' + posterurl + posterFrame +'" height="461px" width="820px"><source src="'+ url + fname +'" /></video>');
 	}
 }
 
@@ -722,39 +731,41 @@ function onPaymentDone (action, file) {
     }
 
 	console.info(file);
+    var fileType = file.track.type;
+    if (!fileType) {
+    	fileType = history.state.mediaType;
+    }
+	var fileName = file.track.fname;
+	var trackPath = file.url.slice(0, '-'+ encodeURI(fileName).length);
+    if ( (fileType === 'video') || (fileType === 'movie') || (fileType === 'music') ) {
+	    var res = loadTrack(file.track.dname, trackPath, fileName);
 
-    var trackPath = file.url.slice(0, '-'+ encodeURI(file.track.fname).length);
-    var res = loadTrack(file.track.dname, trackPath, file.track.fname);
-
-    togglePlaybarShadow(true);
-    if (action === 'download') {
-        // Add a link to download
-        var a = $("<a>").attr("href", url).attr("download", file.track.fname).attr("target","_blank").appendTo("body");
-        // Click the link
-        a[0].click();
-        // Remove the link we added.
-        a.remove();
-        $('#playbar-container').show();
-        $('#audio-player').jPlayer("load");
+	    togglePlaybarShadow(true);
+        // Use built-in media player for audio and video
+		if( !$('#native-player') ) {
+            $('#playbar-container').show();
+		}
+	    if (action === 'download') {
+	        // Add a link to download
+	        var a = $("<a>").attr("href", url).attr("download", fileName).attr("target","_blank").appendTo("body");
+	        // Click the link
+	        a[0].click();
+	        // Remove the link we added.
+	        a.remove();
+	        $('#audio-player').jPlayer("load");
+	 	} else {
+	        if (artifactLoaded === false) {
+	            $('#playbar-container').jPlayer("load");
+	            artifactLoaded = true;
+	        } else {
+	            $('#audio-player').jPlayer("play");
+	        }
+	    }
     } else {
-        var fileType = file.track.type;
-        if ( (fileType === 'video') || (fileType === 'movie') || (fileType === 'music') ) {
-            // Use built-in media player for audio and video
-			if( !$('#native-player') ) {
-	            $('#playbar-container').show();
-			}
-            if (artifactLoaded === false) {
-                $('#playbar-container').jPlayer("load");
-                artifactLoaded = true;
-            } else {
-                $('#audio-player').jPlayer("play");
-            }
-        } else {
-            // Hide built-in media player
-            $('#playbar-container').hide();
-            // Embed static artifacts
-            embedFile(fileType, trackPath.split('/')[4], file.track.fname, '');
-        }
+        // Hide built-in media player
+        $('#playbar-container').hide();
+        // Embed static artifacts
+		embedFile(fileType, trackPath.split('/')[4], fileName, '');
     }
 }
 
